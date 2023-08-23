@@ -418,6 +418,7 @@ internal constructor(
   }
 
   fun getMyLocation(): Location? {
+    // Remove this functionality and either guide users to use separate flutter
     // library for geolocation or implement separate method under
     // [GoogleMapsNavigationSessionManager] to fetch the location
     // using the [FusedLocationProviderApi].

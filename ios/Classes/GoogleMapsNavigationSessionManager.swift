@@ -30,6 +30,14 @@ enum GoogleMapsNavigationSessionManagerError: Error {
   case notSupported
 }
 
+// Expose the navigator to the google_maps_driver side.
+// DriverApi initialization requires navigator.
+public class ExposedGoogleMapsNavigator: NSObject {
+  public static func getNavigator() throws -> GMSNavigator {
+    try GoogleMapsNavigationSessionManager.shared.getNavigator()
+  }
+}
+
 class GoogleMapsNavigationSessionManager: NSObject {
   enum RoutingOptionsTarget {
     case navigator
@@ -44,7 +52,7 @@ class GoogleMapsNavigationSessionManager: NSObject {
 
   private var _session: GMSNavigationSession?
 
-  private func getNavigator() throws -> GMSNavigator {
+  func getNavigator() throws -> GMSNavigator {
     guard let _session else { throw GoogleMapsNavigationSessionManagerError.sessionNotInitialized }
     guard let navigator = _session.navigator
     else { throw GoogleMapsNavigationSessionManagerError.termsNotAccepted }

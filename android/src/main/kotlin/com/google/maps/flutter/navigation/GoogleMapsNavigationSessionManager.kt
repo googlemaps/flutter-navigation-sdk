@@ -104,7 +104,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   }
 
   /** Convenience function for returning the activity. */
-  fun getActivity(): Activity {
+  private fun getActivity(): Activity {
     return weakActivity?.get() ?: throw FlutterError("activityNotFound", "Activity not created.")
   }
 
@@ -125,6 +125,12 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
         "Cannot access navigation functionality before the navigation session has been initialized."
       )
     }
+  }
+
+  // Expose the navigator to the google_maps_driver side.
+  // DriverApi initialization requires navigator.
+  fun getNavigatorWithoutError(): Navigator? {
+    return navigator
   }
 
   /** Creates Navigator instance. */
@@ -510,10 +516,6 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
         "The terms acceptance cannot be reset while the navigation session is active."
       )
     }
-  }
-
-  private fun sendNavigationSessionEvent(type: NavigationSessionEventTypeDto, message: String) {
-    navigationSessionEventApi.onNavigationSessionEvent(NavigationSessionEventDto(type, message)) {}
   }
 
   /**
