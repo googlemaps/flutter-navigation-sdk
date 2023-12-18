@@ -1,0 +1,66 @@
+# Miscellaneous
+.DS_Store
+.atom/
+.vscode/*
+.buildlog/
+.history
+.melos_tool/*
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# vscode related
+.vscode/*
+!.vscode/tasks.json
+!.vscode/settings.json
+
+# Flutter/Dart/Pub related
+# Libraries should not include pubspec.lock, per https://dart.dev/guides/libraries/private-files#pubspeclock.
+pubspec.lock
+pubspec_overrides.yaml
+.dart_tool/
+.packages
+build/
+.flutter-plugins*
+.pub-cache/
+.pub/
+
+# Dart Docs
+**/doc/api/
+
+# iOS
+Podfile.lock
+Pods/
+.symlinks/
+**/Flutter/ephemeral/
+**/Flutter/Flutter.podspec
+**/Flutter/App.framework/
+**/Flutter/Flutter.framework/
+**/Flutter/Generated.xcconfig
+**/Flutter/flutter_assets/
+ServiceDefinitions.json
+xcuserdata/
+.last_build_id
+
+# Android
+local.properties
+keystore.properties
+.gradle/
+gradlew
+gradlew.bat
+gradle-wrapper.jar
+
+.project
+.classpath
+.settings
+
+# Generated files on example apps
+flutter_export_environment.sh
+GeneratedPluginRegistrant.*
+generated_plugin_registrant.*
+
+# Patrol generated test files
+test_bundle.dart

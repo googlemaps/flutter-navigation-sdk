@@ -1,0 +1,6 @@
+--indent 2
+--maxwidth 100
+--wrapparameters afterfirst
+--disable sortedImports,unusedArguments,wrapMultilineStatementBraces
+--exclude Pods,**/MainFlutterWindow.swift,**/AppDelegate.swift,**/.symlinks/**,**/example/build/**
+--swiftversion 5.7

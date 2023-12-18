@@ -1,0 +1,148 @@
+# Copyright 2023 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name:  google_maps_flutter_navigation
+repository: https://github.com/googlemaps/flutter-navigation-sdk
+
+packages:
+  - .
+  - ./example
+
+command:
+  version:
+    # Generate commit links in package changelogs.
+    linkToCommits: true
+    # # Only allow versioning to happen on main branch.
+    # branch: master
+    # Additionally build a changelog at the root of the workspace.
+    workspaceChangelog: true
+
+  bootstrap:
+    # It seems so that running "pub get" in parallel has some issues (like
+    # https://github.com/dart-lang/pub/issues/3404). Disabling this feature
+    # makes the CI much more stable.
+    runPubGetInParallel: false
+    usePubspecOverrides: true
+
+scripts:
+  flutter-analyze:
+    # We are setting the concurrency to 1 because a higher concurrency can crash
+    # the analysis server on low performance machines (like GitHub Actions).
+    run: |
+      melos exec -c 1 -- \
+        flutter analyze . --fatal-infos
+    description: |
+      Run `flutter analyze` in all packages.
+    packageFilters:
+      dirExists:
+        - example
+
+  format:
+    run: |
+      melos run format:dart && melos run format:ios && melos run format:android
+    description: |
+      Formats the code of all packages (Dart, iOS, Android).
+
+  format:dart:
+    run: |
+      dart format .
+    description: |
+      Formats the code of dart package with dart format.
+
+  format:ios:
+    run: |
+      swiftformat .
+    description: |
+      Formats the code of iOS package with swiftformat.
+       - Requires `swiftformat` (can be installed via Brew on macOS).
+
+  format:android:
+    run: |
+      melos exec -c 1 --fail-fast -- \
+        "cd android && ./gradlew ktfmtFormat"
+    description: |
+      Formats the code of Android package with ktfmt.
+    packageFilters:
+      dirExists:
+        - android
+      scope: '*example*'
+
+  flutter-test:
+    run: |
+      melos exec -c 1 --fail-fast -- \
+        "flutter pub get && flutter test"
+    description: Flutter test
+
+  flutter-build-android:
+    run: |
+      melos exec -c 1 --fail-fast -- \
+        "flutter pub get && flutter build apk && flutter build appbundle"
+    description: Build a specific example app for Android.
+    packageFilters:
+      dirExists:
+        - android
+      scope: '*example*'
+
+  flutter-build-ios:
+    run: |
+      melos exec -c 1 --fail-fast -- \
+        "flutter pub get && flutter build ios --release --no-codesign"
+    description: Build a specific example app for iOS.
+    packageFilters:
+      dirExists:
+        - ios
+      scope: '*example*'
+
+  generate:mocks:
+    run: |
+      melos exec -- "dart run build_runner build --delete-conflicting-outputs" && 
+        melos run format --no-select && melos run add-license-header
+    description: Generate the pigeon messages for all the supported packages.
+    packageFilters:
+      fileExists: 'pigeons/messages.dart'
+
+  generate:pigeon:
+    run: |
+      melos exec -- "dart run pigeon --input ./pigeons/messages.dart" && 
+        melos run format --no-select
+    description: Generate the pigeon messages for all the supported packages.
+    packageFilters:
+      fileExists: 'pigeons/messages.dart'
+
+  add-license-header:
+    # If you add here another --ignore flag, add it also to
+    # "check-license-header".
+    run: |
+      addlicense -f header_template.txt \
+        --ignore "**/Pods/**" \
+        --ignore "**/.dart_tool/flutter_build/**" \
+        --ignore "**/example/build/**" \
+        --ignore "**/GeneratedPluginRegistrant.*" \
+        --ignore "**/flutter_export_environment.sh" \
+        .
+    description: Add a license header to all necessary files.
+
+  check-license-header:
+    # If you add here another --ignore flag, add it also to
+    # "add-license-header".
+    run: |
+      addlicense -f header_template.txt \
+        --check \
+        --ignore "**/Pods/**" \
+        --ignore "**/.dart_tool/flutter_build/**" \
+        --ignore "**/example/build/**" \
+        --ignore "**/GeneratedPluginRegistrant.*" \
+        --ignore "**/flutter_export_environment.sh" \
+        .
+    description: Add a license header to all necessary files.
