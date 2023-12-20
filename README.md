@@ -1,16 +1,34 @@
-# Google Maps Navigation
+# Google Maps Navigation (Preview)
 
-A Flutter plugin that provides a [Google Maps Navigation](https://developers.google.com/maps/documentation/navigation) widget.
+## Description
+
+This repository contains a Flutter plugin that provides a [Google Maps Navigation](https://developers.google.com/maps/documentation/navigation) widget.
+
+
+## Requirements
 
 |             | Android | iOS       |
 | ----------- | ------- | --------- |
 | **Support** | SDK 23+ | iOS 14.0+ |
 
-## Usage
+* A Flutter project
+* A Google Cloud project with the [Navigation SDK enabled](https://developers.google.com/maps/documentation/navigation/android-sdk/set-up-project) and the [Maps SDK for iOS enabled](https://developers.google.com/maps/documentation/navigation/ios-sdk/config)
+* An API key from the project above
+* If targeting Android, [Google Play Services](https://developers.google.com/android/guides/overview) installed and enabled
+* [Attributions and licensing text](https://developers.google.com/maps/documentation/navigation/android-sdk/set-up-project#include_the_required_attributions_in_your_app) added to your app
 
-To use this plugin, add `google_maps_navigation` as a [dependency in your pubspec.yaml file](https://flutter.dev/using-packages/).
+## Installation
 
-## Getting Started
+1. This repository is currently private. You will need to add the package dependency using [Git with SSH](https://docs.flutter.dev/packages-and-plugins/using-packages#dependencies-on-unpublished-packages). See [Connecting to GitHub with SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh) for instructions on how to provide SSH keys.
+
+```
+  dependencies:
+    packageA:
+      git:
+        url: git@github.com:googlemaps/flutter-navigation-sdk.git
+```
+
+2. Follow the instructions below to add your API key to the approrpiate files in your Flutter project.
 
 * Enable Google Maps SDK and Google Maps Navigation SDK for each platform.
   * Go to [Google Developers Console](https://console.cloud.google.com/).
@@ -66,7 +84,7 @@ import GoogleNavigation
 }
 ```
 
-### Integration Overview
+## Usage
 
 You can now add a `GoogleMapsNavigationView` widget to your widget tree.
 
@@ -75,7 +93,7 @@ The view can be controlled with the `GoogleNavigationViewController` that is pas
 The `GoogleMapsNavigationView` widget should be used within a widget with a bounded size. Using it
 in an unbounded widget will cause the application to throw a Flutter exception.
 
-### Sample Usage
+### Add a navigation view
 
 ```dart
 import 'package:flutter/material.dart';
@@ -144,10 +162,12 @@ class _NavigationSampleState extends State<NavigationSample> {
 
 See the [example](./example) directory for a complete navigation sample app.
 
-## Permissions
+### Requesting and handling permissions
+
 The Google Navigation SDK Flutter plugin offers functionalities that necessitate specific permissions from the mobile operating system. These include, but are not limited to, location services, background execution, and receiving background location updates.
 
-It is important to note that the management of these permissions falls outside the scope of the Google Navigation and Driver SDKs. As a developer integrating these SDKs into your applications, you are responsible for requesting and obtaining the necessary permissions from the users of your app.
+> [!NOTE]
+> The management of these permissions falls outside the scope of the Google Navigation and Driver SDKs. As a developer integrating these SDKs into your applications, you are responsible for requesting and obtaining the necessary permissions from the users of your app.
 
 You can see example of handling permissions in the [main.dart](./example/lib/main.dart) file of the example application:
 
@@ -176,3 +196,20 @@ Widget build(BuildContext context) {
   ...
 }
 ```
+## Contributing
+
+See the [Contributing guide](https://github.com/googlemaps/flutter-navigation-sdk/blob/main/CONTRIBUTING.md).
+
+## Terms of Service
+
+This package uses Google Maps Platform services, and any use of Google Maps Platform is subject to the [Terms of Service](https://cloud.google.com/maps-platform/terms).
+
+For clarity, this package, and each underlying component, is not a Google Maps Platform Core Service.
+
+## Support
+
+This package is offered via an open source license. It is not governed by the Google Maps Platform Support [Technical Support Services Guidelines](https://cloud.google.com/maps-platform/terms/tssg), the [SLA](https://cloud.google.com/maps-platform/terms/sla), or the [Deprecation Policy](https://cloud.google.com/maps-platform/terms) (however, any Google Maps Platform services used by the library remain subject to the Google Maps Platform Terms of Service).
+
+This package adheres to [semantic versioning](https://semver.org/) to indicate when backwards-incompatible changes are introduced. Accordingly, while the library is in version 0.x, backwards-incompatible changes may be introduced at any time. 
+
+If you find a bug, or have a feature request, please [file an issue](https://github.com/googlemaps/flutter-navigation-sdk/issues) on GitHub. If you would like to get answers to technical questions from other Google Maps Platform developers, ask through one of our [developer community channels](https://developers.google.com/maps/developer-community). If you'd like to contribute, please check the [Contributing guide](https://github.com/googlemaps/flutter-navigation-sdk/blob/main/CONTRIBUTING.md).
