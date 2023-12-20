@@ -19,7 +19,7 @@ This repository contains a Flutter plugin that provides a [Google Maps Navigatio
 
 ## Installation
 
-1. This repository is currently private. You will need to add the package dependency using [Git with SSH](https://docs.flutter.dev/packages-and-plugins/using-packages#dependencies-on-unpublished-packages). See [Connecting to GitHub with SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh) for instructions on how to provide SSH keys.
+1. This repository is currently private. You will need to add the package dependency using [Git with SSH](https://docs.flutter.dev/packages-and-plugins/using-packages#dependencies-on-unpublished-packages) in the app's `pubspec.yaml` file. See [Connecting to GitHub with SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh) for instructions on how to provide SSH keys.
 
 ```
   dependencies:
