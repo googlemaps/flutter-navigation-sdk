@@ -27,7 +27,7 @@ import 'package:flutter/material.dart';
 import 'shared.dart';
 
 void main() {
-  patrolTest('Marker tests', (PatrolIntegrationTester $) async {
+  patrol('Marker tests', (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
         Completer<GoogleNavigationViewController>();
 
@@ -251,7 +251,7 @@ void main() {
     expect(getClearMarkerList, isEmpty);
   });
 
-  patrolTest('Test polylines', (PatrolIntegrationTester $) async {
+  patrol('Test polylines', (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
         Completer<GoogleNavigationViewController>();
 
@@ -479,7 +479,7 @@ void main() {
     expect(receivedPolylines8.length, 0);
   });
 
-  patrolTest('Polygon tests', (PatrolIntegrationTester $) async {
+  patrol('Polygon tests', (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
         Completer<GoogleNavigationViewController>();
 
@@ -781,7 +781,7 @@ void main() {
     expect(getPolygons, isEmpty);
   });
 
-  patrolTest('Circle tests', (PatrolIntegrationTester $) async {
+  patrol('Circle tests', (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
         Completer<GoogleNavigationViewController>();
 

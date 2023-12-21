@@ -43,7 +43,7 @@ void main() {
     });
   }
 
-  patrolTest(
+  patrol(
       'Test navigation guidance for a single destination with location updates',
       (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
@@ -74,12 +74,11 @@ void main() {
     await $.pumpAndSettle();
 
     /// Specify tolerance and navigation start and end coordinates.
-    /// start = '1298 California St', end = '1630 California St'
     const double tolerance = 0.0005;
-    const double startX = 37.79136614772824,
-        startY = -122.41565900473043,
-        endX = 37.79074126174107,
-        endY = -122.4213915308914;
+    const double startX = 68.59381960993993,
+        startY = 23.510696979963722,
+        endX = 68.60079240808535,
+        endY = 23.527946512754752;
 
     /// Finish executing the tests once onArrival event comes in
     /// and test that the guidance stops.
@@ -100,7 +99,7 @@ void main() {
     final Destinations destinations = Destinations(
       waypoints: <NavigationWaypoint>[
         NavigationWaypoint.withLatLngTarget(
-          title: '1630 California St',
+          title: 'Näkkäläntie',
           target: const LatLng(
             latitude: endX,
             longitude: endY,
@@ -122,11 +121,14 @@ void main() {
 
     /// Test that the received coordinates fit between start and end location coordinates within tolerance.
     void onLocationEvent(RoadSnappedLocationUpdatedEvent msg) {
-      expectSync(msg.location.latitude, lessThanOrEqualTo(startX + tolerance));
-      expectSync(msg.location.latitude, greaterThanOrEqualTo(endX - tolerance));
-      expectSync(msg.location.longitude, lessThanOrEqualTo(startY + tolerance));
+      debugPrint(
+          'LatLngSingle: ${msg.location.latitude}, ${msg.location.longitude}');
       expectSync(
-          msg.location.longitude, greaterThanOrEqualTo(endY - tolerance));
+          msg.location.latitude, greaterThanOrEqualTo(startX - tolerance));
+      expectSync(msg.location.latitude, lessThanOrEqualTo(endX + tolerance));
+      expectSync(
+          msg.location.longitude, greaterThanOrEqualTo(startY - tolerance));
+      expectSync(msg.location.longitude, lessThanOrEqualTo(endY + tolerance));
     }
 
     await GoogleMapsNavigator.setRoadSnappedLocationUpdatedListener(
@@ -135,7 +137,7 @@ void main() {
     /// Start simulation.
     await GoogleMapsNavigator.simulator
         .simulateLocationsAlongExistingRouteWithOptions(SimulationOptions(
-      speedMultiplier: 100,
+      speedMultiplier: 10,
     ));
 
     expect(await GoogleMapsNavigator.isGuidanceRunning(), true);
@@ -143,7 +145,7 @@ void main() {
     expect(await GoogleMapsNavigator.isGuidanceRunning(), false);
   });
 
-  patrolTest(
+  patrol(
       'Test navigation guidance for multiple destinations with location updates',
       (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
@@ -175,18 +177,16 @@ void main() {
     await $.pumpAndSettle();
 
     /// Specify tolerance and navigation start and end coordinates.
-    /// start = '1298 California St', mid = 1440 California St', end = 1630 California St'.
     const double tolerance = 0.0005;
-    const double startX = 37.79136614772824,
-        startY = -122.41565900473043,
-        midX = 37.79107688014248,
-        midY = -122.41816675204078,
-        endX = 37.79074126174107,
-        endY = -122.4213915308914;
+    const double startX = 68.59381960993993,
+        startY = 23.510696979963722,
+        midX = 68.59781164189049,
+        midY = 23.520303427087182,
+        endX = 68.60079240808535,
+        endY = 23.527946512754752;
 
     Future<void> onArrivalEvent(OnArrivalEvent msg) async {
       arrivalEventCount += 1;
-      debugPrint('arrivalCount: $arrivalEventCount');
       await GoogleMapsNavigator.continueToNextDestination();
 
       /// Finish executing the tests once 2 onArrival events come in.
@@ -208,14 +208,14 @@ void main() {
     final Destinations destinations = Destinations(
       waypoints: <NavigationWaypoint>[
         NavigationWaypoint.withLatLngTarget(
-          title: '1440 California St',
+          title: 'Näkkäläntie 1st stop',
           target: const LatLng(
             latitude: midX,
             longitude: midY,
           ),
         ),
         NavigationWaypoint.withLatLngTarget(
-          title: '1630 California St',
+          title: 'Näkkäläntie 2nd stop',
           target: const LatLng(
             latitude: endX,
             longitude: endY,
@@ -241,13 +241,11 @@ void main() {
       /// with high speedMultiplier.
       if (arrivalEventCount < 2) {
         expectSync(
-            msg.location.latitude, lessThanOrEqualTo(startX + tolerance));
+            msg.location.latitude, greaterThanOrEqualTo(startX - tolerance));
+        expectSync(msg.location.latitude, lessThanOrEqualTo(endX + tolerance));
         expectSync(
-            msg.location.latitude, greaterThanOrEqualTo(endX - tolerance));
-        expectSync(
-            msg.location.longitude, lessThanOrEqualTo(startY + tolerance));
-        expectSync(
-            msg.location.longitude, greaterThanOrEqualTo(endY - tolerance));
+            msg.location.longitude, greaterThanOrEqualTo(startY - tolerance));
+        expectSync(msg.location.longitude, lessThanOrEqualTo(endY + tolerance));
       }
     }
 
@@ -265,7 +263,7 @@ void main() {
     expect(await GoogleMapsNavigator.isGuidanceRunning(), false);
   });
 
-  patrolTest(
+  patrol(
       'Test location updates when not actively navigating (simulateAlongNewRoute)',
       (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
@@ -297,12 +295,11 @@ void main() {
     await $.pumpAndSettle();
 
     /// Specify tolerance and navigation start and end coordinates.
-    /// start = '1298 California St', end = '1630 California St'
     const double tolerance = 0.001;
-    const double startX = 37.79136614772824,
-        startY = -122.41565900473043,
-        endX = 37.79074126174107,
-        endY = -122.4213915308914;
+    const double startX = 68.59381960993993,
+        startY = 23.510696979963722,
+        endX = 68.60079240808535,
+        endY = 23.527946512754752;
 
     /// Simulate location.
     await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
@@ -313,7 +310,7 @@ void main() {
     /// Create a waypoint.
     final List<NavigationWaypoint> waypoint = <NavigationWaypoint>[
       NavigationWaypoint.withLatLngTarget(
-        title: '1630 California St',
+        title: 'Näkkäläntie',
         target: const LatLng(
           latitude: endX,
           longitude: endY,
@@ -325,19 +322,17 @@ void main() {
     /// End the test when user arrives to the end location coordinates within tolerance.
     void onLocationEvent(RoadSnappedLocationUpdatedEvent msg) {
       if ((!hasArrived) &&
-          (msg.location.latitude - endX <= tolerance) &&
+          (endX - msg.location.latitude <= tolerance) &&
           (endY - msg.location.longitude <= tolerance)) {
         hasArrived = true;
         finishTest.complete();
       } else {
         expectSync(
-            msg.location.latitude, lessThanOrEqualTo(startX + tolerance));
+            msg.location.latitude, greaterThanOrEqualTo(startX - tolerance));
+        expectSync(msg.location.latitude, lessThanOrEqualTo(endX + tolerance));
         expectSync(
-            msg.location.latitude, greaterThanOrEqualTo(endX - tolerance));
-        expectSync(
-            msg.location.longitude, lessThanOrEqualTo(startY + tolerance));
-        expectSync(
-            msg.location.longitude, greaterThanOrEqualTo(endY - tolerance));
+            msg.location.longitude, greaterThanOrEqualTo(startY - tolerance));
+        expectSync(msg.location.longitude, lessThanOrEqualTo(endY + tolerance));
       }
     }
 
@@ -349,12 +344,12 @@ void main() {
         .simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
             waypoint,
             RoutingOptions(routingStrategy: NavigationRoutingStrategy.shorter),
-            SimulationOptions(speedMultiplier: 100));
+            SimulationOptions(speedMultiplier: 10));
 
     await finishTest.future;
   });
 
-  patrolTest('Test that the navigation and updates stop onArrival',
+  patrol('Test that the navigation and updates stop onArrival',
       (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
         Completer<GoogleNavigationViewController>();
@@ -427,8 +422,7 @@ void main() {
   // Skip test on iOS simulator.
   if (Platform.isIOS && !isPhysicalDevice) {
   } else {
-    patrolTest(
-        'Test that onNetworkError is received when no network connection.',
+    patrol('Test that onNetworkError is received when no network connection.',
         (PatrolIntegrationTester $) async {
       final Completer<GoogleNavigationViewController> viewControllerCompleter =
           Completer<GoogleNavigationViewController>();
@@ -498,8 +492,7 @@ void main() {
     });
   }
 
-  patrolTest(
-      'Test that routeNotFound error is received when no route is found.',
+  patrol('Test that routeNotFound error is received when no route is found.',
       (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
         Completer<GoogleNavigationViewController>();
@@ -560,7 +553,7 @@ void main() {
     expect(routeStatusSim, equals(NavigationRouteStatus.routeNotFound));
   });
 
-  patrolTest('Test route structures during navigation',
+  patrol('Test route structures during navigation',
       (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
         Completer<GoogleNavigationViewController>();
@@ -659,7 +652,7 @@ void main() {
     expect(endSegment.destinationLatLng.longitude, lessThan(-122.411));
   });
 
-  patrolTest('Test that the navigation session is attached to existing map',
+  patrol('Test that the navigation session is attached to existing map',
       (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
         Completer<GoogleNavigationViewController>();
@@ -696,7 +689,7 @@ void main() {
     expect(isSessionAttached, true);
   });
 
-  patrolTest('Test that the map attaches existing navigation session to itself',
+  patrol('Test that the map attaches existing navigation session to itself',
       (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
         Completer<GoogleNavigationViewController>();

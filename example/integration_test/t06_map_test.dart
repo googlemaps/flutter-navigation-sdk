@@ -26,7 +26,7 @@ import 'package:flutter/material.dart';
 import 'shared.dart';
 
 void main() {
-  patrolTest('Test map types', (PatrolIntegrationTester $) async {
+  patrol('Test map types', (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
         Completer<GoogleNavigationViewController>();
 
@@ -63,7 +63,7 @@ void main() {
     }
   });
 
-  patrolTest('Test platform view creation params',
+  patrol('Test platform view creation params',
       (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> controllerCompleter =
         Completer<GoogleNavigationViewController>();
@@ -108,7 +108,7 @@ void main() {
     }
   });
 
-  patrolTest('Test map UI settings', (PatrolIntegrationTester $) async {
+  patrol('Test map UI settings', (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> controllerCompleter =
         Completer<GoogleNavigationViewController>();
 
@@ -206,7 +206,7 @@ void main() {
     }
   });
 
-  patrolTest('Test map style', (PatrolIntegrationTester $) async {
+  patrol('Test map style', (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
         Completer<GoogleNavigationViewController>();
 

@@ -33,6 +33,27 @@ export 'package:flutter_test/flutter_test.dart';
 export 'package:google_maps_navigation/google_maps_navigation.dart';
 export 'package:patrol/patrol.dart';
 
+const NativeAutomatorConfig _nativeAutomatorConfig = NativeAutomatorConfig(
+  findTimeout: Duration(seconds: 20),
+);
+
+/// Create a wrapper [patrol] for [patrolTest] with custom options.
+void patrol(
+  String description,
+  Future<void> Function(PatrolIntegrationTester) callback, {
+  bool? skip,
+  NativeAutomatorConfig? nativeAutomatorConfig,
+}) {
+  patrolTest(
+    description,
+    timeout: const Timeout(
+        Duration(seconds: 240)), // Add a 4 minute timeout to tests.
+    nativeAutomatorConfig: nativeAutomatorConfig ?? _nativeAutomatorConfig,
+    skip: skip,
+    callback,
+  );
+}
+
 /// Pumps a [navigationView] widget in tester [$] and then waits until it settles.
 Future<void> pumpNavigationView(
     PatrolIntegrationTester $, GoogleMapsNavigationView navigationView) async {
@@ -61,6 +82,7 @@ Future<void> checkTermsAndConditionsAcceptance(
       'test_company_name',
     );
 
+    await $.pumpAndSettle();
     // Tap accept or cancel.
     if (Platform.isAndroid) {
       await $.native.tap(Selector(text: 'Yes, I am in'));

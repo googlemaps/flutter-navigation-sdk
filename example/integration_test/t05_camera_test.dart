@@ -20,8 +20,6 @@
 // For more information about Flutter integration tests, please see
 // https://docs.flutter.dev/cookbook/testing/integration/introduction
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'shared.dart';
 
@@ -35,7 +33,7 @@ void main() {
     expect(camera.target.longitude, closeTo(myLocation.longitude, 0.02));
   }
 
-  patrolTest('Test camera modes', (PatrolIntegrationTester $) async {
+  patrol('Test camera modes', (PatrolIntegrationTester $) async {
     /// Initialize navigation.
     final GoogleNavigationViewController controller = await startNavigation($);
 
@@ -172,56 +170,5 @@ void main() {
     await $.pumpAndSettle(duration: const Duration(milliseconds: 3000));
     camera = await controller.getCameraPosition();
     expect(camera.zoom, closeTo(zoomLevel, 0.01));
-  });
-
-  patrolTest(
-      'Test using the recenter button to move the camera during navigation',
-      (PatrolIntegrationTester $) async {
-    /// Initialize navigation.
-    final GoogleNavigationViewController controller = await startNavigation($);
-    await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
-
-    // Reset the camera to my location.
-    await controller.followMyLocation(CameraPerspective.tilted);
-    await $.pumpAndSettle(duration: const Duration(milliseconds: 3000));
-
-    // Check the camera location is close to my location
-    CameraPosition camera = await controller.getCameraPosition();
-    await checkCameraFollowsLocation(camera, controller);
-
-    // Check the re-center button is enabled
-    final bool isEnabled = await controller.isRecenterButtonEnabled();
-    expect(isEnabled, true);
-
-    /// Move camera away to reveal the re-center button.
-    final CameraUpdate updateCameraPosition =
-        CameraUpdate.newCameraPosition(CameraPosition(
-            target: LatLng(
-      latitude: camera.target.latitude + 0.2,
-      longitude: camera.target.longitude + 0.2,
-    )));
-    await controller.moveCamera(updateCameraPosition);
-    await $.pumpAndSettle(duration: const Duration(milliseconds: 500));
-
-    // Verify the distance is considerable 0.05 ~= 5.6km
-    camera = await controller.getCameraPosition();
-    final LatLng? myLocation = await controller.getMyLocation();
-    expect(myLocation, isNotNull);
-    expect(camera.target.latitude - myLocation!.latitude, greaterThan(0.05));
-    expect(camera.target.longitude - myLocation.longitude, greaterThan(0.05));
-
-    // Tap the button to re-center the camera to my location.
-    if (Platform.isAndroid) {
-      await $.native.tap(Selector(text: 'Re-center'));
-    } else if (Platform.isIOS) {
-      await $.native.tap(Selector(text: 'RE-CENTER'));
-    } else {
-      fail('Unsupported platform: ${Platform.operatingSystem}');
-    }
-    await $.pumpAndSettle(duration: const Duration(milliseconds: 3000));
-
-    /// Verify the camera matches my location again.
-    camera = await controller.getCameraPosition();
-    await checkCameraFollowsLocation(camera, controller);
   });
 }

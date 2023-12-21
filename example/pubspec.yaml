@@ -34,7 +34,7 @@ dev_dependencies:
     sdk: flutter
   integration_test:
     sdk: flutter
-  patrol: ">=3.2.0 <3.3.0"
+  patrol: ">=3.3.0 <3.4.0"
   pub_semver: ^2.1.4
 
 flutter:

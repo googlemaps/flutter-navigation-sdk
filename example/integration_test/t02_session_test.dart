@@ -25,7 +25,7 @@ import 'package:flutter/material.dart';
 import 'shared.dart';
 
 void main() {
-  patrolTest('Test terms and conditions (TOS) dialog acceptance',
+  patrol('Test terms and conditions (TOS) dialog acceptance',
       (PatrolIntegrationTester $) async {
     // Grant the location permission.
     await checkLocationDialogAcceptance($);
@@ -79,7 +79,7 @@ void main() {
     expect(redundantAccept, true);
   });
 
-  patrolTest('Test driver awareness disclaimer (noTOS) acknowledgement',
+  patrol('Test driver awareness disclaimer (noTOS) acknowledgement',
       (PatrolIntegrationTester $) async {
     // Grant location permissions if not granted.
     await checkLocationDialogAcceptance($);

@@ -23,7 +23,7 @@
 import 'shared.dart';
 
 void main() {
-  patrolTest('Test session initialization errors',
+  patrol('Test session initialization errors',
       (PatrolIntegrationTester $) async {
     await GoogleMapsNavigator.resetTermsAccepted();
     expect(await GoogleMapsNavigator.areTermsAccepted(), false);

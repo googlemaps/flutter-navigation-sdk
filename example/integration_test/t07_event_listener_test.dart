@@ -26,7 +26,7 @@ import 'package:flutter/material.dart';
 import 'shared.dart';
 
 void main() {
-  patrolTest('Test navigation OnRemainingTimeOrDistanceChanged event listener',
+  patrol('Test navigation OnRemainingTimeOrDistanceChanged event listener',
       (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
         Completer<GoogleNavigationViewController>();
@@ -94,7 +94,7 @@ void main() {
     await $.pumpAndSettle();
   });
 
-  patrolTest('Test navigation OnRouteChanged event listener',
+  patrol('Test navigation OnRouteChanged event listener',
       (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
         Completer<GoogleNavigationViewController>();
@@ -162,7 +162,7 @@ void main() {
     await $.pumpAndSettle();
   });
 
-  patrolTest('Test navigation RoadSnappedLocationUpdated event listener',
+  patrol('Test navigation RoadSnappedLocationUpdated event listener',
       (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
         Completer<GoogleNavigationViewController>();
@@ -238,7 +238,7 @@ void main() {
     }
   });
 
-  patrolTest('Test navigation onArrival event listener',
+  patrol('Test navigation onArrival event listener',
       (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
         Completer<GoogleNavigationViewController>();
@@ -308,7 +308,7 @@ void main() {
 
   /// Rerouting listener is Android only.
   if (Platform.isAndroid) {
-    patrolTest('Test navigation onRerouting event listener',
+    patrol('Test navigation onRerouting event listener',
         (PatrolIntegrationTester $) async {
       final Completer<GoogleNavigationViewController> viewControllerCompleter =
           Completer<GoogleNavigationViewController>();

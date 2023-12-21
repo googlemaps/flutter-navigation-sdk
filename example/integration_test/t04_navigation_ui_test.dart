@@ -25,7 +25,7 @@ import 'package:flutter/material.dart';
 import 'shared.dart';
 
 void main() {
-  patrolTest('Test enabling navigation UI', (PatrolIntegrationTester $) async {
+  patrol('Test enabling navigation UI', (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
         Completer<GoogleNavigationViewController>();
 
