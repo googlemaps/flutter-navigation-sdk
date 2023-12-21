@@ -41,7 +41,7 @@ This repository contains a Flutter plugin that provides a [Google Maps Navigatio
 * Generate an API key at <https://console.cloud.google.com/google/maps-apis/credentials>.
 
 > [!IMPORTANT]
-> [Apply API restrictions] to the API key to limit usage to "Navigation SDK, "Maps SDK for Android", and "Maps SDK for iOS" for enhanced security and cost management. This helps guard against unauthorized use of your API key.
+> [Apply API restrictions](https://developers.google.com/maps/api-security-best-practices#api-restriction) to the API key to limit usage to "Navigation SDK, "Maps SDK for Android", and "Maps SDK for iOS" for enhanced security and cost management. This helps guard against unauthorized use of your API key.
 
 * Add your API key to the Flutter project using [these instructions for the corresponding Android and iOS files](https://developers.google.com/maps/flutter-package/config#step_4_add_your_api_key_to_the_project).
 
