@@ -23,7 +23,7 @@ This repository contains a Flutter plugin that provides a [Google Maps Navigatio
 
 ```
   dependencies:
-    packageA:
+    google_maps_navigation:
       git:
         url: git@github.com:googlemaps/flutter-navigation-sdk.git
 ```
@@ -39,7 +39,11 @@ This repository contains a Flutter plugin that provides a [Google Maps Navigatio
   * For iOS, enable "Maps SDK for iOS" by selecting "ENABLE".
 
 * Generate an API key at <https://console.cloud.google.com/google/maps-apis/credentials>.
-  * **Important**: Restrict your API key usage to the "Navigation SDK, "Maps SDK for Android" and "Maps SDK for iOS" for enhanced security and cost management. This prevents unauthorized use of your API key on other services.
+
+> [!IMPORTANT]
+> [Apply API restrictions](https://developers.google.com/maps/api-security-best-practices#api-restriction) to the API key to limit usage to "Navigation SDK, "Maps SDK for Android", and "Maps SDK for iOS" for enhanced security and cost management. This helps guard against unauthorized use of your API key.
+
+* Add your API key to the Flutter project using [these instructions for the corresponding Android and iOS files](https://developers.google.com/maps/flutter-package/config#step_4_add_your_api_key_to_the_project).
 
 For more details, see [Google Navigation SDK Documentation](https://developers.google.com/maps/documentation/navigation).
 
@@ -167,7 +171,7 @@ See the [example](./example) directory for a complete navigation sample app.
 The Google Navigation SDK Flutter plugin offers functionalities that necessitate specific permissions from the mobile operating system. These include, but are not limited to, location services, background execution, and receiving background location updates.
 
 > [!NOTE]
-> The management of these permissions falls outside the scope of the Google Navigation and Driver SDKs. As a developer integrating these SDKs into your applications, you are responsible for requesting and obtaining the necessary permissions from the users of your app.
+> The management of these permissions falls outside the scope of the Navigation SDKs for Android and iOS. As a developer integrating these SDKs into your applications, you are responsible for requesting and obtaining the necessary permissions from the users of your app.
 
 You can see example of handling permissions in the [main.dart](./example/lib/main.dart) file of the example application:
 
