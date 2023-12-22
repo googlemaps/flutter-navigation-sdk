@@ -45,6 +45,7 @@ extension ConvertMarkerOptions on MarkerOptions {
         anchor: anchor.toDto(),
         draggable: draggable,
         flat: flat,
+        icon: icon.toDto(),
         consumeTapEvents: consumeTapEvents,
         position: position.toDto(),
         rotation: rotation,
@@ -63,6 +64,7 @@ extension ConvertMarkerOptionsDto on MarkerOptionsDto {
         anchor: anchor.toMarkerAnchor(),
         draggable: draggable,
         flat: flat,
+        icon: icon.toImageDescriptor(),
         consumeTapEvents: consumeTapEvents,
         position: position.toLatLng(),
         rotation: rotation,
@@ -119,5 +121,29 @@ extension ConvertLatLngDto on LatLngDto {
   /// Converts [LatLngDto] to [LatLng]
   LatLng toLatLng() {
     return LatLng(latitude: latitude, longitude: longitude);
+  }
+}
+
+/// [ImageDescriptor] convert extension.
+extension ConvertImageDescriptor on ImageDescriptor {
+  /// Converts [ImageDescriptor] to [ImageDescriptorDto].
+  ImageDescriptorDto toDto() {
+    return ImageDescriptorDto(
+        registeredImageId: registeredImageId,
+        imagePixelRatio: imagePixelRatio,
+        width: width,
+        height: height);
+  }
+}
+
+/// [ImageDescriptorDto] convert extension.
+extension ConvertImageDescriptorDto on ImageDescriptorDto {
+  /// Converts [ImageDescriptorDto] to [ImageDescriptor].
+  ImageDescriptor toImageDescriptor() {
+    return ImageDescriptor(
+        registeredImageId: registeredImageId,
+        imagePixelRatio: imagePixelRatio,
+        width: width,
+        height: height);
   }
 }

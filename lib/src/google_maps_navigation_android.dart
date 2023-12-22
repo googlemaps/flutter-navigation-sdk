@@ -20,13 +20,17 @@ import '../google_maps_navigation.dart';
 import 'google_maps_navigation_platform_interface.dart';
 import 'inspector/inspector_android.dart';
 import 'inspector/inspector_platform.dart';
+import 'method_channel/common_image_api.dart';
 import 'method_channel/common_session_api.dart';
 import 'method_channel/common_view_api.dart';
 
 /// Google Maps Navigation Platform Android specific functionalities.
 /// @nodoc
 class GoogleMapsNavigationAndroid extends GoogleMapsNavigationPlatform
-    with CommonNavigationSessionAPI, CommonNavigationViewAPI {
+    with
+        CommonNavigationSessionAPI,
+        CommonNavigationViewAPI,
+        CommonImageRegistryAPI {
   /// Registers the Android implementation of GoogleMapsNavigationPlatform.
   static void registerWith() {
     GoogleMapsNavigationPlatform.instance = GoogleMapsNavigationAndroid();

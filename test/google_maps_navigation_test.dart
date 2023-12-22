@@ -25,21 +25,30 @@ import 'google_maps_navigation_mock.dart';
 import 'google_maps_navigation_test.mocks.dart';
 import 'messages_test.g.dart';
 
-@GenerateMocks(<Type>[TestNavigationSessionApi, TestNavigationViewApi])
+@GenerateMocks(<Type>[
+  TestNavigationSessionApi,
+  TestNavigationViewApi,
+  TestImageRegistryApi
+])
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   void onViewCreated(GoogleNavigationViewController controller) {}
 
   late MockTestNavigationSessionApi sessionMockApi;
   late MockTestNavigationViewApi viewMockApi;
+  late MockTestImageRegistryApi imageRegistryMockApi;
 
   setUp(() {
     sessionMockApi = MockTestNavigationSessionApi();
     viewMockApi = MockTestNavigationViewApi();
+    imageRegistryMockApi = MockTestImageRegistryApi();
     TestNavigationSessionApi.setup(sessionMockApi);
     TestNavigationViewApi.setup(viewMockApi);
+    TestImageRegistryApi.setup(imageRegistryMockApi);
     GoogleMapsNavigationPlatform.instance = MockGoogleMapsNavigationPlatform(
-        sessionApi: sessionMockApi, viewApi: viewMockApi);
+        sessionApi: sessionMockApi,
+        viewApi: viewMockApi,
+        imageRegistryApi: imageRegistryMockApi);
   });
 
   void verifyEnabled(VerificationResult result, bool enabled) {

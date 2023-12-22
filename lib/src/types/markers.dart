@@ -61,6 +61,7 @@ class MarkerOptions {
       this.anchor = const MarkerAnchor(u: 0.5, v: 1.0),
       this.draggable = false,
       this.flat = false,
+      this.icon = ImageDescriptor.defaultImage,
       this.consumeTapEvents = false,
       this.position = const LatLng(latitude: 0.0, longitude: 0.0),
       this.rotation = 0.0,
@@ -87,6 +88,12 @@ class MarkerOptions {
   ///
   /// By default, the marker is drawn facing the camera; [flat] is false.
   final bool flat;
+
+  /// Specifies the image ID of the bitmap drawn as the marker on the map.
+  /// The bitmap must be registered with [registerBitmapImage] before creating marker.
+  ///
+  /// By default, the icon ID is [ImageDescriptor.defaultImage], this draws the default marker icon.
+  final ImageDescriptor icon;
 
   /// Sets whether map view does the default behavior when clicking marker.
   /// If set to true default behaviour does not occur.
@@ -126,6 +133,7 @@ class MarkerOptions {
       MarkerAnchor? anchor,
       bool? draggable,
       bool? flat,
+      ImageDescriptor? icon,
       bool? consumeTapEvents,
       MarkerAnchor? infoWindowAnchor,
       LatLng? position,
@@ -139,6 +147,7 @@ class MarkerOptions {
         anchor: anchor ?? this.anchor,
         draggable: draggable ?? this.draggable,
         flat: flat ?? this.flat,
+        icon: icon ?? this.icon,
         consumeTapEvents: consumeTapEvents ?? this.consumeTapEvents,
         position: position ?? this.position,
         rotation: rotation ?? this.rotation,
@@ -160,6 +169,7 @@ class MarkerOptions {
         anchor == other.anchor &&
         draggable == other.draggable &&
         flat == other.flat &&
+        icon == other.icon &&
         consumeTapEvents == other.consumeTapEvents &&
         position == other.position &&
         rotation == other.rotation &&
@@ -174,6 +184,7 @@ class MarkerOptions {
       anchor.hashCode,
       draggable.hashCode,
       flat.hashCode,
+      icon.hashCode,
       consumeTapEvents.hashCode,
       position.hashCode,
       rotation.hashCode,

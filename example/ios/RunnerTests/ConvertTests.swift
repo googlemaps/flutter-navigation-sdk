@@ -19,6 +19,24 @@ import XCTest
 
 @testable import google_maps_navigation
 
+class MockImageRegistry: ImageRegistry {
+  let image = UIImage()
+
+  override func findRegisteredImage(imageId: String) -> RegisteredImage? {
+    if imageId == "default" {
+      return nil
+    } else {
+      return RegisteredImage(
+        imageId: imageId,
+        image: image,
+        imagePixelRatio: 1.0,
+        width: nil,
+        height: nil
+      )
+    }
+  }
+}
+
 class ConvertTests: XCTestCase {
   func testMapTypeConversion() {
     XCTAssertEqual(Convert.convertMapType(mapType: .hybrid), GMSMapViewType.hybrid)
@@ -217,12 +235,14 @@ class ConvertTests: XCTestCase {
           anchor: MarkerAnchorDto(u: 0.6, v: 0.8)
         ),
         visible: false,
-        zIndex: 4.0
+        zIndex: 4.0,
+        icon: ImageDescriptorDto(registeredImageId: "default", imagePixelRatio: 1.0)
       )
     )
 
+    let imageRegistry = MockImageRegistry()
     let markerController = MarkerController(markerId: markerDto.markerId)
-    markerController.update(from: markerDto)
+    markerController.update(from: markerDto, imageRegistry: imageRegistry)
     let gmsMarker = markerController.gmsMarker
 
     XCTAssertEqual(Double(gmsMarker.opacity), markerDto.options.alpha)
@@ -240,6 +260,7 @@ class ConvertTests: XCTestCase {
     XCTAssertEqual(gmsMarker.snippet, markerDto.options.infoWindow.snippet)
     XCTAssertEqual(gmsMarker.title, markerDto.options.infoWindow.title)
     XCTAssertEqual(gmsMarker.zIndex, Int32(markerDto.options.zIndex))
+    XCTAssertNil(gmsMarker.icon)
 
     markerDto = markerController.toMarkerDto()
 
@@ -257,6 +278,7 @@ class ConvertTests: XCTestCase {
     XCTAssertEqual(markerDto.options.infoWindow.title, gmsMarker.title)
     XCTAssertEqual(markerDto.options.infoWindow.snippet, gmsMarker.snippet)
     XCTAssertEqual(Int32(markerDto.options.zIndex), gmsMarker.zIndex)
+    XCTAssertNil(markerDto.options.icon.registeredImageId)
   }
 
   func testUpdateGMSMarker() {
@@ -276,12 +298,14 @@ class ConvertTests: XCTestCase {
           anchor: MarkerAnchorDto(u: 0.6, v: 0.8)
         ),
         visible: false,
-        zIndex: 4.0
+        zIndex: 4.0,
+        icon: ImageDescriptorDto(registeredImageId: "default", imagePixelRatio: 1.0)
       )
     )
 
     let markerController = MarkerController(markerId: marker.markerId)
-    markerController.update(from: marker)
+    let imageRegistry = MockImageRegistry()
+    markerController.update(from: marker, imageRegistry: imageRegistry)
 
     let updatedMarker = MarkerDto(
       markerId: "1345",
@@ -299,11 +323,12 @@ class ConvertTests: XCTestCase {
           anchor: MarkerAnchorDto(u: 0.6, v: 0.8)
         ),
         visible: false,
-        zIndex: 4.0
+        zIndex: 4.0,
+        icon: ImageDescriptorDto(registeredImageId: "Image_0", imagePixelRatio: 1.0)
       )
     )
 
-    markerController.update(from: updatedMarker)
+    markerController.update(from: updatedMarker, imageRegistry: imageRegistry)
     let gmsMarker = markerController.gmsMarker
 
     XCTAssertEqual(Double(gmsMarker.opacity), updatedMarker.options.alpha)
@@ -333,6 +358,7 @@ class ConvertTests: XCTestCase {
     XCTAssertEqual(gmsMarker.snippet, updatedMarker.options.infoWindow.snippet)
     XCTAssertEqual(gmsMarker.title, updatedMarker.options.infoWindow.title)
     XCTAssertEqual(gmsMarker.zIndex, Int32(updatedMarker.options.zIndex))
+    XCTAssertEqual(gmsMarker.icon, imageRegistry.image)
   }
 
   func testPigeonPolygonToGmsPolygon() {

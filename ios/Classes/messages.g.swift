@@ -371,6 +371,7 @@ struct MarkerOptionsDto {
   var infoWindow: InfoWindowDto
   var visible: Bool
   var zIndex: Double
+  var icon: ImageDescriptorDto
 
   static func fromList(_ list: [Any?]) -> MarkerOptionsDto? {
     let alpha = list[0] as! Double
@@ -383,6 +384,7 @@ struct MarkerOptionsDto {
     let infoWindow = InfoWindowDto.fromList(list[7] as! [Any?])!
     let visible = list[8] as! Bool
     let zIndex = list[9] as! Double
+    let icon = ImageDescriptorDto.fromList(list[10] as! [Any?])!
 
     return MarkerOptionsDto(
       alpha: alpha,
@@ -394,7 +396,8 @@ struct MarkerOptionsDto {
       rotation: rotation,
       infoWindow: infoWindow,
       visible: visible,
-      zIndex: zIndex
+      zIndex: zIndex,
+      icon: icon
     )
   }
 
@@ -410,6 +413,38 @@ struct MarkerOptionsDto {
       infoWindow.toList(),
       visible,
       zIndex,
+      icon.toList(),
+    ]
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct ImageDescriptorDto {
+  var registeredImageId: String?
+  var imagePixelRatio: Double?
+  var width: Double?
+  var height: Double?
+
+  static func fromList(_ list: [Any?]) -> ImageDescriptorDto? {
+    let registeredImageId: String? = nilOrValue(list[0])
+    let imagePixelRatio: Double? = nilOrValue(list[1])
+    let width: Double? = nilOrValue(list[2])
+    let height: Double? = nilOrValue(list[3])
+
+    return ImageDescriptorDto(
+      registeredImageId: registeredImageId,
+      imagePixelRatio: imagePixelRatio,
+      width: width,
+      height: height
+    )
+  }
+
+  func toList() -> [Any?] {
+    [
+      registeredImageId,
+      imagePixelRatio,
+      width,
+      height,
     ]
   }
 }
@@ -1606,34 +1641,36 @@ private class NavigationViewApiCodecReader: FlutterStandardReader {
     case 130:
       return CircleOptionsDto.fromList(readValue() as! [Any?])
     case 131:
-      return InfoWindowDto.fromList(readValue() as! [Any?])
+      return ImageDescriptorDto.fromList(readValue() as! [Any?])
     case 132:
-      return LatLngBoundsDto.fromList(readValue() as! [Any?])
+      return InfoWindowDto.fromList(readValue() as! [Any?])
     case 133:
-      return LatLngDto.fromList(readValue() as! [Any?])
+      return LatLngBoundsDto.fromList(readValue() as! [Any?])
     case 134:
       return LatLngDto.fromList(readValue() as! [Any?])
     case 135:
-      return MarkerAnchorDto.fromList(readValue() as! [Any?])
+      return LatLngDto.fromList(readValue() as! [Any?])
     case 136:
-      return MarkerDto.fromList(readValue() as! [Any?])
+      return MarkerAnchorDto.fromList(readValue() as! [Any?])
     case 137:
-      return MarkerOptionsDto.fromList(readValue() as! [Any?])
+      return MarkerDto.fromList(readValue() as! [Any?])
     case 138:
-      return PatternItemDto.fromList(readValue() as! [Any?])
+      return MarkerOptionsDto.fromList(readValue() as! [Any?])
     case 139:
-      return PolygonDto.fromList(readValue() as! [Any?])
+      return PatternItemDto.fromList(readValue() as! [Any?])
     case 140:
-      return PolygonHoleDto.fromList(readValue() as! [Any?])
+      return PolygonDto.fromList(readValue() as! [Any?])
     case 141:
-      return PolygonOptionsDto.fromList(readValue() as! [Any?])
+      return PolygonHoleDto.fromList(readValue() as! [Any?])
     case 142:
-      return PolylineDto.fromList(readValue() as! [Any?])
+      return PolygonOptionsDto.fromList(readValue() as! [Any?])
     case 143:
-      return PolylineOptionsDto.fromList(readValue() as! [Any?])
+      return PolylineDto.fromList(readValue() as! [Any?])
     case 144:
-      return StyleSpanDto.fromList(readValue() as! [Any?])
+      return PolylineOptionsDto.fromList(readValue() as! [Any?])
     case 145:
+      return StyleSpanDto.fromList(readValue() as! [Any?])
+    case 146:
       return StyleSpanStrokeStyleDto.fromList(readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -1652,50 +1689,53 @@ private class NavigationViewApiCodecWriter: FlutterStandardWriter {
     } else if let value = value as? CircleOptionsDto {
       super.writeByte(130)
       super.writeValue(value.toList())
-    } else if let value = value as? InfoWindowDto {
+    } else if let value = value as? ImageDescriptorDto {
       super.writeByte(131)
       super.writeValue(value.toList())
-    } else if let value = value as? LatLngBoundsDto {
+    } else if let value = value as? InfoWindowDto {
       super.writeByte(132)
       super.writeValue(value.toList())
-    } else if let value = value as? LatLngDto {
+    } else if let value = value as? LatLngBoundsDto {
       super.writeByte(133)
       super.writeValue(value.toList())
     } else if let value = value as? LatLngDto {
       super.writeByte(134)
       super.writeValue(value.toList())
-    } else if let value = value as? MarkerAnchorDto {
+    } else if let value = value as? LatLngDto {
       super.writeByte(135)
       super.writeValue(value.toList())
-    } else if let value = value as? MarkerDto {
+    } else if let value = value as? MarkerAnchorDto {
       super.writeByte(136)
       super.writeValue(value.toList())
-    } else if let value = value as? MarkerOptionsDto {
+    } else if let value = value as? MarkerDto {
       super.writeByte(137)
       super.writeValue(value.toList())
-    } else if let value = value as? PatternItemDto {
+    } else if let value = value as? MarkerOptionsDto {
       super.writeByte(138)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonDto {
+    } else if let value = value as? PatternItemDto {
       super.writeByte(139)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonHoleDto {
+    } else if let value = value as? PolygonDto {
       super.writeByte(140)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonOptionsDto {
+    } else if let value = value as? PolygonHoleDto {
       super.writeByte(141)
       super.writeValue(value.toList())
-    } else if let value = value as? PolylineDto {
+    } else if let value = value as? PolygonOptionsDto {
       super.writeByte(142)
       super.writeValue(value.toList())
-    } else if let value = value as? PolylineOptionsDto {
+    } else if let value = value as? PolylineDto {
       super.writeByte(143)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleSpanDto {
+    } else if let value = value as? PolylineOptionsDto {
       super.writeByte(144)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleSpanStrokeStyleDto {
+    } else if let value = value as? StyleSpanDto {
       super.writeByte(145)
+      super.writeValue(value.toList())
+    } else if let value = value as? StyleSpanStrokeStyleDto {
+      super.writeByte(146)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -3508,6 +3548,148 @@ enum NavigationViewApiSetup {
       }
     } else {
       clearCirclesChannel.setMessageHandler(nil)
+    }
+  }
+}
+
+private class ImageRegistryApiCodecReader: FlutterStandardReader {
+  override func readValue(ofType type: UInt8) -> Any? {
+    switch type {
+    case 128:
+      return ImageDescriptorDto.fromList(readValue() as! [Any?])
+    case 129:
+      return ImageDescriptorDto.fromList(readValue() as! [Any?])
+    default:
+      return super.readValue(ofType: type)
+    }
+  }
+}
+
+private class ImageRegistryApiCodecWriter: FlutterStandardWriter {
+  override func writeValue(_ value: Any) {
+    if let value = value as? ImageDescriptorDto {
+      super.writeByte(128)
+      super.writeValue(value.toList())
+    } else if let value = value as? ImageDescriptorDto {
+      super.writeByte(129)
+      super.writeValue(value.toList())
+    } else {
+      super.writeValue(value)
+    }
+  }
+}
+
+private class ImageRegistryApiCodecReaderWriter: FlutterStandardReaderWriter {
+  override func reader(with data: Data) -> FlutterStandardReader {
+    ImageRegistryApiCodecReader(data: data)
+  }
+
+  override func writer(with data: NSMutableData) -> FlutterStandardWriter {
+    ImageRegistryApiCodecWriter(data: data)
+  }
+}
+
+class ImageRegistryApiCodec: FlutterStandardMessageCodec {
+  static let shared = ImageRegistryApiCodec(readerWriter: ImageRegistryApiCodecReaderWriter())
+}
+
+/// Generated protocol from Pigeon that represents a handler of messages from Flutter.
+protocol ImageRegistryApi {
+  func registerBitmapImage(imageId: String, bytes: FlutterStandardTypedData,
+                           imagePixelRatio: Double, width: Double?,
+                           height: Double?) throws -> ImageDescriptorDto
+  func unregisterImage(imageDescriptor: ImageDescriptorDto) throws
+  func getRegisteredImages() throws -> [ImageDescriptorDto]
+  func clearRegisteredImages() throws
+}
+
+/// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
+enum ImageRegistryApiSetup {
+  /// The codec used by ImageRegistryApi.
+  static var codec: FlutterStandardMessageCodec { ImageRegistryApiCodec.shared }
+  /// Sets up an instance of `ImageRegistryApi` to handle messages through the `binaryMessenger`.
+  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: ImageRegistryApi?) {
+    let registerBitmapImageChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.registerBitmapImage",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      registerBitmapImageChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let imageIdArg = args[0] as! String
+        let bytesArg = args[1] as! FlutterStandardTypedData
+        let imagePixelRatioArg = args[2] as! Double
+        let widthArg: Double? = nilOrValue(args[3])
+        let heightArg: Double? = nilOrValue(args[4])
+        do {
+          let result = try api.registerBitmapImage(
+            imageId: imageIdArg,
+            bytes: bytesArg,
+            imagePixelRatio: imagePixelRatioArg,
+            width: widthArg,
+            height: heightArg
+          )
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      registerBitmapImageChannel.setMessageHandler(nil)
+    }
+    let unregisterImageChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.unregisterImage",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      unregisterImageChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let imageDescriptorArg = args[0] as! ImageDescriptorDto
+        do {
+          try api.unregisterImage(imageDescriptor: imageDescriptorArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      unregisterImageChannel.setMessageHandler(nil)
+    }
+    let getRegisteredImagesChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.getRegisteredImages",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      getRegisteredImagesChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.getRegisteredImages()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getRegisteredImagesChannel.setMessageHandler(nil)
+    }
+    let clearRegisteredImagesChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.clearRegisteredImages",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      clearRegisteredImagesChannel.setMessageHandler { _, reply in
+        do {
+          try api.clearRegisteredImages()
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      clearRegisteredImagesChannel.setMessageHandler(nil)
     }
   }
 }

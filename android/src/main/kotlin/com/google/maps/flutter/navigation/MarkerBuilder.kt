@@ -76,4 +76,12 @@ class MarkerBuilder : MarkerOptionsSink {
   override fun setZIndex(zIndex: Float) {
     _markerOptions.zIndex(zIndex)
   }
+
+  override fun setIcon(registeredImage: RegisteredImage?) {
+    // registeredImage will be stored in the MarkerController object
+    // after the marker has been created.
+    if (registeredImage != null) {
+      _markerOptions.icon(registeredImage.bitmapDescriptor)
+    }
+  }
 }

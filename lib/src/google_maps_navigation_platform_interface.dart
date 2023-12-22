@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/widgets.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -28,7 +29,10 @@ typedef MapReadyCallback = void Function(int viewId);
 /// Google Maps Navigation Platform Interface for iOS and Android implementations.
 /// @nodoc
 abstract class GoogleMapsNavigationPlatform extends PlatformInterface
-    with NavigationSessionAPIInterface, NavigationViewAPIInterface {
+    with
+        NavigationSessionAPIInterface,
+        NavigationViewAPIInterface,
+        ImageRegistryAPIInterface {
   /// Constructs a GoogleMapsNavigationPlatform.
   GoogleMapsNavigationPlatform() : super(token: _token);
 
@@ -481,4 +485,24 @@ abstract mixin class NavigationViewAPIInterface {
     throw UnimplementedError(
         'enableDebugInspection() has not been implemented.');
   }
+}
+
+/// API interface for actions of the image registry.
+/// @nodoc
+abstract mixin class ImageRegistryAPIInterface {
+  /// Register bitmap to image registry.
+  Future<ImageDescriptor> registerBitmapImage(
+      {required Uint8List bitmap,
+      required double imagePixelRatio,
+      double? width,
+      double? height});
+
+  /// Delete bitmap from image registry.
+  Future<void> unregisterImage({required ImageDescriptor imageDescriptor});
+
+  /// Get all registered bitmaps from image registry.
+  Future<List<ImageDescriptor>> getRegisteredImages();
+
+  /// Remove all registered bitmaps from image registry.
+  Future<void> clearRegisteredImages();
 }

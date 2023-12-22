@@ -375,6 +375,7 @@ class MarkerOptionsDto {
     required this.infoWindow,
     required this.visible,
     required this.zIndex,
+    required this.icon,
   });
 
   double alpha;
@@ -397,6 +398,8 @@ class MarkerOptionsDto {
 
   double zIndex;
 
+  ImageDescriptorDto icon;
+
   Object encode() {
     return <Object?>[
       alpha,
@@ -409,6 +412,7 @@ class MarkerOptionsDto {
       infoWindow.encode(),
       visible,
       zIndex,
+      icon.encode(),
     ];
   }
 
@@ -425,6 +429,43 @@ class MarkerOptionsDto {
       infoWindow: InfoWindowDto.decode(result[7]! as List<Object?>),
       visible: result[8]! as bool,
       zIndex: result[9]! as double,
+      icon: ImageDescriptorDto.decode(result[10]! as List<Object?>),
+    );
+  }
+}
+
+class ImageDescriptorDto {
+  ImageDescriptorDto({
+    this.registeredImageId,
+    this.imagePixelRatio,
+    this.width,
+    this.height,
+  });
+
+  String? registeredImageId;
+
+  double? imagePixelRatio;
+
+  double? width;
+
+  double? height;
+
+  Object encode() {
+    return <Object?>[
+      registeredImageId,
+      imagePixelRatio,
+      width,
+      height,
+    ];
+  }
+
+  static ImageDescriptorDto decode(Object result) {
+    result as List<Object?>;
+    return ImageDescriptorDto(
+      registeredImageId: result[0] as String?,
+      imagePixelRatio: result[1] as double?,
+      width: result[2] as double?,
+      height: result[3] as double?,
     );
   }
 }
@@ -1744,50 +1785,53 @@ class _NavigationViewApiCodec extends StandardMessageCodec {
     } else if (value is CircleOptionsDto) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
-    } else if (value is InfoWindowDto) {
+    } else if (value is ImageDescriptorDto) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngBoundsDto) {
+    } else if (value is InfoWindowDto) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngDto) {
+    } else if (value is LatLngBoundsDto) {
       buffer.putUint8(133);
       writeValue(buffer, value.encode());
     } else if (value is LatLngDto) {
       buffer.putUint8(134);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerAnchorDto) {
+    } else if (value is LatLngDto) {
       buffer.putUint8(135);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerDto) {
+    } else if (value is MarkerAnchorDto) {
       buffer.putUint8(136);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerOptionsDto) {
+    } else if (value is MarkerDto) {
       buffer.putUint8(137);
       writeValue(buffer, value.encode());
-    } else if (value is PatternItemDto) {
+    } else if (value is MarkerOptionsDto) {
       buffer.putUint8(138);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonDto) {
+    } else if (value is PatternItemDto) {
       buffer.putUint8(139);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonHoleDto) {
+    } else if (value is PolygonDto) {
       buffer.putUint8(140);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonOptionsDto) {
+    } else if (value is PolygonHoleDto) {
       buffer.putUint8(141);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineDto) {
+    } else if (value is PolygonOptionsDto) {
       buffer.putUint8(142);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineOptionsDto) {
+    } else if (value is PolylineDto) {
       buffer.putUint8(143);
       writeValue(buffer, value.encode());
-    } else if (value is StyleSpanDto) {
+    } else if (value is PolylineOptionsDto) {
       buffer.putUint8(144);
       writeValue(buffer, value.encode());
-    } else if (value is StyleSpanStrokeStyleDto) {
+    } else if (value is StyleSpanDto) {
       buffer.putUint8(145);
+      writeValue(buffer, value.encode());
+    } else if (value is StyleSpanStrokeStyleDto) {
+      buffer.putUint8(146);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -1804,34 +1848,36 @@ class _NavigationViewApiCodec extends StandardMessageCodec {
       case 130:
         return CircleOptionsDto.decode(readValue(buffer)!);
       case 131:
-        return InfoWindowDto.decode(readValue(buffer)!);
+        return ImageDescriptorDto.decode(readValue(buffer)!);
       case 132:
-        return LatLngBoundsDto.decode(readValue(buffer)!);
+        return InfoWindowDto.decode(readValue(buffer)!);
       case 133:
-        return LatLngDto.decode(readValue(buffer)!);
+        return LatLngBoundsDto.decode(readValue(buffer)!);
       case 134:
         return LatLngDto.decode(readValue(buffer)!);
       case 135:
-        return MarkerAnchorDto.decode(readValue(buffer)!);
+        return LatLngDto.decode(readValue(buffer)!);
       case 136:
-        return MarkerDto.decode(readValue(buffer)!);
+        return MarkerAnchorDto.decode(readValue(buffer)!);
       case 137:
-        return MarkerOptionsDto.decode(readValue(buffer)!);
+        return MarkerDto.decode(readValue(buffer)!);
       case 138:
-        return PatternItemDto.decode(readValue(buffer)!);
+        return MarkerOptionsDto.decode(readValue(buffer)!);
       case 139:
-        return PolygonDto.decode(readValue(buffer)!);
+        return PatternItemDto.decode(readValue(buffer)!);
       case 140:
-        return PolygonHoleDto.decode(readValue(buffer)!);
+        return PolygonDto.decode(readValue(buffer)!);
       case 141:
-        return PolygonOptionsDto.decode(readValue(buffer)!);
+        return PolygonHoleDto.decode(readValue(buffer)!);
       case 142:
-        return PolylineDto.decode(readValue(buffer)!);
+        return PolygonOptionsDto.decode(readValue(buffer)!);
       case 143:
-        return PolylineOptionsDto.decode(readValue(buffer)!);
+        return PolylineDto.decode(readValue(buffer)!);
       case 144:
-        return StyleSpanDto.decode(readValue(buffer)!);
+        return PolylineOptionsDto.decode(readValue(buffer)!);
       case 145:
+        return StyleSpanDto.decode(readValue(buffer)!);
+      case 146:
         return StyleSpanStrokeStyleDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -4035,6 +4081,159 @@ class NavigationViewApi {
     );
     final List<Object?>? __pigeon_replyList =
         await __pigeon_channel.send(<Object?>[viewId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+}
+
+class _ImageRegistryApiCodec extends StandardMessageCodec {
+  const _ImageRegistryApiCodec();
+  @override
+  void writeValue(WriteBuffer buffer, Object? value) {
+    if (value is ImageDescriptorDto) {
+      buffer.putUint8(128);
+      writeValue(buffer, value.encode());
+    } else if (value is ImageDescriptorDto) {
+      buffer.putUint8(129);
+      writeValue(buffer, value.encode());
+    } else {
+      super.writeValue(buffer, value);
+    }
+  }
+
+  @override
+  Object? readValueOfType(int type, ReadBuffer buffer) {
+    switch (type) {
+      case 128:
+        return ImageDescriptorDto.decode(readValue(buffer)!);
+      case 129:
+        return ImageDescriptorDto.decode(readValue(buffer)!);
+      default:
+        return super.readValueOfType(type, buffer);
+    }
+  }
+}
+
+class ImageRegistryApi {
+  /// Constructor for [ImageRegistryApi].  The [binaryMessenger] named argument is
+  /// available for dependency injection.  If it is left null, the default
+  /// BinaryMessenger will be used which routes to the host platform.
+  ImageRegistryApi({BinaryMessenger? binaryMessenger})
+      : __pigeon_binaryMessenger = binaryMessenger;
+  final BinaryMessenger? __pigeon_binaryMessenger;
+
+  static const MessageCodec<Object?> pigeonChannelCodec =
+      _ImageRegistryApiCodec();
+
+  Future<ImageDescriptorDto> registerBitmapImage(
+      String imageId,
+      Uint8List bytes,
+      double imagePixelRatio,
+      double? width,
+      double? height) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.registerBitmapImage';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+            .send(<Object?>[imageId, bytes, imagePixelRatio, width, height])
+        as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else if (__pigeon_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (__pigeon_replyList[0] as ImageDescriptorDto?)!;
+    }
+  }
+
+  Future<void> unregisterImage(ImageDescriptorDto imageDescriptor) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.unregisterImage';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[imageDescriptor]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<List<ImageDescriptorDto?>> getRegisteredImages() async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.getRegisteredImages';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(null) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else if (__pigeon_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (__pigeon_replyList[0] as List<Object?>?)!
+          .cast<ImageDescriptorDto?>();
+    }
+  }
+
+  Future<void> clearRegisteredImages() async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.clearRegisteredImages';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(null) as List<Object?>?;
     if (__pigeon_replyList == null) {
       throw _createConnectionError(__pigeon_channelName);
     } else if (__pigeon_replyList.length > 1) {

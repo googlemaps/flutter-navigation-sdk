@@ -464,7 +464,8 @@ data class MarkerOptionsDto(
   val rotation: Double,
   val infoWindow: InfoWindowDto,
   val visible: Boolean,
-  val zIndex: Double
+  val zIndex: Double,
+  val icon: ImageDescriptorDto
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -479,6 +480,7 @@ data class MarkerOptionsDto(
       val infoWindow = InfoWindowDto.fromList(list[7] as List<Any?>)
       val visible = list[8] as Boolean
       val zIndex = list[9] as Double
+      val icon = ImageDescriptorDto.fromList(list[10] as List<Any?>)
       return MarkerOptionsDto(
         alpha,
         anchor,
@@ -489,7 +491,8 @@ data class MarkerOptionsDto(
         rotation,
         infoWindow,
         visible,
-        zIndex
+        zIndex,
+        icon
       )
     }
   }
@@ -506,6 +509,35 @@ data class MarkerOptionsDto(
       infoWindow.toList(),
       visible,
       zIndex,
+      icon.toList(),
+    )
+  }
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class ImageDescriptorDto(
+  val registeredImageId: String? = null,
+  val imagePixelRatio: Double? = null,
+  val width: Double? = null,
+  val height: Double? = null
+) {
+  companion object {
+    @Suppress("UNCHECKED_CAST")
+    fun fromList(list: List<Any?>): ImageDescriptorDto {
+      val registeredImageId = list[0] as String?
+      val imagePixelRatio = list[1] as Double?
+      val width = list[2] as Double?
+      val height = list[3] as Double?
+      return ImageDescriptorDto(registeredImageId, imagePixelRatio, width, height)
+    }
+  }
+
+  fun toList(): List<Any?> {
+    return listOf<Any?>(
+      registeredImageId,
+      imagePixelRatio,
+      width,
+      height,
     )
   }
 }
@@ -1625,48 +1657,51 @@ private object NavigationViewApiCodec : StandardMessageCodec() {
         return (readValue(buffer) as? List<Any?>)?.let { CircleOptionsDto.fromList(it) }
       }
       131.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { InfoWindowDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { ImageDescriptorDto.fromList(it) }
       }
       132.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { LatLngBoundsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { InfoWindowDto.fromList(it) }
       }
       133.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { LatLngDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { LatLngBoundsDto.fromList(it) }
       }
       134.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LatLngDto.fromList(it) }
       }
       135.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MarkerAnchorDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { LatLngDto.fromList(it) }
       }
       136.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MarkerDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerAnchorDto.fromList(it) }
       }
       137.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MarkerOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerDto.fromList(it) }
       }
       138.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PatternItemDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerOptionsDto.fromList(it) }
       }
       139.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolygonDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PatternItemDto.fromList(it) }
       }
       140.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolygonHoleDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonDto.fromList(it) }
       }
       141.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolygonOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonHoleDto.fromList(it) }
       }
       142.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolylineDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonOptionsDto.fromList(it) }
       }
       143.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolylineOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolylineDto.fromList(it) }
       }
       144.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { StyleSpanDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolylineOptionsDto.fromList(it) }
       }
       145.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { StyleSpanDto.fromList(it) }
+      }
+      146.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { StyleSpanStrokeStyleDto.fromList(it) }
       }
       else -> super.readValueOfType(type, buffer)
@@ -1687,15 +1722,15 @@ private object NavigationViewApiCodec : StandardMessageCodec() {
         stream.write(130)
         writeValue(stream, value.toList())
       }
-      is InfoWindowDto -> {
+      is ImageDescriptorDto -> {
         stream.write(131)
         writeValue(stream, value.toList())
       }
-      is LatLngBoundsDto -> {
+      is InfoWindowDto -> {
         stream.write(132)
         writeValue(stream, value.toList())
       }
-      is LatLngDto -> {
+      is LatLngBoundsDto -> {
         stream.write(133)
         writeValue(stream, value.toList())
       }
@@ -1703,48 +1738,52 @@ private object NavigationViewApiCodec : StandardMessageCodec() {
         stream.write(134)
         writeValue(stream, value.toList())
       }
-      is MarkerAnchorDto -> {
+      is LatLngDto -> {
         stream.write(135)
         writeValue(stream, value.toList())
       }
-      is MarkerDto -> {
+      is MarkerAnchorDto -> {
         stream.write(136)
         writeValue(stream, value.toList())
       }
-      is MarkerOptionsDto -> {
+      is MarkerDto -> {
         stream.write(137)
         writeValue(stream, value.toList())
       }
-      is PatternItemDto -> {
+      is MarkerOptionsDto -> {
         stream.write(138)
         writeValue(stream, value.toList())
       }
-      is PolygonDto -> {
+      is PatternItemDto -> {
         stream.write(139)
         writeValue(stream, value.toList())
       }
-      is PolygonHoleDto -> {
+      is PolygonDto -> {
         stream.write(140)
         writeValue(stream, value.toList())
       }
-      is PolygonOptionsDto -> {
+      is PolygonHoleDto -> {
         stream.write(141)
         writeValue(stream, value.toList())
       }
-      is PolylineDto -> {
+      is PolygonOptionsDto -> {
         stream.write(142)
         writeValue(stream, value.toList())
       }
-      is PolylineOptionsDto -> {
+      is PolylineDto -> {
         stream.write(143)
         writeValue(stream, value.toList())
       }
-      is StyleSpanDto -> {
+      is PolylineOptionsDto -> {
         stream.write(144)
         writeValue(stream, value.toList())
       }
-      is StyleSpanStrokeStyleDto -> {
+      is StyleSpanDto -> {
         stream.write(145)
+        writeValue(stream, value.toList())
+      }
+      is StyleSpanStrokeStyleDto -> {
+        stream.write(146)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -3967,6 +4006,166 @@ interface NavigationViewApi {
             var wrapped: List<Any?>
             try {
               api.clearCircles(viewIdArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+    }
+  }
+}
+
+@Suppress("UNCHECKED_CAST")
+private object ImageRegistryApiCodec : StandardMessageCodec() {
+  override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
+    return when (type) {
+      128.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { ImageDescriptorDto.fromList(it) }
+      }
+      129.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { ImageDescriptorDto.fromList(it) }
+      }
+      else -> super.readValueOfType(type, buffer)
+    }
+  }
+
+  override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
+    when (value) {
+      is ImageDescriptorDto -> {
+        stream.write(128)
+        writeValue(stream, value.toList())
+      }
+      is ImageDescriptorDto -> {
+        stream.write(129)
+        writeValue(stream, value.toList())
+      }
+      else -> super.writeValue(stream, value)
+    }
+  }
+}
+
+/** Generated interface from Pigeon that represents a handler of messages from Flutter. */
+interface ImageRegistryApi {
+  fun registerBitmapImage(
+    imageId: String,
+    bytes: ByteArray,
+    imagePixelRatio: Double,
+    width: Double?,
+    height: Double?
+  ): ImageDescriptorDto
+
+  fun unregisterImage(imageDescriptor: ImageDescriptorDto)
+
+  fun getRegisteredImages(): List<ImageDescriptorDto>
+
+  fun clearRegisteredImages()
+
+  companion object {
+    /** The codec used by ImageRegistryApi. */
+    val codec: MessageCodec<Any?> by lazy { ImageRegistryApiCodec }
+    /**
+     * Sets up an instance of `ImageRegistryApi` to handle messages through the `binaryMessenger`.
+     */
+    @Suppress("UNCHECKED_CAST")
+    fun setUp(binaryMessenger: BinaryMessenger, api: ImageRegistryApi?) {
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.registerBitmapImage",
+            codec
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val imageIdArg = args[0] as String
+            val bytesArg = args[1] as ByteArray
+            val imagePixelRatioArg = args[2] as Double
+            val widthArg = args[3] as Double?
+            val heightArg = args[4] as Double?
+            var wrapped: List<Any?>
+            try {
+              wrapped =
+                listOf<Any?>(
+                  api.registerBitmapImage(
+                    imageIdArg,
+                    bytesArg,
+                    imagePixelRatioArg,
+                    widthArg,
+                    heightArg
+                  )
+                )
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.unregisterImage",
+            codec
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val imageDescriptorArg = args[0] as ImageDescriptorDto
+            var wrapped: List<Any?>
+            try {
+              api.unregisterImage(imageDescriptorArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.getRegisteredImages",
+            codec
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.getRegisteredImages())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.clearRegisteredImages",
+            codec
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              api.clearRegisteredImages()
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)

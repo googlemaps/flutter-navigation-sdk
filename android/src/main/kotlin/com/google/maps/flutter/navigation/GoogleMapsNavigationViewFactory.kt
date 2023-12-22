@@ -24,6 +24,7 @@ import io.flutter.plugin.platform.PlatformViewFactory
 class GoogleMapsNavigationViewFactory(
   private val viewRegistry: GoogleMapsNavigationViewRegistry,
   private val navigationViewEventApi: NavigationViewEventApi,
+  private val imageRegistry: ImageRegistry
 ) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
   override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
     val params = NavigationViewCreationOptionsDto.fromList(args as List<Any?>)
@@ -36,7 +37,8 @@ class GoogleMapsNavigationViewFactory(
       navigationViewOptionsDto,
       viewId,
       viewRegistry,
-      navigationViewEventApi
+      navigationViewEventApi,
+      imageRegistry
     )
   }
 }

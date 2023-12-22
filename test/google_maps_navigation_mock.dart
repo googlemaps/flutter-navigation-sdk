@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_navigation/google_maps_navigation.dart';
@@ -117,9 +118,12 @@ class CircleDtoClickedEventStream extends Mock
 
 class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
   MockGoogleMapsNavigationPlatform(
-      {required this.sessionApi, required this.viewApi});
+      {required this.sessionApi,
+      required this.viewApi,
+      required this.imageRegistryApi});
   final MockTestNavigationSessionApi sessionApi;
   final MockTestNavigationViewApi viewApi;
+  final MockTestImageRegistryApi imageRegistryApi;
 
   @override
   Widget buildView(
@@ -964,5 +968,36 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
   Stream<CircleClickedEventDto> getCircleDtoClickedEventStream(
       {required int viewId}) {
     return CircleDtoClickedEventStream();
+  }
+
+  @override
+  Future<ImageDescriptor> registerBitmapImage(
+      {required Uint8List bitmap,
+      required double imagePixelRatio,
+      double? width,
+      double? height}) async {
+    return imageRegistryApi
+        .registerBitmapImage('Image_1', bitmap, imagePixelRatio, width, height)
+        .toImageDescriptor();
+  }
+
+  @override
+  Future<void> clearRegisteredImages() async {
+    return imageRegistryApi.clearRegisteredImages();
+  }
+
+  @override
+  Future<void> unregisterImage(
+      {required ImageDescriptor imageDescriptor}) async {
+    return imageRegistryApi.unregisterImage(imageDescriptor.toDto());
+  }
+
+  @override
+  Future<List<ImageDescriptor>> getRegisteredImages() async {
+    return imageRegistryApi
+        .getRegisteredImages()
+        .whereType<ImageDescriptorDto>()
+        .map((ImageDescriptorDto e) => e.toImageDescriptor())
+        .toList();
   }
 }

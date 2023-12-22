@@ -16,33 +16,12 @@
 
 package com.google.maps.flutter.navigation
 
-import com.google.android.gms.maps.model.LatLng
+import android.graphics.Bitmap
 
-/** Interface for marker configuration options */
-interface MarkerOptionsSink {
-  fun setAlpha(alpha: Float)
-
-  fun setAnchor(u: Float, v: Float)
-
-  fun setConsumeTapEvents(consumeTapEvents: Boolean)
-
-  fun setDraggable(draggable: Boolean)
-
-  fun setFlat(flat: Boolean)
-
-  fun setInfoWindowAnchor(u: Float, v: Float)
-
-  fun setTitle(title: String?)
-
-  fun setSnippet(snippet: String?)
-
-  fun setPosition(position: LatLng)
-
-  fun setRotation(rotation: Float)
-
-  fun setVisible(visible: Boolean)
-
-  fun setZIndex(zIndex: Float)
-
-  fun setIcon(registeredImage: RegisteredImage?)
-}
+data class QueuedBitmap(
+  val imageId: String,
+  val bitmap: Bitmap,
+  val imagePixelRatio: Double,
+  val width: Double?,
+  val height: Double?
+)

@@ -18,6 +18,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i4;
+import 'dart:typed_data' as _i5;
 
 import 'package:google_maps_navigation/src/method_channel/messages.g.dart'
     as _i2;
@@ -63,6 +64,17 @@ class _FakeCameraPositionDto_1 extends _i1.SmartFake
 class _FakeLatLngBoundsDto_2 extends _i1.SmartFake
     implements _i2.LatLngBoundsDto {
   _FakeLatLngBoundsDto_2(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeImageDescriptorDto_3 extends _i1.SmartFake
+    implements _i2.ImageDescriptorDto {
+  _FakeImageDescriptorDto_3(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -1522,6 +1534,78 @@ class MockTestNavigationViewApi extends _i1.Mock
         Invocation.method(
           #clearCircles,
           [viewId],
+        ),
+        returnValueForMissingStub: null,
+      );
+}
+
+/// A class which mocks [TestImageRegistryApi].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockTestImageRegistryApi extends _i1.Mock
+    implements _i3.TestImageRegistryApi {
+  MockTestImageRegistryApi() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.ImageDescriptorDto registerBitmapImage(
+    String? imageId,
+    _i5.Uint8List? bytes,
+    double? imagePixelRatio,
+    double? width,
+    double? height,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #registerBitmapImage,
+          [
+            imageId,
+            bytes,
+            imagePixelRatio,
+            width,
+            height,
+          ],
+        ),
+        returnValue: _FakeImageDescriptorDto_3(
+          this,
+          Invocation.method(
+            #registerBitmapImage,
+            [
+              imageId,
+              bytes,
+              imagePixelRatio,
+              width,
+              height,
+            ],
+          ),
+        ),
+      ) as _i2.ImageDescriptorDto);
+
+  @override
+  void unregisterImage(_i2.ImageDescriptorDto? imageDescriptor) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #unregisterImage,
+          [imageDescriptor],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  List<_i2.ImageDescriptorDto?> getRegisteredImages() => (super.noSuchMethod(
+        Invocation.method(
+          #getRegisteredImages,
+          [],
+        ),
+        returnValue: <_i2.ImageDescriptorDto?>[],
+      ) as List<_i2.ImageDescriptorDto?>);
+
+  @override
+  void clearRegisteredImages() => super.noSuchMethod(
+        Invocation.method(
+          #clearRegisteredImages,
+          [],
         ),
         returnValueForMissingStub: null,
       );

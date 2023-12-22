@@ -48,6 +48,7 @@ internal constructor(
   private val viewId: Int,
   private val viewRegistry: GoogleMapsNavigationViewRegistry,
   private val navigationViewEventApi: NavigationViewEventApi,
+  private val imageRegistry: ImageRegistry
 ) : PlatformView {
   companion object {
     const val INVALIDATION_FRAME_SKIP_AMOUNT = 4 // Amount of skip frames before invalidation
@@ -95,6 +96,7 @@ internal constructor(
     _navigationView.getMapAsync { map ->
       _map = map
       initListeners()
+      imageRegistry.mapViewInitializationComplete()
 
       // Re set navigation view enabled state as sometimes earlier value is not
       // respected.
@@ -225,14 +227,26 @@ internal constructor(
     }
   }
 
-  private fun invalidateViewAfterMapLoad() {
+  /**
+   * Workaround for map view not showing added or edited map objects immediately after add/edit.
+   * Schedules [NavigationView.invalidate] call after a certain amount of frames are drawn. In
+   * marker updates short delay is not enough, [doubleInvalidate] is set to true.
+   *
+   * @param doubleInvalidate if true, schedules another invalidate event after the first one.
+   */
+  private fun invalidateViewAfterMapLoad(doubleInvalidate: Boolean = false) {
     if (_loadedCallbackPending) {
       return
     }
     _loadedCallbackPending = true
     getMap().setOnMapLoadedCallback {
       _loadedCallbackPending = false
-      _frameDelayHandler.scheduleActionWithFrameDelay { _navigationView.invalidate() }
+      _frameDelayHandler.scheduleActionWithFrameDelay {
+        _navigationView.invalidate()
+        if (doubleInvalidate) {
+          _frameDelayHandler.scheduleActionWithFrameDelay { _navigationView.invalidate() }
+        }
+      }
     }
   }
 
@@ -695,14 +709,15 @@ internal constructor(
   }
 
   fun addMarkers(markers: List<MarkerDto>): List<MarkerDto> {
-    invalidateViewAfterMapLoad()
     val result = mutableListOf<MarkerDto>()
     markers.forEach {
       val builder = MarkerBuilder()
-      Convert.sinkMarkerOptions(it.options, builder)
+      Convert.sinkMarkerOptions(it.options, builder, imageRegistry)
       val options = builder.build()
       val marker = getMap().addMarker(options)
       if (marker != null) {
+        val registeredImage =
+          it.options.icon.registeredImageId?.let { id -> imageRegistry.findRegisteredImage(id) }
         val controller =
           MarkerController(
             marker,
@@ -711,23 +726,26 @@ internal constructor(
             it.options.anchor.u.toFloat(),
             it.options.anchor.v.toFloat(),
             it.options.infoWindow.anchor.u.toFloat(),
-            it.options.infoWindow.anchor.v.toFloat()
+            it.options.infoWindow.anchor.v.toFloat(),
+            registeredImage
           )
         _markers.add(controller)
         result.add(it)
       }
     }
+    // Double invalidate map view. Marker icon updates seem to take extra
+    // time and some times icon did not update properly after single invalidate.
+    invalidateViewAfterMapLoad(true)
     return result
   }
 
   @Throws(FlutterError::class)
   fun updateMarkers(markers: List<MarkerDto>): List<MarkerDto> {
-    invalidateViewAfterMapLoad()
     val result = mutableListOf<MarkerDto>()
     var error: Throwable? = null
     markers.forEach {
       findMarkerController(it.markerId)?.let { controller ->
-        Convert.sinkMarkerOptions(it.options, controller)
+        Convert.sinkMarkerOptions(it.options, controller, imageRegistry)
         result.add(it)
       }
         ?: run {
@@ -735,6 +753,9 @@ internal constructor(
         }
     }
     error?.let { throw error as Throwable }
+    // Double invalidate map view. Marker icon updates seem to take extra
+    // time and some times icon did not update properly after single invalidate.
+    invalidateViewAfterMapLoad(true)
     return result
   }
 

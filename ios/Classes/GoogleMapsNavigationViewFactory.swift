@@ -18,11 +18,13 @@ import UIKit
 class GoogleMapsNavigationViewFactory: NSObject, FlutterPlatformViewFactory {
   private var viewRegistry: GoogleMapsNavigationViewRegistry
   private var navigationViewEventApi: NavigationViewEventApi
+  private var imageRegistry: ImageRegistry
 
   init(viewRegistry: GoogleMapsNavigationViewRegistry,
-       navigationViewEventApi: NavigationViewEventApi) {
+       navigationViewEventApi: NavigationViewEventApi, imageRegistry: ImageRegistry) {
     self.viewRegistry = viewRegistry
     self.navigationViewEventApi = navigationViewEventApi
+    self.imageRegistry = imageRegistry
     super.init()
   }
 
@@ -48,7 +50,8 @@ class GoogleMapsNavigationViewFactory: NSObject, FlutterPlatformViewFactory {
       viewIdentifier: viewId,
       viewRegistry: viewRegistry,
       navigationViewEventApi: navigationViewEventApi,
-      mapConfiguration: mapConfiguration
+      mapConfiguration: mapConfiguration,
+      imageRegistry: imageRegistry
     )
   }
 }

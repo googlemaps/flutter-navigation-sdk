@@ -23,7 +23,9 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'shared.dart';
 
 void main() {
@@ -48,19 +50,19 @@ void main() {
     final GoogleNavigationViewController viewController =
         await viewControllerCompleter.future;
 
-    // Helsinki marker options.
-    const MarkerOptions helsinkiOfficeMarkerOptions = MarkerOptions(
+    // markerOne options.
+    const MarkerOptions markerOneOptions = MarkerOptions(
       position:
           LatLng(latitude: 60.34856639667419, longitude: 25.03459821831162),
       infoWindow: InfoWindow(
         title: 'Helsinki Office',
-        snippet: 'HelsinkiMarker',
+        snippet: 'markerOne',
       ),
     );
 
     // Add marker and save response to [addedMarkersList].
-    final List<Marker?> addedMarkersList = await viewController
-        .addMarkers(<MarkerOptions>[helsinkiOfficeMarkerOptions]);
+    final List<Marker?> addedMarkersList =
+        await viewController.addMarkers(<MarkerOptions>[markerOneOptions]);
     expect(addedMarkersList.length, 1);
     final Marker? addedMarker = addedMarkersList.first;
 
@@ -79,44 +81,50 @@ void main() {
       expect(marker.options.anchor.v, 1.0);
       expect(marker.options.draggable, false);
       expect(marker.options.flat, false);
+      expect(marker.options.icon, ImageDescriptor.defaultImage);
       expect(marker.options.consumeTapEvents, false);
-      expect(marker.options.position, helsinkiOfficeMarkerOptions.position);
+      expect(marker.options.position, markerOneOptions.position);
       expect(marker.options.rotation, 0.0);
-      expect(marker.options.infoWindow.title,
-          helsinkiOfficeMarkerOptions.infoWindow.title);
+      expect(
+          marker.options.infoWindow.title, markerOneOptions.infoWindow.title);
       expect(marker.options.infoWindow.snippet,
-          helsinkiOfficeMarkerOptions.infoWindow.snippet);
+          markerOneOptions.infoWindow.snippet);
       expect(marker.options.infoWindow.anchor.u, 0.5);
       expect(marker.options.infoWindow.anchor.v, 0.0);
       expect(marker.options.visible, true);
       expect(marker.options.zIndex, 0.0);
     }
 
-    // Updated Oulu marker options.
-    const MarkerOptions ouluOfficeMarkerOptions = MarkerOptions(
+    /// Create a marker icon.
+    final ByteData imageBytes = await rootBundle.load('assets/marker1.png');
+    final ImageDescriptor customIcon =
+        await registerBitmapImage(bitmap: imageBytes, imagePixelRatio: 2);
+
+    // markerTwo options.
+    final MarkerOptions markerTwoOptions = MarkerOptions(
       alpha: 0.5,
-      anchor: MarkerAnchor(u: 0.1, v: 0.2),
+      anchor: const MarkerAnchor(u: 0.1, v: 0.2),
       draggable: true,
       flat: true,
+      icon: customIcon,
       consumeTapEvents: true,
-      position:
-          LatLng(latitude: 65.01193816057041, longitude: 25.46790635614996),
+      position: const LatLng(
+          latitude: 65.01193816057041, longitude: 25.46790635614996),
       rotation: 70,
-      infoWindow: InfoWindow(
+      infoWindow: const InfoWindow(
         title: 'Oulu Office',
-        snippet: 'OuluMarker',
+        snippet: 'markerTwo',
         anchor: MarkerAnchor(u: 0.3, v: 0.4),
       ),
       visible: false,
       zIndex: 2,
     );
 
-    final Marker ouluMarker =
-        addedMarker.copyWith(options: ouluOfficeMarkerOptions);
+    final Marker markerTwo = addedMarker.copyWith(options: markerTwoOptions);
 
     // Update marker and save response.
     final List<Marker?> updatedMarkersList =
-        await viewController.updateMarkers(<Marker>[ouluMarker]);
+        await viewController.updateMarkers(<Marker>[markerTwo]);
     expect(updatedMarkersList.length, 1);
     final Marker? updatedMarker = updatedMarkersList.first;
 
@@ -132,44 +140,45 @@ void main() {
     /// Test updated marker options against updateMarkers and getMarkers responses.
     for (final Marker marker in markers) {
       expect(marker.markerId, addedMarker.markerId);
-      expect(marker.options.alpha, ouluOfficeMarkerOptions.alpha);
+      expect(marker.options.alpha, markerTwoOptions.alpha);
       expect(marker.options.anchor.u,
-          closeTo(ouluOfficeMarkerOptions.anchor.u, tolerance));
+          closeTo(markerTwoOptions.anchor.u, tolerance));
       expect(marker.options.anchor.v,
-          closeTo(ouluOfficeMarkerOptions.anchor.v, tolerance));
-      expect(marker.options.draggable, ouluOfficeMarkerOptions.draggable);
-      expect(marker.options.flat, ouluOfficeMarkerOptions.flat);
-      expect(marker.options.consumeTapEvents,
-          ouluOfficeMarkerOptions.consumeTapEvents);
+          closeTo(markerTwoOptions.anchor.v, tolerance));
+      expect(marker.options.draggable, markerTwoOptions.draggable);
+      expect(marker.options.flat, markerTwoOptions.flat);
+      expect(marker.options.icon, markerTwoOptions.icon);
+      expect(
+          marker.options.consumeTapEvents, markerTwoOptions.consumeTapEvents);
       expect(marker.options.infoWindow.anchor.u,
-          closeTo(ouluOfficeMarkerOptions.infoWindow.anchor.u, tolerance));
+          closeTo(markerTwoOptions.infoWindow.anchor.u, tolerance));
       expect(marker.options.infoWindow.anchor.v,
-          closeTo(ouluOfficeMarkerOptions.infoWindow.anchor.v, tolerance));
-      expect(marker.options.position, ouluOfficeMarkerOptions.position);
-      expect(marker.options.rotation, ouluOfficeMarkerOptions.rotation);
+          closeTo(markerTwoOptions.infoWindow.anchor.v, tolerance));
+      expect(marker.options.position, markerTwoOptions.position);
+      expect(marker.options.rotation, markerTwoOptions.rotation);
       expect(marker.options.infoWindow.snippet,
-          ouluOfficeMarkerOptions.infoWindow.snippet);
-      expect(marker.options.infoWindow.title,
-          ouluOfficeMarkerOptions.infoWindow.title);
-      expect(marker.options.visible, ouluOfficeMarkerOptions.visible);
-      expect(marker.options.zIndex, ouluOfficeMarkerOptions.zIndex);
+          markerTwoOptions.infoWindow.snippet);
+      expect(
+          marker.options.infoWindow.title, markerTwoOptions.infoWindow.title);
+      expect(marker.options.visible, markerTwoOptions.visible);
+      expect(marker.options.zIndex, markerTwoOptions.zIndex);
     }
 
-    // Jyväsylä marker options.
-    const MarkerOptions jyvaskylaMarkerOptions = MarkerOptions(
+    // markerThree options.
+    const MarkerOptions markerThreeOptions = MarkerOptions(
       position:
           LatLng(latitude: 62.25743381335948, longitude: 25.779330148583174),
       infoWindow: InfoWindow(
         title: 'Jyväskylä',
-        snippet: 'Jyväskylä',
+        snippet: 'markerThree',
       ),
     );
 
     /// Test addMarkers() adds markers in correct order.
     final List<Marker?> removeMarkerList =
         await viewController.addMarkers(<MarkerOptions>[
-      jyvaskylaMarkerOptions,
-      helsinkiOfficeMarkerOptions,
+      markerThreeOptions,
+      markerOneOptions,
     ]);
 
     final List<Marker?> getRemoveMarkerList = await viewController.getMarkers();
@@ -214,8 +223,8 @@ void main() {
     expect(getRemovedMarkerList.first!.options.infoWindow.title, 'Jyväskylä');
 
     // Add two markers.
-    List<Marker?> clearMarkerList = await viewController.addMarkers(
-        <MarkerOptions>[helsinkiOfficeMarkerOptions, ouluOfficeMarkerOptions]);
+    List<Marker?> clearMarkerList = await viewController
+        .addMarkers(<MarkerOptions>[markerOneOptions, markerTwoOptions]);
     List<Marker?> getClearMarkerList = await viewController.getMarkers();
 
     expect(clearMarkerList.length, 2);
@@ -240,8 +249,8 @@ void main() {
     expect(getClearMarkerList, isEmpty);
 
     /// Test clear() function clears also markers.
-    clearMarkerList = await viewController.addMarkers(
-        <MarkerOptions>[helsinkiOfficeMarkerOptions, ouluOfficeMarkerOptions]);
+    clearMarkerList = await viewController
+        .addMarkers(<MarkerOptions>[markerOneOptions, markerTwoOptions]);
     getClearMarkerList = await viewController.getMarkers();
     expect(clearMarkerList.length, 2);
     expect(getClearMarkerList.length, 2);

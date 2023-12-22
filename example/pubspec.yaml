@@ -42,6 +42,7 @@ flutter:
   assets:
     - assets/night_style.json
     - assets/sepia_style.json
+    - assets/marker1.png
 
 patrol:
   app_name: Navigation Example

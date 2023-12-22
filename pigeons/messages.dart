@@ -157,7 +157,8 @@ class MarkerOptionsDto {
       required this.rotation,
       required this.infoWindow,
       required this.visible,
-      required this.zIndex});
+      required this.zIndex,
+      required this.icon});
 
   final double alpha;
   final MarkerAnchorDto anchor;
@@ -169,6 +170,16 @@ class MarkerOptionsDto {
   final InfoWindowDto infoWindow;
   final bool visible;
   final double zIndex;
+  final ImageDescriptorDto icon;
+}
+
+class ImageDescriptorDto {
+  const ImageDescriptorDto(
+      {this.registeredImageId, this.imagePixelRatio, this.width, this.height});
+  final String? registeredImageId;
+  final double? imagePixelRatio;
+  final double? width;
+  final double? height;
 }
 
 class InfoWindowDto {
@@ -495,6 +506,15 @@ abstract class NavigationViewApi {
   List<CircleDto> updateCircles(int viewId, List<CircleDto> circles);
   void removeCircles(int viewId, List<CircleDto> circles);
   void clearCircles(int viewId);
+}
+
+@HostApi(dartHostTestHandler: 'TestImageRegistryApi')
+abstract class ImageRegistryApi {
+  ImageDescriptorDto registerBitmapImage(String imageId, Uint8List bytes,
+      double imagePixelRatio, double? width, double? height);
+  void unregisterImage(ImageDescriptorDto imageDescriptor);
+  List<ImageDescriptorDto> getRegisteredImages();
+  void clearRegisteredImages();
 }
 
 @FlutterApi()

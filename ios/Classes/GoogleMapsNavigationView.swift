@@ -39,6 +39,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   private var _mapConfiguration: MapConfiguration!
   private var _mapViewReady: Bool = false
   private var _mapReadyCallback: ((Result<Void, Error>) -> Void)?
+  private var _imageRegistry: ImageRegistry
   var isAttachedToSession: Bool = false
 
   func view() -> UIView {
@@ -49,11 +50,12 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
        viewIdentifier viewId: Int64,
        viewRegistry registry: GoogleMapsNavigationViewRegistry,
        navigationViewEventApi: NavigationViewEventApi,
-       mapConfiguration: MapConfiguration) {
+       mapConfiguration: MapConfiguration, imageRegistry: ImageRegistry) {
     _viewId = viewId
     _viewRegistry = registry
     _navigationViewEventApi = navigationViewEventApi
     _mapConfiguration = mapConfiguration
+    _imageRegistry = imageRegistry
 
     let mapViewOptions = GMSMapViewOptions()
     _mapConfiguration.apply(to: mapViewOptions, withFrame: frame)
@@ -458,7 +460,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
       .compactMap { $0 }
       .map { marker in
         let markerController = MarkerController(markerId: marker.markerId)
-        markerController.update(from: marker)
+        markerController.update(from: marker, imageRegistry: _imageRegistry)
         // Handle visibility property on iOS by removing/not putting the marker
         // on the map.
         markerController.gmsMarker.map = marker.isVisible() ? _navigationView : nil
@@ -473,7 +475,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
       .compactMap { $0 }
       .compactMap { updatedMarker in
         let markerController = try findMarkerController(markerId: updatedMarker.markerId)
-        markerController.update(from: updatedMarker)
+        markerController.update(from: updatedMarker, imageRegistry: _imageRegistry)
         // Handle visibility property on iOS by removing/not putting the marker
         // on the map.
         markerController.gmsMarker.map = updatedMarker.isVisible() ? _navigationView : nil

@@ -20,13 +20,16 @@ class MarkerController {
   let markerId: String
   let gmsMarker = GMSMarker()
   var consumeTapEvents = false
+  var registeredImage: RegisteredImage?
 
   init(markerId: String) {
     self.markerId = markerId
   }
 
+  private let defaultImageDto: ImageDescriptorDto = .init()
+
   /// Update [GMSMarker] instance with values from pigeon [MarkerDto] class
-  func update(from markerDto: MarkerDto) {
+  func update(from markerDto: MarkerDto, imageRegistry: ImageRegistry) {
     gmsMarker.isDraggable = markerDto.options.draggable
     gmsMarker.isFlat = markerDto.options.flat
 
@@ -49,31 +52,42 @@ class MarkerController {
     )
 
     consumeTapEvents = markerDto.options.consumeTapEvents
+
+    if let imageId = markerDto.options.icon.registeredImageId,
+       let registeredImage = imageRegistry.findRegisteredImage(imageId: imageId) {
+      gmsMarker.icon = registeredImage.image
+      self.registeredImage = registeredImage
+    } else {
+      gmsMarker.icon = nil
+      registeredImage = nil
+    }
   }
 
   func toMarkerDto() -> MarkerDto {
-    MarkerDto(markerId: markerId,
-              options: MarkerOptionsDto(alpha: Double(gmsMarker.opacity),
-                                        anchor: MarkerAnchorDto(
-                                          u: gmsMarker.groundAnchor.x,
-                                          v: gmsMarker.groundAnchor.y
-                                        ),
-                                        draggable: gmsMarker.isDraggable,
-                                        flat: gmsMarker.isFlat,
-                                        consumeTapEvents: consumeTapEvents,
-                                        position: LatLngDto(
-                                          latitude: gmsMarker.position.latitude,
-                                          longitude: gmsMarker.position.longitude
-                                        ),
-                                        rotation: gmsMarker.rotation,
-                                        infoWindow: InfoWindowDto(
-                                          title: gmsMarker.title,
-                                          snippet: gmsMarker.snippet,
-                                          anchor: MarkerAnchorDto(
-                                            u: gmsMarker.infoWindowAnchor.x,
-                                            v: gmsMarker.infoWindowAnchor.y
-                                          )
-                                        ), visible: gmsMarker.map != nil,
-                                        zIndex: Double(gmsMarker.zIndex)))
+    let options = MarkerOptionsDto(alpha: Double(gmsMarker.opacity),
+                                   anchor: MarkerAnchorDto(
+                                     u: gmsMarker.groundAnchor.x,
+                                     v: gmsMarker.groundAnchor.y
+                                   ),
+                                   draggable: gmsMarker.isDraggable,
+                                   flat: gmsMarker.isFlat,
+                                   consumeTapEvents: consumeTapEvents,
+                                   position: LatLngDto(
+                                     latitude: gmsMarker.position.latitude,
+                                     longitude: gmsMarker.position.longitude
+                                   ),
+                                   rotation: gmsMarker.rotation,
+                                   infoWindow: InfoWindowDto(
+                                     title: gmsMarker.title,
+                                     snippet: gmsMarker.snippet,
+                                     anchor: MarkerAnchorDto(
+                                       u: gmsMarker.infoWindowAnchor.x,
+                                       v: gmsMarker.infoWindowAnchor.y
+                                     )
+                                   ), visible: gmsMarker.map != nil,
+                                   zIndex: Double(gmsMarker.zIndex),
+                                   icon: registeredImage?.toImageDescriptorDto() ?? defaultImageDto)
+    return MarkerDto(markerId: markerId,
+                     options: options)
   }
 }

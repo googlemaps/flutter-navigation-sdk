@@ -37,50 +37,53 @@ class _TestNavigationViewApiCodec extends StandardMessageCodec {
     } else if (value is CircleOptionsDto) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
-    } else if (value is InfoWindowDto) {
+    } else if (value is ImageDescriptorDto) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngBoundsDto) {
+    } else if (value is InfoWindowDto) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngDto) {
+    } else if (value is LatLngBoundsDto) {
       buffer.putUint8(133);
       writeValue(buffer, value.encode());
     } else if (value is LatLngDto) {
       buffer.putUint8(134);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerAnchorDto) {
+    } else if (value is LatLngDto) {
       buffer.putUint8(135);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerDto) {
+    } else if (value is MarkerAnchorDto) {
       buffer.putUint8(136);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerOptionsDto) {
+    } else if (value is MarkerDto) {
       buffer.putUint8(137);
       writeValue(buffer, value.encode());
-    } else if (value is PatternItemDto) {
+    } else if (value is MarkerOptionsDto) {
       buffer.putUint8(138);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonDto) {
+    } else if (value is PatternItemDto) {
       buffer.putUint8(139);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonHoleDto) {
+    } else if (value is PolygonDto) {
       buffer.putUint8(140);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonOptionsDto) {
+    } else if (value is PolygonHoleDto) {
       buffer.putUint8(141);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineDto) {
+    } else if (value is PolygonOptionsDto) {
       buffer.putUint8(142);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineOptionsDto) {
+    } else if (value is PolylineDto) {
       buffer.putUint8(143);
       writeValue(buffer, value.encode());
-    } else if (value is StyleSpanDto) {
+    } else if (value is PolylineOptionsDto) {
       buffer.putUint8(144);
       writeValue(buffer, value.encode());
-    } else if (value is StyleSpanStrokeStyleDto) {
+    } else if (value is StyleSpanDto) {
       buffer.putUint8(145);
+      writeValue(buffer, value.encode());
+    } else if (value is StyleSpanStrokeStyleDto) {
+      buffer.putUint8(146);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -97,34 +100,36 @@ class _TestNavigationViewApiCodec extends StandardMessageCodec {
       case 130:
         return CircleOptionsDto.decode(readValue(buffer)!);
       case 131:
-        return InfoWindowDto.decode(readValue(buffer)!);
+        return ImageDescriptorDto.decode(readValue(buffer)!);
       case 132:
-        return LatLngBoundsDto.decode(readValue(buffer)!);
+        return InfoWindowDto.decode(readValue(buffer)!);
       case 133:
-        return LatLngDto.decode(readValue(buffer)!);
+        return LatLngBoundsDto.decode(readValue(buffer)!);
       case 134:
         return LatLngDto.decode(readValue(buffer)!);
       case 135:
-        return MarkerAnchorDto.decode(readValue(buffer)!);
+        return LatLngDto.decode(readValue(buffer)!);
       case 136:
-        return MarkerDto.decode(readValue(buffer)!);
+        return MarkerAnchorDto.decode(readValue(buffer)!);
       case 137:
-        return MarkerOptionsDto.decode(readValue(buffer)!);
+        return MarkerDto.decode(readValue(buffer)!);
       case 138:
-        return PatternItemDto.decode(readValue(buffer)!);
+        return MarkerOptionsDto.decode(readValue(buffer)!);
       case 139:
-        return PolygonDto.decode(readValue(buffer)!);
+        return PatternItemDto.decode(readValue(buffer)!);
       case 140:
-        return PolygonHoleDto.decode(readValue(buffer)!);
+        return PolygonDto.decode(readValue(buffer)!);
       case 141:
-        return PolygonOptionsDto.decode(readValue(buffer)!);
+        return PolygonHoleDto.decode(readValue(buffer)!);
       case 142:
-        return PolylineDto.decode(readValue(buffer)!);
+        return PolygonOptionsDto.decode(readValue(buffer)!);
       case 143:
-        return PolylineOptionsDto.decode(readValue(buffer)!);
+        return PolylineDto.decode(readValue(buffer)!);
       case 144:
-        return StyleSpanDto.decode(readValue(buffer)!);
+        return PolylineOptionsDto.decode(readValue(buffer)!);
       case 145:
+        return StyleSpanDto.decode(readValue(buffer)!);
+      case 146:
         return StyleSpanStrokeStyleDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -3057,6 +3062,180 @@ abstract class TestNavigationViewApi {
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.clearCircles was null, expected non-null int.');
           try {
             api.clearCircles(arg_viewId!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+  }
+}
+
+class _TestImageRegistryApiCodec extends StandardMessageCodec {
+  const _TestImageRegistryApiCodec();
+  @override
+  void writeValue(WriteBuffer buffer, Object? value) {
+    if (value is ImageDescriptorDto) {
+      buffer.putUint8(128);
+      writeValue(buffer, value.encode());
+    } else if (value is ImageDescriptorDto) {
+      buffer.putUint8(129);
+      writeValue(buffer, value.encode());
+    } else {
+      super.writeValue(buffer, value);
+    }
+  }
+
+  @override
+  Object? readValueOfType(int type, ReadBuffer buffer) {
+    switch (type) {
+      case 128:
+        return ImageDescriptorDto.decode(readValue(buffer)!);
+      case 129:
+        return ImageDescriptorDto.decode(readValue(buffer)!);
+      default:
+        return super.readValueOfType(type, buffer);
+    }
+  }
+}
+
+abstract class TestImageRegistryApi {
+  static TestDefaultBinaryMessengerBinding? get _testBinaryMessengerBinding =>
+      TestDefaultBinaryMessengerBinding.instance;
+  static const MessageCodec<Object?> pigeonChannelCodec =
+      _TestImageRegistryApiCodec();
+
+  ImageDescriptorDto registerBitmapImage(String imageId, Uint8List bytes,
+      double imagePixelRatio, double? width, double? height);
+
+  void unregisterImage(ImageDescriptorDto imageDescriptor);
+
+  List<ImageDescriptorDto?> getRegisteredImages();
+
+  void clearRegisteredImages();
+
+  static void setup(TestImageRegistryApi? api,
+      {BinaryMessenger? binaryMessenger}) {
+    {
+      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.registerBitmapImage',
+          pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(__pigeon_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
+                (Object? message) async {
+          assert(message != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.registerBitmapImage was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final String? arg_imageId = (args[0] as String?);
+          assert(arg_imageId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.registerBitmapImage was null, expected non-null String.');
+          final Uint8List? arg_bytes = (args[1] as Uint8List?);
+          assert(arg_bytes != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.registerBitmapImage was null, expected non-null Uint8List.');
+          final double? arg_imagePixelRatio = (args[2] as double?);
+          assert(arg_imagePixelRatio != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.registerBitmapImage was null, expected non-null double.');
+          final double? arg_width = (args[3] as double?);
+          final double? arg_height = (args[4] as double?);
+          try {
+            final ImageDescriptorDto output = api.registerBitmapImage(
+                arg_imageId!,
+                arg_bytes!,
+                arg_imagePixelRatio!,
+                arg_width,
+                arg_height);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.unregisterImage',
+          pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(__pigeon_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
+                (Object? message) async {
+          assert(message != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.unregisterImage was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final ImageDescriptorDto? arg_imageDescriptor =
+              (args[0] as ImageDescriptorDto?);
+          assert(arg_imageDescriptor != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.unregisterImage was null, expected non-null ImageDescriptorDto.');
+          try {
+            api.unregisterImage(arg_imageDescriptor!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.getRegisteredImages',
+          pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(__pigeon_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
+                (Object? message) async {
+          try {
+            final List<ImageDescriptorDto?> output = api.getRegisteredImages();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.clearRegisteredImages',
+          pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(__pigeon_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
+                (Object? message) async {
+          try {
+            api.clearRegisteredImages();
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

@@ -505,7 +505,11 @@ object Convert {
    *
    * @param markerOptions pigeon [MarkerOptionsDto].
    */
-  fun sinkMarkerOptions(markerOptions: MarkerOptionsDto, sink: MarkerOptionsSink) {
+  fun sinkMarkerOptions(
+    markerOptions: MarkerOptionsDto,
+    sink: MarkerOptionsSink,
+    imageRegistry: ImageRegistry
+  ) {
     sink.setAlpha(markerOptions.alpha.toFloat())
     sink.setAnchor(markerOptions.anchor.u.toFloat(), markerOptions.anchor.v.toFloat())
     sink.setDraggable(markerOptions.draggable)
@@ -521,6 +525,10 @@ object Convert {
     sink.setTitle(markerOptions.infoWindow.title)
     sink.setVisible(markerOptions.visible)
     sink.setZIndex(markerOptions.zIndex.toFloat())
+    markerOptions.icon.registeredImageId?.let {
+      val registeredImage = imageRegistry.findRegisteredImage(it)
+      sink.setIcon(registeredImage)
+    } ?: run { sink.setIcon(null) }
   }
 
   fun convertRouteSegmentTrafficDataToDto(
@@ -637,7 +645,8 @@ object Convert {
           )
         ),
       visible = marker.isVisible,
-      zIndex = marker.zIndex.toDouble()
+      zIndex = marker.zIndex.toDouble(),
+      icon = registeredImageToImageDescriptorDto(markerController.registeredImage)
     )
   }
 
@@ -834,5 +843,26 @@ object Convert {
       visible = circle.isVisible,
       clickable = circle.isClickable
     )
+  }
+
+  /**
+   * Creates [ImageDescriptorDto] from [RegisteredImage] object. If registeredImage is null, returns
+   * id for default marker icon.
+   *
+   * @param registeredImage [RegisteredImage] object.
+   * @return [ImageDescriptorDto] object.
+   */
+  fun registeredImageToImageDescriptorDto(registeredImage: RegisteredImage?): ImageDescriptorDto {
+    return if (registeredImage != null) {
+      ImageDescriptorDto(
+        registeredImage.imageId,
+        registeredImage.imagePixelRatio,
+        registeredImage.width,
+        registeredImage.height
+      )
+    } else {
+      // For default marker icon
+      ImageDescriptorDto()
+    }
   }
 }

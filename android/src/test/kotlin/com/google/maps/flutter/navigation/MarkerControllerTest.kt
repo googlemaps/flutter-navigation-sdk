@@ -16,8 +16,10 @@
 
 package com.google.maps.flutter.navigation
 
+import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import io.mockk.verify
@@ -29,9 +31,15 @@ internal class MarkerControllerTest {
   @get:Rule val mockkRule = MockKRule(this)
 
   @MockK(relaxUnitFun = true) lateinit var marker: Marker
+  @MockK(relaxUnitFun = true) lateinit var imageRegistry: ImageRegistry
+  @MockK(relaxUnitFun = true) lateinit var bitmapDescriptor: BitmapDescriptor
 
   @Test
   fun markerController_callsExpectedFunctions() {
+    every { imageRegistry.findRegisteredImage("default") } returns null
+    every { imageRegistry.findRegisteredImage("Image_0") } returns
+      RegisteredImage("Image_0", bitmapDescriptor, 1.0, null, null)
+
     val optionsIn =
       MarkerOptionsDto(
         alpha = 0.5,
@@ -43,10 +51,11 @@ internal class MarkerControllerTest {
         position = LatLngDto(10.0, 20.0),
         rotation = 40.0,
         visible = true,
-        zIndex = 2.0
+        zIndex = 2.0,
+        icon = ImageDescriptorDto("default", 1.0)
       )
-    val controller = MarkerController(marker, "Marker_0", true, 0.1F, 0.2F, 0.3F, 0.4F)
-    Convert.sinkMarkerOptions(optionsIn, controller)
+    val controller = MarkerController(marker, "Marker_0", true, 0.1F, 0.2F, 0.3F, 0.4F, null)
+    Convert.sinkMarkerOptions(optionsIn, controller, imageRegistry)
 
     verify { marker.alpha = 0.5F }
     verify { marker.setAnchor(0.1F, 0.2F) }
@@ -64,5 +73,10 @@ internal class MarkerControllerTest {
     assertEquals(0.2F, controller.anchorV)
     assertEquals(0.3F, controller.infoWindowAnchorU)
     assertEquals(0.4F, controller.infoWindowAnchorV)
+    verify { marker.setIcon(null) }
+
+    val optionsWithIcon = optionsIn.copy(icon = ImageDescriptorDto("Image_0", 1.0))
+    Convert.sinkMarkerOptions(optionsWithIcon, controller, imageRegistry)
+    verify { marker.setIcon(bitmapDescriptor) }
   }
 }

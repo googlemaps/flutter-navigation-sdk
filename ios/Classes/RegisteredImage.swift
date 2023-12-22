@@ -12,16 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'circles.dart';
-export 'images.dart';
-export 'lat_lng.dart';
-export 'lat_lng_bounds.dart';
-export 'markers.dart';
-export 'navigation_destinations.dart';
-export 'navigation_view_types.dart';
-export 'polygons.dart';
-export 'polylines.dart';
-export 'simulation.dart';
-export 'stroke_patterns.dart';
-export 'view_initialization_options.dart';
-export 'zoom_constants.dart';
+import Foundation
+
+struct RegisteredImage {
+  let imageId: String
+  let image: UIImage
+  let imagePixelRatio: Double
+  let width: Double?
+  let height: Double?
+
+  func toImageDescriptorDto() -> ImageDescriptorDto {
+    ImageDescriptorDto(
+      registeredImageId: imageId,
+      imagePixelRatio: imagePixelRatio,
+      width: width,
+      height: height
+    )
+  }
+}
