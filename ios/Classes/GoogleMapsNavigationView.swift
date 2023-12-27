@@ -667,12 +667,11 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   private func sendMarkerEvent(marker: GMSMarker, eventType: MarkerEventTypeDto) {
     do {
       let markerController = try findMarkerController(gmsMarker: marker)
+
       _navigationViewEventApi.onMarkerEvent(
-        msg: .init(
-          viewId: _viewId,
-          markerId: markerController.markerId,
-          eventType: eventType
-        ),
+        viewId: _viewId,
+        markerId: markerController.markerId,
+        eventType: eventType,
         completion: { _ in }
       )
     } catch {
@@ -685,14 +684,13 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     do {
       let markerController = try findMarkerController(gmsMarker: marker)
       _navigationViewEventApi.onMarkerDragEvent(
-        msg: .init(
-          viewId: _viewId,
-          markerId: markerController.markerId,
-          eventType: eventType,
-          position: .init(
-            latitude: markerController.gmsMarker.position.latitude,
-            longitude: markerController.gmsMarker.position.longitude
-          )
+        viewId: _viewId,
+        markerId: markerController.markerId,
+        eventType: eventType,
+        position: .init(
+          latitude: markerController.gmsMarker.position.latitude,
+          longitude: markerController.gmsMarker.position.longitude
+
         ),
         completion: { _ in }
       )
@@ -773,26 +771,20 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
   func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
     if let polygon = overlay as? GMSPolygon {
       _navigationViewEventApi.onPolygonClicked(
-        msg: .init(
-          viewId: _viewId,
-          polygonId: polygon.getPolygonId()
-        ),
+        viewId: _viewId,
+        polygonId: polygon.getPolygonId(),
         completion: { _ in }
       )
     } else if let polyline = overlay as? GMSPolyline {
       _navigationViewEventApi.onPolylineClicked(
-        msg: .init(
-          viewId: _viewId,
-          polylineId: polyline.getPolylineId()
-        ),
+        viewId: _viewId,
+        polylineId: polyline.getPolylineId(),
         completion: { _ in }
       )
     } else if let circle = overlay as? GMSCircle {
       _navigationViewEventApi.onCircleClicked(
-        msg: .init(
-          viewId: _viewId,
-          circleId: circle.getCircleId()
-        ),
+        viewId: _viewId,
+        circleId: circle.getCircleId(),
         completion: { _ in }
       )
     }

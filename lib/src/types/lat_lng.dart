@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import 'package:flutter/foundation.dart';
-import '../../google_maps_navigation.dart';
 
 /// LatLng coordinate object.
 /// {@category Navigation}
@@ -67,16 +66,4 @@ class LatLng {
 
   @override
   int get hashCode => Object.hash(latitude.hashCode, longitude.hashCode);
-}
-
-/// Converts lat lng point from the Pigeon DTO format.
-/// @nodoc
-LatLng latLngFromDto(LatLngDto point) {
-  return LatLng(latitude: point.latitude, longitude: point.longitude);
-}
-
-/// Converts lat lng point to the Pigeon DTO format.
-/// @nodoc
-LatLngDto latLngToDto(LatLng point) {
-  return LatLngDto(latitude: point.latitude, longitude: point.longitude);
 }

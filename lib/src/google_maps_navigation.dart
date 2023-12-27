@@ -20,7 +20,6 @@ import 'package:flutter/material.dart';
 
 import '../google_maps_navigation.dart';
 import 'google_maps_navigation_platform_interface.dart';
-import 'types/util/marker_conversion.dart';
 
 /// Created callback.
 typedef OnCreatedCallback = void Function(
@@ -569,15 +568,15 @@ class GoogleNavigationViewController {
   void setOnMarkerClickedListeners() {
     GoogleMapsNavigationPlatform.instance
         .getMarkerEventStream(viewId: _viewId)
-        .listen((MarkerEventDto event) {
+        .listen((MarkerEvent event) {
       switch (event.eventType) {
-        case MarkerEventTypeDto.clicked:
+        case MarkerEventType.clicked:
           _viewState?.widget.onMarkerClicked?.call(event.markerId);
-        case MarkerEventTypeDto.infoWindowClicked:
+        case MarkerEventType.infoWindowClicked:
           _viewState?.widget.onMarkerInfoWindowClicked?.call(event.markerId);
-        case MarkerEventTypeDto.infoWindowClosed:
+        case MarkerEventType.infoWindowClosed:
           _viewState?.widget.onMarkerInfoWindowClosed?.call(event.markerId);
-        case MarkerEventTypeDto.infoWindowLongClicked:
+        case MarkerEventType.infoWindowLongClicked:
           _viewState?.widget.onMarkerInfoWindowLongClicked
               ?.call(event.markerId);
       }
@@ -588,17 +587,16 @@ class GoogleNavigationViewController {
   void setOnMarkerDragListeners() {
     GoogleMapsNavigationPlatform.instance
         .getMarkerDragEventStream(viewId: _viewId)
-        .listen((MarkerDragEventDto event) {
+        .listen((MarkerDragEvent event) {
       switch (event.eventType) {
-        case MarkerDragEventTypeDto.drag:
-          _viewState?.widget.onMarkerDrag
-              ?.call(event.markerId, event.position.toLatLng());
-        case MarkerDragEventTypeDto.dragEnd:
+        case MarkerDragEventType.drag:
+          _viewState?.widget.onMarkerDrag?.call(event.markerId, event.position);
+        case MarkerDragEventType.dragEnd:
           _viewState?.widget.onMarkerDragEnd
-              ?.call(event.markerId, event.position.toLatLng());
-        case MarkerDragEventTypeDto.dragStart:
+              ?.call(event.markerId, event.position);
+        case MarkerDragEventType.dragStart:
           _viewState?.widget.onMarkerDragStart
-              ?.call(event.markerId, event.position.toLatLng());
+              ?.call(event.markerId, event.position);
       }
     });
   }
@@ -607,7 +605,7 @@ class GoogleNavigationViewController {
   void setOnPolygonClickedListener() {
     GoogleMapsNavigationPlatform.instance
         .getPolygonClickedEventStream(viewId: _viewId)
-        .listen((PolygonClickedEventDto event) {
+        .listen((PolygonClickedEvent event) {
       _viewState?.widget.onPolygonClicked?.call(event.polygonId);
     });
   }
@@ -615,8 +613,8 @@ class GoogleNavigationViewController {
   /// Sets the event channel listener for the polyline clicked event.
   void setOnPolylineClickedListener() {
     GoogleMapsNavigationPlatform.instance
-        .getPolylineDtoClickedEventStream(viewId: _viewId)
-        .listen((PolylineClickedEventDto event) {
+        .getPolylineClickedEventStream(viewId: _viewId)
+        .listen((PolylineClickedEvent event) {
       _viewState?.widget.onPolylineClicked?.call(event.polylineId);
     });
   }
@@ -624,8 +622,8 @@ class GoogleNavigationViewController {
   /// Sets the event channel listener for the circle clicked event.
   void setOnCircleClickedListener() {
     GoogleMapsNavigationPlatform.instance
-        .getCircleDtoClickedEventStream(viewId: _viewId)
-        .listen((CircleClickedEventDto event) {
+        .getCircleClickedEventStream(viewId: _viewId)
+        .listen((CircleClickedEvent event) {
       _viewState?.widget.onCircleClicked?.call(event.circleId);
     });
   }

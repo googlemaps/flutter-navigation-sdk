@@ -13,8 +13,10 @@
 // limitations under the License.
 
 import '../../../google_maps_navigation.dart';
+import '../method_channel.dart';
 
-/// [Marker] convert extension
+/// [Marker] convert extension.
+/// @nodoc
 extension ConvertMarker on Marker {
   /// Converts [Marker] to [MarkerDto]
   MarkerDto toDto() {
@@ -22,21 +24,17 @@ extension ConvertMarker on Marker {
   }
 }
 
-/// [NavigationViewMarker] convert extension
+/// [MarkerDto] convert extension.
+/// @nodoc
 extension ConvertMarkerDto on MarkerDto {
   /// Converts [MarkerDto] to [Marker]
   Marker toMarker() {
     return Marker(markerId: markerId, options: options.toMarkerOptions());
   }
-
-  /// Converts [Marker] to [MarkerDto]
-  static MarkerDto fromMarker(Marker marker) {
-    return MarkerDto(
-        markerId: marker.markerId, options: marker.options.toDto());
-  }
 }
 
-/// [MarkerOptions] convert extension
+/// [MarkerOptions] convert extension.
+/// @nodoc
 extension ConvertMarkerOptions on MarkerOptions {
   /// Converts [MarkerOptions] to [MarkerOptionsDto]
   MarkerOptionsDto toDto() {
@@ -55,7 +53,8 @@ extension ConvertMarkerOptions on MarkerOptions {
   }
 }
 
-/// [MarkerOptionsDto] convert extension
+/// [MarkerOptionsDto] convert extension.
+/// @nodoc
 extension ConvertMarkerOptionsDto on MarkerOptionsDto {
   /// Converts [MarkerOptionsDto] to [MarkerOptions]
   MarkerOptions toMarkerOptions() {
@@ -74,7 +73,8 @@ extension ConvertMarkerOptionsDto on MarkerOptionsDto {
   }
 }
 
-/// [MarkerAnchor] convert extension
+/// [MarkerAnchor] convert extension.
+/// @nodoc
 extension ConvertMarkerAnchor on MarkerAnchor {
   /// Converts [MarkerAnchor] to [MarkerAnchorDto]
   MarkerAnchorDto toDto() {
@@ -82,7 +82,8 @@ extension ConvertMarkerAnchor on MarkerAnchor {
   }
 }
 
-/// [MarkerAnchorDto] convert extension
+/// [MarkerAnchorDto] convert extension.
+/// @nodoc
 extension ConvertMarkerAnchorDto on MarkerAnchorDto {
   /// Converts [MarkerAnchorDto] to [MarkerAnchor]
   MarkerAnchor toMarkerAnchor() {
@@ -91,6 +92,7 @@ extension ConvertMarkerAnchorDto on MarkerAnchorDto {
 }
 
 /// [InfoWindow] convert extension.
+/// @nodoc
 extension ConvertInfoWindow on InfoWindow {
   /// Converts [InfoWindow] to [InfoWindowDto].
   InfoWindowDto toDto() {
@@ -100,6 +102,7 @@ extension ConvertInfoWindow on InfoWindow {
 }
 
 /// [InfoWindowDto] convert extension.
+/// @nodoc
 extension ConvertInfoWindowDto on InfoWindowDto {
   /// Converts [InfoWindowDto] to [InfoWindow].
   InfoWindow toInfoWindow() {
@@ -108,23 +111,26 @@ extension ConvertInfoWindowDto on InfoWindowDto {
   }
 }
 
-/// [LatLng] convert extension
-extension ConvertLatLng on LatLng {
-  /// Converts [LatLng] to [LatLngDto]
-  LatLngDto toDto() {
-    return LatLngDto(latitude: latitude, longitude: longitude);
-  }
-}
-
-/// [LatLngDto] convert extension
-extension ConvertLatLngDto on LatLngDto {
-  /// Converts [LatLngDto] to [LatLng]
-  LatLng toLatLng() {
-    return LatLng(latitude: latitude, longitude: longitude);
+/// [MarkerEventTypeDto] convert extension.
+/// @nodoc
+extension ConvertMarkerEventType on MarkerEventTypeDto {
+  /// Converts [MarkerEventTypeDto] to [MarkerEventType]
+  MarkerEventType toMarkerEventType() {
+    switch (this) {
+      case MarkerEventTypeDto.clicked:
+        return MarkerEventType.clicked;
+      case MarkerEventTypeDto.infoWindowClicked:
+        return MarkerEventType.infoWindowClicked;
+      case MarkerEventTypeDto.infoWindowClosed:
+        return MarkerEventType.infoWindowClosed;
+      case MarkerEventTypeDto.infoWindowLongClicked:
+        return MarkerEventType.infoWindowLongClicked;
+    }
   }
 }
 
 /// [ImageDescriptor] convert extension.
+/// @nodoc
 extension ConvertImageDescriptor on ImageDescriptor {
   /// Converts [ImageDescriptor] to [ImageDescriptorDto].
   ImageDescriptorDto toDto() {
@@ -137,6 +143,7 @@ extension ConvertImageDescriptor on ImageDescriptor {
 }
 
 /// [ImageDescriptorDto] convert extension.
+/// @nodoc
 extension ConvertImageDescriptorDto on ImageDescriptorDto {
   /// Converts [ImageDescriptorDto] to [ImageDescriptor].
   ImageDescriptor toImageDescriptor() {

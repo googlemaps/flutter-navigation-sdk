@@ -270,3 +270,65 @@ class MarkerAnchor {
   @override
   int get hashCode => Object.hash(u.hashCode, v.hashCode);
 }
+
+/// Marker event types
+enum MarkerEventType {
+  /// The marker has been tapped.
+  clicked,
+
+  /// The marker info window has been tapped.
+  infoWindowClicked,
+
+  /// The marker info window has been closed.
+  infoWindowClosed,
+
+  /// The marker info window has been long clicked.
+  infoWindowLongClicked,
+}
+
+/// Marker drag event types
+enum MarkerDragEventType {
+  /// The marker is being dragged.
+  drag,
+
+  /// The marker drag has been started.
+  dragStart,
+
+  /// The marker drag has been ended.
+  dragEnd,
+}
+
+/// Marker event sent from platform side.
+@immutable
+class MarkerEvent {
+  /// Initialize [MarkerEvent] object.
+  const MarkerEvent({
+    required this.markerId,
+    required this.eventType,
+  });
+
+  /// Id of the marker that has been tapped.
+  final String markerId;
+
+  /// Type of the event.
+  final MarkerEventType eventType;
+}
+
+/// Marker drag event sent from platform side.
+@immutable
+class MarkerDragEvent {
+  /// Initialize [MarkerDragEvent] object.
+  const MarkerDragEvent(
+      {required this.markerId,
+      required this.eventType,
+      required this.position});
+
+  /// Id of the marker that has been tapped.
+  final String markerId;
+
+  /// Position of the marker that has been dragged.
+  final LatLng position;
+
+  /// Type of the event.
+  final MarkerDragEventType eventType;
+}

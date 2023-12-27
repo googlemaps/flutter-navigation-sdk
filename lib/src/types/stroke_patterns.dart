@@ -17,19 +17,34 @@ import 'package:flutter/material.dart';
 
 import '../../google_maps_navigation.dart';
 
+/// Pattern used in the stroke pattern for a [Polyline] or the outline of a [Polygon] or [Circle].
+enum PatternType {
+  /// Dash pattern.
+  dash,
+
+  /// Dot pattern.
+  dot,
+
+  /// Gap pattern.
+  gap,
+}
+
 /// Item used in the stroke pattern for a Polyline or the outline of a Polygon or Circle.
 /// {@category Navigation View}
 abstract class PatternItem {
-  /// Convert [PatternItem] to [PatternItemDto];
-  PatternItemDto toPatternItemDto();
+  /// Initialize [PatternItem] object.
+  const PatternItem(this.type);
+
+  /// Type of the pattern item.
+  final PatternType type;
 }
 
 /// Class representing a dash used in the stroke pattern for a [Polyline] or the outline of a [Polygon] or [Circle].
 /// {@category Navigation View}
 @immutable
-class DashPattern implements PatternItem {
+class DashPattern extends PatternItem {
   /// Initialize [DashPattern] object.
-  const DashPattern({required this.length});
+  const DashPattern({required this.length}) : super(PatternType.dash);
 
   /// Length in pixels (non-negative).
   final double length;
@@ -47,32 +62,22 @@ class DashPattern implements PatternItem {
 
   @override
   int get hashCode => length.hashCode;
-
-  @override
-  PatternItemDto toPatternItemDto() {
-    return PatternItemDto(type: PatternTypeDto.dash, length: length);
-  }
 }
 
 /// Class representing a dot used in the stroke pattern for a [Polyline] or the outline of a [Polygon] or [Circle].
 /// {@category Navigation View}
 @immutable
-class DotPattern implements PatternItem {
+class DotPattern extends PatternItem {
   /// Initialize [DotPattern] object.
-  const DotPattern();
-
-  @override
-  PatternItemDto toPatternItemDto() {
-    return PatternItemDto(type: PatternTypeDto.dot);
-  }
+  const DotPattern() : super(PatternType.dot);
 }
 
 /// Class representing a gap used in the stroke pattern for a [Polyline] or the outline of a [Polygon] or [Circle].
 /// {@category Navigation View}
 @immutable
-class GapPattern implements PatternItem {
+class GapPattern extends PatternItem {
   /// Initialize [GapPattern] object.
-  const GapPattern({required this.length});
+  const GapPattern({required this.length}) : super(PatternType.gap);
 
   /// Length in pixels (non-negative).
   final double length;
@@ -90,9 +95,4 @@ class GapPattern implements PatternItem {
 
   @override
   int get hashCode => length.hashCode;
-
-  @override
-  PatternItemDto toPatternItemDto() {
-    return PatternItemDto(type: PatternTypeDto.gap, length: length);
-  }
 }

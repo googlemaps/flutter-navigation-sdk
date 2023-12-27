@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'src/google_maps_image_registry.dart';
-export 'src/google_maps_navigation.dart';
-export 'src/google_maps_navigation_android.dart';
-export 'src/google_maps_navigation_ios.dart';
-export 'src/navigator/google_maps_navigator.dart';
-export 'src/types/types.dart';
+export 'common_image_api.dart';
+export 'common_session_api.dart';
+export 'common_view_api.dart';
+export 'convert/convert.dart';
+export 'messages.g.dart';

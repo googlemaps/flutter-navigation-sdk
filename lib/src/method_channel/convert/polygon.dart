@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:flutter/material.dart';
+import 'dart:ui';
 
 import '../../../google_maps_navigation.dart';
-import 'marker_conversion.dart';
+import '../method_channel.dart';
 
 /// [Polygon] convert extension.
+/// @nodoc
 extension ConvertPolygon on Polygon {
   /// Convert [Polygon] to [PolygonDto].
   PolygonDto toDto() {
@@ -26,6 +27,7 @@ extension ConvertPolygon on Polygon {
 }
 
 /// [PolygonOptions] convert extension.
+/// @nodoc
 extension ConvertPolygonOptions on PolygonOptions {
   /// Convert [PolygonOptions] to [PolygonOptionsDto].
   PolygonOptionsDto toDto() {
@@ -46,6 +48,7 @@ extension ConvertPolygonOptions on PolygonOptions {
 }
 
 /// [PolygonDto] convert extension.
+/// @nodoc
 extension ConvertPolygonDto on PolygonDto {
   /// Convert [PolygonDto] to [Polygon].
   Polygon toPolygon() {
@@ -54,6 +57,7 @@ extension ConvertPolygonDto on PolygonDto {
 }
 
 /// [PolygonOptionsDto] convert extension.
+/// @nodoc
 extension ConvertPolygonOptionsDto on PolygonOptionsDto {
   /// Convert [PolygonOptionsDto] to [PolygonOptions].
   PolygonOptions toPolygonOptions() {

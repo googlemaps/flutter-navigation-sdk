@@ -63,11 +63,11 @@ class RoadSnappedLocationUpdatedEvent {
 class RoadSnappedRawLocationUpdatedEvent {
   /// Initialize road snapped raw location updated event message.
   RoadSnappedRawLocationUpdatedEvent({
-    required this.coordinate,
+    required this.location,
   });
 
   /// Coordinate of the updated location.
-  final LatLng? coordinate;
+  final LatLng? location;
 }
 
 /// Navigation simulation options.
@@ -80,61 +80,6 @@ class SimulationOptions {
 
   /// Speed multiplier.
   final double speedMultiplier;
-}
-
-/// Converts speed alert severity from DTO
-/// @nodoc
-SpeedAlertSeverity navigationSpeedAlertSeverityFromDto(
-    SpeedAlertSeverityDto severity) {
-  switch (severity) {
-    case SpeedAlertSeverityDto.unknown:
-      return SpeedAlertSeverity.unknown;
-    case SpeedAlertSeverityDto.notSpeeding:
-      return SpeedAlertSeverity.notSpeeding;
-    case SpeedAlertSeverityDto.minor:
-      return SpeedAlertSeverity.minor;
-    case SpeedAlertSeverityDto.major:
-      return SpeedAlertSeverity.major;
-  }
-}
-
-/// Converts navigation options to the Pigeon DTO format.
-/// @nodoc
-SimulationOptionsDto simulationOptionsToDto(SimulationOptions options) {
-  return SimulationOptionsDto(speedMultiplier: options.speedMultiplier);
-}
-
-/// Converts speeding updated event message from Pigeon DTO.
-/// @nodoc
-SpeedingUpdatedEvent speedingUpdatedEventFromDto(SpeedingUpdatedEventDto msg) {
-  return SpeedingUpdatedEvent(
-      percentageAboveLimit: msg.percentageAboveLimit,
-      severity: navigationSpeedAlertSeverityFromDto(msg.severity));
-}
-
-/// Converts road snapped location updated event message from Pigeon DTO.
-/// @nodoc
-RoadSnappedLocationUpdatedEvent roadSnappedLocationUpdatedEventFromDto(
-    RoadSnappedLocationUpdatedEventDto msg) {
-  return RoadSnappedLocationUpdatedEvent(
-      location: LatLng(
-          latitude: msg.location.latitude, longitude: msg.location.longitude));
-}
-
-/// Converts road snapped raw location updated event message from Pigeon DTO.
-/// @nodoc
-RoadSnappedRawLocationUpdatedEvent roadSnappedRawLocationUpdatedEventFromDto(
-    RoadSnappedRawLocationUpdatedEventDto msg) {
-  if (msg.location != null) {
-    return RoadSnappedRawLocationUpdatedEvent(
-      coordinate: LatLng(
-          latitude: msg.location!.latitude, longitude: msg.location!.longitude),
-    );
-  } else {
-    return RoadSnappedRawLocationUpdatedEvent(
-      coordinate: null,
-    );
-  }
 }
 
 /// Remaining time or distance change event message.
@@ -163,14 +108,4 @@ class OnArrivalEvent {
 
   /// Arrival waypoint.
   final NavigationWaypoint waypoint;
-}
-
-/// Converts remaining distance or remaining time changed event from Pigeon DTO.
-/// @nodoc
-RemainingTimeOrDistanceChangedEvent remainingTimeOrDistanceChangedEventFromDto(
-    RemainingTimeOrDistanceChangedEventDto msg) {
-  return RemainingTimeOrDistanceChangedEvent(
-    remainingDistance: msg.remainingDistance,
-    remainingTime: msg.remainingTime,
-  );
 }

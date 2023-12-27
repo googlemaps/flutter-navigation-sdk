@@ -12,9 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'src/google_maps_image_registry.dart';
-export 'src/google_maps_navigation.dart';
-export 'src/google_maps_navigation_android.dart';
-export 'src/google_maps_navigation_ios.dart';
-export 'src/navigator/google_maps_navigator.dart';
-export 'src/types/types.dart';
+export 'camera.dart';
+export 'circle.dart';
+export 'destinations.dart';
+export 'latlng.dart';
+export 'latlng_bounds.dart';
+export 'map_type.dart';
+export 'marker.dart';
+export 'navigation.dart';
+export 'navigation_display_options.dart';
+export 'navigation_routing_options.dart';
+export 'pattern.dart';
+export 'polygon.dart';
+export 'polyline.dart';
+export 'simulation.dart';

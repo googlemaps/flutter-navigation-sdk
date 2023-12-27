@@ -19,10 +19,7 @@ import 'package:flutter/services.dart';
 
 import '../../google_maps_navigation.dart';
 import '../google_maps_navigation_platform_interface.dart';
-import '../types/util/circle_conversion.dart';
-import '../types/util/marker_conversion.dart';
-import '../types/util/polygon_conversion.dart';
-import '../types/util/polyline_conversion.dart';
+import 'method_channel.dart';
 
 /// @nodoc
 /// Class that handles navigation view communications.
@@ -92,7 +89,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
     );
     final MapOptionsDto mapOptionsMessage = MapOptionsDto(
         cameraPosition: initialCameraPosition,
-        mapType: mapTypeToDto(mapOptions.mapType),
+        mapType: mapOptions.mapType.toDto(),
         compassEnabled: mapOptions.compassEnabled,
         rotateGesturesEnabled: mapOptions.rotateGesturesEnabled,
         scrollGesturesEnabled: mapOptions.scrollGesturesEnabled,
@@ -104,9 +101,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
         minZoomPreference: mapOptions.minZoomPreference,
         maxZoomPreference: mapOptions.maxZoomPreference,
         zoomControlsEnabled: mapOptions.zoomControlsEnabled,
-        cameraTargetBounds: mapOptions.cameraTargetBounds != null
-            ? latLngBoundsToDto(mapOptions.cameraTargetBounds!)
-            : null);
+        cameraTargetBounds: mapOptions.cameraTargetBounds?.toDto());
 
     // Navigation options
     final NavigationViewOptions navigationViewOptions =
@@ -139,13 +134,13 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   @override
   Future<MapType> getMapType({required int viewId}) async {
     final MapTypeDto mapType = await _viewApi.getMapType(viewId);
-    return mapTypeFromDto(mapType);
+    return mapType.toMapType();
   }
 
   @override
   Future<void> setMapType(
       {required int viewId, required MapType mapType}) async {
-    return _viewApi.setMapType(viewId, mapTypeToDto(mapType));
+    return _viewApi.setMapType(viewId, mapType.toDto());
   }
 
   @override
@@ -315,7 +310,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
     if (myLocation == null) {
       return null;
     }
-    return latLngFromDto(myLocation);
+    return myLocation.toLatLng();
   }
 
   @override
@@ -323,7 +318,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
     final CameraPositionDto position = await _viewApi.getCameraPosition(
       viewId,
     );
-    return cameraPositionfromDto(position);
+    return position.toCameraPosition();
   }
 
   @override
@@ -332,8 +327,9 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
       viewId,
     );
     return LatLngBounds(
-        southwest: latLngFromDto(bounds.southwest),
-        northeast: latLngFromDto(bounds.northeast));
+      southwest: bounds.southwest.toLatLng(),
+      northeast: bounds.northeast.toLatLng(),
+    );
   }
 
   @override
@@ -346,7 +342,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
       case CameraUpdateType.cameraPosition:
         unawaited(_viewApi
             .animateCameraToCameraPosition(viewId,
-                cameraPositionToDto(cameraUpdate.cameraPosition!), duration)
+                cameraUpdate.cameraPosition!.toCameraPosition(), duration)
             .then((bool success) => onFinished != null && Platform.isAndroid
                 ? onFinished(success)
                 : null));
@@ -359,11 +355,8 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
                 : null));
       case CameraUpdateType.latLngBounds:
         unawaited(_viewApi
-            .animateCameraToLatLngBounds(
-                viewId,
-                latLngBoundsToDto(cameraUpdate.bounds!),
-                cameraUpdate.padding!,
-                duration)
+            .animateCameraToLatLngBounds(viewId, cameraUpdate.bounds!.toDto(),
+                cameraUpdate.padding!, duration)
             .then((bool success) => onFinished != null && Platform.isAndroid
                 ? onFinished(success)
                 : null));
@@ -404,14 +397,14 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
       case CameraUpdateType.cameraPosition:
         assert(cameraUpdate.cameraPosition != null, 'Camera position is null');
         return _viewApi.moveCameraToCameraPosition(
-            viewId, cameraPositionToDto(cameraUpdate.cameraPosition!));
+            viewId, cameraUpdate.cameraPosition!.toCameraPosition());
       case CameraUpdateType.latLng:
         return _viewApi.moveCameraToLatLng(
             viewId, cameraUpdate.latLng!.toDto());
       case CameraUpdateType.latLngBounds:
         assert(cameraUpdate.padding != null, 'Camera position is null');
-        return _viewApi.moveCameraToLatLngBounds(viewId,
-            latLngBoundsToDto(cameraUpdate.bounds!), cameraUpdate.padding!);
+        return _viewApi.moveCameraToLatLngBounds(
+            viewId, cameraUpdate.bounds!.toDto(), cameraUpdate.padding!);
       case CameraUpdateType.latLngZoom:
         return _viewApi.moveCameraToLatLngZoom(
             viewId, cameraUpdate.latLng!.toDto(), cameraUpdate.zoom!);
@@ -431,8 +424,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
       {required int viewId,
       required CameraPerspective perspective,
       required double? zoomLevel}) {
-    return _viewApi.followMyLocation(
-        viewId, cameraPerspectiveTypeToDto(perspective), zoomLevel);
+    return _viewApi.followMyLocation(viewId, perspective.toDto(), zoomLevel);
   }
 
   @override
@@ -715,9 +707,8 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
       {required int viewId,
       required List<PolylineOptions> polylineOptions}) async {
     // Convert options to pigeon format
-    final List<PolylineOptionsDto> options = polylineOptions
-        .map((PolylineOptions opt) => opt.toPolylineOptionsDto())
-        .toList();
+    final List<PolylineOptionsDto> options =
+        polylineOptions.map((PolylineOptions opt) => opt.toDto()).toList();
 
     // Create polyline objects with new id's
     final List<PolylineDto> polylinesToAdd = options
@@ -874,31 +865,31 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Stream<MarkerEventDto> getMarkerEventStream({required int viewId}) {
-    return _unwrapEventStream<MarkerEventDto>(viewId: viewId);
+  Stream<MarkerEvent> getMarkerEventStream({required int viewId}) {
+    return _unwrapEventStream<MarkerEvent>(viewId: viewId);
   }
 
   @override
-  Stream<MarkerDragEventDto> getMarkerDragEventStream({required int viewId}) {
-    return _unwrapEventStream<MarkerDragEventDto>(viewId: viewId);
+  Stream<MarkerDragEvent> getMarkerDragEventStream({required int viewId}) {
+    return _unwrapEventStream<MarkerDragEvent>(viewId: viewId);
   }
 
   @override
-  Stream<PolygonClickedEventDto> getPolygonClickedEventStream(
+  Stream<PolygonClickedEvent> getPolygonClickedEventStream(
       {required int viewId}) {
-    return _unwrapEventStream<PolygonClickedEventDto>(viewId: viewId);
+    return _unwrapEventStream<PolygonClickedEvent>(viewId: viewId);
   }
 
   @override
-  Stream<PolylineClickedEventDto> getPolylineDtoClickedEventStream(
+  Stream<PolylineClickedEvent> getPolylineClickedEventStream(
       {required int viewId}) {
-    return _unwrapEventStream<PolylineClickedEventDto>(viewId: viewId);
+    return _unwrapEventStream<PolylineClickedEvent>(viewId: viewId);
   }
 
   @override
-  Stream<CircleClickedEventDto> getCircleDtoClickedEventStream(
+  Stream<CircleClickedEvent> getCircleClickedEventStream(
       {required int viewId}) {
-    return _unwrapEventStream<CircleClickedEventDto>(viewId: viewId);
+    return _unwrapEventStream<CircleClickedEvent>(viewId: viewId);
   }
 }
 
@@ -918,40 +909,48 @@ class NavigationViewEventApiImpl implements NavigationViewEventApi {
   }
 
   @override
-  void onMarkerEvent(MarkerEventDto event) {
-    _viewEventStreamController.add(_ViewIdEventWrapper(event.viewId, event));
-  }
-
-  @override
-  void onMarkerDragEvent(MarkerDragEventDto event) {
-    _viewEventStreamController.add(_ViewIdEventWrapper(event.viewId, event));
-  }
-
-  @override
-  void onPolygonClicked(PolygonClickedEventDto event) {
-    _viewEventStreamController.add(_ViewIdEventWrapper(event.viewId, event));
-  }
-
-  @override
   void onMapClickEvent(int viewId, LatLngDto latLng) {
     _viewEventStreamController
-        .add(_ViewIdEventWrapper(viewId, MapClickEvent(latLngFromDto(latLng))));
+        .add(_ViewIdEventWrapper(viewId, MapClickEvent(latLng.toLatLng())));
   }
 
   @override
   void onMapLongClickEvent(int viewId, LatLngDto latLng) {
+    _viewEventStreamController
+        .add(_ViewIdEventWrapper(viewId, MapLongClickEvent(latLng.toLatLng())));
+  }
+
+  @override
+  void onMarkerDragEvent(int viewId, String markerId,
+      MarkerDragEventTypeDto eventType, LatLngDto position) {
+    //   _viewEventStreamController.add(_ViewIdEventWrapper(event.viewId, event));
+  }
+
+  @override
+  void onMarkerEvent(
+      int viewId, String markerId, MarkerEventTypeDto eventType) {
+    _viewEventStreamController.add(_ViewIdEventWrapper(
+        viewId,
+        MarkerEvent(
+            markerId: markerId, eventType: eventType.toMarkerEventType())));
+  }
+
+  @override
+  void onPolygonClicked(int viewId, String polygonId) {
     _viewEventStreamController.add(
-        _ViewIdEventWrapper(viewId, MapLongClickEvent(latLngFromDto(latLng))));
+        _ViewIdEventWrapper(viewId, PolygonClickedEvent(polygonId: polygonId)));
   }
 
   @override
-  void onPolylineClicked(PolylineClickedEventDto msg) {
-    _viewEventStreamController.add(_ViewIdEventWrapper(msg.viewId, msg));
+  void onPolylineClicked(int viewId, String polylineId) {
+    _viewEventStreamController.add(_ViewIdEventWrapper(
+        viewId, PolylineClickedEvent(polylineId: polylineId)));
   }
 
   @override
-  void onCircleClicked(CircleClickedEventDto msg) {
-    _viewEventStreamController.add(_ViewIdEventWrapper(msg.viewId, msg));
+  void onCircleClicked(int viewId, String circleId) {
+    _viewEventStreamController.add(
+        _ViewIdEventWrapper(viewId, CircleClickedEvent(circleId: circleId)));
   }
 }
 

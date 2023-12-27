@@ -16,7 +16,7 @@ import 'package:flutter/services.dart';
 
 import '../../google_maps_navigation.dart';
 import '../google_maps_navigation_platform_interface.dart';
-import '../types/util/marker_conversion.dart';
+import 'method_channel.dart';
 
 /// @nodoc
 /// CommonImageRegistryAPI handles image registry API

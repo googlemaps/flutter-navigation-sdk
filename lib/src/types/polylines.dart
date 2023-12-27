@@ -200,7 +200,7 @@ class StyleSpan {
   final double length;
 
   /// Style of a stroke.
-  final StyleSpanStrokeStyleDto style;
+  final StyleSpanStrokeStyle style;
 }
 
 /// Joint types for [Polyline] and outline of [Polygon].
@@ -214,4 +214,16 @@ enum StrokeJointType {
 
   /// Rounded on the outside of the joint by an arc of radius equal to half the stroke width, centered at the vertex.
   round
+}
+
+/// Event emitted when a polyline is clicked.
+@immutable
+class PolylineClickedEvent {
+  /// Initialize [PolylineClickedEvent] object.
+  const PolylineClickedEvent({
+    required this.polylineId,
+  });
+
+  /// Id of the polyline that has been tapped.
+  final String polylineId;
 }

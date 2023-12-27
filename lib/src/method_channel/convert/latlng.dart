@@ -12,9 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'src/google_maps_image_registry.dart';
-export 'src/google_maps_navigation.dart';
-export 'src/google_maps_navigation_android.dart';
-export 'src/google_maps_navigation_ios.dart';
-export 'src/navigator/google_maps_navigator.dart';
-export 'src/types/types.dart';
+import '../../types/types.dart';
+import '../method_channel.dart';
+
+/// [LatLng] convert extension.
+/// @nodoc
+extension ConvertLatLng on LatLng {
+  /// Converts [LatLng] to [LatLngDto]
+  LatLngDto toDto() {
+    return LatLngDto(latitude: latitude, longitude: longitude);
+  }
+}
+
+/// [LatLngDto] convert extension.
+/// @nodoc
+extension ConvertLatLngDto on LatLngDto {
+  /// Converts [LatLngDto] to [LatLng]
+  LatLng toLatLng() {
+    return LatLng(latitude: latitude, longitude: longitude);
+  }
+}

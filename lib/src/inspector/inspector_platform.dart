@@ -13,7 +13,8 @@
 // limitations under the License.
 
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import '../../google_maps_navigation.dart';
+
+import '../method_channel/method_channel.dart';
 
 /// The interface that platform-specific implementations of
 /// `google_maps_navigation` can extend to support state inspection in tests.

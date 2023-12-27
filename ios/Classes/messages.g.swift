@@ -500,64 +500,6 @@ struct MarkerAnchorDto {
 }
 
 /// Generated class from Pigeon that represents data sent in messages.
-struct MarkerEventDto {
-  var viewId: Int64
-  var markerId: String
-  var eventType: MarkerEventTypeDto
-
-  static func fromList(_ list: [Any?]) -> MarkerEventDto? {
-    let viewId = list[0] is Int64 ? list[0] as! Int64 : Int64(list[0] as! Int32)
-    let markerId = list[1] as! String
-    let eventType = MarkerEventTypeDto(rawValue: list[2] as! Int)!
-
-    return MarkerEventDto(
-      viewId: viewId,
-      markerId: markerId,
-      eventType: eventType
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      viewId,
-      markerId,
-      eventType.rawValue,
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct MarkerDragEventDto {
-  var viewId: Int64
-  var markerId: String
-  var eventType: MarkerDragEventTypeDto
-  var position: LatLngDto
-
-  static func fromList(_ list: [Any?]) -> MarkerDragEventDto? {
-    let viewId = list[0] is Int64 ? list[0] as! Int64 : Int64(list[0] as! Int32)
-    let markerId = list[1] as! String
-    let eventType = MarkerDragEventTypeDto(rawValue: list[2] as! Int)!
-    let position = LatLngDto.fromList(list[3] as! [Any?])!
-
-    return MarkerDragEventDto(
-      viewId: viewId,
-      markerId: markerId,
-      eventType: eventType,
-      position: position
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      viewId,
-      markerId,
-      eventType.rawValue,
-      position.toList(),
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
 struct PolygonDto {
   var polygonId: String
   var options: PolygonOptionsDto
@@ -646,29 +588,6 @@ struct PolygonHoleDto {
   func toList() -> [Any?] {
     [
       points,
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct PolygonClickedEventDto {
-  var viewId: Int64
-  var polygonId: String
-
-  static func fromList(_ list: [Any?]) -> PolygonClickedEventDto? {
-    let viewId = list[0] is Int64 ? list[0] as! Int64 : Int64(list[0] as! Int32)
-    let polygonId = list[1] as! String
-
-    return PolygonClickedEventDto(
-      viewId: viewId,
-      polygonId: polygonId
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      viewId,
-      polygonId,
     ]
   }
 }
@@ -833,29 +752,6 @@ struct PolylineOptionsDto {
 }
 
 /// Generated class from Pigeon that represents data sent in messages.
-struct PolylineClickedEventDto {
-  var viewId: Int64
-  var polylineId: String
-
-  static func fromList(_ list: [Any?]) -> PolylineClickedEventDto? {
-    let viewId = list[0] is Int64 ? list[0] as! Int64 : Int64(list[0] as! Int32)
-    let polylineId = list[1] as! String
-
-    return PolylineClickedEventDto(
-      viewId: viewId,
-      polylineId: polylineId
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      viewId,
-      polylineId,
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
 struct CircleDto {
   /// Identifies circle.
   var circleId: String
@@ -927,29 +823,6 @@ struct CircleOptionsDto {
       zIndex,
       visible,
       clickable,
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct CircleClickedEventDto {
-  var viewId: Int64
-  var circleId: String
-
-  static func fromList(_ list: [Any?]) -> CircleClickedEventDto? {
-    let viewId = list[0] is Int64 ? list[0] as! Int64 : Int64(list[0] as! Int32)
-    let circleId = list[1] as! String
-
-    return CircleClickedEventDto(
-      viewId: viewId,
-      circleId: circleId
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      viewId,
-      circleId,
     ]
   }
 }
@@ -3698,17 +3571,7 @@ private class NavigationViewEventApiCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 128:
-      return CircleClickedEventDto.fromList(readValue() as! [Any?])
-    case 129:
       return LatLngDto.fromList(readValue() as! [Any?])
-    case 130:
-      return MarkerDragEventDto.fromList(readValue() as! [Any?])
-    case 131:
-      return MarkerEventDto.fromList(readValue() as! [Any?])
-    case 132:
-      return PolygonClickedEventDto.fromList(readValue() as! [Any?])
-    case 133:
-      return PolylineClickedEventDto.fromList(readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -3717,23 +3580,8 @@ private class NavigationViewEventApiCodecReader: FlutterStandardReader {
 
 private class NavigationViewEventApiCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? CircleClickedEventDto {
+    if let value = value as? LatLngDto {
       super.writeByte(128)
-      super.writeValue(value.toList())
-    } else if let value = value as? LatLngDto {
-      super.writeByte(129)
-      super.writeValue(value.toList())
-    } else if let value = value as? MarkerDragEventDto {
-      super.writeByte(130)
-      super.writeValue(value.toList())
-    } else if let value = value as? MarkerEventDto {
-      super.writeByte(131)
-      super.writeValue(value.toList())
-    } else if let value = value as? PolygonClickedEventDto {
-      super.writeByte(132)
-      super.writeValue(value.toList())
-    } else if let value = value as? PolylineClickedEventDto {
-      super.writeByte(133)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -3764,15 +3612,18 @@ protocol NavigationViewEventApiProtocol {
                            completion: @escaping (Result<Void, FlutterError>) -> Void)
   func onRecenterButtonClicked(viewId viewIdArg: Int64,
                                completion: @escaping (Result<Void, FlutterError>) -> Void)
-  func onMarkerEvent(msg msgArg: MarkerEventDto,
+  func onMarkerEvent(viewId viewIdArg: Int64, markerId markerIdArg: String,
+                     eventType eventTypeArg: MarkerEventTypeDto,
                      completion: @escaping (Result<Void, FlutterError>) -> Void)
-  func onMarkerDragEvent(msg msgArg: MarkerDragEventDto,
+  func onMarkerDragEvent(viewId viewIdArg: Int64, markerId markerIdArg: String,
+                         eventType eventTypeArg: MarkerDragEventTypeDto,
+                         position positionArg: LatLngDto,
                          completion: @escaping (Result<Void, FlutterError>) -> Void)
-  func onPolygonClicked(msg msgArg: PolygonClickedEventDto,
+  func onPolygonClicked(viewId viewIdArg: Int64, polygonId polygonIdArg: String,
                         completion: @escaping (Result<Void, FlutterError>) -> Void)
-  func onPolylineClicked(msg msgArg: PolylineClickedEventDto,
+  func onPolylineClicked(viewId viewIdArg: Int64, polylineId polylineIdArg: String,
                          completion: @escaping (Result<Void, FlutterError>) -> Void)
-  func onCircleClicked(msg msgArg: CircleClickedEventDto,
+  func onCircleClicked(viewId viewIdArg: Int64, circleId circleIdArg: String,
                        completion: @escaping (Result<Void, FlutterError>) -> Void)
 }
 
@@ -3861,7 +3712,8 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
     }
   }
 
-  func onMarkerEvent(msg msgArg: MarkerEventDto,
+  func onMarkerEvent(viewId viewIdArg: Int64, markerId markerIdArg: String,
+                     eventType eventTypeArg: MarkerEventTypeDto,
                      completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerEvent"
@@ -3870,7 +3722,7 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
+    channel.sendMessage([viewIdArg, markerIdArg, eventTypeArg.rawValue] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -3886,7 +3738,9 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
     }
   }
 
-  func onMarkerDragEvent(msg msgArg: MarkerDragEventDto,
+  func onMarkerDragEvent(viewId viewIdArg: Int64, markerId markerIdArg: String,
+                         eventType eventTypeArg: MarkerDragEventTypeDto,
+                         position positionArg: LatLngDto,
                          completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerDragEvent"
@@ -3895,23 +3749,25 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
-      guard let listResponse = response as? [Any?] else {
-        completion(.failure(createConnectionError(withChannelName: channelName)))
-        return
+    channel
+      .sendMessage([viewIdArg, markerIdArg, eventTypeArg.rawValue,
+                    positionArg] as [Any?]) { response in
+        guard let listResponse = response as? [Any?] else {
+          completion(.failure(createConnectionError(withChannelName: channelName)))
+          return
+        }
+        if listResponse.count > 1 {
+          let code: String = listResponse[0] as! String
+          let message: String? = nilOrValue(listResponse[1])
+          let details: String? = nilOrValue(listResponse[2])
+          completion(.failure(FlutterError(code: code, message: message, details: details)))
+        } else {
+          completion(.success(()))
+        }
       }
-      if listResponse.count > 1 {
-        let code: String = listResponse[0] as! String
-        let message: String? = nilOrValue(listResponse[1])
-        let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(FlutterError(code: code, message: message, details: details)))
-      } else {
-        completion(.success(()))
-      }
-    }
   }
 
-  func onPolygonClicked(msg msgArg: PolygonClickedEventDto,
+  func onPolygonClicked(viewId viewIdArg: Int64, polygonId polygonIdArg: String,
                         completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onPolygonClicked"
@@ -3920,7 +3776,7 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
+    channel.sendMessage([viewIdArg, polygonIdArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -3936,7 +3792,7 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
     }
   }
 
-  func onPolylineClicked(msg msgArg: PolylineClickedEventDto,
+  func onPolylineClicked(viewId viewIdArg: Int64, polylineId polylineIdArg: String,
                          completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onPolylineClicked"
@@ -3945,7 +3801,7 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
+    channel.sendMessage([viewIdArg, polylineIdArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -3961,7 +3817,7 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
     }
   }
 
-  func onCircleClicked(msg msgArg: CircleClickedEventDto,
+  func onCircleClicked(viewId viewIdArg: Int64, circleId circleIdArg: String,
                        completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCircleClicked"
@@ -3970,7 +3826,7 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
+    channel.sendMessage([viewIdArg, circleIdArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return

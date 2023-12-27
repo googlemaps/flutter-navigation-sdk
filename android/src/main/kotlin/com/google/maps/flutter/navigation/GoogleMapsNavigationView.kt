@@ -202,19 +202,17 @@ internal constructor(
 
     getMap().setOnPolygonClickListener { polygon ->
       val polygonId = findPolygonId(polygon)
-      navigationViewEventApi.onPolygonClicked(PolygonClickedEventDto(viewId.toLong(), polygonId)) {}
+      navigationViewEventApi.onPolygonClicked(viewId.toLong(), polygonId) {}
     }
 
     getMap().setOnPolylineClickListener { polyline ->
       val polylineId = findPolylineId(polyline)
-      navigationViewEventApi.onPolylineClicked(
-        PolylineClickedEventDto(viewId.toLong(), polylineId)
-      ) {}
+      navigationViewEventApi.onPolylineClicked(viewId.toLong(), polylineId) {}
     }
 
     getMap().setOnCircleClickListener { circle ->
       val circleId = findCircleId(circle)
-      navigationViewEventApi.onCircleClicked(CircleClickedEventDto(viewId.toLong(), circleId)) {}
+      navigationViewEventApi.onCircleClicked(viewId.toLong(), circleId) {}
     }
   }
 
@@ -321,19 +319,17 @@ internal constructor(
   @Throws(FlutterError::class)
   private fun sendMarkerEvent(marker: Marker, eventType: MarkerEventTypeDto) {
     val markerId = findMarkerId(marker)
-    navigationViewEventApi.onMarkerEvent(MarkerEventDto(viewId.toLong(), markerId, eventType)) {}
+    navigationViewEventApi.onMarkerEvent(viewId.toLong(), markerId, eventType) {}
   }
 
   @Throws(FlutterError::class)
   private fun sendMarkerDragEvent(marker: Marker, eventType: MarkerDragEventTypeDto) {
     val markerId = findMarkerId(marker)
     navigationViewEventApi.onMarkerDragEvent(
-      MarkerDragEventDto(
-        viewId.toLong(),
-        markerId,
-        eventType,
-        LatLngDto(marker.position.latitude, marker.position.longitude)
-      )
+      viewId.toLong(),
+      markerId,
+      eventType,
+      LatLngDto(marker.position.latitude, marker.position.longitude)
     ) {}
   }
 

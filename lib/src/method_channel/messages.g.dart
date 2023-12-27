@@ -527,73 +527,6 @@ class MarkerAnchorDto {
   }
 }
 
-class MarkerEventDto {
-  MarkerEventDto({
-    required this.viewId,
-    required this.markerId,
-    required this.eventType,
-  });
-
-  int viewId;
-
-  String markerId;
-
-  MarkerEventTypeDto eventType;
-
-  Object encode() {
-    return <Object?>[
-      viewId,
-      markerId,
-      eventType.index,
-    ];
-  }
-
-  static MarkerEventDto decode(Object result) {
-    result as List<Object?>;
-    return MarkerEventDto(
-      viewId: result[0]! as int,
-      markerId: result[1]! as String,
-      eventType: MarkerEventTypeDto.values[result[2]! as int],
-    );
-  }
-}
-
-class MarkerDragEventDto {
-  MarkerDragEventDto({
-    required this.viewId,
-    required this.markerId,
-    required this.eventType,
-    required this.position,
-  });
-
-  int viewId;
-
-  String markerId;
-
-  MarkerDragEventTypeDto eventType;
-
-  LatLngDto position;
-
-  Object encode() {
-    return <Object?>[
-      viewId,
-      markerId,
-      eventType.index,
-      position.encode(),
-    ];
-  }
-
-  static MarkerDragEventDto decode(Object result) {
-    result as List<Object?>;
-    return MarkerDragEventDto(
-      viewId: result[0]! as int,
-      markerId: result[1]! as String,
-      eventType: MarkerDragEventTypeDto.values[result[2]! as int],
-      position: LatLngDto.decode(result[3]! as List<Object?>),
-    );
-  }
-}
-
 class PolygonDto {
   PolygonDto({
     required this.polygonId,
@@ -698,32 +631,6 @@ class PolygonHoleDto {
     result as List<Object?>;
     return PolygonHoleDto(
       points: (result[0] as List<Object?>?)!.cast<LatLngDto?>(),
-    );
-  }
-}
-
-class PolygonClickedEventDto {
-  PolygonClickedEventDto({
-    required this.viewId,
-    required this.polygonId,
-  });
-
-  int viewId;
-
-  String polygonId;
-
-  Object encode() {
-    return <Object?>[
-      viewId,
-      polygonId,
-    ];
-  }
-
-  static PolygonClickedEventDto decode(Object result) {
-    result as List<Object?>;
-    return PolygonClickedEventDto(
-      viewId: result[0]! as int,
-      polygonId: result[1]! as String,
     );
   }
 }
@@ -905,32 +812,6 @@ class PolylineOptionsDto {
   }
 }
 
-class PolylineClickedEventDto {
-  PolylineClickedEventDto({
-    required this.viewId,
-    required this.polylineId,
-  });
-
-  int viewId;
-
-  String polylineId;
-
-  Object encode() {
-    return <Object?>[
-      viewId,
-      polylineId,
-    ];
-  }
-
-  static PolylineClickedEventDto decode(Object result) {
-    result as List<Object?>;
-    return PolylineClickedEventDto(
-      viewId: result[0]! as int,
-      polylineId: result[1]! as String,
-    );
-  }
-}
-
 class CircleDto {
   CircleDto({
     required this.circleId,
@@ -1016,32 +897,6 @@ class CircleOptionsDto {
       zIndex: result[6]! as double,
       visible: result[7]! as bool,
       clickable: result[8]! as bool,
-    );
-  }
-}
-
-class CircleClickedEventDto {
-  CircleClickedEventDto({
-    required this.viewId,
-    required this.circleId,
-  });
-
-  int viewId;
-
-  String circleId;
-
-  Object encode() {
-    return <Object?>[
-      viewId,
-      circleId,
-    ];
-  }
-
-  static CircleClickedEventDto decode(Object result) {
-    result as List<Object?>;
-    return CircleClickedEventDto(
-      viewId: result[0]! as int,
-      circleId: result[1]! as String,
     );
   }
 }
@@ -4252,23 +4107,8 @@ class _NavigationViewEventApiCodec extends StandardMessageCodec {
   const _NavigationViewEventApiCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is CircleClickedEventDto) {
+    if (value is LatLngDto) {
       buffer.putUint8(128);
-      writeValue(buffer, value.encode());
-    } else if (value is LatLngDto) {
-      buffer.putUint8(129);
-      writeValue(buffer, value.encode());
-    } else if (value is MarkerDragEventDto) {
-      buffer.putUint8(130);
-      writeValue(buffer, value.encode());
-    } else if (value is MarkerEventDto) {
-      buffer.putUint8(131);
-      writeValue(buffer, value.encode());
-    } else if (value is PolygonClickedEventDto) {
-      buffer.putUint8(132);
-      writeValue(buffer, value.encode());
-    } else if (value is PolylineClickedEventDto) {
-      buffer.putUint8(133);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -4279,17 +4119,7 @@ class _NavigationViewEventApiCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 128:
-        return CircleClickedEventDto.decode(readValue(buffer)!);
-      case 129:
         return LatLngDto.decode(readValue(buffer)!);
-      case 130:
-        return MarkerDragEventDto.decode(readValue(buffer)!);
-      case 131:
-        return MarkerEventDto.decode(readValue(buffer)!);
-      case 132:
-        return PolygonClickedEventDto.decode(readValue(buffer)!);
-      case 133:
-        return PolylineClickedEventDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -4306,15 +4136,16 @@ abstract class NavigationViewEventApi {
 
   void onRecenterButtonClicked(int viewId);
 
-  void onMarkerEvent(MarkerEventDto msg);
+  void onMarkerEvent(int viewId, String markerId, MarkerEventTypeDto eventType);
 
-  void onMarkerDragEvent(MarkerDragEventDto msg);
+  void onMarkerDragEvent(int viewId, String markerId,
+      MarkerDragEventTypeDto eventType, LatLngDto position);
 
-  void onPolygonClicked(PolygonClickedEventDto msg);
+  void onPolygonClicked(int viewId, String polygonId);
 
-  void onPolylineClicked(PolylineClickedEventDto msg);
+  void onPolylineClicked(int viewId, String polylineId);
 
-  void onCircleClicked(CircleClickedEventDto msg);
+  void onCircleClicked(int viewId, String circleId);
 
   static void setup(NavigationViewEventApi? api,
       {BinaryMessenger? binaryMessenger}) {
@@ -4421,11 +4252,19 @@ abstract class NavigationViewEventApi {
           assert(message != null,
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerEvent was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final MarkerEventDto? arg_msg = (args[0] as MarkerEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerEvent was null, expected non-null MarkerEventDto.');
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerEvent was null, expected non-null int.');
+          final String? arg_markerId = (args[1] as String?);
+          assert(arg_markerId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerEvent was null, expected non-null String.');
+          final MarkerEventTypeDto? arg_eventType = args[2] == null
+              ? null
+              : MarkerEventTypeDto.values[args[2]! as int];
+          assert(arg_eventType != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerEvent was null, expected non-null MarkerEventTypeDto.');
           try {
-            api.onMarkerEvent(arg_msg!);
+            api.onMarkerEvent(arg_viewId!, arg_markerId!, arg_eventType!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -4449,11 +4288,23 @@ abstract class NavigationViewEventApi {
           assert(message != null,
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerDragEvent was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final MarkerDragEventDto? arg_msg = (args[0] as MarkerDragEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerDragEvent was null, expected non-null MarkerDragEventDto.');
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerDragEvent was null, expected non-null int.');
+          final String? arg_markerId = (args[1] as String?);
+          assert(arg_markerId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerDragEvent was null, expected non-null String.');
+          final MarkerDragEventTypeDto? arg_eventType = args[2] == null
+              ? null
+              : MarkerDragEventTypeDto.values[args[2]! as int];
+          assert(arg_eventType != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerDragEvent was null, expected non-null MarkerDragEventTypeDto.');
+          final LatLngDto? arg_position = (args[3] as LatLngDto?);
+          assert(arg_position != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerDragEvent was null, expected non-null LatLngDto.');
           try {
-            api.onMarkerDragEvent(arg_msg!);
+            api.onMarkerDragEvent(
+                arg_viewId!, arg_markerId!, arg_eventType!, arg_position!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -4477,12 +4328,14 @@ abstract class NavigationViewEventApi {
           assert(message != null,
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onPolygonClicked was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final PolygonClickedEventDto? arg_msg =
-              (args[0] as PolygonClickedEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onPolygonClicked was null, expected non-null PolygonClickedEventDto.');
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onPolygonClicked was null, expected non-null int.');
+          final String? arg_polygonId = (args[1] as String?);
+          assert(arg_polygonId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onPolygonClicked was null, expected non-null String.');
           try {
-            api.onPolygonClicked(arg_msg!);
+            api.onPolygonClicked(arg_viewId!, arg_polygonId!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -4506,12 +4359,14 @@ abstract class NavigationViewEventApi {
           assert(message != null,
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onPolylineClicked was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final PolylineClickedEventDto? arg_msg =
-              (args[0] as PolylineClickedEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onPolylineClicked was null, expected non-null PolylineClickedEventDto.');
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onPolylineClicked was null, expected non-null int.');
+          final String? arg_polylineId = (args[1] as String?);
+          assert(arg_polylineId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onPolylineClicked was null, expected non-null String.');
           try {
-            api.onPolylineClicked(arg_msg!);
+            api.onPolylineClicked(arg_viewId!, arg_polylineId!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -4535,12 +4390,14 @@ abstract class NavigationViewEventApi {
           assert(message != null,
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCircleClicked was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final CircleClickedEventDto? arg_msg =
-              (args[0] as CircleClickedEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCircleClicked was null, expected non-null CircleClickedEventDto.');
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCircleClicked was null, expected non-null int.');
+          final String? arg_circleId = (args[1] as String?);
+          assert(arg_circleId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCircleClicked was null, expected non-null String.');
           try {
-            api.onCircleClicked(arg_msg!);
+            api.onCircleClicked(arg_viewId!, arg_circleId!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

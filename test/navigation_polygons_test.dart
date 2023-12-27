@@ -15,7 +15,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_maps_navigation/google_maps_navigation.dart';
-import 'package:google_maps_navigation/src/types/util/polygon_conversion.dart';
+import 'package:google_maps_navigation/src/method_channel/method_channel.dart';
 
 void main() {
   late Polygon polygon;

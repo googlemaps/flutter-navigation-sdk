@@ -154,3 +154,15 @@ class CircleOptions {
       visible.hashCode,
       zIndex.hashCode);
 }
+
+/// Event emitted when a circle is clicked.
+@immutable
+class CircleClickedEvent {
+  /// Initialize [CircleClickedEvent] object.
+  const CircleClickedEvent({
+    required this.circleId,
+  });
+
+  /// Id of the circle that has been tapped.
+  final String circleId;
+}

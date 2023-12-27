@@ -18,10 +18,8 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:google_maps_navigation/google_maps_navigation.dart';
 import 'package:google_maps_navigation/src/google_maps_navigation_platform_interface.dart';
-import 'package:google_maps_navigation/src/types/util/circle_conversion.dart';
-import 'package:google_maps_navigation/src/types/util/marker_conversion.dart';
-import 'package:google_maps_navigation/src/types/util/polygon_conversion.dart';
-import 'package:google_maps_navigation/src/types/util/polyline_conversion.dart';
+import 'package:google_maps_navigation/src/method_channel/convert/navigation_waypoint.dart';
+import 'package:google_maps_navigation/src/method_channel/method_channel.dart';
 import 'package:mockito/mockito.dart';
 
 import 'google_maps_navigation_test.mocks.dart';
@@ -42,13 +40,13 @@ class NavigationSessionEventStream extends Mock
 }
 
 class NavigationViewMarkerEventSubscription extends Mock
-    implements StreamSubscription<MarkerEventDto> {}
+    implements StreamSubscription<MarkerEvent> {}
 
 class NavigationViewMarkerEventStream extends Mock
-    implements Stream<MarkerEventDto> {
+    implements Stream<MarkerEvent> {
   @override
-  StreamSubscription<MarkerEventDto> listen(
-      void Function(MarkerEventDto event)? onData,
+  StreamSubscription<MarkerEvent> listen(
+      void Function(MarkerEvent event)? onData,
       {Function? onError,
       void Function()? onDone,
       bool? cancelOnError}) {
@@ -57,13 +55,13 @@ class NavigationViewMarkerEventStream extends Mock
 }
 
 class NavigationViewMarkerDragEventSubscription extends Mock
-    implements StreamSubscription<MarkerDragEventDto> {}
+    implements StreamSubscription<MarkerDragEvent> {}
 
 class NavigationViewMarkerDragEventStream extends Mock
-    implements Stream<MarkerDragEventDto> {
+    implements Stream<MarkerDragEvent> {
   @override
-  StreamSubscription<MarkerDragEventDto> listen(
-      void Function(MarkerDragEventDto event)? onData,
+  StreamSubscription<MarkerDragEvent> listen(
+      void Function(MarkerDragEvent event)? onData,
       {Function? onError,
       void Function()? onDone,
       bool? cancelOnError}) {
@@ -72,13 +70,13 @@ class NavigationViewMarkerDragEventStream extends Mock
 }
 
 class PolygonDtoClickedEventSubscription extends Mock
-    implements StreamSubscription<PolygonClickedEventDto> {}
+    implements StreamSubscription<PolygonClickedEvent> {}
 
 class PolygonDtoClickedEventStream extends Mock
-    implements Stream<PolygonClickedEventDto> {
+    implements Stream<PolygonClickedEvent> {
   @override
-  StreamSubscription<PolygonClickedEventDto> listen(
-      void Function(PolygonClickedEventDto event)? onData,
+  StreamSubscription<PolygonClickedEvent> listen(
+      void Function(PolygonClickedEvent event)? onData,
       {Function? onError,
       void Function()? onDone,
       bool? cancelOnError}) {
@@ -87,13 +85,13 @@ class PolygonDtoClickedEventStream extends Mock
 }
 
 class NavigationViewPolylineClickedEventSubscription extends Mock
-    implements StreamSubscription<PolylineClickedEventDto> {}
+    implements StreamSubscription<PolylineClickedEvent> {}
 
 class NavigationViewPolylineClickedEventStream extends Mock
-    implements Stream<PolylineClickedEventDto> {
+    implements Stream<PolylineClickedEvent> {
   @override
-  StreamSubscription<PolylineClickedEventDto> listen(
-      void Function(PolylineClickedEventDto event)? onData,
+  StreamSubscription<PolylineClickedEvent> listen(
+      void Function(PolylineClickedEvent event)? onData,
       {Function? onError,
       void Function()? onDone,
       bool? cancelOnError}) {
@@ -102,13 +100,13 @@ class NavigationViewPolylineClickedEventStream extends Mock
 }
 
 class CircleDtoClickedEventSubscription extends Mock
-    implements StreamSubscription<CircleClickedEventDto> {}
+    implements StreamSubscription<CircleClickedEvent> {}
 
 class CircleDtoClickedEventStream extends Mock
-    implements Stream<CircleClickedEventDto> {
+    implements Stream<CircleClickedEvent> {
   @override
-  StreamSubscription<CircleClickedEventDto> listen(
-      void Function(CircleClickedEventDto event)? onData,
+  StreamSubscription<CircleClickedEvent> listen(
+      void Function(CircleClickedEvent event)? onData,
       {Function? onError,
       void Function()? onDone,
       bool? cancelOnError}) {
@@ -175,7 +173,7 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
   @override
   Future<CameraPosition> getCameraPosition({required int viewId}) async {
     final CameraPositionDto position = viewApi.getCameraPosition(viewId);
-    return cameraPositionfromDto(position);
+    return position.toCameraPosition();
   }
 
   @override
@@ -193,7 +191,7 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
       case CameraUpdateType.cameraPosition:
         unawaited(viewApi
             .animateCameraToCameraPosition(viewId,
-                cameraPositionToDto(cameraUpdate.cameraPosition!), duration)
+                cameraUpdate.cameraPosition!.toCameraPosition(), duration)
             .then((bool success) =>
                 onFinished != null ? onFinished(success) : null));
       case CameraUpdateType.latLng:
@@ -204,11 +202,8 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
                 onFinished != null ? onFinished(success) : null));
       case CameraUpdateType.latLngBounds:
         unawaited(viewApi
-            .animateCameraToLatLngBounds(
-                viewId,
-                latLngBoundsToDto(cameraUpdate.bounds!),
-                cameraUpdate.padding,
-                duration)
+            .animateCameraToLatLngBounds(viewId, cameraUpdate.bounds!.toDto(),
+                cameraUpdate.padding, duration)
             .then((bool success) =>
                 onFinished != null ? onFinished(success) : null));
       case CameraUpdateType.latLngZoom:
@@ -243,12 +238,12 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
     switch (cameraUpdate.type) {
       case CameraUpdateType.cameraPosition:
         return viewApi.moveCameraToCameraPosition(
-            viewId, cameraPositionToDto(cameraUpdate.cameraPosition!));
+            viewId, cameraUpdate.cameraPosition!.toCameraPosition());
       case CameraUpdateType.latLng:
         return viewApi.moveCameraToLatLng(viewId, cameraUpdate.latLng!.toDto());
       case CameraUpdateType.latLngBounds:
-        return viewApi.moveCameraToLatLngBounds(viewId,
-            latLngBoundsToDto(cameraUpdate.bounds!), cameraUpdate.padding);
+        return viewApi.moveCameraToLatLngBounds(
+            viewId, cameraUpdate.bounds!.toDto(), cameraUpdate.padding);
       case CameraUpdateType.latLngZoom:
         return viewApi.moveCameraToLatLngZoom(
             viewId, cameraUpdate.latLng!.toDto(), cameraUpdate.zoom);
@@ -268,8 +263,7 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
       {required int viewId,
       required CameraPerspective perspective,
       required double? zoomLevel}) async {
-    return viewApi.followMyLocation(
-        viewId, cameraPerspectiveTypeToDto(perspective), zoomLevel);
+    return viewApi.followMyLocation(viewId, perspective.toDto(), zoomLevel);
   }
 
   @override
@@ -413,28 +407,26 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
     if (waypoint == null) {
       return null;
     }
-    return navigationWaypointFromDto(waypoint);
+    return waypoint.toNavigationWaypoint();
   }
 
   @override
   Future<NavigationTimeAndDistance> getCurrentTimeAndDistance() async {
     final NavigationTimeAndDistanceDto timeAndDistance =
         sessionApi.getCurrentTimeAndDistance();
-    return navigationTimeAndDistanceFromDto(timeAndDistance);
+    return timeAndDistance.toNavigationTimeAndDistance();
   }
 
   @override
   Future<void> setAudioGuidance(
       NavigationAudioGuidanceSettings settings) async {
-    return sessionApi
-        .setAudioGuidance(navigationAudioGuidanceSettingsToDto(settings));
+    return sessionApi.setAudioGuidance(settings.toDto());
   }
 
   @override
   Future<NavigationRouteStatus> setDestinations(Destinations msg) async {
-    final RouteStatusDto status =
-        await sessionApi.setDestinations(navigationDestinationToDto(msg));
-    return navigationRouteStatusFromDto(status);
+    final RouteStatusDto status = await sessionApi.setDestinations(msg.toDto());
+    return status.toNavigationRouteStatus();
   }
 
   @override
@@ -480,7 +472,7 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
 
   @override
   Future<void> setUserLocation(LatLng location) async {
-    return sessionApi.setUserLocation(latLngToDto(location));
+    return sessionApi.setUserLocation(location.toDto());
   }
 
   @override
@@ -496,10 +488,10 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
     final RouteStatusDto routeStatus =
         await sessionApi.simulateLocationsAlongNewRoute(waypoints.map(
       (NavigationWaypoint e) {
-        return navigationWaypointToDto(e);
+        return e.toDto();
       },
     ).toList());
-    return navigationRouteStatusFromDto(routeStatus);
+    return routeStatus.toNavigationRouteStatus();
   }
 
   @override
@@ -512,13 +504,13 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
         .simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
       waypoints.map(
         (NavigationWaypoint e) {
-          return navigationWaypointToDto(e);
+          return e.toDto();
         },
       ).toList(),
-      routingOptionsToDto(routingOptions),
+      routingOptions.toDto(),
       simulationOptionsToDto(simulationOptions),
     );
-    return navigationRouteStatusFromDto(routeStatus);
+    return routeStatus.toNavigationRouteStatus();
   }
 
   @override
@@ -530,12 +522,12 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
         await sessionApi.simulateLocationsAlongNewRouteWithRoutingOptions(
       waypoints.map(
         (NavigationWaypoint e) {
-          return navigationWaypointToDto(e);
+          return e.toDto();
         },
       ).toList(),
-      routingOptionsToDto(routingOptions),
+      routingOptions.toDto(),
     );
-    return navigationRouteStatusFromDto(routeStatus);
+    return routeStatus.toNavigationRouteStatus();
   }
 
   @override
@@ -697,12 +689,12 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
   }
 
   @override
-  Stream<MarkerDragEventDto> getMarkerDragEventStream({required int viewId}) {
+  Stream<MarkerDragEvent> getMarkerDragEventStream({required int viewId}) {
     return NavigationViewMarkerDragEventStream();
   }
 
   @override
-  Stream<MarkerEventDto> getMarkerEventStream({required int viewId}) {
+  Stream<MarkerEvent> getMarkerEventStream({required int viewId}) {
     return NavigationViewMarkerEventStream();
   }
 
@@ -809,7 +801,7 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
   }
 
   @override
-  Stream<PolygonClickedEventDto> getPolygonClickedEventStream(
+  Stream<PolygonClickedEvent> getPolygonClickedEventStream(
       {required int viewId}) {
     return PolygonDtoClickedEventStream();
   }
@@ -856,8 +848,7 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
     final List<PolylineDto> polylines =
         polylineOptions.map((PolylineOptions e) {
       final PolylineDto polyline = PolylineDto(
-          polylineId: 'Polyline_$polylineIndex',
-          options: e.toPolylineOptionsDto());
+          polylineId: 'Polyline_$polylineIndex', options: e.toDto());
       polylineIndex += 1;
       return polyline;
     }).toList();
@@ -873,7 +864,7 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
   }
 
   @override
-  Stream<PolylineClickedEventDto> getPolylineDtoClickedEventStream(
+  Stream<PolylineClickedEvent> getPolylineClickedEventStream(
       {required int viewId}) {
     return NavigationViewPolylineClickedEventStream();
   }
@@ -965,7 +956,7 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
   }
 
   @override
-  Stream<CircleClickedEventDto> getCircleDtoClickedEventStream(
+  Stream<CircleClickedEvent> getCircleClickedEventStream(
       {required int viewId}) {
     return CircleDtoClickedEventStream();
   }

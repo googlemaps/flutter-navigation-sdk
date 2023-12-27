@@ -12,24 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:flutter/material.dart';
+import 'dart:ui';
 
 import '../../../google_maps_navigation.dart';
-import 'marker_conversion.dart';
+import '../method_channel.dart';
 
 /// [Polyline] convert extension.
+/// @nodoc
 extension ConvertPolyline on Polyline {
   /// Convert [Polyline] to [NavigationViewPolyline].
   PolylineDto toNavigationViewPolyline() {
-    return PolylineDto(
-        polylineId: polylineId, options: options.toPolylineOptionsDto());
+    return PolylineDto(polylineId: polylineId, options: options.toDto());
   }
 }
 
 /// [PolylineOptions] convert extension.
+/// @nodoc
 extension ConvertPolylineOptions on PolylineOptions {
   /// Convert [PolylineOptions] to [PolylineOptionsDto].
-  PolylineOptionsDto toPolylineOptionsDto() {
+  PolylineOptionsDto toDto() {
     return PolylineOptionsDto(
       points: points?.map((LatLng point) => point.toDto()).toList(),
       clickable: clickable,
@@ -37,7 +38,7 @@ extension ConvertPolylineOptions on PolylineOptions {
       strokeColor: strokeColor?.value,
       strokeJointType: strokeJointType?.toStrokeJointTypeDto(),
       strokePattern:
-          strokePattern?.map((PatternItem e) => e.toPatternItemDto()).toList(),
+          strokePattern?.map((PatternItem pi) => pi.toDto()).toList(),
       strokeWidth: strokeWidth,
       visible: visible,
       zIndex: zIndex,
@@ -49,6 +50,7 @@ extension ConvertPolylineOptions on PolylineOptions {
 }
 
 /// [StyleSpan] convert extension.
+/// @nodoc
 extension ConvertStyleSpan on StyleSpan {
   /// Convert [StyleSpan] to [NavigationViewStyleSpan].
   StyleSpanDto toNavigationViewStyleSpan() {
@@ -64,6 +66,7 @@ extension ConvertStyleSpan on StyleSpan {
 }
 
 /// [StrokeJointType] convert extension.
+/// @nodoc
 extension ConvertStrokeJointType on StrokeJointType {
   /// Convert [StrokeJointType] to [StrokeJointTypeDto].
   StrokeJointTypeDto toStrokeJointTypeDto() {
@@ -79,6 +82,7 @@ extension ConvertStrokeJointType on StrokeJointType {
 }
 
 /// [PolylineDto] convert extension.
+/// @nodoc
 extension ConvertNavigationViewPolyline on PolylineDto {
   /// Convert [PolylineDto] to [Polyline].
   Polyline toPolyline() {
@@ -90,6 +94,7 @@ extension ConvertNavigationViewPolyline on PolylineDto {
 }
 
 /// [PolylineOptionsDto] convert extension.
+/// @nodoc
 extension ConvertPolylineOptionsDto on PolylineOptionsDto {
   /// Convert [PolylineOptionsDto] to [PolylineOptions].
   PolylineOptions toPolylineOptions() {
@@ -103,7 +108,7 @@ extension ConvertPolylineOptionsDto on PolylineOptionsDto {
         strokeColor: strokeColor != null ? Color(strokeColor!) : null,
         strokeJointType: strokeJointType?.toStrokeJointType(),
         strokePattern: strokePattern
-            ?.map((PatternItemDto? e) => e?.toPatternItem())
+            ?.map((PatternItemDto? pidto) => pidto?.toPatternItem())
             .whereType<PatternItem>()
             .toList(),
         strokeWidth: strokeWidth,
@@ -113,6 +118,7 @@ extension ConvertPolylineOptionsDto on PolylineOptionsDto {
 }
 
 /// [StrokeJointTypeDto] convert extension.
+/// @nodoc
 extension ConvertStrokeJointTypeDto on StrokeJointTypeDto {
   /// Convert [StrokeJointTypeDto] to [StrokeJointType].
   StrokeJointType toStrokeJointType() {
@@ -123,21 +129,6 @@ extension ConvertStrokeJointTypeDto on StrokeJointTypeDto {
         return StrokeJointType.defaultJoint;
       case StrokeJointTypeDto.round:
         return StrokeJointType.round;
-    }
-  }
-}
-
-/// [PatternItemDto] convert extension.
-extension ConvertPatternItemDto on PatternItemDto {
-  /// Convert [PatternItemDto] to [PatternItem].
-  PatternItem toPatternItem() {
-    switch (type) {
-      case PatternTypeDto.dash:
-        return DashPattern(length: length!);
-      case PatternTypeDto.dot:
-        return const DotPattern();
-      case PatternTypeDto.gap:
-        return GapPattern(length: length!);
     }
   }
 }

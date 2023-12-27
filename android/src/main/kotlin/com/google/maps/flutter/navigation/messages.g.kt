@@ -588,59 +588,6 @@ data class MarkerAnchorDto(val u: Double, val v: Double) {
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class MarkerEventDto(
-  val viewId: Long,
-  val markerId: String,
-  val eventType: MarkerEventTypeDto
-) {
-  companion object {
-    @Suppress("UNCHECKED_CAST")
-    fun fromList(list: List<Any?>): MarkerEventDto {
-      val viewId = list[0].let { if (it is Int) it.toLong() else it as Long }
-      val markerId = list[1] as String
-      val eventType = MarkerEventTypeDto.ofRaw(list[2] as Int)!!
-      return MarkerEventDto(viewId, markerId, eventType)
-    }
-  }
-
-  fun toList(): List<Any?> {
-    return listOf<Any?>(
-      viewId,
-      markerId,
-      eventType.raw,
-    )
-  }
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
-data class MarkerDragEventDto(
-  val viewId: Long,
-  val markerId: String,
-  val eventType: MarkerDragEventTypeDto,
-  val position: LatLngDto
-) {
-  companion object {
-    @Suppress("UNCHECKED_CAST")
-    fun fromList(list: List<Any?>): MarkerDragEventDto {
-      val viewId = list[0].let { if (it is Int) it.toLong() else it as Long }
-      val markerId = list[1] as String
-      val eventType = MarkerDragEventTypeDto.ofRaw(list[2] as Int)!!
-      val position = LatLngDto.fromList(list[3] as List<Any?>)
-      return MarkerDragEventDto(viewId, markerId, eventType, position)
-    }
-  }
-
-  fun toList(): List<Any?> {
-    return listOf<Any?>(
-      viewId,
-      markerId,
-      eventType.raw,
-      position.toList(),
-    )
-  }
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
 data class PolygonDto(val polygonId: String, val options: PolygonOptionsDto) {
 
   companion object {
@@ -727,26 +674,6 @@ data class PolygonHoleDto(val points: List<LatLngDto?>) {
   fun toList(): List<Any?> {
     return listOf<Any?>(
       points,
-    )
-  }
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
-data class PolygonClickedEventDto(val viewId: Long, val polygonId: String) {
-
-  companion object {
-    @Suppress("UNCHECKED_CAST")
-    fun fromList(list: List<Any?>): PolygonClickedEventDto {
-      val viewId = list[0].let { if (it is Int) it.toLong() else it as Long }
-      val polygonId = list[1] as String
-      return PolygonClickedEventDto(viewId, polygonId)
-    }
-  }
-
-  fun toList(): List<Any?> {
-    return listOf<Any?>(
-      viewId,
-      polygonId,
     )
   }
 }
@@ -895,26 +822,6 @@ data class PolylineOptionsDto(
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class PolylineClickedEventDto(val viewId: Long, val polylineId: String) {
-
-  companion object {
-    @Suppress("UNCHECKED_CAST")
-    fun fromList(list: List<Any?>): PolylineClickedEventDto {
-      val viewId = list[0].let { if (it is Int) it.toLong() else it as Long }
-      val polylineId = list[1] as String
-      return PolylineClickedEventDto(viewId, polylineId)
-    }
-  }
-
-  fun toList(): List<Any?> {
-    return listOf<Any?>(
-      viewId,
-      polylineId,
-    )
-  }
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
 data class CircleDto(
   /** Identifies circle. */
   val circleId: String,
@@ -987,26 +894,6 @@ data class CircleOptionsDto(
       zIndex,
       visible,
       clickable,
-    )
-  }
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
-data class CircleClickedEventDto(val viewId: Long, val circleId: String) {
-
-  companion object {
-    @Suppress("UNCHECKED_CAST")
-    fun fromList(list: List<Any?>): CircleClickedEventDto {
-      val viewId = list[0].let { if (it is Int) it.toLong() else it as Long }
-      val circleId = list[1] as String
-      return CircleClickedEventDto(viewId, circleId)
-    }
-  }
-
-  fun toList(): List<Any?> {
-    return listOf<Any?>(
-      viewId,
-      circleId,
     )
   }
 }
@@ -4185,22 +4072,7 @@ private object NavigationViewEventApiCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
       128.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { CircleClickedEventDto.fromList(it) }
-      }
-      129.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LatLngDto.fromList(it) }
-      }
-      130.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MarkerDragEventDto.fromList(it) }
-      }
-      131.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MarkerEventDto.fromList(it) }
-      }
-      132.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolygonClickedEventDto.fromList(it) }
-      }
-      133.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolylineClickedEventDto.fromList(it) }
       }
       else -> super.readValueOfType(type, buffer)
     }
@@ -4208,28 +4080,8 @@ private object NavigationViewEventApiCodec : StandardMessageCodec() {
 
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
     when (value) {
-      is CircleClickedEventDto -> {
-        stream.write(128)
-        writeValue(stream, value.toList())
-      }
       is LatLngDto -> {
-        stream.write(129)
-        writeValue(stream, value.toList())
-      }
-      is MarkerDragEventDto -> {
-        stream.write(130)
-        writeValue(stream, value.toList())
-      }
-      is MarkerEventDto -> {
-        stream.write(131)
-        writeValue(stream, value.toList())
-      }
-      is PolygonClickedEventDto -> {
-        stream.write(132)
-        writeValue(stream, value.toList())
-      }
-      is PolylineClickedEventDto -> {
-        stream.write(133)
+        stream.write(128)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -4296,11 +4148,16 @@ class NavigationViewEventApi(private val binaryMessenger: BinaryMessenger) {
     }
   }
 
-  fun onMarkerEvent(msgArg: MarkerEventDto, callback: (Result<Unit>) -> Unit) {
+  fun onMarkerEvent(
+    viewIdArg: Long,
+    markerIdArg: String,
+    eventTypeArg: MarkerEventTypeDto,
+    callback: (Result<Unit>) -> Unit
+  ) {
     val channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerEvent"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(msgArg)) {
+    channel.send(listOf(viewIdArg, markerIdArg, eventTypeArg.raw)) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
@@ -4313,11 +4170,17 @@ class NavigationViewEventApi(private val binaryMessenger: BinaryMessenger) {
     }
   }
 
-  fun onMarkerDragEvent(msgArg: MarkerDragEventDto, callback: (Result<Unit>) -> Unit) {
+  fun onMarkerDragEvent(
+    viewIdArg: Long,
+    markerIdArg: String,
+    eventTypeArg: MarkerDragEventTypeDto,
+    positionArg: LatLngDto,
+    callback: (Result<Unit>) -> Unit
+  ) {
     val channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerDragEvent"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(msgArg)) {
+    channel.send(listOf(viewIdArg, markerIdArg, eventTypeArg.raw, positionArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
@@ -4330,11 +4193,11 @@ class NavigationViewEventApi(private val binaryMessenger: BinaryMessenger) {
     }
   }
 
-  fun onPolygonClicked(msgArg: PolygonClickedEventDto, callback: (Result<Unit>) -> Unit) {
+  fun onPolygonClicked(viewIdArg: Long, polygonIdArg: String, callback: (Result<Unit>) -> Unit) {
     val channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onPolygonClicked"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(msgArg)) {
+    channel.send(listOf(viewIdArg, polygonIdArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
@@ -4347,11 +4210,11 @@ class NavigationViewEventApi(private val binaryMessenger: BinaryMessenger) {
     }
   }
 
-  fun onPolylineClicked(msgArg: PolylineClickedEventDto, callback: (Result<Unit>) -> Unit) {
+  fun onPolylineClicked(viewIdArg: Long, polylineIdArg: String, callback: (Result<Unit>) -> Unit) {
     val channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onPolylineClicked"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(msgArg)) {
+    channel.send(listOf(viewIdArg, polylineIdArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
@@ -4364,11 +4227,11 @@ class NavigationViewEventApi(private val binaryMessenger: BinaryMessenger) {
     }
   }
 
-  fun onCircleClicked(msgArg: CircleClickedEventDto, callback: (Result<Unit>) -> Unit) {
+  fun onCircleClicked(viewIdArg: Long, circleIdArg: String, callback: (Result<Unit>) -> Unit) {
     val channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCircleClicked"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(msgArg)) {
+    channel.send(listOf(viewIdArg, circleIdArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))

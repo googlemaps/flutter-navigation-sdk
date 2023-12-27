@@ -206,29 +206,7 @@ enum MarkerEventTypeDto {
   infoWindowLongClicked
 }
 
-class MarkerEventDto {
-  MarkerEventDto(
-      {required this.viewId, required this.markerId, required this.eventType});
-
-  final int viewId;
-  final String markerId;
-  final MarkerEventTypeDto eventType;
-}
-
 enum MarkerDragEventTypeDto { drag, dragStart, dragEnd }
-
-class MarkerDragEventDto {
-  MarkerDragEventDto(
-      {required this.viewId,
-      required this.markerId,
-      required this.eventType,
-      required this.position});
-
-  final int viewId;
-  final String markerId;
-  final MarkerDragEventTypeDto eventType;
-  final LatLngDto position;
-}
 
 class PolygonDto {
   const PolygonDto({required this.polygonId, required this.options});
@@ -263,12 +241,6 @@ class PolygonOptionsDto {
 class PolygonHoleDto {
   const PolygonHoleDto({required this.points});
   final List<LatLngDto?> points;
-}
-
-class PolygonClickedEventDto {
-  PolygonClickedEventDto({required this.viewId, required this.polygonId});
-  final int viewId;
-  final String polygonId;
 }
 
 class StyleSpanStrokeStyleDto {
@@ -341,16 +313,6 @@ class PolylineOptionsDto {
   final List<StyleSpanDto?> spans;
 }
 
-class PolylineClickedEventDto {
-  PolylineClickedEventDto({
-    required this.viewId,
-    required this.polylineId,
-  });
-
-  final int viewId;
-  final String polylineId;
-}
-
 class CircleDto {
   CircleDto({required this.circleId, required this.options});
 
@@ -383,16 +345,6 @@ class CircleOptionsDto {
   final double zIndex;
   final bool visible;
   final bool clickable;
-}
-
-class CircleClickedEventDto {
-  CircleClickedEventDto({
-    required this.viewId,
-    required this.circleId,
-  });
-
-  final int viewId;
-  final String circleId;
 }
 
 @HostApi(dartHostTestHandler: 'TestNavigationViewApi')
@@ -522,11 +474,12 @@ abstract class NavigationViewEventApi {
   void onMapClickEvent(int viewId, LatLngDto latLng);
   void onMapLongClickEvent(int viewId, LatLngDto latLng);
   void onRecenterButtonClicked(int viewId);
-  void onMarkerEvent(MarkerEventDto msg);
-  void onMarkerDragEvent(MarkerDragEventDto msg);
-  void onPolygonClicked(PolygonClickedEventDto msg);
-  void onPolylineClicked(PolylineClickedEventDto msg);
-  void onCircleClicked(CircleClickedEventDto msg);
+  void onMarkerEvent(int viewId, String markerId, MarkerEventTypeDto eventType);
+  void onMarkerDragEvent(int viewId, String markerId,
+      MarkerDragEventTypeDto eventType, LatLngDto position);
+  void onPolygonClicked(int viewId, String polygonId);
+  void onPolylineClicked(int viewId, String polylineId);
+  void onCircleClicked(int viewId, String circleId);
 }
 
 class NavigationSessionEventDto {

@@ -12,9 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'src/google_maps_image_registry.dart';
-export 'src/google_maps_navigation.dart';
-export 'src/google_maps_navigation_android.dart';
-export 'src/google_maps_navigation_ios.dart';
-export 'src/navigator/google_maps_navigator.dart';
-export 'src/types/types.dart';
+import '../../types/types.dart';
+import '../method_channel.dart';
+
+/// [NavigationDisplayOptions] convert extension.
+/// @nodoc
+extension ConvertNavigationDisplayOptions on NavigationDisplayOptions {
+  /// Converts [NavigationWaypoint] to [NavigationDisplayOptionsDto]
+  NavigationDisplayOptionsDto toDto() => NavigationDisplayOptionsDto(
+        showDestinationMarkers: showDestinationMarkers,
+        showStopSigns: showStopSigns,
+        showTrafficLights: showTrafficLights,
+      );
+}

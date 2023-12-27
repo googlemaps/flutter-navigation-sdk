@@ -461,22 +461,21 @@ abstract mixin class NavigationViewAPIInterface {
   Future<void> clearCircles({required int viewId});
 
   /// Get navigation view marker event stream from the navigation view.
-  Stream<MarkerEventDto> getMarkerEventStream({required int viewId});
+  Stream<MarkerEvent> getMarkerEventStream({required int viewId});
 
   /// Get navigation view marker drag event stream from the navigation view.
-  Stream<MarkerDragEventDto> getMarkerDragEventStream({required int viewId});
+  Stream<MarkerDragEvent> getMarkerDragEventStream({required int viewId});
 
   /// Get navigation view polygon clicked event stream from the navigation view.
-  Stream<PolygonClickedEventDto> getPolygonClickedEventStream(
+  Stream<PolygonClickedEvent> getPolygonClickedEventStream(
       {required int viewId});
 
   /// Get navigation view polyline clicked event stream from the navigation view.
-  Stream<PolylineClickedEventDto> getPolylineDtoClickedEventStream(
+  Stream<PolylineClickedEvent> getPolylineClickedEventStream(
       {required int viewId});
 
   /// Get navigation view circle clicked event stream from the navigation view.
-  Stream<CircleClickedEventDto> getCircleDtoClickedEventStream(
-      {required int viewId});
+  Stream<CircleClickedEvent> getCircleClickedEventStream({required int viewId});
 
   /// Populates [GoogleNavigationInspectorPlatform.instance] to allow
   /// inspecting the platform map state.

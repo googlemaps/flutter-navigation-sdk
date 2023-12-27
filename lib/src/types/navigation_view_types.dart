@@ -39,40 +39,6 @@ enum MapType {
   hybrid,
 }
 
-/// Converts Maptype map type to pigeon DTO object.
-/// @nodoc
-MapTypeDto mapTypeToDto(MapType type) {
-  switch (type) {
-    case MapType.none:
-      return MapTypeDto.none;
-    case MapType.hybrid:
-      return MapTypeDto.hybrid;
-    case MapType.normal:
-      return MapTypeDto.normal;
-    case MapType.satellite:
-      return MapTypeDto.satellite;
-    case MapType.terrain:
-      return MapTypeDto.terrain;
-  }
-}
-
-/// Converts map type from pigeon DTO format.
-/// @nodoc
-MapType mapTypeFromDto(MapTypeDto type) {
-  switch (type) {
-    case MapTypeDto.none:
-      return MapType.none;
-    case MapTypeDto.hybrid:
-      return MapType.hybrid;
-    case MapTypeDto.normal:
-      return MapType.normal;
-    case MapTypeDto.satellite:
-      return MapType.satellite;
-    case MapTypeDto.terrain:
-      return MapType.terrain;
-  }
-}
-
 /// Represents the camera position in a Google Maps view.
 /// {@category Navigation View}
 class CameraPosition {
@@ -117,39 +83,6 @@ enum CameraPerspective {
 
   /// A north-facing top-down perspective of the camera's target.
   topDownNorthUp
-}
-
-/// Converts the view event type from the Pigeon DTO format.
-/// @nodoc
-CameraPosition cameraPositionfromDto(CameraPositionDto position) {
-  return CameraPosition(
-      bearing: position.bearing,
-      target: latLngFromDto(position.target),
-      tilt: position.tilt,
-      zoom: position.zoom);
-}
-
-/// Converts the view event type to the Pigeon DTO format.
-/// @nodoc
-CameraPositionDto cameraPositionToDto(CameraPosition position) {
-  return CameraPositionDto(
-      bearing: position.bearing,
-      target: latLngToDto(position.target),
-      tilt: position.tilt,
-      zoom: position.zoom);
-}
-
-/// Converts the camera perspective to the Pigeon DTO format.
-/// @nodoc
-CameraPerspectiveDto cameraPerspectiveTypeToDto(CameraPerspective perspective) {
-  switch (perspective) {
-    case CameraPerspective.tilted:
-      return CameraPerspectiveDto.tilted;
-    case CameraPerspective.topDownHeadingUp:
-      return CameraPerspectiveDto.topDownHeadingUp;
-    case CameraPerspective.topDownNorthUp:
-      return CameraPerspectiveDto.topDownNorthUp;
-  }
 }
 
 /// Represents the click position in a Google Maps view.
@@ -255,74 +188,6 @@ class RouteSegment {
 
   /// Destination waypoint.
   final NavigationWaypoint? destinationWaypoint;
-}
-
-/// Convert road stretch rendering data from Pigeon DTO format.
-/// @nodoc
-RouteSegmentTrafficDataRoadStretchRenderingData roadStretchRenderingDataFromDto(
-    RouteSegmentTrafficDataRoadStretchRenderingDataDto data) {
-  return RouteSegmentTrafficDataRoadStretchRenderingData(
-    style: () {
-      switch (data.style) {
-        case RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
-              .slowerTraffic:
-          return RouteSegmentTrafficDataRoadStretchRenderingDataStyle
-              .slowerTraffic;
-        case RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto.trafficJam:
-          return RouteSegmentTrafficDataRoadStretchRenderingDataStyle
-              .trafficJam;
-        case RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto.unknown:
-          return RouteSegmentTrafficDataRoadStretchRenderingDataStyle.unknown;
-      }
-    }(),
-    lengthMeters: data.lengthMeters,
-    offsetMeters: data.offsetMeters,
-  );
-}
-
-/// Convert route segment traffic data from DTO.
-/// @nodoc
-RouteSegmentTrafficData routeSegmentTrafficDataFromDto(
-    RouteSegmentTrafficDataDto data) {
-  return RouteSegmentTrafficData(
-    status: () {
-      switch (data.status) {
-        case RouteSegmentTrafficDataStatusDto.ok:
-          return RouteSegmentTrafficDataStatus.ok;
-        case RouteSegmentTrafficDataStatusDto.unavailable:
-          return RouteSegmentTrafficDataStatus.unavailable;
-      }
-    }(),
-    roadStretchRenderingDataList: data.roadStretchRenderingDataList
-        .where((RouteSegmentTrafficDataRoadStretchRenderingDataDto? d) =>
-            d != null)
-        .cast<RouteSegmentTrafficDataRoadStretchRenderingDataDto>()
-        .map((RouteSegmentTrafficDataRoadStretchRenderingDataDto d) =>
-            roadStretchRenderingDataFromDto(d))
-        .toList(),
-  );
-}
-
-/// Convert route segment from DTO.
-/// @nodoc
-RouteSegment routeSegmentFromDto(RouteSegmentDto segment) {
-  return RouteSegment(
-    destinationLatLng: LatLng(
-        latitude: segment.destinationLatLng.latitude,
-        longitude: segment.destinationLatLng.longitude),
-    destinationWaypoint: segment.destinationWaypoint != null
-        ? navigationWaypointFromDto(segment.destinationWaypoint!)
-        : null,
-    latLngs: segment.latLngs
-        ?.where((LatLngDto? p) => p != null)
-        .cast<LatLngDto>()
-        .map((LatLngDto p) =>
-            LatLng(latitude: p.latitude, longitude: p.longitude))
-        .toList(),
-    trafficData: segment.trafficData != null
-        ? routeSegmentTrafficDataFromDto(segment.trafficData!)
-        : null,
-  );
 }
 
 /// Internal camera update type.

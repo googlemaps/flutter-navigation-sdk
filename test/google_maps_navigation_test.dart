@@ -16,8 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_maps_navigation/google_maps_navigation.dart';
 import 'package:google_maps_navigation/src/google_maps_navigation_platform_interface.dart';
-import 'package:google_maps_navigation/src/types/util/marker_conversion.dart';
-import 'package:google_maps_navigation/src/types/util/polygon_conversion.dart';
+import 'package:google_maps_navigation/src/method_channel/method_channel.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
@@ -118,7 +117,7 @@ void main() {
       CameraPerspectiveDto perspective =
           perspectiveResult.captured[1] as CameraPerspectiveDto;
       double? zoomLevelOut = perspectiveResult.captured[2] as double?;
-      expect(cameraPerspectiveTypeToDto(perspectiveIn), perspective);
+      expect(perspectiveIn.toDto(), perspective);
       expect(zoomLevelOut, null);
 
       // Follow my position with zoom level
@@ -130,7 +129,7 @@ void main() {
           viewMockApi.followMyLocation(captureAny, captureAny, captureAny));
       perspective = perspectiveResult.captured[1] as CameraPerspectiveDto;
       zoomLevelOut = perspectiveResult.captured[2] as double?;
-      expect(cameraPerspectiveTypeToDto(perspectiveIn), perspective);
+      expect(perspectiveIn.toDto(), perspective);
       expect(zoomLevelOut, 5.0);
     });
 

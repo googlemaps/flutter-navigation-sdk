@@ -169,3 +169,15 @@ class PolygonOptions {
       visible.hashCode,
       zIndex.hashCode);
 }
+
+/// Event emitted when a polygon is clicked.
+@immutable
+class PolygonClickedEvent {
+  /// Initialize [PolygonClickedEvent] object.
+  const PolygonClickedEvent({
+    required this.polygonId,
+  });
+
+  /// Id of the polygon that has been tapped.
+  final String polygonId;
+}
