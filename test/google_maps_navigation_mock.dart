@@ -161,6 +161,11 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
   }
 
   @override
+  Future<String> getNavSDKVersion() async {
+    return sessionApi.getNavSDKVersion();
+  }
+
+  @override
   Future<void> setMapType({required int viewId, required MapType mapType}) {
     throw UnimplementedError();
   }

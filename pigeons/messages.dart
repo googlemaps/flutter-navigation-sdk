@@ -800,6 +800,7 @@ abstract class NavigationSessionApi {
       bool shouldOnlyShowDriverAwarenessDisclaimer);
   bool areTermsAccepted();
   void resetTermsAccepted();
+  String getNavSDKVersion();
 
   /// Navigation.
   bool isGuidanceRunning();

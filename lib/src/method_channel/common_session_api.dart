@@ -127,6 +127,20 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   @override
+  Future<String> getNavSDKVersion() {
+    try {
+      return _sessionApi.getNavSDKVersion();
+    } on PlatformException catch (e) {
+      switch (e.code) {
+        case 'sessionNotInitialized':
+          throw const SessionNotInitializedException();
+        default:
+          rethrow;
+      }
+    }
+  }
+
+  @override
   Future<bool> isGuidanceRunning() async {
     try {
       return await _sessionApi.isGuidanceRunning();

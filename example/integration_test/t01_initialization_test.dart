@@ -148,5 +148,9 @@ void main() {
       fail(
           'Expected isGuidanceRunning() to succeed after the successful navigation initialization.');
     }
+
+    // Test that SDK version call returns non-empty version string.
+    final String version = await GoogleMapsNavigator.getNavSDKVersion();
+    expect(version.length, greaterThan(0));
   });
 }

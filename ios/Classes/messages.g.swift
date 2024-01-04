@@ -3961,6 +3961,7 @@ protocol NavigationSessionApi {
                                     completion: @escaping (Result<Bool, Error>) -> Void)
   func areTermsAccepted() throws -> Bool
   func resetTermsAccepted() throws
+  func getNavSDKVersion() throws -> String
   /// Navigation.
   func isGuidanceRunning() throws -> Bool
   func startGuidance() throws
@@ -4129,6 +4130,23 @@ enum NavigationSessionApiSetup {
       }
     } else {
       resetTermsAcceptedChannel.setMessageHandler(nil)
+    }
+    let getNavSDKVersionChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.getNavSDKVersion",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      getNavSDKVersionChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.getNavSDKVersion()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getNavSDKVersionChannel.setMessageHandler(nil)
     }
     /// Navigation.
     let isGuidanceRunningChannel = FlutterBasicMessageChannel(

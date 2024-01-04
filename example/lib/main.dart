@@ -14,9 +14,11 @@
 
 // ignore_for_file: public_member_api_docs
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:google_maps_navigation/google_maps_navigation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'pages/circles.dart';
 import 'pages/pages.dart';
@@ -57,11 +59,18 @@ class _NavigationDemoState extends State<NavigationBody> {
 
   bool _locationPermitted = false;
   bool _notificationsPermitted = false;
+  String _navSDKVersion = '';
 
   @override
   void initState() {
     _requestPermissions();
     super.initState();
+    unawaited(_checkSDKVersion());
+  }
+
+  Future<void> _checkSDKVersion() async {
+    // Get the Navigation SDK version.
+    _navSDKVersion = await GoogleMapsNavigator.getNavSDKVersion();
   }
 
   Future<void> _pushPage(BuildContext context, ExamplePage page) async {
@@ -103,9 +112,14 @@ class _NavigationDemoState extends State<NavigationBody> {
                   child: Container(
                     height: 40,
                     alignment: Alignment.center,
-                    child: Text(Platform.isIOS
-                        ? 'Location ${_locationPermitted ? 'granted' : 'denied'} • Notifications ${_notificationsPermitted ? 'granted' : 'denied'}'
-                        : 'Location ${_locationPermitted ? 'granted' : 'denied'} '),
+                    child: Column(
+                      children: <Widget>[
+                        Text(Platform.isIOS
+                            ? 'Location ${_locationPermitted ? 'granted' : 'denied'} • Notifications ${_notificationsPermitted ? 'granted' : 'denied'}'
+                            : 'Location ${_locationPermitted ? 'granted' : 'denied'} '),
+                        Text('Navigation SDK version: $_navSDKVersion'),
+                      ],
+                    ),
                   ),
                 );
               }

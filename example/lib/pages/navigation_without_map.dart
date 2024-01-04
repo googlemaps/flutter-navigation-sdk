@@ -44,7 +44,11 @@ class _NavigationWithoutMapPageState
   @override
   void initState() {
     super.initState();
-    checkTermsAcceptance();
+    unawaited(_initialize());
+  }
+
+  Future<void> _initialize() async {
+    await checkTermsAcceptance();
   }
 
   @override

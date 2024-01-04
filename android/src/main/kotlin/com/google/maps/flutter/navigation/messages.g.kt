@@ -4388,6 +4388,8 @@ interface NavigationSessionApi {
   fun areTermsAccepted(): Boolean
 
   fun resetTermsAccepted()
+
+  fun getNavSDKVersion(): String
   /** Navigation. */
   fun isGuidanceRunning(): Boolean
 
@@ -4593,6 +4595,27 @@ interface NavigationSessionApi {
             try {
               api.resetTermsAccepted()
               wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.getNavSDKVersion",
+            codec
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.getNavSDKVersion())
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
             }

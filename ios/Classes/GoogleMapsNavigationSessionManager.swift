@@ -179,6 +179,10 @@ class GoogleMapsNavigationSessionManager: NSObject {
     GMSNavigationServices.resetTermsAndConditionsAccepted()
   }
 
+  func getNavSDKVersion() -> String {
+    GMSNavigationServices.navSDKVersion()
+  }
+
   /// Navigation.
   func startGuidance() throws {
     try getNavigator().isGuidanceActive = true

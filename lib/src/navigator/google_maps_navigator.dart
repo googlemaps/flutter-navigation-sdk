@@ -210,6 +210,11 @@ class GoogleMapsNavigator {
     return GoogleMapsNavigationPlatform.instance.resetTermsAccepted();
   }
 
+  /// Gets the native navigation SDK version as string.
+  static Future<String> getNavSDKVersion() async {
+    return GoogleMapsNavigationPlatform.instance.getNavSDKVersion();
+  }
+
   /// Starts the navigation guidance.
   static Future<void> startGuidance() {
     return GoogleMapsNavigationPlatform.instance.startGuidance();

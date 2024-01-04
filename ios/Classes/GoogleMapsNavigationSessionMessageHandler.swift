@@ -51,6 +51,10 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
     try GoogleMapsNavigationSessionManager.shared.resetTermsAccepted()
   }
 
+  func getNavSDKVersion() -> String {
+    GoogleMapsNavigationSessionManager.shared.getNavSDKVersion()
+  }
+
   func createNavigationSession(completion: @escaping (Result<Void, Error>) -> Void) {
     do {
       try GoogleMapsNavigationSessionManager.shared.createNavigationSession()

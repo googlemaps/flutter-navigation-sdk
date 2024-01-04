@@ -518,6 +518,10 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
     }
   }
 
+  fun getNavSDKVersion(): String {
+    return NavigationApi.getNavSDKVersion()
+  }
+
   /**
    * Wraps [Simulator.setUserLocation]. See
    * [Google Navigation SDK for Android](https://developers.google.com/maps/documentation/navigation/android-sdk/reference/com/google/android/libraries/navigation/Simulator#setUserLocation(com.google.android.gms.maps.model.LatLng)).

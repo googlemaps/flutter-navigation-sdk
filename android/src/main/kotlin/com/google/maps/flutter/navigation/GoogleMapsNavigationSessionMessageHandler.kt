@@ -60,6 +60,10 @@ class GoogleMapsNavigationSessionMessageHandler : NavigationSessionApi {
     manager().resetTermsAccepted()
   }
 
+  override fun getNavSDKVersion(): String {
+    return manager().getNavSDKVersion()
+  }
+
   override fun isGuidanceRunning(): Boolean {
     return manager().isGuidanceRunning()
   }

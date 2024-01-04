@@ -18,11 +18,12 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i4;
-import 'dart:typed_data' as _i5;
+import 'dart:typed_data' as _i6;
 
 import 'package:google_maps_navigation/src/method_channel/messages.g.dart'
     as _i2;
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:mockito/src/dummies.dart' as _i5;
 
 import 'messages_test.g.dart' as _i3;
 
@@ -155,6 +156,21 @@ class MockTestNavigationSessionApi extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
+
+  @override
+  String getNavSDKVersion() => (super.noSuchMethod(
+        Invocation.method(
+          #getNavSDKVersion,
+          [],
+        ),
+        returnValue: _i5.dummyValue<String>(
+          this,
+          Invocation.method(
+            #getNavSDKVersion,
+            [],
+          ),
+        ),
+      ) as String);
 
   @override
   bool isGuidanceRunning() => (super.noSuchMethod(
@@ -1551,7 +1567,7 @@ class MockTestImageRegistryApi extends _i1.Mock
   @override
   _i2.ImageDescriptorDto registerBitmapImage(
     String? imageId,
-    _i5.Uint8List? bytes,
+    _i6.Uint8List? bytes,
     double? imagePixelRatio,
     double? width,
     double? height,

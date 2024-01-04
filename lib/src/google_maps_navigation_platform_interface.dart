@@ -91,6 +91,9 @@ abstract mixin class NavigationSessionAPIInterface {
   /// Resets terms of service acceptance state.
   Future<void> resetTermsAccepted();
 
+  /// Gets the native navigation SDK version as string.
+  Future<String> getNavSDKVersion();
+
   /// Has guidance been started.
   Future<bool> isGuidanceRunning();
 
