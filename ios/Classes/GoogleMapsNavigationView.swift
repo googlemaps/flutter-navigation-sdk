@@ -82,7 +82,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     )
 
     // Set initial navigation UI state.
-    enableNavigationUI(_mapConfiguration?.navigationUIEnabled ?? isAttachedToSession)
+    setNavigationUIEnabled(_mapConfiguration?.navigationUIEnabled ?? isAttachedToSession)
 
     _navigationView.needsUpdateConstraints()
 
@@ -152,7 +152,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     }
   }
 
-  func enableMyLocation(enabled: Bool) throws {
+  func setMyLocationEnabled(_ enabled: Bool) throws {
     _navigationView.isMyLocationEnabled = enabled
     try updateMyLocationButton()
   }
@@ -173,7 +173,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     }
   }
 
-  func enableMyLocationButton(enabled: Bool) throws {
+  func setMyLocationButtonEnabled(_ enabled: Bool) throws {
     _myLocationButton = enabled
     try updateMyLocationButton()
   }
@@ -185,39 +185,39 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
       .isMyLocationEnabled && _myLocationButton
   }
 
-  func enableZoomGestures(enabled: Bool) throws {
+  func setZoomGesturesEnabled(_ enabled: Bool) throws {
     _navigationView.settings.zoomGestures = enabled
   }
 
-  func enableZoomControls(enabled: Bool) throws {
+  func setZoomControlsEnabled(_ enabled: Bool) throws {
     throw GoogleMapsNavigationViewError.notSupported
   }
 
-  func enableCompass(enabled: Bool) throws {
+  func setCompassEnabled(_ enabled: Bool) throws {
     _navigationView.settings.compassButton = enabled
   }
 
-  func enableRotateGestures(enabled: Bool) throws {
+  func setRotateGesturesEnabled(_ enabled: Bool) throws {
     _navigationView.settings.rotateGestures = enabled
   }
 
-  func enableScrollGestures(enabled: Bool) throws {
+  func setScrollGesturesEnabled(_ enabled: Bool) throws {
     _navigationView.settings.scrollGestures = enabled
   }
 
-  func enableScrollGesturesDuringRotateOrZoom(enabled: Bool) throws {
+  func setScrollGesturesDuringRotateOrZoomEnabled(_ enabled: Bool) throws {
     _navigationView.settings.allowScrollGesturesDuringRotateOrZoom = enabled
   }
 
-  func enableTiltGestures(enabled: Bool) throws {
+  func setTiltGesturesEnabled(_ enabled: Bool) throws {
     _navigationView.settings.tiltGestures = enabled
   }
 
-  func enableMapToolbar(enabled: Bool) throws {
+  func setMapToolbarEnabled(_ enabled: Bool) throws {
     throw GoogleMapsNavigationViewError.notSupported
   }
 
-  func enableTraffic(enabled: Bool) throws {
+  func setTrafficEnabled(_ enabled: Bool) throws {
     _navigationView.isTrafficEnabled = enabled
   }
 
@@ -379,7 +379,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     _navigationView.settings.isNavigationTripProgressBarEnabled
   }
 
-  func enableNavigationTripProgressBar(_ enabled: Bool) {
+  func setNavigationTripProgressBarEnabled(_ enabled: Bool) {
     _navigationView.settings.isNavigationTripProgressBarEnabled = enabled
   }
 
@@ -387,7 +387,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     _navigationView.settings.isNavigationHeaderEnabled
   }
 
-  func enableNavigationHeader(_ enabled: Bool) {
+  func setNavigationHeaderEnabled(_ enabled: Bool) {
     _navigationView.settings.isNavigationHeaderEnabled = enabled
   }
 
@@ -395,7 +395,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     _navigationView.settings.isNavigationFooterEnabled
   }
 
-  func enableNavigationFooter(_ enabled: Bool) {
+  func setNavigationFooterEnabled(_ enabled: Bool) {
     _navigationView.settings.isNavigationFooterEnabled = enabled
   }
 
@@ -403,7 +403,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     _navigationView.settings.isRecenterButtonEnabled
   }
 
-  func enableRecenterButton(_ enabled: Bool) {
+  func setRecenterButtonEnabled(_ enabled: Bool) {
     _navigationView.settings.isRecenterButtonEnabled = enabled
   }
 
@@ -411,31 +411,31 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     _navigationView.shouldDisplaySpeedLimit
   }
 
-  func enableSpeedLimitIcon(_ enable: Bool) {
-    _navigationView.shouldDisplaySpeedLimit = enable
+  func setSpeedLimitIconEnabled(_ enabled: Bool) {
+    _navigationView.shouldDisplaySpeedLimit = enabled
   }
 
   func isSpeedometerEnabled() -> Bool {
     _navigationView.shouldDisplaySpeedometer
   }
 
-  func enableSpeedometer(_ enable: Bool) {
-    _navigationView.shouldDisplaySpeedometer = enable
+  func setSpeedometerEnabled(_ enabled: Bool) {
+    _navigationView.shouldDisplaySpeedometer = enabled
   }
 
   func isIncidentCardsEnabled() -> Bool {
     _navigationView.settings.showsIncidentCards
   }
 
-  func enableIncidentCards(_ enable: Bool) {
-    _navigationView.settings.showsIncidentCards = enable
+  func setIncidentCardsEnabled(_ enabled: Bool) {
+    _navigationView.settings.showsIncidentCards = enabled
   }
 
   func isNavigationUIEnabled() -> Bool {
     _navigationView.isNavigationEnabled
   }
 
-  func enableNavigationUI(_ enabled: Bool) {
+  func setNavigationUIEnabled(_ enabled: Bool) {
     if _navigationView.isNavigationEnabled != enabled {
       _navigationView.isNavigationEnabled = enabled
 

@@ -338,52 +338,52 @@ internal constructor(
   }
 
   @SuppressLint("MissingPermission")
-  fun enableMyLocation(enabled: Boolean) {
+  fun setMyLocationEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
     getMap().isMyLocationEnabled = enabled
   }
 
-  fun enableMyLocationButton(enabled: Boolean) {
+  fun setMyLocationButtonEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
     getMap().uiSettings.isMyLocationButtonEnabled = enabled
   }
 
-  fun enableZoomGestures(enabled: Boolean) {
+  fun setZoomGesturesEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
     getMap().uiSettings.isZoomGesturesEnabled = enabled
   }
 
-  fun enableZoomControls(enabled: Boolean) {
+  fun setZoomControlsEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
     getMap().uiSettings.isZoomControlsEnabled = enabled
   }
 
-  fun enableCompass(enabled: Boolean) {
+  fun setCompassEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
     getMap().uiSettings.isCompassEnabled = enabled
   }
 
-  fun enableRotateGestures(enabled: Boolean) {
+  fun setRotateGesturesEnabled(enabled: Boolean) {
     getMap().uiSettings.isRotateGesturesEnabled = enabled
   }
 
-  fun enableScrollGestures(enabled: Boolean) {
+  fun setScrollGesturesEnabled(enabled: Boolean) {
     getMap().uiSettings.isScrollGesturesEnabled = enabled
   }
 
-  fun enableScrollGesturesDuringRotateOrZoom(enabled: Boolean) {
+  fun setScrollGesturesDuringRotateOrZoomEnabled(enabled: Boolean) {
     getMap().uiSettings.isScrollGesturesEnabledDuringRotateOrZoom = enabled
   }
 
-  fun enableTiltGestures(enabled: Boolean) {
+  fun setTiltGesturesEnabled(enabled: Boolean) {
     getMap().uiSettings.isTiltGesturesEnabled = enabled
   }
 
-  fun enableMapToolbar(enabled: Boolean) {
+  fun setMapToolbarEnabled(enabled: Boolean) {
     getMap().uiSettings.isMapToolbarEnabled = enabled
   }
 
-  fun enableTraffic(enabled: Boolean) {
+  fun setTrafficEnabled(enabled: Boolean) {
     getMap().isTrafficEnabled = enabled
   }
 
@@ -598,7 +598,7 @@ internal constructor(
     }
   }
 
-  fun enableNavigationTripProgressBar(enabled: Boolean) {
+  fun setNavigationTripProgressBarEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
     _navigationView.setTripProgressBarEnabled(enabled)
     _isNavigationTripProgressBarEnabled = enabled
@@ -608,7 +608,7 @@ internal constructor(
     return _isNavigationHeaderEnabled
   }
 
-  fun enableNavigationHeader(enabled: Boolean) {
+  fun setNavigationHeaderEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
     _navigationView.setHeaderEnabled(enabled)
     _isNavigationHeaderEnabled = enabled
@@ -618,7 +618,7 @@ internal constructor(
     return _isNavigationFooterEnabled
   }
 
-  fun enableNavigationFooter(enabled: Boolean) {
+  fun setNavigationFooterEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
     _navigationView.setEtaCardEnabled(enabled)
     _isNavigationFooterEnabled = enabled
@@ -628,7 +628,7 @@ internal constructor(
     return _isRecenterButtonEnabled
   }
 
-  fun enableRecenterButton(enabled: Boolean) {
+  fun setRecenterButtonEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
     _navigationView.setRecenterButtonEnabled(enabled)
     _isRecenterButtonEnabled = enabled
@@ -638,37 +638,37 @@ internal constructor(
     return _isSpeedLimitIconEnabled
   }
 
-  fun enableSpeedLimitIcon(enable: Boolean) {
+  fun setSpeedLimitIconEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
-    _navigationView.setSpeedLimitIconEnabled(enable)
-    _isSpeedLimitIconEnabled = enable
+    _navigationView.setSpeedLimitIconEnabled(enabled)
+    _isSpeedLimitIconEnabled = enabled
   }
 
   fun isSpeedometerEnabled(): Boolean {
     return _isSpeedometerEnabled
   }
 
-  fun enableSpeedometer(enable: Boolean) {
+  fun setSpeedometerEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
-    _navigationView.setSpeedometerEnabled(enable)
-    _isSpeedometerEnabled = enable
+    _navigationView.setSpeedometerEnabled(enabled)
+    _isSpeedometerEnabled = enabled
   }
 
   fun isIncidentCardsEnabled(): Boolean {
     return _isIncidentCardsEnabled
   }
 
-  fun enableIncidentCards(enable: Boolean) {
+  fun setIncidentCardsEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
-    _navigationView.setTrafficIncidentCardsEnabled(enable)
-    _isIncidentCardsEnabled = enable
+    _navigationView.setTrafficIncidentCardsEnabled(enabled)
+    _isIncidentCardsEnabled = enabled
   }
 
   fun isNavigationUIEnabled(): Boolean {
     return _navigationView.isNavigationUiEnabled
   }
 
-  fun enableNavigationUI(enabled: Boolean) {
+  fun setNavigationUIEnabled(enabled: Boolean) {
     if (_navigationView.isNavigationUiEnabled != enabled) {
       invalidateViewAfterMapLoad()
       _navigationView.isNavigationUiEnabled = enabled

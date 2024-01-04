@@ -361,7 +361,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     setState(() {
       _navigationViewController = controller;
     });
-    await controller.enableMyLocation(enabled: true);
+    await controller.setMyLocationEnabled(true);
 
     if (_guidanceRunning) {
       // Guidance is running, enable navigation UI.
@@ -416,7 +416,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     if (!_navigatorInitialized) {
       await _initializeNavigator();
     }
-    await _navigationViewController?.enableNavigationUI(enabled: true);
+    await _navigationViewController?.setNavigationUIEnabled(true);
     await _startGuidance();
     await _navigationViewController?.followMyLocation(CameraPerspective.tilted);
   }
@@ -438,7 +438,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     // disabled right after cleanup.
     unawaited(Future<void>.delayed(
         const Duration(milliseconds: _disableNavigationUIDelay), () async {
-      await _navigationViewController!.enableNavigationUI(enabled: false);
+      await _navigationViewController!.setNavigationUIEnabled(false);
     }));
 
     // Make sure that navigation initialization state is up-to-date.
@@ -518,7 +518,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       final bool success = await _updateNavigationDestinations();
 
       if (success) {
-        await _navigationViewController!.enableNavigationUI(enabled: true);
+        await _navigationViewController!.setNavigationUIEnabled(true);
 
         if (!_guidanceRunning) {
           await _navigationViewController!.showRouteOverview();
@@ -1069,7 +1069,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                       initialValue: _navigationHeaderEnabled,
                       onChanged: (bool newValue) async {
                         await _navigationViewController!
-                            .enableNavigationHeader(enabled: newValue);
+                            .setNavigationHeaderEnabled(newValue);
                         setState(() {
                           _navigationHeaderEnabled = newValue;
                         });
@@ -1079,7 +1079,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                       initialValue: _navigationFooterEnabled,
                       onChanged: (bool newValue) async {
                         await _navigationViewController!
-                            .enableNavigationFooter(enabled: newValue);
+                            .setNavigationFooterEnabled(newValue);
                         setState(() {
                           _navigationFooterEnabled = newValue;
                         });
@@ -1089,7 +1089,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                       initialValue: _navigationTripProgressBarEnabled,
                       onChanged: (bool newValue) async {
                         await _navigationViewController!
-                            .enableNavigationTripProgressBar(enabled: newValue);
+                            .setNavigationTripProgressBarEnabled(newValue);
                         setState(() {
                           _navigationTripProgressBarEnabled = newValue;
                         });
@@ -1099,7 +1099,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                       initialValue: _navigationUIEnabled,
                       onChanged: (bool newValue) async {
                         await _navigationViewController!
-                            .enableNavigationUI(enabled: newValue);
+                            .setNavigationUIEnabled(newValue);
                         setState(() {
                           _navigationUIEnabled = newValue;
                         });
@@ -1109,7 +1109,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                       initialValue: _recenterButtonEnabled,
                       onChanged: (bool newValue) async {
                         await _navigationViewController!
-                            .enableRecenterButton(enabled: newValue);
+                            .setRecenterButtonEnabled(newValue);
                         setState(() {
                           _recenterButtonEnabled = newValue;
                         });
@@ -1119,7 +1119,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                       initialValue: _speedLimitIconEnabled,
                       onChanged: (bool newValue) async {
                         await _navigationViewController!
-                            .enableSpeedLimitIcon(enable: newValue);
+                            .setSpeedLimitIconEnabled(newValue);
                         setState(() {
                           _speedLimitIconEnabled = newValue;
                         });
@@ -1129,7 +1129,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                       initialValue: _speedometerEnabled,
                       onChanged: (bool newValue) async {
                         await _navigationViewController!
-                            .enableSpeedometer(enable: newValue);
+                            .setSpeedometerEnabled(newValue);
                         setState(() {
                           _speedometerEnabled = newValue;
                         });
@@ -1139,7 +1139,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                       initialValue: _indicentCardsEnabled,
                       onChanged: (bool newValue) async {
                         await _navigationViewController!
-                            .enableIncidentCards(enable: newValue);
+                            .setIncidentCardsEnabled(newValue);
                         setState(() {
                           _indicentCardsEnabled = newValue;
                         });

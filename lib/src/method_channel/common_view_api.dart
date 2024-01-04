@@ -127,8 +127,9 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Future<void> enableMyLocation({required int viewId, required bool enabled}) {
-    return _viewApi.enableMyLocation(viewId, enabled);
+  Future<void> setMyLocationEnabled(
+      {required int viewId, required bool enabled}) {
+    return _viewApi.setMyLocationEnabled(viewId, enabled);
   }
 
   @override
@@ -159,22 +160,22 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Future<void> enableMyLocationButton(
+  Future<void> setMyLocationButtonEnabled(
       {required int viewId, required bool enabled}) {
-    return _viewApi.enableMyLocationButton(viewId, enabled);
+    return _viewApi.setMyLocationButtonEnabled(viewId, enabled);
   }
 
   @override
-  Future<void> enableZoomGestures(
+  Future<void> setZoomGesturesEnabled(
       {required int viewId, required bool enabled}) {
-    return _viewApi.enableZoomGestures(viewId, enabled);
+    return _viewApi.setZoomGesturesEnabled(viewId, enabled);
   }
 
   @override
-  Future<void> enableZoomControls(
+  Future<void> setZoomControlsEnabled(
       {required int viewId, required bool enabled}) async {
     try {
-      return await _viewApi.enableZoomControls(viewId, enabled);
+      return await _viewApi.setZoomControlsEnabled(viewId, enabled);
     } on PlatformException catch (error) {
       if (error.code == 'notSupported') {
         throw UnsupportedError('Zoom controls are not supported on iOS.');
@@ -185,39 +186,39 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Future<void> enableCompass({required int viewId, required bool enabled}) {
-    return _viewApi.enableCompass(viewId, enabled);
+  Future<void> setCompassEnabled({required int viewId, required bool enabled}) {
+    return _viewApi.setCompassEnabled(viewId, enabled);
   }
 
   @override
-  Future<void> enableRotateGestures(
+  Future<void> setRotateGesturesEnabled(
       {required int viewId, required bool enabled}) {
-    return _viewApi.enableRotateGestures(viewId, enabled);
+    return _viewApi.setRotateGesturesEnabled(viewId, enabled);
   }
 
   @override
-  Future<void> enableScrollGestures(
+  Future<void> setScrollGesturesEnabled(
       {required int viewId, required bool enabled}) {
-    return _viewApi.enableScrollGestures(viewId, enabled);
+    return _viewApi.setScrollGesturesEnabled(viewId, enabled);
   }
 
   @override
-  Future<void> enableScrollGesturesDuringRotateOrZoom(
+  Future<void> setScrollGesturesDuringRotateOrZoomEnabled(
       {required int viewId, required bool enabled}) {
-    return _viewApi.enableScrollGesturesDuringRotateOrZoom(viewId, enabled);
+    return _viewApi.setScrollGesturesDuringRotateOrZoomEnabled(viewId, enabled);
   }
 
   @override
-  Future<void> enableTiltGestures(
+  Future<void> setTiltGesturesEnabled(
       {required int viewId, required bool enabled}) {
-    return _viewApi.enableTiltGestures(viewId, enabled);
+    return _viewApi.setTiltGesturesEnabled(viewId, enabled);
   }
 
   @override
-  Future<void> enableMapToolbar(
+  Future<void> setMapToolbarEnabled(
       {required int viewId, required bool enabled}) async {
     try {
-      return await _viewApi.enableMapToolbar(viewId, enabled);
+      return await _viewApi.setMapToolbarEnabled(viewId, enabled);
     } on PlatformException catch (error) {
       if (error.code == 'notSupported') {
         throw UnsupportedError('Map toolbar is not supported on iOS.');
@@ -228,8 +229,8 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Future<void> enableTraffic({required int viewId, required bool enabled}) {
-    return _viewApi.enableTraffic(viewId, enabled);
+  Future<void> setTrafficEnabled({required int viewId, required bool enabled}) {
+    return _viewApi.setTrafficEnabled(viewId, enabled);
   }
 
   @override
@@ -428,9 +429,9 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Future<void> enableNavigationTripProgressBar(
+  Future<void> setNavigationTripProgressBarEnabled(
       {required int viewId, required bool enabled}) {
-    return _viewApi.enableNavigationTripProgressBar(viewId, enabled);
+    return _viewApi.setNavigationTripProgressBarEnabled(viewId, enabled);
   }
 
   @override
@@ -439,9 +440,9 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Future<void> enableNavigationHeader(
+  Future<void> setNavigationHeaderEnabled(
       {required int viewId, required bool enabled}) {
-    return _viewApi.enableNavigationHeader(viewId, enabled);
+    return _viewApi.setNavigationHeaderEnabled(viewId, enabled);
   }
 
   @override
@@ -450,9 +451,9 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Future<void> enableNavigationFooter(
+  Future<void> setNavigationFooterEnabled(
       {required int viewId, required bool enabled}) {
-    return _viewApi.enableNavigationFooter(viewId, enabled);
+    return _viewApi.setNavigationFooterEnabled(viewId, enabled);
   }
 
   @override
@@ -461,9 +462,9 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Future<void> enableRecenterButton(
+  Future<void> setRecenterButtonEnabled(
       {required int viewId, required bool enabled}) {
-    return _viewApi.enableRecenterButton(viewId, enabled);
+    return _viewApi.setRecenterButtonEnabled(viewId, enabled);
   }
 
   @override
@@ -472,9 +473,9 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Future<void> enableSpeedLimitIcon(
-      {required int viewId, required bool enable}) {
-    return _viewApi.enableSpeedLimitIcon(viewId, enable);
+  Future<void> setSpeedLimitIconEnabled(
+      {required int viewId, required bool enabled}) {
+    return _viewApi.setSpeedLimitIconEnabled(viewId, enabled);
   }
 
   @override
@@ -483,8 +484,9 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Future<void> enableSpeedometer({required int viewId, required bool enable}) {
-    return _viewApi.enableSpeedometer(viewId, enable);
+  Future<void> setSpeedometerEnabled(
+      {required int viewId, required bool enabled}) {
+    return _viewApi.setSpeedometerEnabled(viewId, enabled);
   }
 
   @override
@@ -493,9 +495,9 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Future<void> enableIncidentCards(
-      {required int viewId, required bool enable}) {
-    return _viewApi.enableIncidentCards(viewId, enable);
+  Future<void> setIncidentCardsEnabled(
+      {required int viewId, required bool enabled}) {
+    return _viewApi.setIncidentCardsEnabled(viewId, enabled);
   }
 
   @override
@@ -504,9 +506,9 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Future<void> enableNavigationUI(
+  Future<void> setNavigationUIEnabled(
       {required int viewId, required bool enabled}) {
-    return _viewApi.enableNavigationUI(viewId, enabled);
+    return _viewApi.setNavigationUIEnabled(viewId, enabled);
   }
 
   @override

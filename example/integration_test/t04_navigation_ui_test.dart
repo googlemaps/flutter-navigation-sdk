@@ -38,7 +38,7 @@ void main() {
       GoogleMapsNavigationView(
         key: key,
         onViewCreated: (GoogleNavigationViewController controller) {
-          controller.enableMyLocation(enabled: true);
+          controller.setMyLocationEnabled(true);
           viewControllerCompleter.complete(controller);
         },
       ),
@@ -84,7 +84,7 @@ void main() {
 
     /// Test enabling and disabling the navigation UI.
     for (final bool result in results) {
-      await viewController.enableNavigationUI(enabled: result);
+      await viewController.setNavigationUIEnabled(result);
       await $.pumpAndSettle();
       expect(await viewController.isNavigationUIEnabled(), result);
       final bool isEnabled = await viewController.isNavigationUIEnabled();
@@ -93,7 +93,7 @@ void main() {
 
     /// Test enabling and disabling the header.
     for (final bool result in results) {
-      await viewController.enableNavigationHeader(enabled: result);
+      await viewController.setNavigationHeaderEnabled(result);
       await $.pumpAndSettle();
       final bool isEnabled = await viewController.isNavigationHeaderEnabled();
       expect(isEnabled, result);
@@ -101,7 +101,7 @@ void main() {
 
     /// Test enabling and disabling the footer.
     for (final bool result in results) {
-      await viewController.enableNavigationFooter(enabled: result);
+      await viewController.setNavigationFooterEnabled(result);
       await $.pumpAndSettle();
       final bool isEnabled = await viewController.isNavigationFooterEnabled();
       expect(isEnabled, result);
@@ -109,7 +109,7 @@ void main() {
 
     /// Test enabling and disabling the trip progress bar.
     for (final bool result in results) {
-      await viewController.enableNavigationTripProgressBar(enabled: result);
+      await viewController.setNavigationTripProgressBarEnabled(result);
       await $.pumpAndSettle();
       final bool isEnabled =
           await viewController.isNavigationTripProgressBarEnabled();
@@ -118,7 +118,7 @@ void main() {
 
     /// Test enabling and disabling the speedometer.
     for (final bool result in results) {
-      await viewController.enableSpeedometer(enable: result);
+      await viewController.setSpeedometerEnabled(result);
       await $.pumpAndSettle();
       final bool isEnabled = await viewController.isSpeedometerEnabled();
       expect(isEnabled, result);
@@ -126,7 +126,7 @@ void main() {
 
     /// Test enabling and disabling the speed limit.
     for (final bool result in results) {
-      await viewController.enableSpeedLimitIcon(enable: result);
+      await viewController.setSpeedLimitIconEnabled(result);
       await $.pumpAndSettle();
       final bool isEnabled = await viewController.isSpeedLimitIconEnabled();
       expect(isEnabled, result);
@@ -134,7 +134,7 @@ void main() {
 
     /// Test enabling and disabling the incident cards.
     for (final bool result in results) {
-      await viewController.enableIncidentCards(enable: result);
+      await viewController.setIncidentCardsEnabled(result);
       await $.pumpAndSettle();
       final bool isEnabled = await viewController.isIncidentCardsEnabled();
       expect(isEnabled, result);
@@ -142,7 +142,7 @@ void main() {
 
     /// Test enabling and disabling the recenter button.
     for (final bool result in results) {
-      await viewController.enableRecenterButton(enabled: result);
+      await viewController.setRecenterButtonEnabled(result);
       final bool isEnabled = await viewController.isRecenterButtonEnabled();
       expect(isEnabled, result);
     }

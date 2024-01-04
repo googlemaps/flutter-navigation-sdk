@@ -147,7 +147,7 @@ class GoogleMapsNavigationSessionManager: NSObject {
     guard view.setSession(session) else {
       throw GoogleMapsNavigationSessionManagerError.initializeFailure
     }
-    view.enableNavigationUI(true)
+    view.setNavigationUIEnabled(true)
   }
 
   func attachNavigationSessionToMapView(mapView: GoogleMapsNavigationView) {

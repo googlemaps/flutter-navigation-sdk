@@ -40,7 +40,7 @@ void main() {
       GoogleMapsNavigationView(
         key: key,
         onViewCreated: (GoogleNavigationViewController controller) {
-          controller.enableMyLocation(enabled: true);
+          controller.setMyLocationEnabled(true);
           viewControllerCompleter.complete(controller);
         },
       ),
@@ -108,7 +108,7 @@ void main() {
       GoogleMapsNavigationView(
         key: key,
         onViewCreated: (GoogleNavigationViewController controller) {
-          controller.enableMyLocation(enabled: true);
+          controller.setMyLocationEnabled(true);
           viewControllerCompleter.complete(controller);
         },
       ),
@@ -176,7 +176,7 @@ void main() {
       GoogleMapsNavigationView(
         key: key,
         onViewCreated: (GoogleNavigationViewController controller) {
-          controller.enableMyLocation(enabled: true);
+          controller.setMyLocationEnabled(true);
           viewControllerCompleter.complete(controller);
         },
       ),
@@ -252,7 +252,7 @@ void main() {
       GoogleMapsNavigationView(
         key: key,
         onViewCreated: (GoogleNavigationViewController controller) {
-          controller.enableMyLocation(enabled: true);
+          controller.setMyLocationEnabled(true);
           viewControllerCompleter.complete(controller);
         },
       ),
@@ -322,7 +322,7 @@ void main() {
         GoogleMapsNavigationView(
           key: key,
           onViewCreated: (GoogleNavigationViewController controller) {
-            controller.enableMyLocation(enabled: true);
+            controller.setMyLocationEnabled(true);
             viewControllerCompleter.complete(controller);
           },
         ),

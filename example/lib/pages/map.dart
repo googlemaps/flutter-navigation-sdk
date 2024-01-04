@@ -155,7 +155,7 @@ class _MapPageState extends ExamplePageState<MapPage> {
       SwitchListTile(
           onChanged: (bool newValue) async {
             await _navigationViewController.settings
-                .enableCompass(enabled: newValue);
+                .setCompassEnabled(newValue);
             final bool enabled =
                 await _navigationViewController.settings.isCompassEnabled();
             setState(() {
@@ -169,7 +169,7 @@ class _MapPageState extends ExamplePageState<MapPage> {
           value: isMyLocationEnabled,
           controlAffinity: ListTileControlAffinity.leading,
           onChanged: (bool newValue) async {
-            await _navigationViewController.enableMyLocation(enabled: newValue);
+            await _navigationViewController.setMyLocationEnabled(newValue);
             final bool enabled =
                 await _navigationViewController.isMyLocationEnabled();
             setState(() {
@@ -184,7 +184,7 @@ class _MapPageState extends ExamplePageState<MapPage> {
           onChanged: isMyLocationEnabled
               ? (bool newValue) async {
                   await _navigationViewController.settings
-                      .enableMyLocationButton(enabled: newValue);
+                      .setMyLocationButtonEnabled(newValue);
                   final bool enabled = await _navigationViewController.settings
                       .isMyLocationButtonEnabled();
                   setState(() {
@@ -196,7 +196,7 @@ class _MapPageState extends ExamplePageState<MapPage> {
       SwitchListTile(
           onChanged: (bool newValue) async {
             await _navigationViewController.settings
-                .enableZoomGestures(enabled: newValue);
+                .setZoomGesturesEnabled(newValue);
             final bool enabled = await _navigationViewController.settings
                 .isZoomGesturesEnabled();
             setState(() {
@@ -209,7 +209,7 @@ class _MapPageState extends ExamplePageState<MapPage> {
         SwitchListTile(
             onChanged: (bool newValue) async {
               await _navigationViewController.settings
-                  .enableZoomControls(enabled: newValue);
+                  .setZoomControlsEnabled(newValue);
               final bool enabled = await _navigationViewController.settings
                   .isZoomControlsEnabled();
               setState(() {
@@ -221,7 +221,7 @@ class _MapPageState extends ExamplePageState<MapPage> {
       SwitchListTile(
           onChanged: (bool newValue) async {
             await _navigationViewController.settings
-                .enableRotateGestures(enabled: newValue);
+                .setRotateGesturesEnabled(newValue);
             final bool enabled = await _navigationViewController.settings
                 .isRotateGesturesEnabled();
             setState(() {
@@ -233,7 +233,7 @@ class _MapPageState extends ExamplePageState<MapPage> {
       SwitchListTile(
           onChanged: (bool newValue) async {
             await _navigationViewController.settings
-                .enableScrollGestures(enabled: newValue);
+                .setScrollGesturesEnabled(newValue);
             final bool enabled = await _navigationViewController.settings
                 .isScrollGesturesEnabled();
             setState(() {
@@ -245,7 +245,7 @@ class _MapPageState extends ExamplePageState<MapPage> {
       SwitchListTile(
           onChanged: (bool newValue) async {
             await _navigationViewController.settings
-                .enableScrollGesturesDuringRotateOrZoom(enabled: newValue);
+                .setScrollGesturesDuringRotateOrZoomEnabled(newValue);
             final bool enabled = await _navigationViewController.settings
                 .isScrollGesturesEnabledDuringRotateOrZoom();
             setState(() {
@@ -257,7 +257,7 @@ class _MapPageState extends ExamplePageState<MapPage> {
       SwitchListTile(
           onChanged: (bool newValue) async {
             await _navigationViewController.settings
-                .enableTiltGestures(enabled: newValue);
+                .setTiltGesturesEnabled(newValue);
             final bool enabled = await _navigationViewController.settings
                 .isTiltGesturesEnabled();
             setState(() {
@@ -269,7 +269,7 @@ class _MapPageState extends ExamplePageState<MapPage> {
       SwitchListTile(
           onChanged: (bool newValue) async {
             await _navigationViewController.settings
-                .enableTraffic(enabled: newValue);
+                .setTrafficEnabled(newValue);
             final bool enabled =
                 await _navigationViewController.settings.isTrafficEnabled();
             setState(() {

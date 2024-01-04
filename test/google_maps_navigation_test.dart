@@ -516,44 +516,50 @@ void main() {
       verify(viewMockApi.isMapToolbarEnabled(captureAny));
 
       // Call UI element visibility setters.
-      await controller.enableMyLocation(enabled: true);
-      await controller.settings.enableMyLocationButton(enabled: true);
-      await controller.settings.enableZoomGestures(enabled: true);
-      await controller.settings.enableZoomControls(enabled: true);
-      await controller.settings.enableCompass(enabled: true);
-      await controller.settings.enableRotateGestures(enabled: true);
-      await controller.settings.enableScrollGestures(enabled: true);
+      await controller.setMyLocationEnabled(true);
+      await controller.settings.setMyLocationButtonEnabled(true);
+      await controller.settings.setZoomGesturesEnabled(true);
+      await controller.settings.setZoomControlsEnabled(true);
+      await controller.settings.setCompassEnabled(true);
+      await controller.settings.setRotateGesturesEnabled(true);
+      await controller.settings.setScrollGesturesEnabled(true);
       await controller.settings
-          .enableScrollGesturesDuringRotateOrZoom(enabled: true);
-      await controller.settings.enableTiltGestures(enabled: true);
-      await controller.settings.enableMapToolbar(enabled: true);
+          .setScrollGesturesDuringRotateOrZoomEnabled(true);
+      await controller.settings.setTiltGesturesEnabled(true);
+      await controller.settings.setMapToolbarEnabled(true);
 
       // Verify getters went through with the right parameters.
       verifyEnabled(
-          verify(viewMockApi.enableMyLocation(captureAny, captureAny)), true);
-      verifyEnabled(
-          verify(viewMockApi.enableMyLocationButton(captureAny, captureAny)),
+          verify(viewMockApi.setMyLocationEnabled(captureAny, captureAny)),
           true);
       verifyEnabled(
-          verify(viewMockApi.enableZoomGestures(captureAny, captureAny)), true);
-      verifyEnabled(
-          verify(viewMockApi.enableZoomControls(captureAny, captureAny)), true);
-      verifyEnabled(
-          verify(viewMockApi.enableCompass(captureAny, captureAny)), true);
-      verifyEnabled(
-          verify(viewMockApi.enableRotateGestures(captureAny, captureAny)),
+          verify(
+              viewMockApi.setMyLocationButtonEnabled(captureAny, captureAny)),
           true);
       verifyEnabled(
-          verify(viewMockApi.enableScrollGestures(captureAny, captureAny)),
+          verify(viewMockApi.setZoomGesturesEnabled(captureAny, captureAny)),
           true);
       verifyEnabled(
-          verify(viewMockApi.enableScrollGesturesDuringRotateOrZoom(
+          verify(viewMockApi.setZoomControlsEnabled(captureAny, captureAny)),
+          true);
+      verifyEnabled(
+          verify(viewMockApi.setCompassEnabled(captureAny, captureAny)), true);
+      verifyEnabled(
+          verify(viewMockApi.setRotateGesturesEnabled(captureAny, captureAny)),
+          true);
+      verifyEnabled(
+          verify(viewMockApi.setScrollGesturesEnabled(captureAny, captureAny)),
+          true);
+      verifyEnabled(
+          verify(viewMockApi.setScrollGesturesDuringRotateOrZoomEnabled(
               captureAny, captureAny)),
           true);
       verifyEnabled(
-          verify(viewMockApi.enableTiltGestures(captureAny, captureAny)), true);
+          verify(viewMockApi.setTiltGesturesEnabled(captureAny, captureAny)),
+          true);
       verifyEnabled(
-          verify(viewMockApi.enableMapToolbar(captureAny, captureAny)), true);
+          verify(viewMockApi.setMapToolbarEnabled(captureAny, captureAny)),
+          true);
     });
   });
 

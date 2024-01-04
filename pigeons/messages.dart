@@ -353,28 +353,28 @@ abstract class NavigationViewApi {
   void awaitMapReady(int viewId);
 
   bool isMyLocationEnabled(int viewId);
-  void enableMyLocation(int viewId, bool enabled);
+  void setMyLocationEnabled(int viewId, bool enabled);
   LatLngDto? getMyLocation(int viewId);
 
   MapTypeDto getMapType(int viewId);
   void setMapType(int viewId, MapTypeDto mapType);
   void setMapStyle(int viewId, String styleJson);
   bool isNavigationTripProgressBarEnabled(int viewId);
-  void enableNavigationTripProgressBar(int viewId, bool enabled);
+  void setNavigationTripProgressBarEnabled(int viewId, bool enabled);
   bool isNavigationHeaderEnabled(int viewId);
-  void enableNavigationHeader(int viewId, bool enabled);
+  void setNavigationHeaderEnabled(int viewId, bool enabled);
   bool isNavigationFooterEnabled(int viewId);
-  void enableNavigationFooter(int viewId, bool enabled);
+  void setNavigationFooterEnabled(int viewId, bool enabled);
   bool isRecenterButtonEnabled(int viewId);
-  void enableRecenterButton(int viewId, bool enabled);
+  void setRecenterButtonEnabled(int viewId, bool enabled);
   bool isSpeedLimitIconEnabled(int viewId);
-  void enableSpeedLimitIcon(int viewId, bool enabled);
+  void setSpeedLimitIconEnabled(int viewId, bool enabled);
   bool isSpeedometerEnabled(int viewId);
-  void enableSpeedometer(int viewId, bool enabled);
+  void setSpeedometerEnabled(int viewId, bool enabled);
   bool isIncidentCardsEnabled(int viewId);
-  void enableIncidentCards(int viewId, bool enabled);
+  void setIncidentCardsEnabled(int viewId, bool enabled);
   bool isNavigationUIEnabled(int viewId);
-  void enableNavigationUI(int viewId, bool enabled);
+  void setNavigationUIEnabled(int viewId, bool enabled);
 
   CameraPositionDto getCameraPosition(int viewId);
   LatLngBoundsDto getVisibleRegion(int viewId);
@@ -412,16 +412,16 @@ abstract class NavigationViewApi {
   void moveCameraToZoom(int viewId, double zoom);
   void showRouteOverview(int viewId);
 
-  void enableMyLocationButton(int viewId, bool enabled);
-  void enableZoomGestures(int viewId, bool enabled);
-  void enableZoomControls(int viewId, bool enabled);
-  void enableCompass(int viewId, bool enabled);
-  void enableRotateGestures(int viewId, bool enabled);
-  void enableScrollGestures(int viewId, bool enabled);
-  void enableScrollGesturesDuringRotateOrZoom(int viewId, bool enabled);
-  void enableTiltGestures(int viewId, bool enabled);
-  void enableMapToolbar(int viewId, bool enabled);
-  void enableTraffic(int viewId, bool enabled);
+  void setMyLocationButtonEnabled(int viewId, bool enabled);
+  void setZoomGesturesEnabled(int viewId, bool enabled);
+  void setZoomControlsEnabled(int viewId, bool enabled);
+  void setCompassEnabled(int viewId, bool enabled);
+  void setRotateGesturesEnabled(int viewId, bool enabled);
+  void setScrollGesturesEnabled(int viewId, bool enabled);
+  void setScrollGesturesDuringRotateOrZoomEnabled(int viewId, bool enabled);
+  void setTiltGesturesEnabled(int viewId, bool enabled);
+  void setMapToolbarEnabled(int viewId, bool enabled);
+  void setTrafficEnabled(int viewId, bool enabled);
 
   bool isMyLocationButtonEnabled(int viewId);
   bool isZoomGesturesEnabled(int viewId);

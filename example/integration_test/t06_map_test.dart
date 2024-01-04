@@ -141,38 +141,38 @@ void main() {
 
     final List<bool> results = <bool>[true, false, true];
     for (final bool result in results) {
-      await controller.enableMyLocation(enabled: result);
+      await controller.setMyLocationEnabled(result);
       expect(await controller.isMyLocationEnabled(), result);
 
-      await controller.settings.enableMyLocationButton(enabled: result);
+      await controller.settings.setMyLocationButtonEnabled(result);
       expect(await controller.settings.isMyLocationButtonEnabled(), result);
 
-      await controller.settings.enableZoomGestures(enabled: result);
+      await controller.settings.setZoomGesturesEnabled(result);
       expect(await controller.settings.isZoomGesturesEnabled(), result);
 
-      await controller.settings.enableCompass(enabled: result);
+      await controller.settings.setCompassEnabled(result);
       expect(await controller.settings.isCompassEnabled(), result);
 
-      await controller.settings.enableRotateGestures(enabled: result);
+      await controller.settings.setRotateGesturesEnabled(result);
       expect(await controller.settings.isRotateGesturesEnabled(), result);
 
-      await controller.settings.enableScrollGestures(enabled: result);
+      await controller.settings.setScrollGesturesEnabled(result);
       expect(await controller.settings.isScrollGesturesEnabled(), result);
 
       await controller.settings
-          .enableScrollGesturesDuringRotateOrZoom(enabled: result);
+          .setScrollGesturesDuringRotateOrZoomEnabled(result);
       expect(
           await controller.settings.isScrollGesturesEnabledDuringRotateOrZoom(),
           result);
 
-      await controller.settings.enableTiltGestures(enabled: result);
+      await controller.settings.setTiltGesturesEnabled(result);
       expect(await controller.settings.isTiltGesturesEnabled(), result);
 
-      await controller.settings.enableTraffic(enabled: result);
+      await controller.settings.setTrafficEnabled(result);
       expect(await controller.settings.isTrafficEnabled(), result);
 
       if (Platform.isAndroid) {
-        await controller.settings.enableZoomControls(enabled: result);
+        await controller.settings.setZoomControlsEnabled(result);
         expect(await controller.settings.isZoomControlsEnabled(), result);
       }
     }
@@ -186,7 +186,7 @@ void main() {
         expect(e, const TypeMatcher<UnsupportedError>());
       }
       try {
-        await controller.settings.enableZoomControls(enabled: true);
+        await controller.settings.setZoomControlsEnabled(true);
         fail('Expected to get UnsupportedError');
       } on Object catch (e) {
         expect(e, const TypeMatcher<UnsupportedError>());
@@ -198,7 +198,7 @@ void main() {
         expect(e, const TypeMatcher<UnsupportedError>());
       }
       try {
-        await controller.settings.enableMapToolbar(enabled: true);
+        await controller.settings.setMapToolbarEnabled(true);
         fail('Expected to get UnsupportedError');
       } on Object catch (e) {
         expect(e, const TypeMatcher<UnsupportedError>());

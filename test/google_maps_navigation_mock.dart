@@ -267,69 +267,69 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
   }
 
   @override
-  Future<void> enableMyLocation(
+  Future<void> setMyLocationEnabled(
       {required int viewId, required bool enabled}) async {
-    return viewApi.enableMyLocation(viewId, enabled);
+    return viewApi.setMyLocationEnabled(viewId, enabled);
   }
 
   @override
-  Future<void> enableMyLocationButton(
+  Future<void> setMyLocationButtonEnabled(
       {required int viewId, required bool enabled}) async {
-    return viewApi.enableMyLocationButton(viewId, enabled);
+    return viewApi.setMyLocationButtonEnabled(viewId, enabled);
   }
 
   @override
-  Future<void> enableZoomGestures(
+  Future<void> setZoomGesturesEnabled(
       {required int viewId, required bool enabled}) async {
-    return viewApi.enableZoomGestures(viewId, enabled);
+    return viewApi.setZoomGesturesEnabled(viewId, enabled);
   }
 
   @override
-  Future<void> enableZoomControls(
+  Future<void> setZoomControlsEnabled(
       {required int viewId, required bool enabled}) async {
-    return viewApi.enableZoomControls(viewId, enabled);
+    return viewApi.setZoomControlsEnabled(viewId, enabled);
   }
 
   @override
-  Future<void> enableCompass(
+  Future<void> setCompassEnabled(
       {required int viewId, required bool enabled}) async {
-    return viewApi.enableCompass(viewId, enabled);
+    return viewApi.setCompassEnabled(viewId, enabled);
   }
 
   @override
-  Future<void> enableRotateGestures(
+  Future<void> setRotateGesturesEnabled(
       {required int viewId, required bool enabled}) async {
-    return viewApi.enableRotateGestures(viewId, enabled);
+    return viewApi.setRotateGesturesEnabled(viewId, enabled);
   }
 
   @override
-  Future<void> enableScrollGestures(
+  Future<void> setScrollGesturesEnabled(
       {required int viewId, required bool enabled}) async {
-    return viewApi.enableScrollGestures(viewId, enabled);
+    return viewApi.setScrollGesturesEnabled(viewId, enabled);
   }
 
   @override
-  Future<void> enableScrollGesturesDuringRotateOrZoom(
+  Future<void> setScrollGesturesDuringRotateOrZoomEnabled(
       {required int viewId, required bool enabled}) async {
-    return viewApi.enableScrollGesturesDuringRotateOrZoom(viewId, enabled);
+    return viewApi.setScrollGesturesDuringRotateOrZoomEnabled(viewId, enabled);
   }
 
   @override
-  Future<void> enableTiltGestures(
+  Future<void> setTiltGesturesEnabled(
       {required int viewId, required bool enabled}) async {
-    return viewApi.enableTiltGestures(viewId, enabled);
+    return viewApi.setTiltGesturesEnabled(viewId, enabled);
   }
 
   @override
-  Future<void> enableMapToolbar(
+  Future<void> setMapToolbarEnabled(
       {required int viewId, required bool enabled}) async {
-    return viewApi.enableMapToolbar(viewId, enabled);
+    return viewApi.setMapToolbarEnabled(viewId, enabled);
   }
 
   @override
-  Future<void> enableTraffic(
+  Future<void> setTrafficEnabled(
       {required int viewId, required bool enabled}) async {
-    return viewApi.enableTraffic(viewId, enabled);
+    return viewApi.setTrafficEnabled(viewId, enabled);
   }
 
   @override
@@ -574,49 +574,50 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
   }
 
   @override
-  Future<void> enableNavigationFooter(
+  Future<void> setNavigationFooterEnabled(
       {required int viewId, required bool enabled}) async {
     throw UnimplementedError();
   }
 
   @override
-  Future<void> enableNavigationHeader(
+  Future<void> setNavigationHeaderEnabled(
       {required int viewId, required bool enabled}) async {
     throw UnimplementedError();
   }
 
   @override
-  Future<void> enableNavigationTripProgressBar(
+  Future<void> setNavigationTripProgressBarEnabled(
       {required int viewId, required bool enabled}) async {
     throw UnimplementedError();
   }
 
   @override
-  Future<void> enableNavigationUI(
+  Future<void> setNavigationUIEnabled(
       {required int viewId, required bool enabled}) async {
     throw UnimplementedError();
   }
 
   @override
-  Future<void> enableRecenterButton(
+  Future<void> setRecenterButtonEnabled(
       {required int viewId, required bool enabled}) async {
     throw UnimplementedError();
   }
 
   @override
-  Future<void> enableSpeedLimitIcon(
-      {required int viewId, required bool enable}) {
+  Future<void> setSpeedLimitIconEnabled(
+      {required int viewId, required bool enabled}) {
     throw UnimplementedError();
   }
 
   @override
-  Future<void> enableSpeedometer({required int viewId, required bool enable}) {
+  Future<void> setSpeedometerEnabled(
+      {required int viewId, required bool enabled}) {
     throw UnimplementedError();
   }
 
   @override
-  Future<void> enableIncidentCards(
-      {required int viewId, required bool enable}) {
+  Future<void> setIncidentCardsEnabled(
+      {required int viewId, required bool enabled}) {
     throw UnimplementedError();
   }
 

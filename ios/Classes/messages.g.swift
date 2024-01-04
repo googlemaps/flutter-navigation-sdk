@@ -1634,27 +1634,27 @@ class NavigationViewApiCodec: FlutterStandardMessageCodec {
 protocol NavigationViewApi {
   func awaitMapReady(viewId: Int64, completion: @escaping (Result<Void, Error>) -> Void)
   func isMyLocationEnabled(viewId: Int64) throws -> Bool
-  func enableMyLocation(viewId: Int64, enabled: Bool) throws
+  func setMyLocationEnabled(viewId: Int64, enabled: Bool) throws
   func getMyLocation(viewId: Int64) throws -> LatLngDto?
   func getMapType(viewId: Int64) throws -> MapTypeDto
   func setMapType(viewId: Int64, mapType: MapTypeDto) throws
   func setMapStyle(viewId: Int64, styleJson: String) throws
   func isNavigationTripProgressBarEnabled(viewId: Int64) throws -> Bool
-  func enableNavigationTripProgressBar(viewId: Int64, enabled: Bool) throws
+  func setNavigationTripProgressBarEnabled(viewId: Int64, enabled: Bool) throws
   func isNavigationHeaderEnabled(viewId: Int64) throws -> Bool
-  func enableNavigationHeader(viewId: Int64, enabled: Bool) throws
+  func setNavigationHeaderEnabled(viewId: Int64, enabled: Bool) throws
   func isNavigationFooterEnabled(viewId: Int64) throws -> Bool
-  func enableNavigationFooter(viewId: Int64, enabled: Bool) throws
+  func setNavigationFooterEnabled(viewId: Int64, enabled: Bool) throws
   func isRecenterButtonEnabled(viewId: Int64) throws -> Bool
-  func enableRecenterButton(viewId: Int64, enabled: Bool) throws
+  func setRecenterButtonEnabled(viewId: Int64, enabled: Bool) throws
   func isSpeedLimitIconEnabled(viewId: Int64) throws -> Bool
-  func enableSpeedLimitIcon(viewId: Int64, enabled: Bool) throws
+  func setSpeedLimitIconEnabled(viewId: Int64, enabled: Bool) throws
   func isSpeedometerEnabled(viewId: Int64) throws -> Bool
-  func enableSpeedometer(viewId: Int64, enabled: Bool) throws
+  func setSpeedometerEnabled(viewId: Int64, enabled: Bool) throws
   func isIncidentCardsEnabled(viewId: Int64) throws -> Bool
-  func enableIncidentCards(viewId: Int64, enabled: Bool) throws
+  func setIncidentCardsEnabled(viewId: Int64, enabled: Bool) throws
   func isNavigationUIEnabled(viewId: Int64) throws -> Bool
-  func enableNavigationUI(viewId: Int64, enabled: Bool) throws
+  func setNavigationUIEnabled(viewId: Int64, enabled: Bool) throws
   func getCameraPosition(viewId: Int64) throws -> CameraPositionDto
   func getVisibleRegion(viewId: Int64) throws -> LatLngBoundsDto
   func followMyLocation(viewId: Int64, perspective: CameraPerspectiveDto, zoomLevel: Double?) throws
@@ -1682,16 +1682,16 @@ protocol NavigationViewApi {
   func moveCameraByZoom(viewId: Int64, zoomBy: Double, focusDx: Double?, focusDy: Double?) throws
   func moveCameraToZoom(viewId: Int64, zoom: Double) throws
   func showRouteOverview(viewId: Int64) throws
-  func enableMyLocationButton(viewId: Int64, enabled: Bool) throws
-  func enableZoomGestures(viewId: Int64, enabled: Bool) throws
-  func enableZoomControls(viewId: Int64, enabled: Bool) throws
-  func enableCompass(viewId: Int64, enabled: Bool) throws
-  func enableRotateGestures(viewId: Int64, enabled: Bool) throws
-  func enableScrollGestures(viewId: Int64, enabled: Bool) throws
-  func enableScrollGesturesDuringRotateOrZoom(viewId: Int64, enabled: Bool) throws
-  func enableTiltGestures(viewId: Int64, enabled: Bool) throws
-  func enableMapToolbar(viewId: Int64, enabled: Bool) throws
-  func enableTraffic(viewId: Int64, enabled: Bool) throws
+  func setMyLocationButtonEnabled(viewId: Int64, enabled: Bool) throws
+  func setZoomGesturesEnabled(viewId: Int64, enabled: Bool) throws
+  func setZoomControlsEnabled(viewId: Int64, enabled: Bool) throws
+  func setCompassEnabled(viewId: Int64, enabled: Bool) throws
+  func setRotateGesturesEnabled(viewId: Int64, enabled: Bool) throws
+  func setScrollGesturesEnabled(viewId: Int64, enabled: Bool) throws
+  func setScrollGesturesDuringRotateOrZoomEnabled(viewId: Int64, enabled: Bool) throws
+  func setTiltGesturesEnabled(viewId: Int64, enabled: Bool) throws
+  func setMapToolbarEnabled(viewId: Int64, enabled: Bool) throws
+  func setTrafficEnabled(viewId: Int64, enabled: Bool) throws
   func isMyLocationButtonEnabled(viewId: Int64) throws -> Bool
   func isZoomGesturesEnabled(viewId: Int64) throws -> Bool
   func isZoomControlsEnabled(viewId: Int64) throws -> Bool
@@ -1771,25 +1771,25 @@ enum NavigationViewApiSetup {
     } else {
       isMyLocationEnabledChannel.setMessageHandler(nil)
     }
-    let enableMyLocationChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableMyLocation",
+    let setMyLocationEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMyLocationEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableMyLocationChannel.setMessageHandler { message, reply in
+      setMyLocationEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableMyLocation(viewId: viewIdArg, enabled: enabledArg)
+          try api.setMyLocationEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableMyLocationChannel.setMessageHandler(nil)
+      setMyLocationEnabledChannel.setMessageHandler(nil)
     }
     let getMyLocationChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getMyLocation",
@@ -1888,25 +1888,25 @@ enum NavigationViewApiSetup {
     } else {
       isNavigationTripProgressBarEnabledChannel.setMessageHandler(nil)
     }
-    let enableNavigationTripProgressBarChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableNavigationTripProgressBar",
+    let setNavigationTripProgressBarEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationTripProgressBarEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableNavigationTripProgressBarChannel.setMessageHandler { message, reply in
+      setNavigationTripProgressBarEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableNavigationTripProgressBar(viewId: viewIdArg, enabled: enabledArg)
+          try api.setNavigationTripProgressBarEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableNavigationTripProgressBarChannel.setMessageHandler(nil)
+      setNavigationTripProgressBarEnabledChannel.setMessageHandler(nil)
     }
     let isNavigationHeaderEnabledChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isNavigationHeaderEnabled",
@@ -1927,25 +1927,25 @@ enum NavigationViewApiSetup {
     } else {
       isNavigationHeaderEnabledChannel.setMessageHandler(nil)
     }
-    let enableNavigationHeaderChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableNavigationHeader",
+    let setNavigationHeaderEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationHeaderEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableNavigationHeaderChannel.setMessageHandler { message, reply in
+      setNavigationHeaderEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableNavigationHeader(viewId: viewIdArg, enabled: enabledArg)
+          try api.setNavigationHeaderEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableNavigationHeaderChannel.setMessageHandler(nil)
+      setNavigationHeaderEnabledChannel.setMessageHandler(nil)
     }
     let isNavigationFooterEnabledChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isNavigationFooterEnabled",
@@ -1966,25 +1966,25 @@ enum NavigationViewApiSetup {
     } else {
       isNavigationFooterEnabledChannel.setMessageHandler(nil)
     }
-    let enableNavigationFooterChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableNavigationFooter",
+    let setNavigationFooterEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationFooterEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableNavigationFooterChannel.setMessageHandler { message, reply in
+      setNavigationFooterEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableNavigationFooter(viewId: viewIdArg, enabled: enabledArg)
+          try api.setNavigationFooterEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableNavigationFooterChannel.setMessageHandler(nil)
+      setNavigationFooterEnabledChannel.setMessageHandler(nil)
     }
     let isRecenterButtonEnabledChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isRecenterButtonEnabled",
@@ -2005,25 +2005,25 @@ enum NavigationViewApiSetup {
     } else {
       isRecenterButtonEnabledChannel.setMessageHandler(nil)
     }
-    let enableRecenterButtonChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableRecenterButton",
+    let setRecenterButtonEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setRecenterButtonEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableRecenterButtonChannel.setMessageHandler { message, reply in
+      setRecenterButtonEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableRecenterButton(viewId: viewIdArg, enabled: enabledArg)
+          try api.setRecenterButtonEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableRecenterButtonChannel.setMessageHandler(nil)
+      setRecenterButtonEnabledChannel.setMessageHandler(nil)
     }
     let isSpeedLimitIconEnabledChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isSpeedLimitIconEnabled",
@@ -2044,25 +2044,25 @@ enum NavigationViewApiSetup {
     } else {
       isSpeedLimitIconEnabledChannel.setMessageHandler(nil)
     }
-    let enableSpeedLimitIconChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableSpeedLimitIcon",
+    let setSpeedLimitIconEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setSpeedLimitIconEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableSpeedLimitIconChannel.setMessageHandler { message, reply in
+      setSpeedLimitIconEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableSpeedLimitIcon(viewId: viewIdArg, enabled: enabledArg)
+          try api.setSpeedLimitIconEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableSpeedLimitIconChannel.setMessageHandler(nil)
+      setSpeedLimitIconEnabledChannel.setMessageHandler(nil)
     }
     let isSpeedometerEnabledChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isSpeedometerEnabled",
@@ -2083,25 +2083,25 @@ enum NavigationViewApiSetup {
     } else {
       isSpeedometerEnabledChannel.setMessageHandler(nil)
     }
-    let enableSpeedometerChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableSpeedometer",
+    let setSpeedometerEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setSpeedometerEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableSpeedometerChannel.setMessageHandler { message, reply in
+      setSpeedometerEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableSpeedometer(viewId: viewIdArg, enabled: enabledArg)
+          try api.setSpeedometerEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableSpeedometerChannel.setMessageHandler(nil)
+      setSpeedometerEnabledChannel.setMessageHandler(nil)
     }
     let isIncidentCardsEnabledChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isIncidentCardsEnabled",
@@ -2122,25 +2122,25 @@ enum NavigationViewApiSetup {
     } else {
       isIncidentCardsEnabledChannel.setMessageHandler(nil)
     }
-    let enableIncidentCardsChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableIncidentCards",
+    let setIncidentCardsEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setIncidentCardsEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableIncidentCardsChannel.setMessageHandler { message, reply in
+      setIncidentCardsEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableIncidentCards(viewId: viewIdArg, enabled: enabledArg)
+          try api.setIncidentCardsEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableIncidentCardsChannel.setMessageHandler(nil)
+      setIncidentCardsEnabledChannel.setMessageHandler(nil)
     }
     let isNavigationUIEnabledChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isNavigationUIEnabled",
@@ -2161,25 +2161,25 @@ enum NavigationViewApiSetup {
     } else {
       isNavigationUIEnabledChannel.setMessageHandler(nil)
     }
-    let enableNavigationUIChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableNavigationUI",
+    let setNavigationUIEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationUIEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableNavigationUIChannel.setMessageHandler { message, reply in
+      setNavigationUIEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableNavigationUI(viewId: viewIdArg, enabled: enabledArg)
+          try api.setNavigationUIEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableNavigationUIChannel.setMessageHandler(nil)
+      setNavigationUIEnabledChannel.setMessageHandler(nil)
     }
     let getCameraPositionChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getCameraPosition",
@@ -2621,205 +2621,205 @@ enum NavigationViewApiSetup {
     } else {
       showRouteOverviewChannel.setMessageHandler(nil)
     }
-    let enableMyLocationButtonChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableMyLocationButton",
+    let setMyLocationButtonEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMyLocationButtonEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableMyLocationButtonChannel.setMessageHandler { message, reply in
+      setMyLocationButtonEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableMyLocationButton(viewId: viewIdArg, enabled: enabledArg)
+          try api.setMyLocationButtonEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableMyLocationButtonChannel.setMessageHandler(nil)
+      setMyLocationButtonEnabledChannel.setMessageHandler(nil)
     }
-    let enableZoomGesturesChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableZoomGestures",
+    let setZoomGesturesEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setZoomGesturesEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableZoomGesturesChannel.setMessageHandler { message, reply in
+      setZoomGesturesEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableZoomGestures(viewId: viewIdArg, enabled: enabledArg)
+          try api.setZoomGesturesEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableZoomGesturesChannel.setMessageHandler(nil)
+      setZoomGesturesEnabledChannel.setMessageHandler(nil)
     }
-    let enableZoomControlsChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableZoomControls",
+    let setZoomControlsEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setZoomControlsEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableZoomControlsChannel.setMessageHandler { message, reply in
+      setZoomControlsEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableZoomControls(viewId: viewIdArg, enabled: enabledArg)
+          try api.setZoomControlsEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableZoomControlsChannel.setMessageHandler(nil)
+      setZoomControlsEnabledChannel.setMessageHandler(nil)
     }
-    let enableCompassChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableCompass",
+    let setCompassEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setCompassEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableCompassChannel.setMessageHandler { message, reply in
+      setCompassEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableCompass(viewId: viewIdArg, enabled: enabledArg)
+          try api.setCompassEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableCompassChannel.setMessageHandler(nil)
+      setCompassEnabledChannel.setMessageHandler(nil)
     }
-    let enableRotateGesturesChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableRotateGestures",
+    let setRotateGesturesEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setRotateGesturesEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableRotateGesturesChannel.setMessageHandler { message, reply in
+      setRotateGesturesEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableRotateGestures(viewId: viewIdArg, enabled: enabledArg)
+          try api.setRotateGesturesEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableRotateGesturesChannel.setMessageHandler(nil)
+      setRotateGesturesEnabledChannel.setMessageHandler(nil)
     }
-    let enableScrollGesturesChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableScrollGestures",
+    let setScrollGesturesEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setScrollGesturesEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableScrollGesturesChannel.setMessageHandler { message, reply in
+      setScrollGesturesEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableScrollGestures(viewId: viewIdArg, enabled: enabledArg)
+          try api.setScrollGesturesEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableScrollGesturesChannel.setMessageHandler(nil)
+      setScrollGesturesEnabledChannel.setMessageHandler(nil)
     }
-    let enableScrollGesturesDuringRotateOrZoomChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableScrollGesturesDuringRotateOrZoom",
+    let setScrollGesturesDuringRotateOrZoomEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setScrollGesturesDuringRotateOrZoomEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableScrollGesturesDuringRotateOrZoomChannel.setMessageHandler { message, reply in
+      setScrollGesturesDuringRotateOrZoomEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableScrollGesturesDuringRotateOrZoom(viewId: viewIdArg, enabled: enabledArg)
+          try api.setScrollGesturesDuringRotateOrZoomEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableScrollGesturesDuringRotateOrZoomChannel.setMessageHandler(nil)
+      setScrollGesturesDuringRotateOrZoomEnabledChannel.setMessageHandler(nil)
     }
-    let enableTiltGesturesChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableTiltGestures",
+    let setTiltGesturesEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTiltGesturesEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableTiltGesturesChannel.setMessageHandler { message, reply in
+      setTiltGesturesEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableTiltGestures(viewId: viewIdArg, enabled: enabledArg)
+          try api.setTiltGesturesEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableTiltGesturesChannel.setMessageHandler(nil)
+      setTiltGesturesEnabledChannel.setMessageHandler(nil)
     }
-    let enableMapToolbarChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableMapToolbar",
+    let setMapToolbarEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMapToolbarEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableMapToolbarChannel.setMessageHandler { message, reply in
+      setMapToolbarEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableMapToolbar(viewId: viewIdArg, enabled: enabledArg)
+          try api.setMapToolbarEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableMapToolbarChannel.setMessageHandler(nil)
+      setMapToolbarEnabledChannel.setMessageHandler(nil)
     }
-    let enableTrafficChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableTraffic",
+    let setTrafficEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTrafficEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableTrafficChannel.setMessageHandler { message, reply in
+      setTrafficEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableTraffic(viewId: viewIdArg, enabled: enabledArg)
+          try api.setTrafficEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableTrafficChannel.setMessageHandler(nil)
+      setTrafficEnabledChannel.setMessageHandler(nil)
     }
     let isMyLocationButtonEnabledChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isMyLocationButtonEnabled",

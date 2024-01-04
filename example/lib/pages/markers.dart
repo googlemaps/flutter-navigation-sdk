@@ -337,7 +337,7 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
               SwitchListTile(
                   onChanged: (bool newValue) async {
                     await _navigationViewController.settings
-                        .enableMapToolbar(enabled: newValue);
+                        .setMapToolbarEnabled(newValue);
                     _isMapToolbarEnabled = await _navigationViewController
                         .settings
                         .isMapToolbarEnabled();

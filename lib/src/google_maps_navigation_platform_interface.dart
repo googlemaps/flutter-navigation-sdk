@@ -218,7 +218,8 @@ abstract mixin class NavigationViewAPIInterface {
   Future<bool> isMyLocationEnabled({required int viewId});
 
   /// Enabled location in the navigation view.
-  Future<void> enableMyLocation({required int viewId, required bool enabled});
+  Future<void> setMyLocationEnabled(
+      {required int viewId, required bool enabled});
 
   /// Get the map type.
   Future<MapType> getMapType({required int viewId});
@@ -230,38 +231,42 @@ abstract mixin class NavigationViewAPIInterface {
   Future<void> setMapStyle(int viewId, String? styleJson);
 
   /// Enables or disables the my-location button.
-  Future<void> enableMyLocationButton(
+  Future<void> setMyLocationButtonEnabled(
       {required int viewId, required bool enabled});
 
   /// Enables or disables the zoom gestures.
-  Future<void> enableZoomGestures({required int viewId, required bool enabled});
+  Future<void> setZoomGesturesEnabled(
+      {required int viewId, required bool enabled});
 
   /// Enables or disables the zoom controls.
-  Future<void> enableZoomControls({required int viewId, required bool enabled});
+  Future<void> setZoomControlsEnabled(
+      {required int viewId, required bool enabled});
 
   /// Enables or disables the compass.
-  Future<void> enableCompass({required int viewId, required bool enabled});
+  Future<void> setCompassEnabled({required int viewId, required bool enabled});
 
   /// Sets the preference for whether rotate gestures should be enabled or disabled.
-  Future<void> enableRotateGestures(
+  Future<void> setRotateGesturesEnabled(
       {required int viewId, required bool enabled});
 
   /// Sets the preference for whether scroll gestures should be enabled or disabled.
-  Future<void> enableScrollGestures(
+  Future<void> setScrollGesturesEnabled(
       {required int viewId, required bool enabled});
 
   /// Sets the preference for whether scroll gestures can take place at the same time as a zoom or rotate gesture.
-  Future<void> enableScrollGesturesDuringRotateOrZoom(
+  Future<void> setScrollGesturesDuringRotateOrZoomEnabled(
       {required int viewId, required bool enabled});
 
   /// Sets the preference for whether tilt gestures should be enabled or disabled.
-  Future<void> enableTiltGestures({required int viewId, required bool enabled});
+  Future<void> setTiltGesturesEnabled(
+      {required int viewId, required bool enabled});
 
   /// Sets the preference for whether the Map Toolbar should be enabled or disabled.
-  Future<void> enableMapToolbar({required int viewId, required bool enabled});
+  Future<void> setMapToolbarEnabled(
+      {required int viewId, required bool enabled});
 
   /// Turns the traffic layer on or off.
-  Future<void> enableTraffic({required int viewId, required bool enabled});
+  Future<void> setTrafficEnabled({required int viewId, required bool enabled});
 
   /// Get the preference for whether the my location button should be enabled or disabled.
   Future<bool> isMyLocationButtonEnabled({required int viewId});
@@ -323,54 +328,57 @@ abstract mixin class NavigationViewAPIInterface {
   Future<bool> isNavigationTripProgressBarEnabled({required int viewId});
 
   /// Enable navigation trip progress bar.
-  Future<void> enableNavigationTripProgressBar(
+  Future<void> setNavigationTripProgressBarEnabled(
       {required int viewId, required bool enabled});
 
   /// Is the navigation header enabled.
   Future<bool> isNavigationHeaderEnabled({required int viewId});
 
   /// Enable navigation header.
-  Future<void> enableNavigationHeader(
+  Future<void> setNavigationHeaderEnabled(
       {required int viewId, required bool enabled});
 
   /// Is the navigation footer enabled.
   Future<bool> isNavigationFooterEnabled({required int viewId});
 
   /// Enable the navigation footer.
-  Future<void> enableNavigationFooter(
+  Future<void> setNavigationFooterEnabled(
       {required int viewId, required bool enabled});
 
   /// Is the recenter button enabled.
   Future<bool> isRecenterButtonEnabled({required int viewId});
 
   /// Enable the recenter button.
-  Future<void> enableRecenterButton(
+  Future<void> setRecenterButtonEnabled(
       {required int viewId, required bool enabled});
 
   /// Is the speed limit displayed.
   Future<bool> isSpeedLimitIconEnabled({required int viewId});
 
   /// Should display speed limit.
-  Future<void> enableSpeedLimitIcon(
-      {required int viewId, required bool enable});
+  Future<void> setSpeedLimitIconEnabled(
+      {required int viewId, required bool enabled});
 
   /// Is speedometer displayed.
   Future<bool> isSpeedometerEnabled({required int viewId});
 
   /// Should display speedometer.
-  Future<void> enableSpeedometer({required int viewId, required bool enable});
+  Future<void> setSpeedometerEnabled(
+      {required int viewId, required bool enabled});
 
   /// Is incident cards displayed.
   Future<bool> isIncidentCardsEnabled({required int viewId});
 
   /// Should display incident cards.
-  Future<void> enableIncidentCards({required int viewId, required bool enable});
+  Future<void> setIncidentCardsEnabled(
+      {required int viewId, required bool enabled});
 
   /// Is navigation UI enabled.
   Future<bool> isNavigationUIEnabled({required int viewId});
 
   /// Enable navigation UI.
-  Future<void> enableNavigationUI({required int viewId, required bool enabled});
+  Future<void> setNavigationUIEnabled(
+      {required int viewId, required bool enabled});
 
   /// Show route overview.
   Future<void> showRouteOverview({required int viewId});

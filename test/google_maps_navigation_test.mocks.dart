@@ -1,4 +1,4 @@
-// Copyright 2023 Google LLC
+// Copyright 2024 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -436,13 +436,13 @@ class MockTestNavigationViewApi extends _i1.Mock
       ) as bool);
 
   @override
-  void enableMyLocation(
+  void setMyLocationEnabled(
     int? viewId,
     bool? enabled,
   ) =>
       super.noSuchMethod(
         Invocation.method(
-          #enableMyLocation,
+          #setMyLocationEnabled,
           [
             viewId,
             enabled,
@@ -509,13 +509,13 @@ class MockTestNavigationViewApi extends _i1.Mock
       ) as bool);
 
   @override
-  void enableNavigationTripProgressBar(
+  void setNavigationTripProgressBarEnabled(
     int? viewId,
     bool? enabled,
   ) =>
       super.noSuchMethod(
         Invocation.method(
-          #enableNavigationTripProgressBar,
+          #setNavigationTripProgressBarEnabled,
           [
             viewId,
             enabled,
@@ -534,13 +534,13 @@ class MockTestNavigationViewApi extends _i1.Mock
       ) as bool);
 
   @override
-  void enableNavigationHeader(
+  void setNavigationHeaderEnabled(
     int? viewId,
     bool? enabled,
   ) =>
       super.noSuchMethod(
         Invocation.method(
-          #enableNavigationHeader,
+          #setNavigationHeaderEnabled,
           [
             viewId,
             enabled,
@@ -559,13 +559,13 @@ class MockTestNavigationViewApi extends _i1.Mock
       ) as bool);
 
   @override
-  void enableNavigationFooter(
+  void setNavigationFooterEnabled(
     int? viewId,
     bool? enabled,
   ) =>
       super.noSuchMethod(
         Invocation.method(
-          #enableNavigationFooter,
+          #setNavigationFooterEnabled,
           [
             viewId,
             enabled,
@@ -584,13 +584,13 @@ class MockTestNavigationViewApi extends _i1.Mock
       ) as bool);
 
   @override
-  void enableRecenterButton(
+  void setRecenterButtonEnabled(
     int? viewId,
     bool? enabled,
   ) =>
       super.noSuchMethod(
         Invocation.method(
-          #enableRecenterButton,
+          #setRecenterButtonEnabled,
           [
             viewId,
             enabled,
@@ -609,13 +609,13 @@ class MockTestNavigationViewApi extends _i1.Mock
       ) as bool);
 
   @override
-  void enableSpeedLimitIcon(
+  void setSpeedLimitIconEnabled(
     int? viewId,
     bool? enabled,
   ) =>
       super.noSuchMethod(
         Invocation.method(
-          #enableSpeedLimitIcon,
+          #setSpeedLimitIconEnabled,
           [
             viewId,
             enabled,
@@ -634,13 +634,13 @@ class MockTestNavigationViewApi extends _i1.Mock
       ) as bool);
 
   @override
-  void enableSpeedometer(
+  void setSpeedometerEnabled(
     int? viewId,
     bool? enabled,
   ) =>
       super.noSuchMethod(
         Invocation.method(
-          #enableSpeedometer,
+          #setSpeedometerEnabled,
           [
             viewId,
             enabled,
@@ -659,13 +659,13 @@ class MockTestNavigationViewApi extends _i1.Mock
       ) as bool);
 
   @override
-  void enableIncidentCards(
+  void setIncidentCardsEnabled(
     int? viewId,
     bool? enabled,
   ) =>
       super.noSuchMethod(
         Invocation.method(
-          #enableIncidentCards,
+          #setIncidentCardsEnabled,
           [
             viewId,
             enabled,
@@ -684,13 +684,13 @@ class MockTestNavigationViewApi extends _i1.Mock
       ) as bool);
 
   @override
-  void enableNavigationUI(
+  void setNavigationUIEnabled(
     int? viewId,
     bool? enabled,
   ) =>
       super.noSuchMethod(
         Invocation.method(
-          #enableNavigationUI,
+          #setNavigationUIEnabled,
           [
             viewId,
             enabled,
@@ -1015,13 +1015,13 @@ class MockTestNavigationViewApi extends _i1.Mock
       );
 
   @override
-  void enableMyLocationButton(
+  void setMyLocationButtonEnabled(
     int? viewId,
     bool? enabled,
   ) =>
       super.noSuchMethod(
         Invocation.method(
-          #enableMyLocationButton,
+          #setMyLocationButtonEnabled,
           [
             viewId,
             enabled,
@@ -1031,13 +1031,13 @@ class MockTestNavigationViewApi extends _i1.Mock
       );
 
   @override
-  void enableZoomGestures(
+  void setZoomGesturesEnabled(
     int? viewId,
     bool? enabled,
   ) =>
       super.noSuchMethod(
         Invocation.method(
-          #enableZoomGestures,
+          #setZoomGesturesEnabled,
           [
             viewId,
             enabled,
@@ -1047,13 +1047,13 @@ class MockTestNavigationViewApi extends _i1.Mock
       );
 
   @override
-  void enableZoomControls(
+  void setZoomControlsEnabled(
     int? viewId,
     bool? enabled,
   ) =>
       super.noSuchMethod(
         Invocation.method(
-          #enableZoomControls,
+          #setZoomControlsEnabled,
           [
             viewId,
             enabled,
@@ -1063,13 +1063,13 @@ class MockTestNavigationViewApi extends _i1.Mock
       );
 
   @override
-  void enableCompass(
+  void setCompassEnabled(
     int? viewId,
     bool? enabled,
   ) =>
       super.noSuchMethod(
         Invocation.method(
-          #enableCompass,
+          #setCompassEnabled,
           [
             viewId,
             enabled,
@@ -1079,13 +1079,13 @@ class MockTestNavigationViewApi extends _i1.Mock
       );
 
   @override
-  void enableRotateGestures(
+  void setRotateGesturesEnabled(
     int? viewId,
     bool? enabled,
   ) =>
       super.noSuchMethod(
         Invocation.method(
-          #enableRotateGestures,
+          #setRotateGesturesEnabled,
           [
             viewId,
             enabled,
@@ -1095,13 +1095,13 @@ class MockTestNavigationViewApi extends _i1.Mock
       );
 
   @override
-  void enableScrollGestures(
+  void setScrollGesturesEnabled(
     int? viewId,
     bool? enabled,
   ) =>
       super.noSuchMethod(
         Invocation.method(
-          #enableScrollGestures,
+          #setScrollGesturesEnabled,
           [
             viewId,
             enabled,
@@ -1111,13 +1111,13 @@ class MockTestNavigationViewApi extends _i1.Mock
       );
 
   @override
-  void enableScrollGesturesDuringRotateOrZoom(
+  void setScrollGesturesDuringRotateOrZoomEnabled(
     int? viewId,
     bool? enabled,
   ) =>
       super.noSuchMethod(
         Invocation.method(
-          #enableScrollGesturesDuringRotateOrZoom,
+          #setScrollGesturesDuringRotateOrZoomEnabled,
           [
             viewId,
             enabled,
@@ -1127,13 +1127,13 @@ class MockTestNavigationViewApi extends _i1.Mock
       );
 
   @override
-  void enableTiltGestures(
+  void setTiltGesturesEnabled(
     int? viewId,
     bool? enabled,
   ) =>
       super.noSuchMethod(
         Invocation.method(
-          #enableTiltGestures,
+          #setTiltGesturesEnabled,
           [
             viewId,
             enabled,
@@ -1143,13 +1143,13 @@ class MockTestNavigationViewApi extends _i1.Mock
       );
 
   @override
-  void enableMapToolbar(
+  void setMapToolbarEnabled(
     int? viewId,
     bool? enabled,
   ) =>
       super.noSuchMethod(
         Invocation.method(
-          #enableMapToolbar,
+          #setMapToolbarEnabled,
           [
             viewId,
             enabled,
@@ -1159,13 +1159,13 @@ class MockTestNavigationViewApi extends _i1.Mock
       );
 
   @override
-  void enableTraffic(
+  void setTrafficEnabled(
     int? viewId,
     bool? enabled,
   ) =>
       super.noSuchMethod(
         Invocation.method(
-          #enableTraffic,
+          #setTrafficEnabled,
           [
             viewId,
             enabled,

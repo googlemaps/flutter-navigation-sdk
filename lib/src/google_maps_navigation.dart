@@ -348,17 +348,17 @@ class NavigationViewUISettings {
   ///
   /// By default, the my location button is visible
   /// when the my location indicator is shown.
-  Future<void> enableMyLocationButton({required bool enabled}) {
+  Future<void> setMyLocationButtonEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableMyLocationButton(viewId: _viewId, enabled: enabled);
+        .setMyLocationButtonEnabled(viewId: _viewId, enabled: enabled);
   }
 
   /// Sets the preference for whether the user is allowed to zoom the map using a gesture.
   ///
   /// Initial value can be set with [GoogleMapsNavigationView.initialZoomGesturesEnabled].
-  Future<void> enableZoomGestures({required bool enabled}) {
+  Future<void> setZoomGesturesEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableZoomGestures(viewId: _viewId, enabled: enabled);
+        .setZoomGesturesEnabled(viewId: _viewId, enabled: enabled);
   }
 
   /// Enables or disables the zoom controls.
@@ -366,9 +366,9 @@ class NavigationViewUISettings {
   /// Initial value can be set with [GoogleMapsNavigationView.initialZoomControlsEnabled].
   ///
   /// The zoom controls are only available on Android. Throws [UnsupportedError] on iOS.
-  Future<void> enableZoomControls({required bool enabled}) {
+  Future<void> setZoomControlsEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableZoomControls(viewId: _viewId, enabled: enabled);
+        .setZoomControlsEnabled(viewId: _viewId, enabled: enabled);
   }
 
   /// Enables or disables the compass.
@@ -377,51 +377,51 @@ class NavigationViewUISettings {
   /// from the default position, where the north points up.
   ///
   /// Initial value can be set with [GoogleMapsNavigationView.initialCompassEnabled].
-  Future<void> enableCompass({required bool enabled}) {
+  Future<void> setCompassEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableCompass(viewId: _viewId, enabled: enabled);
+        .setCompassEnabled(viewId: _viewId, enabled: enabled);
   }
 
   /// Sets the preference for whether the user is allowed to rotate the map using a gesture.
   ///
   /// Initial value can be set with [GoogleMapsNavigationView.initialRotateGesturesEnabled].
-  Future<void> enableRotateGestures({required bool enabled}) {
+  Future<void> setRotateGesturesEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableRotateGestures(viewId: _viewId, enabled: enabled);
+        .setRotateGesturesEnabled(viewId: _viewId, enabled: enabled);
   }
 
   /// Sets the preference for whether the user is allowed to scroll the map using a gesture.
   ///
   /// Initial value can be set with [GoogleMapsNavigationView.initialScrollGesturesEnabled].
-  Future<void> enableScrollGestures({required bool enabled}) {
+  Future<void> setScrollGesturesEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableScrollGestures(viewId: _viewId, enabled: enabled);
+        .setScrollGesturesEnabled(viewId: _viewId, enabled: enabled);
   }
 
   /// Sets the preference for whether the user is allowed to scroll the map
   /// at the same time when zooming or rotating the map with a gesture.
   ///
   /// Initial value can be set with [GoogleMapsNavigationView.initialScrollGesturesEnabledDuringRotateOrZoom].
-  Future<void> enableScrollGesturesDuringRotateOrZoom({required bool enabled}) {
+  Future<void> setScrollGesturesDuringRotateOrZoomEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableScrollGesturesDuringRotateOrZoom(
+        .setScrollGesturesDuringRotateOrZoomEnabled(
             viewId: _viewId, enabled: enabled);
   }
 
   /// Sets the preference for whether the user is allowed to tilt the map with a gesture.
   ///
   /// Initial value can be set with [GoogleMapsNavigationView.initialTiltGesturesEnabled].
-  Future<void> enableTiltGestures({required bool enabled}) {
+  Future<void> setTiltGesturesEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableTiltGestures(viewId: _viewId, enabled: enabled);
+        .setTiltGesturesEnabled(viewId: _viewId, enabled: enabled);
   }
 
   /// Turns the traffic layer on or off.
   ///
   /// By default, the traffic layer is off.
-  Future<void> enableTraffic({required bool enabled}) {
+  Future<void> setTrafficEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableTraffic(viewId: _viewId, enabled: enabled);
+        .setTrafficEnabled(viewId: _viewId, enabled: enabled);
   }
 
   /// Sets the preference for whether the map toolbar should be enabled or disabled.
@@ -429,9 +429,9 @@ class NavigationViewUISettings {
   /// Initial value can be set with [GoogleMapsNavigationView.initialMapToolbarEnabled].
   ///
   /// The map toolbar is only available on Android. Throws [UnsupportedError] on iOS.
-  Future<void> enableMapToolbar({required bool enabled}) {
+  Future<void> setMapToolbarEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableMapToolbar(viewId: _viewId, enabled: enabled);
+        .setMapToolbarEnabled(viewId: _viewId, enabled: enabled);
   }
 
   /// Gets whether the my location button is enabled or disabled.
@@ -635,9 +635,9 @@ class GoogleNavigationViewController {
   ///
   /// On iOS this property doesn't control the my location indication during
   /// the navigation.
-  Future<void> enableMyLocation({required bool enabled}) {
+  Future<void> setMyLocationEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableMyLocation(viewId: _viewId, enabled: enabled);
+        .setMyLocationEnabled(viewId: _viewId, enabled: enabled);
   }
 
   /// Get the map type.
@@ -755,9 +755,9 @@ class GoogleNavigationViewController {
   /// Enable the navigation trip progress bar.
   ///
   /// By default, the navigation trip progress bar is disabled.
-  Future<void> enableNavigationTripProgressBar({required bool enabled}) {
+  Future<void> setNavigationTripProgressBarEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableNavigationTripProgressBar(
+        .setNavigationTripProgressBarEnabled(
       viewId: _viewId,
       enabled: enabled,
     );
@@ -772,8 +772,8 @@ class GoogleNavigationViewController {
   /// Enable the navigation header.
   ///
   /// By default, the navigation header is enabled.
-  Future<void> enableNavigationHeader({required bool enabled}) {
-    return GoogleMapsNavigationPlatform.instance.enableNavigationHeader(
+  Future<void> setNavigationHeaderEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.setNavigationHeaderEnabled(
       viewId: _viewId,
       enabled: enabled,
     );
@@ -791,8 +791,8 @@ class GoogleNavigationViewController {
   ///
   /// Also known as ETA card, for example in Android
   /// calls [setEtaCardEnabled().](https://developers.google.com/maps/documentation/navigation/android-sdk/v1/reference/com/google/android/libraries/navigation/NavigationView#setEtaCardEnabled(boolean))
-  Future<void> enableNavigationFooter({required bool enabled}) {
-    return GoogleMapsNavigationPlatform.instance.enableNavigationFooter(
+  Future<void> setNavigationFooterEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.setNavigationFooterEnabled(
       viewId: _viewId,
       enabled: enabled,
     );
@@ -807,8 +807,8 @@ class GoogleNavigationViewController {
   /// Enable the recenter button.
   ///
   /// By default, the recenter button is enabled.
-  Future<void> enableRecenterButton({required bool enabled}) {
-    return GoogleMapsNavigationPlatform.instance.enableRecenterButton(
+  Future<void> setRecenterButtonEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.setRecenterButtonEnabled(
       viewId: _viewId,
       enabled: enabled,
     );
@@ -823,10 +823,10 @@ class GoogleNavigationViewController {
   /// Allow showing the speed limit indicator.
   ///
   /// By default, the speed limit is not displayed.
-  Future<void> enableSpeedLimitIcon({required bool enable}) {
-    return GoogleMapsNavigationPlatform.instance.enableSpeedLimitIcon(
+  Future<void> setSpeedLimitIconEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.setSpeedLimitIconEnabled(
       viewId: _viewId,
-      enable: enable,
+      enabled: enabled,
     );
   }
 
@@ -839,10 +839,10 @@ class GoogleNavigationViewController {
   /// Allow showing the speedometer.
   ///
   /// By default, the speedometer is not displayed.
-  Future<void> enableSpeedometer({required bool enable}) {
-    return GoogleMapsNavigationPlatform.instance.enableSpeedometer(
+  Future<void> setSpeedometerEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.setSpeedometerEnabled(
       viewId: _viewId,
-      enable: enable,
+      enabled: enabled,
     );
   }
 
@@ -855,10 +855,10 @@ class GoogleNavigationViewController {
   /// Enable showing of the incident cards.
   ///
   /// By default, the incident cards are shown.
-  Future<void> enableIncidentCards({required bool enable}) {
-    return GoogleMapsNavigationPlatform.instance.enableIncidentCards(
+  Future<void> setIncidentCardsEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.setIncidentCardsEnabled(
       viewId: _viewId,
-      enable: enable,
+      enabled: enabled,
     );
   }
 
@@ -876,8 +876,8 @@ class GoogleNavigationViewController {
   ///
   /// By default, the navigation UI is enabled when the session has been
   /// initialized with GoogleMapsNavigotor.initializeNavigationSession().
-  Future<void> enableNavigationUI({required bool enabled}) {
-    return GoogleMapsNavigationPlatform.instance.enableNavigationUI(
+  Future<void> setNavigationUIEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.setNavigationUIEnabled(
       viewId: _viewId,
       enabled: enabled,
     );

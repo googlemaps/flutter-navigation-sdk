@@ -1684,7 +1684,7 @@ interface NavigationViewApi {
 
   fun isMyLocationEnabled(viewId: Long): Boolean
 
-  fun enableMyLocation(viewId: Long, enabled: Boolean)
+  fun setMyLocationEnabled(viewId: Long, enabled: Boolean)
 
   fun getMyLocation(viewId: Long): LatLngDto?
 
@@ -1696,35 +1696,35 @@ interface NavigationViewApi {
 
   fun isNavigationTripProgressBarEnabled(viewId: Long): Boolean
 
-  fun enableNavigationTripProgressBar(viewId: Long, enabled: Boolean)
+  fun setNavigationTripProgressBarEnabled(viewId: Long, enabled: Boolean)
 
   fun isNavigationHeaderEnabled(viewId: Long): Boolean
 
-  fun enableNavigationHeader(viewId: Long, enabled: Boolean)
+  fun setNavigationHeaderEnabled(viewId: Long, enabled: Boolean)
 
   fun isNavigationFooterEnabled(viewId: Long): Boolean
 
-  fun enableNavigationFooter(viewId: Long, enabled: Boolean)
+  fun setNavigationFooterEnabled(viewId: Long, enabled: Boolean)
 
   fun isRecenterButtonEnabled(viewId: Long): Boolean
 
-  fun enableRecenterButton(viewId: Long, enabled: Boolean)
+  fun setRecenterButtonEnabled(viewId: Long, enabled: Boolean)
 
   fun isSpeedLimitIconEnabled(viewId: Long): Boolean
 
-  fun enableSpeedLimitIcon(viewId: Long, enabled: Boolean)
+  fun setSpeedLimitIconEnabled(viewId: Long, enabled: Boolean)
 
   fun isSpeedometerEnabled(viewId: Long): Boolean
 
-  fun enableSpeedometer(viewId: Long, enabled: Boolean)
+  fun setSpeedometerEnabled(viewId: Long, enabled: Boolean)
 
   fun isIncidentCardsEnabled(viewId: Long): Boolean
 
-  fun enableIncidentCards(viewId: Long, enabled: Boolean)
+  fun setIncidentCardsEnabled(viewId: Long, enabled: Boolean)
 
   fun isNavigationUIEnabled(viewId: Long): Boolean
 
-  fun enableNavigationUI(viewId: Long, enabled: Boolean)
+  fun setNavigationUIEnabled(viewId: Long, enabled: Boolean)
 
   fun getCameraPosition(viewId: Long): CameraPositionDto
 
@@ -1802,25 +1802,25 @@ interface NavigationViewApi {
 
   fun showRouteOverview(viewId: Long)
 
-  fun enableMyLocationButton(viewId: Long, enabled: Boolean)
+  fun setMyLocationButtonEnabled(viewId: Long, enabled: Boolean)
 
-  fun enableZoomGestures(viewId: Long, enabled: Boolean)
+  fun setZoomGesturesEnabled(viewId: Long, enabled: Boolean)
 
-  fun enableZoomControls(viewId: Long, enabled: Boolean)
+  fun setZoomControlsEnabled(viewId: Long, enabled: Boolean)
 
-  fun enableCompass(viewId: Long, enabled: Boolean)
+  fun setCompassEnabled(viewId: Long, enabled: Boolean)
 
-  fun enableRotateGestures(viewId: Long, enabled: Boolean)
+  fun setRotateGesturesEnabled(viewId: Long, enabled: Boolean)
 
-  fun enableScrollGestures(viewId: Long, enabled: Boolean)
+  fun setScrollGesturesEnabled(viewId: Long, enabled: Boolean)
 
-  fun enableScrollGesturesDuringRotateOrZoom(viewId: Long, enabled: Boolean)
+  fun setScrollGesturesDuringRotateOrZoomEnabled(viewId: Long, enabled: Boolean)
 
-  fun enableTiltGestures(viewId: Long, enabled: Boolean)
+  fun setTiltGesturesEnabled(viewId: Long, enabled: Boolean)
 
-  fun enableMapToolbar(viewId: Long, enabled: Boolean)
+  fun setMapToolbarEnabled(viewId: Long, enabled: Boolean)
 
-  fun enableTraffic(viewId: Long, enabled: Boolean)
+  fun setTrafficEnabled(viewId: Long, enabled: Boolean)
 
   fun isMyLocationButtonEnabled(viewId: Long): Boolean
 
@@ -1943,7 +1943,7 @@ interface NavigationViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableMyLocation",
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMyLocationEnabled",
             codec
           )
         if (api != null) {
@@ -1953,7 +1953,7 @@ interface NavigationViewApi {
             val enabledArg = args[1] as Boolean
             var wrapped: List<Any?>
             try {
-              api.enableMyLocation(viewIdArg, enabledArg)
+              api.setMyLocationEnabled(viewIdArg, enabledArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -2087,7 +2087,7 @@ interface NavigationViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableNavigationTripProgressBar",
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationTripProgressBarEnabled",
             codec
           )
         if (api != null) {
@@ -2097,7 +2097,7 @@ interface NavigationViewApi {
             val enabledArg = args[1] as Boolean
             var wrapped: List<Any?>
             try {
-              api.enableNavigationTripProgressBar(viewIdArg, enabledArg)
+              api.setNavigationTripProgressBarEnabled(viewIdArg, enabledArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -2135,7 +2135,7 @@ interface NavigationViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableNavigationHeader",
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationHeaderEnabled",
             codec
           )
         if (api != null) {
@@ -2145,7 +2145,7 @@ interface NavigationViewApi {
             val enabledArg = args[1] as Boolean
             var wrapped: List<Any?>
             try {
-              api.enableNavigationHeader(viewIdArg, enabledArg)
+              api.setNavigationHeaderEnabled(viewIdArg, enabledArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -2183,7 +2183,7 @@ interface NavigationViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableNavigationFooter",
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationFooterEnabled",
             codec
           )
         if (api != null) {
@@ -2193,7 +2193,7 @@ interface NavigationViewApi {
             val enabledArg = args[1] as Boolean
             var wrapped: List<Any?>
             try {
-              api.enableNavigationFooter(viewIdArg, enabledArg)
+              api.setNavigationFooterEnabled(viewIdArg, enabledArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -2231,7 +2231,7 @@ interface NavigationViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableRecenterButton",
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setRecenterButtonEnabled",
             codec
           )
         if (api != null) {
@@ -2241,7 +2241,7 @@ interface NavigationViewApi {
             val enabledArg = args[1] as Boolean
             var wrapped: List<Any?>
             try {
-              api.enableRecenterButton(viewIdArg, enabledArg)
+              api.setRecenterButtonEnabled(viewIdArg, enabledArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -2279,7 +2279,7 @@ interface NavigationViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableSpeedLimitIcon",
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setSpeedLimitIconEnabled",
             codec
           )
         if (api != null) {
@@ -2289,7 +2289,7 @@ interface NavigationViewApi {
             val enabledArg = args[1] as Boolean
             var wrapped: List<Any?>
             try {
-              api.enableSpeedLimitIcon(viewIdArg, enabledArg)
+              api.setSpeedLimitIconEnabled(viewIdArg, enabledArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -2327,7 +2327,7 @@ interface NavigationViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableSpeedometer",
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setSpeedometerEnabled",
             codec
           )
         if (api != null) {
@@ -2337,7 +2337,7 @@ interface NavigationViewApi {
             val enabledArg = args[1] as Boolean
             var wrapped: List<Any?>
             try {
-              api.enableSpeedometer(viewIdArg, enabledArg)
+              api.setSpeedometerEnabled(viewIdArg, enabledArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -2375,7 +2375,7 @@ interface NavigationViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableIncidentCards",
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setIncidentCardsEnabled",
             codec
           )
         if (api != null) {
@@ -2385,7 +2385,7 @@ interface NavigationViewApi {
             val enabledArg = args[1] as Boolean
             var wrapped: List<Any?>
             try {
-              api.enableIncidentCards(viewIdArg, enabledArg)
+              api.setIncidentCardsEnabled(viewIdArg, enabledArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -2423,7 +2423,7 @@ interface NavigationViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableNavigationUI",
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationUIEnabled",
             codec
           )
         if (api != null) {
@@ -2433,7 +2433,7 @@ interface NavigationViewApi {
             val enabledArg = args[1] as Boolean
             var wrapped: List<Any?>
             try {
-              api.enableNavigationUI(viewIdArg, enabledArg)
+              api.setNavigationUIEnabled(viewIdArg, enabledArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -2923,7 +2923,7 @@ interface NavigationViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableMyLocationButton",
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMyLocationButtonEnabled",
             codec
           )
         if (api != null) {
@@ -2933,7 +2933,7 @@ interface NavigationViewApi {
             val enabledArg = args[1] as Boolean
             var wrapped: List<Any?>
             try {
-              api.enableMyLocationButton(viewIdArg, enabledArg)
+              api.setMyLocationButtonEnabled(viewIdArg, enabledArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -2948,7 +2948,7 @@ interface NavigationViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableZoomGestures",
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setZoomGesturesEnabled",
             codec
           )
         if (api != null) {
@@ -2958,7 +2958,7 @@ interface NavigationViewApi {
             val enabledArg = args[1] as Boolean
             var wrapped: List<Any?>
             try {
-              api.enableZoomGestures(viewIdArg, enabledArg)
+              api.setZoomGesturesEnabled(viewIdArg, enabledArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -2973,7 +2973,7 @@ interface NavigationViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableZoomControls",
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setZoomControlsEnabled",
             codec
           )
         if (api != null) {
@@ -2983,7 +2983,7 @@ interface NavigationViewApi {
             val enabledArg = args[1] as Boolean
             var wrapped: List<Any?>
             try {
-              api.enableZoomControls(viewIdArg, enabledArg)
+              api.setZoomControlsEnabled(viewIdArg, enabledArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -2998,7 +2998,7 @@ interface NavigationViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableCompass",
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setCompassEnabled",
             codec
           )
         if (api != null) {
@@ -3008,7 +3008,7 @@ interface NavigationViewApi {
             val enabledArg = args[1] as Boolean
             var wrapped: List<Any?>
             try {
-              api.enableCompass(viewIdArg, enabledArg)
+              api.setCompassEnabled(viewIdArg, enabledArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -3023,7 +3023,7 @@ interface NavigationViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableRotateGestures",
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setRotateGesturesEnabled",
             codec
           )
         if (api != null) {
@@ -3033,7 +3033,7 @@ interface NavigationViewApi {
             val enabledArg = args[1] as Boolean
             var wrapped: List<Any?>
             try {
-              api.enableRotateGestures(viewIdArg, enabledArg)
+              api.setRotateGesturesEnabled(viewIdArg, enabledArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -3048,7 +3048,7 @@ interface NavigationViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableScrollGestures",
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setScrollGesturesEnabled",
             codec
           )
         if (api != null) {
@@ -3058,7 +3058,7 @@ interface NavigationViewApi {
             val enabledArg = args[1] as Boolean
             var wrapped: List<Any?>
             try {
-              api.enableScrollGestures(viewIdArg, enabledArg)
+              api.setScrollGesturesEnabled(viewIdArg, enabledArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -3073,7 +3073,7 @@ interface NavigationViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableScrollGesturesDuringRotateOrZoom",
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setScrollGesturesDuringRotateOrZoomEnabled",
             codec
           )
         if (api != null) {
@@ -3083,7 +3083,7 @@ interface NavigationViewApi {
             val enabledArg = args[1] as Boolean
             var wrapped: List<Any?>
             try {
-              api.enableScrollGesturesDuringRotateOrZoom(viewIdArg, enabledArg)
+              api.setScrollGesturesDuringRotateOrZoomEnabled(viewIdArg, enabledArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -3098,7 +3098,7 @@ interface NavigationViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableTiltGestures",
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTiltGesturesEnabled",
             codec
           )
         if (api != null) {
@@ -3108,7 +3108,7 @@ interface NavigationViewApi {
             val enabledArg = args[1] as Boolean
             var wrapped: List<Any?>
             try {
-              api.enableTiltGestures(viewIdArg, enabledArg)
+              api.setTiltGesturesEnabled(viewIdArg, enabledArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -3123,7 +3123,7 @@ interface NavigationViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableMapToolbar",
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMapToolbarEnabled",
             codec
           )
         if (api != null) {
@@ -3133,7 +3133,7 @@ interface NavigationViewApi {
             val enabledArg = args[1] as Boolean
             var wrapped: List<Any?>
             try {
-              api.enableMapToolbar(viewIdArg, enabledArg)
+              api.setMapToolbarEnabled(viewIdArg, enabledArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -3148,7 +3148,7 @@ interface NavigationViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableTraffic",
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTrafficEnabled",
             codec
           )
         if (api != null) {
@@ -3158,7 +3158,7 @@ interface NavigationViewApi {
             val enabledArg = args[1] as Boolean
             var wrapped: List<Any?>
             try {
-              api.enableTraffic(viewIdArg, enabledArg)
+              api.setTrafficEnabled(viewIdArg, enabledArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)

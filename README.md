@@ -150,7 +150,7 @@ class _NavigationSampleState extends State<NavigationSample> {
 
   void _onViewCreated(GoogleNavigationViewController controller) {
     _navigationViewController = controller;
-    controller.enableMyLocation(enabled: true);
+    controller.setMyLocationEnabled(true);
     // Additional setup can be added here.
   }
 
