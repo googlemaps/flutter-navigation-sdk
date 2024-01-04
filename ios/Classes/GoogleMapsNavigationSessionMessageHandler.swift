@@ -55,9 +55,11 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
     GoogleMapsNavigationSessionManager.shared.getNavSDKVersion()
   }
 
-  func createNavigationSession(completion: @escaping (Result<Void, Error>) -> Void) {
+  func createNavigationSession(abnormalTerminationReportingEnabled: Bool,
+                               completion: @escaping (Result<Void, Error>) -> Void) {
     do {
-      try GoogleMapsNavigationSessionManager.shared.createNavigationSession()
+      try GoogleMapsNavigationSessionManager.shared
+        .createNavigationSession(abnormalTerminationReportingEnabled)
       completion(.success(()))
     } catch {
       completion(.failure(error))

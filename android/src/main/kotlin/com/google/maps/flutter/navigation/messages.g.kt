@@ -4372,7 +4372,10 @@ private object NavigationSessionApiCodec : StandardMessageCodec() {
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface NavigationSessionApi {
   /** General. */
-  fun createNavigationSession(callback: (Result<Unit>) -> Unit)
+  fun createNavigationSession(
+    abnormalTerminationReportingEnabled: Boolean,
+    callback: (Result<Unit>) -> Unit
+  )
 
   fun isInitialized(): Boolean
 
@@ -4473,8 +4476,11 @@ interface NavigationSessionApi {
             codec
           )
         if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            api.createNavigationSession() { result: Result<Unit> ->
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val abnormalTerminationReportingEnabledArg = args[0] as Boolean
+            api.createNavigationSession(abnormalTerminationReportingEnabledArg) {
+              result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

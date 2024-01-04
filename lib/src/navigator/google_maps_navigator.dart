@@ -42,8 +42,13 @@ class GoogleMapsNavigator {
   /// ([GoogleMapsNavigator.setDestinations], [GoogleMapsNavigator.startGuidance], etc.)
   /// throw [SessionNotInitializedException].
   ///
-  static Future<void> initializeNavigationSession() async {
-    await GoogleMapsNavigationPlatform.instance.createNavigationSession();
+  /// Optional parameter [abnormalTerminationReportingEnabled] can be used enables/disables
+  /// reporting abnormal SDK terminations such as the app crashes while the SDK is still running.
+  ///
+  static Future<void> initializeNavigationSession(
+      {bool abnormalTerminationReportingEnabled = true}) async {
+    await GoogleMapsNavigationPlatform.instance
+        .createNavigationSession(abnormalTerminationReportingEnabled);
   }
 
   /// Check whether navigator has been initialized.

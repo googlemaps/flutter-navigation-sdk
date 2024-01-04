@@ -792,7 +792,7 @@ class RouteSegmentDto {
 abstract class NavigationSessionApi {
   /// General.
   @async
-  void createNavigationSession();
+  void createNavigationSession(bool abnormalTerminationReportingEnabled);
   bool isInitialized();
   void cleanup();
   @async

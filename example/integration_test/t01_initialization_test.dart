@@ -152,5 +152,13 @@ void main() {
     // Test that SDK version call returns non-empty version string.
     final String version = await GoogleMapsNavigator.getNavSDKVersion();
     expect(version.length, greaterThan(0));
+
+    // Test initializing with abnormal termination reporting enabled.
+    try {
+      await GoogleMapsNavigator.initializeNavigationSession(
+          abnormalTerminationReportingEnabled: false);
+    } on Exception {
+      fail('Expected the initialization to go through');
+    }
   });
 }

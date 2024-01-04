@@ -94,10 +94,12 @@ class MockTestNavigationSessionApi extends _i1.Mock
   }
 
   @override
-  _i4.Future<void> createNavigationSession() => (super.noSuchMethod(
+  _i4.Future<void> createNavigationSession(
+          bool? abnormalTerminationReportingEnabled) =>
+      (super.noSuchMethod(
         Invocation.method(
           #createNavigationSession,
-          [],
+          [abnormalTerminationReportingEnabled],
         ),
         returnValue: _i4.Future<void>.value(),
         returnValueForMissingStub: _i4.Future<void>.value(),

@@ -595,7 +595,11 @@ void main() {
 
     test('Test navigation session', () async {
       // Initialize session and session controller.
-      await GoogleMapsNavigator.initializeNavigationSession();
+      await GoogleMapsNavigator.initializeNavigationSession(
+          abnormalTerminationReportingEnabled: false);
+      VerificationResult result =
+          verify(sessionMockApi.createNavigationSession(captureAny));
+      expect(result.captured[0] as bool, false);
 
       // Start/stop guidance.
 
@@ -670,8 +674,7 @@ void main() {
       final NavigationRouteStatus statusOut =
           await GoogleMapsNavigator.setDestinations(destinationIn);
       expect(statusOut, NavigationRouteStatus.quotaExceeded);
-      final VerificationResult result =
-          verify(sessionMockApi.setDestinations(captureAny));
+      result = verify(sessionMockApi.setDestinations(captureAny));
       final DestinationsDto destinationOut =
           result.captured[0] as DestinationsDto;
       final NavigationWaypointDto? destinationWaypointOut =

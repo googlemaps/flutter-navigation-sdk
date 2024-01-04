@@ -3350,7 +3350,8 @@ abstract class TestNavigationSessionApi {
       _TestNavigationSessionApiCodec();
 
   /// General.
-  Future<void> createNavigationSession();
+  Future<void> createNavigationSession(
+      bool abnormalTerminationReportingEnabled);
 
   bool isInitialized();
 
@@ -3442,8 +3443,16 @@ abstract class TestNavigationSessionApi {
         _testBinaryMessengerBinding!.defaultBinaryMessenger
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
+          assert(message != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.createNavigationSession was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_abnormalTerminationReportingEnabled =
+              (args[0] as bool?);
+          assert(arg_abnormalTerminationReportingEnabled != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.createNavigationSession was null, expected non-null bool.');
           try {
-            await api.createNavigationSession();
+            await api.createNavigationSession(
+                arg_abnormalTerminationReportingEnabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

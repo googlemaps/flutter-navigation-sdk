@@ -73,7 +73,8 @@ abstract class GoogleMapsNavigationPlatform extends PlatformInterface
 /// API interface for actions of the navigation session.
 abstract mixin class NavigationSessionAPIInterface {
   /// Creates navigation session in the native platform and returns navigation session controller.
-  Future<void> createNavigationSession();
+  Future<void> createNavigationSession(
+      bool abnormalTerminationReportingEnabled);
 
   /// Check whether navigator has been initialized.
   Future<bool> isInitialized();

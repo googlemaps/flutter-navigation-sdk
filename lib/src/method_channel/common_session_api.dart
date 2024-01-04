@@ -50,12 +50,14 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
 
   /// Creates navigation session in the native platform and returns navigation session controller.
   @override
-  Future<void> createNavigationSession() async {
+  Future<void> createNavigationSession(
+      bool abnormalTerminationReportingEnabled) async {
     // Setup session API streams.
     ensureSessionAPISetUp();
     try {
       // Create native navigation session manager.
-      await _sessionApi.createNavigationSession();
+      await _sessionApi
+          .createNavigationSession(abnormalTerminationReportingEnabled);
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'notAuthorized':

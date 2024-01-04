@@ -25,8 +25,11 @@ class GoogleMapsNavigationSessionMessageHandler : NavigationSessionApi {
     return GoogleMapsNavigationSessionManager.getInstance()
   }
 
-  override fun createNavigationSession(callback: (Result<Unit>) -> Unit) {
-    manager().createNavigationSession(callback)
+  override fun createNavigationSession(
+    abnormalTerminationReportingEnabled: Boolean,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    manager().createNavigationSession(abnormalTerminationReportingEnabled, callback)
   }
 
   override fun isInitialized(): Boolean {

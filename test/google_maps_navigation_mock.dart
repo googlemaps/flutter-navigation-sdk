@@ -131,8 +131,10 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
   }
 
   @override
-  Future<void> createNavigationSession() async {
-    return sessionApi.createNavigationSession();
+  Future<void> createNavigationSession(
+      bool abnormalTerminationReportingEnabled) {
+    return sessionApi
+        .createNavigationSession(abnormalTerminationReportingEnabled);
   }
 
   @override

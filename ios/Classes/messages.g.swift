@@ -3953,7 +3953,8 @@ class NavigationSessionApiCodec: FlutterStandardMessageCodec {
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol NavigationSessionApi {
   /// General.
-  func createNavigationSession(completion: @escaping (Result<Void, Error>) -> Void)
+  func createNavigationSession(abnormalTerminationReportingEnabled: Bool,
+                               completion: @escaping (Result<Void, Error>) -> Void)
   func isInitialized() throws -> Bool
   func cleanup() throws
   func showTermsAndConditionsDialog(title: String, companyName: String,
@@ -4023,15 +4024,20 @@ enum NavigationSessionApiSetup {
       codec: codec
     )
     if let api {
-      createNavigationSessionChannel.setMessageHandler { _, reply in
-        api.createNavigationSession { result in
-          switch result {
-          case .success:
-            reply(wrapResult(nil))
-          case let .failure(error):
-            reply(wrapError(error))
+      createNavigationSessionChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let abnormalTerminationReportingEnabledArg = args[0] as! Bool
+        api
+          .createNavigationSession(
+            abnormalTerminationReportingEnabled: abnormalTerminationReportingEnabledArg
+          ) { result in
+            switch result {
+            case .success:
+              reply(wrapResult(nil))
+            case let .failure(error):
+              reply(wrapError(error))
+            }
           }
-        }
       }
     } else {
       createNavigationSessionChannel.setMessageHandler(nil)

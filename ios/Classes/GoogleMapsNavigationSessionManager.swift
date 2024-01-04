@@ -76,12 +76,15 @@ class GoogleMapsNavigationSessionManager: NSObject {
 
   // Create a navigation session and initializes listeners.
   // If navigator is already created, only re-initialize listeners.
-  func createNavigationSession() throws {
+  func createNavigationSession(_ abnormalTerminationReportingEnabled: Bool) throws {
     // Align API behavior with Android:
     // Check the terms and conditions before the location permission check below.
     if !areTermsAccepted() {
       throw GoogleMapsNavigationSessionManagerError.termsNotAccepted
     }
+
+    // Enable or disable abnormal termination reporting.
+    GMSServices.setAbnormalTerminationReportingEnabled(abnormalTerminationReportingEnabled)
 
     // Align API behavior with Android:
     // Fail the session creation if the location permission hasn't been accepted.

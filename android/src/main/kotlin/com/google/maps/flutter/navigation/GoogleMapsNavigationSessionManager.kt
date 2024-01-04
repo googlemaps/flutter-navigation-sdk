@@ -134,7 +134,10 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   }
 
   /** Creates Navigator instance. */
-  fun createNavigationSession(callback: (Result<Unit>) -> Unit) {
+  fun createNavigationSession(
+    abnormalTerminationReportingEnabled: Boolean,
+    callback: (Result<Unit>) -> Unit
+  ) {
     if (navigator != null) {
       // Navigator is already initialized, just re-register listeners.
       registerNavigationListeners()
@@ -156,6 +159,9 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
       )
       return
     }
+
+    // Enable or disable abnormal termination reporting.
+    NavigationApi.setAbnormalTerminationReportingEnabled(abnormalTerminationReportingEnabled)
 
     val listener =
       object : NavigatorListener {
