@@ -49,7 +49,7 @@ class _ViewInitializationPageState
   double? _initialMaxZoomPreference;
   bool _initialZoomControlsEnabled = true;
   LatLngBounds? _initialCameraTargetBounds;
-  bool _initialNavigationUiEnabled = false;
+  bool _initialNavigationUIEnabled = false;
   TextDirection? _layoutDirection;
   bool _isMinZoomPreferenceEnabled = false;
   bool _isMaxZoomPreferenceEnabled = false;
@@ -99,7 +99,7 @@ class _ViewInitializationPageState
           initialMaxZoomPreference: _initialMaxZoomPreference,
           initialZoomControlsEnabled: _initialZoomControlsEnabled,
           initialCameraTargetBounds: _initialCameraTargetBounds,
-          initialNavigationUiEnabled: _initialNavigationUiEnabled,
+          initialNavigationUIEnabled: _initialNavigationUIEnabled,
           layoutDirection: _layoutDirection,
         ),
       ),
@@ -328,11 +328,11 @@ class _ViewInitializationPageState
                         children: <Widget>[
                           ExampleDropdownButton<bool>(
                             title: 'Navigation UI Enabled',
-                            value: _initialNavigationUiEnabled,
+                            value: _initialNavigationUIEnabled,
                             items: const <bool>[true, false],
                             onChanged: (bool? newValue) {
                               setState(() {
-                                _initialNavigationUiEnabled = newValue ?? false;
+                                _initialNavigationUIEnabled = newValue ?? false;
                               });
                             },
                           ),
@@ -378,7 +378,7 @@ class _InitializedViewPage extends StatelessWidget {
     required this.initialMaxZoomPreference,
     required this.initialZoomControlsEnabled,
     required this.initialCameraTargetBounds,
-    required this.initialNavigationUiEnabled,
+    required this.initialNavigationUIEnabled,
     required this.layoutDirection,
   });
 
@@ -396,7 +396,7 @@ class _InitializedViewPage extends StatelessWidget {
   final double? initialMaxZoomPreference;
   final bool initialZoomControlsEnabled;
   final LatLngBounds? initialCameraTargetBounds;
-  final bool initialNavigationUiEnabled;
+  final bool initialNavigationUIEnabled;
 
   @override
   Widget build(BuildContext context) {
@@ -427,7 +427,7 @@ class _InitializedViewPage extends StatelessWidget {
         initialMaxZoomPreference: initialMaxZoomPreference,
         initialZoomControlsEnabled: initialZoomControlsEnabled,
         initialCameraTargetBounds: initialCameraTargetBounds,
-        initialNavigationUiEnabled: initialNavigationUiEnabled,
+        initialNavigationUIEnabled: initialNavigationUIEnabled,
       ),
     );
   }

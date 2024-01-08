@@ -357,7 +357,20 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   func setSession(_ session: GMSNavigationSession) -> Bool {
     // Navigation UI delegate needs to be set after attaching
     // the session to the map view.
+
+    let navigationWasEnabled = _navigationView.isNavigationEnabled
+
     let result = _navigationView.enableNavigation(with: session)
+
+    if navigationWasEnabled != _navigationView.isNavigationEnabled {
+      // Navigation UI got enabled, send enabled change event.
+      _navigationViewEventApi
+        .onNavigationUIEnabledChanged(
+          viewId: _viewId,
+          navigationUIEnabled: _navigationView.isNavigationEnabled
+        ) { _ in }
+    }
+
     _navigationView.navigationUIDelegate = self
     isAttachedToSession = true
     return result
@@ -438,6 +451,8 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   func setNavigationUIEnabled(_ enabled: Bool) {
     if _navigationView.isNavigationEnabled != enabled {
       _navigationView.isNavigationEnabled = enabled
+      _navigationViewEventApi
+        .onNavigationUIEnabledChanged(viewId: _viewId, navigationUIEnabled: enabled) { _ in }
 
       if !enabled {
         let camera = _navigationView.camera

@@ -103,6 +103,9 @@ typedef OnPolylineClicked = void Function(String polylineId);
 /// Called during circle clicked event.
 typedef OnCircleClicked = void Function(String circleId);
 
+/// Called when the [GoogleNavigationViewController.isNavigationUIEnabled] status changes.
+typedef OnNavigationUIEnabledChanged = void Function(bool navigationUIEnabled);
+
 /// The main map view widget for Google Maps Navigation.
 /// {@category Navigation View}
 class GoogleMapsNavigationView extends StatefulWidget {
@@ -139,7 +142,7 @@ class GoogleMapsNavigationView extends StatefulWidget {
     this.initialMaxZoomPreference,
     this.initialZoomControlsEnabled = true,
     this.initialCameraTargetBounds,
-    this.initialNavigationUiEnabled = false,
+    this.initialNavigationUIEnabled = false,
     this.layoutDirection,
     this.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
     this.onRecenterButtonClicked,
@@ -155,6 +158,7 @@ class GoogleMapsNavigationView extends StatefulWidget {
     this.onPolygonClicked,
     this.onPolylineClicked,
     this.onCircleClicked,
+    this.onNavigationUIEnabledChanged,
   });
 
   /// On view created callback.
@@ -243,7 +247,7 @@ class GoogleMapsNavigationView extends StatefulWidget {
   /// Determines the initial visibility of the navigation UI on map initialization.
   ///
   /// False by default.
-  final bool initialNavigationUiEnabled;
+  final bool initialNavigationUIEnabled;
 
   /// Which gestures should be forwarded to the PlatformView.
   ///
@@ -292,6 +296,9 @@ class GoogleMapsNavigationView extends StatefulWidget {
   /// On circle clicked callback.
   final OnCircleClicked? onCircleClicked;
 
+  /// On navigation UI enabled changed callback.
+  final OnNavigationUIEnabledChanged? onNavigationUIEnabledChanged;
+
   /// Creates a [State] for this [GoogleMapsNavigationView].
   @override
   State createState() => GoogleMapsNavigationViewState();
@@ -324,7 +331,7 @@ class GoogleMapsNavigationViewState extends State<GoogleMapsNavigationView> {
               cameraTargetBounds: widget.initialCameraTargetBounds,
             ),
             navigationViewOptions: NavigationViewOptions(
-                navigationUIEnabled: widget.initialNavigationUiEnabled)),
+                navigationUIEnabled: widget.initialNavigationUIEnabled)),
         onMapReady: _onPlatformViewCreated);
   }
 
@@ -532,6 +539,7 @@ class GoogleNavigationViewController {
     setOnPolygonClickedListener();
     setOnPolylineClickedListener();
     setOnCircleClickedListener();
+    setOnNavigationUIEnabledChangedListener();
   }
 
   /// Sets the event channel listener for the map click event listeners.
@@ -625,6 +633,16 @@ class GoogleNavigationViewController {
         .getCircleClickedEventStream(viewId: _viewId)
         .listen((CircleClickedEvent event) {
       _viewState?.widget.onCircleClicked?.call(event.circleId);
+    });
+  }
+
+  /// Sets the event channel listener for the navigation UI enabled changed event.
+  void setOnNavigationUIEnabledChangedListener() {
+    GoogleMapsNavigationPlatform.instance
+        .getNavigationUIEnabledChangedEventStream(viewId: _viewId)
+        .listen((NavigationUIEnabledChangedEvent event) {
+      _viewState?.widget.onNavigationUIEnabledChanged
+          ?.call(event.navigationUIEnabled);
     });
   }
 

@@ -77,6 +77,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   int _onSpeedingUpdatedEventCallCount = 0;
   int _onRecenterButtonClickedEventCallCount = 0;
   int _onRemainingTimeOrDistanceChangedEventCallCount = 0;
+  int _onNavigationUIEnabledChangedEventCallCount = 0;
 
   bool _navigationHeaderEnabled = true;
   bool _navigationFooterEnabled = true;
@@ -411,6 +412,13 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     });
   }
 
+  void _onNavigationUIEnabledChanged(bool enabled) {
+    setState(() {
+      _navigationUIEnabled = enabled;
+      _onNavigationUIEnabledChangedEventCallCount += 1;
+    });
+  }
+
   Future<void> _startGuidedNavigation() async {
     assert(_navigationViewController != null);
     if (!_navigatorInitialized) {
@@ -729,12 +737,14 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                               onMapLongClicked: _onMapClicked,
                               onRecenterButtonClicked:
                                   _onRecenterButtonClickedEvent,
+                              onNavigationUIEnabledChanged:
+                                  _onNavigationUIEnabledChanged,
                               initialCameraPosition: CameraPosition(
                                 // Initialize map to user location.
                                 target: _userLocation!,
                                 zoom: 15,
                               ),
-                              initialNavigationUiEnabled: _guidanceRunning,
+                              initialNavigationUIEnabled: _guidanceRunning,
                             )
                           : const Center(
                               child: Column(
@@ -921,6 +931,13 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                       'On remaining time or distance changed event call count'),
                   trailing: Text(_onRemainingTimeOrDistanceChangedEventCallCount
                       .toString()),
+                )),
+                Card(
+                    child: ListTile(
+                  title: const Text(
+                      'On navigation UI enabled changed event call count'),
+                  trailing: Text(
+                      _onNavigationUIEnabledChangedEventCallCount.toString()),
                 )),
               ],
             ));

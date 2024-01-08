@@ -4148,6 +4148,8 @@ abstract class NavigationViewEventApi {
 
   void onCircleClicked(int viewId, String circleId);
 
+  void onNavigationUIEnabledChanged(int viewId, bool navigationUIEnabled);
+
   static void setup(NavigationViewEventApi? api,
       {BinaryMessenger? binaryMessenger}) {
     {
@@ -4399,6 +4401,38 @@ abstract class NavigationViewEventApi {
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCircleClicked was null, expected non-null String.');
           try {
             api.onCircleClicked(arg_viewId!, arg_circleId!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onNavigationUIEnabledChanged',
+          pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        __pigeon_channel.setMessageHandler(null);
+      } else {
+        __pigeon_channel.setMessageHandler((Object? message) async {
+          assert(message != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onNavigationUIEnabledChanged was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onNavigationUIEnabledChanged was null, expected non-null int.');
+          final bool? arg_navigationUIEnabled = (args[1] as bool?);
+          assert(arg_navigationUIEnabled != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onNavigationUIEnabledChanged was null, expected non-null bool.');
+          try {
+            api.onNavigationUIEnabledChanged(
+                arg_viewId!, arg_navigationUIEnabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -5472,10 +5506,10 @@ abstract class NavigationSessionEventApi {
   void onRemainingTimeOrDistanceChanged(
       RemainingTimeOrDistanceChangedEventDto msg);
 
-  /// Android only event.
+  /// Android-only event.
   void onTrafficUpdated(TrafficUpdatedEventDto msg);
 
-  /// Android only event.
+  /// Android-only event.
   void onRerouting(ReroutingEventDto msg);
 
   static void setup(NavigationSessionEventApi? api,

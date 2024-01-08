@@ -144,6 +144,9 @@ internal constructor(
     _navigationView.addOnRecenterButtonClickedListener {
       navigationViewEventApi.onRecenterButtonClicked(viewId.toLong()) {}
     }
+    _navigationView.addOnNavigationUiChangedListener {
+      navigationViewEventApi.onNavigationUIEnabledChanged(viewId.toLong(), it) {}
+    }
     getMap().setOnMapClickListener {
       navigationViewEventApi.onMapClickEvent(
         viewId.toLong(),

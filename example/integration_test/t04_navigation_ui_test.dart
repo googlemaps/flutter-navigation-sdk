@@ -21,13 +21,18 @@
 // https://docs.flutter.dev/cookbook/testing/integration/introduction
 
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+
 import 'shared.dart';
 
 void main() {
   patrol('Test enabling navigation UI', (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
         Completer<GoogleNavigationViewController>();
+
+    /// For testing NavigationUIEnabledChanged
+    bool navigationUIisEnabled = false;
 
     await checkLocationDialogAndTosAcceptance($);
 
@@ -41,14 +46,24 @@ void main() {
           controller.setMyLocationEnabled(true);
           viewControllerCompleter.complete(controller);
         },
+        onNavigationUIEnabledChanged: (bool isEnabled) {
+          navigationUIisEnabled = isEnabled;
+        },
       ),
     );
 
     final GoogleNavigationViewController viewController =
         await viewControllerCompleter.future;
 
+    expect(await viewController.isNavigationUIEnabled(), false);
+    expect(navigationUIisEnabled, false);
+
     /// Initialize navigation.
     await GoogleMapsNavigator.initializeNavigationSession();
+
+    expect(await viewController.isNavigationUIEnabled(), true);
+    expect(navigationUIisEnabled, true);
+
     await $.pumpAndSettle();
 
     /// Simulate location (1298 California St)
@@ -80,7 +95,7 @@ void main() {
     /// Start simulation.
     await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
 
-    final List<bool> results = <bool>[true, false, true];
+    final List<bool> results = <bool>[false, true, false];
 
     /// Test enabling and disabling the navigation UI.
     for (final bool result in results) {
@@ -89,6 +104,9 @@ void main() {
       expect(await viewController.isNavigationUIEnabled(), result);
       final bool isEnabled = await viewController.isNavigationUIEnabled();
       expect(isEnabled, result);
+
+      /// Test that NavigationUIEnabledChanged event works.
+      expect(navigationUIisEnabled, result);
     }
 
     /// Test enabling and disabling the header.

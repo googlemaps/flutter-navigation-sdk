@@ -893,6 +893,12 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
       {required int viewId}) {
     return _unwrapEventStream<CircleClickedEvent>(viewId: viewId);
   }
+
+  @override
+  Stream<NavigationUIEnabledChangedEvent>
+      getNavigationUIEnabledChangedEventStream({required int viewId}) {
+    return _unwrapEventStream<NavigationUIEnabledChangedEvent>(viewId: viewId);
+  }
 }
 
 /// Implementation for navigation view event API event handling.
@@ -953,6 +959,12 @@ class NavigationViewEventApiImpl implements NavigationViewEventApi {
   void onCircleClicked(int viewId, String circleId) {
     _viewEventStreamController.add(
         _ViewIdEventWrapper(viewId, CircleClickedEvent(circleId: circleId)));
+  }
+
+  @override
+  void onNavigationUIEnabledChanged(int viewId, bool enabled) {
+    _viewEventStreamController.add(
+        _ViewIdEventWrapper(viewId, NavigationUIEnabledChangedEvent(enabled)));
   }
 }
 

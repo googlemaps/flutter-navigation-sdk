@@ -3625,6 +3625,9 @@ protocol NavigationViewEventApiProtocol {
                          completion: @escaping (Result<Void, FlutterError>) -> Void)
   func onCircleClicked(viewId viewIdArg: Int64, circleId circleIdArg: String,
                        completion: @escaping (Result<Void, FlutterError>) -> Void)
+  func onNavigationUIEnabledChanged(viewId viewIdArg: Int64,
+                                    navigationUIEnabled navigationUIEnabledArg: Bool,
+                                    completion: @escaping (Result<Void, FlutterError>) -> Void)
 }
 
 class NavigationViewEventApi: NavigationViewEventApiProtocol {
@@ -3827,6 +3830,32 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
       codec: codec
     )
     channel.sendMessage([viewIdArg, circleIdArg] as [Any?]) { response in
+      guard let listResponse = response as? [Any?] else {
+        completion(.failure(createConnectionError(withChannelName: channelName)))
+        return
+      }
+      if listResponse.count > 1 {
+        let code: String = listResponse[0] as! String
+        let message: String? = nilOrValue(listResponse[1])
+        let details: String? = nilOrValue(listResponse[2])
+        completion(.failure(FlutterError(code: code, message: message, details: details)))
+      } else {
+        completion(.success(()))
+      }
+    }
+  }
+
+  func onNavigationUIEnabledChanged(viewId viewIdArg: Int64,
+                                    navigationUIEnabled navigationUIEnabledArg: Bool,
+                                    completion: @escaping (Result<Void, FlutterError>) -> Void) {
+    let channelName =
+      "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onNavigationUIEnabledChanged"
+    let channel = FlutterBasicMessageChannel(
+      name: channelName,
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    channel.sendMessage([viewIdArg, navigationUIEnabledArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -4740,10 +4769,10 @@ protocol NavigationSessionEventApiProtocol {
                       completion: @escaping (Result<Void, FlutterError>) -> Void)
   func onRemainingTimeOrDistanceChanged(msg msgArg: RemainingTimeOrDistanceChangedEventDto,
                                         completion: @escaping (Result<Void, FlutterError>) -> Void)
-  /// Android only event.
+  /// Android-only event.
   func onTrafficUpdated(msg msgArg: TrafficUpdatedEventDto,
                         completion: @escaping (Result<Void, FlutterError>) -> Void)
-  /// Android only event.
+  /// Android-only event.
   func onRerouting(msg msgArg: ReroutingEventDto,
                    completion: @escaping (Result<Void, FlutterError>) -> Void)
 }
@@ -4934,7 +4963,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
     }
   }
 
-  /// Android only event.
+  /// Android-only event.
   func onTrafficUpdated(msg msgArg: TrafficUpdatedEventDto,
                         completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
@@ -4960,7 +4989,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
     }
   }
 
-  /// Android only event.
+  /// Android-only event.
   func onRerouting(msg msgArg: ReroutingEventDto,
                    completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =

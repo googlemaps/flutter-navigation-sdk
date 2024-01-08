@@ -489,6 +489,10 @@ abstract mixin class NavigationViewAPIInterface {
   /// Get navigation view circle clicked event stream from the navigation view.
   Stream<CircleClickedEvent> getCircleClickedEventStream({required int viewId});
 
+  /// Get navigation UI changed event stream from the navigation view.
+  Stream<NavigationUIEnabledChangedEvent>
+      getNavigationUIEnabledChangedEventStream({required int viewId});
+
   /// Populates [GoogleNavigationInspectorPlatform.instance] to allow
   /// inspecting the platform map state.
   @visibleForTesting

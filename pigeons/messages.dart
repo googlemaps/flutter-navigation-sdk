@@ -480,6 +480,7 @@ abstract class NavigationViewEventApi {
   void onPolygonClicked(int viewId, String polygonId);
   void onPolylineClicked(int viewId, String polylineId);
   void onCircleClicked(int viewId, String circleId);
+  void onNavigationUIEnabledChanged(int viewId, bool navigationUIEnabled);
 }
 
 class NavigationSessionEventDto {
@@ -866,10 +867,10 @@ abstract class NavigationSessionEventApi {
   void onRemainingTimeOrDistanceChanged(
       RemainingTimeOrDistanceChangedEventDto msg);
 
-  /// Android only event.
+  /// Android-only event.
   void onTrafficUpdated(TrafficUpdatedEventDto msg);
 
-  /// Android only event.
+  /// Android-only event.
   void onRerouting(ReroutingEventDto msg);
 }
 

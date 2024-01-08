@@ -20,6 +20,7 @@
   - `enableTiltGestures({required bool})` to `setTiltGesturesEnabled(bool)`
   - `enableTraffic({required bool})` to `setTrafficEnabled(bool)`
   - `enableMapToolbar({required bool})` to `setMapToolbarEnabled(bool)`
+-- **BREAKING CHANGES** `GoogleMapsNavigationView` property `initialNavigationUiEnabled` renamed to `initialNavigationUIEnabled`
 
 ## 0.1.0-pre1
 

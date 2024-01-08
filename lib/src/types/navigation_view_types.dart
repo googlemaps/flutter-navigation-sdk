@@ -95,6 +95,16 @@ class MapClickEvent {
   final LatLng target;
 }
 
+/// Represents navigation UI changed event in a view.
+/// {@category Navigation View}
+class NavigationUIEnabledChangedEvent {
+  /// Creates a [NavigationUIEnabledChangedEvent] object.
+  const NavigationUIEnabledChangedEvent(this.navigationUIEnabled);
+
+  /// Value representing whether UI changed or not.
+  final bool navigationUIEnabled;
+}
+
 /// Represents the long click position in a Google Maps view.
 /// {@category Navigation View}
 class MapLongClickEvent {

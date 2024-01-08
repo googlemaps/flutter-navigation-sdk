@@ -4243,6 +4243,27 @@ class NavigationViewEventApi(private val binaryMessenger: BinaryMessenger) {
       }
     }
   }
+
+  fun onNavigationUIEnabledChanged(
+    viewIdArg: Long,
+    navigationUIEnabledArg: Boolean,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val channelName =
+      "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onNavigationUIEnabledChanged"
+    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
+    channel.send(listOf(viewIdArg, navigationUIEnabledArg)) {
+      if (it is List<*>) {
+        if (it.size > 1) {
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+        } else {
+          callback(Result.success(Unit))
+        }
+      } else {
+        callback(Result.failure(createConnectionError(channelName)))
+      }
+    }
+  }
 }
 
 @Suppress("UNCHECKED_CAST")
@@ -5460,7 +5481,7 @@ class NavigationSessionEventApi(private val binaryMessenger: BinaryMessenger) {
       }
     }
   }
-  /** Android only event. */
+  /** Android-only event. */
   fun onTrafficUpdated(msgArg: TrafficUpdatedEventDto, callback: (Result<Unit>) -> Unit) {
     val channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onTrafficUpdated"
@@ -5477,7 +5498,7 @@ class NavigationSessionEventApi(private val binaryMessenger: BinaryMessenger) {
       }
     }
   }
-  /** Android only event. */
+  /** Android-only event. */
   fun onRerouting(msgArg: ReroutingEventDto, callback: (Result<Unit>) -> Unit) {
     val channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRerouting"

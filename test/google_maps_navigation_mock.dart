@@ -114,6 +114,21 @@ class CircleDtoClickedEventStream extends Mock
   }
 }
 
+class NavigationUIEnabledChangedEventSubscription extends Mock
+    implements StreamSubscription<NavigationUIEnabledChangedEvent> {}
+
+class NavigationUIEnabledChangedEventStream extends Mock
+    implements Stream<NavigationUIEnabledChangedEvent> {
+  @override
+  StreamSubscription<NavigationUIEnabledChangedEvent> listen(
+      void Function(NavigationUIEnabledChangedEvent event)? onData,
+      {Function? onError,
+      void Function()? onDone,
+      bool? cancelOnError}) {
+    return NavigationUIEnabledChangedEventSubscription();
+  }
+}
+
 class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
   MockGoogleMapsNavigationPlatform(
       {required this.sessionApi,
@@ -967,6 +982,12 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
   Stream<CircleClickedEvent> getCircleClickedEventStream(
       {required int viewId}) {
     return CircleDtoClickedEventStream();
+  }
+
+  @override
+  Stream<NavigationUIEnabledChangedEvent>
+      getNavigationUIEnabledChangedEventStream({required int viewId}) {
+    return NavigationUIEnabledChangedEventStream();
   }
 
   @override
