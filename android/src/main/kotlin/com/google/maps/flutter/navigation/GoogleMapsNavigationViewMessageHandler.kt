@@ -401,15 +401,15 @@ class GoogleMapsNavigationViewMessageHandler(
   }
 
   override fun addPolylines(viewId: Long, polylines: List<PolylineDto>): List<PolylineDto> {
-    return getView(viewId.toInt()).addPolylines(polylines.filterNotNull())
+    return getView(viewId.toInt()).addPolylines(polylines)
   }
 
   override fun updatePolylines(viewId: Long, polylines: List<PolylineDto>): List<PolylineDto> {
-    return getView(viewId.toInt()).updatePolylines(polylines.filterNotNull())
+    return getView(viewId.toInt()).updatePolylines(polylines)
   }
 
   override fun removePolylines(viewId: Long, polylines: List<PolylineDto>) {
-    getView(viewId.toInt()).removePolylines(polylines.filterNotNull())
+    getView(viewId.toInt()).removePolylines(polylines)
   }
 
   override fun clearPolylines(viewId: Long) {
@@ -421,15 +421,15 @@ class GoogleMapsNavigationViewMessageHandler(
   }
 
   override fun addCircles(viewId: Long, circles: List<CircleDto>): List<CircleDto> {
-    return getView(viewId.toInt()).addCircles(circles.filterNotNull())
+    return getView(viewId.toInt()).addCircles(circles)
   }
 
   override fun updateCircles(viewId: Long, circles: List<CircleDto>): List<CircleDto> {
-    return getView(viewId.toInt()).updateCircles(circles.filterNotNull())
+    return getView(viewId.toInt()).updateCircles(circles)
   }
 
   override fun removeCircles(viewId: Long, circles: List<CircleDto>) {
-    getView(viewId.toInt()).removeCircles(circles.filterNotNull())
+    getView(viewId.toInt()).removeCircles(circles)
   }
 
   override fun clearCircles(viewId: Long) {

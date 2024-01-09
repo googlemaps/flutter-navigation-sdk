@@ -181,7 +181,7 @@ object Convert {
    * @param point Google Maps [LatLng].
    * @return Pigeon [LatLngDto].
    */
-  fun convertLatLngToDto(point: LatLng): LatLngDto {
+  private fun convertLatLngToDto(point: LatLng): LatLngDto {
     return LatLngDto(point.latitude, point.longitude)
   }
 
@@ -260,7 +260,7 @@ object Convert {
    */
   fun convertWaypointFromDto(waypoint: NavigationWaypointDto): Waypoint {
     val builder = Waypoint.builder()
-    if (waypoint.target?.latitude != null && waypoint.target?.longitude != null) {
+    if (waypoint.target != null) {
       builder.setLatLng(waypoint.target.latitude, waypoint.target.longitude)
     }
     if (waypoint.preferSameSideOfRoad == true) {
@@ -538,6 +538,10 @@ object Convert {
       when (trafficData.status) {
         NavigationTrafficData.Status.OK -> RouteSegmentTrafficDataStatusDto.OK
         NavigationTrafficData.Status.UNAVAILABLE -> RouteSegmentTrafficDataStatusDto.UNAVAILABLE
+        null -> {
+          // Should never happen, added to suppress compiler warning.
+          throw FlutterError("nullTrafficDataStatus", "Traffic data status is null")
+        }
       }
 
     return RouteSegmentTrafficDataDto(
@@ -551,6 +555,13 @@ object Convert {
               RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto.TRAFFICJAM
             NavigationRoadStretchRenderingData.Style.UNKNOWN ->
               RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto.UNKNOWN
+            null -> {
+              // Should never happen, added to suppress compiler warning.
+              throw FlutterError(
+                "nullTrafficDataRoadStretchRenderingDataListStyle",
+                "Traffic data road stretch rendering data list style is null"
+              )
+            }
           }
         RouteSegmentTrafficDataRoadStretchRenderingDataDto(
           style,
@@ -656,7 +667,7 @@ object Convert {
    * @param span pigeon [StyleSpanDto].
    * @return google maps [StyleSpan].
    */
-  fun convertStyleSpan(span: StyleSpanDto): StyleSpan? {
+  private fun convertStyleSpan(span: StyleSpanDto): StyleSpan? {
     if (span.style.solidColor != null) {
       return StyleSpan(span.style.solidColor.toInt(), span.length)
     }
@@ -676,8 +687,12 @@ object Convert {
    * @param span google maps [StyleSpan].
    * @return pigeon [StyleSpanDto].
    */
-  fun convertStyleSpan(span: StyleSpan): StyleSpanDto? {
-    return StyleSpanDto(length = span.segments, style = StyleSpanStrokeStyleDto())
+  private fun convertStyleSpan(span: StyleSpan): StyleSpanDto {
+    return StyleSpanDto(
+      length = span.segments,
+      style =
+        StyleSpanStrokeStyleDto()
+    )
   }
 
   /**
@@ -686,7 +701,7 @@ object Convert {
    * @param strokeJointType pigeon class [StrokeJointTypeDto]
    * @return google maps [JointType] int value
    */
-  fun convertStrokeJointType(strokeJointType: StrokeJointTypeDto): Int {
+  private fun convertStrokeJointType(strokeJointType: StrokeJointTypeDto): Int {
     return when (strokeJointType) {
       StrokeJointTypeDto.BEVEL -> JointType.BEVEL
       StrokeJointTypeDto.DEFAULTJOINT -> JointType.DEFAULT
@@ -700,7 +715,7 @@ object Convert {
    * @param jointType google maps [JointType] int value
    * @return pigeon [StrokeJointTypeDto]
    */
-  fun convertStrokeJointType(jointType: Int): StrokeJointTypeDto {
+  private fun convertStrokeJointType(jointType: Int): StrokeJointTypeDto {
     return when (jointType) {
       JointType.BEVEL -> StrokeJointTypeDto.BEVEL
       JointType.DEFAULT -> StrokeJointTypeDto.DEFAULTJOINT
@@ -715,7 +730,7 @@ object Convert {
    * @param patternItem pigeon class [PatternItemDto]
    * @return google maps [PatternItem] class
    */
-  fun convertPatternItem(patternItem: PatternItemDto): PatternItem {
+  private fun convertPatternItem(patternItem: PatternItemDto): PatternItem {
     return when (patternItem.type) {
       PatternTypeDto.DASH -> Dash(patternItem.length?.toFloat() ?: 0F)
       PatternTypeDto.DOT -> Dot()
@@ -729,7 +744,7 @@ object Convert {
    * @param patternItem google maps [PatternItem].
    * @return pigeon [PatternItemDto].
    */
-  fun convertPatternItem(patternItem: PatternItem): PatternItemDto {
+  private fun convertPatternItem(patternItem: PatternItem): PatternItemDto {
     return when (patternItem) {
       is Dash -> PatternItemDto(PatternTypeDto.DASH, patternItem.length.toDouble())
       is Dot -> PatternItemDto(PatternTypeDto.DOT)
@@ -782,7 +797,7 @@ object Convert {
     if (polylineOptions.zIndex != null) {
       sink.setZIndex(polylineOptions.zIndex.toFloat())
     }
-    val spans = polylineOptions.spans.filterNotNull().map { convertStyleSpan(it) }.filterNotNull()
+    val spans = polylineOptions.spans.filterNotNull().mapNotNull { convertStyleSpan(it) }
     sink.setSpans(spans)
   }
 

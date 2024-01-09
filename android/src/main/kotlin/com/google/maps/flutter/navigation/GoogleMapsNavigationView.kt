@@ -89,8 +89,8 @@ internal constructor(
     _navigationView.onResume()
 
     // Initialize navigation view with given navigation view options
-    var navigatorInitialized = GoogleMapsNavigationSessionManager.getInstance().isInitialized()
-    var navigationViewEnabled = navigationOptions.navigationUiEnabled ?: navigatorInitialized
+    val navigatorInitialized = GoogleMapsNavigationSessionManager.getInstance().isInitialized()
+    val navigationViewEnabled = navigationOptions.navigationUiEnabled ?: navigatorInitialized
     _navigationView.isNavigationUiEnabled = navigationViewEnabled
 
     _navigationView.getMapAsync { map ->
@@ -940,7 +940,7 @@ internal constructor(
       val builder = CircleBuilder()
       Convert.sinkCircleOptions(it.options, builder, density)
       val options = builder.build()
-      val circle = getMap()?.addCircle(options)
+      val circle = getMap().addCircle(options)
       if (circle != null) {
         val controller = CircleController(circle, it.circleId)
         _circles.add(controller)
@@ -964,6 +964,7 @@ internal constructor(
           error = FlutterError("circleNotFound", "Failed to update circle with id ${it.circleId}")
         }
     }
+    error?.let { throw error as Throwable }
     return result
   }
 
