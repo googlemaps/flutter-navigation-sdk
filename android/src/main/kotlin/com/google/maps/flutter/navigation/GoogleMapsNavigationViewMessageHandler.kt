@@ -63,6 +63,10 @@ class GoogleMapsNavigationViewMessageHandler(
     getView(viewId.toInt()).setMyLocationButtonEnabled(enabled)
   }
 
+  override fun setConsumeMyLocationButtonClickEventsEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setConsumeMyLocationButtonClickEventsEnabled(enabled)
+  }
+
   override fun setZoomGesturesEnabled(viewId: Long, enabled: Boolean) {
     getView(viewId.toInt()).setZoomGesturesEnabled(enabled)
   }
@@ -101,6 +105,10 @@ class GoogleMapsNavigationViewMessageHandler(
 
   override fun isMyLocationButtonEnabled(viewId: Long): Boolean {
     return getView(viewId.toInt()).isMyLocationButtonEnabled()
+  }
+
+  override fun isConsumeMyLocationButtonClickEventsEnabled(viewId: Long): Boolean {
+    return getView(viewId.toInt()).isConsumeMyLocationButtonClickEventsEnabled()
   }
 
   override fun isZoomGesturesEnabled(viewId: Long): Boolean {

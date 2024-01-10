@@ -238,6 +238,10 @@ abstract mixin class NavigationViewAPIInterface {
   Future<void> setMyLocationButtonEnabled(
       {required int viewId, required bool enabled});
 
+  /// Enables or disables if the my location button consumes click events.
+  Future<void> setConsumeMyLocationButtonClickEventsEnabled(
+      {required int viewId, required bool enabled});
+
   /// Enables or disables the zoom gestures.
   Future<void> setZoomGesturesEnabled(
       {required int viewId, required bool enabled});
@@ -274,6 +278,10 @@ abstract mixin class NavigationViewAPIInterface {
 
   /// Get the preference for whether the my location button should be enabled or disabled.
   Future<bool> isMyLocationButtonEnabled({required int viewId});
+
+  /// Get the preference for whether the my location button consumes click events.
+  Future<bool> isConsumeMyLocationButtonClickEventsEnabled(
+      {required int viewId});
 
   /// Gets the preference for whether zoom gestures should be enabled or disabled.
   Future<bool> isZoomGesturesEnabled({required int viewId});
@@ -492,6 +500,14 @@ abstract mixin class NavigationViewAPIInterface {
   /// Get navigation UI changed event stream from the navigation view.
   Stream<NavigationUIEnabledChangedEvent>
       getNavigationUIEnabledChangedEventStream({required int viewId});
+
+  /// Get navigation view my location clicked event stream from the navigation view.
+  Stream<MyLocationClickedEvent> getMyLocationClickedEventStream(
+      {required int viewId});
+
+  /// Get navigation view my location button clicked event stream from the navigation view.
+  Stream<MyLocationButtonClickedEvent> getMyLocationButtonClickedEventStream(
+      {required int viewId});
 
   /// Populates [GoogleNavigationInspectorPlatform.instance] to allow
   /// inspecting the platform map state.

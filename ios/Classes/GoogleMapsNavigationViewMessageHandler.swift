@@ -473,4 +473,12 @@ class GoogleMapsNavigationViewMessageHandler: NavigationViewApi {
   func clear(viewId: Int64) throws {
     try getView(viewId).clear()
   }
+
+  func setConsumeMyLocationButtonClickEventsEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setConsumeMyLocationButtonClickEventsEnabled(enabled: enabled)
+  }
+
+  func isConsumeMyLocationButtonClickEventsEnabled(viewId: Int64) throws -> Bool {
+    try getView(viewId).isConsumeMyLocationButtonClickEventsEnabled()
+  }
 }

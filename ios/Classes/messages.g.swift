@@ -1683,6 +1683,7 @@ protocol NavigationViewApi {
   func moveCameraToZoom(viewId: Int64, zoom: Double) throws
   func showRouteOverview(viewId: Int64) throws
   func setMyLocationButtonEnabled(viewId: Int64, enabled: Bool) throws
+  func setConsumeMyLocationButtonClickEventsEnabled(viewId: Int64, enabled: Bool) throws
   func setZoomGesturesEnabled(viewId: Int64, enabled: Bool) throws
   func setZoomControlsEnabled(viewId: Int64, enabled: Bool) throws
   func setCompassEnabled(viewId: Int64, enabled: Bool) throws
@@ -1693,6 +1694,7 @@ protocol NavigationViewApi {
   func setMapToolbarEnabled(viewId: Int64, enabled: Bool) throws
   func setTrafficEnabled(viewId: Int64, enabled: Bool) throws
   func isMyLocationButtonEnabled(viewId: Int64) throws -> Bool
+  func isConsumeMyLocationButtonClickEventsEnabled(viewId: Int64) throws -> Bool
   func isZoomGesturesEnabled(viewId: Int64) throws -> Bool
   func isZoomControlsEnabled(viewId: Int64) throws -> Bool
   func isCompassEnabled(viewId: Int64) throws -> Bool
@@ -2641,6 +2643,29 @@ enum NavigationViewApiSetup {
     } else {
       setMyLocationButtonEnabledChannel.setMessageHandler(nil)
     }
+    let setConsumeMyLocationButtonClickEventsEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setConsumeMyLocationButtonClickEventsEnabled",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      setConsumeMyLocationButtonClickEventsEnabledChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
+        let enabledArg = args[1] as! Bool
+        do {
+          try api.setConsumeMyLocationButtonClickEventsEnabled(
+            viewId: viewIdArg,
+            enabled: enabledArg
+          )
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setConsumeMyLocationButtonClickEventsEnabledChannel.setMessageHandler(nil)
+    }
     let setZoomGesturesEnabledChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setZoomGesturesEnabled",
       binaryMessenger: binaryMessenger,
@@ -2839,6 +2864,25 @@ enum NavigationViewApiSetup {
       }
     } else {
       isMyLocationButtonEnabledChannel.setMessageHandler(nil)
+    }
+    let isConsumeMyLocationButtonClickEventsEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isConsumeMyLocationButtonClickEventsEnabled",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      isConsumeMyLocationButtonClickEventsEnabledChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
+        do {
+          let result = try api.isConsumeMyLocationButtonClickEventsEnabled(viewId: viewIdArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      isConsumeMyLocationButtonClickEventsEnabledChannel.setMessageHandler(nil)
     }
     let isZoomGesturesEnabledChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isZoomGesturesEnabled",
@@ -3628,6 +3672,10 @@ protocol NavigationViewEventApiProtocol {
   func onNavigationUIEnabledChanged(viewId viewIdArg: Int64,
                                     navigationUIEnabled navigationUIEnabledArg: Bool,
                                     completion: @escaping (Result<Void, FlutterError>) -> Void)
+  func onMyLocationClicked(viewId viewIdArg: Int64,
+                           completion: @escaping (Result<Void, FlutterError>) -> Void)
+  func onMyLocationButtonClicked(viewId viewIdArg: Int64,
+                                 completion: @escaping (Result<Void, FlutterError>) -> Void)
 }
 
 class NavigationViewEventApi: NavigationViewEventApiProtocol {
@@ -3856,6 +3904,56 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
       codec: codec
     )
     channel.sendMessage([viewIdArg, navigationUIEnabledArg] as [Any?]) { response in
+      guard let listResponse = response as? [Any?] else {
+        completion(.failure(createConnectionError(withChannelName: channelName)))
+        return
+      }
+      if listResponse.count > 1 {
+        let code: String = listResponse[0] as! String
+        let message: String? = nilOrValue(listResponse[1])
+        let details: String? = nilOrValue(listResponse[2])
+        completion(.failure(FlutterError(code: code, message: message, details: details)))
+      } else {
+        completion(.success(()))
+      }
+    }
+  }
+
+  func onMyLocationClicked(viewId viewIdArg: Int64,
+                           completion: @escaping (Result<Void, FlutterError>) -> Void) {
+    let channelName =
+      "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMyLocationClicked"
+    let channel = FlutterBasicMessageChannel(
+      name: channelName,
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    channel.sendMessage([viewIdArg] as [Any?]) { response in
+      guard let listResponse = response as? [Any?] else {
+        completion(.failure(createConnectionError(withChannelName: channelName)))
+        return
+      }
+      if listResponse.count > 1 {
+        let code: String = listResponse[0] as! String
+        let message: String? = nilOrValue(listResponse[1])
+        let details: String? = nilOrValue(listResponse[2])
+        completion(.failure(FlutterError(code: code, message: message, details: details)))
+      } else {
+        completion(.success(()))
+      }
+    }
+  }
+
+  func onMyLocationButtonClicked(viewId viewIdArg: Int64,
+                                 completion: @escaping (Result<Void, FlutterError>) -> Void) {
+    let channelName =
+      "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMyLocationButtonClicked"
+    let channel = FlutterBasicMessageChannel(
+      name: channelName,
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    channel.sendMessage([viewIdArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return

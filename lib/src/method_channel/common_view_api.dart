@@ -166,6 +166,13 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
+  Future<void> setConsumeMyLocationButtonClickEventsEnabled(
+      {required int viewId, required bool enabled}) async {
+    return _viewApi.setConsumeMyLocationButtonClickEventsEnabled(
+        viewId, enabled);
+  }
+
+  @override
   Future<void> setZoomGesturesEnabled(
       {required int viewId, required bool enabled}) {
     return _viewApi.setZoomGesturesEnabled(viewId, enabled);
@@ -236,6 +243,12 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   @override
   Future<bool> isMyLocationButtonEnabled({required int viewId}) {
     return _viewApi.isMyLocationButtonEnabled(viewId);
+  }
+
+  @override
+  Future<bool> isConsumeMyLocationButtonClickEventsEnabled(
+      {required int viewId}) {
+    return _viewApi.isConsumeMyLocationButtonClickEventsEnabled(viewId);
   }
 
   @override
@@ -899,6 +912,18 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
       getNavigationUIEnabledChangedEventStream({required int viewId}) {
     return _unwrapEventStream<NavigationUIEnabledChangedEvent>(viewId: viewId);
   }
+
+  @override
+  Stream<MyLocationClickedEvent> getMyLocationClickedEventStream(
+      {required int viewId}) {
+    return _unwrapEventStream<MyLocationClickedEvent>(viewId: viewId);
+  }
+
+  @override
+  Stream<MyLocationButtonClickedEvent> getMyLocationButtonClickedEventStream(
+      {required int viewId}) {
+    return _unwrapEventStream<MyLocationButtonClickedEvent>(viewId: viewId);
+  }
 }
 
 /// Implementation for navigation view event API event handling.
@@ -965,6 +990,18 @@ class NavigationViewEventApiImpl implements NavigationViewEventApi {
   void onNavigationUIEnabledChanged(int viewId, bool enabled) {
     _viewEventStreamController.add(
         _ViewIdEventWrapper(viewId, NavigationUIEnabledChangedEvent(enabled)));
+  }
+
+  @override
+  void onMyLocationClicked(int viewId) {
+    _viewEventStreamController
+        .add(_ViewIdEventWrapper(viewId, MyLocationClickedEvent()));
+  }
+
+  @override
+  void onMyLocationButtonClicked(int viewId) {
+    _viewEventStreamController
+        .add(_ViewIdEventWrapper(viewId, MyLocationButtonClickedEvent()));
   }
 }
 

@@ -106,6 +106,12 @@ typedef OnCircleClicked = void Function(String circleId);
 /// Called when the [GoogleNavigationViewController.isNavigationUIEnabled] status changes.
 typedef OnNavigationUIEnabledChanged = void Function(bool navigationUIEnabled);
 
+/// Called during my location clicked event.
+typedef OnMyLocationClicked = void Function(MyLocationClickedEvent);
+
+/// Called during my location button clicked event.
+typedef OnMyLocationButtonClicked = void Function(MyLocationButtonClickedEvent);
+
 /// The main map view widget for Google Maps Navigation.
 /// {@category Navigation View}
 class GoogleMapsNavigationView extends StatefulWidget {
@@ -159,6 +165,8 @@ class GoogleMapsNavigationView extends StatefulWidget {
     this.onPolylineClicked,
     this.onCircleClicked,
     this.onNavigationUIEnabledChanged,
+    this.onMyLocationClicked,
+    this.onMyLocationButtonClicked,
   });
 
   /// On view created callback.
@@ -299,6 +307,12 @@ class GoogleMapsNavigationView extends StatefulWidget {
   /// On navigation UI enabled changed callback.
   final OnNavigationUIEnabledChanged? onNavigationUIEnabledChanged;
 
+  /// On my location clicked callback.
+  final OnMyLocationClicked? onMyLocationClicked;
+
+  /// On my location button clicked callback.
+  final OnMyLocationButtonClicked? onMyLocationButtonClicked;
+
   /// Creates a [State] for this [GoogleMapsNavigationView].
   @override
   State createState() => GoogleMapsNavigationViewState();
@@ -358,6 +372,20 @@ class NavigationViewUISettings {
   Future<void> setMyLocationButtonEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
         .setMyLocationButtonEnabled(viewId: _viewId, enabled: enabled);
+  }
+
+  /// Sets whether to consume my location button click events.
+  ///
+  /// If [enabled] is set to true, the default behaviour does not occur.
+  /// If [enabled] is set to false, the default behaviour occurs. The default
+  /// behavior is for the camera move such that it is centered on the user location.
+  ///
+  /// Note: By default, the button click events are not consumed, and the map
+  /// follows its native default behavior. This method can be used to override this behavior.
+  Future<void> setConsumeMyLocationButtonClickEventsEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance
+        .setConsumeMyLocationButtonClickEventsEnabled(
+            viewId: _viewId, enabled: enabled);
   }
 
   /// Sets the preference for whether the user is allowed to zoom the map using a gesture.
@@ -445,6 +473,12 @@ class NavigationViewUISettings {
   Future<bool> isMyLocationButtonEnabled() async {
     return GoogleMapsNavigationPlatform.instance
         .isMyLocationButtonEnabled(viewId: _viewId);
+  }
+
+  /// Gets whether the my location button consumes click events.
+  Future<bool> isConsumeMyLocationButtonClickEventsEnabled() async {
+    return GoogleMapsNavigationPlatform.instance
+        .isConsumeMyLocationButtonClickEventsEnabled(viewId: _viewId);
   }
 
   /// Gets whether zoom gestures are enabled/disabled.
@@ -540,6 +574,8 @@ class GoogleNavigationViewController {
     setOnPolylineClickedListener();
     setOnCircleClickedListener();
     setOnNavigationUIEnabledChangedListener();
+    setOnMyLocationClickedListener();
+    setOnMyLocationButtonClickedListener();
   }
 
   /// Sets the event channel listener for the map click event listeners.
@@ -589,6 +625,25 @@ class GoogleNavigationViewController {
               ?.call(event.markerId);
       }
     });
+  }
+
+  /// Sets the event channel listener for the on my location clicked event.
+  void setOnMyLocationClickedListener() {
+    if (_viewState != null && _viewState?.widget.onMyLocationClicked != null) {
+      GoogleMapsNavigationPlatform.instance
+          .getMyLocationClickedEventStream(viewId: _viewId)
+          .listen(_viewState?.widget.onMyLocationClicked);
+    }
+  }
+
+  /// Sets the event channel listener for the on my location button clicked event.
+  void setOnMyLocationButtonClickedListener() {
+    if (_viewState != null &&
+        _viewState?.widget.onMyLocationButtonClicked != null) {
+      GoogleMapsNavigationPlatform.instance
+          .getMyLocationButtonClickedEventStream(viewId: _viewId)
+          .listen(_viewState?.widget.onMyLocationButtonClicked);
+    }
   }
 
   /// Sets the event channel listener for the marker drag event.

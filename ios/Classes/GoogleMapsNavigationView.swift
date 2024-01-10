@@ -40,6 +40,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   private var _mapViewReady: Bool = false
   private var _mapReadyCallback: ((Result<Void, Error>) -> Void)?
   private var _imageRegistry: ImageRegistry
+  private var _consumeMyLocationButtonClickEventsEnabled: Bool = false
   var isAttachedToSession: Bool = false
 
   func view() -> UIView {
@@ -713,6 +714,14 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
       // Fail silently.
     }
   }
+
+  func setConsumeMyLocationButtonClickEventsEnabled(enabled: Bool) {
+    _consumeMyLocationButtonClickEventsEnabled = enabled
+  }
+
+  func isConsumeMyLocationButtonClickEventsEnabled() -> Bool {
+    _consumeMyLocationButtonClickEventsEnabled
+  }
 }
 
 extension GoogleMapsNavigationView: GMSMapViewNavigationUIDelegate {
@@ -803,6 +812,15 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
         completion: { _ in }
       )
     }
+  }
+
+  func mapView(_ mapView: GMSMapView, didTapMyLocation location: CLLocationCoordinate2D) {
+    _navigationViewEventApi.onMyLocationClicked(viewId: _viewId, completion: { _ in })
+  }
+
+  func didTapMyLocationButton(for mapView: GMSMapView) -> Bool {
+    _navigationViewEventApi.onMyLocationButtonClicked(viewId: _viewId, completion: { _ in })
+    return _consumeMyLocationButtonClickEventsEnabled
   }
 }
 

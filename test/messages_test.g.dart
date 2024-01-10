@@ -236,6 +236,8 @@ abstract class TestNavigationViewApi {
 
   void setMyLocationButtonEnabled(int viewId, bool enabled);
 
+  void setConsumeMyLocationButtonClickEventsEnabled(int viewId, bool enabled);
+
   void setZoomGesturesEnabled(int viewId, bool enabled);
 
   void setZoomControlsEnabled(int viewId, bool enabled);
@@ -255,6 +257,8 @@ abstract class TestNavigationViewApi {
   void setTrafficEnabled(int viewId, bool enabled);
 
   bool isMyLocationButtonEnabled(int viewId);
+
+  bool isConsumeMyLocationButtonClickEventsEnabled(int viewId);
 
   bool isZoomGesturesEnabled(int viewId);
 
@@ -1750,6 +1754,41 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
+          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setConsumeMyLocationButtonClickEventsEnabled',
+          pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(__pigeon_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
+                (Object? message) async {
+          assert(message != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setConsumeMyLocationButtonClickEventsEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setConsumeMyLocationButtonClickEventsEnabled was null, expected non-null int.');
+          final bool? arg_enabled = (args[1] as bool?);
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setConsumeMyLocationButtonClickEventsEnabled was null, expected non-null bool.');
+          try {
+            api.setConsumeMyLocationButtonClickEventsEnabled(
+                arg_viewId!, arg_enabled!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
+              Object?>(
           'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setZoomGesturesEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
@@ -2075,6 +2114,38 @@ abstract class TestNavigationViewApi {
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isMyLocationButtonEnabled was null, expected non-null int.');
           try {
             final bool output = api.isMyLocationButtonEnabled(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isConsumeMyLocationButtonClickEventsEnabled',
+          pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(__pigeon_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
+                (Object? message) async {
+          assert(message != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isConsumeMyLocationButtonClickEventsEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isConsumeMyLocationButtonClickEventsEnabled was null, expected non-null int.');
+          try {
+            final bool output =
+                api.isConsumeMyLocationButtonClickEventsEnabled(arg_viewId!);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

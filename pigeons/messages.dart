@@ -413,6 +413,7 @@ abstract class NavigationViewApi {
   void showRouteOverview(int viewId);
 
   void setMyLocationButtonEnabled(int viewId, bool enabled);
+  void setConsumeMyLocationButtonClickEventsEnabled(int viewId, bool enabled);
   void setZoomGesturesEnabled(int viewId, bool enabled);
   void setZoomControlsEnabled(int viewId, bool enabled);
   void setCompassEnabled(int viewId, bool enabled);
@@ -424,6 +425,7 @@ abstract class NavigationViewApi {
   void setTrafficEnabled(int viewId, bool enabled);
 
   bool isMyLocationButtonEnabled(int viewId);
+  bool isConsumeMyLocationButtonClickEventsEnabled(int viewId);
   bool isZoomGesturesEnabled(int viewId);
   bool isZoomControlsEnabled(int viewId);
   bool isCompassEnabled(int viewId);
@@ -481,6 +483,8 @@ abstract class NavigationViewEventApi {
   void onPolylineClicked(int viewId, String polylineId);
   void onCircleClicked(int viewId, String circleId);
   void onNavigationUIEnabledChanged(int viewId, bool navigationUIEnabled);
+  void onMyLocationClicked(int viewId);
+  void onMyLocationButtonClicked(int viewId);
 }
 
 class NavigationSessionEventDto {

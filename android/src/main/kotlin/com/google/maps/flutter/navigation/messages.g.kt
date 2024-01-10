@@ -1804,6 +1804,8 @@ interface NavigationViewApi {
 
   fun setMyLocationButtonEnabled(viewId: Long, enabled: Boolean)
 
+  fun setConsumeMyLocationButtonClickEventsEnabled(viewId: Long, enabled: Boolean)
+
   fun setZoomGesturesEnabled(viewId: Long, enabled: Boolean)
 
   fun setZoomControlsEnabled(viewId: Long, enabled: Boolean)
@@ -1823,6 +1825,8 @@ interface NavigationViewApi {
   fun setTrafficEnabled(viewId: Long, enabled: Boolean)
 
   fun isMyLocationButtonEnabled(viewId: Long): Boolean
+
+  fun isConsumeMyLocationButtonClickEventsEnabled(viewId: Long): Boolean
 
   fun isZoomGesturesEnabled(viewId: Long): Boolean
 
@@ -2948,6 +2952,31 @@ interface NavigationViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setConsumeMyLocationButtonClickEventsEnabled",
+            codec
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            val enabledArg = args[1] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setConsumeMyLocationButtonClickEventsEnabled(viewIdArg, enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
             "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setZoomGesturesEnabled",
             codec
           )
@@ -3183,6 +3212,29 @@ interface NavigationViewApi {
             var wrapped: List<Any?>
             try {
               wrapped = listOf<Any?>(api.isMyLocationButtonEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isConsumeMyLocationButtonClickEventsEnabled",
+            codec
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isConsumeMyLocationButtonClickEventsEnabled(viewIdArg))
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
             }
@@ -4253,6 +4305,40 @@ class NavigationViewEventApi(private val binaryMessenger: BinaryMessenger) {
       "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onNavigationUIEnabledChanged"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(viewIdArg, navigationUIEnabledArg)) {
+      if (it is List<*>) {
+        if (it.size > 1) {
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+        } else {
+          callback(Result.success(Unit))
+        }
+      } else {
+        callback(Result.failure(createConnectionError(channelName)))
+      }
+    }
+  }
+
+  fun onMyLocationClicked(viewIdArg: Long, callback: (Result<Unit>) -> Unit) {
+    val channelName =
+      "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMyLocationClicked"
+    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
+    channel.send(listOf(viewIdArg)) {
+      if (it is List<*>) {
+        if (it.size > 1) {
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+        } else {
+          callback(Result.success(Unit))
+        }
+      } else {
+        callback(Result.failure(createConnectionError(channelName)))
+      }
+    }
+  }
+
+  fun onMyLocationButtonClicked(viewIdArg: Long, callback: (Result<Unit>) -> Unit) {
+    val channelName =
+      "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMyLocationButtonClicked"
+    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
+    channel.send(listOf(viewIdArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))

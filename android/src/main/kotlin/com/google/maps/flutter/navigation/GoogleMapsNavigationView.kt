@@ -71,6 +71,7 @@ internal constructor(
   private var _isSpeedLimitIconEnabled: Boolean = false
   private var _isSpeedometerEnabled: Boolean = false
   private var _isIncidentCardsEnabled: Boolean = true
+  private var _consumeMyLocationButtonClickEventsEnabled: Boolean = false
 
   // Nullable variable to hold the callback function
   private var _mapReadyCallback: ((Result<Unit>) -> Unit)? = null
@@ -216,6 +217,15 @@ internal constructor(
     getMap().setOnCircleClickListener { circle ->
       val circleId = findCircleId(circle)
       navigationViewEventApi.onCircleClicked(viewId.toLong(), circleId) {}
+    }
+
+    getMap().setOnMyLocationClickListener {
+      navigationViewEventApi.onMyLocationClicked(viewId.toLong()) {}
+    }
+
+    getMap().setOnMyLocationButtonClickListener {
+      navigationViewEventApi.onMyLocationButtonClicked(viewId.toLong()) {}
+      _consumeMyLocationButtonClickEventsEnabled
     }
   }
 
@@ -987,5 +997,13 @@ internal constructor(
     invalidateViewAfterMapLoad()
     _circles.forEach { controller -> controller.remove() }
     _circles.clear()
+  }
+
+  fun setConsumeMyLocationButtonClickEventsEnabled(enabled: Boolean) {
+    _consumeMyLocationButtonClickEventsEnabled = enabled
+  }
+
+  fun isConsumeMyLocationButtonClickEventsEnabled(): Boolean {
+    return _consumeMyLocationButtonClickEventsEnabled
   }
 }

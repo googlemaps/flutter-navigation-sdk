@@ -1049,6 +1049,22 @@ class MockTestNavigationViewApi extends _i1.Mock
       );
 
   @override
+  void setConsumeMyLocationButtonClickEventsEnabled(
+    int? viewId,
+    bool? enabled,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #setConsumeMyLocationButtonClickEventsEnabled,
+          [
+            viewId,
+            enabled,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
   void setZoomGesturesEnabled(
     int? viewId,
     bool? enabled,
@@ -1196,6 +1212,16 @@ class MockTestNavigationViewApi extends _i1.Mock
   bool isMyLocationButtonEnabled(int? viewId) => (super.noSuchMethod(
         Invocation.method(
           #isMyLocationButtonEnabled,
+          [viewId],
+        ),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  bool isConsumeMyLocationButtonClickEventsEnabled(int? viewId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #isConsumeMyLocationButtonClickEventsEnabled,
           [viewId],
         ),
         returnValue: false,

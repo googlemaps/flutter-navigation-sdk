@@ -35,6 +35,7 @@ class _MapPageState extends ExamplePageState<MapPage> {
   late final GoogleNavigationViewController _navigationViewController;
   late bool isMyLocationEnabled = false;
   late bool isMyLocationButtonEnabled = true;
+  late bool consumeMyLocationButtonClickEvent = false;
   late bool isZoomGesturesEnabled = true;
   late bool isZoomControlsEnabled = true;
   late bool isCompassEnabled = true;
@@ -73,6 +74,21 @@ class _MapPageState extends ExamplePageState<MapPage> {
     setState(() {});
   }
 
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
+    final SnackBar snackBar = SnackBar(
+        duration: const Duration(milliseconds: 2000), content: Text(message));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void _onMyLocationClicked(MyLocationClickedEvent event) {
+    _showMessage('My location clicked');
+  }
+
+  void _onMyLocationButtonClicked(MyLocationButtonClickedEvent event) {
+    _showMessage('My location button clicked');
+  }
+
   @override
   Widget build(BuildContext context) {
     final ButtonStyle mapTypeStyle = ElevatedButton.styleFrom(
@@ -86,6 +102,8 @@ class _MapPageState extends ExamplePageState<MapPage> {
           children: <Widget>[
             GoogleMapsNavigationView(
               onViewCreated: _onViewCreated,
+              onMyLocationClicked: _onMyLocationClicked,
+              onMyLocationButtonClicked: _onMyLocationButtonClicked,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -120,7 +138,9 @@ class _MapPageState extends ExamplePageState<MapPage> {
             ),
             if (mapType == MapType.normal)
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: isMyLocationEnabled && isMyLocationButtonEnabled
+                    ? const EdgeInsets.only(top: 50.0, right: 8.0)
+                    : const EdgeInsets.all(8.0),
                 child: Align(
                   alignment: Alignment.topRight,
                   child: Column(
@@ -189,6 +209,22 @@ class _MapPageState extends ExamplePageState<MapPage> {
                       .isMyLocationButtonEnabled();
                   setState(() {
                     isMyLocationButtonEnabled = enabled;
+                  });
+                }
+              : null,
+          visualDensity: VisualDensity.compact),
+      SwitchListTile(
+          title: const Text('Consume my location button click'),
+          value: consumeMyLocationButtonClickEvent,
+          controlAffinity: ListTileControlAffinity.leading,
+          onChanged: isMyLocationEnabled && isMyLocationButtonEnabled
+              ? (bool newValue) async {
+                  await _navigationViewController.settings
+                      .setConsumeMyLocationButtonClickEventsEnabled(newValue);
+                  final bool enabled = await _navigationViewController.settings
+                      .isConsumeMyLocationButtonClickEventsEnabled();
+                  setState(() {
+                    consumeMyLocationButtonClickEvent = enabled;
                   });
                 }
               : null,

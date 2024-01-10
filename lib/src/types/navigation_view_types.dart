@@ -351,3 +351,11 @@ class CameraUpdate {
   /// The screen position co-ordinates for the zoom-by camera.
   Offset? focus;
 }
+
+/// My location clicked event.
+/// {@category Navigation View}
+class MyLocationClickedEvent {}
+
+/// My location button clicked event.
+/// {@category Navigation View}
+class MyLocationButtonClickedEvent {}

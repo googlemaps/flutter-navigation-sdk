@@ -129,6 +129,36 @@ class NavigationUIEnabledChangedEventStream extends Mock
   }
 }
 
+class MyLocationClickedEventSubscription extends Mock
+    implements StreamSubscription<MyLocationClickedEvent> {}
+
+class MyLocationClickedEventStream extends Mock
+    implements Stream<MyLocationClickedEvent> {
+  @override
+  StreamSubscription<MyLocationClickedEvent> listen(
+      void Function(MyLocationClickedEvent event)? onData,
+      {Function? onError,
+      void Function()? onDone,
+      bool? cancelOnError}) {
+    return MyLocationClickedEventSubscription();
+  }
+}
+
+class MyLocationButtonClickedEventSubscription extends Mock
+    implements StreamSubscription<MyLocationButtonClickedEvent> {}
+
+class MyLocationButtonClickedEventStream extends Mock
+    implements Stream<MyLocationButtonClickedEvent> {
+  @override
+  StreamSubscription<MyLocationButtonClickedEvent> listen(
+      void Function(MyLocationButtonClickedEvent event)? onData,
+      {Function? onError,
+      void Function()? onDone,
+      bool? cancelOnError}) {
+    return MyLocationButtonClickedEventSubscription();
+  }
+}
+
 class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
   MockGoogleMapsNavigationPlatform(
       {required this.sessionApi,
@@ -301,6 +331,25 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
   }
 
   @override
+  Future<void> setConsumeMyLocationButtonClickEventsEnabled(
+      {required int viewId, required bool enabled}) async {
+    return viewApi.setConsumeMyLocationButtonClickEventsEnabled(
+        viewId, enabled);
+  }
+
+  @override
+  Stream<MyLocationClickedEvent> getMyLocationClickedEventStream(
+      {required int viewId}) {
+    return MyLocationClickedEventStream();
+  }
+
+  @override
+  Stream<MyLocationButtonClickedEvent> getMyLocationButtonClickedEventStream(
+      {required int viewId}) {
+    return MyLocationButtonClickedEventStream();
+  }
+
+  @override
   Future<void> setZoomGesturesEnabled(
       {required int viewId, required bool enabled}) async {
     return viewApi.setZoomGesturesEnabled(viewId, enabled);
@@ -362,6 +411,12 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
   @override
   Future<bool> isMyLocationButtonEnabled({required int viewId}) async {
     return viewApi.isMyLocationButtonEnabled(viewId);
+  }
+
+  @override
+  Future<bool> isConsumeMyLocationButtonClickEventsEnabled(
+      {required int viewId}) async {
+    return viewApi.isConsumeMyLocationButtonClickEventsEnabled(viewId);
   }
 
   @override
