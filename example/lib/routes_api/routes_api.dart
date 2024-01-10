@@ -31,7 +31,7 @@ const String _mapsApiKey = String.fromEnvironment('MAPS_API_KEY');
 /// Returns a list of route tokens or throws an error if the request fails.
 Future<List<String>> getRouteToken(List<NavigationWaypoint> waypoints) async {
   assert(_mapsApiKey.isNotEmpty,
-      'MAPS_API_KEY is not provided. Please pass it as a dart define during the app build.');
+      'MAPS_API_KEY is not provided. Please pass it as a Dart define during the app build.');
   assert(waypoints.length >= 2,
       'At least two waypoints (origin and destination) are required.');
 

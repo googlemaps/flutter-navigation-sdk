@@ -5,49 +5,71 @@ Demonstrates how to use the google_maps_navigation plugin.
 ## Setting up API Keys
 
 To run the example project, you need to provide your Google Maps API key for both Android and iOS platforms.
+Both Android and iOS builds are able to use the `MAPS_API_KEY` variable provided through Dart defines.
+However, this can be overridden to use separate, platform-specific API keys if needed.
 
-### Android
+### Using Dart defines
 
-1. The project uses the [Google Maps Secrets Gradle Plugin](https://developers.google.com/maps/documentation/android-sdk/secrets-gradle-plugin) for Android to securely manage the API key. 
+Using Dart defines to provide the Google Maps API key is the preferred method for this example app. It allows the key to be utilized in Dart code for accessing Google Maps services, such as the Routes API. Additionally, Patrol integration tests should also be run with the API key provided via Dart defines.
 
-2. Place your Google Maps API key in the `example/android/local.properties` file in the following format:
+Run the app with the API key as a Dart define.
+```bash
+flutter run --dart-define=MAPS_API_KEY=YOUR_API_KEY
+```
 
-    ```
-    MAPS_API_KEY=YOUR_API_KEY_HERE
-    ```
+The example app demonstrates multiple ways to provide the Maps API key for platforms.
 
-   This key will be automatically used by the plugin during the build process.
+### Android specific API key
 
-### iOS
+For Android, the example app determines the `MAPS_API_KEY` using the following order (first match applies):
+1. `MAPS_API_KEY` variable in `local.properties` file
+2. `MAPS_API_KEY` variable in environment variables
+3. `MAPS_API_KEY` variable in Dart defines
 
-On iOS, example application implementation initially attempts to read the `MAPS_API_KEY` from Dart defines. If it is not provided in Dart defines, the implementation will then try to fetch the API key from Xcode environment variables. If it’s still not set, it will default to a placeholder. Here are the options to set the API key for example application:
+#### Setting the API Key in local.properties
+The project uses the [Google Maps Secrets Gradle Plugin](https://developers.google.com/maps/documentation/android-sdk/secrets-gradle-plugin) for secure API key management. Place your Google Maps API key in `example/android/local.properties` file in the following format:
 
-    **Option 1:** Running from the command line:
-    ```bash
-    flutter run --dart-define=MAPS_API_KEY=YOUR_API_KEY
-    ```
+```text
+MAPS_API_KEY=YOUR_API_KEY_HERE
+```
 
-    **Option 2:** Add the API key to the runner environment parameters in Xcode by editing the scheme and adding an environment variable named `MAPS_API_KEY`.
+This key will be specifically used for the Android build, overriding the Dart define value.
 
-    **Option 3:** Add the API key directly to the `example/ios/Runner/AppDelegate.swift` file by replacing "YOUR_API_KEY" string with your actual Google Maps API key:
-    ```swift
-    ...
-    override func application(
-        _ application: UIApplication,
-        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-    ) -> Bool {
-        var mapsApiKey = findMapApiKeyFromDartDefines("MAPS_API_KEY") ?? ProcessInfo.processInfo.environment["MAPS_API_KEY"] ?? ""
-        if (mapsApiKey.isEmpty) {
-            mapsApiKey = "YOUR_API_KEY" // REPLACE THIS TEXT WITH YOUR API KEY
-        }
-        GMSServices.provideAPIKey(mapsApiKey)
-        GeneratedPluginRegistrant.register(with: self)
-        return super.application(application, didFinishLaunchingWithOptions: launchOptions)
-    }
-    ...
-    ```
+NOTE: `local.properties` file should always be listed in your .gitignore file to ensure it is not committed to your repository.
 
-    **NOTE**: Please be aware that adding the API key directly to your project files or environment variables can risk exposing the key if you accidentally commit it to a public repository. Always ensure that sensitive information like API keys are not included in your commits.
+### iOS specific API key
+
+For iOS, the app attempts to read the `MAPS_API_KEY` in this order (first match applies):
+
+1. `MAPS_API_KEY` variable in Xcode environment variables
+2. `MAPS_API_KEY` variable in Dart defines
+3. Default API key from `AppDelegate.swift`.
+
+#### Set the API key
+
+**1. Option: Xcode Environment Variables**
+
+Add an environment variable named `MAPS_API_KEY` in the Xcode scheme settings.
+
+**2. Option: Directly in AppDelegate.swift**
+
+Set the API key directly in `example/ios/Runner/AppDelegate.swift`:
+
+```swift
+...
+override func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+) -> Bool { 
+    GMSServices.provideAPIKey("YOUR_API_KEY") // REPLACE THIS TEXT WITH YOUR API KEY
+    GMSServices.setMetalRendererEnabled(true)
+    GeneratedPluginRegistrant.register(with: self)
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+}
+...
+```
+
+**NOTE**: Be cautious with API keys. Avoid exposing them in public repositories, especially when hardcoded in the project files or the environment variables.
 
 If you have pod related issues to run the example code you can run the following commands from example/ios folder:
  - pod repo update

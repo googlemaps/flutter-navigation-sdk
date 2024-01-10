@@ -70,13 +70,13 @@ android {
         multiDexEnabled true
 
         testInstrumentationRunner "pl.leancode.patrol.PatrolJUnitRunner"
-    }
-
-
-    defaultConfig {
 
         resourceConfigurations += ['en']
-        manifestPlaceholders = [MAPS_API_KEY: "$System.env.MAPS_API_KEY"]
+
+        // Extract MAPS_API_KEY from Dart defines or environment variables
+        // and use it as manifest placeholder.
+        def mapsApiKey = System.env.MAPS_API_KEY ?: findDartDefineValue("MAPS_API_KEY") ?: ""
+        manifestPlaceholders = [MAPS_API_KEY: mapsApiKey]
     }
 
     buildTypes {
@@ -126,4 +126,14 @@ secrets {
     ignoreList.add("sdk.*")    
     // Ignore all keys matching the regexp "flutter.*"
     ignoreList.add("flutter.*")      
+}
+
+// Helper function to extract specific Dart define value
+def findDartDefineValue(key) {
+    def encodedDartDefines = project.hasProperty('dart-defines') ? project.property('dart-defines') : ""
+    def defines = encodedDartDefines.split(",").collectEntries { String it ->
+        def define = new String(it.decodeBase64(), 'UTF-8').split('=')
+        return [(define.first()): define.last()]
+    }
+    return defines.containsKey(key) ? defines[key] : null
 }
