@@ -98,17 +98,7 @@ class MapOptions {
     required this.maxZoomPreference,
     required this.zoomControlsEnabled,
     required this.cameraTargetBounds,
-  })  : assert(
-            minZoomPreference == null ||
-                (minZoomPreference >= googleMapsMinZoomLevel &&
-                    minZoomPreference <= googleMapsMaxZoomLevel),
-            'minZoomPreference must be null or between $googleMapsMinZoomLevel and $googleMapsMaxZoomLevel.'),
-        assert(
-            maxZoomPreference == null ||
-                (maxZoomPreference >= googleMapsMinZoomLevel &&
-                    maxZoomPreference <= googleMapsMaxZoomLevel),
-            'maxZoomPreference must be null or between $googleMapsMinZoomLevel and $googleMapsMaxZoomLevel.'),
-        assert(
+  }) : assert(
             minZoomPreference == null ||
                 maxZoomPreference == null ||
                 minZoomPreference <= maxZoomPreference,

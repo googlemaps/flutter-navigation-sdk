@@ -1725,6 +1725,11 @@ protocol NavigationViewApi {
   func moveCameraByZoom(viewId: Int64, zoomBy: Double, focusDx: Double?, focusDy: Double?) throws
   func moveCameraToZoom(viewId: Int64, zoom: Double) throws
   func showRouteOverview(viewId: Int64) throws
+  func getMinZoomPreference(viewId: Int64) throws -> Double
+  func getMaxZoomPreference(viewId: Int64) throws -> Double
+  func resetMinMaxZoomPreference(viewId: Int64) throws
+  func setMinZoomPreference(viewId: Int64, minZoomPreference: Double) throws
+  func setMaxZoomPreference(viewId: Int64, maxZoomPreference: Double) throws
   func setMyLocationButtonEnabled(viewId: Int64, enabled: Bool) throws
   func setConsumeMyLocationButtonClickEventsEnabled(viewId: Int64, enabled: Bool) throws
   func setZoomGesturesEnabled(viewId: Int64, enabled: Bool) throws
@@ -2665,6 +2670,103 @@ enum NavigationViewApiSetup {
       }
     } else {
       showRouteOverviewChannel.setMessageHandler(nil)
+    }
+    let getMinZoomPreferenceChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getMinZoomPreference",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      getMinZoomPreferenceChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
+        do {
+          let result = try api.getMinZoomPreference(viewId: viewIdArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getMinZoomPreferenceChannel.setMessageHandler(nil)
+    }
+    let getMaxZoomPreferenceChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getMaxZoomPreference",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      getMaxZoomPreferenceChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
+        do {
+          let result = try api.getMaxZoomPreference(viewId: viewIdArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getMaxZoomPreferenceChannel.setMessageHandler(nil)
+    }
+    let resetMinMaxZoomPreferenceChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.resetMinMaxZoomPreference",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      resetMinMaxZoomPreferenceChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
+        do {
+          try api.resetMinMaxZoomPreference(viewId: viewIdArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      resetMinMaxZoomPreferenceChannel.setMessageHandler(nil)
+    }
+    let setMinZoomPreferenceChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMinZoomPreference",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      setMinZoomPreferenceChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
+        let minZoomPreferenceArg = args[1] as! Double
+        do {
+          try api.setMinZoomPreference(viewId: viewIdArg, minZoomPreference: minZoomPreferenceArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setMinZoomPreferenceChannel.setMessageHandler(nil)
+    }
+    let setMaxZoomPreferenceChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMaxZoomPreference",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      setMaxZoomPreferenceChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
+        let maxZoomPreferenceArg = args[1] as! Double
+        do {
+          try api.setMaxZoomPreference(viewId: viewIdArg, maxZoomPreference: maxZoomPreferenceArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setMaxZoomPreferenceChannel.setMessageHandler(nil)
     }
     let setMyLocationButtonEnabledChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMyLocationButtonEnabled",

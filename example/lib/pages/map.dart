@@ -315,7 +315,7 @@ class _MapPageState extends ExamplePageState<MapPage> {
             });
           },
           title: const Text('Enable traffic'),
-          value: isTrafficEnabled)
+          value: isTrafficEnabled),
     ]);
   }
 }

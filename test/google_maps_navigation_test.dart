@@ -153,7 +153,7 @@ void main() {
           .thenAnswer((Invocation _) async => true);
 
       const CameraPosition positionIn2 =
-          CameraPosition(bearing: 20, target: latLngIn, tilt: 30, zoom: 2.0);
+          CameraPosition(bearing: 20, target: latLngIn, tilt: 30);
       await controller.animateCamera(
           CameraUpdate.newCameraPosition(positionIn2),
           duration: duration, onFinished: (bool success) {
@@ -349,7 +349,7 @@ void main() {
       const LatLng latLngIn = LatLng(latitude: 5.0, longitude: 6.0);
 
       const CameraPosition positionIn2 =
-          CameraPosition(bearing: 20, target: latLngIn, tilt: 30, zoom: 2.0);
+          CameraPosition(bearing: 20, target: latLngIn, tilt: 30);
       await controller.moveCamera(CameraUpdate.newCameraPosition(positionIn2));
 
       VerificationResult result = verify(

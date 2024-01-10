@@ -526,6 +526,49 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
     return _viewApi.showRouteOverview(viewId);
   }
 
+  @override
+  Future<double> getMinZoomPreference({required int viewId}) {
+    return _viewApi.getMinZoomPreference(viewId);
+  }
+
+  @override
+  Future<double> getMaxZoomPreference({required int viewId}) {
+    return _viewApi.getMaxZoomPreference(viewId);
+  }
+
+  @override
+  Future<void> resetMinMaxZoomPreference({required int viewId}) {
+    return _viewApi.resetMinMaxZoomPreference(viewId);
+  }
+
+  @override
+  Future<void> setMinZoomPreference(
+      {required int viewId, required double minZoomPreference}) async {
+    try {
+      return await _viewApi.setMinZoomPreference(viewId, minZoomPreference);
+    } on PlatformException catch (error) {
+      if (error.code == 'minZoomGreaterThanMaxZoom') {
+        throw const MinZoomRangeException();
+      } else {
+        rethrow;
+      }
+    }
+  }
+
+  @override
+  Future<void> setMaxZoomPreference(
+      {required int viewId, required double maxZoomPreference}) async {
+    try {
+      return await _viewApi.setMaxZoomPreference(viewId, maxZoomPreference);
+    } on PlatformException catch (error) {
+      if (error.code == 'maxZoomLessThanMinZoom') {
+        throw const MaxZoomRangeException();
+      } else {
+        rethrow;
+      }
+    }
+  }
+
   Stream<T> _unwrapEventStream<T>({required int viewId}) {
     // If event that does not
     return _viewEventStreamController.stream

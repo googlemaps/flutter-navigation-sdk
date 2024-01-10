@@ -24,6 +24,8 @@ enum GoogleMapsNavigationViewError: Error {
   case circleNotFound
   case awaitViewReadyCalledMultipleTimes
   case mapStyleError
+  case minZoomGreaterThanMaxZoom
+  case maxZoomLessThanMinZoom
 }
 
 class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelegate {
@@ -482,6 +484,34 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
         ))
       }
     }
+  }
+
+  func getMinZoomPreference() -> Float {
+    _navigationView.minZoom
+  }
+
+  func getMaxZoomPreference() -> Float {
+    _navigationView.maxZoom
+  }
+
+  func resetMinMaxZoomPreference() {
+    _navigationView.setMinZoom(kGMSMinZoomLevel, maxZoom: kGMSMaxZoomLevel)
+  }
+
+  func setMinZoomPreference(minZoomPreference: Float) throws {
+    if minZoomPreference > _navigationView.maxZoom {
+      throw GoogleMapsNavigationViewError.minZoomGreaterThanMaxZoom
+    }
+
+    _navigationView.setMinZoom(minZoomPreference, maxZoom: _navigationView.maxZoom)
+  }
+
+  func setMaxZoomPreference(maxZoomPreference: Float) throws {
+    if maxZoomPreference < _navigationView.minZoom {
+      throw GoogleMapsNavigationViewError.maxZoomLessThanMinZoom
+    }
+
+    _navigationView.setMinZoom(_navigationView.minZoom, maxZoom: maxZoomPreference)
   }
 
   func getMarkers() -> [MarkerDto] {

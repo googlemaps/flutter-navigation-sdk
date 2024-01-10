@@ -360,6 +360,26 @@ class GoogleMapsNavigationViewMessageHandler(
     getView(viewId.toInt()).showRouteOverview()
   }
 
+  override fun getMinZoomPreference(viewId: Long): Double {
+    return getView(viewId.toInt()).getMinZoomPreference().toDouble()
+  }
+
+  override fun getMaxZoomPreference(viewId: Long): Double {
+    return getView(viewId.toInt()).getMaxZoomPreference().toDouble()
+  }
+
+  override fun resetMinMaxZoomPreference(viewId: Long) {
+    getView(viewId.toInt()).resetMinMaxZoomPreference()
+  }
+
+  override fun setMinZoomPreference(viewId: Long, minZoomPreference: Double) {
+    getView(viewId.toInt()).setMinZoomPreference(minZoomPreference.toFloat())
+  }
+
+  override fun setMaxZoomPreference(viewId: Long, maxZoomPreference: Double) {
+    getView(viewId.toInt()).setMaxZoomPreference(maxZoomPreference.toFloat())
+  }
+
   override fun getMarkers(viewId: Long): List<MarkerDto> {
     return getView(viewId.toInt()).getMarkers()
   }

@@ -242,4 +242,74 @@ void main() {
       expect(e, isNotNull);
     }
   });
+
+  patrol('Test min max zoom level', (PatrolIntegrationTester $) async {
+    /// For some reason the functionality works on Android example app, but it doesn't work
+    /// during the testing. Will skip Android testing for now.
+    final Completer<GoogleNavigationViewController> viewControllerCompleter =
+        Completer<GoogleNavigationViewController>();
+
+    await checkLocationDialogAcceptance($);
+
+    /// Display navigation view.
+    final Key key = GlobalKey();
+    await pumpNavigationView(
+      $,
+      GoogleMapsNavigationView(
+        key: key,
+        onViewCreated: (GoogleNavigationViewController controller) {
+          viewControllerCompleter.complete(controller);
+        },
+      ),
+    );
+
+    final GoogleNavigationViewController viewController =
+        await viewControllerCompleter.future;
+
+    // Test that valid zoom values don't throw exception.
+    await viewController.setMinZoomPreference(10);
+    await viewController.setMaxZoomPreference(11);
+
+    // Test that min max values were changed.
+    double newMinZoomPreference = await viewController.getMinZoomPreference();
+    double newMaxZoomPreference = await viewController.getMaxZoomPreference();
+
+    expect(newMinZoomPreference, 10.0);
+    expect(newMaxZoomPreference, 11.0);
+
+    // Reset zoom limits.
+    await viewController.resetMinMaxZoomPreference();
+
+    // Test that min max values were reset.
+    final double resetedMinZoom = await viewController.getMinZoomPreference();
+    final double resetedMaxZoom = await viewController.getMaxZoomPreference();
+
+    expect(resetedMinZoom, isNot(10.0));
+    expect(resetedMaxZoom, isNot(11.0));
+
+    // Test that invalid value throws exception.
+    try {
+      await viewController.setMinZoomPreference(40);
+      fail('expected to get ZoomPreferenceException');
+    } on MinZoomRangeException catch (e) {
+      expect(e, isNotNull);
+    }
+    try {
+      await viewController.setMaxZoomPreference(1);
+      fail('expected to get ZoomPreferenceException');
+    } on MaxZoomRangeException catch (e) {
+      expect(e, isNotNull);
+    }
+
+    // Try to set out of bounds values.
+    await viewController.setMinZoomPreference(0);
+    await viewController.setMaxZoomPreference(50);
+
+    newMinZoomPreference = await viewController.getMinZoomPreference();
+    newMaxZoomPreference = await viewController.getMaxZoomPreference();
+
+    // Expect the same values. The actual zoom level will be limited by the map.
+    expect(newMinZoomPreference, 0.0);
+    expect(newMaxZoomPreference, 50.0);
+  });
 }

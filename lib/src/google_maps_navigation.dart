@@ -981,6 +981,56 @@ class GoogleNavigationViewController {
     );
   }
 
+  /// Returns the minimum zoom level preference from map view.
+  /// If minimum zoom preference is not set previously, returns minimum possible
+  /// zoom level for the current map type.
+  Future<double> getMinZoomPreference() {
+    return GoogleMapsNavigationPlatform.instance
+        .getMinZoomPreference(viewId: _viewId);
+  }
+
+  /// Returns the maximum zoom level preference from map view.
+  /// If maximum zoom preference is not set previously, returns maximum possible
+  /// zoom level for the current map type.
+  Future<double> getMaxZoomPreference() {
+    return GoogleMapsNavigationPlatform.instance
+        .getMaxZoomPreference(viewId: _viewId);
+  }
+
+  /// Removes any previously specified upper and lower zoom bounds.
+  Future<void> resetMinMaxZoomPreference() {
+    return GoogleMapsNavigationPlatform.instance
+        .resetMinMaxZoomPreference(viewId: _viewId);
+  }
+
+  /// Sets a preferred lower bound for the camera zoom.
+  ///
+  /// When the minimum zoom changes, the SDK adjusts all later camera updates
+  /// to respect that minimum if possible. Note that there are technical
+  /// considerations that may prevent the SDK from allowing users to zoom too low.
+  ///
+  /// Throws [MinZoomRangeException] if [minZoomPreference] is
+  /// greater than maximum zoom lavel.
+  Future<void> setMinZoomPreference(double minZoomPreference) {
+    return GoogleMapsNavigationPlatform.instance.setMinZoomPreference(
+        viewId: _viewId, minZoomPreference: minZoomPreference);
+  }
+
+  /// Sets a preferred upper bound for the camera zoom.
+  ///
+  /// When the maximum zoom changes, the SDK adjusts all later camera updates
+  /// to respect that maximum if possible. Note that there are technical
+  /// considerations that may prevent the SDK from allowing users to zoom too
+  /// deep into the map. For example, satellite or terrain may have a lower
+  /// maximum zoom than the base map tiles.
+  ///
+  /// Throws [MaxZoomRangeException] if [maxZoomPreference] is
+  /// less than minimum zoom lavel.
+  Future<void> setMaxZoomPreference(double maxZoomPreference) {
+    return GoogleMapsNavigationPlatform.instance.setMaxZoomPreference(
+        viewId: _viewId, maxZoomPreference: maxZoomPreference);
+  }
+
   /// Get all markers from map view.
   Future<List<Marker?>> getMarkers() {
     return GoogleMapsNavigationPlatform.instance.getMarkers(viewId: _viewId);
@@ -1148,4 +1198,26 @@ class CircleNotFoundException implements Exception {
 class MapStyleException implements Exception {
   /// Default constructor for [MapStyleException].
   const MapStyleException();
+}
+
+/// [GoogleNavigationViewController.setMaxZoomPreference] failed to set zoom level.
+class MaxZoomRangeException implements Exception {
+  /// Default constructor for [MaxZoomRangeException].
+  const MaxZoomRangeException();
+
+  @override
+  String toString() {
+    return 'MaxZoomRangeException: Cannot set max zoom to less than min zoom';
+  }
+}
+
+/// [GoogleNavigationViewController.setMinZoomPreference] failed to set zoom level.
+class MinZoomRangeException implements Exception {
+  /// Default constructor for [MinZoomRangeException].
+  const MinZoomRangeException();
+
+  @override
+  String toString() {
+    return 'MinZoomRangeException: Cannot set min zoom to greater than max zoom';
+  }
 }

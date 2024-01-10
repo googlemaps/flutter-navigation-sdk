@@ -421,6 +421,11 @@ abstract class NavigationViewApi {
       int viewId, double zoomBy, double? focusDx, double? focusDy);
   void moveCameraToZoom(int viewId, double zoom);
   void showRouteOverview(int viewId);
+  double getMinZoomPreference(int viewId);
+  double getMaxZoomPreference(int viewId);
+  void resetMinMaxZoomPreference(int viewId);
+  void setMinZoomPreference(int viewId, double minZoomPreference);
+  void setMaxZoomPreference(int viewId, double maxZoomPreference);
 
   void setMyLocationButtonEnabled(int viewId, bool enabled);
   void setConsumeMyLocationButtonClickEventsEnabled(int viewId, bool enabled);

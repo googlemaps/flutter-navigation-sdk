@@ -36,11 +36,15 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
   double _focusY = 0;
   bool _navigationRunning = false;
   late final GoogleNavigationViewController _navigationViewController;
+  late double _minZoomLevel;
+  late double _maxZoomLevel;
 
   // ignore: use_setters_to_change_properties
   Future<void> _onViewCreated(GoogleNavigationViewController controller) async {
     _navigationViewController = controller;
     calculateFocusCenter();
+    _minZoomLevel = await _navigationViewController.getMinZoomPreference();
+    _maxZoomLevel = await _navigationViewController.getMaxZoomPreference();
     setState(() {});
   }
 
@@ -145,6 +149,36 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
     if (_displayAnimationFinished) {
       showMessage(success ? 'Animation finished' : 'Animation canceled');
     }
+  }
+
+  Future<void> _setMinZoomLevel(double newMinZoomLevel) async {
+    try {
+      await _navigationViewController.setMinZoomPreference(newMinZoomLevel);
+      setState(() {
+        _minZoomLevel = newMinZoomLevel;
+      });
+    } catch (e) {
+      showMessage(e.toString());
+    }
+  }
+
+  Future<void> _setMaxZoomLevel(double newMaxZoomLevel) async {
+    try {
+      await _navigationViewController.setMaxZoomPreference(newMaxZoomLevel);
+      setState(() {
+        _maxZoomLevel = newMaxZoomLevel;
+      });
+    } catch (e) {
+      showMessage(e.toString());
+    }
+  }
+
+  Future<void> _resetZoomLevels() async {
+    await _navigationViewController.resetMinMaxZoomPreference();
+    _minZoomLevel = await _navigationViewController.getMinZoomPreference();
+    _maxZoomLevel = await _navigationViewController.getMaxZoomPreference();
+
+    setState(() {});
   }
 
   @override
@@ -488,6 +522,33 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
                 'Camera position\n\nTilt: ${position.tilt}°\nZoom: ${position.zoom}\nBearing: ${position.bearing}°\nTarget: ${position.target.latitude.toStringAsFixed(4)}, ${position.target.longitude.toStringAsFixed(4)}');
           },
           child: const Text('Get camera position'),
+        ),
+        const SizedBox(height: 24.0),
+        Text('Min zoom level: ${_minZoomLevel.round()}'),
+        Slider(
+            value: _minZoomLevel,
+            min: googleMapsMinZoomLevel,
+            max: googleMapsMaxZoomLevel,
+            divisions:
+                (googleMapsMaxZoomLevel - googleMapsMinZoomLevel).toInt(),
+            label: _minZoomLevel.round().toString(),
+            onChanged: (double value) {
+              _setMinZoomLevel(value);
+            }),
+        Text('Max zoom level: ${_maxZoomLevel.round()}'),
+        Slider(
+            value: _maxZoomLevel,
+            min: googleMapsMinZoomLevel,
+            max: googleMapsMaxZoomLevel,
+            divisions:
+                (googleMapsMaxZoomLevel - googleMapsMinZoomLevel).toInt(),
+            label: _maxZoomLevel.round().toString(),
+            onChanged: (double value) {
+              _setMaxZoomLevel(value);
+            }),
+        ElevatedButton(
+          onPressed: () => _resetZoomLevels(),
+          child: const Text('Reset zoom levels'),
         ),
       ],
     );

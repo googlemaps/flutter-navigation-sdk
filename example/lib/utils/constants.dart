@@ -12,10 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// The minimum zoom level for Google Maps.
-/// {@category Navigation View}
-const double googleMapsMinZoomLevel = 0;
+/// Minimum zoom level to use for zoom options.
+///
+/// Effective zoom level can change depending on map type and device used.
+const double googleMapsMinZoomLevel = 2;
 
-/// The maximum zoom level for Google Maps.
-/// {@category Navigation View}
+/// Maximum zoom level to use for zoom options.
+///
+/// Effective zoom level can change depending on map type and device used.
 const double googleMapsMaxZoomLevel = 21;

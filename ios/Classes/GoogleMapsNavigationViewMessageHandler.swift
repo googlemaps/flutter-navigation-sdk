@@ -481,4 +481,24 @@ class GoogleMapsNavigationViewMessageHandler: NavigationViewApi {
   func isConsumeMyLocationButtonClickEventsEnabled(viewId: Int64) throws -> Bool {
     try getView(viewId).isConsumeMyLocationButtonClickEventsEnabled()
   }
+
+  func getMinZoomPreference(viewId: Int64) throws -> Double {
+    try Double(getView(viewId).getMinZoomPreference())
+  }
+
+  func getMaxZoomPreference(viewId: Int64) throws -> Double {
+    try Double(getView(viewId).getMaxZoomPreference())
+  }
+
+  func resetMinMaxZoomPreference(viewId: Int64) throws {
+    try getView(viewId).resetMinMaxZoomPreference()
+  }
+
+  func setMinZoomPreference(viewId: Int64, minZoomPreference: Double) throws {
+    try getView(viewId).setMinZoomPreference(minZoomPreference: Float(minZoomPreference))
+  }
+
+  func setMaxZoomPreference(viewId: Int64, maxZoomPreference: Double) throws {
+    try getView(viewId).setMaxZoomPreference(maxZoomPreference: Float(maxZoomPreference))
+  }
 }

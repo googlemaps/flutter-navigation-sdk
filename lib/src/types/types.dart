@@ -24,4 +24,3 @@ export 'polylines.dart';
 export 'simulation.dart';
 export 'stroke_patterns.dart';
 export 'view_initialization_options.dart';
-export 'zoom_constants.dart';

@@ -1033,6 +1033,65 @@ class MockTestNavigationViewApi extends _i1.Mock
       );
 
   @override
+  double getMinZoomLevel(int? viewId) => (super.noSuchMethod(
+        Invocation.method(
+          #getMinZoomLevel,
+          [viewId],
+        ),
+        returnValue: 0.0,
+      ) as double);
+
+  @override
+  double getMaxZoomLevel(int? viewId) => (super.noSuchMethod(
+        Invocation.method(
+          #getMaxZoomLevel,
+          [viewId],
+        ),
+        returnValue: 0.0,
+      ) as double);
+
+  @override
+  void resetMinMaxZoomPreference(int? viewId) => super.noSuchMethod(
+        Invocation.method(
+          #resetMinMaxZoomPreference,
+          [viewId],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void setMinZoomPreference(
+    int? viewId,
+    double? minZoomPreference,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #setMinZoomPreference,
+          [
+            viewId,
+            minZoomPreference,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void setMaxZoomPreference(
+    int? viewId,
+    double? maxZoomPreference,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #setMaxZoomPreference,
+          [
+            viewId,
+            maxZoomPreference,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
   void setMyLocationButtonEnabled(
     int? viewId,
     bool? enabled,

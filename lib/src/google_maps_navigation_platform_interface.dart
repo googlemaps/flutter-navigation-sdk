@@ -395,6 +395,23 @@ abstract mixin class NavigationViewAPIInterface {
   /// Show route overview.
   Future<void> showRouteOverview({required int viewId});
 
+  /// Returns the minimum zoom level.
+  Future<double> getMinZoomPreference({required int viewId});
+
+  /// Returns the maximum zoom level for the current camera position.
+  Future<double> getMaxZoomPreference({required int viewId});
+
+  /// Removes any previously specified upper and lower zoom bounds.
+  Future<void> resetMinMaxZoomPreference({required int viewId});
+
+  /// Sets a preferred lower bound for the camera zoom.
+  Future<void> setMinZoomPreference(
+      {required int viewId, required double minZoomPreference});
+
+  /// Sets a preferred upper bound for the camera zoom.
+  Future<void> setMaxZoomPreference(
+      {required int viewId, required double maxZoomPreference});
+
   /// Get map clicked event stream from the navigation view.
   Stream<MapClickEvent> getMapClickEventStream({required int viewId});
 

@@ -1075,4 +1075,31 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
         .map((ImageDescriptorDto e) => e.toImageDescriptor())
         .toList();
   }
+
+  @override
+  Future<double> getMinZoomPreference({required int viewId}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<double> getMaxZoomPreference({required int viewId}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> resetMinMaxZoomPreference({required int viewId}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> setMinZoomPreference(
+      {required int viewId, required double minZoomPreference}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> setMaxZoomPreference(
+      {required int viewId, required double maxZoomPreference}) {
+    throw UnimplementedError();
+  }
 }
