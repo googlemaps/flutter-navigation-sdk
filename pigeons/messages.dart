@@ -86,14 +86,24 @@ class MapOptionsDto {
   final LatLngBoundsDto? cameraTargetBounds;
 }
 
+/// Determines the initial visibility of the navigation UI on map initialization.
+enum NavigationUIEnabledPreferenceDto {
+  /// Navigation UI gets enabled if the navigation
+  /// session has already been successfully started.
+  automatic,
+
+  /// Navigation UI is disabled.
+  disabled
+}
+
 /// Object containing navigation options used to initialize Google Navigation view.
 class NavigationViewOptionsDto {
   NavigationViewOptionsDto({
-    required this.navigationUIEnabled,
+    required this.navigationUIEnabledPreference,
   });
 
   /// Determines the initial visibility of the navigation UI on map initialization.
-  final bool navigationUIEnabled;
+  final NavigationUIEnabledPreferenceDto navigationUIEnabledPreference;
 }
 
 /// A message for creating a new navigation view.

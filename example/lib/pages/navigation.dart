@@ -894,36 +894,38 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
               Column(children: <Widget>[
                 _travelModeSelection,
                 Expanded(
-                  child:
-                      _navigatorInitializedAtLeastOnce && _userLocation != null
-                          ? GoogleMapsNavigationView(
-                              onViewCreated: _onViewCreated,
-                              onMapClicked: _onMapClicked,
-                              onMapLongClicked: _onMapClicked,
-                              onRecenterButtonClicked:
-                                  _onRecenterButtonClickedEvent,
-                              onNavigationUIEnabledChanged:
-                                  _onNavigationUIEnabledChanged,
-                              initialCameraPosition: CameraPosition(
-                                // Initialize map to user location.
-                                target: _userLocation!,
-                                zoom: 15,
-                              ),
-                              initialNavigationUIEnabled: _guidanceRunning,
-                            )
-                          : const Center(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  Text('Waiting navigator and user location'),
-                                  SizedBox(height: 10),
-                                  SizedBox(
-                                      width: 30,
-                                      height: 30,
-                                      child: CircularProgressIndicator())
-                                ],
-                              ),
-                            ),
+                  child: _navigatorInitializedAtLeastOnce &&
+                          _userLocation != null
+                      ? GoogleMapsNavigationView(
+                          onViewCreated: _onViewCreated,
+                          onMapClicked: _onMapClicked,
+                          onMapLongClicked: _onMapClicked,
+                          onRecenterButtonClicked:
+                              _onRecenterButtonClickedEvent,
+                          onNavigationUIEnabledChanged:
+                              _onNavigationUIEnabledChanged,
+                          initialCameraPosition: CameraPosition(
+                            // Initialize map to user location.
+                            target: _userLocation!,
+                            zoom: 15,
+                          ),
+                          initialNavigationUIEnabledPreference: _guidanceRunning
+                              ? NavigationUIEnabledPreference.automatic
+                              : NavigationUIEnabledPreference.disabled,
+                        )
+                      : const Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Text('Waiting navigator and user location'),
+                              SizedBox(height: 10),
+                              SizedBox(
+                                  width: 30,
+                                  height: 30,
+                                  child: CircularProgressIndicator())
+                            ],
+                          ),
+                        ),
                 ),
                 if (_navigationViewController != null) bottomControls
               ]),

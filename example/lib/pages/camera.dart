@@ -120,6 +120,8 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
       context,
       Stack(children: <Widget>[
         GoogleMapsNavigationView(
+          initialNavigationUIEnabledPreference:
+              NavigationUIEnabledPreference.disabled,
           onViewCreated: _onViewCreated,
         ),
         getOverlayOptionsButton(context, onPressed: () => toggleOverlay())

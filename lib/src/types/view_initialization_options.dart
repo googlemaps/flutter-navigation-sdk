@@ -159,6 +159,16 @@ class MapOptions {
   final LatLngBounds? cameraTargetBounds;
 }
 
+/// Determines the initial visibility of the navigation UI on map initialization.
+enum NavigationUIEnabledPreference {
+  /// Navigation UI gets enabled if the navigation
+  /// session has already been successfully started.
+  automatic,
+
+  /// Navigation UI is disabled.
+  disabled,
+}
+
 /// Encapsulates the initial configuration required to initialize the navigation view.
 ///
 /// This class is used to specify various map settings at the time of map initialization.
@@ -168,12 +178,17 @@ class NavigationViewOptions {
   /// Creates a new instance of [NavigationViewOptions] with the given initial
   /// parameters to configure the navigation view.
   const NavigationViewOptions({
-    required this.navigationUIEnabled,
+    this.navigationUIEnabledPreference =
+        NavigationUIEnabledPreference.automatic,
   });
 
   /// Determines the initial visibility of the navigation UI on map initialization.
   ///
-  /// If not set, by default the navigation UI is initially hidden
-  /// until the navigation is started.
-  final bool navigationUIEnabled;
+  /// If not set, by default set to [NavigationUIEnabledPreference.automatic], meaning
+  /// the navigation UI gets enabled if the navigation
+  /// session has already been successfully started.
+  ///
+  /// If set to [NavigationUIEnabledPreference.disabled], navigation view
+  /// initially displays a classic map view.
+  final NavigationUIEnabledPreference navigationUIEnabledPreference;
 }

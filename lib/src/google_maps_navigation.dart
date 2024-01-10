@@ -148,7 +148,8 @@ class GoogleMapsNavigationView extends StatefulWidget {
     this.initialMaxZoomPreference,
     this.initialZoomControlsEnabled = true,
     this.initialCameraTargetBounds,
-    this.initialNavigationUIEnabled = false,
+    this.initialNavigationUIEnabledPreference =
+        NavigationUIEnabledPreference.automatic,
     this.layoutDirection,
     this.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
     this.onRecenterButtonClicked,
@@ -254,8 +255,19 @@ class GoogleMapsNavigationView extends StatefulWidget {
 
   /// Determines the initial visibility of the navigation UI on map initialization.
   ///
-  /// False by default.
-  final bool initialNavigationUIEnabled;
+  /// By default set to [NavigationUIEnabledPreference.automatic],
+  /// meaning the navigation UI gets enabled if the navigation
+  /// session has already been successfully started.
+  ///
+  /// If set to [NavigationUIEnabledPreference.disabled] the navigation view
+  /// initially displays a classic map view.
+  ///
+  /// Note on Android enabling the navigation UI for the view requires that the
+  /// navigation session has already been successfully started with
+  /// [GoogleMapsNavigator.initializeNavigationSession]. On iOS accepting
+  /// the terms and conditions is enough.
+  ///
+  final NavigationUIEnabledPreference initialNavigationUIEnabledPreference;
 
   /// Which gestures should be forwarded to the PlatformView.
   ///
@@ -345,7 +357,8 @@ class GoogleMapsNavigationViewState extends State<GoogleMapsNavigationView> {
               cameraTargetBounds: widget.initialCameraTargetBounds,
             ),
             navigationViewOptions: NavigationViewOptions(
-                navigationUIEnabled: widget.initialNavigationUIEnabled)),
+                navigationUIEnabledPreference:
+                    widget.initialNavigationUIEnabledPreference)),
         onMapReady: _onPlatformViewCreated);
   }
 
@@ -949,6 +962,9 @@ class GoogleNavigationViewController {
   ///
   /// By default, the navigation UI is enabled when the session has been
   /// initialized with GoogleMapsNavigotor.initializeNavigationSession().
+  ///
+  /// Fails on Android if the navigation session has not been initialized,
+  /// and on iOS if the terms and conditions have not been accepted.
   Future<void> setNavigationUIEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance.setNavigationUIEnabled(
       viewId: _viewId,

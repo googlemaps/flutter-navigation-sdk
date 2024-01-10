@@ -101,8 +101,8 @@ class _ExampleCameraPositionEditorState
             _updateCameraPosition();
           },
           title: 'Zoom',
-          min: 0,
-          max: 25,
+          min: googleMapsMinZoomLevel,
+          max: googleMapsMaxZoomLevel,
         ),
         ExampleSlider(
           value: cameraPosition.tilt,

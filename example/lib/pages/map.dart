@@ -104,6 +104,8 @@ class _MapPageState extends ExamplePageState<MapPage> {
               onViewCreated: _onViewCreated,
               onMyLocationClicked: _onMyLocationClicked,
               onMyLocationButtonClicked: _onMyLocationButtonClicked,
+              initialNavigationUIEnabledPreference:
+                  NavigationUIEnabledPreference.disabled,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),

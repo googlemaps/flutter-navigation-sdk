@@ -20,6 +20,11 @@
 // For more information about Flutter integration tests, please see
 // https://docs.flutter.dev/cookbook/testing/integration/introduction
 
+import 'dart:async';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+
 import 'shared.dart';
 
 void main() {
@@ -160,5 +165,94 @@ void main() {
     } on Exception {
       fail('Expected the initialization to go through');
     }
+  });
+
+  patrol('Test Maps initialization', (PatrolIntegrationTester $) async {
+    final Completer<GoogleNavigationViewController> viewControllerCompleter =
+        Completer<GoogleNavigationViewController>();
+
+    await checkTermsAndConditionsAcceptance($);
+    await checkLocationDialogAcceptance($);
+
+    // Now the initialization should finally succeed.
+    try {
+      await GoogleMapsNavigator.initializeNavigationSession();
+    } on SessionInitializationException {
+      fail('Expected the initialization to go through');
+    }
+    expect(await GoogleMapsNavigator.isInitialized(), true);
+
+    const CameraPosition cameraPosition =
+        CameraPosition(target: LatLng(latitude: 65, longitude: 25.5), zoom: 18);
+    const MapType mapType = MapType.satellite;
+    const bool compassEnabled = false;
+    const bool rotateGesturesEnabled = false;
+    const bool scrollGesturesEnabled = false;
+    const bool tiltGesturesEnabled = false;
+    const bool zoomGesturesEnabled = false;
+    const bool scrollGesturesEnabledDuringRotateOrZoom = false;
+    const bool mapToolbarEnabled = false;
+    const bool zoomControlsEnabled = false;
+    const NavigationUIEnabledPreference navigationUiEnabledPreference =
+        NavigationUIEnabledPreference.automatic;
+
+    // TODO(jpetrell): Test initialMinZoomPreference, initialMaxZoomPreference
+    // and initialCameraTargetBounds once respective getters are available.
+
+    /// Display navigation view.
+    final Key key = GlobalKey();
+    await pumpNavigationView(
+      $,
+      GoogleMapsNavigationView(
+        key: key,
+        onViewCreated: (GoogleNavigationViewController controller) {
+          controller.setMyLocationEnabled(true);
+          viewControllerCompleter.complete(controller);
+        },
+        initialCameraPosition: cameraPosition,
+        initialMapType: mapType,
+        initialCompassEnabled: compassEnabled,
+        initialRotateGesturesEnabled: rotateGesturesEnabled,
+        initialScrollGesturesEnabled: scrollGesturesEnabled,
+        initialTiltGesturesEnabled: tiltGesturesEnabled,
+        initialZoomGesturesEnabled: zoomGesturesEnabled,
+        initialScrollGesturesEnabledDuringRotateOrZoom:
+            scrollGesturesEnabledDuringRotateOrZoom,
+        initialMapToolbarEnabled: mapToolbarEnabled,
+        initialZoomControlsEnabled: zoomControlsEnabled,
+        // ignore: avoid_redundant_argument_values
+        initialNavigationUIEnabledPreference: navigationUiEnabledPreference,
+      ),
+    );
+
+    final GoogleNavigationViewController controller =
+        await viewControllerCompleter.future;
+    final CameraPosition cameraOut = await controller.getCameraPosition();
+
+    expect(cameraOut.target.latitude,
+        closeTo(cameraPosition.target.latitude, 0.1));
+    expect(cameraOut.target.longitude,
+        closeTo(cameraPosition.target.longitude, 0.1));
+    expect(cameraOut.zoom, closeTo(cameraPosition.zoom, 0.1));
+    expect(await controller.getMapType(), mapType);
+    expect(await controller.settings.isCompassEnabled(), compassEnabled);
+    expect(await controller.settings.isRotateGesturesEnabled(),
+        rotateGesturesEnabled);
+    expect(await controller.settings.isScrollGesturesEnabled(),
+        scrollGesturesEnabled);
+    expect(
+        await controller.settings.isTiltGesturesEnabled(), tiltGesturesEnabled);
+    expect(
+        await controller.settings.isZoomGesturesEnabled(), zoomGesturesEnabled);
+    expect(
+        await controller.settings.isScrollGesturesEnabledDuringRotateOrZoom(),
+        scrollGesturesEnabledDuringRotateOrZoom);
+    if (Platform.isAndroid) {
+      expect(
+          await controller.settings.isMapToolbarEnabled(), mapToolbarEnabled);
+      expect(await controller.settings.isZoomControlsEnabled(),
+          zoomControlsEnabled);
+    }
+    expect(await controller.isNavigationUIEnabled(), true);
   });
 }

@@ -1,6 +1,7 @@
 ## 0.2.0-pre1
 
-- **BREAKING CHANGES** Following `GoogleNavigationViewController` gesture and UI option setters renamed:
+**GoogleNavigationViewController**
+- **BREAKING CHANGES** Following gesture and UI option setters have been renamed:
   - `enableNavigationUI({required bool})` to `setNavigationUIEnabled(bool)`
   - `enableNavigationHeader({required bool})` to `setNavigationHeaderEnabled(bool)`
   - `enableNavigationFooter({required bool})` to `setNavigationFooterEnabled(bool)`
@@ -20,7 +21,10 @@
   - `enableTiltGestures({required bool})` to `setTiltGesturesEnabled(bool)`
   - `enableTraffic({required bool})` to `setTrafficEnabled(bool)`
   - `enableMapToolbar({required bool})` to `setMapToolbarEnabled(bool)`
--- **BREAKING CHANGES** `GoogleMapsNavigationView` property `initialNavigationUiEnabled` renamed to `initialNavigationUIEnabled`
+
+**GoogleMapsNavigationView:**
+-- **BREAKING CHANGES** `initialNavigationUiEnabled` boolean has been renamed to `initialNavigationUIEnabledPreference` enumeration
+- Initial camera position defaults to zoom level 3.0 instead of 0.0
 
 ## 0.1.0-pre1
 

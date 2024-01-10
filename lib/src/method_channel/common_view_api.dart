@@ -104,11 +104,8 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
         cameraTargetBounds: mapOptions.cameraTargetBounds?.toDto());
 
     // Navigation options
-    final NavigationViewOptions navigationViewOptions =
-        initializationSettings.navigationViewOptions;
     final NavigationViewOptionsDto navigationOptionsMessage =
-        NavigationViewOptionsDto(
-            navigationUIEnabled: navigationViewOptions.navigationUIEnabled);
+        initializationSettings.navigationViewOptions.toDto();
 
     // Build NavigationViewCreationMessage
     return NavigationViewCreationOptionsDto(

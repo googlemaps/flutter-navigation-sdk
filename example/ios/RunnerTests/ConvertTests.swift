@@ -542,12 +542,11 @@ class ConvertTests: XCTestCase {
       zoomControlsEnabled: false
     )
 
-    let navigationViewOptions = NavigationViewOptionsDto(navigationUIEnabled: true)
+    let navigationViewOptions =
+      NavigationViewOptionsDto(navigationUIEnabledPreference: NavigationUIEnabledPreferenceDto
+        .automatic)
 
-    let configuration = Convert.convertMapOptions(
-      mapOptions,
-      navigationViewOptions: navigationViewOptions
-    )
+    let configuration = Convert.convertMapOptions(mapOptions)
 
     // Make sure these match because comparison between different enums is complicated.
     XCTAssert(mapOptions.mapType == .normal)

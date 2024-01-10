@@ -49,13 +49,14 @@ class _ViewInitializationPageState
   double? _initialMaxZoomPreference;
   bool _initialZoomControlsEnabled = true;
   LatLngBounds? _initialCameraTargetBounds;
-  bool _initialNavigationUIEnabled = false;
+  NavigationUIEnabledPreference _initialNavigationUIEnabledPreference =
+      NavigationUIEnabledPreference.automatic;
   TextDirection? _layoutDirection;
   bool _isMinZoomPreferenceEnabled = false;
   bool _isMaxZoomPreferenceEnabled = false;
 
   /// Navigation state
-  bool navigationSessionHasBeenInitialized = false;
+  bool _navigationInitialized = false;
 
   @override
   void initState() {
@@ -63,9 +64,16 @@ class _ViewInitializationPageState
     _updateNavigationInitializationState();
   }
 
+  @override
+  void dispose() {
+    if (_navigationInitialized) {
+      GoogleMapsNavigator.cleanup();
+    }
+    super.dispose();
+  }
+
   Future<void> _updateNavigationInitializationState() async {
-    navigationSessionHasBeenInitialized =
-        await GoogleMapsNavigator.isInitialized();
+    _navigationInitialized = await GoogleMapsNavigator.isInitialized();
     setState(() {});
   }
 
@@ -99,7 +107,8 @@ class _ViewInitializationPageState
           initialMaxZoomPreference: _initialMaxZoomPreference,
           initialZoomControlsEnabled: _initialZoomControlsEnabled,
           initialCameraTargetBounds: _initialCameraTargetBounds,
-          initialNavigationUIEnabled: _initialNavigationUIEnabled,
+          initialNavigationUIEnabledPreference:
+              _initialNavigationUIEnabledPreference,
           layoutDirection: _layoutDirection,
         ),
       ),
@@ -112,6 +121,17 @@ class _ViewInitializationPageState
 
   double _limitMaxZoomReference(double value) {
     return max(_initialMinZoomPreference ?? googleMapsMinZoomLevel, value);
+  }
+
+  Future<void> _startNavigation() async {
+    if (!await GoogleMapsNavigator.areTermsAccepted()) {
+      await GoogleMapsNavigator.showTermsAndConditionsDialog(
+        'test_title',
+        'test_company_name',
+      );
+    }
+    await GoogleMapsNavigator.initializeNavigationSession();
+    await _updateNavigationInitializationState();
   }
 
   @override
@@ -326,13 +346,19 @@ class _ViewInitializationPageState
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         children: <Widget>[
-                          ExampleDropdownButton<bool>(
-                            title: 'Navigation UI Enabled',
-                            value: _initialNavigationUIEnabled,
-                            items: const <bool>[true, false],
-                            onChanged: (bool? newValue) {
+                          ExampleDropdownButton<NavigationUIEnabledPreference>(
+                            title: 'Navigation UI Enabled preference',
+                            value: _initialNavigationUIEnabledPreference,
+                            items: const <NavigationUIEnabledPreference>[
+                              NavigationUIEnabledPreference.automatic,
+                              NavigationUIEnabledPreference.disabled
+                            ],
+                            onChanged:
+                                (NavigationUIEnabledPreference? newValue) {
                               setState(() {
-                                _initialNavigationUIEnabled = newValue ?? false;
+                                _initialNavigationUIEnabledPreference =
+                                    newValue ??
+                                        NavigationUIEnabledPreference.automatic;
                               });
                             },
                           ),
@@ -345,15 +371,12 @@ class _ViewInitializationPageState
               alignment: WrapAlignment.center,
               spacing: 10,
               children: <Widget>[
-                if (!navigationSessionHasBeenInitialized)
-                  ElevatedButton(
-                    onPressed: !navigationSessionHasBeenInitialized
-                        ? GoogleMapsNavigator.initializeNavigationSession
-                        : _updateNavigationInitializationState,
-                    child: const Text('Init navigation'),
-                  ),
-                if (navigationSessionHasBeenInitialized)
-                  const Text('Navigation initialized'),
+                ElevatedButton(
+                  onPressed: !_navigationInitialized ? _startNavigation : null,
+                  child: Text(_navigationInitialized
+                      ? 'Initialized'
+                      : 'Init navigation'),
+                ),
                 ElevatedButton(
                   onPressed: () => _changePage(),
                   child: const Text('Open map'),
@@ -378,7 +401,7 @@ class _InitializedViewPage extends StatelessWidget {
     required this.initialMaxZoomPreference,
     required this.initialZoomControlsEnabled,
     required this.initialCameraTargetBounds,
-    required this.initialNavigationUIEnabled,
+    required this.initialNavigationUIEnabledPreference,
     required this.layoutDirection,
   });
 
@@ -396,7 +419,7 @@ class _InitializedViewPage extends StatelessWidget {
   final double? initialMaxZoomPreference;
   final bool initialZoomControlsEnabled;
   final LatLngBounds? initialCameraTargetBounds;
-  final bool initialNavigationUIEnabled;
+  final NavigationUIEnabledPreference initialNavigationUIEnabledPreference;
 
   @override
   Widget build(BuildContext context) {
@@ -427,7 +450,8 @@ class _InitializedViewPage extends StatelessWidget {
         initialMaxZoomPreference: initialMaxZoomPreference,
         initialZoomControlsEnabled: initialZoomControlsEnabled,
         initialCameraTargetBounds: initialCameraTargetBounds,
-        initialNavigationUIEnabled: initialNavigationUIEnabled,
+        initialNavigationUIEnabledPreference:
+            initialNavigationUIEnabledPreference,
       ),
     );
   }

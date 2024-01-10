@@ -230,6 +230,8 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
           Expanded(
             child: GoogleMapsNavigationView(
               onViewCreated: _onViewCreated,
+              initialNavigationUIEnabledPreference:
+                  NavigationUIEnabledPreference.disabled,
               onMarkerClicked: _onMarkerClicked,
               onMarkerDrag: _onMarkerDrag,
               onMarkerDragStart: _onMarkerDragStart,

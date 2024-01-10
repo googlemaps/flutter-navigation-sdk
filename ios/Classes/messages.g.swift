@@ -60,6 +60,15 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
+/// Determines the initial visibility of the navigation UI on map initialization.
+enum NavigationUIEnabledPreferenceDto: Int {
+  /// Navigation UI gets enabled if the navigation
+  /// session has already been successfully started.
+  case automatic = 0
+  /// Navigation UI is disabled.
+  case disabled = 1
+}
+
 enum MapTypeDto: Int {
   case none = 0
   case normal = 1
@@ -258,19 +267,19 @@ struct MapOptionsDto {
 /// Generated class from Pigeon that represents data sent in messages.
 struct NavigationViewOptionsDto {
   /// Determines the initial visibility of the navigation UI on map initialization.
-  var navigationUIEnabled: Bool
+  var navigationUIEnabledPreference: NavigationUIEnabledPreferenceDto
 
   static func fromList(_ list: [Any?]) -> NavigationViewOptionsDto? {
-    let navigationUIEnabled = list[0] as! Bool
+    let navigationUIEnabledPreference = NavigationUIEnabledPreferenceDto(rawValue: list[0] as! Int)!
 
     return NavigationViewOptionsDto(
-      navigationUIEnabled: navigationUIEnabled
+      navigationUIEnabledPreference: navigationUIEnabledPreference
     )
   }
 
   func toList() -> [Any?] {
     [
-      navigationUIEnabled,
+      navigationUIEnabledPreference.rawValue,
     ]
   }
 }

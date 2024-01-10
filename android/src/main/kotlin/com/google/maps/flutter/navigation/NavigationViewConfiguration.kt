@@ -16,7 +16,16 @@
 
 package com.google.maps.flutter.navigation
 
+/** Determines the initial visibility of the navigation UI on map initialization. */
+enum class NavigationUIEnabledPreference {
+  /** Navigation UI gets enabled if the navigation session has been started. */
+  AUTOMATIC,
+
+  /** Navigation UI is disabled. */
+  DISABLED,
+}
+
 /** Class for navigation view configuration options. */
 data class NavigationViewOptions(
-  val navigationUiEnabled: Boolean?,
+  val navigationUiEnabledPreference: NavigationUIEnabledPreference?,
 )

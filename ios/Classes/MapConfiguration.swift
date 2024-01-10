@@ -15,6 +15,15 @@
 import Foundation
 import GoogleMaps
 
+// Determines the initial visibility of the navigation UI on map initialization.
+enum NavigationUIEnabledPreference {
+  // Navigation UI gets enabled if the navigation
+  // session has already been successfully started.
+  case automatic
+  /// Navigation UI is disabled.
+  case disabled
+}
+
 struct MapConfiguration {
   // MapView related configurations
   var cameraPosition: GMSCameraPosition
@@ -28,9 +37,6 @@ struct MapConfiguration {
   var cameraTargetBounds: GMSCoordinateBounds?
   var minZoomPreference: Float?
   var maxZoomPreference: Float?
-
-  // NavigationView related configurations
-  var navigationUIEnabled: Bool?
 }
 
 extension MapConfiguration {
@@ -51,11 +57,6 @@ extension MapConfiguration {
       minZoomPreference ?? kGMSMinZoomLevel,
       maxZoom: maxZoomPreference ?? kGMSMaxZoomLevel
     )
-
-    // If navigationUIEnabled is not null, process the state.
-    if let isNavigationEnabled = navigationUIEnabled {
-      mapView.isNavigationEnabled = isNavigationEnabled
-    }
   }
 
   // Applies the configuration to the given

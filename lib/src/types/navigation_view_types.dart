@@ -42,15 +42,17 @@ enum MapType {
 /// Represents the camera position in a Google Maps view.
 /// {@category Navigation View}
 class CameraPosition {
-  /// Creates a [CameraPosition] object.
+  /// Creates a [CameraPosition] object with map centered
+  /// to the [target] with the given [bearing], [tilt] and [zoom] level.
   ///
-  /// All parameters have default values of zero, with the [target]
-  /// set to the geographical coordinates (0,0).
+  /// By default, the camera centers on the geographical coordinates (0,0) with
+  /// no tilt (0 degrees), camera zoomed out (3.0) and the bearing heading north
+  /// (0 degrees).
   const CameraPosition(
       {this.bearing = 0,
       this.target = const LatLng(latitude: 0, longitude: 0),
       this.tilt = 0,
-      this.zoom = 0})
+      this.zoom = 3.0})
       : assert(0 <= bearing && bearing < 360,
             'Bearing must be between 0 and 360 degrees.'),
         assert(

@@ -141,7 +141,7 @@ class _NavigationSampleState extends State<NavigationSample> {
       body: _navigationSessionInitialized
           ? GoogleMapsNavigationView(
               onViewCreated: _onViewCreated,
-              initialNavigationUIEnabled: false,
+              initialNavigationUIEnabledPreference: NavigationUIEnabledPreference.disabled,
               // Other view initialization settings
             )
           : const Center(child: CircularProgressIndicator()),

@@ -40,6 +40,16 @@ List<Object?> wrapResponse(
   return <Object?>[error.code, error.message, error.details];
 }
 
+/// Determines the initial visibility of the navigation UI on map initialization.
+enum NavigationUIEnabledPreferenceDto {
+  /// Navigation UI gets enabled if the navigation
+  /// session has already been successfully started.
+  automatic,
+
+  /// Navigation UI is disabled.
+  disabled,
+}
+
 enum MapTypeDto {
   none,
   normal,
@@ -248,22 +258,23 @@ class MapOptionsDto {
 /// Object containing navigation options used to initialize Google Navigation view.
 class NavigationViewOptionsDto {
   NavigationViewOptionsDto({
-    required this.navigationUIEnabled,
+    required this.navigationUIEnabledPreference,
   });
 
   /// Determines the initial visibility of the navigation UI on map initialization.
-  bool navigationUIEnabled;
+  NavigationUIEnabledPreferenceDto navigationUIEnabledPreference;
 
   Object encode() {
     return <Object?>[
-      navigationUIEnabled,
+      navigationUIEnabledPreference.index,
     ];
   }
 
   static NavigationViewOptionsDto decode(Object result) {
     result as List<Object?>;
     return NavigationViewOptionsDto(
-      navigationUIEnabled: result[0]! as bool,
+      navigationUIEnabledPreference:
+          NavigationUIEnabledPreferenceDto.values[result[0]! as int],
     );
   }
 }

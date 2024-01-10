@@ -110,7 +110,7 @@ class _NavigationDemoState extends State<NavigationBody> {
               if (index == 0) {
                 return Card(
                   child: Container(
-                    height: 40,
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
                     alignment: Alignment.center,
                     child: Column(
                       children: <Widget>[

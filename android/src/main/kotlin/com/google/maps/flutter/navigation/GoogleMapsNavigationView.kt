@@ -90,8 +90,15 @@ internal constructor(
     _navigationView.onResume()
 
     // Initialize navigation view with given navigation view options
-    val navigatorInitialized = GoogleMapsNavigationSessionManager.getInstance().isInitialized()
-    val navigationViewEnabled = navigationOptions.navigationUiEnabled ?: navigatorInitialized
+    var navigationViewEnabled: Boolean = false
+    if (
+      navigationOptions.navigationUiEnabledPreference == NavigationUIEnabledPreference.AUTOMATIC
+    ) {
+      val navigatorInitialized = GoogleMapsNavigationSessionManager.getInstance().isInitialized()
+      if (navigatorInitialized) {
+        navigationViewEnabled = true
+      }
+    }
     _navigationView.isNavigationUiEnabled = navigationViewEnabled
 
     _navigationView.getMapAsync { map ->

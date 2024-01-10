@@ -37,6 +37,8 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   private var _gmsPolylines: [GMSPolyline] = []
   private var _gmsCircles: [GMSCircle] = []
   private var _mapConfiguration: MapConfiguration!
+  private var _navigationUIEnabledPreference: NavigationUIEnabledPreference!
+
   private var _mapViewReady: Bool = false
   private var _mapReadyCallback: ((Result<Void, Error>) -> Void)?
   private var _imageRegistry: ImageRegistry
@@ -51,6 +53,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
        viewIdentifier viewId: Int64,
        viewRegistry registry: GoogleMapsNavigationViewRegistry,
        navigationViewEventApi: NavigationViewEventApi,
+       navigationUIEnabledPreference: NavigationUIEnabledPreference,
        mapConfiguration: MapConfiguration, imageRegistry: ImageRegistry) {
     _viewId = viewId
     _viewRegistry = registry
@@ -64,6 +67,10 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     _mapConfiguration.apply(to: _navigationView)
 
     super.init()
+
+    _navigationUIEnabledPreference = navigationUIEnabledPreference
+    applyNavigationUIEnabledPreference()
+
     registry.registerView(viewId: viewId, view: self)
     _navigationView.delegate = self
     _navigationView.viewSettledDelegate = self
@@ -82,8 +89,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
       mapView: self
     )
 
-    // Set initial navigation UI state.
-    setNavigationUIEnabled(_mapConfiguration?.navigationUIEnabled ?? isAttachedToSession)
+    applyNavigationUIEnabledPreference()
 
     _navigationView.needsUpdateConstraints()
 
@@ -93,6 +99,17 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
       callback(.success(()))
       _mapReadyCallback = nil
     }
+  }
+
+  func applyNavigationUIEnabledPreference() {
+    var navigationUIEnabled = false
+    // Set initial navigation UI state.
+    if GoogleMapsNavigationSessionManager.shared.isInitialized() {
+      if _navigationUIEnabledPreference == .automatic {
+        navigationUIEnabled = true
+      }
+    }
+    setNavigationUIEnabled(navigationUIEnabled)
   }
 
   func awaitMapReady(callback: @escaping (Result<Void, Error>) -> Void) {

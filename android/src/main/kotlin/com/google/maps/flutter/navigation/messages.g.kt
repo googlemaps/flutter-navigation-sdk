@@ -62,6 +62,20 @@ class FlutterError(
   val details: Any? = null
 ) : Throwable()
 
+/** Determines the initial visibility of the navigation UI on map initialization. */
+enum class NavigationUIEnabledPreferenceDto(val raw: Int) {
+  /** Navigation UI gets enabled if the navigation session has already been successfully started. */
+  AUTOMATIC(0),
+  /** Navigation UI is disabled. */
+  DISABLED(1);
+
+  companion object {
+    fun ofRaw(raw: Int): NavigationUIEnabledPreferenceDto? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
 enum class MapTypeDto(val raw: Int) {
   NONE(0),
   NORMAL(1),
@@ -356,19 +370,19 @@ data class MapOptionsDto(
  */
 data class NavigationViewOptionsDto(
   /** Determines the initial visibility of the navigation UI on map initialization. */
-  val navigationUIEnabled: Boolean
+  val navigationUIEnabledPreference: NavigationUIEnabledPreferenceDto
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
     fun fromList(list: List<Any?>): NavigationViewOptionsDto {
-      val navigationUIEnabled = list[0] as Boolean
-      return NavigationViewOptionsDto(navigationUIEnabled)
+      val navigationUIEnabledPreference = NavigationUIEnabledPreferenceDto.ofRaw(list[0] as Int)!!
+      return NavigationViewOptionsDto(navigationUIEnabledPreference)
     }
   }
 
   fun toList(): List<Any?> {
     return listOf<Any?>(
-      navigationUIEnabled,
+      navigationUIEnabledPreference.raw,
     )
   }
 }

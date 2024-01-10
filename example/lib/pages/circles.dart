@@ -210,6 +210,8 @@ class _CirclesPageState extends ExamplePageState<CirclesPage> {
             initialCameraPosition: const CameraPosition(
                 target: LatLng(latitude: 37.422, longitude: -122.084),
                 zoom: 12),
+            initialNavigationUIEnabledPreference:
+                NavigationUIEnabledPreference.disabled,
             onViewCreated: _onViewCreated,
             onCircleClicked: _onCircleClicked,
           )),

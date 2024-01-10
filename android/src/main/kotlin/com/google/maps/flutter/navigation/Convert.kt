@@ -80,6 +80,21 @@ object Convert {
   }
 
   /**
+   * Converts pigeon [NavigationUIEnabledPreferenceDto] to [NavigationUIEnabledPreference].
+   *
+   * @param preference pigeon [NavigationUIEnabledPreferenceDto].
+   * @return [NavigationUIEnabledPreference].
+   */
+  fun convertNavigationUIEnabledPreferenceFromDto(
+    preference: NavigationUIEnabledPreferenceDto
+  ): NavigationUIEnabledPreference {
+    return when (preference) {
+      NavigationUIEnabledPreferenceDto.AUTOMATIC -> NavigationUIEnabledPreference.AUTOMATIC
+      NavigationUIEnabledPreferenceDto.DISABLED -> NavigationUIEnabledPreference.DISABLED
+    }
+  }
+
+  /**
    * Converts pigeon [NavigationViewOptionsDto] to [NavigationViewOptions].
    *
    * @param options pigeon message [NavigationViewOptionsDto].
@@ -88,7 +103,11 @@ object Convert {
   fun convertNavigationViewOptionsFromDto(
     options: NavigationViewOptionsDto
   ): NavigationViewOptions {
-    return NavigationViewOptions(navigationUiEnabled = options.navigationUIEnabled)
+
+    return NavigationViewOptions(
+      navigationUiEnabledPreference =
+        convertNavigationUIEnabledPreferenceFromDto(options.navigationUIEnabledPreference)
+    )
   }
 
   /**

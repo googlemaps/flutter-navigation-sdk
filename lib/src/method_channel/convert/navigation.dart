@@ -249,3 +249,20 @@ extension ConvertRouteSegmentDto on RouteSegmentDto {
         trafficData: trafficData?.toRouteSegmentTrafficData(),
       );
 }
+
+/// [NavigationViewOptions] convert extension.
+/// @nodoc
+extension ConvertNavigationViewOptions on NavigationViewOptions {
+  /// Converts [NavigationSessionEvent] to [NavigationSessionEventDto]
+  NavigationViewOptionsDto toDto() {
+    late NavigationUIEnabledPreferenceDto preference;
+    switch (navigationUIEnabledPreference) {
+      case NavigationUIEnabledPreference.automatic:
+        preference = NavigationUIEnabledPreferenceDto.automatic;
+      case NavigationUIEnabledPreference.disabled:
+        preference = NavigationUIEnabledPreferenceDto.disabled;
+    }
+
+    return NavigationViewOptionsDto(navigationUIEnabledPreference: preference);
+  }
+}

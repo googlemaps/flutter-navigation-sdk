@@ -40,16 +40,16 @@ class GoogleMapsNavigationViewFactory: NSObject, FlutterPlatformViewFactory {
       fatalError("Failed to decode NavigationViewCreationOptionsDto")
     }
 
-    let mapConfiguration = Convert.convertMapOptions(
-      params.mapOptions,
-      navigationViewOptions: params.navigationViewOptions
-    )
+    let mapConfiguration = Convert.convertMapOptions(params.mapOptions)
 
     return GoogleMapsNavigationView(
       frame: frame,
       viewIdentifier: viewId,
       viewRegistry: viewRegistry,
       navigationViewEventApi: navigationViewEventApi,
+      navigationUIEnabledPreference: Convert
+        .convertNavigationUIEnabledPreference(preference: params.navigationViewOptions
+          .navigationUIEnabledPreference),
       mapConfiguration: mapConfiguration,
       imageRegistry: imageRegistry
     )
