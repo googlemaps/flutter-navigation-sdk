@@ -16,6 +16,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_navigation/google_maps_navigation.dart';
+
+import '../routes_api/routes_api.dart';
 import '../utils/utils.dart';
 import '../widgets/widgets.dart';
 
@@ -41,6 +43,9 @@ enum SimulationState {
   /// Simulation running.
   running,
 
+  /// Simulation running with outdated route.
+  runningOutdated,
+
   /// Simulation paused.
   paused,
 
@@ -57,9 +62,12 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   /// Camera location used to initialize the map view on simulator if location
   /// is not available by the given timeout [_userLocationTimeoutMS].
-  final LatLng cameraLocationMIT =
-      const LatLng(latitude: 42.3601, longitude: -71.094013);
+  static const LatLng cameraLocationMIT =
+      LatLng(latitude: 42.3601, longitude: -71.094013);
   static const int _userLocationTimeoutMS = 1500;
+
+  /// Speed multiplier used for simulation.
+  static const double simulationSpeedMultiplier = 5;
 
   /// Navigation view controller used to interact with the navigation view.
   GoogleNavigationViewController? _navigationViewController;
@@ -92,12 +100,16 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   bool _locationPermissionsAccepted = false;
 
   bool _validRoute = false;
+  bool _errorOnSetDestinations = false;
   bool _navigatorInitialized = false;
   bool _guidanceRunning = false;
   bool _showRemainingTimeAndDistanceLabels = false;
   SimulationState _simulationState = SimulationState.notRunning;
   NavigationTravelMode _travelMode = NavigationTravelMode.driving;
   final List<NavigationWaypoint> _waypoints = <NavigationWaypoint>[];
+
+  /// If true, route tokens and Routes API are used to calculate the route.
+  bool _routeTokensEnabled = false;
 
   /// Used to track if navigator has been initialized at least once.
   /// In this example app navigator can be cleaned up and re-initialized.
@@ -128,6 +140,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   void dispose() {
     _clearListeners();
     GoogleMapsNavigator.cleanup();
+    clearRegisteredImages();
     super.dispose();
   }
 
@@ -142,6 +155,21 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     // have been accepted.
     if (_termsAndConditionsAccepted && _locationPermissionsAccepted) {
       await _initializeNavigator();
+    }
+  }
+
+  Future<void> _setRouteTokensEnabled(bool value) async {
+    setState(() {
+      // Route tokens are only supported for the driving mode in this example app.
+      _travelMode = NavigationTravelMode.driving;
+      _validRoute = false;
+      _routeTokensEnabled = value;
+    });
+    final bool success = await _updateNavigationDestinations();
+    if (success) {
+      setState(() {
+        _validRoute = true;
+      });
     }
   }
 
@@ -167,11 +195,11 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   /// location is not available after timeout.
   Future<void> _setDefaultUserLocationAfterDelay() async {
     Future<void>.delayed(const Duration(milliseconds: _userLocationTimeoutMS),
-        () {
+        () async {
       if (mounted && _userLocation == null) {
-        setState(() {
-          _userLocation = cameraLocationMIT;
-        });
+        _userLocation = await _navigationViewController?.getMyLocation() ??
+            cameraLocationMIT;
+        setState(() {});
       }
     });
   }
@@ -312,11 +340,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     if (!mounted) {
       return;
     }
-    if (_simulationState == SimulationState.running ||
-        _simulationState == SimulationState.paused ||
-        _simulationState == SimulationState.unknown) {
-      debugPrint('Route changed, start simulating the new route.');
-      _startSimulation(resetSimulationLocation: false);
+    if (_simulationState == SimulationState.running) {
+      _simulationState = SimulationState.runningOutdated;
     }
     setState(() {
       _onRouteChangedEventCallCount += 1;
@@ -435,6 +460,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     // Cleanup navigation session.
     // This will also clear destinations, stop simulation, stop guidance
     await GoogleMapsNavigator.cleanup();
+    await _removeNewWaypointMarker();
+    await _removeDestinationWaypointMarkers();
     _waypoints.clear();
 
     // Reset navigation perspective to top down north up.
@@ -457,20 +484,22 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       _validRoute = false;
       _guidanceRunning = false;
       _simulationState = SimulationState.notRunning;
+      _nextWaypointIndex = 0;
     });
   }
 
   Marker? _newWaypointMarker;
+  final List<Marker> _destinationWaypointMarkers = <Marker>[];
 
-  MarkerOptions _buildMarkerOptions(LatLng target) {
+  MarkerOptions _buildNewWaypointMarkerOptions(LatLng target) {
     return MarkerOptions(
         infoWindow: const InfoWindow(title: 'Destination'),
         position:
             LatLng(latitude: target.latitude, longitude: target.longitude));
   }
 
-  Future<void> _updateWaypointMarker(LatLng target) async {
-    final MarkerOptions markerOptions = _buildMarkerOptions(target);
+  Future<void> _updateNewWaypointMarker(LatLng target) async {
+    final MarkerOptions markerOptions = _buildNewWaypointMarkerOptions(target);
     if (_newWaypointMarker == null) {
       // Add new marker.
       final List<Marker?> addedMarkers = await _navigationViewController!
@@ -495,7 +524,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     setState(() {});
   }
 
-  Future<void> _removeWaypointMarker() async {
+  Future<void> _removeNewWaypointMarker() async {
     if (_newWaypointMarker != null) {
       await _navigationViewController!
           .removeMarkers(<Marker>[_newWaypointMarker!]);
@@ -504,8 +533,20 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     }
   }
 
+  Future<void> _removeDestinationWaypointMarkers() async {
+    if (_destinationWaypointMarkers.isNotEmpty) {
+      await _navigationViewController!
+          .removeMarkers(_destinationWaypointMarkers);
+      _destinationWaypointMarkers.clear();
+
+      // Unregister custom marker images
+      await clearRegisteredImages();
+      setState(() {});
+    }
+  }
+
   Future<void> _onMapClicked(LatLng location) async {
-    await _updateWaypointMarker(location);
+    await _updateNewWaypointMarker(location);
   }
 
   Future<void> _addWaypoint() async {
@@ -521,23 +562,48 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
           longitude: _newWaypointMarker!.options.position.longitude,
         ),
       ));
-      await _removeWaypointMarker();
-      unawaited(showCalculatingRouteMessage());
-      final bool success = await _updateNavigationDestinations();
 
-      if (success) {
-        await _navigationViewController!.setNavigationUIEnabled(true);
-
-        if (!_guidanceRunning) {
-          await _navigationViewController!.showRouteOverview();
-        }
-
-        setState(() {
-          _validRoute = true;
-        });
-      }
+      // Convert new waypoint marker to destination marker.
+      await _convertNewWaypointMarkerToDestinationMarker(_nextWaypointIndex);
+      await _updateNavigationDestinationsAndNavigationViewState();
     }
     setState(() {});
+  }
+
+  /// Helper method that first updates destinations and then
+  /// updates navigation view state to show the route overview.
+  Future<void> _updateNavigationDestinationsAndNavigationViewState() async {
+    final bool success = await _updateNavigationDestinations();
+    if (success) {
+      await _navigationViewController!.setNavigationUIEnabled(true);
+
+      if (!_guidanceRunning) {
+        await _navigationViewController!.showRouteOverview();
+      }
+      setState(() {
+        _validRoute = true;
+      });
+    }
+  }
+
+  Future<void> _convertNewWaypointMarkerToDestinationMarker(
+      final int index) async {
+    final String title = 'Waypoint $index';
+    final ImageDescriptor waypointMarkerImage =
+        await registerWaypointMarkerImage(
+            index, MediaQuery.of(context).devicePixelRatio);
+    final List<Marker?> destinationMarkers =
+        await _navigationViewController!.updateMarkers(<Marker>[
+      _newWaypointMarker!.copyWith(
+        options: _newWaypointMarker!.options.copyWith(
+          infoWindow: InfoWindow(title: title),
+          anchor: const MarkerAnchor(u: 0.5, v: 1.2),
+          icon: waypointMarkerImage,
+        ),
+      )
+    ]);
+    _destinationWaypointMarkers.add(destinationMarkers.first!);
+    _newWaypointMarker = null;
   }
 
   Future<void> showCalculatingRouteMessage() async {
@@ -547,13 +613,31 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     }
   }
 
+  /// This method is called by the _onArrivalEvent event handler when the user
+  /// has arrived to a waypoint.
   Future<void> _arrivedToWaypoint(NavigationWaypoint waypoint) async {
-    // Remove the arrived waypoint from the list.
-    _waypoints.removeWhere((NavigationWaypoint w) => w.title == waypoint.title);
+    debugPrint('Arrived to waypoint: ${waypoint.title}');
+
+    // Remove the first waypoint from the list.
+    if (_waypoints.isNotEmpty) {
+      _waypoints.removeAt(0);
+    }
+    // Remove the first destination marker from the list.
+    if (_destinationWaypointMarkers.isNotEmpty) {
+      final Marker markerToRemove = _destinationWaypointMarkers.first;
+      await _navigationViewController!.removeMarkers(<Marker>[markerToRemove]);
+
+      // Unregister custom marker image.
+      await unregisterImage(markerToRemove.options.icon);
+
+      _destinationWaypointMarkers.removeAt(0);
+    }
 
     await GoogleMapsNavigator.continueToNextDestination();
 
     if (_waypoints.isEmpty) {
+      debugPrint('Arrived to last waypoint, stopping navigation.');
+
       // If there is no next waypoint, it means we have arrived at the last
       // destination. Hence, stop navigation.
       await _stopGuidedNavigation();
@@ -563,6 +647,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   }
 
   Future<void> _clearNavigationWaypoints() async {
+    // Stopping guided navigation will also clear the waypoints.
     await _stopGuidedNavigation();
     setState(() {
       _waypoints.clear();
@@ -578,58 +663,139 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       await _initializeNavigator();
     }
 
-    final Destinations msg = Destinations(
+    // If route tokens are enabled, build destinations with route tokens.
+    final Destinations? destinations = _routeTokensEnabled
+        ? (await _buildDestinationsWithRoutesApi())
+        : _buildDestinations();
+
+    if (destinations == null) {
+      // Failed to build destinations.
+      // This can happen if route tokens are enabled and route token could
+      // not be fetched.
+      setState(() {
+        _errorOnSetDestinations = true;
+      });
+      return false;
+    }
+
+    try {
+      final NavigationRouteStatus navRouteStatus =
+          await GoogleMapsNavigator.setDestinations(destinations);
+
+      switch (navRouteStatus) {
+        case NavigationRouteStatus.statusOk:
+          // Route is valid. Return true as success.
+          setState(() {
+            _errorOnSetDestinations = false;
+          });
+          return true;
+        case NavigationRouteStatus.internalError:
+          showMessage(
+              'Unexpected internal error occured. Please restart the app.');
+        case NavigationRouteStatus.routeNotFound:
+          showMessage('The route could not be calculated.');
+        case NavigationRouteStatus.networkError:
+          showMessage(
+              'Working network connection is required to calculate the route.');
+        case NavigationRouteStatus.quotaExceeded:
+          showMessage('Insufficient API quota to use the navigation.');
+        case NavigationRouteStatus.quotaCheckFailed:
+          showMessage(
+              'API quota check failed, cannot authorize the navigation.');
+        case NavigationRouteStatus.apiKeyNotAuthorized:
+          showMessage('A valid API key is required to use the navigation.');
+        case NavigationRouteStatus.statusCanceled:
+          showMessage(
+              'The route calculation was canceled in favor of a newer one.');
+        case NavigationRouteStatus.duplicateWaypointsError:
+          showMessage(
+              'The route could not be calculated because of duplicate waypoints.');
+        case NavigationRouteStatus.noWaypointsError:
+          showMessage(
+              'The route could not be calculated because no waypoints were provided.');
+        case NavigationRouteStatus.locationUnavailable:
+          showMessage(
+              'No user location is available. Did you allow location permission?');
+        case NavigationRouteStatus.waypointError:
+          showMessage('Invalid waypoints provided.');
+        case NavigationRouteStatus.travelModeUnsupported:
+          showMessage(
+              'The route could not calculated for the given travel mode.');
+        case NavigationRouteStatus.unknown:
+          showMessage(
+              'The route could not be calculated due to an unknown error.');
+        case NavigationRouteStatus.locationUnknown:
+          showMessage(
+              'The route could not be calculated, because the user location is unknown.');
+      }
+    } on RouteTokenMalformedException catch (_) {
+      showMessage('Malformed route token');
+    } on SessionNotInitializedException catch (_) {
+      showMessage('Cannot set destinations, session not initialized');
+    }
+    setState(() {
+      _errorOnSetDestinations = true;
+    });
+    return false;
+  }
+
+  /// Helper function to retry setting navigation settings if there was an error
+  /// on the previous attempt. Sometimes the error is transient and retrying
+  /// the operation can succeed, for example in situations where device location
+  /// is not yet available.
+  Future<void> _retryToUpdateNavigationDestinations() async {
+    setState(() {
+      _errorOnSetDestinations = false;
+    });
+    await _updateNavigationDestinationsAndNavigationViewState();
+  }
+
+  Destinations? _buildDestinations() {
+    // Show delayed calculating route message.
+    unawaited(showCalculatingRouteMessage());
+
+    return Destinations(
       waypoints: _waypoints,
       displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
       routingOptions: RoutingOptions(travelMode: _travelMode),
     );
+  }
 
-    final NavigationRouteStatus navRouteStatus =
-        await GoogleMapsNavigator.setDestinations(msg);
+  Future<Destinations?> _buildDestinationsWithRoutesApi() async {
+    assert(_routeTokensEnabled);
 
-    switch (navRouteStatus) {
-      case NavigationRouteStatus.statusOk:
-        // Route is valid. Return true as success.
-        return true;
-      case NavigationRouteStatus.internalError:
-        showMessage(
-            'Unexpected internal error occured. Please restart the app.');
-      case NavigationRouteStatus.routeNotFound:
-        showMessage('The route could not be calculated.');
-      case NavigationRouteStatus.networkError:
-        showMessage(
-            'Working network connection is required to calculate the route.');
-      case NavigationRouteStatus.quotaExceeded:
-        showMessage('Insufficient API quota to use the navigation.');
-      case NavigationRouteStatus.quotaCheckFailed:
-        showMessage('API quota check failed, cannot authorize the navigation.');
-      case NavigationRouteStatus.apiKeyNotAuthorized:
-        showMessage('A valid API key is required to use the navigation.');
-      case NavigationRouteStatus.statusCanceled:
-        showMessage(
-            'The route calculation was canceled in favor of a newer one.');
-      case NavigationRouteStatus.duplicateWaypointsError:
-        showMessage(
-            'The route could not be calculated because of duplicate waypoints.');
-      case NavigationRouteStatus.noWaypointsError:
-        showMessage(
-            'The route could not be calculated because no waypoints were provided.');
-      case NavigationRouteStatus.locationUnavailable:
-        showMessage(
-            'No user location is available. Did you allow location permission?');
-      case NavigationRouteStatus.waypointError:
-        showMessage('Invalid waypoints provided.');
-      case NavigationRouteStatus.travelModeUnsupported:
-        showMessage(
-            'The route could not calculated for the given travel mode.');
-      case NavigationRouteStatus.unknown:
-        showMessage(
-            'The route could not be calculated due to an unknown error.');
-      case NavigationRouteStatus.locationUnknown:
-        showMessage(
-            'The route could not be calculated, because the user location is unknown.');
+    showMessage('Using route token from Routes API.');
+
+    List<String> routeTokens = <String>[];
+    try {
+      routeTokens = await getRouteToken(
+        <NavigationWaypoint>[
+          // Add users location as start location for getting routetoken.
+          NavigationWaypoint.withLatLngTarget(
+              title: 'Origin', target: _userLocation),
+          ..._waypoints,
+        ],
+      );
+    } catch (e) {
+      showMessage('Failed to get route tokens from Routes API. $e');
+      return null;
     }
-    return false;
+
+    if (routeTokens.isEmpty) {
+      showMessage('Failed to get route tokens from Routes API.');
+      return null;
+    } else if (routeTokens.length > 1) {
+      showMessage(
+          'More than one route token received from Routes API. Using the first one.');
+    }
+
+    return Destinations(
+        waypoints: _waypoints,
+        displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
+        routeTokenOptions: RouteTokenOptions(
+          routeToken: routeTokens.first, // Uses first fetched route token.
+          travelMode: _travelMode,
+        ));
   }
 
   Future<void> _startGuidance() async {
@@ -654,18 +820,17 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     }
   }
 
-  Future<void> _startSimulation({bool resetSimulationLocation = true}) async {
+  Future<void> _startSimulation() async {
     if (_waypoints.isNotEmpty) {
-      if (resetSimulationLocation) {
-        final LatLng? myLocation =
-            await _navigationViewController!.getMyLocation();
-        if (myLocation != null) {
-          await GoogleMapsNavigator.simulator.setUserLocation(myLocation);
-        }
+      final LatLng? myLocation =
+          _userLocation ?? await _navigationViewController!.getMyLocation();
+      if (myLocation != null) {
+        await GoogleMapsNavigator.simulator.setUserLocation(myLocation);
       }
+
       await GoogleMapsNavigator.simulator
           .simulateLocationsAlongExistingRouteWithOptions(
-        SimulationOptions(speedMultiplier: 5),
+        SimulationOptions(speedMultiplier: simulationSpeedMultiplier),
       );
 
       setState(() {
@@ -788,6 +953,25 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       padding: const EdgeInsets.all(15),
       child: Column(
         children: <Widget>[
+          if (_errorOnSetDestinations && _waypoints.isNotEmpty) ...<Widget>[
+            const Text('Error while setting destinations'),
+            ElevatedButton(
+              onPressed: _retryToUpdateNavigationDestinations,
+              child: const Text('Retry'),
+            ),
+          ],
+          if (_guidanceRunning &&
+              _simulationState == SimulationState.runningOutdated)
+            Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 10,
+                children: <Widget>[
+                  const Text('Simulation is running with outdated route'),
+                  ElevatedButton(
+                    onPressed: () => _startSimulation(),
+                    child: const Text('Update simulation'),
+                  ),
+                ]),
           if (_waypoints.isNotEmpty)
             Wrap(
               alignment: WrapAlignment.center,
@@ -812,12 +996,12 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                 if (_guidanceRunning &&
                     _simulationState == SimulationState.unknown)
                   ElevatedButton(
-                    onPressed: () =>
-                        _startSimulation(resetSimulationLocation: false),
+                    onPressed: () => _startSimulation(),
                     child: const Text('Resume simulation state'),
                   ),
                 if (_guidanceRunning &&
                     (_simulationState == SimulationState.running ||
+                        _simulationState == SimulationState.runningOutdated ||
                         _simulationState == SimulationState.paused))
                   ElevatedButton(
                     onPressed: () => _stopSimulation(),
@@ -1026,6 +1210,13 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     : null,
                 child: const Text('Display travelled route'),
               ),
+              ExampleSwitch(
+                title: 'Use route tokens',
+                initialValue: _routeTokensEnabled,
+                onChanged: _guidanceRunning
+                    ? null
+                    : (bool value) => _setRouteTokensEnabled(value),
+              ),
             ],
           ),
           const SizedBox(height: 10)
@@ -1213,8 +1404,10 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   Widget _buildTravelModeChoice(NavigationTravelMode mode, IconData icon) {
     final bool isSelected = mode == _travelMode;
+    final bool enabled =
+        !_routeTokensEnabled || mode == NavigationTravelMode.driving;
     return InkWell(
-      onTap: () => _changeTravelMode(mode),
+      onTap: enabled ? () => _changeTravelMode(mode) : null,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -1223,9 +1416,11 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
               child: Icon(
                 icon,
                 size: 30,
-                color: isSelected
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.secondary,
+                color: enabled
+                    ? (isSelected
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.secondary)
+                    : Theme.of(context).colorScheme.secondary.withAlpha(128),
               )),
           if (isSelected)
             Container(

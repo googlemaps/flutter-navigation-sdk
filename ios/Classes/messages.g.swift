@@ -851,10 +851,38 @@ struct NavigationSessionEventDto {
 }
 
 /// Generated class from Pigeon that represents data sent in messages.
+struct RouteTokenOptionsDto {
+  var routeToken: String
+  var travelMode: TravelModeDto?
+
+  static func fromList(_ list: [Any?]) -> RouteTokenOptionsDto? {
+    let routeToken = list[0] as! String
+    var travelMode: TravelModeDto?
+    let travelModeEnumVal: Int? = nilOrValue(list[1])
+    if let travelModeRawValue = travelModeEnumVal {
+      travelMode = TravelModeDto(rawValue: travelModeRawValue)!
+    }
+
+    return RouteTokenOptionsDto(
+      routeToken: routeToken,
+      travelMode: travelMode
+    )
+  }
+
+  func toList() -> [Any?] {
+    [
+      routeToken,
+      travelMode?.rawValue,
+    ]
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
 struct DestinationsDto {
   var waypoints: [NavigationWaypointDto?]
   var displayOptions: NavigationDisplayOptionsDto
   var routingOptions: RoutingOptionsDto?
+  var routeTokenOptions: RouteTokenOptionsDto?
 
   static func fromList(_ list: [Any?]) -> DestinationsDto? {
     let waypoints = list[0] as! [NavigationWaypointDto?]
@@ -863,11 +891,16 @@ struct DestinationsDto {
     if let routingOptionsList: [Any?] = nilOrValue(list[2]) {
       routingOptions = RoutingOptionsDto.fromList(routingOptionsList)
     }
+    var routeTokenOptions: RouteTokenOptionsDto?
+    if let routeTokenOptionsList: [Any?] = nilOrValue(list[3]) {
+      routeTokenOptions = RouteTokenOptionsDto.fromList(routeTokenOptionsList)
+    }
 
     return DestinationsDto(
       waypoints: waypoints,
       displayOptions: displayOptions,
-      routingOptions: routingOptions
+      routingOptions: routingOptions,
+      routeTokenOptions: routeTokenOptions
     )
   }
 
@@ -876,6 +909,7 @@ struct DestinationsDto {
       waypoints,
       displayOptions.toList(),
       routingOptions?.toList(),
+      routeTokenOptions?.toList(),
     ]
   }
 }
@@ -3998,10 +4032,12 @@ private class NavigationSessionApiCodecReader: FlutterStandardReader {
     case 139:
       return RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(readValue() as! [Any?])
     case 140:
-      return RoutingOptionsDto.fromList(readValue() as! [Any?])
+      return RouteTokenOptionsDto.fromList(readValue() as! [Any?])
     case 141:
-      return SimulationOptionsDto.fromList(readValue() as! [Any?])
+      return RoutingOptionsDto.fromList(readValue() as! [Any?])
     case 142:
+      return SimulationOptionsDto.fromList(readValue() as! [Any?])
+    case 143:
       return SpeedAlertOptionsDto.fromList(readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -4047,14 +4083,17 @@ private class NavigationSessionApiCodecWriter: FlutterStandardWriter {
     } else if let value = value as? RouteSegmentTrafficDataRoadStretchRenderingDataDto {
       super.writeByte(139)
       super.writeValue(value.toList())
-    } else if let value = value as? RoutingOptionsDto {
+    } else if let value = value as? RouteTokenOptionsDto {
       super.writeByte(140)
       super.writeValue(value.toList())
-    } else if let value = value as? SimulationOptionsDto {
+    } else if let value = value as? RoutingOptionsDto {
       super.writeByte(141)
       super.writeValue(value.toList())
-    } else if let value = value as? SpeedAlertOptionsDto {
+    } else if let value = value as? SimulationOptionsDto {
       super.writeByte(142)
+      super.writeValue(value.toList())
+    } else if let value = value as? SpeedAlertOptionsDto {
+      super.writeByte(143)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)

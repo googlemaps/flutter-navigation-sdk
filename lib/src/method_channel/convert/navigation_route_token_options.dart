@@ -14,20 +14,13 @@
 
 import '../../types/types.dart';
 import '../method_channel.dart';
-import 'navigation_route_token_options.dart';
-import 'navigation_waypoint.dart';
 
-/// [Destinations] convert extension.
+/// [NavigationDisplayOptions] convert extension.
 /// @nodoc
-extension ConvertDestinations on Destinations {
-  /// Converts [Destinations] to [DestinationsDto]
-  DestinationsDto toDto() => DestinationsDto(
-      waypoints: waypoints.map(
-        (NavigationWaypoint e) {
-          return e.toDto();
-        },
-      ).toList(),
-      displayOptions: displayOptions.toDto(),
-      routingOptions: routingOptions?.toDto(),
-      routeTokenOptions: routeTokenOptions?.toDto());
+extension ConvertRouteTokenOptions on RouteTokenOptions {
+  /// Converts [RouteTokenOptions] to [RouteTokenOptionsDto]
+  RouteTokenOptionsDto toDto() => RouteTokenOptionsDto(
+        routeToken: routeToken,
+        travelMode: travelMode?.toDto(),
+      );
 }

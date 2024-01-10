@@ -19,6 +19,7 @@ package com.google.maps.flutter.navigation
 import android.app.Activity
 import android.location.Location
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.libraries.navigation.CustomRoutesOptions
 import com.google.android.libraries.navigation.DisplayOptions
 import com.google.android.libraries.navigation.NavigationApi
 import com.google.android.libraries.navigation.NavigationApi.NavigatorListener
@@ -34,6 +35,7 @@ import com.google.android.libraries.navigation.TermsAndConditionsCheckOption
 import com.google.android.libraries.navigation.TermsAndConditionsUIParams
 import com.google.android.libraries.navigation.TimeAndDistance
 import com.google.android.libraries.navigation.Waypoint
+import com.google.maps.flutter.navigation.Convert.convertTravelModeFromDto
 import io.flutter.plugin.common.BinaryMessenger
 import java.lang.ref.WeakReference
 
@@ -393,9 +395,36 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
     waypoints: List<Waypoint>,
     routingOptions: RoutingOptions,
     displayOptions: DisplayOptions,
+    routeTokenOptions: RouteTokenOptionsDto?,
     callback: (Result<Navigator.RouteStatus>) -> Unit
   ) {
     try {
+      // If route toke options are present set token and travel mode if given.
+      if (routeTokenOptions != null) {
+        val customRoutesOptionBuilder =
+          CustomRoutesOptions.builder().setRouteToken(routeTokenOptions.routeToken)
+        if (routeTokenOptions.travelMode != null) {
+          customRoutesOptionBuilder.setTravelMode(
+            convertTravelModeFromDto(routeTokenOptions.travelMode)
+          )
+        }
+
+        val customRoutesOptions: CustomRoutesOptions
+        try {
+          customRoutesOptions = customRoutesOptionBuilder.build()
+        } catch (e: IllegalStateException) {
+          throw FlutterError(
+            "routeTokenMalformed",
+            "The route token passed is malformed",
+            e.message
+          )
+        }
+
+        getNavigator()
+          .setDestinations(waypoints, customRoutesOptions, displayOptions)
+          .setOnResultListener { callback(Result.success(it)) }
+        return
+      }
       getNavigator()
         .setDestinations(waypoints, routingOptions, displayOptions)
         .setOnResultListener { callback(Result.success(it)) }

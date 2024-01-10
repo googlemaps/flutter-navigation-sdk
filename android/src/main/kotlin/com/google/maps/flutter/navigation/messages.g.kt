@@ -919,10 +919,31 @@ data class NavigationSessionEventDto(val type: NavigationSessionEventTypeDto, va
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
+data class RouteTokenOptionsDto(val routeToken: String, val travelMode: TravelModeDto? = null) {
+
+  companion object {
+    @Suppress("UNCHECKED_CAST")
+    fun fromList(list: List<Any?>): RouteTokenOptionsDto {
+      val routeToken = list[0] as String
+      val travelMode: TravelModeDto? = (list[1] as Int?)?.let { TravelModeDto.ofRaw(it) }
+      return RouteTokenOptionsDto(routeToken, travelMode)
+    }
+  }
+
+  fun toList(): List<Any?> {
+    return listOf<Any?>(
+      routeToken,
+      travelMode?.raw,
+    )
+  }
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
 data class DestinationsDto(
   val waypoints: List<NavigationWaypointDto?>,
   val displayOptions: NavigationDisplayOptionsDto,
-  val routingOptions: RoutingOptionsDto? = null
+  val routingOptions: RoutingOptionsDto? = null,
+  val routeTokenOptions: RouteTokenOptionsDto? = null
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -931,7 +952,9 @@ data class DestinationsDto(
       val displayOptions = NavigationDisplayOptionsDto.fromList(list[1] as List<Any?>)
       val routingOptions: RoutingOptionsDto? =
         (list[2] as List<Any?>?)?.let { RoutingOptionsDto.fromList(it) }
-      return DestinationsDto(waypoints, displayOptions, routingOptions)
+      val routeTokenOptions: RouteTokenOptionsDto? =
+        (list[3] as List<Any?>?)?.let { RouteTokenOptionsDto.fromList(it) }
+      return DestinationsDto(waypoints, displayOptions, routingOptions, routeTokenOptions)
     }
   }
 
@@ -940,6 +963,7 @@ data class DestinationsDto(
       waypoints,
       displayOptions.toList(),
       routingOptions?.toList(),
+      routeTokenOptions?.toList(),
     )
   }
 }
@@ -4397,12 +4421,15 @@ private object NavigationSessionApiCodec : StandardMessageCodec() {
         }
       }
       140.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { RoutingOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { RouteTokenOptionsDto.fromList(it) }
       }
       141.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { SimulationOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { RoutingOptionsDto.fromList(it) }
       }
       142.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { SimulationOptionsDto.fromList(it) }
+      }
+      143.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SpeedAlertOptionsDto.fromList(it) }
       }
       else -> super.readValueOfType(type, buffer)
@@ -4459,16 +4486,20 @@ private object NavigationSessionApiCodec : StandardMessageCodec() {
         stream.write(139)
         writeValue(stream, value.toList())
       }
-      is RoutingOptionsDto -> {
+      is RouteTokenOptionsDto -> {
         stream.write(140)
         writeValue(stream, value.toList())
       }
-      is SimulationOptionsDto -> {
+      is RoutingOptionsDto -> {
         stream.write(141)
         writeValue(stream, value.toList())
       }
-      is SpeedAlertOptionsDto -> {
+      is SimulationOptionsDto -> {
         stream.write(142)
+        writeValue(stream, value.toList())
+      }
+      is SpeedAlertOptionsDto -> {
+        stream.write(143)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)

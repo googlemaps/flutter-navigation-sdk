@@ -18,3 +18,4 @@ export 'remaining_distance.dart';
 export 'remaining_time.dart';
 export 'snackbar.dart';
 export 'terms_of_service.dart';
+export 'waypoint_marker.dart';

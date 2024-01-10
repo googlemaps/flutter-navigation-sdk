@@ -15,6 +15,9 @@
 import '../../google_maps_navigation.dart';
 
 /// Destinations main type.
+///
+/// Asserts if both [routeTokenOptions] and [routingOptions] are provided.
+///
 /// {@category Navigation}
 class Destinations {
   /// Destinations initializer with waypoints and options.
@@ -22,7 +25,9 @@ class Destinations {
     required this.waypoints,
     required this.displayOptions,
     this.routingOptions,
-  });
+    this.routeTokenOptions,
+  }) : assert(routeTokenOptions == null || routingOptions == null,
+            'Only one of routeTokenOptions or routingOptions can be provided');
 
   /// List of navigation waypoints.
   final List<NavigationWaypoint> waypoints;
@@ -32,6 +37,40 @@ class Destinations {
 
   /// Navigation routing options.
   final RoutingOptions? routingOptions;
+
+  /// Navigation route token options.
+  final RouteTokenOptions? routeTokenOptions;
+}
+
+/// Provides options for routing using a route token
+/// in the Google Maps Navigation SDK.
+///
+/// This class is used to specify routing preferences when using the
+/// [GoogleMapsNavigator.setDestinations] method. It allows the integration
+/// of a predefined route token, which the SDK can utilize for
+/// routing if possible.
+///
+/// {@category Navigation}
+class RouteTokenOptions {
+  /// Route token options initializer with token and travel mode.
+  ///
+  /// The [travelMode] must match the travel mode used to generate
+  /// the [routeToken].
+  RouteTokenOptions({
+    required this.routeToken,
+    required this.travelMode,
+  });
+
+  /// Route token.
+  final String routeToken;
+
+  /// Specifies the type of [NavigationTravelMode] used to determine the
+  /// navigation directions.
+  ///
+  /// It must match the travel mode used to generate the [routeToken].
+  /// If there is a mismatch, [travelMode] will override the travel mode used to
+  /// generate the [routeToken].
+  final NavigationTravelMode? travelMode;
 }
 
 /// Alternative routes strategy.

@@ -235,9 +235,18 @@ class GoogleMapsNavigator {
     return GoogleMapsNavigationPlatform.instance.isGuidanceRunning();
   }
 
-  /// Sets destination waypoints and other settings.
-  static Future<NavigationRouteStatus> setDestinations(Destinations msg) {
-    return GoogleMapsNavigationPlatform.instance.setDestinations(msg);
+  /// Sets one or multiple destinations for navigation.
+  ///
+  /// Destinations are passed as [NavigationWaypoint] waypoints and options with
+  /// [destinations] parameter. Routing can be controlled by defining
+  /// [RoutingOptions], or using route tokens passed with [RouteTokenOptions].
+  /// [NavigationDisplayOptions] will be used to display the route.
+  ///
+  /// If the options are omitted, the default routing and display options will
+  /// be used.
+  static Future<NavigationRouteStatus> setDestinations(
+      Destinations destinations) {
+    return GoogleMapsNavigationPlatform.instance.setDestinations(destinations);
   }
 
   /// Clears existing destinations.
@@ -324,4 +333,11 @@ class ResetTermsAndConditionsException implements Exception {
 class SessionNotInitializedException implements Exception {
   /// Default constructor for [SessionNotInitializedException].
   const SessionNotInitializedException();
+}
+
+/// [GoogleMapsNavigator.setDestinations] method call has failed, because the
+/// [RouteTokenOptions.routeToken] is malformed. (Android only)
+class RouteTokenMalformedException implements Exception {
+  /// Default constructor for [RouteTokenMalformedException].
+  const RouteTokenMalformedException();
 }

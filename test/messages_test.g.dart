@@ -3360,14 +3360,17 @@ class _TestNavigationSessionApiCodec extends StandardMessageCodec {
     } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
       buffer.putUint8(139);
       writeValue(buffer, value.encode());
-    } else if (value is RoutingOptionsDto) {
+    } else if (value is RouteTokenOptionsDto) {
       buffer.putUint8(140);
       writeValue(buffer, value.encode());
-    } else if (value is SimulationOptionsDto) {
+    } else if (value is RoutingOptionsDto) {
       buffer.putUint8(141);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsDto) {
+    } else if (value is SimulationOptionsDto) {
       buffer.putUint8(142);
+      writeValue(buffer, value.encode());
+    } else if (value is SpeedAlertOptionsDto) {
+      buffer.putUint8(143);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -3403,10 +3406,12 @@ class _TestNavigationSessionApiCodec extends StandardMessageCodec {
         return RouteSegmentTrafficDataRoadStretchRenderingDataDto.decode(
             readValue(buffer)!);
       case 140:
-        return RoutingOptionsDto.decode(readValue(buffer)!);
+        return RouteTokenOptionsDto.decode(readValue(buffer)!);
       case 141:
-        return SimulationOptionsDto.decode(readValue(buffer)!);
+        return RoutingOptionsDto.decode(readValue(buffer)!);
       case 142:
+        return SimulationOptionsDto.decode(readValue(buffer)!);
+      case 143:
         return SpeedAlertOptionsDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);

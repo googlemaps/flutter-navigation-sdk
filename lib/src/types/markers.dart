@@ -140,6 +140,7 @@ class MarkerOptions {
       double? rotation,
       String? snippet,
       String? title,
+      InfoWindow? infoWindow,
       bool? visible,
       double? zIndex}) {
     return MarkerOptions(
@@ -151,7 +152,7 @@ class MarkerOptions {
         consumeTapEvents: consumeTapEvents ?? this.consumeTapEvents,
         position: position ?? this.position,
         rotation: rotation ?? this.rotation,
-        infoWindow: infoWindow,
+        infoWindow: infoWindow ?? this.infoWindow,
         visible: visible ?? this.visible,
         zIndex: zIndex ?? this.zIndex);
   }

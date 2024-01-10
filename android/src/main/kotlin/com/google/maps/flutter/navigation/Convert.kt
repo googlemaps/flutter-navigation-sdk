@@ -384,7 +384,7 @@ object Convert {
    * @param travelMode pigeon [TravelModeDto].
    * @return Google Navigation [@RoutingOptions.TravelMode Int].
    */
-  private fun convertTravelModeFromDto(travelMode: TravelModeDto): Int {
+  fun convertTravelModeFromDto(travelMode: TravelModeDto): Int {
     return when (travelMode) {
       TravelModeDto.CYCLING -> RoutingOptions.TravelMode.CYCLING
       TravelModeDto.DRIVING -> RoutingOptions.TravelMode.DRIVING

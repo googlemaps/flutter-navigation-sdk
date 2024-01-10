@@ -192,10 +192,11 @@ abstract class ExamplePageState<T extends ExamplePage> extends State<T>
               padding: const EdgeInsets.all(16),
               color: Theme.of(context).snackBarTheme.backgroundColor,
               child: SafeArea(
+                  top: false,
                   child: Text(
-                message,
-                style: Theme.of(context).snackBarTheme.contentTextStyle,
-              )),
+                    message,
+                    style: Theme.of(context).snackBarTheme.contentTextStyle,
+                  )),
             ),
           ),
         ),

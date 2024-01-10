@@ -88,7 +88,7 @@ class GoogleMapsNavigationSessionMessageHandler : NavigationSessionApi {
       } else {
         RoutingOptions()
       }
-    manager().setDestinations(waypoints, routingOptions, displayOptions) {
+    manager().setDestinations(waypoints, routingOptions, displayOptions, msg.routeTokenOptions) {
       if (it.isSuccess) {
         callback(Result.success(Convert.convertRouteStatusToDto(it.getOrThrow())))
       } else {

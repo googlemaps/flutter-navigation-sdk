@@ -502,15 +502,27 @@ enum NavigationSessionEventTypeDto {
   errorReceived;
 }
 
+class RouteTokenOptionsDto {
+  RouteTokenOptionsDto({
+    required this.routeToken,
+    required this.travelMode,
+  });
+
+  final String routeToken;
+  final TravelModeDto? travelMode;
+}
+
 class DestinationsDto {
   DestinationsDto({
     required this.waypoints,
     required this.displayOptions,
     this.routingOptions,
+    this.routeTokenOptions,
   });
   final List<NavigationWaypointDto?> waypoints;
   final NavigationDisplayOptionsDto displayOptions;
   final RoutingOptionsDto? routingOptions;
+  final RouteTokenOptionsDto? routeTokenOptions;
 }
 
 enum AlternateRoutesStrategyDto {

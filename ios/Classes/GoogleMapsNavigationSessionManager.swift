@@ -198,7 +198,7 @@ class GoogleMapsNavigationSessionManager: NSObject {
     try getNavigator().isGuidanceActive
   }
 
-  /// If the session has view attached, enable given display options.
+  // If the session has view attached, enable given display options.
   private func handleDisplayOptionsIfNeeded(options: NavigationDisplayOptionsDto) {
     _viewRegistry?.getAllRegisteredViews().forEach { view in
       if let showDestinationMarkers = options.showDestinationMarkers {
@@ -216,10 +216,28 @@ class GoogleMapsNavigationSessionManager: NSObject {
   func setDestinations(msg: DestinationsDto,
                        completion: @escaping (Result<RouteStatusDto, Error>) -> Void) {
     do {
-      /// Set the routing options globally for navigator or restore the defaults
+      // If the session has view attached, enable given display options.
+      handleDisplayOptionsIfNeeded(options: msg.displayOptions)
+
+      // Set the destinations for the navigator with a route token.
+      if let options = msg.routeTokenOptions {
+        try getNavigator()
+          .setDestinations(
+            Convert.convertWaypoints(msg.waypoints),
+            routeToken: options.routeToken,
+            callback: { routeStatus in
+              completion(.success(Convert.convertRouteStatus(routeStatus)))
+            }
+          )
+        _session?.travelMode = Convert.convertTravelMode(options.travelMode)
+        return
+      }
+
+      // Set the routing options globally for navigator or restore the defaults
       try setRoutingOptionsGlobals(msg.routingOptions, for: .navigator)
+
       guard msg.routingOptions != nil else {
-        /// Set destinations for navigator.
+        // Set destinations for navigator.
         try getNavigator()
           .setDestinations(
             Convert.convertWaypoints(msg.waypoints)
@@ -229,9 +247,7 @@ class GoogleMapsNavigationSessionManager: NSObject {
         return
       }
 
-      /// If the session has view attached, enable given display options.
-      handleDisplayOptionsIfNeeded(options: msg.displayOptions)
-      /// Set destinations for navigator with routing options.
+      // Set destinations for navigator with routing options.
       try getNavigator()
         .setDestinations(
           Convert.convertWaypoints(msg.waypoints),

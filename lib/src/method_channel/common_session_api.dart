@@ -198,6 +198,8 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
       switch (e.code) {
         case 'sessionNotInitialized':
           throw const SessionNotInitializedException();
+        case 'routeTokenMalformed':
+          throw const RouteTokenMalformedException();
         default:
           rethrow;
       }
