@@ -46,3 +46,21 @@ extension ConvertCameraPerspective on CameraPerspective {
     }
   }
 }
+
+/// [CameraEventTypeDto] convert extension.
+/// @nodoc
+extension ConvertCameraEventTypeDto on CameraEventTypeDto {
+  /// Convert [CameraEventTypeDto] to [CameraEventType].
+  CameraEventType toCameraEventType() {
+    switch (this) {
+      case CameraEventTypeDto.moveStartedByApi:
+        return CameraEventType.moveStartedByApi;
+      case CameraEventTypeDto.moveStartedByGesture:
+        return CameraEventType.moveStartedByGesture;
+      case CameraEventTypeDto.onCameraMove:
+        return CameraEventType.onCameraMove;
+      case CameraEventTypeDto.onCameraIdle:
+        return CameraEventType.onCameraIdle;
+    }
+  }
+}

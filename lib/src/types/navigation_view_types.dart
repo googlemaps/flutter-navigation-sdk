@@ -379,3 +379,33 @@ class MyLocationClickedEvent {}
 /// My location button clicked event.
 /// {@category Navigation View}
 class MyLocationButtonClickedEvent {}
+
+/// Represents the event type for [CameraChangedEvent].
+/// {@category Navigation View}
+enum CameraEventType {
+  /// Camera move initiated by developer or in response to user action.
+  /// For example: zoom buttons, my location button, or marker clicks.
+  moveStartedByApi,
+
+  /// Camera move initiated in response to user gestures on the map.
+  moveStartedByGesture,
+
+  /// Called repeatedly as the camera continues to move.
+  onCameraMove,
+
+  /// Called when camera movement has ended.
+  onCameraIdle
+}
+
+/// Represents camera changed events in a Google Maps view.
+/// {@category Navigation View}
+class CameraChangedEvent {
+  /// Creates a [CameraChangedEvent] object.
+  const CameraChangedEvent({required this.eventType, required this.position});
+
+  /// Event type that happened.
+  final CameraEventType eventType;
+
+  /// Current position of the camera.
+  final CameraPosition position;
+}

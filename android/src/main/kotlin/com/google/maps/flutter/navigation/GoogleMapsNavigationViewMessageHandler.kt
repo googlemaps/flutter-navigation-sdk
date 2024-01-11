@@ -463,4 +463,8 @@ class GoogleMapsNavigationViewMessageHandler(
   override fun clearCircles(viewId: Long) {
     getView(viewId.toInt()).clearCircles()
   }
+
+  override fun registerOnCameraChangedListener(viewId: Long) {
+    getView(viewId.toInt()).registerOnCameraChangedListener()
+  }
 }

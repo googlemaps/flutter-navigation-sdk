@@ -497,6 +497,9 @@ abstract mixin class NavigationViewAPIInterface {
   /// Remove all circles from map view.
   Future<void> clearCircles({required int viewId});
 
+  /// Register camera changed listeners.
+  Future<void> registerOnCameraChangedListener({required int viewId});
+
   /// Get navigation view marker event stream from the navigation view.
   Stream<MarkerEvent> getMarkerEventStream({required int viewId});
 
@@ -525,6 +528,9 @@ abstract mixin class NavigationViewAPIInterface {
   /// Get navigation view my location button clicked event stream from the navigation view.
   Stream<MyLocationButtonClickedEvent> getMyLocationButtonClickedEventStream(
       {required int viewId});
+
+  /// Get navigation view camera changed event stream from the navigation view.
+  Stream<CameraChangedEvent> getCameraChangedEventStream({required int viewId});
 
   /// Populates [GoogleNavigationInspectorPlatform.instance] to allow
   /// inspecting the platform map state.

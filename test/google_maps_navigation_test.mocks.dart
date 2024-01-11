@@ -1640,6 +1640,15 @@ class MockTestNavigationViewApi extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
+
+  @override
+  void registerOnCameraChangedListener(int? viewId) => super.noSuchMethod(
+        Invocation.method(
+          #registerOnCameraChangedListener,
+          [viewId],
+        ),
+        returnValueForMissingStub: null,
+      );
 }
 
 /// A class which mocks [TestImageRegistryApi].

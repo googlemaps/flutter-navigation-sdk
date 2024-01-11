@@ -38,6 +38,8 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
   late final GoogleNavigationViewController _navigationViewController;
   late double _minZoomLevel;
   late double _maxZoomLevel;
+  bool _showCameraUpdates = false;
+  String _latestCameraUpdate = '';
 
   // ignore: use_setters_to_change_properties
   Future<void> _onViewCreated(GoogleNavigationViewController controller) async {
@@ -127,9 +129,43 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
           initialNavigationUIEnabledPreference:
               NavigationUIEnabledPreference.disabled,
           onViewCreated: _onViewCreated,
+          onCameraMoveStarted: _onCameraMoveStarted,
+          onCameraMove: _onCameraMove,
+          onCameraIdle: _onCameraIdle,
         ),
-        getOverlayOptionsButton(context, onPressed: () => toggleOverlay())
+        getOverlayOptionsButton(context, onPressed: () => toggleOverlay()),
+        if (_showCameraUpdates)
+          Container(
+            width: 180,
+            padding: const EdgeInsets.all(8),
+            decoration: const BoxDecoration(color: Colors.white),
+            child: Text(
+              _latestCameraUpdate,
+            ),
+          )
       ]));
+
+  void _onCameraMoveStarted(CameraPosition position, bool gesture) {
+    if (_showCameraUpdates) {
+      showMessage(gesture
+          ? 'Camera move started by gesture'
+          : 'Camera move started by action');
+    }
+  }
+
+  void _onCameraMove(CameraPosition position) {
+    setState(() {
+      _latestCameraUpdate =
+          'Camera moving\nPosition: ${position.target.latitude.toStringAsFixed(2)}, ${position.target.longitude.toStringAsFixed(2)}';
+    });
+  }
+
+  void _onCameraIdle(CameraPosition position) {
+    setState(() {
+      _latestCameraUpdate =
+          'Camera idle\nPosition: ${position.target.latitude.toStringAsFixed(2)}, ${position.target.longitude.toStringAsFixed(2)}';
+    });
+  }
 
   void showMessage(String message) {
     hideMessage();
@@ -236,6 +272,15 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
               });
             },
           ),
+        SwitchListTile(
+          title: const Text('Show camera updates'),
+          value: _showCameraUpdates,
+          onChanged: (bool value) {
+            setState(() {
+              _showCameraUpdates = value;
+            });
+          },
+        ),
         const SizedBox(height: 24.0),
         Wrap(
           alignment: WrapAlignment.center,

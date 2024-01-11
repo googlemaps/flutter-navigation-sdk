@@ -26,6 +26,7 @@ import android.view.View
 import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.model.CameraPosition
@@ -1060,5 +1061,39 @@ internal constructor(
 
   fun isConsumeMyLocationButtonClickEventsEnabled(): Boolean {
     return _consumeMyLocationButtonClickEventsEnabled
+  }
+
+  fun registerOnCameraChangedListener() {
+    getMap().setOnCameraMoveStartedListener { reason ->
+      val event =
+        when (reason) {
+          OnCameraMoveStartedListener.REASON_API_ANIMATION,
+          OnCameraMoveStartedListener.REASON_DEVELOPER_ANIMATION ->
+            CameraEventTypeDto.MOVESTARTEDBYAPI
+          OnCameraMoveStartedListener.REASON_GESTURE -> CameraEventTypeDto.MOVESTARTEDBYGESTURE
+          else -> {
+            // This should not happen, added that the compiler does not complain.
+            throw RuntimeException("Unknown camera move started reason: $reason")
+          }
+        }
+      val position = Convert.convertCameraPositionToDto(getMap().cameraPosition)
+      navigationViewEventApi.onCameraChanged(viewId.toLong(), event, position) {}
+    }
+    getMap().setOnCameraMoveListener {
+      val position = Convert.convertCameraPositionToDto(getMap().cameraPosition)
+      navigationViewEventApi.onCameraChanged(
+        viewId.toLong(),
+        CameraEventTypeDto.ONCAMERAMOVE,
+        position
+      ) {}
+    }
+    getMap().setOnCameraIdleListener {
+      val position = Convert.convertCameraPositionToDto(getMap().cameraPosition)
+      navigationViewEventApi.onCameraChanged(
+        viewId.toLong(),
+        CameraEventTypeDto.ONCAMERAIDLE,
+        position
+      ) {}
+    }
   }
 }

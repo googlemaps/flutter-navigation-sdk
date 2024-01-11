@@ -108,6 +108,13 @@ enum PatternTypeDto: Int {
   case gap = 2
 }
 
+enum CameraEventTypeDto: Int {
+  case moveStartedByApi = 0
+  case moveStartedByGesture = 1
+  case onCameraMove = 2
+  case onCameraIdle = 3
+}
+
 enum NavigationSessionEventTypeDto: Int {
   case arrivalEvent = 0
   case routeChanged = 1
@@ -1773,6 +1780,7 @@ protocol NavigationViewApi {
   func updateCircles(viewId: Int64, circles: [CircleDto]) throws -> [CircleDto]
   func removeCircles(viewId: Int64, circles: [CircleDto]) throws
   func clearCircles(viewId: Int64) throws
+  func registerOnCameraChangedListener(viewId: Int64) throws
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -3611,6 +3619,25 @@ enum NavigationViewApiSetup {
     } else {
       clearCirclesChannel.setMessageHandler(nil)
     }
+    let registerOnCameraChangedListenerChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.registerOnCameraChangedListener",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      registerOnCameraChangedListenerChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
+        do {
+          try api.registerOnCameraChangedListener(viewId: viewIdArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      registerOnCameraChangedListenerChannel.setMessageHandler(nil)
+    }
   }
 }
 
@@ -3760,6 +3787,8 @@ private class NavigationViewEventApiCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 128:
+      return CameraPositionDto.fromList(readValue() as! [Any?])
+    case 129:
       return LatLngDto.fromList(readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -3769,8 +3798,11 @@ private class NavigationViewEventApiCodecReader: FlutterStandardReader {
 
 private class NavigationViewEventApiCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? LatLngDto {
+    if let value = value as? CameraPositionDto {
       super.writeByte(128)
+      super.writeValue(value.toList())
+    } else if let value = value as? LatLngDto {
+      super.writeByte(129)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -3821,6 +3853,9 @@ protocol NavigationViewEventApiProtocol {
                            completion: @escaping (Result<Void, FlutterError>) -> Void)
   func onMyLocationButtonClicked(viewId viewIdArg: Int64,
                                  completion: @escaping (Result<Void, FlutterError>) -> Void)
+  func onCameraChanged(viewId viewIdArg: Int64, eventType eventTypeArg: CameraEventTypeDto,
+                       position positionArg: CameraPositionDto,
+                       completion: @escaping (Result<Void, FlutterError>) -> Void)
 }
 
 class NavigationViewEventApi: NavigationViewEventApiProtocol {
@@ -4099,6 +4134,32 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
       codec: codec
     )
     channel.sendMessage([viewIdArg] as [Any?]) { response in
+      guard let listResponse = response as? [Any?] else {
+        completion(.failure(createConnectionError(withChannelName: channelName)))
+        return
+      }
+      if listResponse.count > 1 {
+        let code: String = listResponse[0] as! String
+        let message: String? = nilOrValue(listResponse[1])
+        let details: String? = nilOrValue(listResponse[2])
+        completion(.failure(FlutterError(code: code, message: message, details: details)))
+      } else {
+        completion(.success(()))
+      }
+    }
+  }
+
+  func onCameraChanged(viewId viewIdArg: Int64, eventType eventTypeArg: CameraEventTypeDto,
+                       position positionArg: CameraPositionDto,
+                       completion: @escaping (Result<Void, FlutterError>) -> Void) {
+    let channelName =
+      "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCameraChanged"
+    let channel = FlutterBasicMessageChannel(
+      name: channelName,
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    channel.sendMessage([viewIdArg, eventTypeArg.rawValue, positionArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return

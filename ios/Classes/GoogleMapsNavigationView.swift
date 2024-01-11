@@ -45,6 +45,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   private var _mapReadyCallback: ((Result<Void, Error>) -> Void)?
   private var _imageRegistry: ImageRegistry
   private var _consumeMyLocationButtonClickEventsEnabled: Bool = false
+  private var _listenCameraChanges = false
   var isAttachedToSession: Bool = false
 
   func view() -> UIView {
@@ -769,6 +770,12 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   func isConsumeMyLocationButtonClickEventsEnabled() -> Bool {
     _consumeMyLocationButtonClickEventsEnabled
   }
+
+  func registerOnCameraChangedListener() {
+    // Camera listeners cannot be controlled at runtime, so use this
+    // boolean to control if camera changes are sent over the event channel.
+    _listenCameraChanges = true
+  }
 }
 
 extension GoogleMapsNavigationView: GMSMapViewNavigationUIDelegate {
@@ -868,6 +875,40 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
   func didTapMyLocationButton(for mapView: GMSMapView) -> Bool {
     _navigationViewEventApi.onMyLocationButtonClicked(viewId: _viewId, completion: { _ in })
     return _consumeMyLocationButtonClickEventsEnabled
+  }
+
+  func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
+    if _listenCameraChanges {
+      let position = Convert.convertCameraPosition(position: mapView.camera)
+      _navigationViewEventApi.onCameraChanged(
+        viewId: _viewId,
+        eventType: gesture ? .moveStartedByGesture : .moveStartedByApi,
+        position: position,
+        completion: { _ in }
+      )
+    }
+  }
+
+  func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
+    if _listenCameraChanges {
+      _navigationViewEventApi.onCameraChanged(
+        viewId: _viewId,
+        eventType: .onCameraIdle,
+        position: Convert.convertCameraPosition(position: position),
+        completion: { _ in }
+      )
+    }
+  }
+
+  func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
+    if _listenCameraChanges {
+      _navigationViewEventApi.onCameraChanged(
+        viewId: _viewId,
+        eventType: .onCameraMove,
+        position: Convert.convertCameraPosition(position: position),
+        completion: { _ in }
+      )
+    }
   }
 }
 

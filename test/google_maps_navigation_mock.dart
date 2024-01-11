@@ -159,6 +159,21 @@ class MyLocationButtonClickedEventStream extends Mock
   }
 }
 
+class CameraChangedEventSubscription extends Mock
+    implements StreamSubscription<CameraChangedEvent> {}
+
+class CameraChangedEventStream extends Mock
+    implements Stream<CameraChangedEvent> {
+  @override
+  StreamSubscription<CameraChangedEvent> listen(
+      void Function(CameraChangedEvent event)? onData,
+      {Function? onError,
+      void Function()? onDone,
+      bool? cancelOnError}) {
+    return CameraChangedEventSubscription();
+  }
+}
+
 class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
   MockGoogleMapsNavigationPlatform(
       {required this.sessionApi,
@@ -1043,6 +1058,17 @@ class MockGoogleMapsNavigationPlatform extends GoogleMapsNavigationPlatform {
   Stream<NavigationUIEnabledChangedEvent>
       getNavigationUIEnabledChangedEventStream({required int viewId}) {
     return NavigationUIEnabledChangedEventStream();
+  }
+
+  @override
+  Stream<CameraChangedEvent> getCameraChangedEventStream(
+      {required int viewId}) {
+    return CameraChangedEventStream();
+  }
+
+  @override
+  Future<void> registerOnCameraChangedListener({required int viewId}) async {
+    return viewApi.registerOnCameraChangedListener(viewId);
   }
 
   @override

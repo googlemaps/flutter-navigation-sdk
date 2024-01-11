@@ -151,6 +151,19 @@ enum class PatternTypeDto(val raw: Int) {
   }
 }
 
+enum class CameraEventTypeDto(val raw: Int) {
+  MOVESTARTEDBYAPI(0),
+  MOVESTARTEDBYGESTURE(1),
+  ONCAMERAMOVE(2),
+  ONCAMERAIDLE(3);
+
+  companion object {
+    fun ofRaw(raw: Int): CameraEventTypeDto? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
 enum class NavigationSessionEventTypeDto(val raw: Int) {
   ARRIVALEVENT(0),
   ROUTECHANGED(1),
@@ -1935,6 +1948,8 @@ interface NavigationViewApi {
   fun removeCircles(viewId: Long, circles: List<CircleDto>)
 
   fun clearCircles(viewId: Long)
+
+  fun registerOnCameraChangedListener(viewId: Long)
 
   companion object {
     /** The codec used by NavigationViewApi. */
@@ -4123,6 +4138,30 @@ interface NavigationViewApi {
           channel.setMessageHandler(null)
         }
       }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.registerOnCameraChangedListener",
+            codec
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            var wrapped: List<Any?>
+            try {
+              api.registerOnCameraChangedListener(viewIdArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
     }
   }
 }
@@ -4292,6 +4331,9 @@ private object NavigationViewEventApiCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
       128.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { CameraPositionDto.fromList(it) }
+      }
+      129.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LatLngDto.fromList(it) }
       }
       else -> super.readValueOfType(type, buffer)
@@ -4300,8 +4342,12 @@ private object NavigationViewEventApiCodec : StandardMessageCodec() {
 
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
     when (value) {
-      is LatLngDto -> {
+      is CameraPositionDto -> {
         stream.write(128)
+        writeValue(stream, value.toList())
+      }
+      is LatLngDto -> {
+        stream.write(129)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -4507,6 +4553,28 @@ class NavigationViewEventApi(private val binaryMessenger: BinaryMessenger) {
       "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMyLocationButtonClicked"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(viewIdArg)) {
+      if (it is List<*>) {
+        if (it.size > 1) {
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+        } else {
+          callback(Result.success(Unit))
+        }
+      } else {
+        callback(Result.failure(createConnectionError(channelName)))
+      }
+    }
+  }
+
+  fun onCameraChanged(
+    viewIdArg: Long,
+    eventTypeArg: CameraEventTypeDto,
+    positionArg: CameraPositionDto,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val channelName =
+      "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCameraChanged"
+    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
+    channel.send(listOf(viewIdArg, eventTypeArg.raw, positionArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))

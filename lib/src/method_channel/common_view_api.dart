@@ -910,6 +910,11 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
+  Future<void> registerOnCameraChangedListener({required int viewId}) {
+    return _viewApi.registerOnCameraChangedListener(viewId);
+  }
+
+  @override
   Stream<MapClickEvent> getMapClickEventStream({required int viewId}) {
     return _unwrapEventStream<MapClickEvent>(viewId: viewId);
   }
@@ -963,6 +968,12 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   Stream<MyLocationButtonClickedEvent> getMyLocationButtonClickedEventStream(
       {required int viewId}) {
     return _unwrapEventStream<MyLocationButtonClickedEvent>(viewId: viewId);
+  }
+
+  @override
+  Stream<CameraChangedEvent> getCameraChangedEventStream(
+      {required int viewId}) {
+    return _unwrapEventStream<CameraChangedEvent>(viewId: viewId);
   }
 }
 
@@ -1042,6 +1053,16 @@ class NavigationViewEventApiImpl implements NavigationViewEventApi {
   void onMyLocationButtonClicked(int viewId) {
     _viewEventStreamController
         .add(_ViewIdEventWrapper(viewId, MyLocationButtonClickedEvent()));
+  }
+
+  @override
+  void onCameraChanged(
+      int viewId, CameraEventTypeDto eventType, CameraPositionDto position) {
+    _viewEventStreamController.add(_ViewIdEventWrapper(
+        viewId,
+        CameraChangedEvent(
+            eventType: eventType.toCameraEventType(),
+            position: position.toCameraPosition())));
   }
 }
 

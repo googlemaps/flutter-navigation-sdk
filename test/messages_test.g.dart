@@ -330,6 +330,8 @@ abstract class TestNavigationViewApi {
 
   void clearCircles(int viewId);
 
+  void registerOnCameraChangedListener(int viewId);
+
   static void setup(TestNavigationViewApi? api,
       {BinaryMessenger? binaryMessenger}) {
     {
@@ -3304,6 +3306,37 @@ abstract class TestNavigationViewApi {
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.clearCircles was null, expected non-null int.');
           try {
             api.clearCircles(arg_viewId!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.registerOnCameraChangedListener',
+          pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(__pigeon_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
+                (Object? message) async {
+          assert(message != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.registerOnCameraChangedListener was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.registerOnCameraChangedListener was null, expected non-null int.');
+          try {
+            api.registerOnCameraChangedListener(arg_viewId!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

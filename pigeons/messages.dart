@@ -357,6 +357,13 @@ class CircleOptionsDto {
   final bool clickable;
 }
 
+enum CameraEventTypeDto {
+  moveStartedByApi,
+  moveStartedByGesture,
+  onCameraMove,
+  onCameraIdle
+}
+
 @HostApi(dartHostTestHandler: 'TestNavigationViewApi')
 abstract class NavigationViewApi {
   @async
@@ -475,6 +482,8 @@ abstract class NavigationViewApi {
   List<CircleDto> updateCircles(int viewId, List<CircleDto> circles);
   void removeCircles(int viewId, List<CircleDto> circles);
   void clearCircles(int viewId);
+
+  void registerOnCameraChangedListener(int viewId);
 }
 
 @HostApi(dartHostTestHandler: 'TestImageRegistryApi')
@@ -500,6 +509,8 @@ abstract class NavigationViewEventApi {
   void onNavigationUIEnabledChanged(int viewId, bool navigationUIEnabled);
   void onMyLocationClicked(int viewId);
   void onMyLocationButtonClicked(int viewId);
+  void onCameraChanged(
+      int viewId, CameraEventTypeDto eventType, CameraPositionDto position);
 }
 
 class NavigationSessionEventDto {

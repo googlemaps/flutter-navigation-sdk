@@ -501,4 +501,8 @@ class GoogleMapsNavigationViewMessageHandler: NavigationViewApi {
   func setMaxZoomPreference(viewId: Int64, maxZoomPreference: Double) throws {
     try getView(viewId).setMaxZoomPreference(maxZoomPreference: Float(maxZoomPreference))
   }
+
+  func registerOnCameraChangedListener(viewId: Int64) throws {
+    try getView(viewId).registerOnCameraChangedListener()
+  }
 }

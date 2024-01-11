@@ -89,6 +89,13 @@ enum PatternTypeDto {
   gap,
 }
 
+enum CameraEventTypeDto {
+  moveStartedByApi,
+  moveStartedByGesture,
+  onCameraMove,
+  onCameraIdle,
+}
+
 enum NavigationSessionEventTypeDto {
   arrivalEvent,
   routeChanged,
@@ -4180,6 +4187,30 @@ class NavigationViewApi {
       return;
     }
   }
+
+  Future<void> registerOnCameraChangedListener(int viewId) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.registerOnCameraChangedListener';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[viewId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
 }
 
 class _ImageRegistryApiCodec extends StandardMessageCodec {
@@ -4339,8 +4370,11 @@ class _NavigationViewEventApiCodec extends StandardMessageCodec {
   const _NavigationViewEventApiCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is LatLngDto) {
+    if (value is CameraPositionDto) {
       buffer.putUint8(128);
+      writeValue(buffer, value.encode());
+    } else if (value is LatLngDto) {
+      buffer.putUint8(129);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -4351,6 +4385,8 @@ class _NavigationViewEventApiCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 128:
+        return CameraPositionDto.decode(readValue(buffer)!);
+      case 129:
         return LatLngDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -4384,6 +4420,9 @@ abstract class NavigationViewEventApi {
   void onMyLocationClicked(int viewId);
 
   void onMyLocationButtonClicked(int viewId);
+
+  void onCameraChanged(
+      int viewId, CameraEventTypeDto eventType, CameraPositionDto position);
 
   static void setup(NavigationViewEventApi? api,
       {BinaryMessenger? binaryMessenger}) {
@@ -4724,6 +4763,43 @@ abstract class NavigationViewEventApi {
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMyLocationButtonClicked was null, expected non-null int.');
           try {
             api.onMyLocationButtonClicked(arg_viewId!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCameraChanged',
+          pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        __pigeon_channel.setMessageHandler(null);
+      } else {
+        __pigeon_channel.setMessageHandler((Object? message) async {
+          assert(message != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCameraChanged was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCameraChanged was null, expected non-null int.');
+          final CameraEventTypeDto? arg_eventType = args[1] == null
+              ? null
+              : CameraEventTypeDto.values[args[1]! as int];
+          assert(arg_eventType != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCameraChanged was null, expected non-null CameraEventTypeDto.');
+          final CameraPositionDto? arg_position =
+              (args[2] as CameraPositionDto?);
+          assert(arg_position != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCameraChanged was null, expected non-null CameraPositionDto.');
+          try {
+            api.onCameraChanged(arg_viewId!, arg_eventType!, arg_position!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

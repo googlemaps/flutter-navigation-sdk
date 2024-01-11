@@ -112,6 +112,32 @@ typedef OnMyLocationClicked = void Function(MyLocationClickedEvent);
 /// Called during my location button clicked event.
 typedef OnMyLocationButtonClicked = void Function(MyLocationButtonClickedEvent);
 
+/// Called when the camera starts moving after it has been idle or when the
+/// reason for the camera motion has changed.
+///
+/// [gesture] is true when the camera motion has been initiated in response
+/// to the user gestures on the map. For example: pan, tilt, pinch to zoom, or
+/// rotate.
+/// [gesture] is false when the camera motion has been initiated in response
+/// to user actions. For example: zoom buttons, my location button, or marker
+/// clicks.
+/// [position] is the camera position where the motion started.
+typedef OnCameraMoveStarted = void Function(
+    CameraPosition position, bool gesture);
+
+/// Called repeatedly as the camera continues to move after the
+/// [OnCameraMoveStarted] call. The method may be called as often as once every
+/// frame.
+///
+/// [position] is the current camera position.
+typedef OnCameraMove = void Function(CameraPosition position);
+
+/// Called when the camera movement has ended, there are no pending animations
+/// and the user has stopped interacting with the map.
+///
+/// [position] is the camera position where the motion ended.
+typedef OnCameraIdle = void Function(CameraPosition position);
+
 /// The main map view widget for Google Maps Navigation.
 /// {@category Navigation View}
 class GoogleMapsNavigationView extends StatefulWidget {
@@ -168,6 +194,9 @@ class GoogleMapsNavigationView extends StatefulWidget {
     this.onNavigationUIEnabledChanged,
     this.onMyLocationClicked,
     this.onMyLocationButtonClicked,
+    this.onCameraMoveStarted,
+    this.onCameraMove,
+    this.onCameraIdle,
   });
 
   /// On view created callback.
@@ -216,7 +245,7 @@ class GoogleMapsNavigationView extends StatefulWidget {
   /// By default, the zoom gestures enabled.
   final bool initialZoomGesturesEnabled;
 
-  /// /// Specifies whether scroll gestures during rotate or zoom should be enabled.
+  /// Specifies whether scroll gestures during rotate or zoom should be enabled.
   ///
   /// If enabled, users can swipe to pan the camera. If disabled, swiping has no effect.
   /// This setting doesn't restrict programmatic movement and animation of the camera.
@@ -324,6 +353,15 @@ class GoogleMapsNavigationView extends StatefulWidget {
 
   /// On my location button clicked callback.
   final OnMyLocationButtonClicked? onMyLocationButtonClicked;
+
+  /// On camera move started callback.
+  final OnCameraMoveStarted? onCameraMoveStarted;
+
+  /// On camera move callback.
+  final OnCameraMove? onCameraMove;
+
+  /// On camera idle callback.
+  final OnCameraIdle? onCameraIdle;
 
   /// Creates a [State] for this [GoogleMapsNavigationView].
   @override
@@ -589,6 +627,7 @@ class GoogleNavigationViewController {
     setOnNavigationUIEnabledChangedListener();
     setOnMyLocationClickedListener();
     setOnMyLocationButtonClickedListener();
+    setOnCameraChangedListener();
   }
 
   /// Sets the event channel listener for the map click event listeners.
@@ -657,6 +696,31 @@ class GoogleNavigationViewController {
           .getMyLocationButtonClickedEventStream(viewId: _viewId)
           .listen(_viewState?.widget.onMyLocationButtonClicked);
     }
+  }
+
+  /// Sets the event channel listener for camera changed events.
+  void setOnCameraChangedListener() {
+    // Register listeners if any of the callbacks are not null.
+    if (_viewState?.widget.onCameraMoveStarted != null ||
+        _viewState?.widget.onCameraMove != null ||
+        _viewState?.widget.onCameraIdle != null) {
+      GoogleMapsNavigationPlatform.instance
+          .registerOnCameraChangedListener(viewId: _viewId);
+    }
+    GoogleMapsNavigationPlatform.instance
+        .getCameraChangedEventStream(viewId: _viewId)
+        .listen((CameraChangedEvent event) {
+      switch (event.eventType) {
+        case CameraEventType.moveStartedByApi:
+          _viewState?.widget.onCameraMoveStarted?.call(event.position, false);
+        case CameraEventType.moveStartedByGesture:
+          _viewState?.widget.onCameraMoveStarted?.call(event.position, true);
+        case CameraEventType.onCameraMove:
+          _viewState?.widget.onCameraMove?.call(event.position);
+        case CameraEventType.onCameraIdle:
+          _viewState?.widget.onCameraIdle?.call(event.position);
+      }
+    });
   }
 
   /// Sets the event channel listener for the marker drag event.
