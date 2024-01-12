@@ -27,25 +27,9 @@ import 'shared.dart';
 
 void main() {
   patrol('Test map types', (PatrolIntegrationTester $) async {
-    final Completer<GoogleNavigationViewController> viewControllerCompleter =
-        Completer<GoogleNavigationViewController>();
-
-    await checkLocationDialogAcceptance($);
-
-    /// Display navigation view.
-    final Key key = GlobalKey();
-    await pumpNavigationView(
-      $,
-      GoogleMapsNavigationView(
-        key: key,
-        onViewCreated: (GoogleNavigationViewController controller) {
-          viewControllerCompleter.complete(controller);
-        },
-      ),
-    );
-
+    /// Set up navigation.
     final GoogleNavigationViewController viewController =
-        await viewControllerCompleter.future;
+        await startNavigationWithoutDestination($);
 
     // Test default type.
     expect(await viewController.getMapType(), MapType.normal);
@@ -109,22 +93,10 @@ void main() {
   });
 
   patrol('Test map UI settings', (PatrolIntegrationTester $) async {
-    final Completer<GoogleNavigationViewController> controllerCompleter =
-        Completer<GoogleNavigationViewController>();
-
-    final Key key = GlobalKey();
-    await pumpNavigationView(
-      $,
-      GoogleMapsNavigationView(
-        key: key,
-        onViewCreated: (GoogleNavigationViewController viewController) {
-          controllerCompleter.complete(viewController);
-        },
-      ),
-    );
-
+    /// Set up navigation without initialization to test isMyLocationEnabled
+    /// is false before initialization is done.
     final GoogleNavigationViewController controller =
-        await controllerCompleter.future;
+        await startNavigationWithoutDestination($, initializeNavigation: false);
 
     /// Test the default values match with what has been documented in the
     /// API documentation in google_maps_navigation.dart file.
@@ -207,25 +179,9 @@ void main() {
   });
 
   patrol('Test map style', (PatrolIntegrationTester $) async {
-    final Completer<GoogleNavigationViewController> viewControllerCompleter =
-        Completer<GoogleNavigationViewController>();
-
-    await checkLocationDialogAcceptance($);
-
-    /// Display navigation view.
-    final Key key = GlobalKey();
-    await pumpNavigationView(
-      $,
-      GoogleMapsNavigationView(
-        key: key,
-        onViewCreated: (GoogleNavigationViewController controller) {
-          viewControllerCompleter.complete(controller);
-        },
-      ),
-    );
-
+    /// Set up navigation.
     final GoogleNavigationViewController viewController =
-        await viewControllerCompleter.future;
+        await startNavigationWithoutDestination($);
 
     // Test that valid json doens't throw exception.
     await viewController.setMapStyle(

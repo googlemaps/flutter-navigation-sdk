@@ -177,3 +177,44 @@ Future<GoogleNavigationViewController> startNavigation(
 
   return controller;
 }
+
+/// Start navigation without setting the destination and optionally
+/// simulating starting location with [simulateLocation] and skipping
+/// initialization with [initializeNavigation].
+Future<GoogleNavigationViewController> startNavigationWithoutDestination(
+    PatrolIntegrationTester $,
+    {bool initializeNavigation = true,
+    bool simulateLocation = false}) async {
+  final Completer<GoogleNavigationViewController> controllerCompleter =
+      Completer<GoogleNavigationViewController>();
+
+  await checkLocationDialogAndTosAcceptance($);
+
+  final Key key = GlobalKey();
+  await pumpNavigationView(
+    $,
+    GoogleMapsNavigationView(
+      key: key,
+      onViewCreated: (GoogleNavigationViewController viewController) {
+        controllerCompleter.complete(viewController);
+      },
+    ),
+  );
+
+  final GoogleNavigationViewController controller =
+      await controllerCompleter.future;
+
+  if (initializeNavigation) {
+    await GoogleMapsNavigator.initializeNavigationSession();
+    await $.pumpAndSettle();
+  }
+
+  if (simulateLocation) {
+    await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
+      latitude: 68.59381960993993,
+      longitude: 23.510696979963722,
+    ));
+  }
+
+  return controller;
+}

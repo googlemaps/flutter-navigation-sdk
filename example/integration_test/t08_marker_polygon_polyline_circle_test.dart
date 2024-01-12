@@ -20,7 +20,6 @@
 // For more information about Flutter integration tests, please see
 // https://docs.flutter.dev/cookbook/testing/integration/introduction
 
-import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
@@ -30,25 +29,9 @@ import 'shared.dart';
 
 void main() {
   patrol('Marker tests', (PatrolIntegrationTester $) async {
-    final Completer<GoogleNavigationViewController> viewControllerCompleter =
-        Completer<GoogleNavigationViewController>();
-
-    await checkLocationDialogAcceptance($);
-
-    /// Display navigation view.
-    final Key key = GlobalKey();
-    await pumpNavigationView(
-      $,
-      GoogleMapsNavigationView(
-        key: key,
-        onViewCreated: (GoogleNavigationViewController controller) {
-          viewControllerCompleter.complete(controller);
-        },
-      ),
-    );
-
+    /// Set up navigation.
     final GoogleNavigationViewController viewController =
-        await viewControllerCompleter.future;
+        await startNavigationWithoutDestination($);
 
     // markerOne options.
     const MarkerOptions markerOneOptions = MarkerOptions(
@@ -261,25 +244,9 @@ void main() {
   });
 
   patrol('Test polylines', (PatrolIntegrationTester $) async {
-    final Completer<GoogleNavigationViewController> viewControllerCompleter =
-        Completer<GoogleNavigationViewController>();
-
-    await checkLocationDialogAcceptance($);
-
-    /// Display navigation view.
-    final Key key = GlobalKey();
-    await pumpNavigationView(
-      $,
-      GoogleMapsNavigationView(
-        key: key,
-        onViewCreated: (GoogleNavigationViewController controller) {
-          viewControllerCompleter.complete(controller);
-        },
-      ),
-    );
-
+    /// Set up navigation.
     final GoogleNavigationViewController viewController =
-        await viewControllerCompleter.future;
+        await startNavigationWithoutDestination($);
 
     await viewController.addPolylines(
       <PolylineOptions>[
@@ -489,25 +456,9 @@ void main() {
   });
 
   patrol('Polygon tests', (PatrolIntegrationTester $) async {
-    final Completer<GoogleNavigationViewController> viewControllerCompleter =
-        Completer<GoogleNavigationViewController>();
-
-    await checkLocationDialogAcceptance($);
-
-    /// Display navigation view.
-    final Key key = GlobalKey();
-    await pumpNavigationView(
-      $,
-      GoogleMapsNavigationView(
-        key: key,
-        onViewCreated: (GoogleNavigationViewController controller) {
-          viewControllerCompleter.complete(controller);
-        },
-      ),
-    );
-
+    /// Set up navigation.
     final GoogleNavigationViewController viewController =
-        await viewControllerCompleter.future;
+        await startNavigationWithoutDestination($);
 
     /// Creates square, 4 coordinates, from top left and bottom right coordinates.
     List<LatLng> createSquare(LatLng topLeft, LatLng bottomRight) {
@@ -791,25 +742,9 @@ void main() {
   });
 
   patrol('Circle tests', (PatrolIntegrationTester $) async {
-    final Completer<GoogleNavigationViewController> viewControllerCompleter =
-        Completer<GoogleNavigationViewController>();
-
-    await checkLocationDialogAcceptance($);
-
-    /// Display navigation view.
-    final Key key = GlobalKey();
-    await pumpNavigationView(
-      $,
-      GoogleMapsNavigationView(
-        key: key,
-        onViewCreated: (GoogleNavigationViewController controller) {
-          viewControllerCompleter.complete(controller);
-        },
-      ),
-    );
-
+    /// Set up navigation.
     final GoogleNavigationViewController viewController =
-        await viewControllerCompleter.future;
+        await startNavigationWithoutDestination($);
 
     // Add circle on the current camera position.
     final CameraPosition position = await viewController.getCameraPosition();

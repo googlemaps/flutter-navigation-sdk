@@ -20,38 +20,14 @@
 // For more information about Flutter integration tests, please see
 // https://docs.flutter.dev/cookbook/testing/integration/introduction
 
-import 'dart:async';
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'shared.dart';
 
 void main() {
   patrol('Test navigation OnRemainingTimeOrDistanceChanged event listener',
       (PatrolIntegrationTester $) async {
-    final Completer<GoogleNavigationViewController> viewControllerCompleter =
-        Completer<GoogleNavigationViewController>();
-
-    await checkLocationDialogAndTosAcceptance($);
-
-    /// Display navigation view.
-    final Key key = GlobalKey();
-    await pumpNavigationView(
-      $,
-      GoogleMapsNavigationView(
-        key: key,
-        onViewCreated: (GoogleNavigationViewController controller) {
-          controller.setMyLocationEnabled(true);
-          viewControllerCompleter.complete(controller);
-        },
-      ),
-    );
-
-    await viewControllerCompleter.future;
-
-    await checkTermsAndConditionsAcceptance($);
-
-    /// Initialize navigation.
-    await GoogleMapsNavigator.initializeNavigationSession();
+    /// Set up navigation.
+    await startNavigationWithoutDestination($);
 
     /// Set up the listener and the test.
     GoogleMapsNavigator.setOnRemainingTimeOrDistanceChangedListener(
@@ -96,30 +72,8 @@ void main() {
 
   patrol('Test navigation OnRouteChanged event listener',
       (PatrolIntegrationTester $) async {
-    final Completer<GoogleNavigationViewController> viewControllerCompleter =
-        Completer<GoogleNavigationViewController>();
-
-    await checkLocationDialogAndTosAcceptance($);
-
-    /// Display navigation view.
-    final Key key = GlobalKey();
-    await pumpNavigationView(
-      $,
-      GoogleMapsNavigationView(
-        key: key,
-        onViewCreated: (GoogleNavigationViewController controller) {
-          controller.setMyLocationEnabled(true);
-          viewControllerCompleter.complete(controller);
-        },
-      ),
-    );
-
-    await viewControllerCompleter.future;
-
-    await checkTermsAndConditionsAcceptance($);
-
-    /// Initialize navigation.
-    await GoogleMapsNavigator.initializeNavigationSession();
+    /// Set up navigation.
+    await startNavigationWithoutDestination($);
 
     /// Set up the listener and the test.
     GoogleMapsNavigator.setOnRouteChangedListener(expectAsync0(
@@ -164,29 +118,8 @@ void main() {
 
   patrol('Test navigation RoadSnappedLocationUpdated event listener',
       (PatrolIntegrationTester $) async {
-    final Completer<GoogleNavigationViewController> viewControllerCompleter =
-        Completer<GoogleNavigationViewController>();
-
-    await checkLocationDialogAndTosAcceptance($);
-
-    /// Display navigation view.
-    final Key key = GlobalKey();
-    await pumpNavigationView(
-      $,
-      GoogleMapsNavigationView(
-        key: key,
-        onViewCreated: (GoogleNavigationViewController controller) {
-          controller.setMyLocationEnabled(true);
-          viewControllerCompleter.complete(controller);
-        },
-      ),
-    );
-
-    await viewControllerCompleter.future;
-
-    /// Initialize navigation.
-    await GoogleMapsNavigator.initializeNavigationSession();
-    await $.pumpAndSettle();
+    /// Sert up navigation.
+    await startNavigationWithoutDestination($);
 
     /// Simulate location (1298 California St)
     await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
@@ -240,28 +173,8 @@ void main() {
 
   patrol('Test navigation onArrival event listener',
       (PatrolIntegrationTester $) async {
-    final Completer<GoogleNavigationViewController> viewControllerCompleter =
-        Completer<GoogleNavigationViewController>();
-
-    await checkLocationDialogAndTosAcceptance($);
-
-    /// Display navigation view.
-    final Key key = GlobalKey();
-    await pumpNavigationView(
-      $,
-      GoogleMapsNavigationView(
-        key: key,
-        onViewCreated: (GoogleNavigationViewController controller) {
-          controller.setMyLocationEnabled(true);
-          viewControllerCompleter.complete(controller);
-        },
-      ),
-    );
-
-    await viewControllerCompleter.future;
-
-    /// Initialize navigation.
-    await GoogleMapsNavigator.initializeNavigationSession();
+    /// Set uo navigation.
+    await startNavigationWithoutDestination($);
 
     /// Set up the listener and the test.
     GoogleMapsNavigator.setOnArrivalListener(expectAsync1(
@@ -310,28 +223,10 @@ void main() {
   if (Platform.isAndroid) {
     patrol('Test navigation onRerouting event listener',
         (PatrolIntegrationTester $) async {
-      final Completer<GoogleNavigationViewController> viewControllerCompleter =
-          Completer<GoogleNavigationViewController>();
+      /// Set up navigation.
+      await startNavigationWithoutDestination($);
 
-      await checkLocationDialogAndTosAcceptance($);
-
-      /// Display navigation view.
-      final Key key = GlobalKey();
-      await pumpNavigationView(
-        $,
-        GoogleMapsNavigationView(
-          key: key,
-          onViewCreated: (GoogleNavigationViewController controller) {
-            controller.setMyLocationEnabled(true);
-            viewControllerCompleter.complete(controller);
-          },
-        ),
-      );
-
-      await viewControllerCompleter.future;
-
-      /// Initialize navigation and set up the rerouting listener with the test.
-      await GoogleMapsNavigator.initializeNavigationSession();
+      /// Set up the rerouting listener with the test.
       GoogleMapsNavigator.setOnReroutingListener(expectAsync1(
         (OnArrivalEvent event) {},
         count: 1,
