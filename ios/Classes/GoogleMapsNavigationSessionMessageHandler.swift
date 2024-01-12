@@ -87,9 +87,12 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
     try GoogleMapsNavigationSessionManager.shared.stopGuidance()
   }
 
-  func setDestinations(msg: DestinationsDto,
+  func setDestinations(destinations: DestinationsDto,
                        completion: @escaping (Result<RouteStatusDto, Error>) -> Void) {
-    GoogleMapsNavigationSessionManager.shared.setDestinations(msg: msg, completion: completion)
+    GoogleMapsNavigationSessionManager.shared.setDestinations(
+      destinations: destinations,
+      completion: completion
+    )
   }
 
   func clearDestinations() throws {

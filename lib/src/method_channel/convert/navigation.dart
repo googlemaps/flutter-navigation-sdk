@@ -44,40 +44,6 @@ extension ConvertSpeedingUpdatedEventDto on SpeedingUpdatedEventDto {
       );
 }
 
-/// [RemainingTimeOrDistanceChangedEventDto] convert extension.
-/// @nodoc
-extension ConvertRemainingTimeOrDistanceChangedEventDto
-    on RemainingTimeOrDistanceChangedEventDto {
-  /// Converts [RemainingTimeOrDistanceChangedEventDto] to [RemainingTimeOrDistanceChangedEvent]
-  RemainingTimeOrDistanceChangedEvent toRemainingTimeOrDistanceChangedEvent() =>
-      RemainingTimeOrDistanceChangedEvent(
-        remainingDistance: remainingDistance,
-        remainingTime: remainingTime,
-      );
-}
-
-/// [NavigationSessionEventDto] convert extension.
-/// @nodoc
-extension ConvertNavigationSessionEventDto on NavigationSessionEventDto {
-  /// Converts [NavigationSessionEventDto] to [NavigationSessionEvent]
-  NavigationSessionEvent toNavigationSessionEvent() {
-    late NavigationSessionEventType newType;
-    switch (type) {
-      case NavigationSessionEventTypeDto.arrivalEvent:
-        newType = NavigationSessionEventType.arrivalEvent;
-      case NavigationSessionEventTypeDto.routeChanged:
-        newType = NavigationSessionEventType.routeChanged;
-      case NavigationSessionEventTypeDto.errorReceived:
-        newType = NavigationSessionEventType.errorReceived;
-    }
-
-    return NavigationSessionEvent(
-      type: newType,
-      message: message,
-    );
-  }
-}
-
 /// [RouteStatusDto] convert extension.
 /// @nodoc
 extension ConvertRouteStatusDto on RouteStatusDto {
@@ -227,7 +193,7 @@ extension ConvertRouteSegmentDto on RouteSegmentDto {
 /// [NavigationViewOptions] convert extension.
 /// @nodoc
 extension ConvertNavigationViewOptions on NavigationViewOptions {
-  /// Converts [NavigationSessionEvent] to [NavigationSessionEventDto]
+  /// Converts [NavigationViewOptions] to [NavigationViewOptionsDto]
   NavigationViewOptionsDto toDto() {
     late NavigationUIEnabledPreferenceDto preference;
     switch (navigationUIEnabledPreference) {

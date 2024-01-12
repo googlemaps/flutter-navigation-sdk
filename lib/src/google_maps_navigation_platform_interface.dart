@@ -189,9 +189,6 @@ abstract mixin class NavigationSessionAPIInterface {
   Stream<RoadSnappedRawLocationUpdatedEvent>
       getNavigationRoadSnappedRawLocationEventStream();
 
-  /// Get navigation session event stream from the navigation session.
-  Stream<NavigationSessionEvent> getNavigationSessionEventStream();
-
   /// Get navigation on arrival event stream from the navigation session.
   Stream<OnArrivalEvent> getNavigationOnArrivalEventStream();
 

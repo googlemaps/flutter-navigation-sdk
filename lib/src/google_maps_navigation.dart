@@ -26,11 +26,6 @@ typedef OnCreatedCallback = void Function(
   GoogleNavigationViewController controller,
 );
 
-/// Navigation session events callback.
-typedef OnNavigationSessionEventCallback = void Function(
-  NavigationSessionEvent onNavigationSessionEvent,
-);
-
 /// Called during speeding event.
 typedef OnSpeedingUpdatedEventCallback = void Function(
   SpeedingUpdatedEvent onSpeedingUpdatedEvent,

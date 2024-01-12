@@ -513,21 +513,6 @@ abstract class NavigationViewEventApi {
       int viewId, CameraEventTypeDto eventType, CameraPositionDto position);
 }
 
-class NavigationSessionEventDto {
-  NavigationSessionEventDto({
-    required this.type,
-    required this.message,
-  });
-  final NavigationSessionEventTypeDto type;
-  final String message;
-}
-
-enum NavigationSessionEventTypeDto {
-  arrivalEvent,
-  routeChanged,
-  errorReceived;
-}
-
 class RouteTokenOptionsDto {
   RouteTokenOptionsDto({
     required this.routeToken,
@@ -706,48 +691,6 @@ class SpeedingUpdatedEventDto {
   final SpeedAlertSeverityDto severity;
 }
 
-class OnArrivalEventDto {
-  OnArrivalEventDto({
-    required this.waypoint,
-  });
-
-  final NavigationWaypointDto waypoint;
-}
-
-class RemainingTimeOrDistanceChangedEventDto {
-  RemainingTimeOrDistanceChangedEventDto({
-    required this.remainingTime,
-    required this.remainingDistance,
-  });
-
-  final double remainingTime;
-  final double remainingDistance;
-}
-
-class RouteChangedEventDto {
-  RouteChangedEventDto({
-    required this.message,
-  });
-
-  final String message;
-}
-
-class ReroutingEventDto {
-  ReroutingEventDto({
-    required this.message,
-  });
-
-  final String message;
-}
-
-class TrafficUpdatedEventDto {
-  TrafficUpdatedEventDto({
-    required this.message,
-  });
-
-  final String message;
-}
-
 class SpeedAlertOptionsThresholdPercentageDto {
   SpeedAlertOptionsThresholdPercentageDto({
     required this.percentage,
@@ -834,7 +777,7 @@ abstract class NavigationSessionApi {
   void startGuidance();
   void stopGuidance();
   @async
-  RouteStatusDto setDestinations(DestinationsDto msg);
+  RouteStatusDto setDestinations(DestinationsDto destinations);
   void clearDestinations();
   NavigationWaypointDto? continueToNextDestination();
   NavigationTimeAndDistanceDto getCurrentTimeAndDistance();
@@ -882,21 +825,19 @@ abstract class NavigationSessionApi {
 
 @FlutterApi()
 abstract class NavigationSessionEventApi {
-  // Android and iOS errors need to be unified first.
-  void onNavigationSessionEvent(NavigationSessionEventDto msg);
   void onSpeedingUpdated(SpeedingUpdatedEventDto msg);
   void onRoadSnappedLocationUpdated(LatLngDto location);
   void onRoadSnappedRawLocationUpdated(LatLngDto location);
-  void onArrival(OnArrivalEventDto msg);
-  void onRouteChanged(RouteChangedEventDto msg);
+  void onArrival(NavigationWaypointDto waypoint);
+  void onRouteChanged();
   void onRemainingTimeOrDistanceChanged(
-      RemainingTimeOrDistanceChangedEventDto msg);
+      double remainingTime, double remainingDistance);
 
   /// Android-only event.
-  void onTrafficUpdated(TrafficUpdatedEventDto msg);
+  void onTrafficUpdated();
 
   /// Android-only event.
-  void onRerouting(ReroutingEventDto msg);
+  void onRerouting();
 }
 
 @HostApi()

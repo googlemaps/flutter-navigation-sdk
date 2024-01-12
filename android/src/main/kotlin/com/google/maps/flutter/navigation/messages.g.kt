@@ -164,18 +164,6 @@ enum class CameraEventTypeDto(val raw: Int) {
   }
 }
 
-enum class NavigationSessionEventTypeDto(val raw: Int) {
-  ARRIVALEVENT(0),
-  ROUTECHANGED(1),
-  ERRORRECEIVED(2);
-
-  companion object {
-    fun ofRaw(raw: Int): NavigationSessionEventTypeDto? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
 enum class AlternateRoutesStrategyDto(val raw: Int) {
   ALL(0),
   NONE(1),
@@ -926,26 +914,6 @@ data class CircleOptionsDto(
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class NavigationSessionEventDto(val type: NavigationSessionEventTypeDto, val message: String) {
-
-  companion object {
-    @Suppress("UNCHECKED_CAST")
-    fun fromList(list: List<Any?>): NavigationSessionEventDto {
-      val type = NavigationSessionEventTypeDto.ofRaw(list[0] as Int)!!
-      val message = list[1] as String
-      return NavigationSessionEventDto(type, message)
-    }
-  }
-
-  fun toList(): List<Any?> {
-    return listOf<Any?>(
-      type.raw,
-      message,
-    )
-  }
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
 data class RouteTokenOptionsDto(val routeToken: String, val travelMode: TravelModeDto? = null) {
 
   companion object {
@@ -1234,100 +1202,6 @@ data class SpeedingUpdatedEventDto(
     return listOf<Any?>(
       percentageAboveLimit,
       severity.raw,
-    )
-  }
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
-data class OnArrivalEventDto(val waypoint: NavigationWaypointDto) {
-
-  companion object {
-    @Suppress("UNCHECKED_CAST")
-    fun fromList(list: List<Any?>): OnArrivalEventDto {
-      val waypoint = NavigationWaypointDto.fromList(list[0] as List<Any?>)
-      return OnArrivalEventDto(waypoint)
-    }
-  }
-
-  fun toList(): List<Any?> {
-    return listOf<Any?>(
-      waypoint.toList(),
-    )
-  }
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
-data class RemainingTimeOrDistanceChangedEventDto(
-  val remainingTime: Double,
-  val remainingDistance: Double
-) {
-  companion object {
-    @Suppress("UNCHECKED_CAST")
-    fun fromList(list: List<Any?>): RemainingTimeOrDistanceChangedEventDto {
-      val remainingTime = list[0] as Double
-      val remainingDistance = list[1] as Double
-      return RemainingTimeOrDistanceChangedEventDto(remainingTime, remainingDistance)
-    }
-  }
-
-  fun toList(): List<Any?> {
-    return listOf<Any?>(
-      remainingTime,
-      remainingDistance,
-    )
-  }
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
-data class RouteChangedEventDto(val message: String) {
-
-  companion object {
-    @Suppress("UNCHECKED_CAST")
-    fun fromList(list: List<Any?>): RouteChangedEventDto {
-      val message = list[0] as String
-      return RouteChangedEventDto(message)
-    }
-  }
-
-  fun toList(): List<Any?> {
-    return listOf<Any?>(
-      message,
-    )
-  }
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
-data class ReroutingEventDto(val message: String) {
-
-  companion object {
-    @Suppress("UNCHECKED_CAST")
-    fun fromList(list: List<Any?>): ReroutingEventDto {
-      val message = list[0] as String
-      return ReroutingEventDto(message)
-    }
-  }
-
-  fun toList(): List<Any?> {
-    return listOf<Any?>(
-      message,
-    )
-  }
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
-data class TrafficUpdatedEventDto(val message: String) {
-
-  companion object {
-    @Suppress("UNCHECKED_CAST")
-    fun fromList(list: List<Any?>): TrafficUpdatedEventDto {
-      val message = list[0] as String
-      return TrafficUpdatedEventDto(message)
-    }
-  }
-
-  fun toList(): List<Any?> {
-    return listOf<Any?>(
-      message,
     )
   }
 }
@@ -4714,7 +4588,7 @@ interface NavigationSessionApi {
 
   fun stopGuidance()
 
-  fun setDestinations(msg: DestinationsDto, callback: (Result<RouteStatusDto>) -> Unit)
+  fun setDestinations(destinations: DestinationsDto, callback: (Result<RouteStatusDto>) -> Unit)
 
   fun clearDestinations()
 
@@ -5020,8 +4894,8 @@ interface NavigationSessionApi {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val msgArg = args[0] as DestinationsDto
-            api.setDestinations(msgArg) { result: Result<RouteStatusDto> ->
+            val destinationsArg = args[0] as DestinationsDto
+            api.setDestinations(destinationsArg) { result: Result<RouteStatusDto> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -5539,30 +5413,10 @@ private object NavigationSessionEventApiCodec : StandardMessageCodec() {
         return (readValue(buffer) as? List<Any?>)?.let { LatLngDto.fromList(it) }
       }
       129.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { NavigationSessionEventDto.fromList(it) }
-      }
-      130.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavigationWaypointDto.fromList(it) }
       }
-      131.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { OnArrivalEventDto.fromList(it) }
-      }
-      132.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          RemainingTimeOrDistanceChangedEventDto.fromList(it)
-        }
-      }
-      133.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { ReroutingEventDto.fromList(it) }
-      }
-      134.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { RouteChangedEventDto.fromList(it) }
-      }
-      135.toByte() -> {
+      130.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SpeedingUpdatedEventDto.fromList(it) }
-      }
-      136.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { TrafficUpdatedEventDto.fromList(it) }
       }
       else -> super.readValueOfType(type, buffer)
     }
@@ -5574,36 +5428,12 @@ private object NavigationSessionEventApiCodec : StandardMessageCodec() {
         stream.write(128)
         writeValue(stream, value.toList())
       }
-      is NavigationSessionEventDto -> {
+      is NavigationWaypointDto -> {
         stream.write(129)
         writeValue(stream, value.toList())
       }
-      is NavigationWaypointDto -> {
-        stream.write(130)
-        writeValue(stream, value.toList())
-      }
-      is OnArrivalEventDto -> {
-        stream.write(131)
-        writeValue(stream, value.toList())
-      }
-      is RemainingTimeOrDistanceChangedEventDto -> {
-        stream.write(132)
-        writeValue(stream, value.toList())
-      }
-      is ReroutingEventDto -> {
-        stream.write(133)
-        writeValue(stream, value.toList())
-      }
-      is RouteChangedEventDto -> {
-        stream.write(134)
-        writeValue(stream, value.toList())
-      }
       is SpeedingUpdatedEventDto -> {
-        stream.write(135)
-        writeValue(stream, value.toList())
-      }
-      is TrafficUpdatedEventDto -> {
-        stream.write(136)
+        stream.write(130)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -5617,26 +5447,6 @@ class NavigationSessionEventApi(private val binaryMessenger: BinaryMessenger) {
   companion object {
     /** The codec used by NavigationSessionEventApi. */
     val codec: MessageCodec<Any?> by lazy { NavigationSessionEventApiCodec }
-  }
-
-  fun onNavigationSessionEvent(
-    msgArg: NavigationSessionEventDto,
-    callback: (Result<Unit>) -> Unit
-  ) {
-    val channelName =
-      "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onNavigationSessionEvent"
-    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(msgArg)) {
-      if (it is List<*>) {
-        if (it.size > 1) {
-          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
-        } else {
-          callback(Result.success(Unit))
-        }
-      } else {
-        callback(Result.failure(createConnectionError(channelName)))
-      }
-    }
   }
 
   fun onSpeedingUpdated(msgArg: SpeedingUpdatedEventDto, callback: (Result<Unit>) -> Unit) {
@@ -5690,11 +5500,11 @@ class NavigationSessionEventApi(private val binaryMessenger: BinaryMessenger) {
     }
   }
 
-  fun onArrival(msgArg: OnArrivalEventDto, callback: (Result<Unit>) -> Unit) {
+  fun onArrival(waypointArg: NavigationWaypointDto, callback: (Result<Unit>) -> Unit) {
     val channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onArrival"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(msgArg)) {
+    channel.send(listOf(waypointArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
@@ -5707,11 +5517,11 @@ class NavigationSessionEventApi(private val binaryMessenger: BinaryMessenger) {
     }
   }
 
-  fun onRouteChanged(msgArg: RouteChangedEventDto, callback: (Result<Unit>) -> Unit) {
+  fun onRouteChanged(callback: (Result<Unit>) -> Unit) {
     val channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRouteChanged"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(msgArg)) {
+    channel.send(null) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
@@ -5725,13 +5535,14 @@ class NavigationSessionEventApi(private val binaryMessenger: BinaryMessenger) {
   }
 
   fun onRemainingTimeOrDistanceChanged(
-    msgArg: RemainingTimeOrDistanceChangedEventDto,
+    remainingTimeArg: Double,
+    remainingDistanceArg: Double,
     callback: (Result<Unit>) -> Unit
   ) {
     val channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRemainingTimeOrDistanceChanged"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(msgArg)) {
+    channel.send(listOf(remainingTimeArg, remainingDistanceArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
@@ -5744,11 +5555,11 @@ class NavigationSessionEventApi(private val binaryMessenger: BinaryMessenger) {
     }
   }
   /** Android-only event. */
-  fun onTrafficUpdated(msgArg: TrafficUpdatedEventDto, callback: (Result<Unit>) -> Unit) {
+  fun onTrafficUpdated(callback: (Result<Unit>) -> Unit) {
     val channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onTrafficUpdated"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(msgArg)) {
+    channel.send(null) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
@@ -5761,11 +5572,11 @@ class NavigationSessionEventApi(private val binaryMessenger: BinaryMessenger) {
     }
   }
   /** Android-only event. */
-  fun onRerouting(msgArg: ReroutingEventDto, callback: (Result<Unit>) -> Unit) {
+  fun onRerouting(callback: (Result<Unit>) -> Unit) {
     val channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRerouting"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(msgArg)) {
+    channel.send(null) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))

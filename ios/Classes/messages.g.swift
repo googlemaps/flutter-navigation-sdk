@@ -115,12 +115,6 @@ enum CameraEventTypeDto: Int {
   case onCameraIdle = 3
 }
 
-enum NavigationSessionEventTypeDto: Int {
-  case arrivalEvent = 0
-  case routeChanged = 1
-  case errorReceived = 2
-}
-
 enum AlternateRoutesStrategyDto: Int {
   case all = 0
   case none = 1
@@ -844,29 +838,6 @@ struct CircleOptionsDto {
 }
 
 /// Generated class from Pigeon that represents data sent in messages.
-struct NavigationSessionEventDto {
-  var type: NavigationSessionEventTypeDto
-  var message: String
-
-  static func fromList(_ list: [Any?]) -> NavigationSessionEventDto? {
-    let type = NavigationSessionEventTypeDto(rawValue: list[0] as! Int)!
-    let message = list[1] as! String
-
-    return NavigationSessionEventDto(
-      type: type,
-      message: message
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      type.rawValue,
-      message,
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
 struct RouteTokenOptionsDto {
   var routeToken: String
   var travelMode: TravelModeDto?
@@ -1195,105 +1166,6 @@ struct SpeedingUpdatedEventDto {
     [
       percentageAboveLimit,
       severity.rawValue,
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct OnArrivalEventDto {
-  var waypoint: NavigationWaypointDto
-
-  static func fromList(_ list: [Any?]) -> OnArrivalEventDto? {
-    let waypoint = NavigationWaypointDto.fromList(list[0] as! [Any?])!
-
-    return OnArrivalEventDto(
-      waypoint: waypoint
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      waypoint.toList(),
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct RemainingTimeOrDistanceChangedEventDto {
-  var remainingTime: Double
-  var remainingDistance: Double
-
-  static func fromList(_ list: [Any?]) -> RemainingTimeOrDistanceChangedEventDto? {
-    let remainingTime = list[0] as! Double
-    let remainingDistance = list[1] as! Double
-
-    return RemainingTimeOrDistanceChangedEventDto(
-      remainingTime: remainingTime,
-      remainingDistance: remainingDistance
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      remainingTime,
-      remainingDistance,
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct RouteChangedEventDto {
-  var message: String
-
-  static func fromList(_ list: [Any?]) -> RouteChangedEventDto? {
-    let message = list[0] as! String
-
-    return RouteChangedEventDto(
-      message: message
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      message,
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct ReroutingEventDto {
-  var message: String
-
-  static func fromList(_ list: [Any?]) -> ReroutingEventDto? {
-    let message = list[0] as! String
-
-    return ReroutingEventDto(
-      message: message
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      message,
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct TrafficUpdatedEventDto {
-  var message: String
-
-  static func fromList(_ list: [Any?]) -> TrafficUpdatedEventDto? {
-    let message = list[0] as! String
-
-    return TrafficUpdatedEventDto(
-      message: message
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      message,
     ]
   }
 }
@@ -4264,7 +4136,7 @@ protocol NavigationSessionApi {
   func isGuidanceRunning() throws -> Bool
   func startGuidance() throws
   func stopGuidance() throws
-  func setDestinations(msg: DestinationsDto,
+  func setDestinations(destinations: DestinationsDto,
                        completion: @escaping (Result<RouteStatusDto, Error>) -> Void)
   func clearDestinations() throws
   func continueToNextDestination() throws -> NavigationWaypointDto?
@@ -4511,8 +4383,8 @@ enum NavigationSessionApiSetup {
     if let api {
       setDestinationsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let msgArg = args[0] as! DestinationsDto
-        api.setDestinations(msg: msgArg) { result in
+        let destinationsArg = args[0] as! DestinationsDto
+        api.setDestinations(destinations: destinationsArg) { result in
           switch result {
           case let .success(res):
             reply(wrapResult(res.rawValue))
@@ -4935,21 +4807,9 @@ private class NavigationSessionEventApiCodecReader: FlutterStandardReader {
     case 128:
       return LatLngDto.fromList(readValue() as! [Any?])
     case 129:
-      return NavigationSessionEventDto.fromList(readValue() as! [Any?])
-    case 130:
       return NavigationWaypointDto.fromList(readValue() as! [Any?])
-    case 131:
-      return OnArrivalEventDto.fromList(readValue() as! [Any?])
-    case 132:
-      return RemainingTimeOrDistanceChangedEventDto.fromList(readValue() as! [Any?])
-    case 133:
-      return ReroutingEventDto.fromList(readValue() as! [Any?])
-    case 134:
-      return RouteChangedEventDto.fromList(readValue() as! [Any?])
-    case 135:
+    case 130:
       return SpeedingUpdatedEventDto.fromList(readValue() as! [Any?])
-    case 136:
-      return TrafficUpdatedEventDto.fromList(readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -4961,29 +4821,11 @@ private class NavigationSessionEventApiCodecWriter: FlutterStandardWriter {
     if let value = value as? LatLngDto {
       super.writeByte(128)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationSessionEventDto {
+    } else if let value = value as? NavigationWaypointDto {
       super.writeByte(129)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationWaypointDto {
-      super.writeByte(130)
-      super.writeValue(value.toList())
-    } else if let value = value as? OnArrivalEventDto {
-      super.writeByte(131)
-      super.writeValue(value.toList())
-    } else if let value = value as? RemainingTimeOrDistanceChangedEventDto {
-      super.writeByte(132)
-      super.writeValue(value.toList())
-    } else if let value = value as? ReroutingEventDto {
-      super.writeByte(133)
-      super.writeValue(value.toList())
-    } else if let value = value as? RouteChangedEventDto {
-      super.writeByte(134)
-      super.writeValue(value.toList())
     } else if let value = value as? SpeedingUpdatedEventDto {
-      super.writeByte(135)
-      super.writeValue(value.toList())
-    } else if let value = value as? TrafficUpdatedEventDto {
-      super.writeByte(136)
+      super.writeByte(130)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -5008,26 +4850,22 @@ class NavigationSessionEventApiCodec: FlutterStandardMessageCodec {
 
 /// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
 protocol NavigationSessionEventApiProtocol {
-  func onNavigationSessionEvent(msg msgArg: NavigationSessionEventDto,
-                                completion: @escaping (Result<Void, FlutterError>) -> Void)
   func onSpeedingUpdated(msg msgArg: SpeedingUpdatedEventDto,
                          completion: @escaping (Result<Void, FlutterError>) -> Void)
   func onRoadSnappedLocationUpdated(location locationArg: LatLngDto,
                                     completion: @escaping (Result<Void, FlutterError>) -> Void)
   func onRoadSnappedRawLocationUpdated(location locationArg: LatLngDto,
                                        completion: @escaping (Result<Void, FlutterError>) -> Void)
-  func onArrival(msg msgArg: OnArrivalEventDto,
+  func onArrival(waypoint waypointArg: NavigationWaypointDto,
                  completion: @escaping (Result<Void, FlutterError>) -> Void)
-  func onRouteChanged(msg msgArg: RouteChangedEventDto,
-                      completion: @escaping (Result<Void, FlutterError>) -> Void)
-  func onRemainingTimeOrDistanceChanged(msg msgArg: RemainingTimeOrDistanceChangedEventDto,
+  func onRouteChanged(completion: @escaping (Result<Void, FlutterError>) -> Void)
+  func onRemainingTimeOrDistanceChanged(remainingTime remainingTimeArg: Double,
+                                        remainingDistance remainingDistanceArg: Double,
                                         completion: @escaping (Result<Void, FlutterError>) -> Void)
   /// Android-only event.
-  func onTrafficUpdated(msg msgArg: TrafficUpdatedEventDto,
-                        completion: @escaping (Result<Void, FlutterError>) -> Void)
+  func onTrafficUpdated(completion: @escaping (Result<Void, FlutterError>) -> Void)
   /// Android-only event.
-  func onRerouting(msg msgArg: ReroutingEventDto,
-                   completion: @escaping (Result<Void, FlutterError>) -> Void)
+  func onRerouting(completion: @escaping (Result<Void, FlutterError>) -> Void)
 }
 
 class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
@@ -5038,31 +4876,6 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
 
   var codec: FlutterStandardMessageCodec {
     NavigationSessionEventApiCodec.shared
-  }
-
-  func onNavigationSessionEvent(msg msgArg: NavigationSessionEventDto,
-                                completion: @escaping (Result<Void, FlutterError>) -> Void) {
-    let channelName =
-      "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onNavigationSessionEvent"
-    let channel = FlutterBasicMessageChannel(
-      name: channelName,
-      binaryMessenger: binaryMessenger,
-      codec: codec
-    )
-    channel.sendMessage([msgArg] as [Any?]) { response in
-      guard let listResponse = response as? [Any?] else {
-        completion(.failure(createConnectionError(withChannelName: channelName)))
-        return
-      }
-      if listResponse.count > 1 {
-        let code: String = listResponse[0] as! String
-        let message: String? = nilOrValue(listResponse[1])
-        let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(FlutterError(code: code, message: message, details: details)))
-      } else {
-        completion(.success(()))
-      }
-    }
   }
 
   func onSpeedingUpdated(msg msgArg: SpeedingUpdatedEventDto,
@@ -5140,7 +4953,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
     }
   }
 
-  func onArrival(msg msgArg: OnArrivalEventDto,
+  func onArrival(waypoint waypointArg: NavigationWaypointDto,
                  completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onArrival"
@@ -5149,7 +4962,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
+    channel.sendMessage([waypointArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -5165,8 +4978,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
     }
   }
 
-  func onRouteChanged(msg msgArg: RouteChangedEventDto,
-                      completion: @escaping (Result<Void, FlutterError>) -> Void) {
+  func onRouteChanged(completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRouteChanged"
     let channel = FlutterBasicMessageChannel(
@@ -5174,7 +4986,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
+    channel.sendMessage(nil) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -5190,7 +5002,8 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
     }
   }
 
-  func onRemainingTimeOrDistanceChanged(msg msgArg: RemainingTimeOrDistanceChangedEventDto,
+  func onRemainingTimeOrDistanceChanged(remainingTime remainingTimeArg: Double,
+                                        remainingDistance remainingDistanceArg: Double,
                                         completion: @escaping (Result<Void, FlutterError>)
                                           -> Void) {
     let channelName =
@@ -5200,7 +5013,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
+    channel.sendMessage([remainingTimeArg, remainingDistanceArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -5217,8 +5030,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
   }
 
   /// Android-only event.
-  func onTrafficUpdated(msg msgArg: TrafficUpdatedEventDto,
-                        completion: @escaping (Result<Void, FlutterError>) -> Void) {
+  func onTrafficUpdated(completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onTrafficUpdated"
     let channel = FlutterBasicMessageChannel(
@@ -5226,7 +5038,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
+    channel.sendMessage(nil) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -5243,8 +5055,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
   }
 
   /// Android-only event.
-  func onRerouting(msg msgArg: ReroutingEventDto,
-                   completion: @escaping (Result<Void, FlutterError>) -> Void) {
+  func onRerouting(completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRerouting"
     let channel = FlutterBasicMessageChannel(
@@ -5252,7 +5063,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
+    channel.sendMessage(nil) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return

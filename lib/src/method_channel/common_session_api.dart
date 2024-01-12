@@ -573,46 +573,34 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
         .whereType<RoadSnappedRawLocationUpdatedEvent>();
   }
 
-  /// Get event stream for navigation session events.
-  @override
-  Stream<NavigationSessionEvent> getNavigationSessionEventStream() {
-    return _sessionEventStreamController.stream
-        .whereType<NavigationSessionEventDto>()
-        .map((NavigationSessionEventDto event) =>
-            event.toNavigationSessionEvent());
-  }
-
   /// Get navigation on arrival event stream from the navigation session.
   @override
   Stream<OnArrivalEvent> getNavigationOnArrivalEventStream() {
-    return _sessionEventStreamController.stream
-        .whereType<OnArrivalEventDto>()
-        .map((OnArrivalEventDto event) =>
-            OnArrivalEvent(waypoint: event.waypoint.toNavigationWaypoint()));
+    return _sessionEventStreamController.stream.whereType<OnArrivalEvent>();
   }
 
   /// Get navigation on rerouting event stream from the navigation session.
   @override
   Stream<void> getNavigationOnReroutingEventStream() {
     return _sessionEventStreamController.stream
-        .whereType<ReroutingEventDto>()
-        .map((ReroutingEventDto event) => ());
+        .whereType<_ReroutingEvent>()
+        .map((_ReroutingEvent event) => ());
   }
 
   /// Get navigation traffic updated event stream from the navigation session.
   @override
   Stream<void> getNavigationTrafficUpdatedEventStream() {
     return _sessionEventStreamController.stream
-        .whereType<TrafficUpdatedEventDto>()
-        .map((TrafficUpdatedEventDto event) => ());
+        .whereType<_TrafficUpdatedEvent>()
+        .map((_TrafficUpdatedEvent event) => ());
   }
 
   /// Get navigation on route changed event stream from the navigation session.
   @override
   Stream<void> getNavigationOnRouteChangedEventStream() {
     return _sessionEventStreamController.stream
-        .whereType<RouteChangedEventDto>()
-        .map((RouteChangedEventDto event) => ());
+        .whereType<_RouteChangedEvent>()
+        .map((_RouteChangedEvent event) => ());
   }
 
   /// Get navigation remaining time or distance event stream from the navigation session.
@@ -620,9 +608,7 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   Stream<RemainingTimeOrDistanceChangedEvent>
       getNavigationRemainingTimeOrDistanceChangedEventStream() {
     return _sessionEventStreamController.stream
-        .whereType<RemainingTimeOrDistanceChangedEventDto>()
-        .map((RemainingTimeOrDistanceChangedEventDto event) =>
-            event.toRemainingTimeOrDistanceChangedEvent());
+        .whereType<RemainingTimeOrDistanceChangedEvent>();
   }
 
   @override
@@ -644,33 +630,29 @@ class NavigationSessionEventApiImpl implements NavigationSessionEventApi {
   final StreamController<Object> sessionEventStreamController;
 
   @override
-  void onNavigationSessionEvent(NavigationSessionEventDto event) {
-    sessionEventStreamController.add(event);
-  }
-
-  @override
   void onSpeedingUpdated(SpeedingUpdatedEventDto event) {
     sessionEventStreamController.add(event);
   }
 
   @override
-  void onArrival(OnArrivalEventDto event) {
-    sessionEventStreamController.add(event);
+  void onArrival(NavigationWaypointDto waypoint) {
+    sessionEventStreamController
+        .add(OnArrivalEvent(waypoint: waypoint.toNavigationWaypoint()));
   }
 
   @override
-  void onRouteChanged(RouteChangedEventDto event) {
-    sessionEventStreamController.add(event);
+  void onRerouting() {
+    sessionEventStreamController.add(_ReroutingEvent());
   }
 
   @override
-  void onRerouting(ReroutingEventDto event) {
-    sessionEventStreamController.add(event);
+  void onRouteChanged() {
+    sessionEventStreamController.add(_RouteChangedEvent());
   }
 
   @override
-  void onTrafficUpdated(TrafficUpdatedEventDto event) {
-    sessionEventStreamController.add(event);
+  void onTrafficUpdated() {
+    sessionEventStreamController.add(_TrafficUpdatedEvent());
   }
 
   @override
@@ -688,7 +670,17 @@ class NavigationSessionEventApiImpl implements NavigationSessionEventApi {
 
   @override
   void onRemainingTimeOrDistanceChanged(
-      RemainingTimeOrDistanceChangedEventDto event) {
-    sessionEventStreamController.add(event);
+      double remainingTime, double remainingDistance) {
+    sessionEventStreamController.add(RemainingTimeOrDistanceChangedEvent(
+        remainingTime: remainingTime, remainingDistance: remainingDistance));
   }
 }
+
+/// Event wrapper for a route update events.
+class _RouteChangedEvent {}
+
+/// Event wrapper for a rerouting events.
+class _ReroutingEvent {}
+
+/// Event wrapper for a traffic updated events.
+class _TrafficUpdatedEvent {}

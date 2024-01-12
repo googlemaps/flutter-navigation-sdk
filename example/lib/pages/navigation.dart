@@ -509,6 +509,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       _guidanceRunning = false;
       _simulationState = SimulationState.notRunning;
       _nextWaypointIndex = 0;
+      _remainingDistance = 0;
+      _remainingTime = 0;
     });
   }
 
@@ -1246,6 +1248,14 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                 child: const Text('Display travelled route'),
               ),
               ExampleSwitch(
+                  title: 'Show remaining time and distance',
+                  initialValue: _showRemainingTimeAndDistanceLabels,
+                  onChanged: (bool newValue) async {
+                    setState(() {
+                      _showRemainingTimeAndDistanceLabels = newValue;
+                    });
+                  }),
+              ExampleSwitch(
                 title: 'Use route tokens',
                 initialValue: _routeTokensEnabled,
                 onChanged: _guidanceRunning
@@ -1299,14 +1309,6 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     !_navigatorInitialized ||
                         _navigationViewController == null),
                 children: <Widget>[
-                  ExampleSwitch(
-                      title: 'Show remaining time and distance',
-                      initialValue: _showRemainingTimeAndDistanceLabels,
-                      onChanged: (bool newValue) async {
-                        setState(() {
-                          _showRemainingTimeAndDistanceLabels = newValue;
-                        });
-                      }),
                   ExampleSwitch(
                       title: 'Enable guidance header',
                       initialValue: _navigationHeaderEnabled,

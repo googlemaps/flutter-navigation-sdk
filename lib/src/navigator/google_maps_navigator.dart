@@ -75,29 +75,6 @@ class GoogleMapsNavigator {
     return GoogleMapsNavigationPlatform.instance.isInitialized();
   }
 
-  /// Sets the event channel listener for [NavigationSessionEvent]s.
-  ///
-  /// Returns a [StreamSubscription] for handling [NavigationSessionEvent]s.
-  /// This subscription must be canceled using `cancel()` when it is no longer
-  /// needed to stop receiving events and allow the stream to perform necessary
-  /// cleanup, such as releasing resources or shutting down event sources. The
-  /// cleanup is asynchronous, and the `cancel()` method returns a Future that
-  /// completes once the cleanup is done.
-  ///
-  /// Example usage:
-  /// ```dart
-  /// final subscription = setNavigationSessionEventListener(yourEventHandler);
-  /// // When done with the subscription
-  /// await subscription.cancel();
-  /// ```
-  static StreamSubscription<NavigationSessionEvent>
-      setNavigationSessionEventListener(
-          OnNavigationSessionEventCallback listener) {
-    return GoogleMapsNavigationPlatform.instance
-        .getNavigationSessionEventStream()
-        .listen(listener);
-  }
-
   /// Sets the event channel listener for the [SpeedingUpdatedEvent]s.
   ///
   /// Returns a [StreamSubscription] for [SpeedingUpdatedEvent]s.

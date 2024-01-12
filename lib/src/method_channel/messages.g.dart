@@ -96,12 +96,6 @@ enum CameraEventTypeDto {
   onCameraIdle,
 }
 
-enum NavigationSessionEventTypeDto {
-  arrivalEvent,
-  routeChanged,
-  errorReceived,
-}
-
 enum AlternateRoutesStrategyDto {
   all,
   none,
@@ -919,32 +913,6 @@ class CircleOptionsDto {
   }
 }
 
-class NavigationSessionEventDto {
-  NavigationSessionEventDto({
-    required this.type,
-    required this.message,
-  });
-
-  NavigationSessionEventTypeDto type;
-
-  String message;
-
-  Object encode() {
-    return <Object?>[
-      type.index,
-      message,
-    ];
-  }
-
-  static NavigationSessionEventDto decode(Object result) {
-    result as List<Object?>;
-    return NavigationSessionEventDto(
-      type: NavigationSessionEventTypeDto.values[result[0]! as int],
-      message: result[1]! as String,
-    );
-  }
-}
-
 class RouteTokenOptionsDto {
   RouteTokenOptionsDto({
     required this.routeToken,
@@ -1302,116 +1270,6 @@ class SpeedingUpdatedEventDto {
     return SpeedingUpdatedEventDto(
       percentageAboveLimit: result[0]! as double,
       severity: SpeedAlertSeverityDto.values[result[1]! as int],
-    );
-  }
-}
-
-class OnArrivalEventDto {
-  OnArrivalEventDto({
-    required this.waypoint,
-  });
-
-  NavigationWaypointDto waypoint;
-
-  Object encode() {
-    return <Object?>[
-      waypoint.encode(),
-    ];
-  }
-
-  static OnArrivalEventDto decode(Object result) {
-    result as List<Object?>;
-    return OnArrivalEventDto(
-      waypoint: NavigationWaypointDto.decode(result[0]! as List<Object?>),
-    );
-  }
-}
-
-class RemainingTimeOrDistanceChangedEventDto {
-  RemainingTimeOrDistanceChangedEventDto({
-    required this.remainingTime,
-    required this.remainingDistance,
-  });
-
-  double remainingTime;
-
-  double remainingDistance;
-
-  Object encode() {
-    return <Object?>[
-      remainingTime,
-      remainingDistance,
-    ];
-  }
-
-  static RemainingTimeOrDistanceChangedEventDto decode(Object result) {
-    result as List<Object?>;
-    return RemainingTimeOrDistanceChangedEventDto(
-      remainingTime: result[0]! as double,
-      remainingDistance: result[1]! as double,
-    );
-  }
-}
-
-class RouteChangedEventDto {
-  RouteChangedEventDto({
-    required this.message,
-  });
-
-  String message;
-
-  Object encode() {
-    return <Object?>[
-      message,
-    ];
-  }
-
-  static RouteChangedEventDto decode(Object result) {
-    result as List<Object?>;
-    return RouteChangedEventDto(
-      message: result[0]! as String,
-    );
-  }
-}
-
-class ReroutingEventDto {
-  ReroutingEventDto({
-    required this.message,
-  });
-
-  String message;
-
-  Object encode() {
-    return <Object?>[
-      message,
-    ];
-  }
-
-  static ReroutingEventDto decode(Object result) {
-    result as List<Object?>;
-    return ReroutingEventDto(
-      message: result[0]! as String,
-    );
-  }
-}
-
-class TrafficUpdatedEventDto {
-  TrafficUpdatedEventDto({
-    required this.message,
-  });
-
-  String message;
-
-  Object encode() {
-    return <Object?>[
-      message,
-    ];
-  }
-
-  static TrafficUpdatedEventDto decode(Object result) {
-    result as List<Object?>;
-    return TrafficUpdatedEventDto(
-      message: result[0]! as String,
     );
   }
 }
@@ -5152,7 +5010,7 @@ class NavigationSessionApi {
     }
   }
 
-  Future<RouteStatusDto> setDestinations(DestinationsDto msg) async {
+  Future<RouteStatusDto> setDestinations(DestinationsDto destinations) async {
     const String __pigeon_channelName =
         'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.setDestinations';
     final BasicMessageChannel<Object?> __pigeon_channel =
@@ -5162,7 +5020,7 @@ class NavigationSessionApi {
       binaryMessenger: __pigeon_binaryMessenger,
     );
     final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(<Object?>[msg]) as List<Object?>?;
+        await __pigeon_channel.send(<Object?>[destinations]) as List<Object?>?;
     if (__pigeon_replyList == null) {
       throw _createConnectionError(__pigeon_channelName);
     } else if (__pigeon_replyList.length > 1) {
@@ -5742,29 +5600,11 @@ class _NavigationSessionEventApiCodec extends StandardMessageCodec {
     if (value is LatLngDto) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationSessionEventDto) {
+    } else if (value is NavigationWaypointDto) {
       buffer.putUint8(129);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationWaypointDto) {
-      buffer.putUint8(130);
-      writeValue(buffer, value.encode());
-    } else if (value is OnArrivalEventDto) {
-      buffer.putUint8(131);
-      writeValue(buffer, value.encode());
-    } else if (value is RemainingTimeOrDistanceChangedEventDto) {
-      buffer.putUint8(132);
-      writeValue(buffer, value.encode());
-    } else if (value is ReroutingEventDto) {
-      buffer.putUint8(133);
-      writeValue(buffer, value.encode());
-    } else if (value is RouteChangedEventDto) {
-      buffer.putUint8(134);
-      writeValue(buffer, value.encode());
     } else if (value is SpeedingUpdatedEventDto) {
-      buffer.putUint8(135);
-      writeValue(buffer, value.encode());
-    } else if (value is TrafficUpdatedEventDto) {
-      buffer.putUint8(136);
+      buffer.putUint8(130);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -5777,22 +5617,9 @@ class _NavigationSessionEventApiCodec extends StandardMessageCodec {
       case 128:
         return LatLngDto.decode(readValue(buffer)!);
       case 129:
-        return NavigationSessionEventDto.decode(readValue(buffer)!);
-      case 130:
         return NavigationWaypointDto.decode(readValue(buffer)!);
-      case 131:
-        return OnArrivalEventDto.decode(readValue(buffer)!);
-      case 132:
-        return RemainingTimeOrDistanceChangedEventDto.decode(
-            readValue(buffer)!);
-      case 133:
-        return ReroutingEventDto.decode(readValue(buffer)!);
-      case 134:
-        return RouteChangedEventDto.decode(readValue(buffer)!);
-      case 135:
+      case 130:
         return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
-      case 136:
-        return TrafficUpdatedEventDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -5803,58 +5630,27 @@ abstract class NavigationSessionEventApi {
   static const MessageCodec<Object?> pigeonChannelCodec =
       _NavigationSessionEventApiCodec();
 
-  void onNavigationSessionEvent(NavigationSessionEventDto msg);
-
   void onSpeedingUpdated(SpeedingUpdatedEventDto msg);
 
   void onRoadSnappedLocationUpdated(LatLngDto location);
 
   void onRoadSnappedRawLocationUpdated(LatLngDto location);
 
-  void onArrival(OnArrivalEventDto msg);
+  void onArrival(NavigationWaypointDto waypoint);
 
-  void onRouteChanged(RouteChangedEventDto msg);
+  void onRouteChanged();
 
   void onRemainingTimeOrDistanceChanged(
-      RemainingTimeOrDistanceChangedEventDto msg);
+      double remainingTime, double remainingDistance);
 
   /// Android-only event.
-  void onTrafficUpdated(TrafficUpdatedEventDto msg);
+  void onTrafficUpdated();
 
   /// Android-only event.
-  void onRerouting(ReroutingEventDto msg);
+  void onRerouting();
 
   static void setup(NavigationSessionEventApi? api,
       {BinaryMessenger? binaryMessenger}) {
-    {
-      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
-              Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onNavigationSessionEvent',
-          pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
-      if (api == null) {
-        __pigeon_channel.setMessageHandler(null);
-      } else {
-        __pigeon_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onNavigationSessionEvent was null.');
-          final List<Object?> args = (message as List<Object?>?)!;
-          final NavigationSessionEventDto? arg_msg =
-              (args[0] as NavigationSessionEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onNavigationSessionEvent was null, expected non-null NavigationSessionEventDto.');
-          try {
-            api.onNavigationSessionEvent(arg_msg!);
-            return wrapResponse(empty: true);
-          } on PlatformException catch (e) {
-            return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-                error: PlatformException(code: 'error', message: e.toString()));
-          }
-        });
-      }
-    }
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
@@ -5953,11 +5749,12 @@ abstract class NavigationSessionEventApi {
           assert(message != null,
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onArrival was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final OnArrivalEventDto? arg_msg = (args[0] as OnArrivalEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onArrival was null, expected non-null OnArrivalEventDto.');
+          final NavigationWaypointDto? arg_waypoint =
+              (args[0] as NavigationWaypointDto?);
+          assert(arg_waypoint != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onArrival was null, expected non-null NavigationWaypointDto.');
           try {
-            api.onArrival(arg_msg!);
+            api.onArrival(arg_waypoint!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -5978,15 +5775,8 @@ abstract class NavigationSessionEventApi {
         __pigeon_channel.setMessageHandler(null);
       } else {
         __pigeon_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRouteChanged was null.');
-          final List<Object?> args = (message as List<Object?>?)!;
-          final RouteChangedEventDto? arg_msg =
-              (args[0] as RouteChangedEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRouteChanged was null, expected non-null RouteChangedEventDto.');
           try {
-            api.onRouteChanged(arg_msg!);
+            api.onRouteChanged();
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -6010,12 +5800,15 @@ abstract class NavigationSessionEventApi {
           assert(message != null,
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRemainingTimeOrDistanceChanged was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final RemainingTimeOrDistanceChangedEventDto? arg_msg =
-              (args[0] as RemainingTimeOrDistanceChangedEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRemainingTimeOrDistanceChanged was null, expected non-null RemainingTimeOrDistanceChangedEventDto.');
+          final double? arg_remainingTime = (args[0] as double?);
+          assert(arg_remainingTime != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRemainingTimeOrDistanceChanged was null, expected non-null double.');
+          final double? arg_remainingDistance = (args[1] as double?);
+          assert(arg_remainingDistance != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRemainingTimeOrDistanceChanged was null, expected non-null double.');
           try {
-            api.onRemainingTimeOrDistanceChanged(arg_msg!);
+            api.onRemainingTimeOrDistanceChanged(
+                arg_remainingTime!, arg_remainingDistance!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -6036,15 +5829,8 @@ abstract class NavigationSessionEventApi {
         __pigeon_channel.setMessageHandler(null);
       } else {
         __pigeon_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onTrafficUpdated was null.');
-          final List<Object?> args = (message as List<Object?>?)!;
-          final TrafficUpdatedEventDto? arg_msg =
-              (args[0] as TrafficUpdatedEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onTrafficUpdated was null, expected non-null TrafficUpdatedEventDto.');
           try {
-            api.onTrafficUpdated(arg_msg!);
+            api.onTrafficUpdated();
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -6065,14 +5851,8 @@ abstract class NavigationSessionEventApi {
         __pigeon_channel.setMessageHandler(null);
       } else {
         __pigeon_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRerouting was null.');
-          final List<Object?> args = (message as List<Object?>?)!;
-          final ReroutingEventDto? arg_msg = (args[0] as ReroutingEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRerouting was null, expected non-null ReroutingEventDto.');
           try {
-            api.onRerouting(arg_msg!);
+            api.onRerouting();
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

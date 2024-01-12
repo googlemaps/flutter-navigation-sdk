@@ -245,35 +245,6 @@ class NavigationWaypoint {
   int? preferredSegmentHeading;
 }
 
-/// Navigation event messages that are returned from the native platforms.
-/// {@category Navigation}
-class NavigationSessionEvent {
-  /// Initializer for the event with type and message.
-  NavigationSessionEvent({
-    required this.type,
-    required this.message,
-  });
-
-  /// Type of the event
-  final NavigationSessionEventType type;
-
-  /// Message of the event.
-  final String message;
-}
-
-/// Navigation Session events that returned from the native platforms.
-/// {@category Navigation}
-enum NavigationSessionEventType {
-  /// Arrival event.
-  arrivalEvent,
-
-  ///Route changes event.
-  routeChanged,
-
-  /// Error received event.
-  errorReceived;
-}
-
 /// Status of the navigation routing.
 /// {@category Navigation}
 enum NavigationRouteStatus {

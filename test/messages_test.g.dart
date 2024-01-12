@@ -3653,7 +3653,7 @@ abstract class TestNavigationSessionApi {
 
   void stopGuidance();
 
-  Future<RouteStatusDto> setDestinations(DestinationsDto msg);
+  Future<RouteStatusDto> setDestinations(DestinationsDto destinations);
 
   void clearDestinations();
 
@@ -4000,11 +4000,13 @@ abstract class TestNavigationSessionApi {
           assert(message != null,
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.setDestinations was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final DestinationsDto? arg_msg = (args[0] as DestinationsDto?);
-          assert(arg_msg != null,
+          final DestinationsDto? arg_destinations =
+              (args[0] as DestinationsDto?);
+          assert(arg_destinations != null,
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.setDestinations was null, expected non-null DestinationsDto.');
           try {
-            final RouteStatusDto output = await api.setDestinations(arg_msg!);
+            final RouteStatusDto output =
+                await api.setDestinations(arg_destinations!);
             return <Object?>[output.index];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

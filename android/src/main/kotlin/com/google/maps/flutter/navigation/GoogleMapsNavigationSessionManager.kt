@@ -301,10 +301,8 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
         Navigator.RemainingTimeOrDistanceChangedListener {
           val timeAndDistance = getNavigator().currentTimeAndDistance
           navigationSessionEventApi.onRemainingTimeOrDistanceChanged(
-            RemainingTimeOrDistanceChangedEventDto(
-              timeAndDistance.seconds.toDouble(),
-              timeAndDistance.meters.toDouble()
-            )
+            timeAndDistance.seconds.toDouble(),
+            timeAndDistance.meters.toDouble()
           ) {}
         }
     }
@@ -321,35 +319,26 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
     val navigator = getNavigator()
     if (arrivalListener == null) {
       arrivalListener =
-        Navigator.ArrivalListener { // Show an onscreen message
-          navigationSessionEventApi.onArrival(
-            OnArrivalEventDto(Convert.convertWaypointToDto(it.waypoint))
-          ) {}
+        Navigator.ArrivalListener {
+          navigationSessionEventApi.onArrival(Convert.convertWaypointToDto(it.waypoint)) {}
         }
       navigator.addArrivalListener(arrivalListener)
     }
 
     if (routeChangedListener == null) {
       routeChangedListener =
-        Navigator.RouteChangedListener { // Show an onscreen message when the route changes
-          navigationSessionEventApi.onRouteChanged(RouteChangedEventDto("")) {}
-        }
+        Navigator.RouteChangedListener { navigationSessionEventApi.onRouteChanged() {} }
       navigator.addRouteChangedListener(routeChangedListener)
     }
 
     if (reroutingListener == null) {
-      reroutingListener =
-        Navigator.ReroutingListener {
-          navigationSessionEventApi.onRerouting(ReroutingEventDto("")) {}
-        }
+      reroutingListener = Navigator.ReroutingListener { navigationSessionEventApi.onRerouting() {} }
       navigator.addReroutingListener(reroutingListener)
     }
 
     if (trafficUpdatedListener == null) {
       trafficUpdatedListener =
-        Navigator.TrafficUpdatedListener {
-          navigationSessionEventApi.onTrafficUpdated(TrafficUpdatedEventDto("")) {}
-        }
+        Navigator.TrafficUpdatedListener { navigationSessionEventApi.onTrafficUpdated() {} }
       navigator.addTrafficUpdatedListener(trafficUpdatedListener)
     }
 

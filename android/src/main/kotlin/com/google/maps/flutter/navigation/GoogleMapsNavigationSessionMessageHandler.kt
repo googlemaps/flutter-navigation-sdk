@@ -79,16 +79,25 @@ class GoogleMapsNavigationSessionMessageHandler : NavigationSessionApi {
     manager().stopGuidance()
   }
 
-  override fun setDestinations(msg: DestinationsDto, callback: (Result<RouteStatusDto>) -> Unit) {
-    val waypoints = msg.waypoints.filterNotNull().map { Convert.convertWaypointFromDto(it) }
-    val displayOptions = Convert.convertDisplayOptionsFromDto(msg.displayOptions)
+  override fun setDestinations(
+    destinations: DestinationsDto,
+    callback: (Result<RouteStatusDto>) -> Unit
+  ) {
+    val waypoints =
+      destinations.waypoints.filterNotNull().map { Convert.convertWaypointFromDto(it) }
+    val displayOptions = Convert.convertDisplayOptionsFromDto(destinations.displayOptions)
     val routingOptions =
-      if (msg.routingOptions != null) {
-        Convert.convertRoutingOptionsFromDto(msg.routingOptions)
+      if (destinations.routingOptions != null) {
+        Convert.convertRoutingOptionsFromDto(destinations.routingOptions)
       } else {
         RoutingOptions()
       }
-    manager().setDestinations(waypoints, routingOptions, displayOptions, msg.routeTokenOptions) {
+    manager().setDestinations(
+      waypoints,
+      routingOptions,
+      displayOptions,
+      destinations.routeTokenOptions
+    ) {
       if (it.isSuccess) {
         callback(Result.success(Convert.convertRouteStatusToDto(it.getOrThrow())))
       } else {

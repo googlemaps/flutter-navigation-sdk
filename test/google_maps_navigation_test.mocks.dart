@@ -202,11 +202,12 @@ class MockTestNavigationSessionApi extends _i1.Mock
       );
 
   @override
-  _i4.Future<_i2.RouteStatusDto> setDestinations(_i2.DestinationsDto? msg) =>
+  _i4.Future<_i2.RouteStatusDto> setDestinations(
+          _i2.DestinationsDto? destinations) =>
       (super.noSuchMethod(
         Invocation.method(
           #setDestinations,
-          [msg],
+          [destinations],
         ),
         returnValue: _i4.Future<_i2.RouteStatusDto>.value(
             _i2.RouteStatusDto.internalError),

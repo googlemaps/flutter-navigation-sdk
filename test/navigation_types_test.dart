@@ -21,7 +21,6 @@ void main() {
   late NavigationWaypointDto waypointDto;
   late NavigationWaypoint waypoint;
   late Destinations destinations;
-  late NavigationSessionEventDto sessionEventDto;
   late NavigationDisplayOptions displayOptions;
   late RoutingOptions routingOptions;
 
@@ -48,10 +47,6 @@ void main() {
       displayOptions: NavigationDisplayOptions(
         showDestinationMarkers: false,
       ),
-    );
-    sessionEventDto = NavigationSessionEventDto(
-      type: NavigationSessionEventTypeDto.arrivalEvent,
-      message: 'testMessage',
     );
     displayOptions = NavigationDisplayOptions(
         showDestinationMarkers: false,
@@ -116,24 +111,6 @@ void main() {
           pidgeonDestinationMessage.waypoints[0]!.preferSameSideOfRoad);
       expect(destinations.waypoints[0].preferredSegmentHeading,
           pidgeonDestinationMessage.waypoints[0]!.preferredSegmentHeading);
-    });
-  });
-
-  group('Navigation Event Message tests', () {
-    test('tests Navigation Session Event Message conversion from Pigeon DTO',
-        () {
-      final NavigationSessionEvent gmsNavigationSessionEventDto =
-          sessionEventDto.toNavigationSessionEvent();
-
-      expect(
-        gmsNavigationSessionEventDto.message,
-        sessionEventDto.message,
-      );
-
-      expect(
-        gmsNavigationSessionEventDto.type.toString().split('.').last,
-        sessionEventDto.type.toString().split('.').last,
-      );
     });
   });
 
@@ -326,19 +303,6 @@ void main() {
           percentageAboveLimit: 5.0,
           severity: SpeedAlertSeverityDto.major,
         ).toSpeedingUpdatedEvent().percentageAboveLimit,
-      );
-    });
-
-    test(
-        'Navigation remaining time or distance changed event message conversion from Pigeon DTO',
-        () {
-      final RemainingTimeOrDistanceChangedEventDto event =
-          RemainingTimeOrDistanceChangedEventDto(
-              remainingDistance: 5000, remainingTime: 100);
-
-      expect(
-        event.toRemainingTimeOrDistanceChangedEvent().remainingDistance,
-        event.remainingDistance,
       );
     });
 
