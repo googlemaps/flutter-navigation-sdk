@@ -42,6 +42,11 @@ class GoogleMapsNavigator {
   /// ([GoogleMapsNavigator.setDestinations], [GoogleMapsNavigator.startGuidance], etc.)
   /// throw [SessionNotInitializedException].
   ///
+  /// Checks if there are active listeners for either road-snapped location
+  /// updates or raw location updates. If there are, this method re-enables the
+  /// emission of road-snapped location updates. This is necessary because the
+  /// native (Android/iOS) implementation clears the listeners during cleanup.
+  ///
   /// Optional parameter [abnormalTerminationReportingEnabled] can be used enables/disables
   /// reporting abnormal SDK terminations such as the app crashes while the SDK is still running.
   ///
@@ -49,6 +54,15 @@ class GoogleMapsNavigator {
       {bool abnormalTerminationReportingEnabled = true}) async {
     await GoogleMapsNavigationPlatform.instance
         .createNavigationSession(abnormalTerminationReportingEnabled);
+
+    // Enable road-snapped location updates if there are subscriptions to them.
+    if ((_roadSnappedLocationUpdatedController != null &&
+            _roadSnappedLocationUpdatedController!.hasListener) ||
+        (_roadSnappedRawLocationUpdatedController != null &&
+            _roadSnappedRawLocationUpdatedController!.hasListener)) {
+      await GoogleMapsNavigationPlatform.instance
+          .enableRoadSnappedLocationUpdates();
+    }
   }
 
   /// Check whether navigator has been initialized.
@@ -61,67 +75,164 @@ class GoogleMapsNavigator {
     return GoogleMapsNavigationPlatform.instance.isInitialized();
   }
 
-  /// Sets the event channel listener for navigation session event.
+  /// Sets the event channel listener for [NavigationSessionEvent]s.
+  ///
+  /// Returns a [StreamSubscription] for handling [NavigationSessionEvent]s.
+  /// This subscription must be canceled using `cancel()` when it is no longer
+  /// needed to stop receiving events and allow the stream to perform necessary
+  /// cleanup, such as releasing resources or shutting down event sources. The
+  /// cleanup is asynchronous, and the `cancel()` method returns a Future that
+  /// completes once the cleanup is done.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final subscription = setNavigationSessionEventListener(yourEventHandler);
+  /// // When done with the subscription
+  /// await subscription.cancel();
+  /// ```
   static StreamSubscription<NavigationSessionEvent>
       setNavigationSessionEventListener(
-          OnNavigationSessionEventCallback onNavigationSessionEvent) {
+          OnNavigationSessionEventCallback listener) {
     return GoogleMapsNavigationPlatform.instance
         .getNavigationSessionEventStream()
-        .listen(onNavigationSessionEvent);
+        .listen(listener);
   }
 
-  /// Sets the event channel listener for the speeding updated event.
+  /// Sets the event channel listener for the [SpeedingUpdatedEvent]s.
+  ///
+  /// Returns a [StreamSubscription] for [SpeedingUpdatedEvent]s.
+  /// This subscription must be canceled using `cancel()` when it is no longer
+  /// needed to stop receiving events and allow the stream to perform necessary
+  /// cleanup, such as releasing resources or shutting down event sources. The
+  /// cleanup is asynchronous, and the `cancel()` method returns a Future that
+  /// completes once the cleanup is done.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final subscription = setSpeedingUpdatedListener(yourEventHandler);
+  /// // When done with the subscription
+  /// await subscription.cancel();
+  /// ```
   static StreamSubscription<SpeedingUpdatedEvent> setSpeedingUpdatedListener(
-    OnSpeedingUpdatedEventCallback onSpeedingUpdatedEvent,
+    OnSpeedingUpdatedEventCallback listener,
   ) {
     return GoogleMapsNavigationPlatform.instance
         .getNavigationSpeedingEventStream()
-        .listen(onSpeedingUpdatedEvent);
+        .listen(listener);
   }
 
-  /// Sets the event channel listener for the on arrival event.
+  /// Sets the event channel listener for the [OnArrivalEvent]s.
+  ///
+  /// Returns a [StreamSubscription] for [OnArrivalEvent]s.
+  /// This subscription must be canceled using `cancel()` when it is no longer
+  /// needed to stop receiving events and allow the stream to perform necessary
+  /// cleanup, such as releasing resources or shutting down event sources. The
+  /// cleanup is asynchronous, and the `cancel()` method returns a Future that
+  /// completes once the cleanup is done.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final subscription = setOnArrivalListener(yourEventHandler);
+  /// // When done with the subscription
+  /// await subscription.cancel();
+  /// ```
   static StreamSubscription<OnArrivalEvent> setOnArrivalListener(
-      OnArrivalEventCallback onArrivalEvent) {
+      OnArrivalEventCallback listener) {
     return GoogleMapsNavigationPlatform.instance
         .getNavigationOnArrivalEventStream()
-        .listen(onArrivalEvent);
+        .listen(listener);
   }
 
-  /// Sets the event channel listener for the rerouting event. (Android only)
+  /// Sets the event channel listener for the rerouting events. (Android only)
+  ///
+  /// Returns a [StreamSubscription] for rerouting events.
+  /// This subscription must be canceled using `cancel()` when it is no longer
+  /// needed to stop receiving events and allow the stream to perform necessary
+  /// cleanup, such as releasing resources or shutting down event sources. The
+  /// cleanup is asynchronous, and the `cancel()` method returns a Future that
+  /// completes once the cleanup is done.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final subscription = setOnReroutingListener(yourEventHandler);
+  /// // When done with the subscription
+  /// await subscription.cancel();
+  /// ```
   static StreamSubscription<void> setOnReroutingListener(
-      OnReroutingEventCallback onReroutingEvent) {
+      OnReroutingEventCallback listener) {
     return GoogleMapsNavigationPlatform.instance
         .getNavigationOnReroutingEventStream()
         .listen((void event) {
-      onReroutingEvent.call();
+      listener.call();
     });
   }
 
-  /// Sets the event channel listener for the traffic updated event. (Android only)
+  /// Sets the event channel listener for the traffic updated events. (Android only)
+  ///
+  /// Returns a [StreamSubscription] for traffic updated events.
+  /// This subscription must be canceled using `cancel()` when it is no longer
+  /// needed to stop receiving events and allow the stream to perform necessary
+  /// cleanup, such as releasing resources or shutting down event sources. The
+  /// cleanup is asynchronous, and the `cancel()` method returns a Future that
+  /// completes once the cleanup is done.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final subscription = setTrafficUpdatedListener(yourEventHandler);
+  /// // When done with the subscription
+  /// await subscription.cancel();
+  /// ```
   static StreamSubscription<void> setTrafficUpdatedListener(
-      OnTrafficUpdatedEventCallback onTrafficUpdatedEvent) {
+      OnTrafficUpdatedEventCallback listener) {
     return GoogleMapsNavigationPlatform.instance
         .getNavigationTrafficUpdatedEventStream()
         .listen((void event) {
-      onTrafficUpdatedEvent.call();
+      listener.call();
     });
   }
 
-  /// Sets the event channel listener for the on route changed event.
+  /// Sets the event channel listener for the on route changed events.
+  ///
+  /// Returns a [StreamSubscription] for route changed events.
+  /// This subscription must be canceled using `cancel()` when it is no longer
+  /// needed to stop receiving events and allow the stream to perform necessary
+  /// cleanup, such as releasing resources or shutting down event sources. The
+  /// cleanup is asynchronous, and the `cancel()` method returns a Future that
+  /// completes once the cleanup is done.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final subscription = setOnRouteChangedListener(yourEventHandler);
+  /// // When done with the subscription
+  /// await subscription.cancel();
+  /// ```
   static StreamSubscription<void> setOnRouteChangedListener(
-      OnRouteChangedEventCallback onRouteChangedEvent) {
+      OnRouteChangedEventCallback listener) {
     return GoogleMapsNavigationPlatform.instance
         .getNavigationOnRouteChangedEventStream()
         .listen((void event) {
-      onRouteChangedEvent.call();
+      listener.call();
     });
   }
 
-  /// Sets the event channel listener for the on remaining time or distance changed event.
+  /// Sets the event channel listener for [RemainingTimeOrDistanceChangedEvent]s.
+  ///
+  /// Returns a [StreamSubscription] for handling [RemainingTimeOrDistanceChangedEvent]s.
+  /// This subscription must be canceled using `cancel()` when it is no longer
+  /// needed to stop receiving events and allow the stream to perform necessary
+  /// cleanup, such as releasing resources or shutting down event sources. The
+  /// cleanup is asynchronous, and the `cancel()` method returns a Future that
+  /// completes once the cleanup is done.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final subscription = setOnRemainingTimeOrDistanceChangedListener(yourEventHandler);
+  /// // When done with the subscription
+  /// await subscription.cancel();
+  /// ```
   static StreamSubscription<RemainingTimeOrDistanceChangedEvent>
       setOnRemainingTimeOrDistanceChangedListener(
-          OnRemainingTimeOrDistanceChangedEventCallback
-              onRemainingTimeOrDistanceChangedEvent,
+          OnRemainingTimeOrDistanceChangedEventCallback listener,
           // iOS default value.
           {int remainingTimeThresholdSeconds = 1,
           // iOS default value.
@@ -133,26 +244,37 @@ class GoogleMapsNavigator {
             remainingTimeThresholdSeconds, remainingDistanceThresholdMeters);
     return GoogleMapsNavigationPlatform.instance
         .getNavigationRemainingTimeOrDistanceChangedEventStream()
-        .listen(onRemainingTimeOrDistanceChangedEvent);
+        .listen(listener);
   }
 
   static StreamController<RoadSnappedLocationUpdatedEvent>?
       _roadSnappedLocationUpdatedController;
 
-  /// Enable road snapped location updates and set the event channel listener
-  /// for the road snapped location updated event.
+  /// Sets the event channel listener for [RoadSnappedLocationUpdatedEvent]s.
+  ///
+  /// Returns a Future for [StreamSubscription] for handling
+  /// [RoadSnappedLocationUpdatedEvent]s.
+  /// This subscription must be canceled using `cancel()` when it is no longer
+  /// needed to stop receiving events and allow the stream to perform necessary
+  /// cleanup, such as releasing resources or shutting down event sources. The
+  /// cleanup is asynchronous, and the `cancel()` method returns a Future that
+  /// completes once the cleanup is done.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final subscription = setRoadSnappedLocationUpdatedListener(yourEventHandler);
+  /// // When done with the subscription
+  /// await subscription.cancel();
+  /// ```
   static Future<StreamSubscription<RoadSnappedLocationUpdatedEvent>>
       setRoadSnappedLocationUpdatedListener(
-    OnRoadSnappedLocationUpdatedEventCallback onRoadSnappedLocationUpdatedEvent,
+    OnRoadSnappedLocationUpdatedEventCallback listener,
   ) async {
     if (_roadSnappedLocationUpdatedController == null) {
       _roadSnappedLocationUpdatedController =
           StreamController<RoadSnappedLocationUpdatedEvent>.broadcast(
         onCancel: () {
-          if (!_roadSnappedLocationUpdatedController!.hasListener) {
-            GoogleMapsNavigationPlatform.instance
-                .disableRoadSnappedLocationUpdates();
-          }
+          _disableRoadSnappedLocationUpdatesIfNoActiveListeners();
         },
         onListen: () {
           GoogleMapsNavigationPlatform.instance
@@ -164,14 +286,66 @@ class GoogleMapsNavigator {
               .getNavigationRoadSnappedLocationEventStream()));
     }
 
-    return _roadSnappedLocationUpdatedController!.stream
-        .listen(onRoadSnappedLocationUpdatedEvent);
+    return _roadSnappedLocationUpdatedController!.stream.listen(listener);
+  }
+
+  static StreamController<RoadSnappedRawLocationUpdatedEvent>?
+      _roadSnappedRawLocationUpdatedController;
+
+  /// Sets the event channel listener for [RoadSnappedRawLocationUpdatedEvent]s
+  /// (Android only).
+  ///
+  /// Returns a Future for [StreamSubscription] for handling
+  /// [RoadSnappedRawLocationUpdatedEvent]s.
+  /// This subscription must be canceled using `cancel()` when it is no longer
+  /// needed to stop receiving events and allow the stream to perform necessary
+  /// cleanup, such as releasing resources or shutting down event sources. The
+  /// cleanup is asynchronous, and the `cancel()` method returns a Future that
+  /// completes once the cleanup is done.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final subscription = setRoadSnappedRawLocationUpdatedListener(yourEventHandler);
+  /// // When done with the subscription
+  /// await subscription.cancel();
+  /// ```
+  static Future<StreamSubscription<RoadSnappedRawLocationUpdatedEvent>>
+      setRoadSnappedRawLocationUpdatedListener(
+    OnRoadSnappedRawLocationUpdatedEventCallback listener,
+  ) async {
+    if (_roadSnappedRawLocationUpdatedController == null) {
+      _roadSnappedRawLocationUpdatedController =
+          StreamController<RoadSnappedRawLocationUpdatedEvent>.broadcast(
+        onCancel: () {
+          _disableRoadSnappedLocationUpdatesIfNoActiveListeners();
+        },
+        onListen: () {
+          GoogleMapsNavigationPlatform.instance
+              .enableRoadSnappedLocationUpdates();
+        },
+      );
+      unawaited(_roadSnappedRawLocationUpdatedController!.addStream(
+          GoogleMapsNavigationPlatform.instance
+              .getNavigationRoadSnappedRawLocationEventStream()));
+    }
+
+    return _roadSnappedRawLocationUpdatedController!.stream.listen(listener);
+  }
+
+  /// Disables road snapped location updates if there are no listeners.
+  static void _disableRoadSnappedLocationUpdatesIfNoActiveListeners() {
+    if ((_roadSnappedLocationUpdatedController == null ||
+            !_roadSnappedLocationUpdatedController!.hasListener) &&
+        (_roadSnappedRawLocationUpdatedController == null ||
+            !_roadSnappedRawLocationUpdatedController!.hasListener)) {
+      GoogleMapsNavigationPlatform.instance.disableRoadSnappedLocationUpdates();
+    }
   }
 
   /// Cleans up the navigation session.
   ///
   /// Cleans up the navigator's internal state, clearing
-  /// any existing route waypoints and stopping ongoing
+  /// listeners, any existing route waypoints and stopping ongoing
   /// navigation guidance and simulation.
   ///
   /// On iOS the session is fully deleted and needs to be recreated
@@ -179,7 +353,6 @@ class GoogleMapsNavigator {
   ///
   /// On Android the session is cleaned up, but never destroyed after the
   /// first initialization.
-  ///
   static Future<void> cleanup() async {
     await GoogleMapsNavigationPlatform.instance.cleanup();
   }
@@ -194,7 +367,6 @@ class GoogleMapsNavigator {
   ///
   ///  Returns true if the user accepts the terms, and false if not. If the terms
   ///  have already been accepted returns true without showing the dialog again.
-  //
   static Future<bool> showTermsAndConditionsDialog(
       String title, String companyName,
       {bool shouldOnlyShowDriverAwarenessDisclaimer = false}) async {

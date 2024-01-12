@@ -706,22 +706,6 @@ class SpeedingUpdatedEventDto {
   final SpeedAlertSeverityDto severity;
 }
 
-class RoadSnappedLocationUpdatedEventDto {
-  RoadSnappedLocationUpdatedEventDto({
-    required this.location,
-  });
-
-  final LatLngDto location;
-}
-
-class RoadSnappedRawLocationUpdatedEventDto {
-  RoadSnappedRawLocationUpdatedEventDto({
-    required this.location,
-  });
-
-  final LatLngDto? location;
-}
-
 class OnArrivalEventDto {
   OnArrivalEventDto({
     required this.waypoint,
@@ -901,9 +885,8 @@ abstract class NavigationSessionEventApi {
   // Android and iOS errors need to be unified first.
   void onNavigationSessionEvent(NavigationSessionEventDto msg);
   void onSpeedingUpdated(SpeedingUpdatedEventDto msg);
-  void onRoadSnappedLocationUpdated(RoadSnappedLocationUpdatedEventDto msg);
-  void onRoadSnappedRawLocationUpdated(
-      RoadSnappedRawLocationUpdatedEventDto msg);
+  void onRoadSnappedLocationUpdated(LatLngDto location);
+  void onRoadSnappedRawLocationUpdated(LatLngDto location);
   void onArrival(OnArrivalEventDto msg);
   void onRouteChanged(RouteChangedEventDto msg);
   void onRemainingTimeOrDistanceChanged(

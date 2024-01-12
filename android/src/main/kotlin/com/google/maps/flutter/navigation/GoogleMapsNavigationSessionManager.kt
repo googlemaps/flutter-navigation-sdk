@@ -668,15 +668,13 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
         object : RoadSnappedLocationProvider.LocationListener {
           override fun onLocationChanged(location: Location) {
             navigationSessionEventApi.onRoadSnappedLocationUpdated(
-              RoadSnappedLocationUpdatedEventDto(LatLngDto(location.latitude, location.longitude))
+              LatLngDto(location.latitude, location.longitude)
             ) {}
           }
 
           override fun onRawLocationUpdate(location: Location) {
             navigationSessionEventApi.onRoadSnappedRawLocationUpdated(
-              RoadSnappedRawLocationUpdatedEventDto(
-                LatLngDto(location.latitude, location.longitude)
-              )
+              LatLngDto(location.latitude, location.longitude)
             ) {}
           }
         }

@@ -47,6 +47,11 @@ typedef OnRoadSnappedLocationUpdatedEventCallback = void Function(
   RoadSnappedLocationUpdatedEvent onRoadSnappedLocationUpdatedEvent,
 );
 
+/// Called during road snapped raw location event (Android only).
+typedef OnRoadSnappedRawLocationUpdatedEventCallback = void Function(
+  RoadSnappedRawLocationUpdatedEvent onRoadSnappedRawLocationUpdatedEvent,
+);
+
 /// Called during arriving to destination event.
 typedef OnArrivalEventCallback = void Function(OnArrivalEvent onArrivalEvent);
 

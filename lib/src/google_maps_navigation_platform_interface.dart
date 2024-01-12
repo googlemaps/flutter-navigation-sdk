@@ -185,6 +185,7 @@ abstract mixin class NavigationSessionAPIInterface {
       getNavigationRoadSnappedLocationEventStream();
 
   /// Get navigation road snapped raw location event stream from the navigation session.
+  /// Android only.
   Stream<RoadSnappedRawLocationUpdatedEvent>
       getNavigationRoadSnappedRawLocationEventStream();
 

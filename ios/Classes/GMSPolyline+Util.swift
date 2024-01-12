@@ -29,7 +29,7 @@ extension GMSPolyline {
   func update(from pigeonPolyline: PolylineDto) {
     if let points = pigeonPolyline.options.points?.compactMap({ $0 }) {
       let path = GMSMutablePath()
-      points.forEach { point in
+      for point in points {
         path.addLatitude(point.latitude, longitude: point.longitude)
       }
       self.path = path

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_navigation/google_maps_navigation.dart';
@@ -79,6 +80,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   int _remainingDistance = 0;
   int _onRouteChangedEventCallCount = 0;
   int _onRoadSnappedLocationUpdatedEventCallCount = 0;
+  int _onRoadSnappedRawLocationUpdatedEventCallCount = 0;
   int _onTrafficUpdatedEventCallCount = 0;
   int _onReroutingEventCallCount = 0;
   int _onArrivalEventCallCount = 0;
@@ -127,6 +129,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       _remainingTimeOrDistanceChangedSubscription;
   StreamSubscription<RoadSnappedLocationUpdatedEvent>?
       _roadSnappedLocationUpdatedSubscription;
+  StreamSubscription<RoadSnappedRawLocationUpdatedEvent>?
+      _roadSnappedRawLocationUpdatedSubscription;
 
   int _nextWaypointIndex = 0;
 
@@ -288,6 +292,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     _roadSnappedLocationUpdatedSubscription =
         await GoogleMapsNavigator.setRoadSnappedLocationUpdatedListener(
             _onRoadSnappedLocationUpdatedEvent);
+    _roadSnappedRawLocationUpdatedSubscription =
+        await GoogleMapsNavigator.setRoadSnappedRawLocationUpdatedListener(
+            _onRoadSnappedRawLocationUpdatedEvent);
   }
 
   void _clearListeners() {
@@ -311,6 +318,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
     _roadSnappedLocationUpdatedSubscription?.cancel();
     _roadSnappedLocationUpdatedSubscription = null;
+
+    _roadSnappedRawLocationUpdatedSubscription?.cancel();
+    _roadSnappedRawLocationUpdatedSubscription = null;
   }
 
   void _onRoadSnappedLocationUpdatedEvent(
@@ -318,9 +328,23 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     if (!mounted) {
       return;
     }
+
     setState(() {
       _userLocation = event.location;
       _onRoadSnappedLocationUpdatedEventCallCount += 1;
+    });
+  }
+
+  // Note: Raw location updates are not available on iOS.
+  void _onRoadSnappedRawLocationUpdatedEvent(
+      RoadSnappedRawLocationUpdatedEvent event) {
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _userLocation = event.location;
+      _onRoadSnappedRawLocationUpdatedEventCallCount += 1;
     });
   }
 
@@ -1084,6 +1108,15 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   trailing: Text(
                       _onRoadSnappedLocationUpdatedEventCallCount.toString()),
                 )),
+                if (Platform.isAndroid)
+                  Card(
+                      child: ListTile(
+                    title: const Text(
+                        'On road snapped raw location updated event call count'),
+                    trailing: Text(
+                        _onRoadSnappedRawLocationUpdatedEventCallCount
+                            .toString()),
+                  )),
                 Card(
                     child: ListTile(
                   title: const Text('On traffic updated event call count'),

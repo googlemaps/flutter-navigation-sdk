@@ -330,39 +330,6 @@ void main() {
     });
 
     test(
-        'Road snapped location updated event message conversion from Pigeon DTO',
-        () {
-      expect(
-        RoadSnappedLocationUpdatedEvent(
-          location: const LatLng(
-            latitude: 5.0,
-            longitude: 9.0,
-          ),
-        ).location.latitude,
-        RoadSnappedLocationUpdatedEventDto(
-          location: LatLngDto(
-            latitude: 5.0,
-            longitude: 9.0,
-          ),
-        ).toRoadSnappedLocationUpdatedEvent().location.latitude,
-      );
-      expect(
-        RoadSnappedLocationUpdatedEvent(
-          location: const LatLng(
-            latitude: 5.0,
-            longitude: 9.0,
-          ),
-        ).location.longitude,
-        RoadSnappedLocationUpdatedEventDto(
-          location: LatLngDto(
-            latitude: 5.0,
-            longitude: 9.0,
-          ),
-        ).toRoadSnappedLocationUpdatedEvent().location.longitude,
-      );
-    });
-
-    test(
         'Navigation remaining time or distance changed event message conversion from Pigeon DTO',
         () {
       final RemainingTimeOrDistanceChangedEventDto event =

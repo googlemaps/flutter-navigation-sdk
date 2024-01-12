@@ -44,32 +44,6 @@ extension ConvertSpeedingUpdatedEventDto on SpeedingUpdatedEventDto {
       );
 }
 
-/// [RoadSnappedLocationUpdatedEventDto] convert extension.
-/// @nodoc
-extension ConvertRoadSnappedLocationUpdatedEventDto
-    on RoadSnappedLocationUpdatedEventDto {
-  /// Converts [RoadSnappedLocationUpdatedEventDto] to [RoadSnappedLocationUpdatedEvent]
-  RoadSnappedLocationUpdatedEvent toRoadSnappedLocationUpdatedEvent() =>
-      RoadSnappedLocationUpdatedEvent(
-          location: LatLng(
-        latitude: location.latitude,
-        longitude: location.longitude,
-      ));
-}
-
-/// [RoadSnappedRawLocationUpdatedEventDto] convert extension.
-/// @nodoc
-extension ConvertRoadSnappedRawLocationUpdatedEventDto
-    on RoadSnappedRawLocationUpdatedEventDto {
-  /// Converts [RoadSnappedRawLocationUpdatedEventDto] to [RoadSnappedLocationUpdatedEvent]
-  RoadSnappedRawLocationUpdatedEvent toRoadSnappedRawLocationUpdatedEvent() =>
-      RoadSnappedRawLocationUpdatedEvent(
-          location: LatLng(
-        latitude: location!.latitude,
-        longitude: location!.longitude,
-      ));
-}
-
 /// [RemainingTimeOrDistanceChangedEventDto] convert extension.
 /// @nodoc
 extension ConvertRemainingTimeOrDistanceChangedEventDto

@@ -1033,18 +1033,18 @@ class MockTestNavigationViewApi extends _i1.Mock
       );
 
   @override
-  double getMinZoomLevel(int? viewId) => (super.noSuchMethod(
+  double getMinZoomPreference(int? viewId) => (super.noSuchMethod(
         Invocation.method(
-          #getMinZoomLevel,
+          #getMinZoomPreference,
           [viewId],
         ),
         returnValue: 0.0,
       ) as double);
 
   @override
-  double getMaxZoomLevel(int? viewId) => (super.noSuchMethod(
+  double getMaxZoomPreference(int? viewId) => (super.noSuchMethod(
         Invocation.method(
-          #getMaxZoomLevel,
+          #getMaxZoomPreference,
           [viewId],
         ),
         returnValue: 0.0,

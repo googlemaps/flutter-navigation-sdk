@@ -559,7 +559,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   }
 
   func clearMarkers() {
-    _markerControllers.forEach { markerController in
+    for markerController in _markerControllers {
       markerController.gmsMarker.map = nil
     }
     _markerControllers.removeAll()
@@ -610,7 +610,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   }
 
   func clearPolygons() {
-    _gmsPolygons.forEach { gmsPolygon in
+    for gmsPolygon in _gmsPolygons {
       gmsPolygon.map = nil
     }
     _gmsPolygons.removeAll()
@@ -661,7 +661,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   }
 
   func clearPolylines() {
-    _gmsPolylines.forEach { gmsPolyline in
+    for gmsPolyline in _gmsPolylines {
       gmsPolyline.map = nil
     }
     _gmsPolylines.removeAll()
@@ -712,7 +712,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   }
 
   func clearCircles() {
-    _gmsCircles.forEach { gmsCircle in
+    for gmsCircle in _gmsCircles {
       gmsCircle.map = nil
     }
     _gmsCircles.removeAll()

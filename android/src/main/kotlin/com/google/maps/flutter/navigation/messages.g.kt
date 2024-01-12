@@ -1239,42 +1239,6 @@ data class SpeedingUpdatedEventDto(
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class RoadSnappedLocationUpdatedEventDto(val location: LatLngDto) {
-
-  companion object {
-    @Suppress("UNCHECKED_CAST")
-    fun fromList(list: List<Any?>): RoadSnappedLocationUpdatedEventDto {
-      val location = LatLngDto.fromList(list[0] as List<Any?>)
-      return RoadSnappedLocationUpdatedEventDto(location)
-    }
-  }
-
-  fun toList(): List<Any?> {
-    return listOf<Any?>(
-      location.toList(),
-    )
-  }
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
-data class RoadSnappedRawLocationUpdatedEventDto(val location: LatLngDto? = null) {
-
-  companion object {
-    @Suppress("UNCHECKED_CAST")
-    fun fromList(list: List<Any?>): RoadSnappedRawLocationUpdatedEventDto {
-      val location: LatLngDto? = (list[0] as List<Any?>?)?.let { LatLngDto.fromList(it) }
-      return RoadSnappedRawLocationUpdatedEventDto(location)
-    }
-  }
-
-  fun toList(): List<Any?> {
-    return listOf<Any?>(
-      location?.toList(),
-    )
-  }
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
 data class OnArrivalEventDto(val waypoint: NavigationWaypointDto) {
 
   companion object {
@@ -5575,42 +5539,29 @@ private object NavigationSessionEventApiCodec : StandardMessageCodec() {
         return (readValue(buffer) as? List<Any?>)?.let { LatLngDto.fromList(it) }
       }
       129.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { LatLngDto.fromList(it) }
-      }
-      130.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavigationSessionEventDto.fromList(it) }
       }
-      131.toByte() -> {
+      130.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavigationWaypointDto.fromList(it) }
       }
-      132.toByte() -> {
+      131.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { OnArrivalEventDto.fromList(it) }
       }
-      133.toByte() -> {
+      132.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           RemainingTimeOrDistanceChangedEventDto.fromList(it)
         }
       }
-      134.toByte() -> {
+      133.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { ReroutingEventDto.fromList(it) }
       }
-      135.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          RoadSnappedLocationUpdatedEventDto.fromList(it)
-        }
-      }
-      136.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          RoadSnappedRawLocationUpdatedEventDto.fromList(it)
-        }
-      }
-      137.toByte() -> {
+      134.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteChangedEventDto.fromList(it) }
       }
-      138.toByte() -> {
+      135.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SpeedingUpdatedEventDto.fromList(it) }
       }
-      139.toByte() -> {
+      136.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { TrafficUpdatedEventDto.fromList(it) }
       }
       else -> super.readValueOfType(type, buffer)
@@ -5623,48 +5574,36 @@ private object NavigationSessionEventApiCodec : StandardMessageCodec() {
         stream.write(128)
         writeValue(stream, value.toList())
       }
-      is LatLngDto -> {
+      is NavigationSessionEventDto -> {
         stream.write(129)
         writeValue(stream, value.toList())
       }
-      is NavigationSessionEventDto -> {
+      is NavigationWaypointDto -> {
         stream.write(130)
         writeValue(stream, value.toList())
       }
-      is NavigationWaypointDto -> {
+      is OnArrivalEventDto -> {
         stream.write(131)
         writeValue(stream, value.toList())
       }
-      is OnArrivalEventDto -> {
+      is RemainingTimeOrDistanceChangedEventDto -> {
         stream.write(132)
         writeValue(stream, value.toList())
       }
-      is RemainingTimeOrDistanceChangedEventDto -> {
+      is ReroutingEventDto -> {
         stream.write(133)
         writeValue(stream, value.toList())
       }
-      is ReroutingEventDto -> {
+      is RouteChangedEventDto -> {
         stream.write(134)
         writeValue(stream, value.toList())
       }
-      is RoadSnappedLocationUpdatedEventDto -> {
+      is SpeedingUpdatedEventDto -> {
         stream.write(135)
         writeValue(stream, value.toList())
       }
-      is RoadSnappedRawLocationUpdatedEventDto -> {
-        stream.write(136)
-        writeValue(stream, value.toList())
-      }
-      is RouteChangedEventDto -> {
-        stream.write(137)
-        writeValue(stream, value.toList())
-      }
-      is SpeedingUpdatedEventDto -> {
-        stream.write(138)
-        writeValue(stream, value.toList())
-      }
       is TrafficUpdatedEventDto -> {
-        stream.write(139)
+        stream.write(136)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -5717,14 +5656,11 @@ class NavigationSessionEventApi(private val binaryMessenger: BinaryMessenger) {
     }
   }
 
-  fun onRoadSnappedLocationUpdated(
-    msgArg: RoadSnappedLocationUpdatedEventDto,
-    callback: (Result<Unit>) -> Unit
-  ) {
+  fun onRoadSnappedLocationUpdated(locationArg: LatLngDto, callback: (Result<Unit>) -> Unit) {
     val channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRoadSnappedLocationUpdated"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(msgArg)) {
+    channel.send(listOf(locationArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
@@ -5737,14 +5673,11 @@ class NavigationSessionEventApi(private val binaryMessenger: BinaryMessenger) {
     }
   }
 
-  fun onRoadSnappedRawLocationUpdated(
-    msgArg: RoadSnappedRawLocationUpdatedEventDto,
-    callback: (Result<Unit>) -> Unit
-  ) {
+  fun onRoadSnappedRawLocationUpdated(locationArg: LatLngDto, callback: (Result<Unit>) -> Unit) {
     val channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRoadSnappedRawLocationUpdated"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(msgArg)) {
+    channel.send(listOf(locationArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))

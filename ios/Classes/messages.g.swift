@@ -1200,47 +1200,6 @@ struct SpeedingUpdatedEventDto {
 }
 
 /// Generated class from Pigeon that represents data sent in messages.
-struct RoadSnappedLocationUpdatedEventDto {
-  var location: LatLngDto
-
-  static func fromList(_ list: [Any?]) -> RoadSnappedLocationUpdatedEventDto? {
-    let location = LatLngDto.fromList(list[0] as! [Any?])!
-
-    return RoadSnappedLocationUpdatedEventDto(
-      location: location
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      location.toList(),
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct RoadSnappedRawLocationUpdatedEventDto {
-  var location: LatLngDto?
-
-  static func fromList(_ list: [Any?]) -> RoadSnappedRawLocationUpdatedEventDto? {
-    var location: LatLngDto?
-    if let locationList: [Any?] = nilOrValue(list[0]) {
-      location = LatLngDto.fromList(locationList)
-    }
-
-    return RoadSnappedRawLocationUpdatedEventDto(
-      location: location
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      location?.toList(),
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
 struct OnArrivalEventDto {
   var waypoint: NavigationWaypointDto
 
@@ -4976,26 +4935,20 @@ private class NavigationSessionEventApiCodecReader: FlutterStandardReader {
     case 128:
       return LatLngDto.fromList(readValue() as! [Any?])
     case 129:
-      return LatLngDto.fromList(readValue() as! [Any?])
-    case 130:
       return NavigationSessionEventDto.fromList(readValue() as! [Any?])
-    case 131:
+    case 130:
       return NavigationWaypointDto.fromList(readValue() as! [Any?])
-    case 132:
+    case 131:
       return OnArrivalEventDto.fromList(readValue() as! [Any?])
-    case 133:
+    case 132:
       return RemainingTimeOrDistanceChangedEventDto.fromList(readValue() as! [Any?])
-    case 134:
+    case 133:
       return ReroutingEventDto.fromList(readValue() as! [Any?])
-    case 135:
-      return RoadSnappedLocationUpdatedEventDto.fromList(readValue() as! [Any?])
-    case 136:
-      return RoadSnappedRawLocationUpdatedEventDto.fromList(readValue() as! [Any?])
-    case 137:
+    case 134:
       return RouteChangedEventDto.fromList(readValue() as! [Any?])
-    case 138:
+    case 135:
       return SpeedingUpdatedEventDto.fromList(readValue() as! [Any?])
-    case 139:
+    case 136:
       return TrafficUpdatedEventDto.fromList(readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -5008,38 +4961,29 @@ private class NavigationSessionEventApiCodecWriter: FlutterStandardWriter {
     if let value = value as? LatLngDto {
       super.writeByte(128)
       super.writeValue(value.toList())
-    } else if let value = value as? LatLngDto {
+    } else if let value = value as? NavigationSessionEventDto {
       super.writeByte(129)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationSessionEventDto {
+    } else if let value = value as? NavigationWaypointDto {
       super.writeByte(130)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationWaypointDto {
+    } else if let value = value as? OnArrivalEventDto {
       super.writeByte(131)
       super.writeValue(value.toList())
-    } else if let value = value as? OnArrivalEventDto {
+    } else if let value = value as? RemainingTimeOrDistanceChangedEventDto {
       super.writeByte(132)
       super.writeValue(value.toList())
-    } else if let value = value as? RemainingTimeOrDistanceChangedEventDto {
+    } else if let value = value as? ReroutingEventDto {
       super.writeByte(133)
       super.writeValue(value.toList())
-    } else if let value = value as? ReroutingEventDto {
+    } else if let value = value as? RouteChangedEventDto {
       super.writeByte(134)
       super.writeValue(value.toList())
-    } else if let value = value as? RoadSnappedLocationUpdatedEventDto {
+    } else if let value = value as? SpeedingUpdatedEventDto {
       super.writeByte(135)
       super.writeValue(value.toList())
-    } else if let value = value as? RoadSnappedRawLocationUpdatedEventDto {
-      super.writeByte(136)
-      super.writeValue(value.toList())
-    } else if let value = value as? RouteChangedEventDto {
-      super.writeByte(137)
-      super.writeValue(value.toList())
-    } else if let value = value as? SpeedingUpdatedEventDto {
-      super.writeByte(138)
-      super.writeValue(value.toList())
     } else if let value = value as? TrafficUpdatedEventDto {
-      super.writeByte(139)
+      super.writeByte(136)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -5068,9 +5012,9 @@ protocol NavigationSessionEventApiProtocol {
                                 completion: @escaping (Result<Void, FlutterError>) -> Void)
   func onSpeedingUpdated(msg msgArg: SpeedingUpdatedEventDto,
                          completion: @escaping (Result<Void, FlutterError>) -> Void)
-  func onRoadSnappedLocationUpdated(msg msgArg: RoadSnappedLocationUpdatedEventDto,
+  func onRoadSnappedLocationUpdated(location locationArg: LatLngDto,
                                     completion: @escaping (Result<Void, FlutterError>) -> Void)
-  func onRoadSnappedRawLocationUpdated(msg msgArg: RoadSnappedRawLocationUpdatedEventDto,
+  func onRoadSnappedRawLocationUpdated(location locationArg: LatLngDto,
                                        completion: @escaping (Result<Void, FlutterError>) -> Void)
   func onArrival(msg msgArg: OnArrivalEventDto,
                  completion: @escaping (Result<Void, FlutterError>) -> Void)
@@ -5146,7 +5090,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
     }
   }
 
-  func onRoadSnappedLocationUpdated(msg msgArg: RoadSnappedLocationUpdatedEventDto,
+  func onRoadSnappedLocationUpdated(location locationArg: LatLngDto,
                                     completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRoadSnappedLocationUpdated"
@@ -5155,7 +5099,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
+    channel.sendMessage([locationArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -5171,7 +5115,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
     }
   }
 
-  func onRoadSnappedRawLocationUpdated(msg msgArg: RoadSnappedRawLocationUpdatedEventDto,
+  func onRoadSnappedRawLocationUpdated(location locationArg: LatLngDto,
                                        completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRoadSnappedRawLocationUpdated"
@@ -5180,7 +5124,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
+    channel.sendMessage([locationArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return

@@ -1306,50 +1306,6 @@ class SpeedingUpdatedEventDto {
   }
 }
 
-class RoadSnappedLocationUpdatedEventDto {
-  RoadSnappedLocationUpdatedEventDto({
-    required this.location,
-  });
-
-  LatLngDto location;
-
-  Object encode() {
-    return <Object?>[
-      location.encode(),
-    ];
-  }
-
-  static RoadSnappedLocationUpdatedEventDto decode(Object result) {
-    result as List<Object?>;
-    return RoadSnappedLocationUpdatedEventDto(
-      location: LatLngDto.decode(result[0]! as List<Object?>),
-    );
-  }
-}
-
-class RoadSnappedRawLocationUpdatedEventDto {
-  RoadSnappedRawLocationUpdatedEventDto({
-    this.location,
-  });
-
-  LatLngDto? location;
-
-  Object encode() {
-    return <Object?>[
-      location?.encode(),
-    ];
-  }
-
-  static RoadSnappedRawLocationUpdatedEventDto decode(Object result) {
-    result as List<Object?>;
-    return RoadSnappedRawLocationUpdatedEventDto(
-      location: result[0] != null
-          ? LatLngDto.decode(result[0]! as List<Object?>)
-          : null,
-    );
-  }
-}
-
 class OnArrivalEventDto {
   OnArrivalEventDto({
     required this.waypoint,
@@ -5786,38 +5742,29 @@ class _NavigationSessionEventApiCodec extends StandardMessageCodec {
     if (value is LatLngDto) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngDto) {
+    } else if (value is NavigationSessionEventDto) {
       buffer.putUint8(129);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationSessionEventDto) {
+    } else if (value is NavigationWaypointDto) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationWaypointDto) {
+    } else if (value is OnArrivalEventDto) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
-    } else if (value is OnArrivalEventDto) {
+    } else if (value is RemainingTimeOrDistanceChangedEventDto) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
-    } else if (value is RemainingTimeOrDistanceChangedEventDto) {
+    } else if (value is ReroutingEventDto) {
       buffer.putUint8(133);
       writeValue(buffer, value.encode());
-    } else if (value is ReroutingEventDto) {
+    } else if (value is RouteChangedEventDto) {
       buffer.putUint8(134);
       writeValue(buffer, value.encode());
-    } else if (value is RoadSnappedLocationUpdatedEventDto) {
+    } else if (value is SpeedingUpdatedEventDto) {
       buffer.putUint8(135);
       writeValue(buffer, value.encode());
-    } else if (value is RoadSnappedRawLocationUpdatedEventDto) {
-      buffer.putUint8(136);
-      writeValue(buffer, value.encode());
-    } else if (value is RouteChangedEventDto) {
-      buffer.putUint8(137);
-      writeValue(buffer, value.encode());
-    } else if (value is SpeedingUpdatedEventDto) {
-      buffer.putUint8(138);
-      writeValue(buffer, value.encode());
     } else if (value is TrafficUpdatedEventDto) {
-      buffer.putUint8(139);
+      buffer.putUint8(136);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -5830,27 +5777,21 @@ class _NavigationSessionEventApiCodec extends StandardMessageCodec {
       case 128:
         return LatLngDto.decode(readValue(buffer)!);
       case 129:
-        return LatLngDto.decode(readValue(buffer)!);
-      case 130:
         return NavigationSessionEventDto.decode(readValue(buffer)!);
-      case 131:
+      case 130:
         return NavigationWaypointDto.decode(readValue(buffer)!);
-      case 132:
+      case 131:
         return OnArrivalEventDto.decode(readValue(buffer)!);
-      case 133:
+      case 132:
         return RemainingTimeOrDistanceChangedEventDto.decode(
             readValue(buffer)!);
-      case 134:
+      case 133:
         return ReroutingEventDto.decode(readValue(buffer)!);
-      case 135:
-        return RoadSnappedLocationUpdatedEventDto.decode(readValue(buffer)!);
-      case 136:
-        return RoadSnappedRawLocationUpdatedEventDto.decode(readValue(buffer)!);
-      case 137:
+      case 134:
         return RouteChangedEventDto.decode(readValue(buffer)!);
-      case 138:
+      case 135:
         return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
-      case 139:
+      case 136:
         return TrafficUpdatedEventDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -5866,10 +5807,9 @@ abstract class NavigationSessionEventApi {
 
   void onSpeedingUpdated(SpeedingUpdatedEventDto msg);
 
-  void onRoadSnappedLocationUpdated(RoadSnappedLocationUpdatedEventDto msg);
+  void onRoadSnappedLocationUpdated(LatLngDto location);
 
-  void onRoadSnappedRawLocationUpdated(
-      RoadSnappedRawLocationUpdatedEventDto msg);
+  void onRoadSnappedRawLocationUpdated(LatLngDto location);
 
   void onArrival(OnArrivalEventDto msg);
 
@@ -5957,12 +5897,11 @@ abstract class NavigationSessionEventApi {
           assert(message != null,
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRoadSnappedLocationUpdated was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final RoadSnappedLocationUpdatedEventDto? arg_msg =
-              (args[0] as RoadSnappedLocationUpdatedEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRoadSnappedLocationUpdated was null, expected non-null RoadSnappedLocationUpdatedEventDto.');
+          final LatLngDto? arg_location = (args[0] as LatLngDto?);
+          assert(arg_location != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRoadSnappedLocationUpdated was null, expected non-null LatLngDto.');
           try {
-            api.onRoadSnappedLocationUpdated(arg_msg!);
+            api.onRoadSnappedLocationUpdated(arg_location!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -5986,12 +5925,11 @@ abstract class NavigationSessionEventApi {
           assert(message != null,
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRoadSnappedRawLocationUpdated was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final RoadSnappedRawLocationUpdatedEventDto? arg_msg =
-              (args[0] as RoadSnappedRawLocationUpdatedEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRoadSnappedRawLocationUpdated was null, expected non-null RoadSnappedRawLocationUpdatedEventDto.');
+          final LatLngDto? arg_location = (args[0] as LatLngDto?);
+          assert(arg_location != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRoadSnappedRawLocationUpdated was null, expected non-null LatLngDto.');
           try {
-            api.onRoadSnappedRawLocationUpdated(arg_msg!);
+            api.onRoadSnappedRawLocationUpdated(arg_location!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

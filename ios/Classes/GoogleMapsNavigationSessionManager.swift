@@ -465,15 +465,14 @@ extension GoogleMapsNavigationSessionManager: GMSRoadSnappedLocationProviderList
   /// Send road snapped location update back to flutter code.
   func locationProvider(_ locationProvider: GMSRoadSnappedLocationProvider,
                         didUpdate location: CLLocation) {
-    _navigationSessionEventApi?.onRoadSnappedLocationUpdated(msg:
+    _navigationSessionEventApi?.onRoadSnappedLocationUpdated(
+      location:
       .init(
-        location:
-        .init(
-          latitude: location.coordinate.latitude,
-          longitude: location.coordinate.longitude
-        )
+        latitude: location.coordinate.latitude,
+        longitude: location.coordinate.longitude
       ),
-      completion: { _ in })
+      completion: { _ in }
+    )
   }
 }
 

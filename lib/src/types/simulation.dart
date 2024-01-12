@@ -58,7 +58,7 @@ class RoadSnappedLocationUpdatedEvent {
   final LatLng location;
 }
 
-/// RoadSnappedRawLocationUpdated event message.
+/// RoadSnappedRawLocationUpdated event message (Android only).
 /// {@category Navigation}
 class RoadSnappedRawLocationUpdatedEvent {
   /// Initialize road snapped raw location updated event message.
@@ -67,7 +67,7 @@ class RoadSnappedRawLocationUpdatedEvent {
   });
 
   /// Coordinate of the updated location.
-  final LatLng? location;
+  final LatLng location;
 }
 
 /// Navigation simulation options.

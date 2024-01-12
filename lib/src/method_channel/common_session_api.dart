@@ -562,9 +562,7 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   Stream<RoadSnappedLocationUpdatedEvent>
       getNavigationRoadSnappedLocationEventStream() {
     return _sessionEventStreamController.stream
-        .whereType<RoadSnappedLocationUpdatedEventDto>()
-        .map((RoadSnappedLocationUpdatedEventDto event) =>
-            event.toRoadSnappedLocationUpdatedEvent());
+        .whereType<RoadSnappedLocationUpdatedEvent>();
   }
 
   /// Get event stream for road snapped location updates.
@@ -572,9 +570,7 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   Stream<RoadSnappedRawLocationUpdatedEvent>
       getNavigationRoadSnappedRawLocationEventStream() {
     return _sessionEventStreamController.stream
-        .whereType<RoadSnappedRawLocationUpdatedEventDto>()
-        .map((RoadSnappedRawLocationUpdatedEventDto event) =>
-            event.toRoadSnappedRawLocationUpdatedEvent());
+        .whereType<RoadSnappedRawLocationUpdatedEvent>();
   }
 
   /// Get event stream for navigation session events.
@@ -658,11 +654,6 @@ class NavigationSessionEventApiImpl implements NavigationSessionEventApi {
   }
 
   @override
-  void onRoadSnappedLocationUpdated(RoadSnappedLocationUpdatedEventDto event) {
-    sessionEventStreamController.add(event);
-  }
-
-  @override
   void onArrival(OnArrivalEventDto event) {
     sessionEventStreamController.add(event);
   }
@@ -683,9 +674,16 @@ class NavigationSessionEventApiImpl implements NavigationSessionEventApi {
   }
 
   @override
-  void onRoadSnappedRawLocationUpdated(
-      RoadSnappedRawLocationUpdatedEventDto event) {
-    sessionEventStreamController.add(event);
+  void onRoadSnappedLocationUpdated(LatLngDto location) {
+    sessionEventStreamController
+        .add(RoadSnappedLocationUpdatedEvent(location: location.toLatLng()));
+  }
+
+  // Android only.
+  @override
+  void onRoadSnappedRawLocationUpdated(LatLngDto location) {
+    sessionEventStreamController
+        .add(RoadSnappedRawLocationUpdatedEvent(location: location.toLatLng()));
   }
 
   @override
