@@ -28,7 +28,7 @@ import 'package:flutter/material.dart';
 import 'shared.dart';
 
 void main() {
-  patrol('Test session initialization errors',
+  patrol('C01 - Test session initialization errors',
       (PatrolIntegrationTester $) async {
     await GoogleMapsNavigator.resetTermsAccepted();
     expect(await GoogleMapsNavigator.areTermsAccepted(), false);
@@ -167,7 +167,7 @@ void main() {
     }
   });
 
-  patrol('Test Maps initialization', (PatrolIntegrationTester $) async {
+  patrol('C02 - Test Maps initialization', (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
         Completer<GoogleNavigationViewController>();
 
@@ -183,7 +183,7 @@ void main() {
     expect(await GoogleMapsNavigator.isInitialized(), true);
 
     const CameraPosition cameraPosition =
-        CameraPosition(target: LatLng(latitude: 65, longitude: 25.5), zoom: 18);
+        CameraPosition(target: LatLng(latitude: 65, longitude: 25.5), zoom: 12);
     const MapType mapType = MapType.satellite;
     const bool compassEnabled = false;
     const bool rotateGesturesEnabled = false;
@@ -193,6 +193,8 @@ void main() {
     const bool scrollGesturesEnabledDuringRotateOrZoom = false;
     const bool mapToolbarEnabled = false;
     const bool zoomControlsEnabled = false;
+    const double minZoomPreference = 5.0;
+    const double maxZoomPreference = 18.0;
     const NavigationUIEnabledPreference navigationUiEnabledPreference =
         NavigationUIEnabledPreference.automatic;
 
@@ -220,6 +222,8 @@ void main() {
             scrollGesturesEnabledDuringRotateOrZoom,
         initialMapToolbarEnabled: mapToolbarEnabled,
         initialZoomControlsEnabled: zoomControlsEnabled,
+        initialMinZoomPreference: minZoomPreference,
+        initialMaxZoomPreference: maxZoomPreference,
         // ignore: avoid_redundant_argument_values
         initialNavigationUIEnabledPreference: navigationUiEnabledPreference,
       ),
@@ -253,6 +257,8 @@ void main() {
       expect(await controller.settings.isZoomControlsEnabled(),
           zoomControlsEnabled);
     }
+    expect(await controller.getMinZoomPreference(), minZoomPreference);
+    expect(await controller.getMaxZoomPreference(), maxZoomPreference);
     expect(await controller.isNavigationUIEnabled(), true);
   });
 }
