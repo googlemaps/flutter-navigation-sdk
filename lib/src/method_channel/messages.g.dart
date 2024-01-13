@@ -94,6 +94,8 @@ enum CameraEventTypeDto {
   moveStartedByGesture,
   onCameraMove,
   onCameraIdle,
+  onCameraStartedFollowingLocation,
+  onCameraStoppedFollowingLocation,
 }
 
 enum AlternateRoutesStrategyDto {

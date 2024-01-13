@@ -155,7 +155,9 @@ enum class CameraEventTypeDto(val raw: Int) {
   MOVESTARTEDBYAPI(0),
   MOVESTARTEDBYGESTURE(1),
   ONCAMERAMOVE(2),
-  ONCAMERAIDLE(3);
+  ONCAMERAIDLE(3),
+  ONCAMERASTARTEDFOLLOWINGLOCATION(4),
+  ONCAMERASTOPPEDFOLLOWINGLOCATION(5);
 
   companion object {
     fun ofRaw(raw: Int): CameraEventTypeDto? {

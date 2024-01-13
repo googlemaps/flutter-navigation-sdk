@@ -113,6 +113,8 @@ enum CameraEventTypeDto: Int {
   case moveStartedByGesture = 1
   case onCameraMove = 2
   case onCameraIdle = 3
+  case onCameraStartedFollowingLocation = 4
+  case onCameraStoppedFollowingLocation = 5
 }
 
 enum AlternateRoutesStrategyDto: Int {

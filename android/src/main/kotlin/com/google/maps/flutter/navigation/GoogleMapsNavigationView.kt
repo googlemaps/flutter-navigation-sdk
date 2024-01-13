@@ -26,6 +26,7 @@ import android.view.View
 import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.OnCameraFollowLocationCallback
 import com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener
 import com.google.android.gms.maps.GoogleMapOptions
@@ -243,6 +244,27 @@ internal constructor(
       navigationViewEventApi.onMyLocationButtonClicked(viewId.toLong()) {}
       _consumeMyLocationButtonClickEventsEnabled
     }
+
+    getMap()
+      .setOnFollowMyLocationCallback(
+        object : OnCameraFollowLocationCallback {
+          override fun onCameraStartedFollowingLocation() {
+            navigationViewEventApi.onCameraChanged(
+              viewId.toLong(),
+              CameraEventTypeDto.ONCAMERASTARTEDFOLLOWINGLOCATION,
+              Convert.convertCameraPositionToDto(getMap().cameraPosition)
+            ) {}
+          }
+
+          override fun onCameraStoppedFollowingLocation() {
+            navigationViewEventApi.onCameraChanged(
+              viewId.toLong(),
+              CameraEventTypeDto.ONCAMERASTOPPEDFOLLOWINGLOCATION,
+              Convert.convertCameraPositionToDto(getMap().cameraPosition)
+            ) {}
+          }
+        }
+      )
   }
 
   @Throws(FlutterError::class)

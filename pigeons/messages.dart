@@ -361,7 +361,9 @@ enum CameraEventTypeDto {
   moveStartedByApi,
   moveStartedByGesture,
   onCameraMove,
-  onCameraIdle
+  onCameraIdle,
+  onCameraStartedFollowingLocation,
+  onCameraStoppedFollowingLocation
 }
 
 @HostApi(dartHostTestHandler: 'TestNavigationViewApi')

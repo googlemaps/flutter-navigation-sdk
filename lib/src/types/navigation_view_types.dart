@@ -394,7 +394,13 @@ enum CameraEventType {
   onCameraMove,
 
   /// Called when camera movement has ended.
-  onCameraIdle
+  onCameraIdle,
+
+  /// Called when camera starts following location (Android only).
+  onCameraStartedFollowingLocation,
+
+  /// Called when camera stops following location (Android only).
+  onCameraStoppedFollowingLocation
 }
 
 /// Represents camera changed events in a Google Maps view.

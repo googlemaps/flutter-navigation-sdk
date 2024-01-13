@@ -138,6 +138,24 @@ typedef OnCameraMove = void Function(CameraPosition position);
 /// [position] is the camera position where the motion ended.
 typedef OnCameraIdle = void Function(CameraPosition position);
 
+/// Called when the camera starts following current location, typically will
+/// get called in response to [GoogleNavigationViewController.followMyLocation].
+/// Only applicable on Android.
+///
+/// [position] is the current camera position.
+typedef OnCameraStartedFollowingLocation = void Function(
+    CameraPosition position);
+
+/// Called when the camera stops following current location. A camera already
+/// following location will exit the follow mode if the camera is moved via
+/// user gesture or an API call, e.g. [GoogleNavigationViewController.moveCamera]
+/// or [GoogleNavigationViewController.animateCamera].
+/// Only applicable on Android.
+///
+/// [position] is the current camera position.
+typedef OnCameraStoppedFollowingLocation = void Function(
+    CameraPosition position);
+
 /// The main map view widget for Google Maps Navigation.
 /// {@category Navigation View}
 class GoogleMapsNavigationView extends StatefulWidget {
@@ -158,46 +176,47 @@ class GoogleMapsNavigationView extends StatefulWidget {
   ///   // Other initial map settings...
   /// )
   /// ```
-  const GoogleMapsNavigationView({
-    super.key,
-    required this.onViewCreated,
-    this.initialCameraPosition = const CameraPosition(),
-    this.initialMapType = MapType.normal,
-    this.initialCompassEnabled = true,
-    this.initialRotateGesturesEnabled = true,
-    this.initialScrollGesturesEnabled = true,
-    this.initialTiltGesturesEnabled = true,
-    this.initialZoomGesturesEnabled = true,
-    this.initialScrollGesturesEnabledDuringRotateOrZoom = true,
-    this.initialMapToolbarEnabled = true,
-    this.initialMinZoomPreference,
-    this.initialMaxZoomPreference,
-    this.initialZoomControlsEnabled = true,
-    this.initialCameraTargetBounds,
-    this.initialNavigationUIEnabledPreference =
-        NavigationUIEnabledPreference.automatic,
-    this.layoutDirection,
-    this.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
-    this.onRecenterButtonClicked,
-    this.onMarkerClicked,
-    this.onMarkerDrag,
-    this.onMarkerDragStart,
-    this.onMarkerDragEnd,
-    this.onMarkerInfoWindowClicked,
-    this.onMarkerInfoWindowClosed,
-    this.onMarkerInfoWindowLongClicked,
-    this.onMapClicked,
-    this.onMapLongClicked,
-    this.onPolygonClicked,
-    this.onPolylineClicked,
-    this.onCircleClicked,
-    this.onNavigationUIEnabledChanged,
-    this.onMyLocationClicked,
-    this.onMyLocationButtonClicked,
-    this.onCameraMoveStarted,
-    this.onCameraMove,
-    this.onCameraIdle,
-  });
+  const GoogleMapsNavigationView(
+      {super.key,
+      required this.onViewCreated,
+      this.initialCameraPosition = const CameraPosition(),
+      this.initialMapType = MapType.normal,
+      this.initialCompassEnabled = true,
+      this.initialRotateGesturesEnabled = true,
+      this.initialScrollGesturesEnabled = true,
+      this.initialTiltGesturesEnabled = true,
+      this.initialZoomGesturesEnabled = true,
+      this.initialScrollGesturesEnabledDuringRotateOrZoom = true,
+      this.initialMapToolbarEnabled = true,
+      this.initialMinZoomPreference,
+      this.initialMaxZoomPreference,
+      this.initialZoomControlsEnabled = true,
+      this.initialCameraTargetBounds,
+      this.initialNavigationUIEnabledPreference =
+          NavigationUIEnabledPreference.automatic,
+      this.layoutDirection,
+      this.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
+      this.onRecenterButtonClicked,
+      this.onMarkerClicked,
+      this.onMarkerDrag,
+      this.onMarkerDragStart,
+      this.onMarkerDragEnd,
+      this.onMarkerInfoWindowClicked,
+      this.onMarkerInfoWindowClosed,
+      this.onMarkerInfoWindowLongClicked,
+      this.onMapClicked,
+      this.onMapLongClicked,
+      this.onPolygonClicked,
+      this.onPolylineClicked,
+      this.onCircleClicked,
+      this.onNavigationUIEnabledChanged,
+      this.onMyLocationClicked,
+      this.onMyLocationButtonClicked,
+      this.onCameraMoveStarted,
+      this.onCameraMove,
+      this.onCameraIdle,
+      this.onCameraStartedFollowingLocation,
+      this.onCameraStoppedFollowingLocation});
 
   /// On view created callback.
   final OnCreatedCallback onViewCreated;
@@ -362,6 +381,12 @@ class GoogleMapsNavigationView extends StatefulWidget {
 
   /// On camera idle callback.
   final OnCameraIdle? onCameraIdle;
+
+  /// On camera started following location callback.
+  final OnCameraStartedFollowingLocation? onCameraStartedFollowingLocation;
+
+  /// On camera stopped following location callback.
+  final OnCameraStoppedFollowingLocation? onCameraStoppedFollowingLocation;
 
   /// Creates a [State] for this [GoogleMapsNavigationView].
   @override
@@ -719,6 +744,12 @@ class GoogleNavigationViewController {
           _viewState?.widget.onCameraMove?.call(event.position);
         case CameraEventType.onCameraIdle:
           _viewState?.widget.onCameraIdle?.call(event.position);
+        case CameraEventType.onCameraStartedFollowingLocation:
+          _viewState?.widget.onCameraStartedFollowingLocation
+              ?.call(event.position);
+        case CameraEventType.onCameraStoppedFollowingLocation:
+          _viewState?.widget.onCameraStoppedFollowingLocation
+              ?.call(event.position);
       }
     });
   }

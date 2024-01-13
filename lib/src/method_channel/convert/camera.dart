@@ -61,6 +61,10 @@ extension ConvertCameraEventTypeDto on CameraEventTypeDto {
         return CameraEventType.onCameraMove;
       case CameraEventTypeDto.onCameraIdle:
         return CameraEventType.onCameraIdle;
+      case CameraEventTypeDto.onCameraStartedFollowingLocation:
+        return CameraEventType.onCameraStartedFollowingLocation;
+      case CameraEventTypeDto.onCameraStoppedFollowingLocation:
+        return CameraEventType.onCameraStoppedFollowingLocation;
     }
   }
 }

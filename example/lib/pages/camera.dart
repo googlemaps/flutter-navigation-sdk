@@ -40,6 +40,7 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
   late double _maxZoomLevel;
   bool _showCameraUpdates = false;
   String _latestCameraUpdate = '';
+  bool _isFollowingLocation = false;
 
   // ignore: use_setters_to_change_properties
   Future<void> _onViewCreated(GoogleNavigationViewController controller) async {
@@ -126,13 +127,15 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
       context,
       Stack(children: <Widget>[
         GoogleMapsNavigationView(
-          initialNavigationUIEnabledPreference:
-              NavigationUIEnabledPreference.disabled,
-          onViewCreated: _onViewCreated,
-          onCameraMoveStarted: _onCameraMoveStarted,
-          onCameraMove: _onCameraMove,
-          onCameraIdle: _onCameraIdle,
-        ),
+            initialNavigationUIEnabledPreference:
+                NavigationUIEnabledPreference.disabled,
+            onViewCreated: _onViewCreated,
+            onCameraMoveStarted: _onCameraMoveStarted,
+            onCameraMove: _onCameraMove,
+            onCameraIdle: _onCameraIdle,
+            onCameraStartedFollowingLocation: _onCameraStartedFollowingLocation,
+            onCameraStoppedFollowingLocation:
+                _onCameraStoppedFollowingLocation),
         getOverlayOptionsButton(context, onPressed: () => toggleOverlay()),
         if (_showCameraUpdates)
           Container(
@@ -154,9 +157,12 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
   }
 
   void _onCameraMove(CameraPosition position) {
+    final String cameraState =
+        _isFollowingLocation ? 'Camera following' : 'Camera moving';
+    final String positionStr =
+        'Position: ${position.target.latitude.toStringAsFixed(2)}, ${position.target.longitude.toStringAsFixed(2)}';
     setState(() {
-      _latestCameraUpdate =
-          'Camera moving\nPosition: ${position.target.latitude.toStringAsFixed(2)}, ${position.target.longitude.toStringAsFixed(2)}';
+      _latestCameraUpdate = '$cameraState\n$positionStr';
     });
   }
 
@@ -164,6 +170,20 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
     setState(() {
       _latestCameraUpdate =
           'Camera idle\nPosition: ${position.target.latitude.toStringAsFixed(2)}, ${position.target.longitude.toStringAsFixed(2)}';
+    });
+  }
+
+  // Android only.
+  void _onCameraStartedFollowingLocation(CameraPosition position) {
+    setState(() {
+      _isFollowingLocation = true;
+    });
+  }
+
+  // Android only.
+  void _onCameraStoppedFollowingLocation(CameraPosition position) {
+    setState(() {
+      _isFollowingLocation = false;
     });
   }
 
