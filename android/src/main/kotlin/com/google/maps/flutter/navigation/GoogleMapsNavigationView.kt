@@ -77,7 +77,7 @@ internal constructor(
   private var _isRecenterButtonEnabled: Boolean = true
   private var _isSpeedLimitIconEnabled: Boolean = false
   private var _isSpeedometerEnabled: Boolean = false
-  private var _isIncidentCardsEnabled: Boolean = true
+  private var _isTrafficIncidentCardsEnabled: Boolean = true
   private var _consumeMyLocationButtonClickEventsEnabled: Boolean = false
 
   // Nullable variable to hold the callback function
@@ -705,14 +705,14 @@ internal constructor(
     _isSpeedometerEnabled = enabled
   }
 
-  fun isIncidentCardsEnabled(): Boolean {
-    return _isIncidentCardsEnabled
+  fun isTrafficIncidentCardsEnabled(): Boolean {
+    return _isTrafficIncidentCardsEnabled
   }
 
-  fun setIncidentCardsEnabled(enabled: Boolean) {
+  fun setTrafficIncidentCardsEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
     _navigationView.setTrafficIncidentCardsEnabled(enabled)
-    _isIncidentCardsEnabled = enabled
+    _isTrafficIncidentCardsEnabled = enabled
   }
 
   fun isNavigationUIEnabled(): Boolean {

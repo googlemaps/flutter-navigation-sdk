@@ -1028,16 +1028,16 @@ class GoogleNavigationViewController {
   }
 
   /// Are the incident cards displayed.
-  Future<bool> isIncidentCardsEnabled() {
+  Future<bool> isTrafficIncidentCardsEnabled() {
     return GoogleMapsNavigationPlatform.instance
-        .isIncidentCardsEnabled(viewId: _viewId);
+        .isTrafficIncidentCardsEnabled(viewId: _viewId);
   }
 
   /// Enable showing of the incident cards.
   ///
   /// By default, the incident cards are shown.
-  Future<void> setIncidentCardsEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance.setIncidentCardsEnabled(
+  Future<void> setTrafficIncidentCardsEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.setTrafficIncidentCardsEnabled(
       viewId: _viewId,
       enabled: enabled,
     );

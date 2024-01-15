@@ -669,22 +669,22 @@ class MockTestNavigationViewApi extends _i1.Mock
       );
 
   @override
-  bool isIncidentCardsEnabled(int? viewId) => (super.noSuchMethod(
+  bool isTrafficIncidentCardsEnabled(int? viewId) => (super.noSuchMethod(
         Invocation.method(
-          #isIncidentCardsEnabled,
+          #isTrafficIncidentCardsEnabled,
           [viewId],
         ),
         returnValue: false,
       ) as bool);
 
   @override
-  void setIncidentCardsEnabled(
+  void setTrafficIncidentCardsEnabled(
     int? viewId,
     bool? enabled,
   ) =>
       super.noSuchMethod(
         Invocation.method(
-          #setIncidentCardsEnabled,
+          #setTrafficIncidentCardsEnabled,
           [
             viewId,
             enabled,

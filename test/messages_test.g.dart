@@ -181,9 +181,9 @@ abstract class TestNavigationViewApi {
 
   void setSpeedometerEnabled(int viewId, bool enabled);
 
-  bool isIncidentCardsEnabled(int viewId);
+  bool isTrafficIncidentCardsEnabled(int viewId);
 
-  void setIncidentCardsEnabled(int viewId, bool enabled);
+  void setTrafficIncidentCardsEnabled(int viewId, bool enabled);
 
   bool isNavigationUIEnabled(int viewId);
 
@@ -955,7 +955,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isIncidentCardsEnabled',
+          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isTrafficIncidentCardsEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -966,13 +966,13 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isIncidentCardsEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isTrafficIncidentCardsEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isIncidentCardsEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isTrafficIncidentCardsEnabled was null, expected non-null int.');
           try {
-            final bool output = api.isIncidentCardsEnabled(arg_viewId!);
+            final bool output = api.isTrafficIncidentCardsEnabled(arg_viewId!);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -986,7 +986,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setIncidentCardsEnabled',
+          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTrafficIncidentCardsEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -997,16 +997,16 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setIncidentCardsEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTrafficIncidentCardsEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setIncidentCardsEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTrafficIncidentCardsEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
           assert(arg_enabled != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setIncidentCardsEnabled was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTrafficIncidentCardsEnabled was null, expected non-null bool.');
           try {
-            api.setIncidentCardsEnabled(arg_viewId!, arg_enabled!);
+            api.setTrafficIncidentCardsEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

@@ -390,8 +390,8 @@ abstract class NavigationViewApi {
   void setSpeedLimitIconEnabled(int viewId, bool enabled);
   bool isSpeedometerEnabled(int viewId);
   void setSpeedometerEnabled(int viewId, bool enabled);
-  bool isIncidentCardsEnabled(int viewId);
-  void setIncidentCardsEnabled(int viewId, bool enabled);
+  bool isTrafficIncidentCardsEnabled(int viewId);
+  void setTrafficIncidentCardsEnabled(int viewId, bool enabled);
   bool isNavigationUIEnabled(int viewId);
   void setNavigationUIEnabled(int viewId, bool enabled);
 

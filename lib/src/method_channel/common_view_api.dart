@@ -500,14 +500,14 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Future<bool> isIncidentCardsEnabled({required int viewId}) {
-    return _viewApi.isIncidentCardsEnabled(viewId);
+  Future<bool> isTrafficIncidentCardsEnabled({required int viewId}) {
+    return _viewApi.isTrafficIncidentCardsEnabled(viewId);
   }
 
   @override
-  Future<void> setIncidentCardsEnabled(
+  Future<void> setTrafficIncidentCardsEnabled(
       {required int viewId, required bool enabled}) {
-    return _viewApi.setIncidentCardsEnabled(viewId, enabled);
+    return _viewApi.setTrafficIncidentCardsEnabled(viewId, enabled);
   }
 
   @override

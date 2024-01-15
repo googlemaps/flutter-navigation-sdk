@@ -2116,9 +2116,9 @@ class NavigationViewApi {
     }
   }
 
-  Future<bool> isIncidentCardsEnabled(int viewId) async {
+  Future<bool> isTrafficIncidentCardsEnabled(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isIncidentCardsEnabled';
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isTrafficIncidentCardsEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2145,9 +2145,9 @@ class NavigationViewApi {
     }
   }
 
-  Future<void> setIncidentCardsEnabled(int viewId, bool enabled) async {
+  Future<void> setTrafficIncidentCardsEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setIncidentCardsEnabled';
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTrafficIncidentCardsEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,

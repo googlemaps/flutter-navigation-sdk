@@ -190,7 +190,7 @@ class GoogleMapsNavigationViewMessageHandler: NavigationViewApi {
   func animateCameraToLatLng(viewId: Int64, point: LatLngDto, duration: Int64?,
                              completion: @escaping (Result<Bool, Error>) -> Void) {
     do {
-      try getView(viewId).animateCameraToLatLng(point: Convert.convertLatLng(point: point))
+      try getView(viewId).animateCameraToLatLng(point: Convert.convertLatLngFromDto(point: point))
 
       // No callback supported, just return immediately
       completion(.success(true))
@@ -222,7 +222,7 @@ class GoogleMapsNavigationViewMessageHandler: NavigationViewApi {
                                  completion: @escaping (Result<Bool, Error>) -> Void) {
     do {
       try getView(viewId).animateCameraToLatLngZoom(
-        point: Convert.convertLatLng(point: point),
+        point: Convert.convertLatLngFromDto(point: point),
         zoom: zoom
       )
 
@@ -281,7 +281,7 @@ class GoogleMapsNavigationViewMessageHandler: NavigationViewApi {
   }
 
   func moveCameraToLatLng(viewId: Int64, point: LatLngDto) throws {
-    try getView(viewId).moveCameraToLatLng(point: Convert.convertLatLng(point: point))
+    try getView(viewId).moveCameraToLatLng(point: Convert.convertLatLngFromDto(point: point))
   }
 
   func moveCameraToLatLngBounds(viewId: Int64, bounds: LatLngBoundsDto,
@@ -294,7 +294,7 @@ class GoogleMapsNavigationViewMessageHandler: NavigationViewApi {
 
   func moveCameraToLatLngZoom(viewId: Int64, point: LatLngDto, zoom: Double) throws {
     try getView(viewId).moveCameraToLatLngZoom(
-      point: Convert.convertLatLng(point: point),
+      point: Convert.convertLatLngFromDto(point: point),
       zoom: zoom
     )
   }
@@ -342,8 +342,8 @@ class GoogleMapsNavigationViewMessageHandler: NavigationViewApi {
     try getView(viewId).setSpeedometerEnabled(enabled)
   }
 
-  func setIncidentCardsEnabled(viewId: Int64, enabled: Bool) throws {
-    try getView(viewId).setIncidentCardsEnabled(enabled)
+  func setTrafficIncidentCardsEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setTrafficIncidentCardsEnabled(enabled)
   }
 
   func isNavigationTripProgressBarEnabled(viewId: Int64) throws -> Bool {
@@ -374,8 +374,8 @@ class GoogleMapsNavigationViewMessageHandler: NavigationViewApi {
     try getView(viewId).isSpeedometerEnabled()
   }
 
-  func isIncidentCardsEnabled(viewId: Int64) throws -> Bool {
-    try getView(viewId).isIncidentCardsEnabled()
+  func isTrafficIncidentCardsEnabled(viewId: Int64) throws -> Bool {
+    try getView(viewId).isTrafficIncidentCardsEnabled()
   }
 
   func isNavigationUIEnabled(viewId: Int64) throws -> Bool {

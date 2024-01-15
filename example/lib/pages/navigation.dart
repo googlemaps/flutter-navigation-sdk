@@ -96,7 +96,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   bool _recenterButtonEnabled = true;
   bool _speedometerEnabled = false;
   bool _speedLimitIconEnabled = false;
-  bool _indicentCardsEnabled = false;
+  bool _trafficIndicentCardsEnabled = false;
 
   bool _termsAndConditionsAccepted = false;
   bool _locationPermissionsAccepted = false;
@@ -438,8 +438,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
           await _navigationViewController!.isSpeedometerEnabled();
       final bool speedLimitIconEnabled =
           await _navigationViewController!.isSpeedLimitIconEnabled();
-      final bool indicentCardsEnabled =
-          await _navigationViewController!.isIncidentCardsEnabled();
+      final bool trafficIndicentCardsEnabled =
+          await _navigationViewController!.isTrafficIncidentCardsEnabled();
 
       setState(() {
         _navigationHeaderEnabled = navigationHeaderEnabled;
@@ -449,7 +449,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         _recenterButtonEnabled = recenterButtonEnabled;
         _speedometerEnabled = speedometerEnabled;
         _speedLimitIconEnabled = speedLimitIconEnabled;
-        _indicentCardsEnabled = indicentCardsEnabled;
+        _trafficIndicentCardsEnabled = trafficIndicentCardsEnabled;
       });
     }
   }
@@ -1380,13 +1380,13 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                         });
                       }),
                   ExampleSwitch(
-                      title: 'Display incident cards',
-                      initialValue: _indicentCardsEnabled,
+                      title: 'Display traffic incident cards',
+                      initialValue: _trafficIndicentCardsEnabled,
                       onChanged: (bool newValue) async {
                         await _navigationViewController!
-                            .setIncidentCardsEnabled(newValue);
+                            .setTrafficIncidentCardsEnabled(newValue);
                         setState(() {
-                          _indicentCardsEnabled = newValue;
+                          _trafficIndicentCardsEnabled = newValue;
                         });
                       }),
                 ]),

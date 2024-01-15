@@ -82,7 +82,16 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
 
   @override
   Future<void> cleanup() async {
-    await _sessionApi.cleanup();
+    try {
+      return await _sessionApi.cleanup();
+    } on PlatformException catch (e) {
+      switch (e.code) {
+        case 'sessionNotInitialized':
+          throw const SessionNotInitializedException();
+        default:
+          rethrow;
+      }
+    }
   }
 
   /// Show terms and conditions dialog.

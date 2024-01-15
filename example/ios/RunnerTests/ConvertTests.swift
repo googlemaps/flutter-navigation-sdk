@@ -503,7 +503,7 @@ class ConvertTests: XCTestCase {
 
   func testConvertLatLngItem() {
     let latLngPoint = LatLngDto(latitude: 44.0, longitude: 55.0)
-    let coordinate = Convert.convertLatLng(point: latLngPoint)
+    let coordinate = Convert.convertLatLngFromDto(point: latLngPoint)
 
     XCTAssertEqual(latLngPoint.latitude, coordinate.latitude)
     XCTAssertEqual(latLngPoint.longitude, coordinate.longitude)

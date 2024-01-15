@@ -377,10 +377,10 @@ abstract mixin class NavigationViewAPIInterface {
       {required int viewId, required bool enabled});
 
   /// Is incident cards displayed.
-  Future<bool> isIncidentCardsEnabled({required int viewId});
+  Future<bool> isTrafficIncidentCardsEnabled({required int viewId});
 
   /// Should display incident cards.
-  Future<void> setIncidentCardsEnabled(
+  Future<void> setTrafficIncidentCardsEnabled(
       {required int viewId, required bool enabled});
 
   /// Is navigation UI enabled.

@@ -1534,8 +1534,8 @@ protocol NavigationViewApi {
   func setSpeedLimitIconEnabled(viewId: Int64, enabled: Bool) throws
   func isSpeedometerEnabled(viewId: Int64) throws -> Bool
   func setSpeedometerEnabled(viewId: Int64, enabled: Bool) throws
-  func isIncidentCardsEnabled(viewId: Int64) throws -> Bool
-  func setIncidentCardsEnabled(viewId: Int64, enabled: Bool) throws
+  func isTrafficIncidentCardsEnabled(viewId: Int64) throws -> Bool
+  func setTrafficIncidentCardsEnabled(viewId: Int64, enabled: Bool) throws
   func isNavigationUIEnabled(viewId: Int64) throws -> Bool
   func setNavigationUIEnabled(viewId: Int64, enabled: Bool) throws
   func getCameraPosition(viewId: Int64) throws -> CameraPositionDto
@@ -1994,44 +1994,44 @@ enum NavigationViewApiSetup {
     } else {
       setSpeedometerEnabledChannel.setMessageHandler(nil)
     }
-    let isIncidentCardsEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isIncidentCardsEnabled",
+    let isTrafficIncidentCardsEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isTrafficIncidentCardsEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      isIncidentCardsEnabledChannel.setMessageHandler { message, reply in
+      isTrafficIncidentCardsEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         do {
-          let result = try api.isIncidentCardsEnabled(viewId: viewIdArg)
+          let result = try api.isTrafficIncidentCardsEnabled(viewId: viewIdArg)
           reply(wrapResult(result))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      isIncidentCardsEnabledChannel.setMessageHandler(nil)
+      isTrafficIncidentCardsEnabledChannel.setMessageHandler(nil)
     }
-    let setIncidentCardsEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setIncidentCardsEnabled",
+    let setTrafficIncidentCardsEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTrafficIncidentCardsEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      setIncidentCardsEnabledChannel.setMessageHandler { message, reply in
+      setTrafficIncidentCardsEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.setIncidentCardsEnabled(viewId: viewIdArg, enabled: enabledArg)
+          try api.setTrafficIncidentCardsEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      setIncidentCardsEnabledChannel.setMessageHandler(nil)
+      setTrafficIncidentCardsEnabledChannel.setMessageHandler(nil)
     }
     let isNavigationUIEnabledChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isNavigationUIEnabled",

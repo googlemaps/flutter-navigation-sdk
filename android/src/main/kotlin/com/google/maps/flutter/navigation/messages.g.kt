@@ -1609,9 +1609,9 @@ interface NavigationViewApi {
 
   fun setSpeedometerEnabled(viewId: Long, enabled: Boolean)
 
-  fun isIncidentCardsEnabled(viewId: Long): Boolean
+  fun isTrafficIncidentCardsEnabled(viewId: Long): Boolean
 
-  fun setIncidentCardsEnabled(viewId: Long, enabled: Boolean)
+  fun setTrafficIncidentCardsEnabled(viewId: Long, enabled: Boolean)
 
   fun isNavigationUIEnabled(viewId: Long): Boolean
 
@@ -2259,7 +2259,7 @@ interface NavigationViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isIncidentCardsEnabled",
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isTrafficIncidentCardsEnabled",
             codec
           )
         if (api != null) {
@@ -2268,7 +2268,7 @@ interface NavigationViewApi {
             val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
             var wrapped: List<Any?>
             try {
-              wrapped = listOf<Any?>(api.isIncidentCardsEnabled(viewIdArg))
+              wrapped = listOf<Any?>(api.isTrafficIncidentCardsEnabled(viewIdArg))
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
             }
@@ -2282,7 +2282,7 @@ interface NavigationViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setIncidentCardsEnabled",
+            "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTrafficIncidentCardsEnabled",
             codec
           )
         if (api != null) {
@@ -2292,7 +2292,7 @@ interface NavigationViewApi {
             val enabledArg = args[1] as Boolean
             var wrapped: List<Any?>
             try {
-              api.setIncidentCardsEnabled(viewIdArg, enabledArg)
+              api.setTrafficIncidentCardsEnabled(viewIdArg, enabledArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)

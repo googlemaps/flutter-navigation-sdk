@@ -67,6 +67,13 @@ void main() {
     }
 
     try {
+      await GoogleMapsNavigator.cleanup();
+      fail('Expected SessionInitializationException');
+    } on Exception catch (e) {
+      expect(e, const TypeMatcher<SessionNotInitializedException>());
+    }
+
+    try {
       await GoogleMapsNavigator.startGuidance();
       fail('Expected SessionNotInitializedException.');
     } on Exception catch (e) {

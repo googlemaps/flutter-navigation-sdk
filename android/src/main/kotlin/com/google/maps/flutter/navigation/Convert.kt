@@ -85,7 +85,7 @@ object Convert {
    * @param preference pigeon [NavigationUIEnabledPreferenceDto].
    * @return [NavigationUIEnabledPreference].
    */
-  fun convertNavigationUIEnabledPreferenceFromDto(
+  private fun convertNavigationUIEnabledPreferenceFromDto(
     preference: NavigationUIEnabledPreferenceDto
   ): NavigationUIEnabledPreference {
     return when (preference) {

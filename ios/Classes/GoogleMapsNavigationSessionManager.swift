@@ -36,6 +36,14 @@ public class ExposedGoogleMapsNavigator: NSObject {
   public static func getNavigator() throws -> GMSNavigator {
     try GoogleMapsNavigationSessionManager.shared.getNavigator()
   }
+
+  public static func getRoadSnappedLocationProvider() throws -> GMSRoadSnappedLocationProvider? {
+    try GoogleMapsNavigationSessionManager.shared.getSession().roadSnappedLocationProvider
+  }
+
+  public static func enableRoadSnappedLocationUpdates() throws {
+    try GoogleMapsNavigationSessionManager.shared.enableRoadSnappedLocationUpdates()
+  }
 }
 
 class GoogleMapsNavigationSessionManager: NSObject {
@@ -57,6 +65,11 @@ class GoogleMapsNavigationSessionManager: NSObject {
     guard let navigator = _session.navigator
     else { throw GoogleMapsNavigationSessionManagerError.termsNotAccepted }
     return navigator
+  }
+
+  func getSession() throws -> GMSNavigationSession {
+    guard let _session else { throw GoogleMapsNavigationSessionManagerError.sessionNotInitialized }
+    return _session
   }
 
   private func getSimulator() throws -> GMSLocationSimulator {

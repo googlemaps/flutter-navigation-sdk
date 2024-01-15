@@ -340,12 +340,12 @@ class GoogleMapsNavigationViewMessageHandler(
     getView(viewId.toInt()).setSpeedometerEnabled(enabled)
   }
 
-  override fun isIncidentCardsEnabled(viewId: Long): Boolean {
-    return getView(viewId.toInt()).isIncidentCardsEnabled()
+  override fun isTrafficIncidentCardsEnabled(viewId: Long): Boolean {
+    return getView(viewId.toInt()).isTrafficIncidentCardsEnabled()
   }
 
-  override fun setIncidentCardsEnabled(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).setIncidentCardsEnabled(enabled)
+  override fun setTrafficIncidentCardsEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setTrafficIncidentCardsEnabled(enabled)
   }
 
   override fun isNavigationUIEnabled(viewId: Long): Boolean {

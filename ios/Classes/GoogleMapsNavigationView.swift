@@ -457,11 +457,11 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     _navigationView.shouldDisplaySpeedometer = enabled
   }
 
-  func isIncidentCardsEnabled() -> Bool {
+  func isTrafficIncidentCardsEnabled() -> Bool {
     _navigationView.settings.showsIncidentCards
   }
 
-  func setIncidentCardsEnabled(_ enabled: Bool) {
+  func setTrafficIncidentCardsEnabled(_ enabled: Bool) {
     _navigationView.settings.showsIncidentCards = enabled
   }
 

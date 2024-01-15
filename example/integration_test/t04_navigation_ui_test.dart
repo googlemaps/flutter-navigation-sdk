@@ -150,11 +150,12 @@ void main() {
       expect(isEnabled, result);
     }
 
-    /// Test enabling and disabling the incident cards.
+    /// Test enabling and disabling the traffic incident cards.
     for (final bool result in results) {
-      await viewController.setIncidentCardsEnabled(result);
+      await viewController.setTrafficIncidentCardsEnabled(result);
       await $.pumpAndSettle();
-      final bool isEnabled = await viewController.isIncidentCardsEnabled();
+      final bool isEnabled =
+          await viewController.isTrafficIncidentCardsEnabled();
       expect(isEnabled, result);
     }
 
