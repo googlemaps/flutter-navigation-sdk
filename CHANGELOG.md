@@ -8,7 +8,6 @@
   - `enableNavigationTripProgressBar({required bool})` to `setNavigationTripProgressBarEnabled(bool)`
   - `enableSpeedLimitIcon({required bool})` to `setSpeedLimitIconEnabled(bool)`
   - `enableSpeedometer({required bool})` to `setSpeedometerEnabled(bool)`
-  - `enableIncidentCards({required bool})` to `setIncidentCardsEnabled(bool)`
   - `enableMyLocation({required bool})` to `setMyLocationEnabled(bool)`
   - `enableMyLocationButton({required bool})` to `setMyLocationButtonEnabled(bool)`
   - `enableRecenterButton({required bool})` to `setRecenterButtonEnabled(bool)`
@@ -21,9 +20,11 @@
   - `enableTiltGestures({required bool})` to `setTiltGesturesEnabled(bool)`
   - `enableTraffic({required bool})` to `setTrafficEnabled(bool)`
   - `enableMapToolbar({required bool})` to `setMapToolbarEnabled(bool)`
+  - `enableIncidentCards({required bool})` to `setTrafficIncidentCardsEnabled(bool)`
+  - `isIncidentCardsEnabled()` to `isTrafficIncidentCardsEnabled`
 
 **GoogleMapsNavigationView:**
--- **BREAKING CHANGES** `initialNavigationUiEnabled` boolean has been renamed to `initialNavigationUIEnabledPreference` enumeration
+- **BREAKING CHANGES** `initialNavigationUiEnabled` boolean has been renamed to `initialNavigationUIEnabledPreference` enumeration
 - Initial camera position defaults to zoom level 3.0 instead of 0.0
 
 ## 0.1.0-pre1
