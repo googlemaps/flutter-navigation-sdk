@@ -386,10 +386,10 @@ class GoogleMapsNavigationView extends StatefulWidget {
   /// On camera idle callback.
   final OnCameraIdle? onCameraIdle;
 
-  /// On camera started following location callback.
+  /// On camera started following location callback (Android-only).
   final OnCameraStartedFollowingLocation? onCameraStartedFollowingLocation;
 
-  /// On camera stopped following location callback.
+  /// On camera stopped following location callback (Android-only).
   final OnCameraStoppedFollowingLocation? onCameraStoppedFollowingLocation;
 
   /// Creates a [State] for this [GoogleMapsNavigationView].
@@ -865,8 +865,16 @@ class GoogleNavigationViewController {
   /// Use [perspective] to specify the orientation of the camera
   /// and optional [zoomLevel] to control the map zoom.
   ///
-  /// Automatically started in perspective [CameraPerspective.tilted] when
-  /// the navigation guidance begins.
+  /// Automatically started in the perspective [CameraPerspective.tilted] when
+  /// the navigation is initialized with [GoogleMapsNavigator.initializeNavigationSession]
+  /// or when navigation UI gets re-enabled with [setNavigationUIEnabled].
+  ///
+  /// In Android, you can use [GoogleMapsNavigationView.onCameraStartedFollowingLocation]
+  /// and [GoogleMapsNavigationView.onCameraStoppedFollowingLocation] callbacks
+  /// to detect when the follow location mode is enabled or disabled.
+  ///
+  /// Note there are small differences on how Android and iOS handle the camera
+  /// during the follow my location mode (tilt, zoom, transitions, etc.).
   ///
   /// See also [GoogleMapsNavigator.startGuidance], [showRouteOverview] and [animateCamera].
   Future<void> followMyLocation(CameraPerspective perspective,
