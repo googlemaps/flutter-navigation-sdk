@@ -83,6 +83,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   int _onRoadSnappedRawLocationUpdatedEventCallCount = 0;
   int _onTrafficUpdatedEventCallCount = 0;
   int _onReroutingEventCallCount = 0;
+  int _onGpsAvailabilityEventCallCount = 0;
   int _onArrivalEventCallCount = 0;
   int _onSpeedingUpdatedEventCallCount = 0;
   int _onRecenterButtonClickedEventCallCount = 0;
@@ -123,6 +124,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   StreamSubscription<SpeedingUpdatedEvent>? _speedUpdatedSubscription;
   StreamSubscription<OnArrivalEvent>? _onArrivalSubscription;
   StreamSubscription<void>? _onReRoutingSubscription;
+  StreamSubscription<void>? _onGpsAvailabilitySubscription;
   StreamSubscription<void>? _trafficUpdatedSubscription;
   StreamSubscription<void>? _onRouteChangedSubscription;
   StreamSubscription<RemainingTimeOrDistanceChangedEvent>?
@@ -280,6 +282,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         GoogleMapsNavigator.setOnArrivalListener(_onArrivalEvent);
     _onReRoutingSubscription =
         GoogleMapsNavigator.setOnReroutingListener(_onReroutingEvent);
+    _onGpsAvailabilitySubscription =
+        await GoogleMapsNavigator.setOnGpsAvailabilityListener(
+            _onGpsAvailabilityEvent);
     _trafficUpdatedSubscription =
         GoogleMapsNavigator.setTrafficUpdatedListener(_onTrafficUpdatedEvent);
     _onRouteChangedSubscription =
@@ -306,6 +311,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
     _onReRoutingSubscription?.cancel();
     _onReRoutingSubscription = null;
+
+    _onGpsAvailabilitySubscription?.cancel();
+    _onGpsAvailabilitySubscription = null;
 
     _trafficUpdatedSubscription?.cancel();
     _trafficUpdatedSubscription = null;
@@ -381,6 +389,12 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   void _onReroutingEvent() {
     setState(() {
       _onReroutingEventCallCount += 1;
+    });
+  }
+
+  void _onGpsAvailabilityEvent(GpsAvailabilityUpdatedEvent event) {
+    setState(() {
+      _onGpsAvailabilityEventCallCount += 1;
     });
   }
 
@@ -1129,6 +1143,12 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   title: const Text('On rerouting event call count'),
                   trailing: Text(_onReroutingEventCallCount.toString()),
                 )),
+                if (Platform.isAndroid)
+                  Card(
+                      child: ListTile(
+                    title: const Text('On GPS availability event call count'),
+                    trailing: Text(_onGpsAvailabilityEventCallCount.toString()),
+                  )),
                 Card(
                     child: ListTile(
                   title: const Text('On arrival event call count'),

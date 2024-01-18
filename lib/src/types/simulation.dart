@@ -70,6 +70,16 @@ class RoadSnappedRawLocationUpdatedEvent {
   final LatLng location;
 }
 
+/// GpsAvailabilityUpdated event message (Android only).
+/// {@category Navigation}
+class GpsAvailabilityUpdatedEvent {
+  /// Initialize GPS availability updated event message.
+  GpsAvailabilityUpdatedEvent({required this.available});
+
+  /// GPS availability.
+  final bool available;
+}
+
 /// Navigation simulation options.
 /// {@category Navigation}
 class SimulationOptions {

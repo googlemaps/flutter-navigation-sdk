@@ -596,6 +596,14 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
         .map((_ReroutingEvent event) => ());
   }
 
+  /// Get navigation on GPS availability update event stream from the navigation session.
+  @override
+  Stream<GpsAvailabilityUpdatedEvent>
+      getNavigationOnGpsAvailabilityUpdateEventStream() {
+    return _sessionEventStreamController.stream
+        .whereType<GpsAvailabilityUpdatedEvent>();
+  }
+
   /// Get navigation traffic updated event stream from the navigation session.
   @override
   Stream<void> getNavigationTrafficUpdatedEventStream() {
@@ -652,6 +660,12 @@ class NavigationSessionEventApiImpl implements NavigationSessionEventApi {
   @override
   void onRerouting() {
     sessionEventStreamController.add(_ReroutingEvent());
+  }
+
+  @override
+  void onGpsAvailabilityUpdate(bool available) {
+    sessionEventStreamController
+        .add(GpsAvailabilityUpdatedEvent(available: available));
   }
 
   @override

@@ -4868,6 +4868,9 @@ protocol NavigationSessionEventApiProtocol {
   func onTrafficUpdated(completion: @escaping (Result<Void, FlutterError>) -> Void)
   /// Android-only event.
   func onRerouting(completion: @escaping (Result<Void, FlutterError>) -> Void)
+  /// Android-only event.
+  func onGpsAvailabilityUpdate(available availableArg: Bool,
+                               completion: @escaping (Result<Void, FlutterError>) -> Void)
 }
 
 class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
@@ -5066,6 +5069,32 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
       codec: codec
     )
     channel.sendMessage(nil) { response in
+      guard let listResponse = response as? [Any?] else {
+        completion(.failure(createConnectionError(withChannelName: channelName)))
+        return
+      }
+      if listResponse.count > 1 {
+        let code: String = listResponse[0] as! String
+        let message: String? = nilOrValue(listResponse[1])
+        let details: String? = nilOrValue(listResponse[2])
+        completion(.failure(FlutterError(code: code, message: message, details: details)))
+      } else {
+        completion(.success(()))
+      }
+    }
+  }
+
+  /// Android-only event.
+  func onGpsAvailabilityUpdate(available availableArg: Bool,
+                               completion: @escaping (Result<Void, FlutterError>) -> Void) {
+    let channelName =
+      "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onGpsAvailabilityUpdate"
+    let channel = FlutterBasicMessageChannel(
+      name: channelName,
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    channel.sendMessage([availableArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return

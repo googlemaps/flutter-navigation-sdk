@@ -5590,6 +5590,23 @@ class NavigationSessionEventApi(private val binaryMessenger: BinaryMessenger) {
       }
     }
   }
+  /** Android-only event. */
+  fun onGpsAvailabilityUpdate(availableArg: Boolean, callback: (Result<Unit>) -> Unit) {
+    val channelName =
+      "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onGpsAvailabilityUpdate"
+    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
+    channel.send(listOf(availableArg)) {
+      if (it is List<*>) {
+        if (it.size > 1) {
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+        } else {
+          callback(Result.success(Unit))
+        }
+      } else {
+        callback(Result.failure(createConnectionError(channelName)))
+      }
+    }
+  }
 }
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface NavigationInspector {

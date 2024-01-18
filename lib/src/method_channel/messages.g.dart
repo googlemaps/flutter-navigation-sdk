@@ -5651,6 +5651,9 @@ abstract class NavigationSessionEventApi {
   /// Android-only event.
   void onRerouting();
 
+  /// Android-only event.
+  void onGpsAvailabilityUpdate(bool available);
+
   static void setup(NavigationSessionEventApi? api,
       {BinaryMessenger? binaryMessenger}) {
     {
@@ -5855,6 +5858,34 @@ abstract class NavigationSessionEventApi {
         __pigeon_channel.setMessageHandler((Object? message) async {
           try {
             api.onRerouting();
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onGpsAvailabilityUpdate',
+          pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        __pigeon_channel.setMessageHandler(null);
+      } else {
+        __pigeon_channel.setMessageHandler((Object? message) async {
+          assert(message != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onGpsAvailabilityUpdate was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_available = (args[0] as bool?);
+          assert(arg_available != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onGpsAvailabilityUpdate was null, expected non-null bool.');
+          try {
+            api.onGpsAvailabilityUpdate(arg_available!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

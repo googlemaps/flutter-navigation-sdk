@@ -840,6 +840,9 @@ abstract class NavigationSessionEventApi {
 
   /// Android-only event.
   void onRerouting();
+
+  /// Android-only event.
+  void onGpsAvailabilityUpdate(bool available);
 }
 
 @HostApi()

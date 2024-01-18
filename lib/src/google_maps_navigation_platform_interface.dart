@@ -195,6 +195,10 @@ abstract mixin class NavigationSessionAPIInterface {
   /// Get navigation on rerouting event stream from the navigation session.
   Stream<void> getNavigationOnReroutingEventStream();
 
+  /// Get navigation on GPS availability update event stream from the navigation session.
+  Stream<GpsAvailabilityUpdatedEvent>
+      getNavigationOnGpsAvailabilityUpdateEventStream();
+
   /// Get navigation traffic updated event stream from the navigation session.
   Stream<void> getNavigationTrafficUpdatedEventStream();
 

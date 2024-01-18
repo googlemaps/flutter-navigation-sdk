@@ -96,7 +96,9 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
     Navigator.RemainingTimeOrDistanceChangedListener? =
     null
   private var roadSnappedLocationProvider: RoadSnappedLocationProvider? = null
-  private var roadSnappedLocationListener: RoadSnappedLocationProvider.LocationListener? = null
+  private var roadSnappedLocationListener:
+    RoadSnappedLocationProvider.GpsAvailabilityEnhancedLocationListener? =
+    null
   private var speedingListener: SpeedingListener? = null
   private var weakActivity: WeakReference<Activity>? = null
 
@@ -654,7 +656,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   fun enableRoadSnappedLocationUpdates() {
     if (roadSnappedLocationListener == null) {
       roadSnappedLocationListener =
-        object : RoadSnappedLocationProvider.LocationListener {
+        object : RoadSnappedLocationProvider.GpsAvailabilityEnhancedLocationListener {
           override fun onLocationChanged(location: Location) {
             navigationSessionEventApi.onRoadSnappedLocationUpdated(
               LatLngDto(location.latitude, location.longitude)
@@ -665,6 +667,10 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
             navigationSessionEventApi.onRoadSnappedRawLocationUpdated(
               LatLngDto(location.latitude, location.longitude)
             ) {}
+          }
+
+          override fun onGpsAvailabilityUpdate(isGpsAvailable: Boolean) {
+            navigationSessionEventApi.onGpsAvailabilityUpdate(isGpsAvailable) {}
           }
         }
       getRoadSnappedLocationProvider()?.addLocationListener(roadSnappedLocationListener)
