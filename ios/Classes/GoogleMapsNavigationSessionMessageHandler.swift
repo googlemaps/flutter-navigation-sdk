@@ -71,7 +71,7 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
   }
 
   func cleanup() throws {
-    GoogleMapsNavigationSessionManager.shared.cleanup()
+    try GoogleMapsNavigationSessionManager.shared.cleanup()
   }
 
   /// Navigation actions

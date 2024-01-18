@@ -141,7 +141,10 @@ class GoogleMapsNavigationSessionManager: NSObject {
     _session?.navigator != nil
   }
 
-  func cleanup() {
+  func cleanup() throws {
+    if _session == nil {
+      throw GoogleMapsNavigationSessionManagerError.sessionNotInitialized
+    }
     _session?.locationSimulator?.stopSimulation()
     _session?.navigator?.clearDestinations()
     _session?.roadSnappedLocationProvider?.remove(self)
