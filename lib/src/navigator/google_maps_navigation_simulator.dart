@@ -14,7 +14,6 @@
 
 import '../../google_maps_navigation.dart';
 import '../google_maps_navigation_platform_interface.dart';
-// ignore_for_file: avoid_classes_with_only_static_members
 
 /// Simulator handles actions of the navigation simulation
 /// {@category Navigation}

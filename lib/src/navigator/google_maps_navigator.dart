@@ -16,7 +16,6 @@ import 'dart:async';
 
 import '../../google_maps_navigation.dart';
 import '../google_maps_navigation_platform_interface.dart';
-// ignore_for_file: avoid_classes_with_only_static_members
 
 import 'google_maps_navigation_simulator.dart';
 
@@ -56,10 +55,9 @@ class GoogleMapsNavigator {
         .createNavigationSession(abnormalTerminationReportingEnabled);
 
     // Enable road-snapped location updates if there are subscriptions to them.
-    if ((_roadSnappedLocationUpdatedController != null &&
-            _roadSnappedLocationUpdatedController!.hasListener) ||
-        (_roadSnappedRawLocationUpdatedController != null &&
-            _roadSnappedRawLocationUpdatedController!.hasListener)) {
+    if ((_roadSnappedLocationUpdatedController?.hasListener ?? false) ||
+        (_roadSnappedRawLocationUpdatedController?.hasListener ?? false) ||
+        (_gpsAvailabilityUpdatedController?.hasListener ?? false)) {
       await GoogleMapsNavigationPlatform.instance
           .enableRoadSnappedLocationUpdates();
     }
@@ -355,12 +353,9 @@ class GoogleMapsNavigator {
 
   /// Disables road snapped location updates if there are no listeners.
   static void _disableRoadSnappedLocationUpdatesIfNoActiveListeners() {
-    if ((_roadSnappedLocationUpdatedController == null ||
-            !_roadSnappedLocationUpdatedController!.hasListener) &&
-        (_roadSnappedRawLocationUpdatedController == null ||
-            !_roadSnappedRawLocationUpdatedController!.hasListener) &&
-        (_gpsAvailabilityUpdatedController != null ||
-            _gpsAvailabilityUpdatedController!.hasListener)) {
+    if (!(_roadSnappedLocationUpdatedController?.hasListener ?? false) &&
+        !(_roadSnappedRawLocationUpdatedController?.hasListener ?? false) &&
+        !(_gpsAvailabilityUpdatedController?.hasListener ?? false)) {
       GoogleMapsNavigationPlatform.instance.disableRoadSnappedLocationUpdates();
     }
   }

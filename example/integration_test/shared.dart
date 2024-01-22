@@ -123,7 +123,12 @@ Future<void> checkLocationDialogAndTosAcceptance(
 }
 
 Future<GoogleNavigationViewController> startNavigation(
-    PatrolIntegrationTester $) async {
+    PatrolIntegrationTester $,
+    {void Function(CameraPosition, bool)? onCameraMoveStarted,
+    void Function(CameraPosition)? onCameraMove,
+    void Function(CameraPosition)? onCameraIdle,
+    void Function(CameraPosition)? onCameraStartedFollowingLocation,
+    void Function(CameraPosition)? onCameraStoppedFollowingLocation}) async {
   final Completer<GoogleNavigationViewController> controllerCompleter =
       Completer<GoogleNavigationViewController>();
 
@@ -137,6 +142,11 @@ Future<GoogleNavigationViewController> startNavigation(
       onViewCreated: (GoogleNavigationViewController viewController) {
         controllerCompleter.complete(viewController);
       },
+      onCameraMoveStarted: onCameraMoveStarted,
+      onCameraMove: onCameraMove,
+      onCameraIdle: onCameraIdle,
+      onCameraStartedFollowingLocation: onCameraStartedFollowingLocation,
+      onCameraStoppedFollowingLocation: onCameraStoppedFollowingLocation,
     ),
   );
 
@@ -217,4 +227,23 @@ Future<GoogleNavigationViewController> startNavigationWithoutDestination(
   }
 
   return controller;
+}
+
+/// A function that waits until a certain condition is met, e.g. until the camera moves where intended.
+///
+/// The function constantly sends the Value objects from [getValue] function
+/// to the provided [predicate] function until the [predicate] function returns true.
+/// Then the function returns that Value. If [maxTries] are reached without
+/// predicate returning true, null is returned.
+Future<Value?> waitForValueMatchingPredicate<Value>(PatrolIntegrationTester $,
+    Future<Value> Function() getValue, bool Function(Value) predicate,
+    {int maxTries = 200, int delayMs = 100}) async {
+  for (int i = 0; i < maxTries; i++) {
+    final Value currentValue = await getValue();
+    if (predicate(currentValue)) {
+      return currentValue;
+    }
+    await $.pump(Duration(milliseconds: delayMs));
+  }
+  return null;
 }
