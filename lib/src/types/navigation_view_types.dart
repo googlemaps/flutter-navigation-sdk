@@ -71,7 +71,7 @@ class CameraPosition {
   final double zoom;
 }
 
-/// Parameter given to parameter given to the followMyLocation()
+/// Parameter given to parameter given to the [GoogleNavigationViewController.followMyLocation]
 /// to specify the orientation of the camera.
 /// {@category Navigation View}
 enum CameraPerspective {
@@ -265,8 +265,8 @@ class CameraUpdate {
   /// geographical location and zoom level.
   ///
   /// Zoom level is bound to minimum and maximum zoom preference. See
-  /// [GoogleMapsNavigationView.setMinZoomPreference] and
-  /// [GoogleMapsNavigationView.setMaxZoomPreference].
+  /// [GoogleNavigationViewController.setMinZoomPreference] and
+  /// [GoogleNavigationViewController.setMaxZoomPreference].
   static CameraUpdate newLatLngZoom(LatLng latLng, double zoom) {
     final CameraUpdate update = CameraUpdate._(CameraUpdateType.latLngZoom);
     update.latLng = latLng;
@@ -292,8 +292,8 @@ class CameraUpdate {
   /// geographical location should be invariant, if possible, by the movement.
   ///
   /// Zoom level is bound to minimum and maximum zoom preference. See
-  /// [GoogleMapsNavigationView.setMinZoomPreference] and
-  /// [GoogleMapsNavigationView.setMaxZoomPreference].
+  /// [GoogleNavigationViewController.setMinZoomPreference] and
+  /// [GoogleNavigationViewController.setMaxZoomPreference].
   static CameraUpdate zoomBy(double amount, {Offset? focus}) {
     final CameraUpdate update = CameraUpdate._(CameraUpdateType.zoomBy);
     update.zoomByAmount = amount;
@@ -308,8 +308,8 @@ class CameraUpdate {
   /// Equivalent to the result of calling `zoomBy(1.0)`.
   ///
   /// Zoom level is bound to minimum and maximum zoom preference. See
-  /// [GoogleMapsNavigationView.setMinZoomPreference] and
-  /// [GoogleMapsNavigationView.setMaxZoomPreference].
+  /// [GoogleNavigationViewController.setMinZoomPreference] and
+  /// [GoogleNavigationViewController.setMaxZoomPreference].
   static CameraUpdate zoomIn() {
     final CameraUpdate update = CameraUpdate._(CameraUpdateType.zoomBy);
     update.zoomByAmount = 1.0;
@@ -322,8 +322,8 @@ class CameraUpdate {
   /// Equivalent to the result of calling `zoomBy(-1.0)`.
   ///
   /// Zoom level is bound to minimum and maximum zoom preference. See
-  /// [GoogleMapsNavigationView.setMinZoomPreference] and
-  /// [GoogleMapsNavigationView.setMaxZoomPreference].
+  /// [GoogleNavigationViewController.setMinZoomPreference] and
+  /// [GoogleNavigationViewController.setMaxZoomPreference].
   static CameraUpdate zoomOut() {
     final CameraUpdate update = CameraUpdate._(CameraUpdateType.zoomBy);
     update.zoomByAmount = -1.0;
@@ -333,8 +333,8 @@ class CameraUpdate {
   /// Returns a camera update that sets the camera zoom level.
   ///
   /// Zoom level is bound to minimum and maximum zoom preference. See
-  /// [GoogleMapsNavigationView.setMinZoomPreference] and
-  /// [GoogleMapsNavigationView.setMaxZoomPreference].
+  /// [GoogleNavigationViewController.setMinZoomPreference] and
+  /// [GoogleNavigationViewController.setMaxZoomPreference].
   static CameraUpdate zoomTo(double zoom) {
     final CameraUpdate update = CameraUpdate._(CameraUpdateType.zoomTo);
     update.zoom = zoom;

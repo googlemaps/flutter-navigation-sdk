@@ -150,6 +150,7 @@ class MapOptions {
 }
 
 /// Determines the initial visibility of the navigation UI on map initialization.
+/// {@category Navigation View}
 enum NavigationUIEnabledPreference {
   /// Navigation UI gets enabled if the navigation
   /// session has already been successfully started.

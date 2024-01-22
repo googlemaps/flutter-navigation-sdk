@@ -24,7 +24,7 @@ import 'method_channel.dart';
 mixin CommonImageRegistryAPI on ImageRegistryAPIInterface {
   final ImageRegistryApi _imageApi = ImageRegistryApi();
 
-  /// Keep track of image count, used to generate image id's.
+  /// Keep track of image count, used to generate image ID's.
   int _imageCounter = 0;
   String _createImageId() {
     final String imageId = 'Image_$_imageCounter';

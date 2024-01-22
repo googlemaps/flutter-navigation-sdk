@@ -20,7 +20,10 @@ dartdoc:
     "Navigation View":
       markdown: doc/navigation-view.md
       name: Navigation View
-  categoryOrder: ["Navigation", "Navigation View"]
+    "Image Registry":
+      markdown: doc/image-registry.md
+      name: Image Registry
+  categoryOrder: ["Navigation", "Navigation View", "Image Registry"]
   showUndocumentedCategories: true
   nodoc: ['**/*.g.dart']
 

@@ -29,7 +29,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   final StreamController<_ViewIdEventWrapper> _viewEventStreamController =
       StreamController<_ViewIdEventWrapper>.broadcast();
 
-  /// Keep track of marker count, used to generate marker id's.
+  /// Keep track of marker count, used to generate marker ID's.
   int _markerCounter = 0;
   String _createMarkerId() {
     final String markerId = 'Marker_$_markerCounter';
@@ -37,7 +37,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
     return markerId;
   }
 
-  /// Keep track of polygon count, used to generate polygon id's.
+  /// Keep track of polygon count, used to generate polygon ID's.
   int _polygonCounter = 0;
   String _createPolygonId() {
     final String polygonId = 'Polygon_$_polygonCounter';
@@ -45,7 +45,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
     return polygonId;
   }
 
-  /// Keep track of polyline count, used to generate polyline id's.
+  /// Keep track of polyline count, used to generate polyline ID's.
   int _polylineCounter = 0;
   String _createPolylineId() {
     final String polylineId = 'Polyline_$_polylineCounter';
@@ -53,7 +53,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
     return polylineId;
   }
 
-  /// Keep track of circle count, used to generate circle id's.
+  /// Keep track of circle count, used to generate circle ID's.
   int _circleCounter = 0;
   String _createCircleId() {
     final String circleId = 'Circle_$_circleCounter';
@@ -600,7 +600,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
     final List<MarkerOptionsDto> options =
         markerOptions.map((MarkerOptions opt) => opt.toDto()).toList();
 
-    // Create marker objects with new id's
+    // Create marker objects with new ID's
     final List<MarkerDto> markersToAdd = options
         .map((MarkerOptionsDto options) =>
             MarkerDto(markerId: _createMarkerId(), options: options))
@@ -685,7 +685,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
     final List<PolygonOptionsDto> options =
         polygonOptions.map((PolygonOptions opt) => opt.toDto()).toList();
 
-    // Create polygon objects with new id's
+    // Create polygon objects with new ID's
     final List<PolygonDto> polygonsToAdd = options
         .map((PolygonOptionsDto options) =>
             PolygonDto(polygonId: _createPolygonId(), options: options))
@@ -765,7 +765,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
     final List<PolylineOptionsDto> options =
         polylineOptions.map((PolylineOptions opt) => opt.toDto()).toList();
 
-    // Create polyline objects with new id's
+    // Create polyline objects with new ID's
     final List<PolylineDto> polylinesToAdd = options
         .map((PolylineOptionsDto options) =>
             PolylineDto(polylineId: _createPolylineId(), options: options))
@@ -846,7 +846,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
     final List<CircleOptionsDto> optionsDto =
         options.map((CircleOptions opt) => opt.toDto()).toList();
 
-    // Create circle objects with new id's
+    // Create circle objects with new ID's
     final List<CircleDto> circlesToAdd = optionsDto
         .map((CircleOptionsDto options) =>
             CircleDto(circleId: _createCircleId(), options: options))

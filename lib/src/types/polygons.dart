@@ -171,6 +171,7 @@ class PolygonOptions {
 }
 
 /// Event emitted when a polygon is clicked.
+/// {@category Navigation View}
 @immutable
 class PolygonClickedEvent {
   /// Initialize [PolygonClickedEvent] object.

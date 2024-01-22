@@ -495,6 +495,7 @@ class GoogleMapsNavigator {
 }
 
 /// Possible errors that [GoogleMapsNavigator.initializeNavigationSession] can throw.
+/// {@category Navigation}
 enum SessionInitializationError {
   /// The session initialization failed, because the required Maps API key is empty or invalid.
   notAuthorized,
@@ -507,6 +508,7 @@ enum SessionInitializationError {
 }
 
 /// Exception thrown by [GoogleMapsNavigator.initializeNavigationSession].
+/// {@category Navigation}
 class SessionInitializationException implements Exception {
   /// Default constructor for [SessionInitializationException].
   const SessionInitializationException(this.code);
@@ -518,6 +520,7 @@ class SessionInitializationException implements Exception {
 /// Exception thrown by [GoogleMapsNavigator.resetTermsAccepted],
 /// when attempting to reset the terms and conditions after the session has
 /// already been initialized.
+/// {@category Navigation}
 class ResetTermsAndConditionsException implements Exception {
   /// Default constructor for [ResetTermsAndConditionsException].
   const ResetTermsAndConditionsException();
@@ -525,6 +528,7 @@ class ResetTermsAndConditionsException implements Exception {
 
 /// [GoogleMapsNavigator] navigation method call has failed, because the navigation
 /// session hasn't yet been successfully initialized.
+/// {@category Navigation}
 class SessionNotInitializedException implements Exception {
   /// Default constructor for [SessionNotInitializedException].
   const SessionNotInitializedException();

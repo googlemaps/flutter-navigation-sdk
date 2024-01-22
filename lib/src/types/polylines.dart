@@ -217,6 +217,7 @@ enum StrokeJointType {
 }
 
 /// Event emitted when a polyline is clicked.
+/// {@category Navigation View}
 @immutable
 class PolylineClickedEvent {
   /// Initialize [PolylineClickedEvent] object.

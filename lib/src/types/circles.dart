@@ -156,6 +156,7 @@ class CircleOptions {
 }
 
 /// Event emitted when a circle is clicked.
+/// {@category Navigation View}
 @immutable
 class CircleClickedEvent {
   /// Initialize [CircleClickedEvent] object.

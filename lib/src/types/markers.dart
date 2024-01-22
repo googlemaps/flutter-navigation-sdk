@@ -273,6 +273,7 @@ class MarkerAnchor {
 }
 
 /// Marker event types
+/// {@category Navigation View}
 enum MarkerEventType {
   /// The marker has been tapped.
   clicked,
@@ -288,6 +289,7 @@ enum MarkerEventType {
 }
 
 /// Marker drag event types
+/// {@category Navigation View}
 enum MarkerDragEventType {
   /// The marker is being dragged.
   drag,
@@ -300,6 +302,7 @@ enum MarkerDragEventType {
 }
 
 /// Marker event sent from platform side.
+/// {@category Navigation View}
 @immutable
 class MarkerEvent {
   /// Initialize [MarkerEvent] object.
@@ -316,6 +319,7 @@ class MarkerEvent {
 }
 
 /// Marker drag event sent from platform side.
+/// {@category Navigation View}
 @immutable
 class MarkerDragEvent {
   /// Initialize [MarkerDragEvent] object.

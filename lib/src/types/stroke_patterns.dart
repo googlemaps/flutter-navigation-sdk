@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import '../../google_maps_navigation.dart';
 
 /// Pattern used in the stroke pattern for a [Polyline] or the outline of a [Polygon] or [Circle].
+/// {@category Navigation View}
 enum PatternType {
   /// Dash pattern.
   dash,

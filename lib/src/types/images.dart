@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 
 /// Defines an image. For marker this class can be used to set the
 /// image of the marker icon.
+/// {@category Image Registry}
 @immutable
 class ImageDescriptor {
   /// Construct [ImageDescriptor].

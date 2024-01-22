@@ -22,7 +22,7 @@ import '../google_maps_navigation.dart';
 
 /// Callback signature for when a map view is ready.
 ///
-/// `id` is the platform view's unique identifier.
+/// `viewId` is the platform view's unique identifier.
 /// @nodoc
 typedef MapReadyCallback = void Function(int viewId);
 
@@ -431,7 +431,7 @@ abstract mixin class NavigationViewAPIInterface {
   Future<List<Marker?>> addMarkers(
       {required int viewId, required List<MarkerOptions> markerOptions});
 
-  /// Update markers to map view.
+  /// Update markers on the map view.
   Future<List<Marker?>> updateMarkers(
       {required int viewId, required List<Marker> markers});
 
@@ -452,7 +452,7 @@ abstract mixin class NavigationViewAPIInterface {
   Future<List<Polygon?>> addPolygons(
       {required int viewId, required List<PolygonOptions> polygonOptions});
 
-  /// Update polygons to map view.
+  /// Update polygons on the map view.
   Future<List<Polygon?>> updatePolygons(
       {required int viewId, required List<Polygon> polygons});
 
@@ -470,7 +470,7 @@ abstract mixin class NavigationViewAPIInterface {
   Future<List<Polyline?>> addPolylines(
       {required int viewId, required List<PolylineOptions> polylineOptions});
 
-  /// Update polylines to map view.
+  /// Update polylines on the map view.
   Future<List<Polyline?>> updatePolylines(
       {required int viewId, required List<Polyline> polylines});
 
@@ -488,7 +488,7 @@ abstract mixin class NavigationViewAPIInterface {
   Future<List<Circle?>> addCircles(
       {required int viewId, required List<CircleOptions> options});
 
-  /// Update circles to map view.
+  /// Update circles on the map view.
   Future<List<Circle?>> updateCircles(
       {required int viewId, required List<Circle> circles});
 

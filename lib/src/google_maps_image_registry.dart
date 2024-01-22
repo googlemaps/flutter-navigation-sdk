@@ -29,6 +29,7 @@ import 'types/types.dart';
 /// according to the aspect ratio of the bitmap.
 ///
 /// Throws [ImageDecodingFailedException] if bitmap decoding fails.
+/// {@category Image Registry}
 Future<ImageDescriptor> registerBitmapImage(
     {required ByteData bitmap,
     double imagePixelRatio = 1.0,
@@ -42,22 +43,26 @@ Future<ImageDescriptor> registerBitmapImage(
 }
 
 /// Delete previously registered bitmap from image registry.
+/// {@category Image Registry}
 Future<void> unregisterImage(ImageDescriptor imageDescriptor) {
   return GoogleMapsNavigationPlatform.instance
       .unregisterImage(imageDescriptor: imageDescriptor);
 }
 
 /// Get all registered bitmaps from image registry.
+/// {@category Image Registry}
 Future<List<ImageDescriptor>> getRegisteredImages() {
   return GoogleMapsNavigationPlatform.instance.getRegisteredImages();
 }
 
 /// Remove all registered bitmaps from image registry.
+/// {@category Image Registry}
 Future<void> clearRegisteredImages() {
   return GoogleMapsNavigationPlatform.instance.clearRegisteredImages();
 }
 
 /// [registerBitmapImage] failed to decode bitmap from byte array.
+/// {@category Image Registry}
 class ImageDecodingFailedException implements Exception {
   /// Default constructor for [ImageDecodingFailedException].
   const ImageDecodingFailedException();
