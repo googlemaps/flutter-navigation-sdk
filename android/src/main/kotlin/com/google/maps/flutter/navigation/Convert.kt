@@ -707,11 +707,7 @@ object Convert {
    * @return pigeon [StyleSpanDto].
    */
   private fun convertStyleSpan(span: StyleSpan): StyleSpanDto {
-    return StyleSpanDto(
-      length = span.segments,
-      style =
-        StyleSpanStrokeStyleDto()
-    )
+    return StyleSpanDto(length = span.segments, style = StyleSpanStrokeStyleDto())
   }
 
   /**

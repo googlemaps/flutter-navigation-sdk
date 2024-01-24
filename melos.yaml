@@ -70,7 +70,8 @@ scripts:
   format:android:
     run: |
       melos exec -c 1 --fail-fast -- \
-        "cd android && ./gradlew ktfmtFormat"
+        "if [ ! -f android/gradlew ]; then flutter build apk --config-only; fi \
+         && cd android && ./gradlew ktfmtFormat"
     description: |
       Formats the code of Android package with ktfmt.
     packageFilters:
@@ -83,6 +84,8 @@ scripts:
       melos exec -c 1 --fail-fast -- \
         "flutter pub get && flutter test"
     description: Flutter test
+    packageFilters:
+      fileExists: 'pigeons/messages.dart'
 
   flutter-build-android:
     run: |
