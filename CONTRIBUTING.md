@@ -2,159 +2,132 @@
 
 _See also: [Flutter's code of conduct](https://flutter.io/design-principles/#code-of-conduct)_
 
-## 1. Things you will need
+## 1. Essential Setup for Contributors
 
-- Linux, Mac OS X, or Windows.
-- [git](https://git-scm.com) (used for source version control).
-- An IDE such as [Android Studio](https://developer.android.com/studio) or [Visual Studio Code](https://code.visualstudio.com/).
-- [`swiftformat`](https://github.com/nicklockwood/SwiftFormat) (available via brew on macOS, on Windows install Swift toolchain and build SwiftFormat from git sources)
+- **Operating System:** Linux, macOS, or Windows.
+- **Version Control:** [git](https://git-scm.com).
+- **Development Environment:** An IDE such as [Android Studio](https://developer.android.com/studio) or [Visual Studio Code](https://code.visualstudio.com/).
+- **Code Formatting:** [`swiftformat`](https://github.com/nicklockwood/SwiftFormat) (available via brew on macOS, on Windows install Swift toolchain and build SwiftFormat from git sources). 
 
-## 2. Forking & cloning the repository
+### 1.1. Installing swiftformat
+The CI is locked to swiftformat 0.53 version which you can install with the command below:
+```bash
+curl -O https://raw.githubusercontent.com/Homebrew/homebrew-core/86f85aaa82beba49f8a5aabf3a22508c9249f188/Formula/s/swiftformat.rb
+brew install swiftformat.rb
+```
 
-- Ensure all the dependencies described in the previous section are installed.
-- Fork `https://github.com/googlemaps/flutter-navigation-sdk` into your own GitHub account. If
-  you already have a fork, and are now installing a development environment on
-  a new machine, make sure you've updated your fork so that you don't use stale
-  configuration options from long ago.
-- If you haven't configured your machine with an SSH key that's known to github, then
-  follow [GitHub's directions](https://help.github.com/articles/generating-ssh-keys/)
-  to generate an SSH key.
-- `git clone git@github.com:<your_name_here>/googlemaps/flutter-navigation-sdk.git`
-- `git remote add upstream git@github.com:googlemaps/flutter-navigation-sdk.git` (So that you
-  fetch from the master repository, not your clone, when running `git fetch`
-  et al.)
+## 2. Setting Up Your Local Repository
 
-## 3. Environment Setup
+- **Preparation:** Before starting, make sure you have all dependencies installed as mentioned in the prior section.
+- **Fork the Repository:** Navigate to `https://github.com/googlemaps/flutter-navigation-sdk` and create a fork in your GitHub account.
+- **SSH Key Configuration:** If your machine doesn't have an SSH key registered with GitHub, generate one following the instructions at [Generating SSH Keys on GitHub.](https://help.github.com/articles/generating-ssh-keys/).
+- **Clone Your Fork:** Use the command `git clone git@github.com:<your_name_here>/google_maps_flutter_navigation.git` to clone the repository to your local machine.
+- **Add remote upstream:** Establish a link to the main repository for updates using command `git remote add upstream git@github.com:googlemaps/flutter-navigation-sdk.git` This ensures you pull changes from the original source, not just your clone, when using git fetch and similar commands.
 
-This project uses [Melos](https://github.com/invertase/melos) to manage the project and dependencies.
-Melos is a tool that optimizes the workflow around managing multi-package repositories with git and Pub.
+## 3. Install Melos
 
-To install Melos, run the following command from your terminal:
+This project leverages [Melos](https://github.com/invertase/melos) to manage the project and its dependencies.
+
+Run the following command to install Melos:
 
 ```bash
 dart pub global activate melos
 ```
 
-Next, at the root of your locally cloned repository bootstrap the projects dependencies:
-
-```bash
-melos bootstrap
-```
-
-The bootstrap command locally links all dependencies within the project without having to
-provide manual [`dependency_overrides`](https://dart.dev/tools/pub/pubspec). This allows all
-plugins, examples and tests to build from the local clone project.
-
-> You do not need to run `flutter pub get` once bootstrap has been completed.
-
-> If you're using [fvm](https://fvm.app/) you might need to specify the sdk-path: `melos bs --sdk-path=/Users/user/fvm/default/`
-
-The [Melos extension]([https://marketplace.visualstudio.com/items?itemName=blaugold.melos-code]) integrates Melos with VS Code
-
 ## 4. Automatically generated MethodChannel with Pigeon
 
-### Use
+### Using pigeon
 
-Google Maps Navigation Flutter Plugins uses [pigeon](https://github.com/flutter/packages/tree/main/packages/pigeon) to generate the `MethodChannel` API layer between Dart and the native platforms.
-To modify the messages sent with Pigeon (i.e. API code between Dart and native platforms), you can modify the `pigeons/messages.dart` file in the corresponding folder and regenerate the code running the below noted melos command.
-
+Google Maps Navigation Flutter Plugins utilizes [pigeon](https://github.com/flutter/packages/tree/main/packages/pigeon) to generate the `MethodChannel` API layer between Dart and the native platforms.
+To modify the messages sent with Pigeon (i.e., the API code between Dart and native platforms), you can edit the `pigeons/messages.dart` file in the corresponding folder and regenerate the code by running the following melos command:
 
 ```
 melos run generate:pigeon
 ```
 
-Don't forget to run the formatter on the generated files.
-Note: melos script runs formatter automatically after pigeon generation.
+Remember to format the generated files using the formatter.
 
-### Tests
+Note: The melos script automatically runs the formatter after pigeon generation.
 
-To tests the created interface, you can mock the interface directly with:
+### Testing pigeon generated code
+
+To test the created interface, you can mock the interface directly with:
 
 ```dart
-TestNAMEHostApi.setup(MockNAMEApp());
+late MockTestNAMEHostApi mockApi;
+TestNAMEHostApi.setup(mockApi);
 ```
 
-How to add a unit test to a new method:
+Add a unit test to a new method:
 
-1. In the mock Platform API pass the method calls to the respective Mock API generated by Mockito.
-
-```dart
-@override
-Future<MyType> myMethod() async {
-  return mockTestApi.myMethod();
-}
-```
-
-2. Mock the return value (if the function has one).
+1. Mock the return value (if the function has one).
 
 ```dart
-when(mockApi.myMethod(any)) .thenAnswer((Invocation _) async => returnValueIn);
+when(mockApi.newMethod(any)).thenReturn(returnValueIn);
 ```
 
 3. Call the public API.
 
 ```dart
-returnValueOut = api.myMethod(parameterIn)
+returnValueOut = await GoogleMapsNavigationPlatform.instance.newMethod(parameterIn)
 ```
 
 4. Check that the parameters and return values passed between the public API and platform match.
 
 ```dart
-final VerificationResult result = verify(mockApi.myMethod(captureAny));
+final VerificationResult result = verify(mockApi.newMethod(captureAny));
 final MyType parameterOut = result.captured[0] as MyType;
-expect(parameterIn, parameterOut)
-expect(returnValueIn, returnValueOut)
+expect(parameterIn.param, parameterOut.param)
+expect(returnValueIn.param, returnValueOut.param)
 ```
 
-## 5. Running an example
+See examples in `test/` folders.
 
-Each plugin provides an example app which aims to showcase the main use-cases of each plugin.
+## 5. Running the Navigation Example
 
-To run an example, run the `flutter run` command from the `example` directory of each plugins main
-directory. For example, for Google Maps Flutter Navigation example:
+The Google Maps Flutter Navigation plugin provides an example app that showcases its main use-cases.
+
+To run the Navigation example, navigate to the `example` directory of the plugin and run the app:
 
 ```bash
-cd packages/google_maps_navigation/example
-flutter run
+cd example
+flutter run --dart-define=MAPS_API_KEY=YOUR_API_KEY
 ```
-
-Using Melos (installed in step 3), any changes made to the plugins locally will also be reflected within all
-example applications code automatically.
 
 ## 6. Running tests
 
-Google Maps Flutter Navigation packages comprises of a number of tests for each plugin, either integration or unit tests.
+Google Maps Flutter Navigation package has integration and unit tests. 
 
 ### Unit tests
 
-Unit tests are responsible for ensuring expected behavior whilst developing the plugins Dart code. To run unit tests for a specific plugin, run the
-`flutter test` command from the plugins root directory. For example, Google Maps Flutter Navigation tests can be run
-with the following commands:
+To run unit tests for the Google Maps Flutter Navigation plugin, navigate to the plugin's root directory and execute the `flutter test` command. Use the following command:
 
 ```bash
-cd packages/google_maps_navigation
 flutter test
 ```
 
 To run unit tests on Android call
 
 ```bash
-cd packages/google_maps_navigation/example
+cd example/android
 ./gradlew test
 ```
 
-To run unit tests on iOS open Test Navigator in Xcode
-and tap play icon button for RunnerTests.
+To run unit tests on iOS, follow these steps:
+1. Open Xcode.
+2. Navigate to the Test Navigator.
+3. Find and select the "RunnerTests" target.
+4. Click on the play icon button to run the tests.
 
 ### Integration tests
 
-Integration tests are responsible for ensuring that the individual plugins are working together as expected. Patrol is used for the integration tests to simplify interactions with native elements. To use patrol, you first need to activate the patrol_cli.  
+Integration tests are responsible for ensuring that the plugin works against the native Navigation SDK for both Android and iOS platforms. Patrol is used for the integration tests to simplify interactions with native elements. To use patrol, you first need to activate the patrol_cli.  
 
 ```bash
-flutter pub global activate patrol_cli 2.2.2
+flutter pub global activate patrol_cli 2.5.0
 ```
 
-Ensure everything patrol needs is set up with the command:
+To ensure that all necessary dependencies for patrol are properly set up, run the following command:
 
 ```bash
 patrol doctor
@@ -163,23 +136,15 @@ patrol doctor
 Google Maps Flutter Navigation integration tests can be run with the following command:
 
 ```bash
-cd packages/google_maps_navigation/example
-dart integration_test/run_tests.dart
+cd ./example
+patrol test --dart-define=MAPS_API_KEY=YOUR_API_KEY
 ```
-
-On ios you can pass the MAPS_API_KEY with following command:
-
-```bash
-cd packages/google_maps_navigation/example
-dart integration_test/run_tests.dart --dart-defines=MAPS_API_KEY=YOUR_API_KEY
-```
-
 
 To only run a specific test file, use patrol command with -t flag. For example to run a navigation_test.dart run it with the following command:
 
 ```bash
-cd packages/google_maps_navigation/example
-patrol test -t integration_test/navigation_test.dart
+cd ./example
+patrol test --dart-define=MAPS_API_KEY=YOUR_API_KEY -t integration_test/navigation_test.dart
 ```
 
 Test report should appear in the build folder:
@@ -195,60 +160,81 @@ When adding new tests, add the location dialog and ToS check to the beginning of
     await checkLocationDialogAndTosAcceptance($);
 ```
 
-For debugging the tests, you can add debugPrint() functions in your test and use patrol develop mode with --verbose falg to see the printed messages. To run navigation_test.dart in develop mode, use the following command:
+For debugging the tests, you can add `debugPrint()` functions in your test and use patrol develop mode with the `--verbose` flag to see the printed messages. To run `navigation_test.dart` in develop mode, use the following command:
 
 ```bash
-cd packages/google_maps_navigation/example
-patrol develop --verbose -t integration_test/navigation_test.dart
+cd ./example
+patrol develop --dart-define=MAPS_API_KEY=YOUR_API_KEY --verbose -t integration_test/navigation_test.dart
 ```
 
-FYI, the patrol develop mode's "hot restart" doesn't work properly with all the test files. 
+Please note that the "hot restart" feature in patrol's develop mode may not work correctly with all test files.
+
+#### Android emulator setup
+
+If the patrol tests fail to run on the Android emulator due to insufficient RAM, increase the emulator's default RAM allocation to ensure proper test execution.
 
 ## 7. Contributing code
 
-We gladly accept contributions via GitHub pull requests.
+We welcome contributions through GitHub pull requests.
 
-Please peruse the
-[Flutter style guide](https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo) and
-[design principles](https://flutter.io/design-principles/) before
-working on anything non-trivial. These guidelines are intended to
-keep the code consistent and avoid common pitfalls.
+Before working on any significant changes, please review the [Flutter style guide](https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo) and [design principles](https://flutter.io/design-principles/). These guidelines help maintain code consistency and avoid common pitfalls.
 
-To start working on a patch:
+To begin working on a patch, follow these steps:
 
-1. `git fetch upstream`
-2. `git checkout upstream/master -b <name_of_your_branch>`
+1. Fetch the latest changes from the upstream repository:
+   ```bash
+   git fetch upstream
+   ```
+
+2. Create a new branch based on the latest upstream master branch:
+   ```bash
+   git checkout upstream/master -b <name_of_your_branch>
+   ```
+
 3. Start coding!
 
-Once you have made your changes, ensure that it passes the internal analyzer & formatting checks. The following
-commands can be run locally to highlight any issues before committing your code:
+Before committing your changes, it's important to ensure that your code passes the internal analyzer and formatting checks. You can run the following commands locally to identify any issues:
 
-```bash
-# Run the analyze check
-melos run flutter-analyze
+- Run the analyze check:
+  ```bash
+  melos run flutter-analyze
+  ```
 
-# Format code
-melos run format
-```
+- Format your code:
+  ```bash
+  melos run format
+  ```
 
-If you have changed pigeon messages, make sure to run:
+If you have made changes to pigeon messages, don't forget to generate the necessary code by running:
 
 ```bash
 melos run generate:pigeon
 ```
 
-If you have changed files that have mocked tests, make sure to run: 
+If you have changed files that have mocked tests, make sure to run the following command:
 
 ```bash
 melos run generate:mocks
 ```
-And run affecting tests locally.
+And run affecting tests locally to make sure they still pass.
 
 
-Assuming all is successful, commit and push your code:
+Assuming all is successful, commit and push your code using the following commands:
 
-1. `git commit -a -m "<your informative commit message>"`
-2. `git push origin <name_of_your_branch>`
+1. Stage your changes:
+  ```bash
+  git add .
+  ```
+
+2. Commit your changes with an informative commit message:
+  ```bash
+  git commit -m "<your informative commit message>"
+  ```
+
+3. Push your changes to the remote repository:
+  ```bash
+  git push origin <name_of_your_branch>
+  ```
 
 To send us a pull request:
 
@@ -256,74 +242,47 @@ To send us a pull request:
   go to `https://github.com/googlemaps/flutter-navigation-sdk` and click the
   "Compare & pull request" button
 
-Please make sure all your check-ins have detailed commit messages explaining the patch.
+Please ensure that all your commits have detailed commit messages explaining the changes made.
 
 When naming the title of your pull request, please follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0-beta.4/)
-guide. For example, for a fix to the Driver plugin:
+guide. For example, for a fix to the plugin:
 
-`fix(google_maps_flutter_driver): fixed a bug!`
+`fix: Fixed a bug!`
 
-Plugins tests are run automatically on contributions using GitHub Actions. Depending on
-your code contributions, various tests will be run against your updated code automatically.
+Automated tests will be run on your contributions using GitHub Actions. Depending on
+your code changes, various tests will be performed automatically.
 
-Once you've gotten an LGTM from a project maintainer and once your PR has received
-the green light from all our automated testing, wait for one the package maintainers
-to merge the pull request.
+Once you have received an LGTM (Looks Good To Me) from a project maintainer and once your pull request has passed all automated tests, please wait for one of the package maintainers to merge your changes.
 
-You must complete the
+Before contributing, please ensure that you have completed the
 [Contributor License Agreement](https://cla.developers.google.com/clas).
-You can do this online, and it only takes a minute.
-If you've never submitted code before, you must add your (or your
-organization's) name and contact info to the [AUTHORS](AUTHORS) file.
+This can be done online and only takes a few moments.
+If you are submitting code for the first time, please add your (or your
+organization's) name and contact information to the [AUTHORS](AUTHORS) file.
 
-If you create a new file, do not forget to add the license header. You can use
-[`addlicense`](https://github.com/google/addlicense) to add the license to all
-necessary files.
+This project uses Google's `addlicense` [here](https://github.com/google/addlicense) tool to add the license header to all necessary files. Running `addlicense` is a required step before committing any new files.
 
 To install `addlicense`, run:
 ```bash
 go install github.com/google/addlicense@latest
 ```
 
-Do not forget to add `$HOME/go/bin` to your `PATH`. If you are using Bash on
-Linux or macOS, you need to add `export PATH="$HOME/go/bin:$PATH"` to your
-`.bash_profile`.
+Make sure to include `$HOME/go/bin` in your `PATH` environment variable. 
+If you are using Bash on Linux or macOS, add `export PATH="$HOME/go/bin:$PATH"` to your `.bash_profile`.
 
-To add the license header to all files, run from the root of the repository:
+To add the license header to all files, run the following command from the root of the repository:
 ```bash
 melos run add-license-header
 ```
 This command uses `addlicense` with all necessary flags.
 
-### The review process
-
-Newly opened PRs first go through initial triage which results in one of:
-
-- **Merging the PR** - if the PR can be quickly reviewed and looks good.
-- **Closing the PR** - if the PR maintainer decides that the PR should not be merged.
-- **Moving the PR to the backlog** - if the review requires non trivial effort and the issue isn't a priority; in this case the maintainer will:
-  - Make sure that the PR has an associated issue labeled with "plugin".
-  - Add the "backlog" label to the issue.
-  - Leave a comment on the PR explaining that the review is not trivial and that the issue will be looked at according to priority order.
-- **Starting a non trivial review** - if the review requires non trivial effort and the issue is a priority; in this case the maintainer will:
-  - Add the "in review" label to the issue.
-  - Self assign the PR.
-
-
-### Graduate packages
-
-Sometimes you may need to 'graduate' a package from a 'dev' or 'beta' (versions tagged like this: `0.10.0-dev.4`) to a stable version. Melos can also be used
-to graduate multiple packages using the following steps:
-
-1. Switch to `master` branch locally.
-2. Run 'git pull origin master'.
-3. Run `git fetch --all` to make sure all tags and commits are fetched.
-4. Run `melos version --graduate` to prompt a list of all packages to be graduated (You may also specifically select packages using the scope flag like this: `--scope="*driver*"`)
-5. Run `git push --follow-tags` to push the auto commits and tags to the remote repository.
-6. Run `melos publish` to dry run and confirm all packages are publishable.
-7. Run `melos publish --no-dry-run` to now publish to Pub.dev.
+To check the license header of all files, run from the root of the repository:
+```bash
+melos run check-license-header
+```
 
 ## 8. Contributing documentation
 
-We gladly accept contributions to the plugin documentation. As our docs are also part of this repo,
-see "Contributing code" above for how to prepare and submit a PR to the repo.
+We welcome contributions to the plugin documentation. The documentation for this project is generated using Dart Docs. All documentation for the app-facing API is described in Dart files.
+
+Please refer to the "Contributing code" section above for instructions on how to prepare and submit a pull request to the repository.

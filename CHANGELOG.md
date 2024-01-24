@@ -1,4 +1,4 @@
-## 0.2.0-pre1
+## 0.2.0-beta
 
 **GoogleNavigationViewController**
 - **BREAKING CHANGES** Following gesture and UI option setters have been renamed:
@@ -27,7 +27,7 @@
 - **BREAKING CHANGES** `initialNavigationUiEnabled` boolean has been renamed to `initialNavigationUIEnabledPreference` enumeration
 - Initial camera position defaults to zoom level 3.0 instead of 0.0
 
-## 0.1.0-pre1
+## 0.1.0-beta
 
 This is the first pre-release of the Google Maps Navigation package for Flutter. It is an early look at the package and is intended for testing and feedback collection. The functionalities and APIs in this version are subject to change.
 
