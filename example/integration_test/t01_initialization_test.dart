@@ -205,9 +205,6 @@ void main() {
     const NavigationUIEnabledPreference navigationUiEnabledPreference =
         NavigationUIEnabledPreference.automatic;
 
-    // TODO(jpetrell): Test initialMinZoomPreference, initialMaxZoomPreference
-    // and initialCameraTargetBounds once respective getters are available.
-
     /// Display navigation view.
     final Key key = GlobalKey();
     await pumpNavigationView(

@@ -158,7 +158,6 @@ enum Convert {
             return GMSNavigationWaypoint(
               location: .init(latitude: latitude, longitude: longitude),
               title: waypoint.title,
-              // TODO: Handle the 32bit x 64bit conversion correctly.
               preferredSegmentHeading: Int32(preferredSegmentHeading)
             )
           }
