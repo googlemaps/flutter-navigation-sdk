@@ -47,7 +47,8 @@ melos run generate:pigeon
 
 Remember to format the generated files using the formatter.
 
-Note: The melos script automatically runs the formatter after pigeon generation.
+> [!NOTE]
+> The melos script automatically runs the formatter after pigeon generation.
 
 ### Testing pigeon generated code
 

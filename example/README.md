@@ -35,7 +35,8 @@ MAPS_API_KEY=YOUR_API_KEY_HERE
 
 This key will be specifically used for the Android build, overriding the Dart define value.
 
-NOTE: `local.properties` file should always be listed in your .gitignore file to ensure it is not committed to your repository.
+> [!NOTE]
+> `local.properties` file should always be listed in your .gitignore file to ensure it is not committed to your repository.
 
 ### iOS specific API key
 
@@ -69,10 +70,23 @@ override func application(
 ...
 ```
 
-**NOTE**: Be cautious with API keys. Avoid exposing them in public repositories, especially when hardcoded in the project files or the environment variables.
+> [!NOTE]
+> Be cautious with API keys. Avoid exposing them in public repositories, especially when hardcoded in the project files or the environment variables.
 
-If you have pod related issues to run the example code you can run the following commands from example/ios folder:
- - pod repo update
- - pod install
+## Running the example app
 
-This should install all required pod files to run the example in iOS.
+To run the example app, follow these steps:
+1. Start the emulator or connect your device.
+2. Run the following command from the root of the example project: 
+    ``` bash
+    cd example
+    flutter run
+    ```
+If you want to run the example app with a specific API key, see the [Setting up API Keys](#setting-up-api-keys) section.
+
+> [!TIP]
+> If you encounter pod-related issues when running the example code on iOS, you can try running the following commands from the `example/ios` folder:
+>  - pod repo update
+>  - pod install
+> 
+> These commands will update and install the required pod files specifically for iOS.
