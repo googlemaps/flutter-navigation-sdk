@@ -1,7 +1,27 @@
 ## 0.2.0-beta
 
-**GoogleNavigationViewController**
-- **BREAKING CHANGES** Following gesture and UI option setters have been renamed:
+This is the beta release of the Google Maps Navigation package for Flutter. It is an early look at the package and is intended for testing and feedback collection. The functionalities and APIs in this version are subject to change.
+
+**Key Features:**
+- `setDestinations` now supports a `RouteTokenOptions` parameter.
+- Added support for custom marker icons:
+  - `registerBitmapImage` to register `ImageDescriptor`.
+  - `unregisterImage` to unregister `ImageDescriptor`.
+  - Registered `ImageDescriptor` can be used as icon for `MarkerOptions`.
+- Added following event listeners:
+  - `onNavigationUIEnabledChanged`
+  - `onMyLocationClicked`
+  - `onMyLocationButtonClicked`
+  - `onCameraMoveStarted`
+  - `onCameraMove`
+  - `onCameraIdle`
+- Added `setConsumeMyLocationButtonClickEventsEnabled` method to control if the default my location button click event should be consumed by the plugin or not.
+- Added the following methods to control zoom level preferences of the map: `setMinZoomPreference`, `setMaxZoomPreference`, 
+`getMinZoomPreference`, `getMaxZoomPreference` and `resetMinMaxZoomPreference`.
+- Improved error handling and reporting.
+
+**BREAKING CHANGES:**
+- **GoogleNavigationViewController** Following gesture and UI option setters have been renamed:
   - `enableNavigationUI({required bool})` to `setNavigationUIEnabled(bool)`
   - `enableNavigationHeader({required bool})` to `setNavigationHeaderEnabled(bool)`
   - `enableNavigationFooter({required bool})` to `setNavigationFooterEnabled(bool)`
@@ -23,13 +43,13 @@
   - `enableIncidentCards({required bool})` to `setTrafficIncidentCardsEnabled(bool)`
   - `isIncidentCardsEnabled()` to `isTrafficIncidentCardsEnabled`
 
-**GoogleMapsNavigationView:**
-- **BREAKING CHANGES** `initialNavigationUiEnabled` boolean has been renamed to `initialNavigationUIEnabledPreference` enumeration
-- Initial camera position defaults to zoom level 3.0 instead of 0.0
+- **GoogleMapsNavigationView:**
+  - `initialNavigationUiEnabled` boolean has been renamed to `initialNavigationUIEnabledPreference` enumeration
+  - Initial camera position defaults to zoom level 3.0 instead of 0.0
 
 ## 0.1.0-beta
 
-This is the first pre-release of the Google Maps Navigation package for Flutter. It is an early look at the package and is intended for testing and feedback collection. The functionalities and APIs in this version are subject to change.
+This is the beta release of the Google Maps Navigation package for Flutter. It is an early look at the package and is intended for testing and feedback collection. The functionalities and APIs in this version are subject to change.
 
 **Key Features:**
 - Integration of Google Maps Navigation with Flutter.
