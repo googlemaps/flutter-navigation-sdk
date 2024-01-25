@@ -15,9 +15,13 @@ This is the beta release of the Google Maps Navigation package for Flutter. It i
   - `onCameraMoveStarted`
   - `onCameraMove`
   - `onCameraIdle`
+  - `onCameraStartedFollowingLocation`
+  - `onCameraStoppedFollowingLocation`
 - Added `setConsumeMyLocationButtonClickEventsEnabled` method to control if the default my location button click event should be consumed by the plugin or not.
 - Added the following methods to control zoom level preferences of the map: `setMinZoomPreference`, `setMaxZoomPreference`, 
 `getMinZoomPreference`, `getMaxZoomPreference` and `resetMinMaxZoomPreference`.
+- Added `GoogleMapsNavigator.getNavSDKVersion()` method to fetch the Navigation SDK version
+- `GoogleMapsNavigator.initializeNavigationSession()` now accepts optional parameter `abnormalTerminationReportingEnabled` to enable/disable reporting abnormal SDK terminations such as app crashes
 - Improved error handling and reporting.
 
 **BREAKING CHANGES:**
