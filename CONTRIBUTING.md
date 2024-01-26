@@ -92,7 +92,7 @@ To run the Navigation example, navigate to the `example` directory of the plugin
 
 ```bash
 cd example
-flutter run --dart-define=MAPS_API_KEY=YOUR_API_KEY
+flutter run --dart-define MAPS_API_KEY=YOUR_API_KEY
 ```
 
 ## 6. Running tests
@@ -138,14 +138,14 @@ Google Maps Flutter Navigation integration tests can be run with the following c
 
 ```bash
 cd ./example
-patrol test --dart-define=MAPS_API_KEY=YOUR_API_KEY
+patrol test --dart-define MAPS_API_KEY=YOUR_API_KEY
 ```
 
 To only run a specific test file, use patrol command with -t flag. For example to run a navigation_test.dart run it with the following command:
 
 ```bash
 cd ./example
-patrol test --dart-define=MAPS_API_KEY=YOUR_API_KEY -t integration_test/navigation_test.dart
+patrol test --dart-define MAPS_API_KEY=YOUR_API_KEY -t integration_test/navigation_test.dart
 ```
 
 Test report should appear in the build folder:
@@ -165,7 +165,7 @@ For debugging the tests, you can add `debugPrint()` functions in your test and u
 
 ```bash
 cd ./example
-patrol develop --dart-define=MAPS_API_KEY=YOUR_API_KEY --verbose -t integration_test/navigation_test.dart
+patrol develop --dart-define MAPS_API_KEY=YOUR_API_KEY --verbose -t integration_test/navigation_test.dart
 ```
 
 Please note that the "hot restart" feature in patrol's develop mode may not work correctly with all test files.

@@ -14,7 +14,7 @@ Using Dart defines to provide the Google Maps API key is the preferred method fo
 
 Run the app with the API key as a Dart define.
 ```bash
-flutter run --dart-define=MAPS_API_KEY=YOUR_API_KEY
+flutter run --dart-define MAPS_API_KEY=YOUR_API_KEY
 ```
 
 The example app demonstrates multiple ways to provide the Maps API key for platforms.
