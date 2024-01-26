@@ -41,8 +41,8 @@ public class ExposedGoogleMapsNavigator: NSObject {
     try GoogleMapsNavigationSessionManager.shared.getSession().roadSnappedLocationProvider
   }
 
-  public static func enableRoadSnappedLocationUpdates() throws {
-    try GoogleMapsNavigationSessionManager.shared.enableRoadSnappedLocationUpdates()
+  public static func enableRoadSnappedLocationUpdates() {
+    GoogleMapsNavigationSessionManager.shared.enableRoadSnappedLocationUpdates()
   }
 }
 
@@ -458,12 +458,12 @@ class GoogleMapsNavigationSessionManager: NSObject {
   }
 
   /// Listeners
-  func enableRoadSnappedLocationUpdates() throws {
+  func enableRoadSnappedLocationUpdates() {
     LocationManager.shared.startUpdatingLocation()
     _session?.roadSnappedLocationProvider?.startUpdatingLocation()
   }
 
-  func disableRoadSnappedLocationUpdates() throws {
+  func disableRoadSnappedLocationUpdates() {
     LocationManager.shared.stopUpdatingLocation()
     _session?.roadSnappedLocationProvider?.stopUpdatingLocation()
   }
