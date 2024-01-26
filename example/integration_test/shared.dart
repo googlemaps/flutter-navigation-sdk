@@ -33,6 +33,10 @@ export 'package:flutter_test/flutter_test.dart';
 export 'package:google_maps_navigation/google_maps_navigation.dart';
 export 'package:patrol/patrol.dart';
 
+/// Location coordinates for starting position simulation in Finland - Näkkäläntie.
+const double startLocationLat = 68.5938196099399;
+const double startLocationLon = 23.510696979963722;
+
 const NativeAutomatorConfig _nativeAutomatorConfig = NativeAutomatorConfig(
   findTimeout: Duration(seconds: 20),
 );
@@ -157,18 +161,18 @@ Future<GoogleNavigationViewController> startNavigation(
   await $.pumpAndSettle();
 
   await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
-    latitude: 38.012087,
-    longitude: -120.270701,
+    latitude: startLocationLat,
+    longitude: startLocationLon,
   ));
 
   /// Set Destination.
   final Destinations destinations = Destinations(
     waypoints: <NavigationWaypoint>[
       NavigationWaypoint.withLatLngTarget(
-        title: 'Grace Cathedral',
+        title: 'Finland - Leppäjärvi',
         target: const LatLng(
-          latitude: 37.791957,
-          longitude: -122.412529,
+          latitude: 68.50680417455591,
+          longitude: 23.310968509112517,
         ),
       ),
     ],
@@ -192,9 +196,11 @@ Future<GoogleNavigationViewController> startNavigation(
 /// simulating starting location with [simulateLocation] and skipping
 /// initialization with [initializeNavigation].
 Future<GoogleNavigationViewController> startNavigationWithoutDestination(
-    PatrolIntegrationTester $,
-    {bool initializeNavigation = true,
-    bool simulateLocation = false}) async {
+  PatrolIntegrationTester $, {
+  bool initializeNavigation = true,
+  bool simulateLocation = false,
+  void Function(CameraPosition)? onCameraIdle,
+}) async {
   final Completer<GoogleNavigationViewController> controllerCompleter =
       Completer<GoogleNavigationViewController>();
 
@@ -208,6 +214,7 @@ Future<GoogleNavigationViewController> startNavigationWithoutDestination(
       onViewCreated: (GoogleNavigationViewController viewController) {
         controllerCompleter.complete(viewController);
       },
+      onCameraIdle: onCameraIdle,
     ),
   );
 
@@ -221,8 +228,8 @@ Future<GoogleNavigationViewController> startNavigationWithoutDestination(
 
   if (simulateLocation) {
     await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
-      latitude: 68.59381960993993,
-      longitude: 23.510696979963722,
+      latitude: startLocationLat,
+      longitude: startLocationLon,
     ));
   }
 

@@ -35,8 +35,8 @@ void main() {
       GoogleNavigationInspectorPlatform.instance!;
 
   /// Start location coordinates in Finland (Näkkäläntie).
-  const double startX = 68.5938196099399;
-  const double startY = 23.510696979963722;
+  const double startLat = startLocationLat;
+  const double startLon = startLocationLon;
 
   bool isPhysicalDevice = false;
   final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -57,7 +57,7 @@ void main() {
 
     /// Specify tolerance and navigation end coordinates.
     const double tolerance = 0.0005;
-    const double endX = 68.59451829688189, endY = 23.512277951523007;
+    const double endLat = 68.59451829688189, endLon = 23.512277951523007;
 
     /// Finish executing the tests once onArrival event comes in
     /// and test that the guidance stops.
@@ -70,13 +70,13 @@ void main() {
 
     /// Simulate location and test it.
     await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
-      latitude: startX,
-      longitude: startY,
+      latitude: startLat,
+      longitude: startLon,
     ));
     await $.pumpAndSettle();
     final LatLng? currentLocation = await viewController.getMyLocation();
-    expect(currentLocation?.latitude, closeTo(startX, tolerance));
-    expect(currentLocation?.longitude, closeTo(startY, tolerance));
+    expect(currentLocation?.latitude, closeTo(startLat, tolerance));
+    expect(currentLocation?.longitude, closeTo(startLon, tolerance));
 
     /// Set Destination.
     final Destinations destinations = Destinations(
@@ -84,8 +84,8 @@ void main() {
         NavigationWaypoint.withLatLngTarget(
           title: 'Näkkäläntie',
           target: const LatLng(
-            latitude: endX,
-            longitude: endY,
+            latitude: endLat,
+            longitude: endLon,
           ),
         ),
       ],
@@ -107,11 +107,21 @@ void main() {
       debugPrint(
           'LatLngSingle: ${msg.location.latitude}, ${msg.location.longitude}');
       expectSync(
-          msg.location.latitude, greaterThanOrEqualTo(startX - tolerance));
-      expectSync(msg.location.latitude, lessThanOrEqualTo(endX + tolerance));
+        msg.location.latitude,
+        greaterThanOrEqualTo(startLat - tolerance),
+      );
       expectSync(
-          msg.location.longitude, greaterThanOrEqualTo(startY - tolerance));
-      expectSync(msg.location.longitude, lessThanOrEqualTo(endY + tolerance));
+        msg.location.latitude,
+        lessThanOrEqualTo(endLat + tolerance),
+      );
+      expectSync(
+        msg.location.longitude,
+        greaterThanOrEqualTo(startLon - tolerance),
+      );
+      expectSync(
+        msg.location.longitude,
+        lessThanOrEqualTo(endLon + tolerance),
+      );
     }
 
     await GoogleMapsNavigator.setRoadSnappedLocationUpdatedListener(
@@ -138,10 +148,10 @@ void main() {
 
     /// Specify tolerance and navigation destination coordinates.
     const double tolerance = 0.0005;
-    const double midX = 68.59781164189049,
-        midY = 23.520303427087182,
-        endX = 68.60079240808535,
-        endY = 23.527946512754752;
+    const double midLat = 68.59781164189049,
+        midLon = 23.520303427087182,
+        endLat = 68.60079240808535,
+        endLon = 23.527946512754752;
 
     Future<void> onArrivalEvent(OnArrivalEvent msg) async {
       arrivalEventCount += 1;
@@ -158,13 +168,13 @@ void main() {
 
     /// Simulate location and test it.
     await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
-      latitude: startX,
-      longitude: startY,
+      latitude: startLat,
+      longitude: startLon,
     ));
     await $.pumpAndSettle(timeout: const Duration(seconds: 1));
     final LatLng? currentLocation = await viewController.getMyLocation();
-    expect(currentLocation!.latitude, closeTo(startX, tolerance));
-    expect(currentLocation.longitude, closeTo(startY, tolerance));
+    expect(currentLocation!.latitude, closeTo(startLat, tolerance));
+    expect(currentLocation.longitude, closeTo(startLon, tolerance));
 
     /// Set Destination.
     final Destinations destinations = Destinations(
@@ -172,15 +182,15 @@ void main() {
         NavigationWaypoint.withLatLngTarget(
           title: 'Näkkäläntie 1st stop',
           target: const LatLng(
-            latitude: midX,
-            longitude: midY,
+            latitude: midLat,
+            longitude: midLon,
           ),
         ),
         NavigationWaypoint.withLatLngTarget(
           title: 'Näkkäläntie 2nd stop',
           target: const LatLng(
-            latitude: endX,
-            longitude: endY,
+            latitude: endLat,
+            longitude: endLon,
           ),
         ),
       ],
@@ -203,11 +213,21 @@ void main() {
       /// with high speedMultiplier.
       if (arrivalEventCount < 2) {
         expectSync(
-            msg.location.latitude, greaterThanOrEqualTo(startX - tolerance));
-        expectSync(msg.location.latitude, lessThanOrEqualTo(endX + tolerance));
+          msg.location.latitude,
+          greaterThanOrEqualTo(startLat - tolerance),
+        );
         expectSync(
-            msg.location.longitude, greaterThanOrEqualTo(startY - tolerance));
-        expectSync(msg.location.longitude, lessThanOrEqualTo(endY + tolerance));
+          msg.location.latitude,
+          lessThanOrEqualTo(endLat + tolerance),
+        );
+        expectSync(
+          msg.location.longitude,
+          greaterThanOrEqualTo(startLon - tolerance),
+        );
+        expectSync(
+          msg.location.longitude,
+          lessThanOrEqualTo(endLon + tolerance),
+        );
       }
     }
 
@@ -235,15 +255,15 @@ void main() {
 
     /// Specify tolerance and navigation end coordinates.
     const double tolerance = 0.0005;
-    const double endX = 68.59451829688189, endY = 23.512277951523007;
+    const double endLat = 68.59451829688189, endLon = 23.512277951523007;
 
     /// Create a waypoint.
     final List<NavigationWaypoint> waypoint = <NavigationWaypoint>[
       NavigationWaypoint.withLatLngTarget(
         title: 'Näkkäläntie',
         target: const LatLng(
-          latitude: endX,
-          longitude: endY,
+          latitude: endLat,
+          longitude: endLon,
         ),
       ),
     ];
@@ -339,8 +359,8 @@ void main() {
 
       /// Simulate location.
       await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
-        latitude: startX,
-        longitude: startY,
+        latitude: startLat,
+        longitude: startLon,
       ));
       debugPrint('Starting location set.');
       await $.pumpAndSettle();
@@ -351,19 +371,27 @@ void main() {
         debugPrint(
             'LatLngSimulator: ${msg.location.latitude}, ${msg.location.longitude}.');
         if ((!hasArrived) &&
-            (endX - msg.location.latitude <= tolerance) &&
-            (endY - msg.location.longitude <= tolerance)) {
+            (endLat - msg.location.latitude <= tolerance) &&
+            (endLon - msg.location.longitude <= tolerance)) {
           hasArrived = true;
           finishTest.complete();
         } else {
           expectSync(
-              msg.location.latitude, greaterThanOrEqualTo(startX - tolerance));
+            msg.location.latitude,
+            greaterThanOrEqualTo(startLat - tolerance),
+          );
           expectSync(
-              msg.location.latitude, lessThanOrEqualTo(endX + tolerance));
+            msg.location.latitude,
+            lessThanOrEqualTo(endLat + tolerance),
+          );
           expectSync(
-              msg.location.longitude, greaterThanOrEqualTo(startY - tolerance));
+            msg.location.longitude,
+            greaterThanOrEqualTo(startLon - tolerance),
+          );
           expectSync(
-              msg.location.longitude, lessThanOrEqualTo(endY + tolerance));
+            msg.location.longitude,
+            lessThanOrEqualTo(endLon + tolerance),
+          );
         }
       }
 
@@ -378,8 +406,6 @@ void main() {
       debugPrint('Simulation along the route started.');
       await finishTest.future;
       debugPrint('Loop with simulator$loopIteration finished.');
-      //await GoogleMapsNavigator.simulator.removeUserLocation();
-      //debugPrint('user location removed');
 
       await GoogleMapsNavigator.cleanup();
       await subscription.cancel();
@@ -394,19 +420,19 @@ void main() {
 
     /// Specify tolerance and navigation end coordinates.
     const double tolerance = 0.0005;
-    const double endX = 68.60338455021943, endY = 23.548804200724454;
+    const double endLat = 68.60338455021943, endLon = 23.548804200724454;
 
     /// Simulate location.
     await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
-      latitude: startX,
-      longitude: startY,
+      latitude: startLat,
+      longitude: startLon,
     ));
     await $.pumpAndSettle();
 
     /// Test the location simulation.
     LatLng? currentLocation = await viewController.getMyLocation();
-    expect(currentLocation!.latitude, closeTo(startX, tolerance));
-    expect(currentLocation.longitude, closeTo(startY, tolerance));
+    expect(currentLocation!.latitude, closeTo(startLat, tolerance));
+    expect(currentLocation.longitude, closeTo(startLon, tolerance));
 
     /// Test the simulated location was removed when using Android.
     /// iOS Xcode simulators location is flaky making the test fail sometimes
@@ -416,14 +442,14 @@ void main() {
       await $.pumpAndSettle(duration: const Duration(seconds: 5));
 
       currentLocation = await viewController.getMyLocation();
-      expect(currentLocation!.latitude, isNot(closeTo(startX, tolerance)));
-      expect(currentLocation.longitude, isNot(closeTo(startY, tolerance)));
+      expect(currentLocation!.latitude, isNot(closeTo(startLat, tolerance)));
+      expect(currentLocation.longitude, isNot(closeTo(startLon, tolerance)));
     }
 
     /// Simulate location.
     await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
-      latitude: startX,
-      longitude: startY,
+      latitude: startLat,
+      longitude: startLon,
     ));
     await $.pumpAndSettle(duration: const Duration(seconds: 1));
 
@@ -433,8 +459,8 @@ void main() {
         NavigationWaypoint.withLatLngTarget(
           title: 'Näkkäläntie',
           target: const LatLng(
-            latitude: endX,
-            longitude: endY,
+            latitude: endLat,
+            longitude: endLon,
           ),
         ),
       ],

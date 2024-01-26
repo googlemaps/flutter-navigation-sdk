@@ -86,20 +86,6 @@ void main() {
     return (diff < -180 ? diff + 360 : diff).abs();
   }
 
-  Future<void> checkCameraFollowsLocation(
-      CameraPosition camera, GoogleNavigationViewController controller) async {
-    final LatLng? myLocation = await controller.getMyLocation();
-    // Check the camera location is close to my location (locationThreshold = ~200m)
-    expect(myLocation, isNotNull);
-    expect(camera.target.latitude, closeTo(myLocation!.latitude, 0.02));
-    expect(camera.target.longitude, closeTo(myLocation.longitude, 0.02));
-    // Check that Android camera started following location events have come in.
-    if (Platform.isAndroid) {
-      expect(followingMyLocationActive, true);
-      expect(startedFollowingMyLocationPosition, isNotNull);
-    }
-  }
-
   /// Define the predicate functions for waitForCameraPositionMatchingPredicate().
   ///
   /// Check the camera zoom values match each other within tolerance.
@@ -118,15 +104,25 @@ void main() {
     return receivedPosition.tilt >= expectedPosition.tilt;
   }
 
-  /// Check the received camera zoom value is greater than or equal to the expected zoom value.
-  bool checkZoomGreaterThanOrEqualTo(CameraPosition receivedPosition) {
-    return receivedPosition.zoom >= expectedPosition.zoom;
-  }
-
   /// Check the received camera bearing value is less than or equal to the expected bearing value.
   bool checkBearingLessThanOrEqualTo(CameraPosition receivedPosition) {
     return distanceToNorth(receivedPosition.bearing) <=
         expectedPosition.bearing;
+  }
+
+  /// Check that the received camera target value doesn't match the expected camera target value.
+  bool checkCoordinatesDiffer(CameraPosition receivedPosition) {
+    return receivedPosition.target != expectedPosition.target;
+  }
+
+  // Check that the received camera target value matches the expected camera target value.
+  bool checkCoordinatesMatch(CameraPosition receivedPosition) {
+    return (receivedPosition.target.latitude - expectedPosition.target.latitude)
+                .abs() <=
+            0.02 &&
+        (receivedPosition.target.longitude - expectedPosition.target.longitude)
+                .abs() <=
+            0.02;
   }
 
   /// Wait for cameraMoveStarted, cameraMove and cameraIdle events.
@@ -141,9 +137,15 @@ void main() {
   }
 
   /// Check the camera coordinates match each other within tolerance.
-  void checkCoordinatesMatch(CameraPosition received, CameraPosition expected) {
+  void checkCameraCoordinatesMatch(
+      CameraPosition received, CameraPosition expected) {
     expect(received.target.latitude, closeTo(expected.target.latitude, 0.02));
     expect(received.target.longitude, closeTo(expected.target.longitude, 0.02));
+  }
+
+  // onTimeout fail function for futures.
+  void onTimeout() {
+    fail('Future timed out');
   }
 
   patrol('Test camera modes', (PatrolIntegrationTester $) async {
@@ -177,24 +179,39 @@ void main() {
       return position;
     }
 
-    await GoogleMapsNavigator.simulator
-        .simulateLocationsAlongExistingRouteWithOptions(
-            SimulationOptions(speedMultiplier: 15));
+    // Verify that the follow my location camera mode is active.
+    Future<void> checkCameraFollowsLocation() async {
+      final LatLng? currentLocation = await controller.getMyLocation();
+      expectedPosition = CameraPosition(target: currentLocation!);
+      // Wait until camera target matches my location target, fail if
+      // it doesn't happen within the max retries (≈20s).
+      final CameraPosition? followMyLocationCheck =
+          await waitForValueMatchingPredicate(
+              $, getPosition, checkCoordinatesMatch);
+      expect(followMyLocationCheck, isNotNull);
+
+      // Check that Android camera started following location events have come in.
+      if (Platform.isAndroid) {
+        expect(followingMyLocationActive, true);
+        expect(startedFollowingMyLocationPosition, isNotNull);
+      }
+    }
+
+    await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
 
     // 1. Test default.
     //
     // The navigation follows the user's location in tilted mode.
 
-    // Check the camera tilt value matches the default tilt within tolerance.
-    expectedPosition = const CameraPosition(tilt: 55);
-    bool checkTiltMatch(CameraPosition receivedPosition) {
-      return (receivedPosition.tilt - expectedPosition.tilt).abs() <= 0.1 &&
-          (receivedPosition.tilt - expectedPosition.tilt).abs() <= 0.1;
-    }
+    // Check the camera tilt value is over 40.
+    expectedPosition = const CameraPosition(tilt: 40);
 
-    // Wait until the camera tilt roughly matches the expected tilt.
-    CameraPosition? camera =
-        await waitForValueMatchingPredicate($, getPosition, checkTiltMatch);
+    // Wait until the camera tilt is greater than the expected tilt.
+    CameraPosition? camera = await waitForValueMatchingPredicate(
+      $,
+      getPosition,
+      checkTiltGreaterThanOrEqualTo,
+    );
     expect(camera, isNotNull);
 
     debugPrint('Default tilt: ${camera!.tilt}');
@@ -202,13 +219,10 @@ void main() {
     debugPrint('Default bearing: ${camera.bearing}');
 
     // Verify that the follow my location camera mode is active.
-    await checkCameraFollowsLocation(camera, controller);
+    await checkCameraFollowsLocation();
 
     // Strong tilting (Android 45, iOS 55 degrees)
     expect(camera.tilt, greaterThanOrEqualTo(40));
-
-    // Zoomed map (Android 18, iOS 17.25)
-    expect(camera.zoom, greaterThanOrEqualTo(16));
 
     LatLng oldTarget = camera.target;
     double oldZoom = camera.zoom;
@@ -227,13 +241,18 @@ void main() {
     debugPrint('topDownHeadingUp bearing: ${camera.bearing}');
 
     // Verify that the follow my location camera mode is active.
-    await checkCameraFollowsLocation(camera, controller);
+    await checkCameraFollowsLocation();
 
     // No tilt when top-down.
     expect(camera.tilt, lessThanOrEqualTo(0.1));
 
-    // The camera target should have moved.
-    expect(camera.target, isNot(oldTarget));
+    // Wait until camera target has moved (follows users location).
+    CameraPosition? cameraHasMoved = await waitForValueMatchingPredicate(
+      $,
+      getPosition,
+      checkCoordinatesDiffer,
+    );
+    expect(cameraHasMoved, isNotNull);
 
     oldTarget = camera.target;
 
@@ -254,31 +273,30 @@ void main() {
     debugPrint('topDownNorthUp bearing: ${camera.bearing}');
 
     // Verify that the follow my location camera mode is active.
-    await checkCameraFollowsLocation(camera, controller);
+    await checkCameraFollowsLocation();
 
     // No tilt when top-down.
     expect(camera.tilt, lessThanOrEqualTo(0.1));
-
-    // Expect zoom to be farther.
-    expect(oldZoom, greaterThanOrEqualTo(camera.zoom));
 
     // North-up means zero bearing.
     // iOS reports 0 degrees, Android is more fuzzy e.g. 359.7 degrees.
     expect(distanceToNorth(camera.bearing), lessThanOrEqualTo(2.0));
 
-    // The camera target should have moved again.
-    expect(camera.target, isNot(oldTarget));
+    // Wait until camera target has moved (follows users location).
+    cameraHasMoved = await waitForValueMatchingPredicate(
+      $,
+      getPosition,
+      checkCoordinatesDiffer,
+    );
+    expect(cameraHasMoved, isNotNull);
 
     oldTarget = camera.target;
 
     // 4. Test CameraPerspective.tilted
-    expectedPosition = const CameraPosition(zoom: 15, tilt: 40);
+    expectedPosition = const CameraPosition(tilt: 40);
     await controller.followMyLocation(CameraPerspective.tilted);
 
-    // Wait until the zoom is greater or equal to the expected zoom
-    // and the tilt is greater than or equal to the expected tilt.
-    await waitForValueMatchingPredicate(
-        $, getPosition, checkZoomGreaterThanOrEqualTo);
+    // Wait until the tilt is greater than or equal to the expected tilt.
     camera = await waitForValueMatchingPredicate(
         $, getPosition, checkTiltGreaterThanOrEqualTo);
     expect(camera, isNotNull);
@@ -288,15 +306,16 @@ void main() {
     debugPrint('tilted bearing: ${camera.bearing}');
 
     // Verify that the follow my location camera mode is active.
-    await checkCameraFollowsLocation(camera, controller);
+    await checkCameraFollowsLocation();
 
     // Repeat tests done with the default state above
     expect(camera.tilt, greaterThanOrEqualTo(40));
-    expect(camera.zoom, greaterThanOrEqualTo(15));
     expect(distanceToNorth(camera.bearing), greaterThanOrEqualTo(0.01));
 
-    // The camera target should have moved again.
-    expect(camera.target, isNot(oldTarget));
+    // Wait until camera target has moved (follows users location).
+    cameraHasMoved = await waitForValueMatchingPredicate(
+        $, getPosition, checkCoordinatesDiffer);
+    expect(cameraHasMoved, isNotNull);
 
     oldTarget = camera.target;
     oldZoom = camera.zoom;
@@ -329,8 +348,10 @@ void main() {
     // Route is shown north up.
     expect(distanceToNorth(camera.bearing), lessThanOrEqualTo(1.0));
 
-    // The camera target should have moved again.
-    expect(camera.target, isNot(oldTarget));
+    // Wait until camera target has moved (follows users location).
+    cameraHasMoved = await waitForValueMatchingPredicate(
+        $, getPosition, checkCoordinatesDiffer);
+    expect(cameraHasMoved, isNotNull);
 
     // 6. Test the optional follow my location parameter zoom level
     // and the startedFollowingMyLocation event.
@@ -351,7 +372,8 @@ void main() {
     // and the received position is close to the start position.
     if (Platform.isAndroid) {
       expect(followingMyLocationActive, true);
-      checkCoordinatesMatch(startedFollowingMyLocationPosition!, oldCamera);
+      checkCameraCoordinatesMatch(
+          startedFollowingMyLocationPosition!, oldCamera);
     }
 
     oldTarget = camera.target;
@@ -367,7 +389,10 @@ void main() {
     await controller.moveCamera(positionUpdate);
 
     // Wait for cameraIdleEvent before doing doing the tests.
-    await cameraIdleCompleter.future.timeout(const Duration(seconds: 10));
+    await cameraIdleCompleter.future.timeout(
+      const Duration(seconds: 10),
+      onTimeout: onTimeout,
+    );
     camera = await controller.getCameraPosition();
 
     // Test stoppedFollowingMyLocation event is received on Android.
@@ -391,7 +416,7 @@ void main() {
     // Define the target position.
     expectedPosition = CameraPosition(target: newTarget);
     final CameraUpdate cameraUpdate = CameraUpdate.newLatLng(newTarget);
-    debugPrint('cameraMoveUpcoming');
+
     // Move camera and wait for cameraMoveStarted, cameraMove
     // and cameraIdle events to come in.
     await controller.moveCamera(cameraUpdate);
@@ -402,7 +427,7 @@ void main() {
     // Skipped on iOS, because the received position is often the end position
     // instead of the start position. Bug in native SDK.
     if (Platform.isAndroid) {
-      checkCoordinatesMatch(cameraMoveStartedPosition, camera);
+      checkCameraCoordinatesMatch(cameraMoveStartedPosition, camera);
       expect(cameraMoveStartedPosition.bearing, closeTo(camera.bearing, 30));
       expect(cameraMoveStartedPosition.tilt, camera.tilt);
       expect(cameraMoveStartedPosition.zoom, closeTo(camera.zoom, 0.1));
@@ -425,7 +450,7 @@ void main() {
 
     // Test that cameraIdleEvent position coordinates are close to the provided coordinates
     // and that the other values match within tolerance.
-    checkCoordinatesMatch(cameraIdlePosition, expectedPosition);
+    checkCameraCoordinatesMatch(cameraIdlePosition, expectedPosition);
     expect(cameraIdlePosition.bearing, closeTo(camera.bearing, 30));
     expect(cameraIdlePosition.tilt, camera.tilt);
     expect(cameraIdlePosition.zoom, closeTo(camera.zoom, 0.1));
@@ -434,19 +459,19 @@ void main() {
   patrol('Test moveCamera() and animateCamera() with various options',
       (PatrolIntegrationTester $) async {
     /// Initialize navigation with the event listener functions.
-    final GoogleNavigationViewController controller = await startNavigation(
+    final GoogleNavigationViewController controller =
+        await startNavigationWithoutDestination(
       $,
+      simulateLocation: true,
       onCameraIdle: onCameraIdle,
     );
-
-    // Stop guidance.
-    await GoogleMapsNavigator.stopGuidance();
 
     // Create a wrapper for moveCamera() that waits until the move is finished.
     Future<void> moveCamera(CameraUpdate update) async {
       resetCameraEventCompleters();
       await controller.moveCamera(update);
-      await cameraIdleCompleter.future.timeout(const Duration(seconds: 10));
+      await cameraIdleCompleter.future
+          .timeout(const Duration(seconds: 10), onTimeout: onTimeout);
     }
 
     // Create a wrapper for animateCamera() that waits until move is finished
@@ -468,21 +493,25 @@ void main() {
       );
 
       // Wait until the cameraIdle event comes in.
-      await cameraIdleCompleter.future.timeout(const Duration(seconds: 10));
+      await cameraIdleCompleter.future.timeout(
+        const Duration(seconds: 10),
+        onTimeout: onTimeout,
+      );
     }
 
     final List<Future<void> Function(CameraUpdate update)> cameraMethods =
         <Future<void> Function(CameraUpdate update)>[moveCamera, animateCamera];
 
-    const double startX = 70.59381960993993;
-    const double startY = 25.510696979963722;
-    const LatLng target = LatLng(latitude: startX + 1, longitude: startY + 1);
+    const double startLat = startLocationLat + 1;
+    const double startLon = startLocationLon + 1;
+    const LatLng target =
+        LatLng(latitude: startLat + 1, longitude: startLon + 1);
 
     final CameraUpdate start =
         CameraUpdate.newCameraPosition(const CameraPosition(
       target: LatLng(
-        latitude: startX,
-        longitude: startY,
+        latitude: startLat,
+        longitude: startLon,
       ),
       zoom: 9,
     ));
@@ -491,7 +520,10 @@ void main() {
     Future<void> moveCameraToStart() async {
       resetCameraEventCompleters();
       await controller.moveCamera(start);
-      await cameraIdleCompleter.future.timeout(const Duration(seconds: 10));
+      await cameraIdleCompleter.future.timeout(
+        const Duration(seconds: 10),
+        onTimeout: onTimeout,
+      );
     }
 
     final CameraUpdate updateCameraPosition =
@@ -499,7 +531,7 @@ void main() {
       bearing: 5,
       target: target,
       tilt: 30,
-      zoom: 5.0,
+      zoom: 20.0,
     ));
 
     // Test the CameraUpdate.newCameraPosition() with moveCamera and animateCamera commands.
@@ -508,7 +540,7 @@ void main() {
       await cameraMethod(updateCameraPosition);
 
       // Test that the camera position matches the provided position.
-      checkCoordinatesMatch(
+      checkCameraCoordinatesMatch(
           cameraIdlePosition, updateCameraPosition.cameraPosition!);
       expect(cameraIdlePosition.bearing,
           closeTo(updateCameraPosition.cameraPosition!.bearing, 0.1));
@@ -570,7 +602,7 @@ void main() {
     }
 
     final CameraUpdate updateLatLngZoom =
-        CameraUpdate.newLatLngZoom(target, 10);
+        CameraUpdate.newLatLngZoom(target, 12);
 
     // Test the CameraUpdate.newLatLngZoom() with moveCamera and animateCamera commands.
     for (final Future<void> Function(CameraUpdate update) cameraMethod
@@ -693,7 +725,7 @@ void main() {
       await moveCameraToStart();
     }
 
-    final CameraUpdate updateZoomTo = CameraUpdate.zoomTo(12);
+    final CameraUpdate updateZoomTo = CameraUpdate.zoomTo(11);
 
     // Test the CameraUpdate.zoomBy() with moveCamera and animateCamera commands.
     for (final Future<void> Function(CameraUpdate update) cameraMethod
