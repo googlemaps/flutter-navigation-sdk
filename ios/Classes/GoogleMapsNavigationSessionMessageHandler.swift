@@ -30,6 +30,7 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
                                     shouldOnlyShowDriverAwarenessDisclaimer: Bool,
                                     completion: @escaping (Result<Bool, Error>) -> Void) {
     if shouldOnlyShowDriverAwarenessDisclaimer {
+      // TODO: Disable driver awareness disclaimer on iOS due to the bug in the native side SDK
       completion(Result.failure(GoogleMapsNavigationSessionManagerError.notSupported))
       return
     }
@@ -215,11 +216,11 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
 
   /// Listeners
   func enableRoadSnappedLocationUpdates() throws {
-    try GoogleMapsNavigationSessionManager.shared.enableRoadSnappedLocationUpdates()
+    GoogleMapsNavigationSessionManager.shared.enableRoadSnappedLocationUpdates()
   }
 
   func disableRoadSnappedLocationUpdates() throws {
-    try GoogleMapsNavigationSessionManager.shared.disableRoadSnappedLocationUpdates()
+    GoogleMapsNavigationSessionManager.shared.disableRoadSnappedLocationUpdates()
   }
 
   func registerRemainingTimeOrDistanceChangedListener(remainingTimeThresholdSeconds: Int64,
