@@ -36,11 +36,18 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
   double _focusY = 0;
   bool _navigationRunning = false;
   late final GoogleNavigationViewController _navigationViewController;
+  late double _minZoomLevel;
+  late double _maxZoomLevel;
+  bool _showCameraUpdates = false;
+  String _latestCameraUpdate = '';
+  bool _isFollowingLocation = false;
 
   // ignore: use_setters_to_change_properties
   Future<void> _onViewCreated(GoogleNavigationViewController controller) async {
     _navigationViewController = controller;
     calculateFocusCenter();
+    _minZoomLevel = await _navigationViewController.getMinZoomPreference();
+    _maxZoomLevel = await _navigationViewController.getMaxZoomPreference();
     setState(() {});
   }
 
@@ -120,10 +127,65 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
       context,
       Stack(children: <Widget>[
         GoogleMapsNavigationView(
-          onViewCreated: _onViewCreated,
-        ),
-        getOverlayOptionsButton(context, onPressed: () => toggleOverlay())
+            initialNavigationUIEnabledPreference:
+                NavigationUIEnabledPreference.disabled,
+            onViewCreated: _onViewCreated,
+            onCameraMoveStarted: _onCameraMoveStarted,
+            onCameraMove: _onCameraMove,
+            onCameraIdle: _onCameraIdle,
+            onCameraStartedFollowingLocation: _onCameraStartedFollowingLocation,
+            onCameraStoppedFollowingLocation:
+                _onCameraStoppedFollowingLocation),
+        getOverlayOptionsButton(context, onPressed: () => toggleOverlay()),
+        if (_showCameraUpdates)
+          Container(
+            width: 180,
+            padding: const EdgeInsets.all(8),
+            decoration: const BoxDecoration(color: Colors.white),
+            child: Text(
+              _latestCameraUpdate,
+            ),
+          )
       ]));
+
+  void _onCameraMoveStarted(CameraPosition position, bool gesture) {
+    if (_showCameraUpdates) {
+      showMessage(gesture
+          ? 'Camera move started by gesture'
+          : 'Camera move started by action');
+    }
+  }
+
+  void _onCameraMove(CameraPosition position) {
+    final String cameraState =
+        _isFollowingLocation ? 'Camera following' : 'Camera moving';
+    final String positionStr =
+        'Position: ${position.target.latitude.toStringAsFixed(2)}, ${position.target.longitude.toStringAsFixed(2)}';
+    setState(() {
+      _latestCameraUpdate = '$cameraState\n$positionStr';
+    });
+  }
+
+  void _onCameraIdle(CameraPosition position) {
+    setState(() {
+      _latestCameraUpdate =
+          'Camera idle\nPosition: ${position.target.latitude.toStringAsFixed(2)}, ${position.target.longitude.toStringAsFixed(2)}';
+    });
+  }
+
+  // Android only.
+  void _onCameraStartedFollowingLocation(CameraPosition position) {
+    setState(() {
+      _isFollowingLocation = true;
+    });
+  }
+
+  // Android only.
+  void _onCameraStoppedFollowingLocation(CameraPosition position) {
+    setState(() {
+      _isFollowingLocation = false;
+    });
+  }
 
   void showMessage(String message) {
     hideMessage();
@@ -143,6 +205,36 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
     if (_displayAnimationFinished) {
       showMessage(success ? 'Animation finished' : 'Animation canceled');
     }
+  }
+
+  Future<void> _setMinZoomLevel(double newMinZoomLevel) async {
+    try {
+      await _navigationViewController.setMinZoomPreference(newMinZoomLevel);
+      setState(() {
+        _minZoomLevel = newMinZoomLevel;
+      });
+    } catch (e) {
+      showMessage(e.toString());
+    }
+  }
+
+  Future<void> _setMaxZoomLevel(double newMaxZoomLevel) async {
+    try {
+      await _navigationViewController.setMaxZoomPreference(newMaxZoomLevel);
+      setState(() {
+        _maxZoomLevel = newMaxZoomLevel;
+      });
+    } catch (e) {
+      showMessage(e.toString());
+    }
+  }
+
+  Future<void> _resetZoomLevels() async {
+    await _navigationViewController.resetMinMaxZoomPreference();
+    _minZoomLevel = await _navigationViewController.getMinZoomPreference();
+    _maxZoomLevel = await _navigationViewController.getMaxZoomPreference();
+
+    setState(() {});
   }
 
   @override
@@ -200,6 +292,15 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
               });
             },
           ),
+        SwitchListTile(
+          title: const Text('Show camera updates'),
+          value: _showCameraUpdates,
+          onChanged: (bool value) {
+            setState(() {
+              _showCameraUpdates = value;
+            });
+          },
+        ),
         const SizedBox(height: 24.0),
         Wrap(
           alignment: WrapAlignment.center,
@@ -486,6 +587,33 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
                 'Camera position\n\nTilt: ${position.tilt}°\nZoom: ${position.zoom}\nBearing: ${position.bearing}°\nTarget: ${position.target.latitude.toStringAsFixed(4)}, ${position.target.longitude.toStringAsFixed(4)}');
           },
           child: const Text('Get camera position'),
+        ),
+        const SizedBox(height: 24.0),
+        Text('Min zoom level: ${_minZoomLevel.round()}'),
+        Slider(
+            value: _minZoomLevel,
+            min: googleMapsMinZoomLevel,
+            max: googleMapsMaxZoomLevel,
+            divisions:
+                (googleMapsMaxZoomLevel - googleMapsMinZoomLevel).toInt(),
+            label: _minZoomLevel.round().toString(),
+            onChanged: (double value) {
+              _setMinZoomLevel(value);
+            }),
+        Text('Max zoom level: ${_maxZoomLevel.round()}'),
+        Slider(
+            value: _maxZoomLevel,
+            min: googleMapsMinZoomLevel,
+            max: googleMapsMaxZoomLevel,
+            divisions:
+                (googleMapsMaxZoomLevel - googleMapsMinZoomLevel).toInt(),
+            label: _maxZoomLevel.round().toString(),
+            onChanged: (double value) {
+              _setMaxZoomLevel(value);
+            }),
+        ElevatedButton(
+          onPressed: () => _resetZoomLevels(),
+          child: const Text('Reset zoom levels'),
         ),
       ],
     );

@@ -26,26 +26,10 @@ import 'package:flutter/material.dart';
 import 'shared.dart';
 
 void main() {
-  patrolTest('Test map types', (PatrolIntegrationTester $) async {
-    final Completer<GoogleNavigationViewController> viewControllerCompleter =
-        Completer<GoogleNavigationViewController>();
-
-    await checkLocationDialogAcceptance($);
-
-    /// Display navigation view.
-    final Key key = GlobalKey();
-    await pumpNavigationView(
-      $,
-      GoogleMapsNavigationView(
-        key: key,
-        onViewCreated: (GoogleNavigationViewController controller) {
-          viewControllerCompleter.complete(controller);
-        },
-      ),
-    );
-
+  patrol('Test map types', (PatrolIntegrationTester $) async {
+    /// Set up navigation.
     final GoogleNavigationViewController viewController =
-        await viewControllerCompleter.future;
+        await startNavigationWithoutDestination($);
 
     // Test default type.
     expect(await viewController.getMapType(), MapType.normal);
@@ -63,7 +47,7 @@ void main() {
     }
   });
 
-  patrolTest('Test platform view creation params',
+  patrol('Test platform view creation params',
       (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> controllerCompleter =
         Completer<GoogleNavigationViewController>();
@@ -108,23 +92,11 @@ void main() {
     }
   });
 
-  patrolTest('Test map UI settings', (PatrolIntegrationTester $) async {
-    final Completer<GoogleNavigationViewController> controllerCompleter =
-        Completer<GoogleNavigationViewController>();
-
-    final Key key = GlobalKey();
-    await pumpNavigationView(
-      $,
-      GoogleMapsNavigationView(
-        key: key,
-        onViewCreated: (GoogleNavigationViewController viewController) {
-          controllerCompleter.complete(viewController);
-        },
-      ),
-    );
-
+  patrol('Test map UI settings', (PatrolIntegrationTester $) async {
+    /// Set up navigation without initialization to test isMyLocationEnabled
+    /// is false before initialization is done.
     final GoogleNavigationViewController controller =
-        await controllerCompleter.future;
+        await startNavigationWithoutDestination($, initializeNavigation: false);
 
     /// Test the default values match with what has been documented in the
     /// API documentation in google_maps_navigation.dart file.
@@ -141,38 +113,38 @@ void main() {
 
     final List<bool> results = <bool>[true, false, true];
     for (final bool result in results) {
-      await controller.enableMyLocation(enabled: result);
+      await controller.setMyLocationEnabled(result);
       expect(await controller.isMyLocationEnabled(), result);
 
-      await controller.settings.enableMyLocationButton(enabled: result);
+      await controller.settings.setMyLocationButtonEnabled(result);
       expect(await controller.settings.isMyLocationButtonEnabled(), result);
 
-      await controller.settings.enableZoomGestures(enabled: result);
+      await controller.settings.setZoomGesturesEnabled(result);
       expect(await controller.settings.isZoomGesturesEnabled(), result);
 
-      await controller.settings.enableCompass(enabled: result);
+      await controller.settings.setCompassEnabled(result);
       expect(await controller.settings.isCompassEnabled(), result);
 
-      await controller.settings.enableRotateGestures(enabled: result);
+      await controller.settings.setRotateGesturesEnabled(result);
       expect(await controller.settings.isRotateGesturesEnabled(), result);
 
-      await controller.settings.enableScrollGestures(enabled: result);
+      await controller.settings.setScrollGesturesEnabled(result);
       expect(await controller.settings.isScrollGesturesEnabled(), result);
 
       await controller.settings
-          .enableScrollGesturesDuringRotateOrZoom(enabled: result);
+          .setScrollGesturesDuringRotateOrZoomEnabled(result);
       expect(
           await controller.settings.isScrollGesturesEnabledDuringRotateOrZoom(),
           result);
 
-      await controller.settings.enableTiltGestures(enabled: result);
+      await controller.settings.setTiltGesturesEnabled(result);
       expect(await controller.settings.isTiltGesturesEnabled(), result);
 
-      await controller.settings.enableTraffic(enabled: result);
+      await controller.settings.setTrafficEnabled(result);
       expect(await controller.settings.isTrafficEnabled(), result);
 
       if (Platform.isAndroid) {
-        await controller.settings.enableZoomControls(enabled: result);
+        await controller.settings.setZoomControlsEnabled(result);
         expect(await controller.settings.isZoomControlsEnabled(), result);
       }
     }
@@ -186,7 +158,7 @@ void main() {
         expect(e, const TypeMatcher<UnsupportedError>());
       }
       try {
-        await controller.settings.enableZoomControls(enabled: true);
+        await controller.settings.setZoomControlsEnabled(true);
         fail('Expected to get UnsupportedError');
       } on Object catch (e) {
         expect(e, const TypeMatcher<UnsupportedError>());
@@ -198,7 +170,7 @@ void main() {
         expect(e, const TypeMatcher<UnsupportedError>());
       }
       try {
-        await controller.settings.enableMapToolbar(enabled: true);
+        await controller.settings.setMapToolbarEnabled(true);
         fail('Expected to get UnsupportedError');
       } on Object catch (e) {
         expect(e, const TypeMatcher<UnsupportedError>());
@@ -206,7 +178,30 @@ void main() {
     }
   });
 
-  patrolTest('Test map style', (PatrolIntegrationTester $) async {
+  patrol('Test map style', (PatrolIntegrationTester $) async {
+    /// Set up navigation.
+    final GoogleNavigationViewController viewController =
+        await startNavigationWithoutDestination($);
+
+    // Test that valid json doens't throw exception.
+    await viewController.setMapStyle(
+        '[{"elementType":"geometry","stylers":[{"color":"#ffffff"}]}]');
+
+    // Test that null value doens't throw exception.
+    await viewController.setMapStyle(null);
+
+    // Test that invalid json throws exception.
+    try {
+      await viewController.setMapStyle('not_json');
+      fail('expected to get MapStyleException');
+    } on MapStyleException catch (e) {
+      expect(e, isNotNull);
+    }
+  });
+
+  patrol('Test min max zoom level', (PatrolIntegrationTester $) async {
+    /// For some reason the functionality works on Android example app, but it doesn't work
+    /// during the testing. Will skip Android testing for now.
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
         Completer<GoogleNavigationViewController>();
 
@@ -227,19 +222,50 @@ void main() {
     final GoogleNavigationViewController viewController =
         await viewControllerCompleter.future;
 
-    // Test that valid json doens't throw exception.
-    await viewController.setMapStyle(
-        '[{"elementType":"geometry","stylers":[{"color":"#ffffff"}]}]');
+    // Test that valid zoom values don't throw exception.
+    await viewController.setMinZoomPreference(10);
+    await viewController.setMaxZoomPreference(11);
 
-    // Test that null value doens't throw exception.
-    await viewController.setMapStyle(null);
+    // Test that min max values were changed.
+    double newMinZoomPreference = await viewController.getMinZoomPreference();
+    double newMaxZoomPreference = await viewController.getMaxZoomPreference();
 
-    // Test that invalid json throws exception.
+    expect(newMinZoomPreference, 10.0);
+    expect(newMaxZoomPreference, 11.0);
+
+    // Reset zoom limits.
+    await viewController.resetMinMaxZoomPreference();
+
+    // Test that min max values were reset.
+    final double resetedMinZoom = await viewController.getMinZoomPreference();
+    final double resetedMaxZoom = await viewController.getMaxZoomPreference();
+
+    expect(resetedMinZoom, isNot(10.0));
+    expect(resetedMaxZoom, isNot(11.0));
+
+    // Test that invalid value throws exception.
     try {
-      await viewController.setMapStyle('not_json');
-      fail('expected to get MapStyleException');
-    } on MapStyleException catch (e) {
+      await viewController.setMinZoomPreference(40);
+      fail('expected to get ZoomPreferenceException');
+    } on MinZoomRangeException catch (e) {
       expect(e, isNotNull);
     }
+    try {
+      await viewController.setMaxZoomPreference(1);
+      fail('expected to get ZoomPreferenceException');
+    } on MaxZoomRangeException catch (e) {
+      expect(e, isNotNull);
+    }
+
+    // Try to set out of bounds values.
+    await viewController.setMinZoomPreference(0);
+    await viewController.setMaxZoomPreference(50);
+
+    newMinZoomPreference = await viewController.getMinZoomPreference();
+    newMaxZoomPreference = await viewController.getMaxZoomPreference();
+
+    // Expect the same values. The actual zoom level will be limited by the map.
+    expect(newMinZoomPreference, 0.0);
+    expect(newMaxZoomPreference, 50.0);
   });
 }

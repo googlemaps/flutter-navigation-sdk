@@ -49,8 +49,8 @@ class GoogleMapsNavigationViewMessageHandler: NavigationViewApi {
     }
   }
 
-  func enableMyLocation(viewId: Int64, enabled: Bool) throws {
-    try getView(viewId).enableMyLocation(enabled: enabled)
+  func setMyLocationEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setMyLocationEnabled(enabled)
   }
 
   func getMapType(viewId: Int64) throws -> MapTypeDto {
@@ -66,44 +66,44 @@ class GoogleMapsNavigationViewMessageHandler: NavigationViewApi {
     try getView(viewId).setMapStyle(styleJson: styleJson)
   }
 
-  func enableMyLocationButton(viewId: Int64, enabled: Bool) throws {
-    try getView(viewId).enableMyLocationButton(enabled: enabled)
+  func setMyLocationButtonEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setMyLocationButtonEnabled(enabled)
   }
 
-  func enableZoomGestures(viewId: Int64, enabled: Bool) throws {
-    try getView(viewId).enableZoomGestures(enabled: enabled)
+  func setZoomGesturesEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setZoomGesturesEnabled(enabled)
   }
 
-  func enableZoomControls(viewId: Int64, enabled: Bool) throws {
-    try getView(viewId).enableZoomControls(enabled: enabled)
+  func setZoomControlsEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setZoomControlsEnabled(enabled)
   }
 
-  func enableCompass(viewId: Int64, enabled: Bool) throws {
-    try getView(viewId).enableCompass(enabled: enabled)
+  func setCompassEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setCompassEnabled(enabled)
   }
 
-  func enableRotateGestures(viewId: Int64, enabled: Bool) throws {
-    try getView(viewId).enableRotateGestures(enabled: enabled)
+  func setRotateGesturesEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setRotateGesturesEnabled(enabled)
   }
 
-  func enableScrollGestures(viewId: Int64, enabled: Bool) throws {
-    try getView(viewId).enableScrollGestures(enabled: enabled)
+  func setScrollGesturesEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setScrollGesturesEnabled(enabled)
   }
 
-  func enableScrollGesturesDuringRotateOrZoom(viewId: Int64, enabled: Bool) throws {
-    try getView(viewId).enableScrollGesturesDuringRotateOrZoom(enabled: enabled)
+  func setScrollGesturesDuringRotateOrZoomEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setScrollGesturesDuringRotateOrZoomEnabled(enabled)
   }
 
-  func enableTiltGestures(viewId: Int64, enabled: Bool) throws {
-    try getView(viewId).enableTiltGestures(enabled: enabled)
+  func setTiltGesturesEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setTiltGesturesEnabled(enabled)
   }
 
-  func enableMapToolbar(viewId: Int64, enabled: Bool) throws {
-    try getView(viewId).enableMapToolbar(enabled: enabled)
+  func setMapToolbarEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setMapToolbarEnabled(enabled)
   }
 
-  func enableTraffic(viewId: Int64, enabled: Bool) throws {
-    try getView(viewId).enableTraffic(enabled: enabled)
+  func setTrafficEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setTrafficEnabled(enabled)
   }
 
   func isMyLocationEnabled(viewId: Int64) throws -> Bool {
@@ -190,7 +190,7 @@ class GoogleMapsNavigationViewMessageHandler: NavigationViewApi {
   func animateCameraToLatLng(viewId: Int64, point: LatLngDto, duration: Int64?,
                              completion: @escaping (Result<Bool, Error>) -> Void) {
     do {
-      try getView(viewId).animateCameraToLatLng(point: Convert.convertLatLng(point: point))
+      try getView(viewId).animateCameraToLatLng(point: Convert.convertLatLngFromDto(point: point))
 
       // No callback supported, just return immediately
       completion(.success(true))
@@ -222,7 +222,7 @@ class GoogleMapsNavigationViewMessageHandler: NavigationViewApi {
                                  completion: @escaping (Result<Bool, Error>) -> Void) {
     do {
       try getView(viewId).animateCameraToLatLngZoom(
-        point: Convert.convertLatLng(point: point),
+        point: Convert.convertLatLngFromDto(point: point),
         zoom: zoom
       )
 
@@ -281,7 +281,7 @@ class GoogleMapsNavigationViewMessageHandler: NavigationViewApi {
   }
 
   func moveCameraToLatLng(viewId: Int64, point: LatLngDto) throws {
-    try getView(viewId).moveCameraToLatLng(point: Convert.convertLatLng(point: point))
+    try getView(viewId).moveCameraToLatLng(point: Convert.convertLatLngFromDto(point: point))
   }
 
   func moveCameraToLatLngBounds(viewId: Int64, bounds: LatLngBoundsDto,
@@ -294,7 +294,7 @@ class GoogleMapsNavigationViewMessageHandler: NavigationViewApi {
 
   func moveCameraToLatLngZoom(viewId: Int64, point: LatLngDto, zoom: Double) throws {
     try getView(viewId).moveCameraToLatLngZoom(
-      point: Convert.convertLatLng(point: point),
+      point: Convert.convertLatLngFromDto(point: point),
       zoom: zoom
     )
   }
@@ -322,36 +322,36 @@ class GoogleMapsNavigationViewMessageHandler: NavigationViewApi {
       )
   }
 
-  func enableNavigationHeader(viewId: Int64, enabled: Bool) throws {
-    try getView(viewId).enableNavigationHeader(enabled)
+  func setNavigationHeaderEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setNavigationHeaderEnabled(enabled)
   }
 
-  func enableNavigationFooter(viewId: Int64, enabled: Bool) throws {
-    try getView(viewId).enableNavigationFooter(enabled)
+  func setNavigationFooterEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setNavigationFooterEnabled(enabled)
   }
 
-  func enableRecenterButton(viewId: Int64, enabled: Bool) throws {
-    try getView(viewId).enableRecenterButton(enabled)
+  func setRecenterButtonEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setRecenterButtonEnabled(enabled)
   }
 
-  func enableSpeedLimitIcon(viewId: Int64, enabled: Bool) throws {
-    try getView(viewId).enableSpeedLimitIcon(enabled)
+  func setSpeedLimitIconEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setSpeedLimitIconEnabled(enabled)
   }
 
-  func enableSpeedometer(viewId: Int64, enabled: Bool) throws {
-    try getView(viewId).enableSpeedometer(enabled)
+  func setSpeedometerEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setSpeedometerEnabled(enabled)
   }
 
-  func enableIncidentCards(viewId: Int64, enabled: Bool) throws {
-    try getView(viewId).enableIncidentCards(enabled)
+  func setTrafficIncidentCardsEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setTrafficIncidentCardsEnabled(enabled)
   }
 
   func isNavigationTripProgressBarEnabled(viewId: Int64) throws -> Bool {
     try getView(viewId).isNavigationTripProgressBarEnabled()
   }
 
-  func enableNavigationTripProgressBar(viewId: Int64, enabled: Bool) throws {
-    try getView(viewId).enableNavigationTripProgressBar(enabled)
+  func setNavigationTripProgressBarEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setNavigationTripProgressBarEnabled(enabled)
   }
 
   func isNavigationHeaderEnabled(viewId: Int64) throws -> Bool {
@@ -374,16 +374,16 @@ class GoogleMapsNavigationViewMessageHandler: NavigationViewApi {
     try getView(viewId).isSpeedometerEnabled()
   }
 
-  func isIncidentCardsEnabled(viewId: Int64) throws -> Bool {
-    try getView(viewId).isIncidentCardsEnabled()
+  func isTrafficIncidentCardsEnabled(viewId: Int64) throws -> Bool {
+    try getView(viewId).isTrafficIncidentCardsEnabled()
   }
 
   func isNavigationUIEnabled(viewId: Int64) throws -> Bool {
     try getView(viewId).isNavigationUIEnabled()
   }
 
-  func enableNavigationUI(viewId: Int64, enabled: Bool) throws {
-    try getView(viewId).enableNavigationUI(enabled)
+  func setNavigationUIEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setNavigationUIEnabled(enabled)
   }
 
   func showRouteOverview(viewId: Int64) throws {
@@ -472,5 +472,37 @@ class GoogleMapsNavigationViewMessageHandler: NavigationViewApi {
 
   func clear(viewId: Int64) throws {
     try getView(viewId).clear()
+  }
+
+  func setConsumeMyLocationButtonClickEventsEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setConsumeMyLocationButtonClickEventsEnabled(enabled: enabled)
+  }
+
+  func isConsumeMyLocationButtonClickEventsEnabled(viewId: Int64) throws -> Bool {
+    try getView(viewId).isConsumeMyLocationButtonClickEventsEnabled()
+  }
+
+  func getMinZoomPreference(viewId: Int64) throws -> Double {
+    try Double(getView(viewId).getMinZoomPreference())
+  }
+
+  func getMaxZoomPreference(viewId: Int64) throws -> Double {
+    try Double(getView(viewId).getMaxZoomPreference())
+  }
+
+  func resetMinMaxZoomPreference(viewId: Int64) throws {
+    try getView(viewId).resetMinMaxZoomPreference()
+  }
+
+  func setMinZoomPreference(viewId: Int64, minZoomPreference: Double) throws {
+    try getView(viewId).setMinZoomPreference(minZoomPreference: Float(minZoomPreference))
+  }
+
+  func setMaxZoomPreference(viewId: Int64, maxZoomPreference: Double) throws {
+    try getView(viewId).setMaxZoomPreference(maxZoomPreference: Float(maxZoomPreference))
+  }
+
+  func registerOnCameraChangedListener(viewId: Int64) throws {
+    try getView(viewId).registerOnCameraChangedListener()
   }
 }

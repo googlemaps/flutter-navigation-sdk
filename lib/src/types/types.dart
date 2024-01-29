@@ -13,6 +13,7 @@
 // limitations under the License.
 
 export 'circles.dart';
+export 'images.dart';
 export 'lat_lng.dart';
 export 'lat_lng_bounds.dart';
 export 'markers.dart';
@@ -23,4 +24,3 @@ export 'polylines.dart';
 export 'simulation.dart';
 export 'stroke_patterns.dart';
 export 'view_initialization_options.dart';
-export 'zoom_constants.dart';

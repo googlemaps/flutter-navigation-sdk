@@ -19,6 +19,8 @@ import 'package:stream_transform/stream_transform.dart';
 
 import '../../google_maps_navigation.dart';
 import '../google_maps_navigation_platform_interface.dart';
+import 'convert/navigation_waypoint.dart';
+import 'method_channel.dart';
 
 /// @nodoc
 /// CommonNavigationSessionAPI handles navigation session API
@@ -48,12 +50,14 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
 
   /// Creates navigation session in the native platform and returns navigation session controller.
   @override
-  Future<void> createNavigationSession() async {
+  Future<void> createNavigationSession(
+      bool abnormalTerminationReportingEnabled) async {
     // Setup session API streams.
     ensureSessionAPISetUp();
     try {
       // Create native navigation session manager.
-      await _sessionApi.createNavigationSession();
+      await _sessionApi
+          .createNavigationSession(abnormalTerminationReportingEnabled);
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'notAuthorized':
@@ -78,7 +82,16 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
 
   @override
   Future<void> cleanup() async {
-    await _sessionApi.cleanup();
+    try {
+      return await _sessionApi.cleanup();
+    } on PlatformException catch (e) {
+      switch (e.code) {
+        case 'sessionNotInitialized':
+          throw const SessionNotInitializedException();
+        default:
+          rethrow;
+      }
+    }
   }
 
   /// Show terms and conditions dialog.
@@ -118,6 +131,20 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
       switch (e.code) {
         case 'termsResetNotAllowed':
           throw const ResetTermsAndConditionsException();
+        default:
+          rethrow;
+      }
+    }
+  }
+
+  @override
+  Future<String> getNavSDKVersion() {
+    try {
+      return _sessionApi.getNavSDKVersion();
+    } on PlatformException catch (e) {
+      switch (e.code) {
+        case 'sessionNotInitialized':
+          throw const SessionNotInitializedException();
         default:
           rethrow;
       }
@@ -173,13 +200,15 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   Future<NavigationRouteStatus> setDestinations(Destinations msg) async {
     try {
       final RouteStatusDto status =
-          await _sessionApi.setDestinations(navigationDestinationToDto(msg));
+          await _sessionApi.setDestinations(msg.toDto());
 
-      return navigationRouteStatusFromDto(status);
+      return status.toNavigationRouteStatus();
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'sessionNotInitialized':
           throw const SessionNotInitializedException();
+        case 'routeTokenMalformed':
+          throw const RouteTokenMalformedException();
         default:
           rethrow;
       }
@@ -210,7 +239,7 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
       if (waypointDto == null) {
         return null;
       }
-      return navigationWaypointFromDto(waypointDto);
+      return waypointDto.toNavigationWaypoint();
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'sessionNotInitialized':
@@ -227,7 +256,7 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
     try {
       final NavigationTimeAndDistanceDto timeAndDistance =
           await _sessionApi.getCurrentTimeAndDistance();
-      return navigationTimeAndDistanceFromDto(timeAndDistance);
+      return timeAndDistance.toNavigationTimeAndDistance();
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'sessionNotInitialized':
@@ -243,8 +272,7 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   Future<void> setAudioGuidance(
       NavigationAudioGuidanceSettings settings) async {
     try {
-      return await _sessionApi
-          .setAudioGuidance(navigationAudioGuidanceSettingsToDto(settings));
+      return await _sessionApi.setAudioGuidance(settings.toDto());
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'sessionNotInitialized':
@@ -259,7 +287,7 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   @override
   Future<void> setUserLocation(LatLng location) async {
     try {
-      return await _sessionApi.setUserLocation(latLngToDto(location));
+      return await _sessionApi.setUserLocation(location.toDto());
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'sessionNotInitialized':
@@ -325,10 +353,10 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
       final RouteStatusDto routeStatus =
           await _sessionApi.simulateLocationsAlongNewRoute(waypoints.map(
         (NavigationWaypoint e) {
-          return navigationWaypointToDto(e);
+          return e.toDto();
         },
       ).toList());
-      return navigationRouteStatusFromDto(routeStatus);
+      return routeStatus.toNavigationRouteStatus();
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'sessionNotInitialized':
@@ -351,13 +379,13 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
           .simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
         waypoints.map(
           (NavigationWaypoint e) {
-            return navigationWaypointToDto(e);
+            return e.toDto();
           },
         ).toList(),
-        routingOptionsToDto(routingOptions),
+        routingOptions.toDto(),
         simulationOptionsToDto(simulationOptions),
       );
-      return navigationRouteStatusFromDto(routeStatus);
+      return routeStatus.toNavigationRouteStatus();
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'sessionNotInitialized':
@@ -379,12 +407,12 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
           await _sessionApi.simulateLocationsAlongNewRouteWithRoutingOptions(
         waypoints.map(
           (NavigationWaypoint e) {
-            return navigationWaypointToDto(e);
+            return e.toDto();
           },
         ).toList(),
-        routingOptionsToDto(routingOptions),
+        routingOptions.toDto(),
       );
-      return navigationRouteStatusFromDto(routeStatus);
+      return routeStatus.toNavigationRouteStatus();
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'sessionNotInitialized':
@@ -479,7 +507,7 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
       return routeSegments
           .where((RouteSegmentDto? p) => p != null)
           .cast<RouteSegmentDto>()
-          .map((RouteSegmentDto s) => routeSegmentFromDto(s))
+          .map((RouteSegmentDto s) => s.toRouteSegment())
           .toList();
     } on PlatformException catch (e) {
       switch (e.code) {
@@ -519,9 +547,7 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
     try {
       final RouteSegmentDto? currentRouteSegment =
           await _sessionApi.getCurrentRouteSegment();
-      return currentRouteSegment != null
-          ? routeSegmentFromDto(currentRouteSegment)
-          : null;
+      return currentRouteSegment?.toRouteSegment();
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'sessionNotInitialized':
@@ -537,8 +563,7 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   Stream<SpeedingUpdatedEvent> getNavigationSpeedingEventStream() {
     return _sessionEventStreamController.stream
         .whereType<SpeedingUpdatedEventDto>()
-        .map((SpeedingUpdatedEventDto event) =>
-            speedingUpdatedEventFromDto(event));
+        .map((SpeedingUpdatedEventDto event) => event.toSpeedingUpdatedEvent());
   }
 
   /// Get event stream for road snapped location updates.
@@ -546,9 +571,7 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   Stream<RoadSnappedLocationUpdatedEvent>
       getNavigationRoadSnappedLocationEventStream() {
     return _sessionEventStreamController.stream
-        .whereType<RoadSnappedLocationUpdatedEventDto>()
-        .map((RoadSnappedLocationUpdatedEventDto event) =>
-            roadSnappedLocationUpdatedEventFromDto(event));
+        .whereType<RoadSnappedLocationUpdatedEvent>();
   }
 
   /// Get event stream for road snapped location updates.
@@ -556,51 +579,45 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   Stream<RoadSnappedRawLocationUpdatedEvent>
       getNavigationRoadSnappedRawLocationEventStream() {
     return _sessionEventStreamController.stream
-        .whereType<RoadSnappedRawLocationUpdatedEventDto>()
-        .map((RoadSnappedRawLocationUpdatedEventDto event) =>
-            roadSnappedRawLocationUpdatedEventFromDto(event));
-  }
-
-  /// Get event stream for navigation session events.
-  @override
-  Stream<NavigationSessionEvent> getNavigationSessionEventStream() {
-    return _sessionEventStreamController.stream
-        .whereType<NavigationSessionEventDto>()
-        .map((NavigationSessionEventDto event) =>
-            navigationSessionEventFromDto(event));
+        .whereType<RoadSnappedRawLocationUpdatedEvent>();
   }
 
   /// Get navigation on arrival event stream from the navigation session.
   @override
   Stream<OnArrivalEvent> getNavigationOnArrivalEventStream() {
-    return _sessionEventStreamController.stream
-        .whereType<OnArrivalEventDto>()
-        .map((OnArrivalEventDto event) => OnArrivalEvent(
-            waypoint: navigationWaypointFromDto(event.waypoint)));
+    return _sessionEventStreamController.stream.whereType<OnArrivalEvent>();
   }
 
   /// Get navigation on rerouting event stream from the navigation session.
   @override
   Stream<void> getNavigationOnReroutingEventStream() {
     return _sessionEventStreamController.stream
-        .whereType<ReroutingEventDto>()
-        .map((ReroutingEventDto event) => ());
+        .whereType<_ReroutingEvent>()
+        .map((_ReroutingEvent event) => ());
+  }
+
+  /// Get navigation on GPS availability update event stream from the navigation session.
+  @override
+  Stream<GpsAvailabilityUpdatedEvent>
+      getNavigationOnGpsAvailabilityUpdateEventStream() {
+    return _sessionEventStreamController.stream
+        .whereType<GpsAvailabilityUpdatedEvent>();
   }
 
   /// Get navigation traffic updated event stream from the navigation session.
   @override
   Stream<void> getNavigationTrafficUpdatedEventStream() {
     return _sessionEventStreamController.stream
-        .whereType<TrafficUpdatedEventDto>()
-        .map((TrafficUpdatedEventDto event) => ());
+        .whereType<_TrafficUpdatedEvent>()
+        .map((_TrafficUpdatedEvent event) => ());
   }
 
   /// Get navigation on route changed event stream from the navigation session.
   @override
   Stream<void> getNavigationOnRouteChangedEventStream() {
     return _sessionEventStreamController.stream
-        .whereType<RouteChangedEventDto>()
-        .map((RouteChangedEventDto event) => ());
+        .whereType<_RouteChangedEvent>()
+        .map((_RouteChangedEvent event) => ());
   }
 
   /// Get navigation remaining time or distance event stream from the navigation session.
@@ -608,9 +625,7 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   Stream<RemainingTimeOrDistanceChangedEvent>
       getNavigationRemainingTimeOrDistanceChangedEventStream() {
     return _sessionEventStreamController.stream
-        .whereType<RemainingTimeOrDistanceChangedEventDto>()
-        .map((RemainingTimeOrDistanceChangedEventDto event) =>
-            remainingTimeOrDistanceChangedEventFromDto(event));
+        .whereType<RemainingTimeOrDistanceChangedEvent>();
   }
 
   @override
@@ -632,49 +647,63 @@ class NavigationSessionEventApiImpl implements NavigationSessionEventApi {
   final StreamController<Object> sessionEventStreamController;
 
   @override
-  void onNavigationSessionEvent(NavigationSessionEventDto event) {
-    sessionEventStreamController.add(event);
-  }
-
-  @override
   void onSpeedingUpdated(SpeedingUpdatedEventDto event) {
     sessionEventStreamController.add(event);
   }
 
   @override
-  void onRoadSnappedLocationUpdated(RoadSnappedLocationUpdatedEventDto event) {
-    sessionEventStreamController.add(event);
+  void onArrival(NavigationWaypointDto waypoint) {
+    sessionEventStreamController
+        .add(OnArrivalEvent(waypoint: waypoint.toNavigationWaypoint()));
   }
 
   @override
-  void onArrival(OnArrivalEventDto event) {
-    sessionEventStreamController.add(event);
+  void onRerouting() {
+    sessionEventStreamController.add(_ReroutingEvent());
   }
 
   @override
-  void onRouteChanged(RouteChangedEventDto event) {
-    sessionEventStreamController.add(event);
+  void onGpsAvailabilityUpdate(bool available) {
+    sessionEventStreamController
+        .add(GpsAvailabilityUpdatedEvent(available: available));
   }
 
   @override
-  void onRerouting(ReroutingEventDto event) {
-    sessionEventStreamController.add(event);
+  void onRouteChanged() {
+    sessionEventStreamController.add(_RouteChangedEvent());
   }
 
   @override
-  void onTrafficUpdated(TrafficUpdatedEventDto event) {
-    sessionEventStreamController.add(event);
+  void onTrafficUpdated() {
+    sessionEventStreamController.add(_TrafficUpdatedEvent());
   }
 
   @override
-  void onRoadSnappedRawLocationUpdated(
-      RoadSnappedRawLocationUpdatedEventDto event) {
-    sessionEventStreamController.add(event);
+  void onRoadSnappedLocationUpdated(LatLngDto location) {
+    sessionEventStreamController
+        .add(RoadSnappedLocationUpdatedEvent(location: location.toLatLng()));
+  }
+
+  // Android only.
+  @override
+  void onRoadSnappedRawLocationUpdated(LatLngDto location) {
+    sessionEventStreamController
+        .add(RoadSnappedRawLocationUpdatedEvent(location: location.toLatLng()));
   }
 
   @override
   void onRemainingTimeOrDistanceChanged(
-      RemainingTimeOrDistanceChangedEventDto event) {
-    sessionEventStreamController.add(event);
+      double remainingTime, double remainingDistance) {
+    sessionEventStreamController.add(RemainingTimeOrDistanceChangedEvent(
+        remainingTime: remainingTime, remainingDistance: remainingDistance));
   }
 }
+
+/// Event wrapper for a route update events.
+class _RouteChangedEvent {}
+
+/// Event wrapper for a rerouting events.
+class _ReroutingEvent {}
+
+/// Event wrapper for a traffic updated events.
+class _TrafficUpdatedEvent {}

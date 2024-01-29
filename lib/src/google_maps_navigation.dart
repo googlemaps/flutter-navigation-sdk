@@ -20,16 +20,10 @@ import 'package:flutter/material.dart';
 
 import '../google_maps_navigation.dart';
 import 'google_maps_navigation_platform_interface.dart';
-import 'types/util/marker_conversion.dart';
 
-/// Created callback.
+/// The view creation callback.
 typedef OnCreatedCallback = void Function(
   GoogleNavigationViewController controller,
-);
-
-/// Navigation session events callback.
-typedef OnNavigationSessionEventCallback = void Function(
-  NavigationSessionEvent onNavigationSessionEvent,
 );
 
 /// Called during speeding event.
@@ -48,11 +42,20 @@ typedef OnRoadSnappedLocationUpdatedEventCallback = void Function(
   RoadSnappedLocationUpdatedEvent onRoadSnappedLocationUpdatedEvent,
 );
 
+/// Called during road snapped raw location event (Android only).
+typedef OnRoadSnappedRawLocationUpdatedEventCallback = void Function(
+  RoadSnappedRawLocationUpdatedEvent onRoadSnappedRawLocationUpdatedEvent,
+);
+
 /// Called during arriving to destination event.
 typedef OnArrivalEventCallback = void Function(OnArrivalEvent onArrivalEvent);
 
 /// Called during rerouting event. (Android only)
 typedef OnReroutingEventCallback = void Function();
+
+/// Called during GPS availability event. (Android only).
+typedef OnGpsAvailabilityEventCallback = void Function(
+    GpsAvailabilityUpdatedEvent gpsAvailabilityUpdatedEvent);
 
 /// Called during traffic updated event. (Android only)
 typedef OnTrafficUpdatedEventCallback = void Function();
@@ -61,7 +64,7 @@ typedef OnTrafficUpdatedEventCallback = void Function();
 typedef OnRouteChangedEventCallback = void Function();
 
 /// Called during recenter button click event.
-typedef OnRecenterButtonClickedEventCallback = void Function(
+typedef OnRecenterButtonClicked = void Function(
     NavigationViewRecenterButtonClickedEvent);
 
 /// Called during remaining time or distance changed event.
@@ -104,6 +107,59 @@ typedef OnPolylineClicked = void Function(String polylineId);
 /// Called during circle clicked event.
 typedef OnCircleClicked = void Function(String circleId);
 
+/// Called when the [GoogleNavigationViewController.isNavigationUIEnabled] status changes.
+typedef OnNavigationUIEnabledChanged = void Function(bool navigationUIEnabled);
+
+/// Called during my location clicked event.
+typedef OnMyLocationClicked = void Function(MyLocationClickedEvent);
+
+/// Called during my location button clicked event.
+typedef OnMyLocationButtonClicked = void Function(MyLocationButtonClickedEvent);
+
+/// Called when the camera starts moving after it has been idle or when the
+/// reason for the camera motion has changed.
+///
+/// [gesture] is true when the camera motion has been initiated in response
+/// to the user gestures on the map. For example: pan, tilt, pinch to zoom, or
+/// rotate.
+/// [gesture] is false when the camera motion has been initiated in response
+/// to user actions. For example: zoom buttons, my location button, or marker
+/// clicks.
+/// [position] is the camera position where the motion started.
+typedef OnCameraMoveStarted = void Function(
+    CameraPosition position, bool gesture);
+
+/// Called repeatedly as the camera continues to move after the
+/// [OnCameraMoveStarted] call. The method may be called as often as once every
+/// frame.
+///
+/// [position] is the current camera position.
+typedef OnCameraMove = void Function(CameraPosition position);
+
+/// Called when the camera movement has ended, there are no pending animations
+/// and the user has stopped interacting with the map.
+///
+/// [position] is the camera position where the motion ended.
+typedef OnCameraIdle = void Function(CameraPosition position);
+
+/// Called when the camera starts following current location, typically will
+/// get called in response to [GoogleNavigationViewController.followMyLocation].
+/// Only applicable on Android.
+///
+/// [position] is the current camera position.
+typedef OnCameraStartedFollowingLocation = void Function(
+    CameraPosition position);
+
+/// Called when the camera stops following current location. A camera already
+/// following location will exit the follow mode if the camera is moved via
+/// user gesture or an API call, e.g. [GoogleNavigationViewController.moveCamera]
+/// or [GoogleNavigationViewController.animateCamera].
+/// Only applicable on Android.
+///
+/// [position] is the current camera position.
+typedef OnCameraStoppedFollowingLocation = void Function(
+    CameraPosition position);
+
 /// The main map view widget for Google Maps Navigation.
 /// {@category Navigation View}
 class GoogleMapsNavigationView extends StatefulWidget {
@@ -124,39 +180,47 @@ class GoogleMapsNavigationView extends StatefulWidget {
   ///   // Other initial map settings...
   /// )
   /// ```
-  const GoogleMapsNavigationView({
-    super.key,
-    required this.onViewCreated,
-    this.initialCameraPosition = const CameraPosition(),
-    this.initialMapType = MapType.normal,
-    this.initialCompassEnabled = true,
-    this.initialRotateGesturesEnabled = true,
-    this.initialScrollGesturesEnabled = true,
-    this.initialTiltGesturesEnabled = true,
-    this.initialZoomGesturesEnabled = true,
-    this.initialScrollGesturesEnabledDuringRotateOrZoom = true,
-    this.initialMapToolbarEnabled = true,
-    this.initialMinZoomPreference,
-    this.initialMaxZoomPreference,
-    this.initialZoomControlsEnabled = true,
-    this.initialCameraTargetBounds,
-    this.initialNavigationUiEnabled = false,
-    this.layoutDirection,
-    this.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
-    this.onRecenterButtonClicked,
-    this.onMarkerClicked,
-    this.onMarkerDrag,
-    this.onMarkerDragStart,
-    this.onMarkerDragEnd,
-    this.onMarkerInfoWindowClicked,
-    this.onMarkerInfoWindowClosed,
-    this.onMarkerInfoWindowLongClicked,
-    this.onMapClicked,
-    this.onMapLongClicked,
-    this.onPolygonClicked,
-    this.onPolylineClicked,
-    this.onCircleClicked,
-  });
+  const GoogleMapsNavigationView(
+      {super.key,
+      required this.onViewCreated,
+      this.initialCameraPosition = const CameraPosition(),
+      this.initialMapType = MapType.normal,
+      this.initialCompassEnabled = true,
+      this.initialRotateGesturesEnabled = true,
+      this.initialScrollGesturesEnabled = true,
+      this.initialTiltGesturesEnabled = true,
+      this.initialZoomGesturesEnabled = true,
+      this.initialScrollGesturesEnabledDuringRotateOrZoom = true,
+      this.initialMapToolbarEnabled = true,
+      this.initialMinZoomPreference,
+      this.initialMaxZoomPreference,
+      this.initialZoomControlsEnabled = true,
+      this.initialCameraTargetBounds,
+      this.initialNavigationUIEnabledPreference =
+          NavigationUIEnabledPreference.automatic,
+      this.layoutDirection,
+      this.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
+      this.onRecenterButtonClicked,
+      this.onMarkerClicked,
+      this.onMarkerDrag,
+      this.onMarkerDragStart,
+      this.onMarkerDragEnd,
+      this.onMarkerInfoWindowClicked,
+      this.onMarkerInfoWindowClosed,
+      this.onMarkerInfoWindowLongClicked,
+      this.onMapClicked,
+      this.onMapLongClicked,
+      this.onPolygonClicked,
+      this.onPolylineClicked,
+      this.onCircleClicked,
+      this.onNavigationUIEnabledChanged,
+      this.onMyLocationClicked,
+      this.onMyLocationButtonClicked,
+      this.onCameraMoveStarted,
+      this.onCameraMove,
+      this.onCameraIdle,
+      this.onCameraStartedFollowingLocation,
+      this.onCameraStoppedFollowingLocation});
 
   /// On view created callback.
   final OnCreatedCallback onViewCreated;
@@ -204,7 +268,7 @@ class GoogleMapsNavigationView extends StatefulWidget {
   /// By default, the zoom gestures enabled.
   final bool initialZoomGesturesEnabled;
 
-  /// /// Specifies whether scroll gestures during rotate or zoom should be enabled.
+  /// Specifies whether scroll gestures during rotate or zoom should be enabled.
   ///
   /// If enabled, users can swipe to pan the camera. If disabled, swiping has no effect.
   /// This setting doesn't restrict programmatic movement and animation of the camera.
@@ -212,12 +276,12 @@ class GoogleMapsNavigationView extends StatefulWidget {
   /// By default, the zoom gestures enabled.
   final bool initialScrollGesturesEnabledDuringRotateOrZoom;
 
-  /// Specifies whether the mapToolbar should be enabled. Only applicable on Android.
+  /// Specifies whether the map toolbar should be enabled. Only applicable on Android.
   ///
-  /// If enabled, and the Map Toolbar can be shown in the current context,
+  /// If enabled, and the map toolbar can be shown in the current context,
   /// users will see a bar with various context-dependent actions.
   ///
-  /// By default, the Map Toolbar is enabled.
+  /// By default, the map toolbar is enabled.
   final bool initialMapToolbarEnabled;
 
   /// Specifies a preferred lower bound for camera zoom.
@@ -243,8 +307,18 @@ class GoogleMapsNavigationView extends StatefulWidget {
 
   /// Determines the initial visibility of the navigation UI on map initialization.
   ///
-  /// False by default.
-  final bool initialNavigationUiEnabled;
+  /// By default set to [NavigationUIEnabledPreference.automatic],
+  /// meaning the navigation UI gets enabled if the navigation
+  /// session has already been successfully started.
+  ///
+  /// If set to [NavigationUIEnabledPreference.disabled] the navigation view
+  /// initially displays a classic map view.
+  ///
+  /// Note on Android enabling the navigation UI for the view requires that the
+  /// navigation session has already been successfully started with
+  /// [GoogleMapsNavigator.initializeNavigationSession]. On iOS accepting
+  /// the terms and conditions is enough.
+  final NavigationUIEnabledPreference initialNavigationUIEnabledPreference;
 
   /// Which gestures should be forwarded to the PlatformView.
   ///
@@ -255,7 +329,7 @@ class GoogleMapsNavigationView extends StatefulWidget {
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
 
   /// On recenter button clicked event callback.
-  final OnRecenterButtonClickedEventCallback? onRecenterButtonClicked;
+  final OnRecenterButtonClicked? onRecenterButtonClicked;
 
   /// On marker clicked callback.
   final OnMarkerClicked? onMarkerClicked;
@@ -293,12 +367,37 @@ class GoogleMapsNavigationView extends StatefulWidget {
   /// On circle clicked callback.
   final OnCircleClicked? onCircleClicked;
 
+  /// On navigation UI enabled changed callback.
+  final OnNavigationUIEnabledChanged? onNavigationUIEnabledChanged;
+
+  /// On my location clicked callback.
+  final OnMyLocationClicked? onMyLocationClicked;
+
+  /// On my location button clicked callback.
+  final OnMyLocationButtonClicked? onMyLocationButtonClicked;
+
+  /// On camera move started callback.
+  final OnCameraMoveStarted? onCameraMoveStarted;
+
+  /// On camera move callback.
+  final OnCameraMove? onCameraMove;
+
+  /// On camera idle callback.
+  final OnCameraIdle? onCameraIdle;
+
+  /// On camera started following location callback (Android-only).
+  final OnCameraStartedFollowingLocation? onCameraStartedFollowingLocation;
+
+  /// On camera stopped following location callback (Android-only).
+  final OnCameraStoppedFollowingLocation? onCameraStoppedFollowingLocation;
+
   /// Creates a [State] for this [GoogleMapsNavigationView].
   @override
   State createState() => GoogleMapsNavigationViewState();
 }
 
 /// Google Maps Navigation.
+/// {@category Navigation View}
 class GoogleMapsNavigationViewState extends State<GoogleMapsNavigationView> {
   @override
   Widget build(BuildContext context) {
@@ -325,7 +424,8 @@ class GoogleMapsNavigationViewState extends State<GoogleMapsNavigationView> {
               cameraTargetBounds: widget.initialCameraTargetBounds,
             ),
             navigationViewOptions: NavigationViewOptions(
-                navigationUIEnabled: widget.initialNavigationUiEnabled)),
+                navigationUIEnabledPreference:
+                    widget.initialNavigationUIEnabledPreference)),
         onMapReady: _onPlatformViewCreated);
   }
 
@@ -340,7 +440,7 @@ class GoogleMapsNavigationViewState extends State<GoogleMapsNavigationView> {
 /// Settings for the user interface of the map.
 /// {@category Navigation View}
 class NavigationViewUISettings {
-  /// NavigationViewUISettings constructor.
+  /// [NavigationViewUISettings] constructor.
   NavigationViewUISettings(this._viewId);
 
   final int _viewId;
@@ -349,17 +449,31 @@ class NavigationViewUISettings {
   ///
   /// By default, the my location button is visible
   /// when the my location indicator is shown.
-  Future<void> enableMyLocationButton({required bool enabled}) {
+  Future<void> setMyLocationButtonEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableMyLocationButton(viewId: _viewId, enabled: enabled);
+        .setMyLocationButtonEnabled(viewId: _viewId, enabled: enabled);
+  }
+
+  /// Sets whether to consume my location button click events.
+  ///
+  /// If [enabled] is set to true, the default behaviour does not occur.
+  /// If [enabled] is set to false, the default behaviour occurs. The default
+  /// behavior is for the camera move such that it is centered on the user location.
+  ///
+  /// Note: By default, the button click events are not consumed, and the map
+  /// follows its native default behavior. This method can be used to override this behavior.
+  Future<void> setConsumeMyLocationButtonClickEventsEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance
+        .setConsumeMyLocationButtonClickEventsEnabled(
+            viewId: _viewId, enabled: enabled);
   }
 
   /// Sets the preference for whether the user is allowed to zoom the map using a gesture.
   ///
   /// Initial value can be set with [GoogleMapsNavigationView.initialZoomGesturesEnabled].
-  Future<void> enableZoomGestures({required bool enabled}) {
+  Future<void> setZoomGesturesEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableZoomGestures(viewId: _viewId, enabled: enabled);
+        .setZoomGesturesEnabled(viewId: _viewId, enabled: enabled);
   }
 
   /// Enables or disables the zoom controls.
@@ -367,9 +481,9 @@ class NavigationViewUISettings {
   /// Initial value can be set with [GoogleMapsNavigationView.initialZoomControlsEnabled].
   ///
   /// The zoom controls are only available on Android. Throws [UnsupportedError] on iOS.
-  Future<void> enableZoomControls({required bool enabled}) {
+  Future<void> setZoomControlsEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableZoomControls(viewId: _viewId, enabled: enabled);
+        .setZoomControlsEnabled(viewId: _viewId, enabled: enabled);
   }
 
   /// Enables or disables the compass.
@@ -378,51 +492,51 @@ class NavigationViewUISettings {
   /// from the default position, where the north points up.
   ///
   /// Initial value can be set with [GoogleMapsNavigationView.initialCompassEnabled].
-  Future<void> enableCompass({required bool enabled}) {
+  Future<void> setCompassEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableCompass(viewId: _viewId, enabled: enabled);
+        .setCompassEnabled(viewId: _viewId, enabled: enabled);
   }
 
   /// Sets the preference for whether the user is allowed to rotate the map using a gesture.
   ///
   /// Initial value can be set with [GoogleMapsNavigationView.initialRotateGesturesEnabled].
-  Future<void> enableRotateGestures({required bool enabled}) {
+  Future<void> setRotateGesturesEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableRotateGestures(viewId: _viewId, enabled: enabled);
+        .setRotateGesturesEnabled(viewId: _viewId, enabled: enabled);
   }
 
   /// Sets the preference for whether the user is allowed to scroll the map using a gesture.
   ///
   /// Initial value can be set with [GoogleMapsNavigationView.initialScrollGesturesEnabled].
-  Future<void> enableScrollGestures({required bool enabled}) {
+  Future<void> setScrollGesturesEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableScrollGestures(viewId: _viewId, enabled: enabled);
+        .setScrollGesturesEnabled(viewId: _viewId, enabled: enabled);
   }
 
   /// Sets the preference for whether the user is allowed to scroll the map
   /// at the same time when zooming or rotating the map with a gesture.
   ///
   /// Initial value can be set with [GoogleMapsNavigationView.initialScrollGesturesEnabledDuringRotateOrZoom].
-  Future<void> enableScrollGesturesDuringRotateOrZoom({required bool enabled}) {
+  Future<void> setScrollGesturesDuringRotateOrZoomEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableScrollGesturesDuringRotateOrZoom(
+        .setScrollGesturesDuringRotateOrZoomEnabled(
             viewId: _viewId, enabled: enabled);
   }
 
   /// Sets the preference for whether the user is allowed to tilt the map with a gesture.
   ///
   /// Initial value can be set with [GoogleMapsNavigationView.initialTiltGesturesEnabled].
-  Future<void> enableTiltGestures({required bool enabled}) {
+  Future<void> setTiltGesturesEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableTiltGestures(viewId: _viewId, enabled: enabled);
+        .setTiltGesturesEnabled(viewId: _viewId, enabled: enabled);
   }
 
   /// Turns the traffic layer on or off.
   ///
   /// By default, the traffic layer is off.
-  Future<void> enableTraffic({required bool enabled}) {
+  Future<void> setTrafficEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableTraffic(viewId: _viewId, enabled: enabled);
+        .setTrafficEnabled(viewId: _viewId, enabled: enabled);
   }
 
   /// Sets the preference for whether the map toolbar should be enabled or disabled.
@@ -430,24 +544,30 @@ class NavigationViewUISettings {
   /// Initial value can be set with [GoogleMapsNavigationView.initialMapToolbarEnabled].
   ///
   /// The map toolbar is only available on Android. Throws [UnsupportedError] on iOS.
-  Future<void> enableMapToolbar({required bool enabled}) {
+  Future<void> setMapToolbarEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableMapToolbar(viewId: _viewId, enabled: enabled);
+        .setMapToolbarEnabled(viewId: _viewId, enabled: enabled);
   }
 
-  /// Gets whether the my location button is enabled or disabled.
+  /// Checks if the my location button is enabled.
   Future<bool> isMyLocationButtonEnabled() async {
     return GoogleMapsNavigationPlatform.instance
         .isMyLocationButtonEnabled(viewId: _viewId);
   }
 
-  /// Gets whether zoom gestures are enabled/disabled.
+  /// Checks if the my location button consumes click events.
+  Future<bool> isConsumeMyLocationButtonClickEventsEnabled() async {
+    return GoogleMapsNavigationPlatform.instance
+        .isConsumeMyLocationButtonClickEventsEnabled(viewId: _viewId);
+  }
+
+  /// Checks if the zoom gestures are enabled.
   Future<bool> isZoomGesturesEnabled() async {
     return GoogleMapsNavigationPlatform.instance
         .isZoomGesturesEnabled(viewId: _viewId);
   }
 
-  /// Gets whether zoom controls are enabled/disabled.
+  /// Checks if the zoom controls are enabled.
   ///
   /// The zoom controls are only available on Android. Throws [UnsupportedError] on iOS.
   Future<bool> isZoomControlsEnabled() async {
@@ -455,37 +575,38 @@ class NavigationViewUISettings {
         .isZoomControlsEnabled(viewId: _viewId);
   }
 
-  /// Gets whether the compass is enabled/disabled.
+  /// Checks if the compass is enabled.
   Future<bool> isCompassEnabled() async {
     return GoogleMapsNavigationPlatform.instance
         .isCompassEnabled(viewId: _viewId);
   }
 
-  /// Gets whether rotate gestures are enabled/disabled.
+  /// Checks if the rotate gestures are enabled.
   Future<bool> isRotateGesturesEnabled() async {
     return GoogleMapsNavigationPlatform.instance
         .isRotateGesturesEnabled(viewId: _viewId);
   }
 
-  /// Gets whether scroll gestures are enabled/disabled.
+  /// Checks if the scroll gestures are enabled.
   Future<bool> isScrollGesturesEnabled() async {
     return GoogleMapsNavigationPlatform.instance
         .isScrollGesturesEnabled(viewId: _viewId);
   }
 
-  /// Gets whether scroll gestures are enabled/disabled during rotation and zoom gestures.
+  /// Checks if the scroll gestures are enabled during the rotation and
+  /// zoom gestures.
   Future<bool> isScrollGesturesEnabledDuringRotateOrZoom() async {
     return GoogleMapsNavigationPlatform.instance
         .isScrollGesturesEnabledDuringRotateOrZoom(viewId: _viewId);
   }
 
-  /// Gets whether tilt gestures are enabled/disabled.
+  /// Checks if the scroll gestures are enabled.
   Future<bool> isTiltGesturesEnabled() async {
     return GoogleMapsNavigationPlatform.instance
         .isTiltGesturesEnabled(viewId: _viewId);
   }
 
-  /// Gets whether the Map Toolbar is enabled/disabled.
+  /// Checks if the map toolbar is enabled.
   ///
   /// The map toolbar is only available on Android. Throws [UnsupportedError] on iOS.
   Future<bool> isMapToolbarEnabled() async {
@@ -493,7 +614,7 @@ class NavigationViewUISettings {
         .isMapToolbarEnabled(viewId: _viewId);
   }
 
-  /// Checks whether the map is drawing traffic data.
+  /// Checks if the map is displaying traffic data.
   Future<bool> isTrafficEnabled() async {
     return GoogleMapsNavigationPlatform.instance
         .isTrafficEnabled(viewId: _viewId);
@@ -506,7 +627,7 @@ class GoogleNavigationViewController {
   /// Basic constructor.
   ///
   /// Don't create this directly, but access through
-  /// GoogleMapsNavigation.onViewCreated() callback.
+  /// [GoogleMapsNavigationView.onViewCreated] callback.
   GoogleNavigationViewController(this._viewId, [this._viewState])
       : settings = NavigationViewUISettings(_viewId) {
     _initListeners();
@@ -519,24 +640,28 @@ class GoogleNavigationViewController {
   /// Settings for the user interface of the map.
   final NavigationViewUISettings settings;
 
-  /// Getter for viewId.
+  /// Getter for view ID.
   int getViewId() {
     return _viewId;
   }
 
   /// Initializes the event channel listeners for the navigation view instance.
   void _initListeners() {
-    setOnMapClickedListeners();
-    setOnRecenterButtonClickedListener();
-    setOnMarkerClickedListeners();
-    setOnMarkerDragListeners();
-    setOnPolygonClickedListener();
-    setOnPolylineClickedListener();
-    setOnCircleClickedListener();
+    _setOnMapClickedListeners();
+    _setOnRecenterButtonClickedListener();
+    _setOnMarkerClickedListeners();
+    _setOnMarkerDragListeners();
+    _setOnPolygonClickedListener();
+    _setOnPolylineClickedListener();
+    _setOnCircleClickedListener();
+    _setOnNavigationUIEnabledChangedListener();
+    _setOnMyLocationClickedListener();
+    _setOnMyLocationButtonClickedListener();
+    _setOnCameraChangedListener();
   }
 
   /// Sets the event channel listener for the map click event listeners.
-  void setOnMapClickedListeners() {
+  void _setOnMapClickedListeners() {
     if (_viewState != null) {
       if (_viewState?.widget.onMapClicked != null) {
         GoogleMapsNavigationPlatform.instance
@@ -556,7 +681,7 @@ class GoogleNavigationViewController {
   }
 
   /// Sets the event channel listener for the on recenter button clicked event.
-  void setOnRecenterButtonClickedListener() {
+  void _setOnRecenterButtonClickedListener() {
     if (_viewState != null &&
         _viewState?.widget.onRecenterButtonClicked != null) {
       GoogleMapsNavigationPlatform.instance
@@ -566,67 +691,126 @@ class GoogleNavigationViewController {
   }
 
   /// Sets the event channel listener for the marker clicked events.
-  void setOnMarkerClickedListeners() {
+  void _setOnMarkerClickedListeners() {
     GoogleMapsNavigationPlatform.instance
         .getMarkerEventStream(viewId: _viewId)
-        .listen((MarkerEventDto event) {
+        .listen((MarkerEvent event) {
       switch (event.eventType) {
-        case MarkerEventTypeDto.clicked:
+        case MarkerEventType.clicked:
           _viewState?.widget.onMarkerClicked?.call(event.markerId);
-        case MarkerEventTypeDto.infoWindowClicked:
+        case MarkerEventType.infoWindowClicked:
           _viewState?.widget.onMarkerInfoWindowClicked?.call(event.markerId);
-        case MarkerEventTypeDto.infoWindowClosed:
+        case MarkerEventType.infoWindowClosed:
           _viewState?.widget.onMarkerInfoWindowClosed?.call(event.markerId);
-        case MarkerEventTypeDto.infoWindowLongClicked:
+        case MarkerEventType.infoWindowLongClicked:
           _viewState?.widget.onMarkerInfoWindowLongClicked
               ?.call(event.markerId);
       }
     });
   }
 
+  /// Sets the event channel listener for the on my location clicked event.
+  void _setOnMyLocationClickedListener() {
+    if (_viewState != null && _viewState?.widget.onMyLocationClicked != null) {
+      GoogleMapsNavigationPlatform.instance
+          .getMyLocationClickedEventStream(viewId: _viewId)
+          .listen(_viewState?.widget.onMyLocationClicked);
+    }
+  }
+
+  /// Sets the event channel listener for the on my location button clicked event.
+  void _setOnMyLocationButtonClickedListener() {
+    if (_viewState != null &&
+        _viewState?.widget.onMyLocationButtonClicked != null) {
+      GoogleMapsNavigationPlatform.instance
+          .getMyLocationButtonClickedEventStream(viewId: _viewId)
+          .listen(_viewState?.widget.onMyLocationButtonClicked);
+    }
+  }
+
+  /// Sets the event channel listener for camera changed events.
+  void _setOnCameraChangedListener() {
+    // Register listeners if any of the callbacks are not null.
+    if (_viewState?.widget.onCameraMoveStarted != null ||
+        _viewState?.widget.onCameraMove != null ||
+        _viewState?.widget.onCameraIdle != null) {
+      GoogleMapsNavigationPlatform.instance
+          .registerOnCameraChangedListener(viewId: _viewId);
+    }
+    GoogleMapsNavigationPlatform.instance
+        .getCameraChangedEventStream(viewId: _viewId)
+        .listen((CameraChangedEvent event) {
+      switch (event.eventType) {
+        case CameraEventType.moveStartedByApi:
+          _viewState?.widget.onCameraMoveStarted?.call(event.position, false);
+        case CameraEventType.moveStartedByGesture:
+          _viewState?.widget.onCameraMoveStarted?.call(event.position, true);
+        case CameraEventType.onCameraMove:
+          _viewState?.widget.onCameraMove?.call(event.position);
+        case CameraEventType.onCameraIdle:
+          _viewState?.widget.onCameraIdle?.call(event.position);
+        case CameraEventType.onCameraStartedFollowingLocation:
+          _viewState?.widget.onCameraStartedFollowingLocation
+              ?.call(event.position);
+        case CameraEventType.onCameraStoppedFollowingLocation:
+          _viewState?.widget.onCameraStoppedFollowingLocation
+              ?.call(event.position);
+      }
+    });
+  }
+
   /// Sets the event channel listener for the marker drag event.
-  void setOnMarkerDragListeners() {
+  void _setOnMarkerDragListeners() {
     GoogleMapsNavigationPlatform.instance
         .getMarkerDragEventStream(viewId: _viewId)
-        .listen((MarkerDragEventDto event) {
+        .listen((MarkerDragEvent event) {
       switch (event.eventType) {
-        case MarkerDragEventTypeDto.drag:
-          _viewState?.widget.onMarkerDrag
-              ?.call(event.markerId, event.position.toLatLng());
-        case MarkerDragEventTypeDto.dragEnd:
+        case MarkerDragEventType.drag:
+          _viewState?.widget.onMarkerDrag?.call(event.markerId, event.position);
+        case MarkerDragEventType.dragEnd:
           _viewState?.widget.onMarkerDragEnd
-              ?.call(event.markerId, event.position.toLatLng());
-        case MarkerDragEventTypeDto.dragStart:
+              ?.call(event.markerId, event.position);
+        case MarkerDragEventType.dragStart:
           _viewState?.widget.onMarkerDragStart
-              ?.call(event.markerId, event.position.toLatLng());
+              ?.call(event.markerId, event.position);
       }
     });
   }
 
   /// Sets the event channel listener for the polygon clicked event.
-  void setOnPolygonClickedListener() {
+  void _setOnPolygonClickedListener() {
     GoogleMapsNavigationPlatform.instance
         .getPolygonClickedEventStream(viewId: _viewId)
-        .listen((PolygonClickedEventDto event) {
+        .listen((PolygonClickedEvent event) {
       _viewState?.widget.onPolygonClicked?.call(event.polygonId);
     });
   }
 
   /// Sets the event channel listener for the polyline clicked event.
-  void setOnPolylineClickedListener() {
+  void _setOnPolylineClickedListener() {
     GoogleMapsNavigationPlatform.instance
-        .getPolylineDtoClickedEventStream(viewId: _viewId)
-        .listen((PolylineClickedEventDto event) {
+        .getPolylineClickedEventStream(viewId: _viewId)
+        .listen((PolylineClickedEvent event) {
       _viewState?.widget.onPolylineClicked?.call(event.polylineId);
     });
   }
 
   /// Sets the event channel listener for the circle clicked event.
-  void setOnCircleClickedListener() {
+  void _setOnCircleClickedListener() {
     GoogleMapsNavigationPlatform.instance
-        .getCircleDtoClickedEventStream(viewId: _viewId)
-        .listen((CircleClickedEventDto event) {
+        .getCircleClickedEventStream(viewId: _viewId)
+        .listen((CircleClickedEvent event) {
       _viewState?.widget.onCircleClicked?.call(event.circleId);
+    });
+  }
+
+  /// Sets the event channel listener for the navigation UI enabled changed event.
+  void _setOnNavigationUIEnabledChangedListener() {
+    GoogleMapsNavigationPlatform.instance
+        .getNavigationUIEnabledChangedEventStream(viewId: _viewId)
+        .listen((NavigationUIEnabledChangedEvent event) {
+      _viewState?.widget.onNavigationUIEnabledChanged
+          ?.call(event.navigationUIEnabled);
     });
   }
 
@@ -637,17 +821,27 @@ class GoogleNavigationViewController {
   ///
   /// On iOS this property doesn't control the my location indication during
   /// the navigation.
-  Future<void> enableMyLocation({required bool enabled}) {
+  Future<void> setMyLocationEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableMyLocation(viewId: _viewId, enabled: enabled);
+        .setMyLocationEnabled(viewId: _viewId, enabled: enabled);
   }
 
-  /// Get the map type.
+  /// This method returns the current map type of the Google Maps view instance.
   Future<MapType> getMapType() {
     return GoogleMapsNavigationPlatform.instance.getMapType(viewId: _viewId);
   }
 
-  /// Change the map type.
+  /// Changes the type of the map being displayed on the Google Maps view.
+  ///
+  /// The [mapType] parameter specifies the new map type to be set.
+  /// It should be one of the values defined in the [MapType] enum,
+  /// such as [MapType.normal], [MapType.satellite], [MapType.terrain],
+  /// or [MapType.hybrid].
+  ///
+  /// Example usage:
+  /// ```dart
+  /// _navigationViewController.changeMapType(MapType.satellite);
+  /// ```
   Future<void> setMapType({required MapType mapType}) async {
     return GoogleMapsNavigationPlatform.instance
         .setMapType(viewId: _viewId, mapType: mapType);
@@ -682,8 +876,16 @@ class GoogleNavigationViewController {
   /// Use [perspective] to specify the orientation of the camera
   /// and optional [zoomLevel] to control the map zoom.
   ///
-  /// Automatically started in perspective [CameraPerspective.tilted] when
-  /// the navigation guidance begins.
+  /// Automatically started in the perspective [CameraPerspective.tilted] when
+  /// the navigation is initialized with [GoogleMapsNavigator.initializeNavigationSession]
+  /// or when navigation UI gets re-enabled with [setNavigationUIEnabled].
+  ///
+  /// In Android, you can use [GoogleMapsNavigationView.onCameraStartedFollowingLocation]
+  /// and [GoogleMapsNavigationView.onCameraStoppedFollowingLocation] callbacks
+  /// to detect when the follow location mode is enabled or disabled.
+  ///
+  /// Note there are small differences on how Android and iOS handle the camera
+  /// during the follow my location mode (tilt, zoom, transitions, etc.).
   ///
   /// See also [GoogleMapsNavigator.startGuidance], [showRouteOverview] and [animateCamera].
   Future<void> followMyLocation(CameraPerspective perspective,
@@ -692,12 +894,12 @@ class GoogleNavigationViewController {
         viewId: _viewId, perspective: perspective, zoomLevel: zoomLevel);
   }
 
-  /// Gets users current location.
+  /// Gets user's current location.
   Future<LatLng?> getMyLocation() async {
     return GoogleMapsNavigationPlatform.instance.getMyLocation(viewId: _viewId);
   }
 
-  /// Gets current visible map region / camera bounds.
+  /// Gets the current visible map region or camera bounds.
   Future<LatLngBounds> getVisibleRegion() async {
     return GoogleMapsNavigationPlatform.instance
         .getVisibleRegion(viewId: _viewId);
@@ -741,7 +943,7 @@ class GoogleNavigationViewController {
   /// Moves the camera from the current position to the position
   /// defined in the [cameraUpdate].
   ///
-  /// See CameraUpdate for more information
+  /// See [CameraUpdate] for more information
   /// on how to create different camera movements.
   Future<void> moveCamera(CameraUpdate cameraUpdate) {
     return GoogleMapsNavigationPlatform.instance
@@ -754,12 +956,12 @@ class GoogleNavigationViewController {
         .isNavigationTripProgressBarEnabled(viewId: _viewId);
   }
 
-  /// Enable the navigation trip progress bar.
+  /// Enable or disable the navigation trip progress bar.
   ///
   /// By default, the navigation trip progress bar is disabled.
-  Future<void> enableNavigationTripProgressBar({required bool enabled}) {
+  Future<void> setNavigationTripProgressBarEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
-        .enableNavigationTripProgressBar(
+        .setNavigationTripProgressBarEnabled(
       viewId: _viewId,
       enabled: enabled,
     );
@@ -771,11 +973,11 @@ class GoogleNavigationViewController {
         .isNavigationHeaderEnabled(viewId: _viewId);
   }
 
-  /// Enable the navigation header.
+  /// Enable or disable the navigation header.
   ///
   /// By default, the navigation header is enabled.
-  Future<void> enableNavigationHeader({required bool enabled}) {
-    return GoogleMapsNavigationPlatform.instance.enableNavigationHeader(
+  Future<void> setNavigationHeaderEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.setNavigationHeaderEnabled(
       viewId: _viewId,
       enabled: enabled,
     );
@@ -787,14 +989,14 @@ class GoogleNavigationViewController {
         .isNavigationFooterEnabled(viewId: _viewId);
   }
 
-  /// Enable the navigation footer.
+  /// Enable or disable the navigation footer.
   ///
   /// By default, the navigation footer is enabled.
   ///
   /// Also known as ETA card, for example in Android
   /// calls [setEtaCardEnabled().](https://developers.google.com/maps/documentation/navigation/android-sdk/v1/reference/com/google/android/libraries/navigation/NavigationView#setEtaCardEnabled(boolean))
-  Future<void> enableNavigationFooter({required bool enabled}) {
-    return GoogleMapsNavigationPlatform.instance.enableNavigationFooter(
+  Future<void> setNavigationFooterEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.setNavigationFooterEnabled(
       viewId: _viewId,
       enabled: enabled,
     );
@@ -806,11 +1008,11 @@ class GoogleNavigationViewController {
         .isRecenterButtonEnabled(viewId: _viewId);
   }
 
-  /// Enable the recenter button.
+  /// Enable or disable the recenter button.
   ///
   /// By default, the recenter button is enabled.
-  Future<void> enableRecenterButton({required bool enabled}) {
-    return GoogleMapsNavigationPlatform.instance.enableRecenterButton(
+  Future<void> setRecenterButtonEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.setRecenterButtonEnabled(
       viewId: _viewId,
       enabled: enabled,
     );
@@ -825,10 +1027,10 @@ class GoogleNavigationViewController {
   /// Allow showing the speed limit indicator.
   ///
   /// By default, the speed limit is not displayed.
-  Future<void> enableSpeedLimitIcon({required bool enable}) {
-    return GoogleMapsNavigationPlatform.instance.enableSpeedLimitIcon(
+  Future<void> setSpeedLimitIconEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.setSpeedLimitIconEnabled(
       viewId: _viewId,
-      enable: enable,
+      enabled: enabled,
     );
   }
 
@@ -841,26 +1043,26 @@ class GoogleNavigationViewController {
   /// Allow showing the speedometer.
   ///
   /// By default, the speedometer is not displayed.
-  Future<void> enableSpeedometer({required bool enable}) {
-    return GoogleMapsNavigationPlatform.instance.enableSpeedometer(
+  Future<void> setSpeedometerEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.setSpeedometerEnabled(
       viewId: _viewId,
-      enable: enable,
+      enabled: enabled,
     );
   }
 
   /// Are the incident cards displayed.
-  Future<bool> isIncidentCardsEnabled() {
+  Future<bool> isTrafficIncidentCardsEnabled() {
     return GoogleMapsNavigationPlatform.instance
-        .isIncidentCardsEnabled(viewId: _viewId);
+        .isTrafficIncidentCardsEnabled(viewId: _viewId);
   }
 
-  /// Enable showing of the incident cards.
+  /// Enable or disable showing of the incident cards.
   ///
   /// By default, the incident cards are shown.
-  Future<void> enableIncidentCards({required bool enable}) {
-    return GoogleMapsNavigationPlatform.instance.enableIncidentCards(
+  Future<void> setTrafficIncidentCardsEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.setTrafficIncidentCardsEnabled(
       viewId: _viewId,
-      enable: enable,
+      enabled: enabled,
     );
   }
 
@@ -877,9 +1079,12 @@ class GoogleNavigationViewController {
   /// Disabling hides routes on iOS, but on Android the routes stay visible.
   ///
   /// By default, the navigation UI is enabled when the session has been
-  /// initialized with GoogleMapsNavigotor.initializeNavigationSession().
-  Future<void> enableNavigationUI({required bool enabled}) {
-    return GoogleMapsNavigationPlatform.instance.enableNavigationUI(
+  /// initialized with [GoogleMapsNavigator.initializeNavigationSession].
+  ///
+  /// Fails on Android if the navigation session has not been initialized,
+  /// and on iOS if the terms and conditions have not been accepted.
+  Future<void> setNavigationUIEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.setNavigationUIEnabled(
       viewId: _viewId,
       enabled: enabled,
     );
@@ -894,132 +1099,202 @@ class GoogleNavigationViewController {
     );
   }
 
-  /// Get all markers from map view.
+  /// Returns the minimum zoom level preference from the map view.
+  /// If minimum zoom preference is not set previously, returns minimum possible
+  /// zoom level for the current map type.
+  Future<double> getMinZoomPreference() {
+    return GoogleMapsNavigationPlatform.instance
+        .getMinZoomPreference(viewId: _viewId);
+  }
+
+  /// Returns the maximum zoom level preference from the map view.
+  /// If maximum zoom preference is not set previously, returns maximum possible
+  /// zoom level for the current map type.
+  Future<double> getMaxZoomPreference() {
+    return GoogleMapsNavigationPlatform.instance
+        .getMaxZoomPreference(viewId: _viewId);
+  }
+
+  /// Removes any previously specified upper and lower zoom bounds.
+  Future<void> resetMinMaxZoomPreference() {
+    return GoogleMapsNavigationPlatform.instance
+        .resetMinMaxZoomPreference(viewId: _viewId);
+  }
+
+  /// Sets a preferred lower bound for the camera zoom.
+  ///
+  /// When the minimum zoom changes, the SDK adjusts all later camera updates
+  /// to respect that minimum if possible. Note that there are technical
+  /// considerations that may prevent the SDK from allowing users to zoom too low.
+  ///
+  /// Throws [MinZoomRangeException] if [minZoomPreference] is
+  /// greater than maximum zoom lavel.
+  Future<void> setMinZoomPreference(double minZoomPreference) {
+    return GoogleMapsNavigationPlatform.instance.setMinZoomPreference(
+        viewId: _viewId, minZoomPreference: minZoomPreference);
+  }
+
+  /// Sets a preferred upper bound for the camera zoom.
+  ///
+  /// When the maximum zoom changes, the SDK adjusts all later camera updates
+  /// to respect that maximum if possible. Note that there are technical
+  /// considerations that may prevent the SDK from allowing users to zoom too
+  /// deep into the map. For example, satellite or terrain may have a lower
+  /// maximum zoom than the base map tiles.
+  ///
+  /// Throws [MaxZoomRangeException] if [maxZoomPreference] is
+  /// less than minimum zoom lavel.
+  Future<void> setMaxZoomPreference(double maxZoomPreference) {
+    return GoogleMapsNavigationPlatform.instance.setMaxZoomPreference(
+        viewId: _viewId, maxZoomPreference: maxZoomPreference);
+  }
+
+  /// Retrieves all markers that have been added to the map view.
   Future<List<Marker?>> getMarkers() {
     return GoogleMapsNavigationPlatform.instance.getMarkers(viewId: _viewId);
   }
 
-  /// Add markers to the map.
+  /// Add markers to the map view.
   Future<List<Marker?>> addMarkers(List<MarkerOptions> markerOptions) {
     return GoogleMapsNavigationPlatform.instance
         .addMarkers(viewId: _viewId, markerOptions: markerOptions);
   }
 
-  /// Update markers to the map.
+  /// Update markers to the map view.
   ///
-  /// If the [markers] cannot be not be found throws [MarkerNotFoundException].
+  /// Throws [MarkerNotFoundException] if the [markers] list contains one or
+  /// more markers that have not been added to the map view via [addMarkers] or
+  /// contains markers that have already been removed from the map view.
   Future<List<Marker?>> updateMarkers(List<Marker> markers) async {
     return GoogleMapsNavigationPlatform.instance
         .updateMarkers(viewId: _viewId, markers: markers);
   }
 
-  /// Remove markers from the map.
+  /// Remove markers from the map view.
   ///
-  /// If the [markers] cannot be not be found throws [MarkerNotFoundException].
+  /// Throws [MarkerNotFoundException] if the [markers] list contains one or
+  /// more markers that have not been added to the map view via [addMarkers] or
+  /// contains markers that have already been removed from the map view.
   Future<void> removeMarkers(List<Marker> markers) async {
     return GoogleMapsNavigationPlatform.instance
         .removeMarkers(viewId: _viewId, markers: markers);
   }
 
-  /// Remove all markers from the map.
+  /// Remove all markers from the map view.
   Future<void> clearMarkers() {
     return GoogleMapsNavigationPlatform.instance.clearMarkers(viewId: _viewId);
   }
 
-  /// Get all polygons from map view.
+  /// Retrieves all polygons that have been added to the map view.
   Future<List<Polygon?>> getPolygons() {
     return GoogleMapsNavigationPlatform.instance.getPolygons(viewId: _viewId);
   }
 
-  /// Add polygons to map view.
+  /// Add polygons to the map view.
   Future<List<Polygon?>> addPolygons(List<PolygonOptions> polygonOptions) {
     return GoogleMapsNavigationPlatform.instance
         .addPolygons(viewId: _viewId, polygonOptions: polygonOptions);
   }
 
-  /// Update polygons to map view.
+  /// Update polygons to the map view.
   ///
-  /// If [polygons] cannot be not be found throws [PolygonNotFoundException].
+  /// Throws [PolygonNotFoundException] if the [polygons] list contains
+  /// polygon that has not beed added to the map view via [addPolygons] or
+  /// contains polygon that has already been removed from the map view.
   Future<List<Polygon?>> updatePolygons(List<Polygon> polygons) async {
     return GoogleMapsNavigationPlatform.instance
         .updatePolygons(viewId: _viewId, polygons: polygons);
   }
 
-  /// Remove polygons from map.
+  /// Remove polygons from the map view.
   ///
-  /// If [polygons] cannot be not be found throws [PolygonNotFoundException].
+  /// Throws [PolygonNotFoundException] if the [polygons] list contains
+  /// polygon that has not beed added to the map view via [addPolygons] or
+  /// contains polygon that has already been removed from the map view.
   Future<void> removePolygons(List<Polygon> polygons) async {
     return GoogleMapsNavigationPlatform.instance
         .removePolygons(viewId: _viewId, polygons: polygons);
   }
 
-  /// Remove all polygons from map.
+  /// Remove all polygons from the map view.
   Future<void> clearPolygons() {
     return GoogleMapsNavigationPlatform.instance.clearPolygons(viewId: _viewId);
   }
 
-  /// Get all polylines from map view.
+  /// Retrieves all polylines that have been added to the map view.
   Future<List<Polyline?>> getPolylines() {
     return GoogleMapsNavigationPlatform.instance.getPolylines(viewId: _viewId);
   }
 
-  /// Add polylines to map view.
+  /// Add polylines to the map view.
   Future<List<Polyline?>> addPolylines(List<PolylineOptions> polylineOptions) {
     return GoogleMapsNavigationPlatform.instance
         .addPolylines(viewId: _viewId, polylineOptions: polylineOptions);
   }
 
-  /// Update polylines to map view.
+  /// Update polylines to the map view.
   ///
-  /// If [polylines] cannot be not be found throws [PolylineNotFoundException].
+  /// Throws [PolylineNotFoundException] if the [polylines] list contains
+  /// polyline that has not beed added to the map view via [addPolylines] or
+  /// contains polyline that has already been removed from the map view.
   Future<List<Polyline?>> updatePolylines(List<Polyline> polylines) async {
     return GoogleMapsNavigationPlatform.instance
         .updatePolylines(viewId: _viewId, polylines: polylines);
   }
 
-  /// Remove polylines from map.
+  /// Remove polylines from the map view.
   ///
-  /// If [polylines] cannot be not be found throws [PolylineNotFoundException].
+  /// Throws [PolylineNotFoundException] if the [polylines] list contains
+  /// polyline that has not beed added to the map view via [addPolylines] or
+  /// contains polyline that has already been removed from the map view.
   Future<void> removePolylines(List<Polyline> polylines) async {
     return GoogleMapsNavigationPlatform.instance
         .removePolylines(viewId: _viewId, polylines: polylines);
   }
 
-  /// Remove all polylines from map.
+  /// Remove all polylines from the map view.
   Future<void> clearPolylines() {
     return GoogleMapsNavigationPlatform.instance
         .clearPolylines(viewId: _viewId);
   }
 
-  /// Get all circles from map view.
+  /// Gets all circles from the map view.
   Future<List<Circle?>> getCircles() {
     return GoogleMapsNavigationPlatform.instance.getCircles(viewId: _viewId);
   }
 
-  /// Add circles to map view.
+  /// Add circles to the map view.
   Future<List<Circle?>> addCircles(List<CircleOptions> options) {
     return GoogleMapsNavigationPlatform.instance
         .addCircles(viewId: _viewId, options: options);
   }
 
-  /// Update circles to map view.
+  /// Update circles to the map view.
+  ///
+  /// Throws [CircleNotFoundException] if the [circles] list contains one or
+  /// more circles that have not been added to the map view via [addCircles] or
+  /// contains circles that have already been removed from the map view.
   Future<List<Circle?>> updateCircles(List<Circle> circles) async {
     return GoogleMapsNavigationPlatform.instance
         .updateCircles(viewId: _viewId, circles: circles);
   }
 
-  /// Remove circles from map.
+  /// Remove circles from the map view.
+  ///
+  /// Throws [CircleNotFoundException] if the [circles] list contains one or
+  /// more circles that have not been added to the map view via [addCircles] or
+  /// contains circles that have already been removed from the map view.
   Future<void> removeCircles(List<Circle> circles) async {
     return GoogleMapsNavigationPlatform.instance
         .removeCircles(viewId: _viewId, circles: circles);
   }
 
-  /// Remove all circles from map.
+  /// Remove all circles from the map view.
   Future<void> clearCircles() {
     return GoogleMapsNavigationPlatform.instance.clearCircles(viewId: _viewId);
   }
 
-  /// Removes all markers, polylines, polygons, overlays, etc from the map.
+  /// Remove all markers, polylines, polygons, overlays, etc from the map view.
   Future<void> clear() {
     return GoogleMapsNavigationPlatform.instance.clear(viewId: _viewId);
   }
@@ -1028,6 +1303,7 @@ class GoogleNavigationViewController {
 /// [GoogleNavigationViewController.updateMarkers] or
 /// [GoogleNavigationViewController.removeMarkers] failed
 /// to find the marker given to the method.
+/// {@category Navigation View}
 class MarkerNotFoundException implements Exception {
   /// Default constructor for [MarkerNotFoundException].
   const MarkerNotFoundException();
@@ -1036,6 +1312,7 @@ class MarkerNotFoundException implements Exception {
 /// [GoogleNavigationViewController.updatePolygons] or
 /// [GoogleNavigationViewController.removePolygons] failed
 /// to find the polygon given to the method.
+/// {@category Navigation View}
 class PolygonNotFoundException implements Exception {
   /// Default constructor for [PolygonNotFoundException].
   const PolygonNotFoundException();
@@ -1044,6 +1321,7 @@ class PolygonNotFoundException implements Exception {
 /// [GoogleNavigationViewController.updatePolylines] or
 /// [GoogleNavigationViewController.removePolylines] failed
 /// to find the polyline given to the method.
+/// {@category Navigation View}
 class PolylineNotFoundException implements Exception {
   /// Default constructor for [PolylineNotFoundException].
   const PolylineNotFoundException();
@@ -1052,13 +1330,39 @@ class PolylineNotFoundException implements Exception {
 /// [GoogleNavigationViewController.updateCircles] or
 /// [GoogleNavigationViewController.removeCircles] failed
 /// to find the circle given to the method.
+/// {@category Navigation View}
 class CircleNotFoundException implements Exception {
   /// Default constructor for [CircleNotFoundException].
   const CircleNotFoundException();
 }
 
 /// [GoogleNavigationViewController.setMapStyle] failed to set the map style.
+/// {@category Navigation View}
 class MapStyleException implements Exception {
   /// Default constructor for [MapStyleException].
   const MapStyleException();
+}
+
+/// [GoogleNavigationViewController.setMaxZoomPreference] failed to set zoom level.
+/// {@category Navigation View}
+class MaxZoomRangeException implements Exception {
+  /// Default constructor for [MaxZoomRangeException].
+  const MaxZoomRangeException();
+
+  @override
+  String toString() {
+    return 'MaxZoomRangeException: Cannot set max zoom to less than min zoom';
+  }
+}
+
+/// [GoogleNavigationViewController.setMinZoomPreference] failed to set zoom level.
+/// {@category Navigation View}
+class MinZoomRangeException implements Exception {
+  /// Default constructor for [MinZoomRangeException].
+  const MinZoomRangeException();
+
+  @override
+  String toString() {
+    return 'MinZoomRangeException: Cannot set min zoom to greater than max zoom';
+  }
 }

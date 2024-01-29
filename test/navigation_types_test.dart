@@ -14,12 +14,13 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_maps_navigation/google_maps_navigation.dart';
+import 'package:google_maps_navigation/src/method_channel/convert/navigation_waypoint.dart';
+import 'package:google_maps_navigation/src/method_channel/method_channel.dart';
 
 void main() {
   late NavigationWaypointDto waypointDto;
   late NavigationWaypoint waypoint;
   late Destinations destinations;
-  late NavigationSessionEventDto sessionEventDto;
   late NavigationDisplayOptions displayOptions;
   late RoutingOptions routingOptions;
 
@@ -47,10 +48,6 @@ void main() {
         showDestinationMarkers: false,
       ),
     );
-    sessionEventDto = NavigationSessionEventDto(
-      type: NavigationSessionEventTypeDto.arrivalEvent,
-      message: 'testMessage',
-    );
     displayOptions = NavigationDisplayOptions(
         showDestinationMarkers: false,
         showStopSigns: true,
@@ -68,8 +65,7 @@ void main() {
 
   group('NavigationWaypoint tests', () {
     test('tests Navigation Waypoint conversion from DTO', () {
-      final NavigationWaypoint gmsWaypoint =
-          navigationWaypointFromDto(waypointDto);
+      final NavigationWaypoint gmsWaypoint = waypointDto.toNavigationWaypoint();
       expect(gmsWaypoint.title, waypointDto.title);
       expect(gmsWaypoint.target?.latitude, waypointDto.target?.latitude);
       expect(gmsWaypoint.target?.longitude, waypointDto.target?.longitude);
@@ -81,8 +77,7 @@ void main() {
     });
 
     test('tests Navigation Waypoint conversion to DTO', () {
-      final NavigationWaypointDto waypointDto2 =
-          navigationWaypointToDto(waypoint);
+      final NavigationWaypointDto waypointDto2 = waypoint.toDto();
       expect(waypoint.title, waypointDto2.title);
       expect(waypoint.target?.latitude, waypointDto2.target?.latitude);
       expect(waypoint.target?.longitude, waypointDto2.target?.longitude);
@@ -95,8 +90,7 @@ void main() {
 
   group('NavigationDestinationEventMessage tests', () {
     test('tests Navigation Destination Message conversion to DTO', () {
-      final DestinationsDto pidgeonDestinationMessage =
-          navigationDestinationToDto(destinations);
+      final DestinationsDto pidgeonDestinationMessage = destinations.toDto();
 
       expect(destinations.displayOptions.showDestinationMarkers,
           pidgeonDestinationMessage.displayOptions.showDestinationMarkers);
@@ -120,28 +114,10 @@ void main() {
     });
   });
 
-  group('Navigation Event Message tests', () {
-    test('tests Navigation Session Event Message conversion from Pigeon DTO',
-        () {
-      final NavigationSessionEvent gmsNavigationSessionEventDto =
-          navigationSessionEventFromDto(sessionEventDto);
-
-      expect(
-        gmsNavigationSessionEventDto.message,
-        sessionEventDto.message,
-      );
-
-      expect(
-        gmsNavigationSessionEventDto.type.toString().split('.').last,
-        sessionEventDto.type.toString().split('.').last,
-      );
-    });
-  });
-
   group('Navigation Options tests', () {
     test('tests Navigation Display options conversion to Pigeon DTO', () {
       final NavigationDisplayOptionsDto pigeonDtoDisplayOptions =
-          navigationDisplayOptionsToDto(displayOptions);
+          displayOptions.toDto();
 
       expect(
         pigeonDtoDisplayOptions.showDestinationMarkers,
@@ -158,8 +134,7 @@ void main() {
     });
 
     test('tests Navigation Routing options conversion to Pigeon DTO', () {
-      final RoutingOptionsDto pigeonDtoRoutingOptions =
-          routingOptionsToDto(routingOptions);
+      final RoutingOptionsDto pigeonDtoRoutingOptions = routingOptions.toDto();
 
       expect(
         pigeonDtoRoutingOptions.targetDistanceMeters,
@@ -199,10 +174,8 @@ void main() {
     });
 
     test('tests Navigation Routing strategy conversion to Pigeon DTO', () {
-      final RoutingStrategyDto? pigeonDtoStrategy =
-          navigationRoutingStrategyToPigeonFormat(
-        NavigationRoutingStrategy.defaultBest,
-      );
+      final RoutingStrategyDto pigeonDtoStrategy =
+          NavigationRoutingStrategy.defaultBest.toDto();
 
       expect(
         pigeonDtoStrategy.toString().split('.').last,
@@ -212,10 +185,8 @@ void main() {
 
     test('tests Navigation AlternativeRoutes strategy conversion to Pigeon DTO',
         () {
-      final AlternateRoutesStrategyDto? pigeonDtoStrategy =
-          navigationAlternateRoutesStrategyToDto(
-        NavigationAlternateRoutesStrategy.all,
-      );
+      final AlternateRoutesStrategyDto pigeonDtoStrategy =
+          NavigationAlternateRoutesStrategy.all.toDto();
 
       expect(
         pigeonDtoStrategy.toString().split('.').last,
@@ -227,7 +198,7 @@ void main() {
   group('Navigation tests', () {
     test('Navigation RouteStatus conversion from Pigeon DTO', () {
       final NavigationRouteStatus status =
-          navigationRouteStatusFromDto(RouteStatusDto.apiKeyNotAuthorized);
+          RouteStatusDto.apiKeyNotAuthorized.toNavigationRouteStatus();
 
       expect(
         status.toString().split('.').last,
@@ -236,11 +207,10 @@ void main() {
     });
 
     test('Navigation time and distance conversion from Pigeon DTO', () {
-      final NavigationTimeAndDistance td =
-          navigationTimeAndDistanceFromDto(NavigationTimeAndDistanceDto(
+      final NavigationTimeAndDistance td = NavigationTimeAndDistanceDto(
         time: 5.0,
         distance: 6.0,
-      ));
+      ).toNavigationTimeAndDistance();
 
       expect(
         td.time,
@@ -254,12 +224,11 @@ void main() {
 
     test('Navigation audio guidance conversion to Pigeon DTO', () {
       final NavigationAudioGuidanceSettingsDto settings =
-          navigationAudioGuidanceSettingsToDto(
-        NavigationAudioGuidanceSettings(
-            isBluetoothAudioEnabled: true,
-            isVibrationEnabled: true,
-            guidanceType: NavigationAudioGuidanceType.alertsAndGuidance),
-      );
+          NavigationAudioGuidanceSettings(
+                  isBluetoothAudioEnabled: true,
+                  isVibrationEnabled: true,
+                  guidanceType: NavigationAudioGuidanceType.alertsAndGuidance)
+              .toDto();
 
       expect(
         settings.isBluetoothAudioEnabled,
@@ -281,19 +250,19 @@ void main() {
     test('Navigation speed alert severity conversion from Pigeon DTO', () {
       expect(
         SpeedAlertSeverity.major,
-        navigationSpeedAlertSeverityFromDto(SpeedAlertSeverityDto.major),
+        SpeedAlertSeverityDto.major.toSpeedAlertSeverity(),
       );
       expect(
         SpeedAlertSeverity.minor,
-        navigationSpeedAlertSeverityFromDto(SpeedAlertSeverityDto.minor),
+        SpeedAlertSeverityDto.minor.toSpeedAlertSeverity(),
       );
       expect(
         SpeedAlertSeverity.notSpeeding,
-        navigationSpeedAlertSeverityFromDto(SpeedAlertSeverityDto.notSpeeding),
+        SpeedAlertSeverityDto.notSpeeding.toSpeedAlertSeverity(),
       );
       expect(
         SpeedAlertSeverity.unknown,
-        navigationSpeedAlertSeverityFromDto(SpeedAlertSeverityDto.unknown),
+        SpeedAlertSeverityDto.unknown.toSpeedAlertSeverity(),
       );
     });
 
@@ -308,11 +277,11 @@ void main() {
     test('Navigation lat lng point conversion to Pigeon DTO', () {
       expect(
         LatLngDto(latitude: 5.0, longitude: 6.0).latitude,
-        latLngToDto(const LatLng(latitude: 5.0, longitude: 6.0)).latitude,
+        const LatLng(latitude: 5.0, longitude: 6.0).toDto().latitude,
       );
       expect(
         LatLngDto(latitude: 5.0, longitude: 6.0).longitude,
-        latLngToDto(const LatLng(latitude: 5.0, longitude: 6.0)).longitude,
+        const LatLng(latitude: 5.0, longitude: 6.0).toDto().longitude,
       );
     });
 
@@ -321,67 +290,19 @@ void main() {
         SpeedingUpdatedEvent(
                 percentageAboveLimit: 5.0, severity: SpeedAlertSeverity.major)
             .severity,
-        speedingUpdatedEventFromDto(SpeedingUpdatedEventDto(
+        SpeedingUpdatedEventDto(
           percentageAboveLimit: 5.0,
           severity: SpeedAlertSeverityDto.major,
-        )).severity,
+        ).toSpeedingUpdatedEvent().severity,
       );
       expect(
         SpeedingUpdatedEvent(
                 percentageAboveLimit: 5.0, severity: SpeedAlertSeverity.major)
             .percentageAboveLimit,
-        speedingUpdatedEventFromDto(SpeedingUpdatedEventDto(
+        SpeedingUpdatedEventDto(
           percentageAboveLimit: 5.0,
           severity: SpeedAlertSeverityDto.major,
-        )).percentageAboveLimit,
-      );
-    });
-
-    test(
-        'Road snapped location updated event message conversion from Pigeon DTO',
-        () {
-      expect(
-        RoadSnappedLocationUpdatedEvent(
-          location: const LatLng(
-            latitude: 5.0,
-            longitude: 9.0,
-          ),
-        ).location.latitude,
-        roadSnappedLocationUpdatedEventFromDto(
-            RoadSnappedLocationUpdatedEventDto(
-          location: LatLngDto(
-            latitude: 5.0,
-            longitude: 9.0,
-          ),
-        )).location.latitude,
-      );
-      expect(
-        RoadSnappedLocationUpdatedEvent(
-          location: const LatLng(
-            latitude: 5.0,
-            longitude: 9.0,
-          ),
-        ).location.longitude,
-        roadSnappedLocationUpdatedEventFromDto(
-            RoadSnappedLocationUpdatedEventDto(
-          location: LatLngDto(
-            latitude: 5.0,
-            longitude: 9.0,
-          ),
-        )).location.longitude,
-      );
-    });
-
-    test(
-        'Navigation remaining time or distance changed event message conversion from Pigeon DTO',
-        () {
-      final RemainingTimeOrDistanceChangedEventDto event =
-          RemainingTimeOrDistanceChangedEventDto(
-              remainingDistance: 5000, remainingTime: 100);
-
-      expect(
-        remainingTimeOrDistanceChangedEventFromDto(event).remainingDistance,
-        event.remainingDistance,
+        ).toSpeedingUpdatedEvent().percentageAboveLimit,
       );
     });
 
@@ -395,7 +316,7 @@ void main() {
       );
 
       final RouteSegmentTrafficDataRoadStretchRenderingData gmsData =
-          roadStretchRenderingDataFromDto(data);
+          data.toRouteSegmentTrafficDataRoadStretchRenderingData();
 
       expect(data.lengthMeters, gmsData.lengthMeters);
       expect(data.offsetMeters, gmsData.offsetMeters);
@@ -417,8 +338,7 @@ void main() {
             renderingData
           ]);
 
-      final RouteSegmentTrafficData gmsData =
-          routeSegmentTrafficDataFromDto(data);
+      final RouteSegmentTrafficData gmsData = data.toRouteSegmentTrafficData();
 
       expect(data.status.toString().split('.').last,
           gmsData.status.toString().split('.').last);
@@ -458,7 +378,7 @@ void main() {
               target: LatLngDto(latitude: 77.0, longitude: 88.0)),
           latLngs: <LatLngDto?>[LatLngDto(latitude: 11.0, longitude: 22.0)]);
 
-      final RouteSegment gmsSegment = routeSegmentFromDto(segment);
+      final RouteSegment gmsSegment = segment.toRouteSegment();
 
       expect(segment.destinationLatLng.latitude,
           gmsSegment.destinationLatLng.latitude);

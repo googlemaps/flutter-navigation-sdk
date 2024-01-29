@@ -12,10 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// The minimum zoom level for Google Maps.
-/// {@category Navigation View}
-const double googleMapsMinZoomLevel = 0;
+import '../../types/types.dart';
+import '../method_channel.dart';
 
-/// The maximum zoom level for Google Maps.
-/// {@category Navigation View}
-const double googleMapsMaxZoomLevel = 21;
+/// [NavigationDisplayOptions] convert extension.
+/// @nodoc
+extension ConvertNavigationDisplayOptions on NavigationDisplayOptions {
+  /// Converts [NavigationWaypoint] to [NavigationDisplayOptionsDto]
+  NavigationDisplayOptionsDto toDto() => NavigationDisplayOptionsDto(
+        showDestinationMarkers: showDestinationMarkers,
+        showStopSigns: showStopSigns,
+        showTrafficLights: showTrafficLights,
+      );
+}

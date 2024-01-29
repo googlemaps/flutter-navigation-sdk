@@ -30,6 +30,22 @@ enum GoogleMapsNavigationSessionManagerError: Error {
   case notSupported
 }
 
+// Expose the navigator to the google_maps_driver side.
+// DriverApi initialization requires navigator.
+public class ExposedGoogleMapsNavigator: NSObject {
+  public static func getNavigator() throws -> GMSNavigator {
+    try GoogleMapsNavigationSessionManager.shared.getNavigator()
+  }
+
+  public static func getRoadSnappedLocationProvider() throws -> GMSRoadSnappedLocationProvider? {
+    try GoogleMapsNavigationSessionManager.shared.getSession().roadSnappedLocationProvider
+  }
+
+  public static func enableRoadSnappedLocationUpdates() {
+    GoogleMapsNavigationSessionManager.shared.enableRoadSnappedLocationUpdates()
+  }
+}
+
 class GoogleMapsNavigationSessionManager: NSObject {
   enum RoutingOptionsTarget {
     case navigator
@@ -44,11 +60,16 @@ class GoogleMapsNavigationSessionManager: NSObject {
 
   private var _session: GMSNavigationSession?
 
-  private func getNavigator() throws -> GMSNavigator {
+  func getNavigator() throws -> GMSNavigator {
     guard let _session else { throw GoogleMapsNavigationSessionManagerError.sessionNotInitialized }
     guard let navigator = _session.navigator
     else { throw GoogleMapsNavigationSessionManagerError.termsNotAccepted }
     return navigator
+  }
+
+  func getSession() throws -> GMSNavigationSession {
+    guard let _session else { throw GoogleMapsNavigationSessionManagerError.sessionNotInitialized }
+    return _session
   }
 
   private func getSimulator() throws -> GMSLocationSimulator {
@@ -68,12 +89,15 @@ class GoogleMapsNavigationSessionManager: NSObject {
 
   // Create a navigation session and initializes listeners.
   // If navigator is already created, only re-initialize listeners.
-  func createNavigationSession() throws {
+  func createNavigationSession(_ abnormalTerminationReportingEnabled: Bool) throws {
     // Align API behavior with Android:
     // Check the terms and conditions before the location permission check below.
     if !areTermsAccepted() {
       throw GoogleMapsNavigationSessionManagerError.termsNotAccepted
     }
+
+    // Enable or disable abnormal termination reporting.
+    GMSServices.setAbnormalTerminationReportingEnabled(abnormalTerminationReportingEnabled)
 
     // Align API behavior with Android:
     // Fail the session creation if the location permission hasn't been accepted.
@@ -117,7 +141,10 @@ class GoogleMapsNavigationSessionManager: NSObject {
     _session?.navigator != nil
   }
 
-  func cleanup() {
+  func cleanup() throws {
+    if _session == nil {
+      throw GoogleMapsNavigationSessionManagerError.sessionNotInitialized
+    }
     _session?.locationSimulator?.stopSimulation()
     _session?.navigator?.clearDestinations()
     _session?.roadSnappedLocationProvider?.remove(self)
@@ -139,7 +166,6 @@ class GoogleMapsNavigationSessionManager: NSObject {
     guard view.setSession(session) else {
       throw GoogleMapsNavigationSessionManagerError.initializeFailure
     }
-    view.enableNavigationUI(true)
   }
 
   func attachNavigationSessionToMapView(mapView: GoogleMapsNavigationView) {
@@ -171,6 +197,10 @@ class GoogleMapsNavigationSessionManager: NSObject {
     GMSNavigationServices.resetTermsAndConditionsAccepted()
   }
 
+  func getNavSDKVersion() -> String {
+    GMSNavigationServices.navSDKVersion()
+  }
+
   /// Navigation.
   func startGuidance() throws {
     try getNavigator().isGuidanceActive = true
@@ -184,7 +214,7 @@ class GoogleMapsNavigationSessionManager: NSObject {
     try getNavigator().isGuidanceActive
   }
 
-  /// If the session has view attached, enable given display options.
+  // If the session has view attached, enable given display options.
   private func handleDisplayOptionsIfNeeded(options: NavigationDisplayOptionsDto) {
     _viewRegistry?.getAllRegisteredViews().forEach { view in
       if let showDestinationMarkers = options.showDestinationMarkers {
@@ -199,29 +229,45 @@ class GoogleMapsNavigationSessionManager: NSObject {
     }
   }
 
-  func setDestinations(msg: DestinationsDto,
+  func setDestinations(destinations: DestinationsDto,
                        completion: @escaping (Result<RouteStatusDto, Error>) -> Void) {
     do {
-      /// Set the routing options globally for navigator or restore the defaults
-      try setRoutingOptionsGlobals(msg.routingOptions, for: .navigator)
-      guard msg.routingOptions != nil else {
-        /// Set destinations for navigator.
+      // If the session has view attached, enable given display options.
+      handleDisplayOptionsIfNeeded(options: destinations.displayOptions)
+
+      // Set the destinations for the navigator with a route token.
+      if let options = destinations.routeTokenOptions {
         try getNavigator()
           .setDestinations(
-            Convert.convertWaypoints(msg.waypoints)
+            Convert.convertWaypoints(destinations.waypoints),
+            routeToken: options.routeToken,
+            callback: { routeStatus in
+              completion(.success(Convert.convertRouteStatus(routeStatus)))
+            }
+          )
+        _session?.travelMode = Convert.convertTravelMode(options.travelMode)
+        return
+      }
+
+      // Set the routing options globally for navigator or restore the defaults
+      try setRoutingOptionsGlobals(destinations.routingOptions, for: .navigator)
+
+      guard destinations.routingOptions != nil else {
+        // Set destinations for navigator.
+        try getNavigator()
+          .setDestinations(
+            Convert.convertWaypoints(destinations.waypoints)
           ) { routeStatus in
             completion(.success(Convert.convertRouteStatus(routeStatus)))
           }
         return
       }
 
-      /// If the session has view attached, enable given display options.
-      handleDisplayOptionsIfNeeded(options: msg.displayOptions)
-      /// Set destinations for navigator with routing options.
+      // Set destinations for navigator with routing options.
       try getNavigator()
         .setDestinations(
-          Convert.convertWaypoints(msg.waypoints),
-          routingOptions: Convert.convertRoutingOptions(msg.routingOptions),
+          Convert.convertWaypoints(destinations.waypoints),
+          routingOptions: Convert.convertRoutingOptions(destinations.routingOptions),
           callback: { routeStatus in
             completion(.success(Convert.convertRouteStatus(routeStatus)))
           }
@@ -412,12 +458,12 @@ class GoogleMapsNavigationSessionManager: NSObject {
   }
 
   /// Listeners
-  func enableRoadSnappedLocationUpdates() throws {
+  func enableRoadSnappedLocationUpdates() {
     LocationManager.shared.startUpdatingLocation()
     _session?.roadSnappedLocationProvider?.startUpdatingLocation()
   }
 
-  func disableRoadSnappedLocationUpdates() throws {
+  func disableRoadSnappedLocationUpdates() {
     LocationManager.shared.stopUpdatingLocation()
     _session?.roadSnappedLocationProvider?.stopUpdatingLocation()
   }
@@ -435,15 +481,14 @@ extension GoogleMapsNavigationSessionManager: GMSRoadSnappedLocationProviderList
   /// Send road snapped location update back to flutter code.
   func locationProvider(_ locationProvider: GMSRoadSnappedLocationProvider,
                         didUpdate location: CLLocation) {
-    _navigationSessionEventApi?.onRoadSnappedLocationUpdated(msg:
+    _navigationSessionEventApi?.onRoadSnappedLocationUpdated(
+      location:
       .init(
-        location:
-        .init(
-          latitude: location.coordinate.latitude,
-          longitude: location.coordinate.longitude
-        )
+        latitude: location.coordinate.latitude,
+        longitude: location.coordinate.longitude
       ),
-      completion: { _ in })
+      completion: { _ in }
+    )
   }
 }
 
@@ -463,21 +508,21 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
 
   func navigator(_ navigator: GMSNavigator, didArriveAt waypoint: GMSNavigationWaypoint) {
     _navigationSessionEventApi?.onArrival(
-      msg: .init(waypoint: Convert.convertNavigationWayPoint(waypoint)),
+      waypoint: Convert.convertNavigationWayPoint(waypoint),
       completion: { _ in }
     )
   }
 
   func navigatorDidChangeRoute(_ navigator: GMSNavigator) {
     _navigationSessionEventApi?.onRouteChanged(
-      msg: .init(message: .empty),
       completion: { _ in }
     )
   }
 
   func navigator(_ navigator: GMSNavigator, didUpdateRemainingTime time: TimeInterval) {
     _navigationSessionEventApi?.onRemainingTimeOrDistanceChanged(
-      msg: .init(remainingTime: time, remainingDistance: navigator.distanceToNextDestination),
+      remainingTime: time,
+      remainingDistance: navigator.distanceToNextDestination,
       completion: { _ in }
     )
   }
@@ -485,7 +530,8 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
   func navigator(_ navigator: GMSNavigator,
                  didUpdateRemainingDistance distance: CLLocationDistance) {
     _navigationSessionEventApi?.onRemainingTimeOrDistanceChanged(
-      msg: .init(remainingTime: navigator.timeToNextDestination, remainingDistance: distance),
+      remainingTime: navigator.timeToNextDestination,
+      remainingDistance: distance,
       completion: { _ in }
     )
   }

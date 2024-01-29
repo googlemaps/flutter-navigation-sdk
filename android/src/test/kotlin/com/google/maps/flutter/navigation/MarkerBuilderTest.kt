@@ -16,12 +16,26 @@
 
 package com.google.maps.flutter.navigation
 
+import com.google.android.gms.maps.model.BitmapDescriptor
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit4.MockKRule
 import kotlin.test.assertEquals
+import org.junit.Rule
 import org.junit.Test
 
 internal class MarkerBuilderTest {
+  @get:Rule val mockkRule = MockKRule(this)
+
+  @MockK(relaxUnitFun = true) lateinit var imageRegistry: ImageRegistry
+  @MockK(relaxUnitFun = true) lateinit var bitmapDescriptor: BitmapDescriptor
+
   @Test
   fun markerBuilder_returnsExpectedValue() {
+    every { imageRegistry.findRegisteredImage("default") } returns null
+    every { imageRegistry.findRegisteredImage("Image_0") } returns
+      RegisteredImage("Image_0", bitmapDescriptor, 1.0, null, null)
+
     val optionsIn =
       MarkerOptionsDto(
         alpha = 0.5,
@@ -33,10 +47,11 @@ internal class MarkerBuilderTest {
         position = LatLngDto(10.0, 20.0),
         rotation = 40.0,
         visible = true,
-        zIndex = 2.0
+        zIndex = 2.0,
+        icon = ImageDescriptorDto("default", 1.0)
       )
     val builder = MarkerBuilder()
-    Convert.sinkMarkerOptions(optionsIn, builder)
+    Convert.sinkMarkerOptions(optionsIn, builder, imageRegistry)
     val optionsOut = builder.build()
 
     assertEquals(0.5F, optionsOut.alpha)
@@ -54,5 +69,11 @@ internal class MarkerBuilderTest {
     assertEquals("Title", optionsOut.title)
     assertEquals(true, optionsOut.isVisible)
     assertEquals(2.0F, optionsOut.zIndex)
+    assertEquals(null, optionsOut.icon)
+
+    val optionsWithIcon = optionsIn.copy(icon = ImageDescriptorDto("Image_0", 1.0))
+    Convert.sinkMarkerOptions(optionsWithIcon, builder, imageRegistry)
+    val optionsOutWithIcon = builder.build()
+    assertEquals(bitmapDescriptor, optionsOutWithIcon.icon)
   }
 }

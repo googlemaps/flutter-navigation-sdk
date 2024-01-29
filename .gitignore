@@ -13,9 +13,11 @@
 .idea/
 
 # vscode related
+.vscode
 .vscode/*
 !.vscode/tasks.json
 !.vscode/settings.json
+devtools_options.yaml
 
 # Flutter/Dart/Pub related
 # Libraries should not include pubspec.lock, per https://dart.dev/guides/libraries/private-files#pubspeclock.

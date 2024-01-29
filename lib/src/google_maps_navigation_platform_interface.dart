@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/widgets.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -21,14 +22,17 @@ import '../google_maps_navigation.dart';
 
 /// Callback signature for when a map view is ready.
 ///
-/// `id` is the platform view's unique identifier.
+/// `viewId` is the platform view's unique identifier.
 /// @nodoc
 typedef MapReadyCallback = void Function(int viewId);
 
 /// Google Maps Navigation Platform Interface for iOS and Android implementations.
 /// @nodoc
 abstract class GoogleMapsNavigationPlatform extends PlatformInterface
-    with NavigationSessionAPIInterface, NavigationViewAPIInterface {
+    with
+        NavigationSessionAPIInterface,
+        NavigationViewAPIInterface,
+        ImageRegistryAPIInterface {
   /// Constructs a GoogleMapsNavigationPlatform.
   GoogleMapsNavigationPlatform() : super(token: _token);
 
@@ -69,7 +73,8 @@ abstract class GoogleMapsNavigationPlatform extends PlatformInterface
 /// API interface for actions of the navigation session.
 abstract mixin class NavigationSessionAPIInterface {
   /// Creates navigation session in the native platform and returns navigation session controller.
-  Future<void> createNavigationSession();
+  Future<void> createNavigationSession(
+      bool abnormalTerminationReportingEnabled);
 
   /// Check whether navigator has been initialized.
   Future<bool> isInitialized();
@@ -86,6 +91,9 @@ abstract mixin class NavigationSessionAPIInterface {
 
   /// Resets terms of service acceptance state.
   Future<void> resetTermsAccepted();
+
+  /// Gets the native navigation SDK version as string.
+  Future<String> getNavSDKVersion();
 
   /// Has guidance been started.
   Future<bool> isGuidanceRunning();
@@ -177,17 +185,19 @@ abstract mixin class NavigationSessionAPIInterface {
       getNavigationRoadSnappedLocationEventStream();
 
   /// Get navigation road snapped raw location event stream from the navigation session.
+  /// Android only.
   Stream<RoadSnappedRawLocationUpdatedEvent>
       getNavigationRoadSnappedRawLocationEventStream();
-
-  /// Get navigation session event stream from the navigation session.
-  Stream<NavigationSessionEvent> getNavigationSessionEventStream();
 
   /// Get navigation on arrival event stream from the navigation session.
   Stream<OnArrivalEvent> getNavigationOnArrivalEventStream();
 
   /// Get navigation on rerouting event stream from the navigation session.
   Stream<void> getNavigationOnReroutingEventStream();
+
+  /// Get navigation on GPS availability update event stream from the navigation session.
+  Stream<GpsAvailabilityUpdatedEvent>
+      getNavigationOnGpsAvailabilityUpdateEventStream();
 
   /// Get navigation traffic updated event stream from the navigation session.
   Stream<void> getNavigationTrafficUpdatedEventStream();
@@ -214,7 +224,8 @@ abstract mixin class NavigationViewAPIInterface {
   Future<bool> isMyLocationEnabled({required int viewId});
 
   /// Enabled location in the navigation view.
-  Future<void> enableMyLocation({required int viewId, required bool enabled});
+  Future<void> setMyLocationEnabled(
+      {required int viewId, required bool enabled});
 
   /// Get the map type.
   Future<MapType> getMapType({required int viewId});
@@ -226,41 +237,53 @@ abstract mixin class NavigationViewAPIInterface {
   Future<void> setMapStyle(int viewId, String? styleJson);
 
   /// Enables or disables the my-location button.
-  Future<void> enableMyLocationButton(
+  Future<void> setMyLocationButtonEnabled(
+      {required int viewId, required bool enabled});
+
+  /// Enables or disables if the my location button consumes click events.
+  Future<void> setConsumeMyLocationButtonClickEventsEnabled(
       {required int viewId, required bool enabled});
 
   /// Enables or disables the zoom gestures.
-  Future<void> enableZoomGestures({required int viewId, required bool enabled});
+  Future<void> setZoomGesturesEnabled(
+      {required int viewId, required bool enabled});
 
   /// Enables or disables the zoom controls.
-  Future<void> enableZoomControls({required int viewId, required bool enabled});
+  Future<void> setZoomControlsEnabled(
+      {required int viewId, required bool enabled});
 
   /// Enables or disables the compass.
-  Future<void> enableCompass({required int viewId, required bool enabled});
+  Future<void> setCompassEnabled({required int viewId, required bool enabled});
 
   /// Sets the preference for whether rotate gestures should be enabled or disabled.
-  Future<void> enableRotateGestures(
+  Future<void> setRotateGesturesEnabled(
       {required int viewId, required bool enabled});
 
   /// Sets the preference for whether scroll gestures should be enabled or disabled.
-  Future<void> enableScrollGestures(
+  Future<void> setScrollGesturesEnabled(
       {required int viewId, required bool enabled});
 
   /// Sets the preference for whether scroll gestures can take place at the same time as a zoom or rotate gesture.
-  Future<void> enableScrollGesturesDuringRotateOrZoom(
+  Future<void> setScrollGesturesDuringRotateOrZoomEnabled(
       {required int viewId, required bool enabled});
 
   /// Sets the preference for whether tilt gestures should be enabled or disabled.
-  Future<void> enableTiltGestures({required int viewId, required bool enabled});
+  Future<void> setTiltGesturesEnabled(
+      {required int viewId, required bool enabled});
 
   /// Sets the preference for whether the Map Toolbar should be enabled or disabled.
-  Future<void> enableMapToolbar({required int viewId, required bool enabled});
+  Future<void> setMapToolbarEnabled(
+      {required int viewId, required bool enabled});
 
   /// Turns the traffic layer on or off.
-  Future<void> enableTraffic({required int viewId, required bool enabled});
+  Future<void> setTrafficEnabled({required int viewId, required bool enabled});
 
   /// Get the preference for whether the my location button should be enabled or disabled.
   Future<bool> isMyLocationButtonEnabled({required int viewId});
+
+  /// Get the preference for whether the my location button consumes click events.
+  Future<bool> isConsumeMyLocationButtonClickEventsEnabled(
+      {required int viewId});
 
   /// Gets the preference for whether zoom gestures should be enabled or disabled.
   Future<bool> isZoomGesturesEnabled({required int viewId});
@@ -319,57 +342,77 @@ abstract mixin class NavigationViewAPIInterface {
   Future<bool> isNavigationTripProgressBarEnabled({required int viewId});
 
   /// Enable navigation trip progress bar.
-  Future<void> enableNavigationTripProgressBar(
+  Future<void> setNavigationTripProgressBarEnabled(
       {required int viewId, required bool enabled});
 
   /// Is the navigation header enabled.
   Future<bool> isNavigationHeaderEnabled({required int viewId});
 
   /// Enable navigation header.
-  Future<void> enableNavigationHeader(
+  Future<void> setNavigationHeaderEnabled(
       {required int viewId, required bool enabled});
 
   /// Is the navigation footer enabled.
   Future<bool> isNavigationFooterEnabled({required int viewId});
 
   /// Enable the navigation footer.
-  Future<void> enableNavigationFooter(
+  Future<void> setNavigationFooterEnabled(
       {required int viewId, required bool enabled});
 
   /// Is the recenter button enabled.
   Future<bool> isRecenterButtonEnabled({required int viewId});
 
   /// Enable the recenter button.
-  Future<void> enableRecenterButton(
+  Future<void> setRecenterButtonEnabled(
       {required int viewId, required bool enabled});
 
   /// Is the speed limit displayed.
   Future<bool> isSpeedLimitIconEnabled({required int viewId});
 
   /// Should display speed limit.
-  Future<void> enableSpeedLimitIcon(
-      {required int viewId, required bool enable});
+  Future<void> setSpeedLimitIconEnabled(
+      {required int viewId, required bool enabled});
 
   /// Is speedometer displayed.
   Future<bool> isSpeedometerEnabled({required int viewId});
 
   /// Should display speedometer.
-  Future<void> enableSpeedometer({required int viewId, required bool enable});
+  Future<void> setSpeedometerEnabled(
+      {required int viewId, required bool enabled});
 
   /// Is incident cards displayed.
-  Future<bool> isIncidentCardsEnabled({required int viewId});
+  Future<bool> isTrafficIncidentCardsEnabled({required int viewId});
 
   /// Should display incident cards.
-  Future<void> enableIncidentCards({required int viewId, required bool enable});
+  Future<void> setTrafficIncidentCardsEnabled(
+      {required int viewId, required bool enabled});
 
   /// Is navigation UI enabled.
   Future<bool> isNavigationUIEnabled({required int viewId});
 
   /// Enable navigation UI.
-  Future<void> enableNavigationUI({required int viewId, required bool enabled});
+  Future<void> setNavigationUIEnabled(
+      {required int viewId, required bool enabled});
 
   /// Show route overview.
   Future<void> showRouteOverview({required int viewId});
+
+  /// Returns the minimum zoom level.
+  Future<double> getMinZoomPreference({required int viewId});
+
+  /// Returns the maximum zoom level for the current camera position.
+  Future<double> getMaxZoomPreference({required int viewId});
+
+  /// Removes any previously specified upper and lower zoom bounds.
+  Future<void> resetMinMaxZoomPreference({required int viewId});
+
+  /// Sets a preferred lower bound for the camera zoom.
+  Future<void> setMinZoomPreference(
+      {required int viewId, required double minZoomPreference});
+
+  /// Sets a preferred upper bound for the camera zoom.
+  Future<void> setMaxZoomPreference(
+      {required int viewId, required double maxZoomPreference});
 
   /// Get map clicked event stream from the navigation view.
   Stream<MapClickEvent> getMapClickEventStream({required int viewId});
@@ -388,7 +431,7 @@ abstract mixin class NavigationViewAPIInterface {
   Future<List<Marker?>> addMarkers(
       {required int viewId, required List<MarkerOptions> markerOptions});
 
-  /// Update markers to map view.
+  /// Update markers on the map view.
   Future<List<Marker?>> updateMarkers(
       {required int viewId, required List<Marker> markers});
 
@@ -409,7 +452,7 @@ abstract mixin class NavigationViewAPIInterface {
   Future<List<Polygon?>> addPolygons(
       {required int viewId, required List<PolygonOptions> polygonOptions});
 
-  /// Update polygons to map view.
+  /// Update polygons on the map view.
   Future<List<Polygon?>> updatePolygons(
       {required int viewId, required List<Polygon> polygons});
 
@@ -427,7 +470,7 @@ abstract mixin class NavigationViewAPIInterface {
   Future<List<Polyline?>> addPolylines(
       {required int viewId, required List<PolylineOptions> polylineOptions});
 
-  /// Update polylines to map view.
+  /// Update polylines on the map view.
   Future<List<Polyline?>> updatePolylines(
       {required int viewId, required List<Polyline> polylines});
 
@@ -445,7 +488,7 @@ abstract mixin class NavigationViewAPIInterface {
   Future<List<Circle?>> addCircles(
       {required int viewId, required List<CircleOptions> options});
 
-  /// Update circles to map view.
+  /// Update circles on the map view.
   Future<List<Circle?>> updateCircles(
       {required int viewId, required List<Circle> circles});
 
@@ -456,23 +499,40 @@ abstract mixin class NavigationViewAPIInterface {
   /// Remove all circles from map view.
   Future<void> clearCircles({required int viewId});
 
+  /// Register camera changed listeners.
+  Future<void> registerOnCameraChangedListener({required int viewId});
+
   /// Get navigation view marker event stream from the navigation view.
-  Stream<MarkerEventDto> getMarkerEventStream({required int viewId});
+  Stream<MarkerEvent> getMarkerEventStream({required int viewId});
 
   /// Get navigation view marker drag event stream from the navigation view.
-  Stream<MarkerDragEventDto> getMarkerDragEventStream({required int viewId});
+  Stream<MarkerDragEvent> getMarkerDragEventStream({required int viewId});
 
   /// Get navigation view polygon clicked event stream from the navigation view.
-  Stream<PolygonClickedEventDto> getPolygonClickedEventStream(
+  Stream<PolygonClickedEvent> getPolygonClickedEventStream(
       {required int viewId});
 
   /// Get navigation view polyline clicked event stream from the navigation view.
-  Stream<PolylineClickedEventDto> getPolylineDtoClickedEventStream(
+  Stream<PolylineClickedEvent> getPolylineClickedEventStream(
       {required int viewId});
 
   /// Get navigation view circle clicked event stream from the navigation view.
-  Stream<CircleClickedEventDto> getCircleDtoClickedEventStream(
+  Stream<CircleClickedEvent> getCircleClickedEventStream({required int viewId});
+
+  /// Get navigation UI changed event stream from the navigation view.
+  Stream<NavigationUIEnabledChangedEvent>
+      getNavigationUIEnabledChangedEventStream({required int viewId});
+
+  /// Get navigation view my location clicked event stream from the navigation view.
+  Stream<MyLocationClickedEvent> getMyLocationClickedEventStream(
       {required int viewId});
+
+  /// Get navigation view my location button clicked event stream from the navigation view.
+  Stream<MyLocationButtonClickedEvent> getMyLocationButtonClickedEventStream(
+      {required int viewId});
+
+  /// Get navigation view camera changed event stream from the navigation view.
+  Stream<CameraChangedEvent> getCameraChangedEventStream({required int viewId});
 
   /// Populates [GoogleNavigationInspectorPlatform.instance] to allow
   /// inspecting the platform map state.
@@ -481,4 +541,24 @@ abstract mixin class NavigationViewAPIInterface {
     throw UnimplementedError(
         'enableDebugInspection() has not been implemented.');
   }
+}
+
+/// API interface for actions of the image registry.
+/// @nodoc
+abstract mixin class ImageRegistryAPIInterface {
+  /// Register bitmap to image registry.
+  Future<ImageDescriptor> registerBitmapImage(
+      {required Uint8List bitmap,
+      required double imagePixelRatio,
+      double? width,
+      double? height});
+
+  /// Delete bitmap from image registry.
+  Future<void> unregisterImage({required ImageDescriptor imageDescriptor});
+
+  /// Get all registered bitmaps from image registry.
+  Future<List<ImageDescriptor>> getRegisteredImages();
+
+  /// Remove all registered bitmaps from image registry.
+  Future<void> clearRegisteredImages();
 }

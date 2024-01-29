@@ -25,8 +25,11 @@ class GoogleMapsNavigationSessionMessageHandler : NavigationSessionApi {
     return GoogleMapsNavigationSessionManager.getInstance()
   }
 
-  override fun createNavigationSession(callback: (Result<Unit>) -> Unit) {
-    manager().createNavigationSession(callback)
+  override fun createNavigationSession(
+    abnormalTerminationReportingEnabled: Boolean,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    manager().createNavigationSession(abnormalTerminationReportingEnabled, callback)
   }
 
   override fun isInitialized(): Boolean {
@@ -60,6 +63,10 @@ class GoogleMapsNavigationSessionMessageHandler : NavigationSessionApi {
     manager().resetTermsAccepted()
   }
 
+  override fun getNavSDKVersion(): String {
+    return manager().getNavSDKVersion()
+  }
+
   override fun isGuidanceRunning(): Boolean {
     return manager().isGuidanceRunning()
   }
@@ -72,16 +79,25 @@ class GoogleMapsNavigationSessionMessageHandler : NavigationSessionApi {
     manager().stopGuidance()
   }
 
-  override fun setDestinations(msg: DestinationsDto, callback: (Result<RouteStatusDto>) -> Unit) {
-    val waypoints = msg.waypoints.filterNotNull().map { Convert.convertWaypointFromDto(it) }
-    val displayOptions = Convert.convertDisplayOptionsFromDto(msg.displayOptions)
+  override fun setDestinations(
+    destinations: DestinationsDto,
+    callback: (Result<RouteStatusDto>) -> Unit
+  ) {
+    val waypoints =
+      destinations.waypoints.filterNotNull().map { Convert.convertWaypointFromDto(it) }
+    val displayOptions = Convert.convertDisplayOptionsFromDto(destinations.displayOptions)
     val routingOptions =
-      if (msg.routingOptions != null) {
-        Convert.convertRoutingOptionsFromDto(msg.routingOptions)
+      if (destinations.routingOptions != null) {
+        Convert.convertRoutingOptionsFromDto(destinations.routingOptions)
       } else {
         RoutingOptions()
       }
-    manager().setDestinations(waypoints, routingOptions, displayOptions) {
+    manager().setDestinations(
+      waypoints,
+      routingOptions,
+      displayOptions,
+      destinations.routeTokenOptions
+    ) {
       if (it.isSuccess) {
         callback(Result.success(Convert.convertRouteStatusToDto(it.getOrThrow())))
       } else {

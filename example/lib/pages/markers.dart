@@ -15,7 +15,10 @@
 // ignore_for_file: public_member_api_docs
 
 import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:google_maps_navigation/google_maps_navigation.dart';
 
 import '../widgets/widgets.dart';
@@ -30,6 +33,7 @@ class MarkersPage extends ExamplePage {
 
 class _MarkersPageState extends ExamplePageState<MarkersPage> {
   late final GoogleNavigationViewController _navigationViewController;
+  ImageDescriptor? _registeredCustomIcon;
   List<Marker> _markers = <Marker>[];
   Marker? _selectedMarker;
 
@@ -39,7 +43,7 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
   final List<double> _alphas = <double>[1.0, 0.3];
 
   // ignore: use_setters_to_change_properties
-  void _onViewCreated(GoogleNavigationViewController controller) {
+  Future<void> _onViewCreated(GoogleNavigationViewController controller) async {
     _navigationViewController = controller;
   }
 
@@ -135,6 +139,52 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
         _selectedMarker!.options.copyWith(zIndex: newZIndex));
   }
 
+  Future<ImageDescriptor> _getOrCreateCustomImageFromAsset() async {
+    if (_registeredCustomIcon != null) {
+      // Custom image already registered.
+      return _registeredCustomIcon!;
+    }
+
+    // Example how to load mipmapped bitmap for asset.
+    const AssetImage assetImage = AssetImage('assets/marker1.png');
+    final ImageConfiguration configuration =
+        createLocalImageConfiguration(context);
+    final AssetBundleImageKey assetBundleImageKey =
+        await assetImage.obtainKey(configuration);
+    final double imagePixelRatio = assetBundleImageKey.scale;
+    final ByteData imageBytes = await rootBundle.load(assetBundleImageKey.name);
+    _registeredCustomIcon = await registerBitmapImage(
+        bitmap: imageBytes, imagePixelRatio: imagePixelRatio);
+    return _registeredCustomIcon!;
+  }
+
+  Future<void> _unRegisterUnusedCustomImage() async {
+    if (_registeredCustomIcon != null) {
+      // Do not unregister marker image if it is still used by some marker.
+      if (_markers.any((Marker marker) =>
+          marker.options.icon.registeredImageId ==
+          _registeredCustomIcon!.registeredImageId)) {
+        return;
+      }
+      await unregisterImage(_registeredCustomIcon!);
+      _registeredCustomIcon = null;
+    }
+  }
+
+  Future<void> _toggleCustomIcon() async {
+    assert(_selectedMarker != null, 'No marker selected');
+    if (_selectedMarker!.options.icon.registeredImageId == null) {
+      final ImageDescriptor customMarkerIcon =
+          await _getOrCreateCustomImageFromAsset();
+      await _updateSelectedMarkerWithOptions(
+          _selectedMarker!.options.copyWith(icon: customMarkerIcon));
+    } else {
+      await _updateSelectedMarkerWithOptions(_selectedMarker!.options
+          .copyWith(icon: ImageDescriptor.defaultImage));
+      await _unRegisterUnusedCustomImage();
+    }
+  }
+
   void _onMarkerClicked(String markerId) {
     final Marker marker =
         _markers.firstWhere((Marker marker) => marker.markerId == markerId);
@@ -180,6 +230,8 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
           Expanded(
             child: GoogleMapsNavigationView(
               onViewCreated: _onViewCreated,
+              initialNavigationUIEnabledPreference:
+                  NavigationUIEnabledPreference.disabled,
               onMarkerClicked: _onMarkerClicked,
               onMarkerDrag: _onMarkerDrag,
               onMarkerDragStart: _onMarkerDragStart,
@@ -261,6 +313,16 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
                   ),
                   ElevatedButton(
                     style: style,
+                    onPressed: _selectedMarker == null
+                        ? null
+                        : _selectedMarker == null
+                            ? null
+                            : () => _toggleCustomIcon(),
+                    child: Text(
+                        'Icon: ${_selectedMarker?.options.icon.registeredImageId != null ? 'Custom' : 'Default'}'),
+                  ),
+                  ElevatedButton(
+                    style: style,
                     onPressed: _markers.isNotEmpty
                         ? () {
                             setState(() {
@@ -277,7 +339,7 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
               SwitchListTile(
                   onChanged: (bool newValue) async {
                     await _navigationViewController.settings
-                        .enableMapToolbar(enabled: newValue);
+                        .setMapToolbarEnabled(newValue);
                     _isMapToolbarEnabled = await _navigationViewController
                         .settings
                         .isMapToolbarEnabled();

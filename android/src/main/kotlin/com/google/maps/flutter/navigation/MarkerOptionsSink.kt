@@ -43,4 +43,6 @@ interface MarkerOptionsSink {
   fun setVisible(visible: Boolean)
 
   fun setZIndex(zIndex: Float)
+
+  fun setIcon(registeredImage: RegisteredImage?)
 }

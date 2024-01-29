@@ -19,10 +19,7 @@ import 'package:flutter/services.dart';
 
 import '../../google_maps_navigation.dart';
 import '../google_maps_navigation_platform_interface.dart';
-import '../types/util/circle_conversion.dart';
-import '../types/util/marker_conversion.dart';
-import '../types/util/polygon_conversion.dart';
-import '../types/util/polyline_conversion.dart';
+import 'method_channel.dart';
 
 /// @nodoc
 /// Class that handles navigation view communications.
@@ -32,7 +29,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   final StreamController<_ViewIdEventWrapper> _viewEventStreamController =
       StreamController<_ViewIdEventWrapper>.broadcast();
 
-  /// Keep track of marker count, used to generate marker id's
+  /// Keep track of marker count, used to generate marker ID's.
   int _markerCounter = 0;
   String _createMarkerId() {
     final String markerId = 'Marker_$_markerCounter';
@@ -40,7 +37,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
     return markerId;
   }
 
-  /// Keep track of polygon count, used to generate polygon id's
+  /// Keep track of polygon count, used to generate polygon ID's.
   int _polygonCounter = 0;
   String _createPolygonId() {
     final String polygonId = 'Polygon_$_polygonCounter';
@@ -48,7 +45,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
     return polygonId;
   }
 
-  /// Keep track of polyline count, used to generate polyline id's
+  /// Keep track of polyline count, used to generate polyline ID's.
   int _polylineCounter = 0;
   String _createPolylineId() {
     final String polylineId = 'Polyline_$_polylineCounter';
@@ -56,7 +53,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
     return polylineId;
   }
 
-  /// Keep track of circle count, used to generate circle id's
+  /// Keep track of circle count, used to generate circle ID's.
   int _circleCounter = 0;
   String _createCircleId() {
     final String circleId = 'Circle_$_circleCounter';
@@ -92,7 +89,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
     );
     final MapOptionsDto mapOptionsMessage = MapOptionsDto(
         cameraPosition: initialCameraPosition,
-        mapType: mapTypeToDto(mapOptions.mapType),
+        mapType: mapOptions.mapType.toDto(),
         compassEnabled: mapOptions.compassEnabled,
         rotateGesturesEnabled: mapOptions.rotateGesturesEnabled,
         scrollGesturesEnabled: mapOptions.scrollGesturesEnabled,
@@ -104,16 +101,11 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
         minZoomPreference: mapOptions.minZoomPreference,
         maxZoomPreference: mapOptions.maxZoomPreference,
         zoomControlsEnabled: mapOptions.zoomControlsEnabled,
-        cameraTargetBounds: mapOptions.cameraTargetBounds != null
-            ? latLngBoundsToDto(mapOptions.cameraTargetBounds!)
-            : null);
+        cameraTargetBounds: mapOptions.cameraTargetBounds?.toDto());
 
     // Navigation options
-    final NavigationViewOptions navigationViewOptions =
-        initializationSettings.navigationViewOptions;
     final NavigationViewOptionsDto navigationOptionsMessage =
-        NavigationViewOptionsDto(
-            navigationUIEnabled: navigationViewOptions.navigationUIEnabled);
+        initializationSettings.navigationViewOptions.toDto();
 
     // Build NavigationViewCreationMessage
     return NavigationViewCreationOptionsDto(
@@ -132,20 +124,21 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Future<void> enableMyLocation({required int viewId, required bool enabled}) {
-    return _viewApi.enableMyLocation(viewId, enabled);
+  Future<void> setMyLocationEnabled(
+      {required int viewId, required bool enabled}) {
+    return _viewApi.setMyLocationEnabled(viewId, enabled);
   }
 
   @override
   Future<MapType> getMapType({required int viewId}) async {
     final MapTypeDto mapType = await _viewApi.getMapType(viewId);
-    return mapTypeFromDto(mapType);
+    return mapType.toMapType();
   }
 
   @override
   Future<void> setMapType(
       {required int viewId, required MapType mapType}) async {
-    return _viewApi.setMapType(viewId, mapTypeToDto(mapType));
+    return _viewApi.setMapType(viewId, mapType.toDto());
   }
 
   @override
@@ -164,22 +157,29 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Future<void> enableMyLocationButton(
+  Future<void> setMyLocationButtonEnabled(
       {required int viewId, required bool enabled}) {
-    return _viewApi.enableMyLocationButton(viewId, enabled);
+    return _viewApi.setMyLocationButtonEnabled(viewId, enabled);
   }
 
   @override
-  Future<void> enableZoomGestures(
-      {required int viewId, required bool enabled}) {
-    return _viewApi.enableZoomGestures(viewId, enabled);
+  Future<void> setConsumeMyLocationButtonClickEventsEnabled(
+      {required int viewId, required bool enabled}) async {
+    return _viewApi.setConsumeMyLocationButtonClickEventsEnabled(
+        viewId, enabled);
   }
 
   @override
-  Future<void> enableZoomControls(
+  Future<void> setZoomGesturesEnabled(
+      {required int viewId, required bool enabled}) {
+    return _viewApi.setZoomGesturesEnabled(viewId, enabled);
+  }
+
+  @override
+  Future<void> setZoomControlsEnabled(
       {required int viewId, required bool enabled}) async {
     try {
-      return await _viewApi.enableZoomControls(viewId, enabled);
+      return await _viewApi.setZoomControlsEnabled(viewId, enabled);
     } on PlatformException catch (error) {
       if (error.code == 'notSupported') {
         throw UnsupportedError('Zoom controls are not supported on iOS.');
@@ -190,39 +190,39 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Future<void> enableCompass({required int viewId, required bool enabled}) {
-    return _viewApi.enableCompass(viewId, enabled);
+  Future<void> setCompassEnabled({required int viewId, required bool enabled}) {
+    return _viewApi.setCompassEnabled(viewId, enabled);
   }
 
   @override
-  Future<void> enableRotateGestures(
+  Future<void> setRotateGesturesEnabled(
       {required int viewId, required bool enabled}) {
-    return _viewApi.enableRotateGestures(viewId, enabled);
+    return _viewApi.setRotateGesturesEnabled(viewId, enabled);
   }
 
   @override
-  Future<void> enableScrollGestures(
+  Future<void> setScrollGesturesEnabled(
       {required int viewId, required bool enabled}) {
-    return _viewApi.enableScrollGestures(viewId, enabled);
+    return _viewApi.setScrollGesturesEnabled(viewId, enabled);
   }
 
   @override
-  Future<void> enableScrollGesturesDuringRotateOrZoom(
+  Future<void> setScrollGesturesDuringRotateOrZoomEnabled(
       {required int viewId, required bool enabled}) {
-    return _viewApi.enableScrollGesturesDuringRotateOrZoom(viewId, enabled);
+    return _viewApi.setScrollGesturesDuringRotateOrZoomEnabled(viewId, enabled);
   }
 
   @override
-  Future<void> enableTiltGestures(
+  Future<void> setTiltGesturesEnabled(
       {required int viewId, required bool enabled}) {
-    return _viewApi.enableTiltGestures(viewId, enabled);
+    return _viewApi.setTiltGesturesEnabled(viewId, enabled);
   }
 
   @override
-  Future<void> enableMapToolbar(
+  Future<void> setMapToolbarEnabled(
       {required int viewId, required bool enabled}) async {
     try {
-      return await _viewApi.enableMapToolbar(viewId, enabled);
+      return await _viewApi.setMapToolbarEnabled(viewId, enabled);
     } on PlatformException catch (error) {
       if (error.code == 'notSupported') {
         throw UnsupportedError('Map toolbar is not supported on iOS.');
@@ -233,13 +233,19 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Future<void> enableTraffic({required int viewId, required bool enabled}) {
-    return _viewApi.enableTraffic(viewId, enabled);
+  Future<void> setTrafficEnabled({required int viewId, required bool enabled}) {
+    return _viewApi.setTrafficEnabled(viewId, enabled);
   }
 
   @override
   Future<bool> isMyLocationButtonEnabled({required int viewId}) {
     return _viewApi.isMyLocationButtonEnabled(viewId);
+  }
+
+  @override
+  Future<bool> isConsumeMyLocationButtonClickEventsEnabled(
+      {required int viewId}) {
+    return _viewApi.isConsumeMyLocationButtonClickEventsEnabled(viewId);
   }
 
   @override
@@ -315,7 +321,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
     if (myLocation == null) {
       return null;
     }
-    return latLngFromDto(myLocation);
+    return myLocation.toLatLng();
   }
 
   @override
@@ -323,7 +329,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
     final CameraPositionDto position = await _viewApi.getCameraPosition(
       viewId,
     );
-    return cameraPositionfromDto(position);
+    return position.toCameraPosition();
   }
 
   @override
@@ -332,8 +338,9 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
       viewId,
     );
     return LatLngBounds(
-        southwest: latLngFromDto(bounds.southwest),
-        northeast: latLngFromDto(bounds.northeast));
+      southwest: bounds.southwest.toLatLng(),
+      northeast: bounds.northeast.toLatLng(),
+    );
   }
 
   @override
@@ -346,7 +353,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
       case CameraUpdateType.cameraPosition:
         unawaited(_viewApi
             .animateCameraToCameraPosition(viewId,
-                cameraPositionToDto(cameraUpdate.cameraPosition!), duration)
+                cameraUpdate.cameraPosition!.toCameraPosition(), duration)
             .then((bool success) => onFinished != null && Platform.isAndroid
                 ? onFinished(success)
                 : null));
@@ -359,11 +366,8 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
                 : null));
       case CameraUpdateType.latLngBounds:
         unawaited(_viewApi
-            .animateCameraToLatLngBounds(
-                viewId,
-                latLngBoundsToDto(cameraUpdate.bounds!),
-                cameraUpdate.padding!,
-                duration)
+            .animateCameraToLatLngBounds(viewId, cameraUpdate.bounds!.toDto(),
+                cameraUpdate.padding!, duration)
             .then((bool success) => onFinished != null && Platform.isAndroid
                 ? onFinished(success)
                 : null));
@@ -404,14 +408,14 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
       case CameraUpdateType.cameraPosition:
         assert(cameraUpdate.cameraPosition != null, 'Camera position is null');
         return _viewApi.moveCameraToCameraPosition(
-            viewId, cameraPositionToDto(cameraUpdate.cameraPosition!));
+            viewId, cameraUpdate.cameraPosition!.toCameraPosition());
       case CameraUpdateType.latLng:
         return _viewApi.moveCameraToLatLng(
             viewId, cameraUpdate.latLng!.toDto());
       case CameraUpdateType.latLngBounds:
         assert(cameraUpdate.padding != null, 'Camera position is null');
-        return _viewApi.moveCameraToLatLngBounds(viewId,
-            latLngBoundsToDto(cameraUpdate.bounds!), cameraUpdate.padding!);
+        return _viewApi.moveCameraToLatLngBounds(
+            viewId, cameraUpdate.bounds!.toDto(), cameraUpdate.padding!);
       case CameraUpdateType.latLngZoom:
         return _viewApi.moveCameraToLatLngZoom(
             viewId, cameraUpdate.latLng!.toDto(), cameraUpdate.zoom!);
@@ -431,14 +435,13 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
       {required int viewId,
       required CameraPerspective perspective,
       required double? zoomLevel}) {
-    return _viewApi.followMyLocation(
-        viewId, cameraPerspectiveTypeToDto(perspective), zoomLevel);
+    return _viewApi.followMyLocation(viewId, perspective.toDto(), zoomLevel);
   }
 
   @override
-  Future<void> enableNavigationTripProgressBar(
+  Future<void> setNavigationTripProgressBarEnabled(
       {required int viewId, required bool enabled}) {
-    return _viewApi.enableNavigationTripProgressBar(viewId, enabled);
+    return _viewApi.setNavigationTripProgressBarEnabled(viewId, enabled);
   }
 
   @override
@@ -447,9 +450,9 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Future<void> enableNavigationHeader(
+  Future<void> setNavigationHeaderEnabled(
       {required int viewId, required bool enabled}) {
-    return _viewApi.enableNavigationHeader(viewId, enabled);
+    return _viewApi.setNavigationHeaderEnabled(viewId, enabled);
   }
 
   @override
@@ -458,9 +461,9 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Future<void> enableNavigationFooter(
+  Future<void> setNavigationFooterEnabled(
       {required int viewId, required bool enabled}) {
-    return _viewApi.enableNavigationFooter(viewId, enabled);
+    return _viewApi.setNavigationFooterEnabled(viewId, enabled);
   }
 
   @override
@@ -469,9 +472,9 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Future<void> enableRecenterButton(
+  Future<void> setRecenterButtonEnabled(
       {required int viewId, required bool enabled}) {
-    return _viewApi.enableRecenterButton(viewId, enabled);
+    return _viewApi.setRecenterButtonEnabled(viewId, enabled);
   }
 
   @override
@@ -480,9 +483,9 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Future<void> enableSpeedLimitIcon(
-      {required int viewId, required bool enable}) {
-    return _viewApi.enableSpeedLimitIcon(viewId, enable);
+  Future<void> setSpeedLimitIconEnabled(
+      {required int viewId, required bool enabled}) {
+    return _viewApi.setSpeedLimitIconEnabled(viewId, enabled);
   }
 
   @override
@@ -491,19 +494,20 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Future<void> enableSpeedometer({required int viewId, required bool enable}) {
-    return _viewApi.enableSpeedometer(viewId, enable);
+  Future<void> setSpeedometerEnabled(
+      {required int viewId, required bool enabled}) {
+    return _viewApi.setSpeedometerEnabled(viewId, enabled);
   }
 
   @override
-  Future<bool> isIncidentCardsEnabled({required int viewId}) {
-    return _viewApi.isIncidentCardsEnabled(viewId);
+  Future<bool> isTrafficIncidentCardsEnabled({required int viewId}) {
+    return _viewApi.isTrafficIncidentCardsEnabled(viewId);
   }
 
   @override
-  Future<void> enableIncidentCards(
-      {required int viewId, required bool enable}) {
-    return _viewApi.enableIncidentCards(viewId, enable);
+  Future<void> setTrafficIncidentCardsEnabled(
+      {required int viewId, required bool enabled}) {
+    return _viewApi.setTrafficIncidentCardsEnabled(viewId, enabled);
   }
 
   @override
@@ -512,14 +516,57 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Future<void> enableNavigationUI(
+  Future<void> setNavigationUIEnabled(
       {required int viewId, required bool enabled}) {
-    return _viewApi.enableNavigationUI(viewId, enabled);
+    return _viewApi.setNavigationUIEnabled(viewId, enabled);
   }
 
   @override
   Future<void> showRouteOverview({required int viewId}) {
     return _viewApi.showRouteOverview(viewId);
+  }
+
+  @override
+  Future<double> getMinZoomPreference({required int viewId}) {
+    return _viewApi.getMinZoomPreference(viewId);
+  }
+
+  @override
+  Future<double> getMaxZoomPreference({required int viewId}) {
+    return _viewApi.getMaxZoomPreference(viewId);
+  }
+
+  @override
+  Future<void> resetMinMaxZoomPreference({required int viewId}) {
+    return _viewApi.resetMinMaxZoomPreference(viewId);
+  }
+
+  @override
+  Future<void> setMinZoomPreference(
+      {required int viewId, required double minZoomPreference}) async {
+    try {
+      return await _viewApi.setMinZoomPreference(viewId, minZoomPreference);
+    } on PlatformException catch (error) {
+      if (error.code == 'minZoomGreaterThanMaxZoom') {
+        throw const MinZoomRangeException();
+      } else {
+        rethrow;
+      }
+    }
+  }
+
+  @override
+  Future<void> setMaxZoomPreference(
+      {required int viewId, required double maxZoomPreference}) async {
+    try {
+      return await _viewApi.setMaxZoomPreference(viewId, maxZoomPreference);
+    } on PlatformException catch (error) {
+      if (error.code == 'maxZoomLessThanMinZoom') {
+        throw const MaxZoomRangeException();
+      } else {
+        rethrow;
+      }
+    }
   }
 
   Stream<T> _unwrapEventStream<T>({required int viewId}) {
@@ -553,7 +600,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
     final List<MarkerOptionsDto> options =
         markerOptions.map((MarkerOptions opt) => opt.toDto()).toList();
 
-    // Create marker objects with new id's
+    // Create marker objects with new ID's
     final List<MarkerDto> markersToAdd = options
         .map((MarkerOptionsDto options) =>
             MarkerDto(markerId: _createMarkerId(), options: options))
@@ -638,7 +685,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
     final List<PolygonOptionsDto> options =
         polygonOptions.map((PolygonOptions opt) => opt.toDto()).toList();
 
-    // Create polygon objects with new id's
+    // Create polygon objects with new ID's
     final List<PolygonDto> polygonsToAdd = options
         .map((PolygonOptionsDto options) =>
             PolygonDto(polygonId: _createPolygonId(), options: options))
@@ -715,11 +762,10 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
       {required int viewId,
       required List<PolylineOptions> polylineOptions}) async {
     // Convert options to pigeon format
-    final List<PolylineOptionsDto> options = polylineOptions
-        .map((PolylineOptions opt) => opt.toPolylineOptionsDto())
-        .toList();
+    final List<PolylineOptionsDto> options =
+        polylineOptions.map((PolylineOptions opt) => opt.toDto()).toList();
 
-    // Create polyline objects with new id's
+    // Create polyline objects with new ID's
     final List<PolylineDto> polylinesToAdd = options
         .map((PolylineOptionsDto options) =>
             PolylineDto(polylineId: _createPolylineId(), options: options))
@@ -800,7 +846,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
     final List<CircleOptionsDto> optionsDto =
         options.map((CircleOptions opt) => opt.toDto()).toList();
 
-    // Create circle objects with new id's
+    // Create circle objects with new ID's
     final List<CircleDto> circlesToAdd = optionsDto
         .map((CircleOptionsDto options) =>
             CircleDto(circleId: _createCircleId(), options: options))
@@ -864,6 +910,11 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
+  Future<void> registerOnCameraChangedListener({required int viewId}) {
+    return _viewApi.registerOnCameraChangedListener(viewId);
+  }
+
+  @override
   Stream<MapClickEvent> getMapClickEventStream({required int viewId}) {
     return _unwrapEventStream<MapClickEvent>(viewId: viewId);
   }
@@ -874,31 +925,55 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   }
 
   @override
-  Stream<MarkerEventDto> getMarkerEventStream({required int viewId}) {
-    return _unwrapEventStream<MarkerEventDto>(viewId: viewId);
+  Stream<MarkerEvent> getMarkerEventStream({required int viewId}) {
+    return _unwrapEventStream<MarkerEvent>(viewId: viewId);
   }
 
   @override
-  Stream<MarkerDragEventDto> getMarkerDragEventStream({required int viewId}) {
-    return _unwrapEventStream<MarkerDragEventDto>(viewId: viewId);
+  Stream<MarkerDragEvent> getMarkerDragEventStream({required int viewId}) {
+    return _unwrapEventStream<MarkerDragEvent>(viewId: viewId);
   }
 
   @override
-  Stream<PolygonClickedEventDto> getPolygonClickedEventStream(
+  Stream<PolygonClickedEvent> getPolygonClickedEventStream(
       {required int viewId}) {
-    return _unwrapEventStream<PolygonClickedEventDto>(viewId: viewId);
+    return _unwrapEventStream<PolygonClickedEvent>(viewId: viewId);
   }
 
   @override
-  Stream<PolylineClickedEventDto> getPolylineDtoClickedEventStream(
+  Stream<PolylineClickedEvent> getPolylineClickedEventStream(
       {required int viewId}) {
-    return _unwrapEventStream<PolylineClickedEventDto>(viewId: viewId);
+    return _unwrapEventStream<PolylineClickedEvent>(viewId: viewId);
   }
 
   @override
-  Stream<CircleClickedEventDto> getCircleDtoClickedEventStream(
+  Stream<CircleClickedEvent> getCircleClickedEventStream(
       {required int viewId}) {
-    return _unwrapEventStream<CircleClickedEventDto>(viewId: viewId);
+    return _unwrapEventStream<CircleClickedEvent>(viewId: viewId);
+  }
+
+  @override
+  Stream<NavigationUIEnabledChangedEvent>
+      getNavigationUIEnabledChangedEventStream({required int viewId}) {
+    return _unwrapEventStream<NavigationUIEnabledChangedEvent>(viewId: viewId);
+  }
+
+  @override
+  Stream<MyLocationClickedEvent> getMyLocationClickedEventStream(
+      {required int viewId}) {
+    return _unwrapEventStream<MyLocationClickedEvent>(viewId: viewId);
+  }
+
+  @override
+  Stream<MyLocationButtonClickedEvent> getMyLocationButtonClickedEventStream(
+      {required int viewId}) {
+    return _unwrapEventStream<MyLocationButtonClickedEvent>(viewId: viewId);
+  }
+
+  @override
+  Stream<CameraChangedEvent> getCameraChangedEventStream(
+      {required int viewId}) {
+    return _unwrapEventStream<CameraChangedEvent>(viewId: viewId);
   }
 }
 
@@ -918,40 +993,76 @@ class NavigationViewEventApiImpl implements NavigationViewEventApi {
   }
 
   @override
-  void onMarkerEvent(MarkerEventDto event) {
-    _viewEventStreamController.add(_ViewIdEventWrapper(event.viewId, event));
-  }
-
-  @override
-  void onMarkerDragEvent(MarkerDragEventDto event) {
-    _viewEventStreamController.add(_ViewIdEventWrapper(event.viewId, event));
-  }
-
-  @override
-  void onPolygonClicked(PolygonClickedEventDto event) {
-    _viewEventStreamController.add(_ViewIdEventWrapper(event.viewId, event));
-  }
-
-  @override
   void onMapClickEvent(int viewId, LatLngDto latLng) {
     _viewEventStreamController
-        .add(_ViewIdEventWrapper(viewId, MapClickEvent(latLngFromDto(latLng))));
+        .add(_ViewIdEventWrapper(viewId, MapClickEvent(latLng.toLatLng())));
   }
 
   @override
   void onMapLongClickEvent(int viewId, LatLngDto latLng) {
+    _viewEventStreamController
+        .add(_ViewIdEventWrapper(viewId, MapLongClickEvent(latLng.toLatLng())));
+  }
+
+  @override
+  void onMarkerDragEvent(int viewId, String markerId,
+      MarkerDragEventTypeDto eventType, LatLngDto position) {
+    //   _viewEventStreamController.add(_ViewIdEventWrapper(event.viewId, event));
+  }
+
+  @override
+  void onMarkerEvent(
+      int viewId, String markerId, MarkerEventTypeDto eventType) {
+    _viewEventStreamController.add(_ViewIdEventWrapper(
+        viewId,
+        MarkerEvent(
+            markerId: markerId, eventType: eventType.toMarkerEventType())));
+  }
+
+  @override
+  void onPolygonClicked(int viewId, String polygonId) {
     _viewEventStreamController.add(
-        _ViewIdEventWrapper(viewId, MapLongClickEvent(latLngFromDto(latLng))));
+        _ViewIdEventWrapper(viewId, PolygonClickedEvent(polygonId: polygonId)));
   }
 
   @override
-  void onPolylineClicked(PolylineClickedEventDto msg) {
-    _viewEventStreamController.add(_ViewIdEventWrapper(msg.viewId, msg));
+  void onPolylineClicked(int viewId, String polylineId) {
+    _viewEventStreamController.add(_ViewIdEventWrapper(
+        viewId, PolylineClickedEvent(polylineId: polylineId)));
   }
 
   @override
-  void onCircleClicked(CircleClickedEventDto msg) {
-    _viewEventStreamController.add(_ViewIdEventWrapper(msg.viewId, msg));
+  void onCircleClicked(int viewId, String circleId) {
+    _viewEventStreamController.add(
+        _ViewIdEventWrapper(viewId, CircleClickedEvent(circleId: circleId)));
+  }
+
+  @override
+  void onNavigationUIEnabledChanged(int viewId, bool enabled) {
+    _viewEventStreamController.add(
+        _ViewIdEventWrapper(viewId, NavigationUIEnabledChangedEvent(enabled)));
+  }
+
+  @override
+  void onMyLocationClicked(int viewId) {
+    _viewEventStreamController
+        .add(_ViewIdEventWrapper(viewId, MyLocationClickedEvent()));
+  }
+
+  @override
+  void onMyLocationButtonClicked(int viewId) {
+    _viewEventStreamController
+        .add(_ViewIdEventWrapper(viewId, MyLocationButtonClickedEvent()));
+  }
+
+  @override
+  void onCameraChanged(
+      int viewId, CameraEventTypeDto eventType, CameraPositionDto position) {
+    _viewEventStreamController.add(_ViewIdEventWrapper(
+        viewId,
+        CameraChangedEvent(
+            eventType: eventType.toCameraEventType(),
+            position: position.toCameraPosition())));
   }
 }
 

@@ -33,6 +33,31 @@ export 'package:flutter_test/flutter_test.dart';
 export 'package:google_maps_navigation/google_maps_navigation.dart';
 export 'package:patrol/patrol.dart';
 
+/// Location coordinates for starting position simulation in Finland - Näkkäläntie.
+const double startLocationLat = 68.5938196099399;
+const double startLocationLon = 23.510696979963722;
+
+const NativeAutomatorConfig _nativeAutomatorConfig = NativeAutomatorConfig(
+  findTimeout: Duration(seconds: 20),
+);
+
+/// Create a wrapper [patrol] for [patrolTest] with custom options.
+void patrol(
+  String description,
+  Future<void> Function(PatrolIntegrationTester) callback, {
+  bool? skip,
+  NativeAutomatorConfig? nativeAutomatorConfig,
+}) {
+  patrolTest(
+    description,
+    timeout: const Timeout(
+        Duration(seconds: 240)), // Add a 4 minute timeout to tests.
+    nativeAutomatorConfig: nativeAutomatorConfig ?? _nativeAutomatorConfig,
+    skip: skip,
+    callback,
+  );
+}
+
 /// Pumps a [navigationView] widget in tester [$] and then waits until it settles.
 Future<void> pumpNavigationView(
     PatrolIntegrationTester $, GoogleMapsNavigationView navigationView) async {
@@ -61,6 +86,7 @@ Future<void> checkTermsAndConditionsAcceptance(
       'test_company_name',
     );
 
+    await $.pumpAndSettle();
     // Tap accept or cancel.
     if (Platform.isAndroid) {
       await $.native.tap(Selector(text: 'Yes, I am in'));
@@ -101,7 +127,12 @@ Future<void> checkLocationDialogAndTosAcceptance(
 }
 
 Future<GoogleNavigationViewController> startNavigation(
-    PatrolIntegrationTester $) async {
+    PatrolIntegrationTester $,
+    {void Function(CameraPosition, bool)? onCameraMoveStarted,
+    void Function(CameraPosition)? onCameraMove,
+    void Function(CameraPosition)? onCameraIdle,
+    void Function(CameraPosition)? onCameraStartedFollowingLocation,
+    void Function(CameraPosition)? onCameraStoppedFollowingLocation}) async {
   final Completer<GoogleNavigationViewController> controllerCompleter =
       Completer<GoogleNavigationViewController>();
 
@@ -115,6 +146,11 @@ Future<GoogleNavigationViewController> startNavigation(
       onViewCreated: (GoogleNavigationViewController viewController) {
         controllerCompleter.complete(viewController);
       },
+      onCameraMoveStarted: onCameraMoveStarted,
+      onCameraMove: onCameraMove,
+      onCameraIdle: onCameraIdle,
+      onCameraStartedFollowingLocation: onCameraStartedFollowingLocation,
+      onCameraStoppedFollowingLocation: onCameraStoppedFollowingLocation,
     ),
   );
 
@@ -125,18 +161,18 @@ Future<GoogleNavigationViewController> startNavigation(
   await $.pumpAndSettle();
 
   await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
-    latitude: 38.012087,
-    longitude: -120.270701,
+    latitude: startLocationLat,
+    longitude: startLocationLon,
   ));
 
   /// Set Destination.
   final Destinations destinations = Destinations(
     waypoints: <NavigationWaypoint>[
       NavigationWaypoint.withLatLngTarget(
-        title: 'Grace Cathedral',
+        title: 'Finland - Leppäjärvi',
         target: const LatLng(
-          latitude: 37.791957,
-          longitude: -122.412529,
+          latitude: 68.50680417455591,
+          longitude: 23.310968509112517,
         ),
       ),
     ],
@@ -154,4 +190,67 @@ Future<GoogleNavigationViewController> startNavigation(
   expect(await GoogleMapsNavigator.isGuidanceRunning(), true);
 
   return controller;
+}
+
+/// Start navigation without setting the destination and optionally
+/// simulating starting location with [simulateLocation] and skipping
+/// initialization with [initializeNavigation].
+Future<GoogleNavigationViewController> startNavigationWithoutDestination(
+  PatrolIntegrationTester $, {
+  bool initializeNavigation = true,
+  bool simulateLocation = false,
+  void Function(CameraPosition)? onCameraIdle,
+}) async {
+  final Completer<GoogleNavigationViewController> controllerCompleter =
+      Completer<GoogleNavigationViewController>();
+
+  await checkLocationDialogAndTosAcceptance($);
+
+  final Key key = GlobalKey();
+  await pumpNavigationView(
+    $,
+    GoogleMapsNavigationView(
+      key: key,
+      onViewCreated: (GoogleNavigationViewController viewController) {
+        controllerCompleter.complete(viewController);
+      },
+      onCameraIdle: onCameraIdle,
+    ),
+  );
+
+  final GoogleNavigationViewController controller =
+      await controllerCompleter.future;
+
+  if (initializeNavigation) {
+    await GoogleMapsNavigator.initializeNavigationSession();
+    await $.pumpAndSettle();
+  }
+
+  if (simulateLocation) {
+    await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
+      latitude: startLocationLat,
+      longitude: startLocationLon,
+    ));
+  }
+
+  return controller;
+}
+
+/// A function that waits until a certain condition is met, e.g. until the camera moves where intended.
+///
+/// The function constantly sends the Value objects from [getValue] function
+/// to the provided [predicate] function until the [predicate] function returns true.
+/// Then the function returns that Value. If [maxTries] are reached without
+/// predicate returning true, null is returned.
+Future<Value?> waitForValueMatchingPredicate<Value>(PatrolIntegrationTester $,
+    Future<Value> Function() getValue, bool Function(Value) predicate,
+    {int maxTries = 200, int delayMs = 100}) async {
+  for (int i = 0; i < maxTries; i++) {
+    final Value currentValue = await getValue();
+    if (predicate(currentValue)) {
+      return currentValue;
+    }
+    await $.pump(Duration(milliseconds: delayMs));
+  }
+  return null;
 }

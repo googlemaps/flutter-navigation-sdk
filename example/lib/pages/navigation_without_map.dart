@@ -38,24 +38,15 @@ class _NavigationWithoutMapPageState
   bool sessionInitialized = false;
   bool routeCalculated = false;
   bool guidanceRunning = false;
-  StreamSubscription<NavigationSessionEvent>?
-      _navigationSessionEventSubscription;
 
   @override
   void initState() {
     super.initState();
-    checkTermsAcceptance();
+    unawaited(_initialize());
   }
 
-  @override
-  void dispose() {
-    _navigationSessionEventSubscription?.cancel();
-    super.dispose();
-  }
-
-  void _onNavigationSessionEvent(
-      NavigationSessionEvent navigationSessionEvent) {
-    showMessage(navigationSessionEvent.message);
+  Future<void> _initialize() async {
+    await checkTermsAcceptance();
   }
 
   Future<void> checkTermsAcceptance() async {
@@ -91,9 +82,6 @@ class _NavigationWithoutMapPageState
 
   Future<void> initializeNavigationSession() async {
     try {
-      _navigationSessionEventSubscription =
-          GoogleMapsNavigator.setNavigationSessionEventListener(
-              _onNavigationSessionEvent);
       await GoogleMapsNavigator.initializeNavigationSession();
       setState(() {
         sessionInitialized = true;

@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_navigation/google_maps_navigation.dart';
 
+import '../utils/utils.dart';
 import 'widgets.dart';
 
 /// An editor for [CameraPosition] values.
@@ -101,8 +102,8 @@ class _ExampleCameraPositionEditorState
             _updateCameraPosition();
           },
           title: 'Zoom',
-          min: 0,
-          max: 25,
+          min: googleMapsMinZoomLevel,
+          max: googleMapsMaxZoomLevel,
         ),
         ExampleSlider(
           value: cameraPosition.tilt,

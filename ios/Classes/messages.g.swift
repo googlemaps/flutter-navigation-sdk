@@ -60,6 +60,15 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
+/// Determines the initial visibility of the navigation UI on map initialization.
+enum NavigationUIEnabledPreferenceDto: Int {
+  /// Navigation UI gets enabled if the navigation
+  /// session has already been successfully started.
+  case automatic = 0
+  /// Navigation UI is disabled.
+  case disabled = 1
+}
+
 enum MapTypeDto: Int {
   case none = 0
   case normal = 1
@@ -99,10 +108,13 @@ enum PatternTypeDto: Int {
   case gap = 2
 }
 
-enum NavigationSessionEventTypeDto: Int {
-  case arrivalEvent = 0
-  case routeChanged = 1
-  case errorReceived = 2
+enum CameraEventTypeDto: Int {
+  case moveStartedByApi = 0
+  case moveStartedByGesture = 1
+  case onCameraMove = 2
+  case onCameraIdle = 3
+  case onCameraStartedFollowingLocation = 4
+  case onCameraStoppedFollowingLocation = 5
 }
 
 enum AlternateRoutesStrategyDto: Int {
@@ -258,19 +270,19 @@ struct MapOptionsDto {
 /// Generated class from Pigeon that represents data sent in messages.
 struct NavigationViewOptionsDto {
   /// Determines the initial visibility of the navigation UI on map initialization.
-  var navigationUIEnabled: Bool
+  var navigationUIEnabledPreference: NavigationUIEnabledPreferenceDto
 
   static func fromList(_ list: [Any?]) -> NavigationViewOptionsDto? {
-    let navigationUIEnabled = list[0] as! Bool
+    let navigationUIEnabledPreference = NavigationUIEnabledPreferenceDto(rawValue: list[0] as! Int)!
 
     return NavigationViewOptionsDto(
-      navigationUIEnabled: navigationUIEnabled
+      navigationUIEnabledPreference: navigationUIEnabledPreference
     )
   }
 
   func toList() -> [Any?] {
     [
-      navigationUIEnabled,
+      navigationUIEnabledPreference.rawValue,
     ]
   }
 }
@@ -371,6 +383,7 @@ struct MarkerOptionsDto {
   var infoWindow: InfoWindowDto
   var visible: Bool
   var zIndex: Double
+  var icon: ImageDescriptorDto
 
   static func fromList(_ list: [Any?]) -> MarkerOptionsDto? {
     let alpha = list[0] as! Double
@@ -383,6 +396,7 @@ struct MarkerOptionsDto {
     let infoWindow = InfoWindowDto.fromList(list[7] as! [Any?])!
     let visible = list[8] as! Bool
     let zIndex = list[9] as! Double
+    let icon = ImageDescriptorDto.fromList(list[10] as! [Any?])!
 
     return MarkerOptionsDto(
       alpha: alpha,
@@ -394,7 +408,8 @@ struct MarkerOptionsDto {
       rotation: rotation,
       infoWindow: infoWindow,
       visible: visible,
-      zIndex: zIndex
+      zIndex: zIndex,
+      icon: icon
     )
   }
 
@@ -410,6 +425,38 @@ struct MarkerOptionsDto {
       infoWindow.toList(),
       visible,
       zIndex,
+      icon.toList(),
+    ]
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct ImageDescriptorDto {
+  var registeredImageId: String?
+  var imagePixelRatio: Double?
+  var width: Double?
+  var height: Double?
+
+  static func fromList(_ list: [Any?]) -> ImageDescriptorDto? {
+    let registeredImageId: String? = nilOrValue(list[0])
+    let imagePixelRatio: Double? = nilOrValue(list[1])
+    let width: Double? = nilOrValue(list[2])
+    let height: Double? = nilOrValue(list[3])
+
+    return ImageDescriptorDto(
+      registeredImageId: registeredImageId,
+      imagePixelRatio: imagePixelRatio,
+      width: width,
+      height: height
+    )
+  }
+
+  func toList() -> [Any?] {
+    [
+      registeredImageId,
+      imagePixelRatio,
+      width,
+      height,
     ]
   }
 }
@@ -460,64 +507,6 @@ struct MarkerAnchorDto {
     [
       u,
       v,
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct MarkerEventDto {
-  var viewId: Int64
-  var markerId: String
-  var eventType: MarkerEventTypeDto
-
-  static func fromList(_ list: [Any?]) -> MarkerEventDto? {
-    let viewId = list[0] is Int64 ? list[0] as! Int64 : Int64(list[0] as! Int32)
-    let markerId = list[1] as! String
-    let eventType = MarkerEventTypeDto(rawValue: list[2] as! Int)!
-
-    return MarkerEventDto(
-      viewId: viewId,
-      markerId: markerId,
-      eventType: eventType
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      viewId,
-      markerId,
-      eventType.rawValue,
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct MarkerDragEventDto {
-  var viewId: Int64
-  var markerId: String
-  var eventType: MarkerDragEventTypeDto
-  var position: LatLngDto
-
-  static func fromList(_ list: [Any?]) -> MarkerDragEventDto? {
-    let viewId = list[0] is Int64 ? list[0] as! Int64 : Int64(list[0] as! Int32)
-    let markerId = list[1] as! String
-    let eventType = MarkerDragEventTypeDto(rawValue: list[2] as! Int)!
-    let position = LatLngDto.fromList(list[3] as! [Any?])!
-
-    return MarkerDragEventDto(
-      viewId: viewId,
-      markerId: markerId,
-      eventType: eventType,
-      position: position
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      viewId,
-      markerId,
-      eventType.rawValue,
-      position.toList(),
     ]
   }
 }
@@ -611,29 +600,6 @@ struct PolygonHoleDto {
   func toList() -> [Any?] {
     [
       points,
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct PolygonClickedEventDto {
-  var viewId: Int64
-  var polygonId: String
-
-  static func fromList(_ list: [Any?]) -> PolygonClickedEventDto? {
-    let viewId = list[0] is Int64 ? list[0] as! Int64 : Int64(list[0] as! Int32)
-    let polygonId = list[1] as! String
-
-    return PolygonClickedEventDto(
-      viewId: viewId,
-      polygonId: polygonId
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      viewId,
-      polygonId,
     ]
   }
 }
@@ -798,29 +764,6 @@ struct PolylineOptionsDto {
 }
 
 /// Generated class from Pigeon that represents data sent in messages.
-struct PolylineClickedEventDto {
-  var viewId: Int64
-  var polylineId: String
-
-  static func fromList(_ list: [Any?]) -> PolylineClickedEventDto? {
-    let viewId = list[0] is Int64 ? list[0] as! Int64 : Int64(list[0] as! Int32)
-    let polylineId = list[1] as! String
-
-    return PolylineClickedEventDto(
-      viewId: viewId,
-      polylineId: polylineId
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      viewId,
-      polylineId,
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
 struct CircleDto {
   /// Identifies circle.
   var circleId: String
@@ -897,47 +840,28 @@ struct CircleOptionsDto {
 }
 
 /// Generated class from Pigeon that represents data sent in messages.
-struct CircleClickedEventDto {
-  var viewId: Int64
-  var circleId: String
+struct RouteTokenOptionsDto {
+  var routeToken: String
+  var travelMode: TravelModeDto?
 
-  static func fromList(_ list: [Any?]) -> CircleClickedEventDto? {
-    let viewId = list[0] is Int64 ? list[0] as! Int64 : Int64(list[0] as! Int32)
-    let circleId = list[1] as! String
+  static func fromList(_ list: [Any?]) -> RouteTokenOptionsDto? {
+    let routeToken = list[0] as! String
+    var travelMode: TravelModeDto?
+    let travelModeEnumVal: Int? = nilOrValue(list[1])
+    if let travelModeRawValue = travelModeEnumVal {
+      travelMode = TravelModeDto(rawValue: travelModeRawValue)!
+    }
 
-    return CircleClickedEventDto(
-      viewId: viewId,
-      circleId: circleId
+    return RouteTokenOptionsDto(
+      routeToken: routeToken,
+      travelMode: travelMode
     )
   }
 
   func toList() -> [Any?] {
     [
-      viewId,
-      circleId,
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct NavigationSessionEventDto {
-  var type: NavigationSessionEventTypeDto
-  var message: String
-
-  static func fromList(_ list: [Any?]) -> NavigationSessionEventDto? {
-    let type = NavigationSessionEventTypeDto(rawValue: list[0] as! Int)!
-    let message = list[1] as! String
-
-    return NavigationSessionEventDto(
-      type: type,
-      message: message
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      type.rawValue,
-      message,
+      routeToken,
+      travelMode?.rawValue,
     ]
   }
 }
@@ -947,6 +871,7 @@ struct DestinationsDto {
   var waypoints: [NavigationWaypointDto?]
   var displayOptions: NavigationDisplayOptionsDto
   var routingOptions: RoutingOptionsDto?
+  var routeTokenOptions: RouteTokenOptionsDto?
 
   static func fromList(_ list: [Any?]) -> DestinationsDto? {
     let waypoints = list[0] as! [NavigationWaypointDto?]
@@ -955,11 +880,16 @@ struct DestinationsDto {
     if let routingOptionsList: [Any?] = nilOrValue(list[2]) {
       routingOptions = RoutingOptionsDto.fromList(routingOptionsList)
     }
+    var routeTokenOptions: RouteTokenOptionsDto?
+    if let routeTokenOptionsList: [Any?] = nilOrValue(list[3]) {
+      routeTokenOptions = RouteTokenOptionsDto.fromList(routeTokenOptionsList)
+    }
 
     return DestinationsDto(
       waypoints: waypoints,
       displayOptions: displayOptions,
-      routingOptions: routingOptions
+      routingOptions: routingOptions,
+      routeTokenOptions: routeTokenOptions
     )
   }
 
@@ -968,6 +898,7 @@ struct DestinationsDto {
       waypoints,
       displayOptions.toList(),
       routingOptions?.toList(),
+      routeTokenOptions?.toList(),
     ]
   }
 }
@@ -1242,146 +1173,6 @@ struct SpeedingUpdatedEventDto {
 }
 
 /// Generated class from Pigeon that represents data sent in messages.
-struct RoadSnappedLocationUpdatedEventDto {
-  var location: LatLngDto
-
-  static func fromList(_ list: [Any?]) -> RoadSnappedLocationUpdatedEventDto? {
-    let location = LatLngDto.fromList(list[0] as! [Any?])!
-
-    return RoadSnappedLocationUpdatedEventDto(
-      location: location
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      location.toList(),
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct RoadSnappedRawLocationUpdatedEventDto {
-  var location: LatLngDto?
-
-  static func fromList(_ list: [Any?]) -> RoadSnappedRawLocationUpdatedEventDto? {
-    var location: LatLngDto?
-    if let locationList: [Any?] = nilOrValue(list[0]) {
-      location = LatLngDto.fromList(locationList)
-    }
-
-    return RoadSnappedRawLocationUpdatedEventDto(
-      location: location
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      location?.toList(),
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct OnArrivalEventDto {
-  var waypoint: NavigationWaypointDto
-
-  static func fromList(_ list: [Any?]) -> OnArrivalEventDto? {
-    let waypoint = NavigationWaypointDto.fromList(list[0] as! [Any?])!
-
-    return OnArrivalEventDto(
-      waypoint: waypoint
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      waypoint.toList(),
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct RemainingTimeOrDistanceChangedEventDto {
-  var remainingTime: Double
-  var remainingDistance: Double
-
-  static func fromList(_ list: [Any?]) -> RemainingTimeOrDistanceChangedEventDto? {
-    let remainingTime = list[0] as! Double
-    let remainingDistance = list[1] as! Double
-
-    return RemainingTimeOrDistanceChangedEventDto(
-      remainingTime: remainingTime,
-      remainingDistance: remainingDistance
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      remainingTime,
-      remainingDistance,
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct RouteChangedEventDto {
-  var message: String
-
-  static func fromList(_ list: [Any?]) -> RouteChangedEventDto? {
-    let message = list[0] as! String
-
-    return RouteChangedEventDto(
-      message: message
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      message,
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct ReroutingEventDto {
-  var message: String
-
-  static func fromList(_ list: [Any?]) -> ReroutingEventDto? {
-    let message = list[0] as! String
-
-    return ReroutingEventDto(
-      message: message
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      message,
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct TrafficUpdatedEventDto {
-  var message: String
-
-  static func fromList(_ list: [Any?]) -> TrafficUpdatedEventDto? {
-    let message = list[0] as! String
-
-    return TrafficUpdatedEventDto(
-      message: message
-    )
-  }
-
-  func toList() -> [Any?] {
-    [
-      message,
-    ]
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
 struct SpeedAlertOptionsDto {
   var severityUpgradeDurationSeconds: Double
   var minorSpeedAlertThresholdPercentage: Double
@@ -1606,34 +1397,36 @@ private class NavigationViewApiCodecReader: FlutterStandardReader {
     case 130:
       return CircleOptionsDto.fromList(readValue() as! [Any?])
     case 131:
-      return InfoWindowDto.fromList(readValue() as! [Any?])
+      return ImageDescriptorDto.fromList(readValue() as! [Any?])
     case 132:
-      return LatLngBoundsDto.fromList(readValue() as! [Any?])
+      return InfoWindowDto.fromList(readValue() as! [Any?])
     case 133:
-      return LatLngDto.fromList(readValue() as! [Any?])
+      return LatLngBoundsDto.fromList(readValue() as! [Any?])
     case 134:
       return LatLngDto.fromList(readValue() as! [Any?])
     case 135:
-      return MarkerAnchorDto.fromList(readValue() as! [Any?])
+      return LatLngDto.fromList(readValue() as! [Any?])
     case 136:
-      return MarkerDto.fromList(readValue() as! [Any?])
+      return MarkerAnchorDto.fromList(readValue() as! [Any?])
     case 137:
-      return MarkerOptionsDto.fromList(readValue() as! [Any?])
+      return MarkerDto.fromList(readValue() as! [Any?])
     case 138:
-      return PatternItemDto.fromList(readValue() as! [Any?])
+      return MarkerOptionsDto.fromList(readValue() as! [Any?])
     case 139:
-      return PolygonDto.fromList(readValue() as! [Any?])
+      return PatternItemDto.fromList(readValue() as! [Any?])
     case 140:
-      return PolygonHoleDto.fromList(readValue() as! [Any?])
+      return PolygonDto.fromList(readValue() as! [Any?])
     case 141:
-      return PolygonOptionsDto.fromList(readValue() as! [Any?])
+      return PolygonHoleDto.fromList(readValue() as! [Any?])
     case 142:
-      return PolylineDto.fromList(readValue() as! [Any?])
+      return PolygonOptionsDto.fromList(readValue() as! [Any?])
     case 143:
-      return PolylineOptionsDto.fromList(readValue() as! [Any?])
+      return PolylineDto.fromList(readValue() as! [Any?])
     case 144:
-      return StyleSpanDto.fromList(readValue() as! [Any?])
+      return PolylineOptionsDto.fromList(readValue() as! [Any?])
     case 145:
+      return StyleSpanDto.fromList(readValue() as! [Any?])
+    case 146:
       return StyleSpanStrokeStyleDto.fromList(readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -1652,50 +1445,53 @@ private class NavigationViewApiCodecWriter: FlutterStandardWriter {
     } else if let value = value as? CircleOptionsDto {
       super.writeByte(130)
       super.writeValue(value.toList())
-    } else if let value = value as? InfoWindowDto {
+    } else if let value = value as? ImageDescriptorDto {
       super.writeByte(131)
       super.writeValue(value.toList())
-    } else if let value = value as? LatLngBoundsDto {
+    } else if let value = value as? InfoWindowDto {
       super.writeByte(132)
       super.writeValue(value.toList())
-    } else if let value = value as? LatLngDto {
+    } else if let value = value as? LatLngBoundsDto {
       super.writeByte(133)
       super.writeValue(value.toList())
     } else if let value = value as? LatLngDto {
       super.writeByte(134)
       super.writeValue(value.toList())
-    } else if let value = value as? MarkerAnchorDto {
+    } else if let value = value as? LatLngDto {
       super.writeByte(135)
       super.writeValue(value.toList())
-    } else if let value = value as? MarkerDto {
+    } else if let value = value as? MarkerAnchorDto {
       super.writeByte(136)
       super.writeValue(value.toList())
-    } else if let value = value as? MarkerOptionsDto {
+    } else if let value = value as? MarkerDto {
       super.writeByte(137)
       super.writeValue(value.toList())
-    } else if let value = value as? PatternItemDto {
+    } else if let value = value as? MarkerOptionsDto {
       super.writeByte(138)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonDto {
+    } else if let value = value as? PatternItemDto {
       super.writeByte(139)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonHoleDto {
+    } else if let value = value as? PolygonDto {
       super.writeByte(140)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonOptionsDto {
+    } else if let value = value as? PolygonHoleDto {
       super.writeByte(141)
       super.writeValue(value.toList())
-    } else if let value = value as? PolylineDto {
+    } else if let value = value as? PolygonOptionsDto {
       super.writeByte(142)
       super.writeValue(value.toList())
-    } else if let value = value as? PolylineOptionsDto {
+    } else if let value = value as? PolylineDto {
       super.writeByte(143)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleSpanDto {
+    } else if let value = value as? PolylineOptionsDto {
       super.writeByte(144)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleSpanStrokeStyleDto {
+    } else if let value = value as? StyleSpanDto {
       super.writeByte(145)
+      super.writeValue(value.toList())
+    } else if let value = value as? StyleSpanStrokeStyleDto {
+      super.writeByte(146)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -1721,27 +1517,27 @@ class NavigationViewApiCodec: FlutterStandardMessageCodec {
 protocol NavigationViewApi {
   func awaitMapReady(viewId: Int64, completion: @escaping (Result<Void, Error>) -> Void)
   func isMyLocationEnabled(viewId: Int64) throws -> Bool
-  func enableMyLocation(viewId: Int64, enabled: Bool) throws
+  func setMyLocationEnabled(viewId: Int64, enabled: Bool) throws
   func getMyLocation(viewId: Int64) throws -> LatLngDto?
   func getMapType(viewId: Int64) throws -> MapTypeDto
   func setMapType(viewId: Int64, mapType: MapTypeDto) throws
   func setMapStyle(viewId: Int64, styleJson: String) throws
   func isNavigationTripProgressBarEnabled(viewId: Int64) throws -> Bool
-  func enableNavigationTripProgressBar(viewId: Int64, enabled: Bool) throws
+  func setNavigationTripProgressBarEnabled(viewId: Int64, enabled: Bool) throws
   func isNavigationHeaderEnabled(viewId: Int64) throws -> Bool
-  func enableNavigationHeader(viewId: Int64, enabled: Bool) throws
+  func setNavigationHeaderEnabled(viewId: Int64, enabled: Bool) throws
   func isNavigationFooterEnabled(viewId: Int64) throws -> Bool
-  func enableNavigationFooter(viewId: Int64, enabled: Bool) throws
+  func setNavigationFooterEnabled(viewId: Int64, enabled: Bool) throws
   func isRecenterButtonEnabled(viewId: Int64) throws -> Bool
-  func enableRecenterButton(viewId: Int64, enabled: Bool) throws
+  func setRecenterButtonEnabled(viewId: Int64, enabled: Bool) throws
   func isSpeedLimitIconEnabled(viewId: Int64) throws -> Bool
-  func enableSpeedLimitIcon(viewId: Int64, enabled: Bool) throws
+  func setSpeedLimitIconEnabled(viewId: Int64, enabled: Bool) throws
   func isSpeedometerEnabled(viewId: Int64) throws -> Bool
-  func enableSpeedometer(viewId: Int64, enabled: Bool) throws
-  func isIncidentCardsEnabled(viewId: Int64) throws -> Bool
-  func enableIncidentCards(viewId: Int64, enabled: Bool) throws
+  func setSpeedometerEnabled(viewId: Int64, enabled: Bool) throws
+  func isTrafficIncidentCardsEnabled(viewId: Int64) throws -> Bool
+  func setTrafficIncidentCardsEnabled(viewId: Int64, enabled: Bool) throws
   func isNavigationUIEnabled(viewId: Int64) throws -> Bool
-  func enableNavigationUI(viewId: Int64, enabled: Bool) throws
+  func setNavigationUIEnabled(viewId: Int64, enabled: Bool) throws
   func getCameraPosition(viewId: Int64) throws -> CameraPositionDto
   func getVisibleRegion(viewId: Int64) throws -> LatLngBoundsDto
   func followMyLocation(viewId: Int64, perspective: CameraPerspectiveDto, zoomLevel: Double?) throws
@@ -1769,17 +1565,24 @@ protocol NavigationViewApi {
   func moveCameraByZoom(viewId: Int64, zoomBy: Double, focusDx: Double?, focusDy: Double?) throws
   func moveCameraToZoom(viewId: Int64, zoom: Double) throws
   func showRouteOverview(viewId: Int64) throws
-  func enableMyLocationButton(viewId: Int64, enabled: Bool) throws
-  func enableZoomGestures(viewId: Int64, enabled: Bool) throws
-  func enableZoomControls(viewId: Int64, enabled: Bool) throws
-  func enableCompass(viewId: Int64, enabled: Bool) throws
-  func enableRotateGestures(viewId: Int64, enabled: Bool) throws
-  func enableScrollGestures(viewId: Int64, enabled: Bool) throws
-  func enableScrollGesturesDuringRotateOrZoom(viewId: Int64, enabled: Bool) throws
-  func enableTiltGestures(viewId: Int64, enabled: Bool) throws
-  func enableMapToolbar(viewId: Int64, enabled: Bool) throws
-  func enableTraffic(viewId: Int64, enabled: Bool) throws
+  func getMinZoomPreference(viewId: Int64) throws -> Double
+  func getMaxZoomPreference(viewId: Int64) throws -> Double
+  func resetMinMaxZoomPreference(viewId: Int64) throws
+  func setMinZoomPreference(viewId: Int64, minZoomPreference: Double) throws
+  func setMaxZoomPreference(viewId: Int64, maxZoomPreference: Double) throws
+  func setMyLocationButtonEnabled(viewId: Int64, enabled: Bool) throws
+  func setConsumeMyLocationButtonClickEventsEnabled(viewId: Int64, enabled: Bool) throws
+  func setZoomGesturesEnabled(viewId: Int64, enabled: Bool) throws
+  func setZoomControlsEnabled(viewId: Int64, enabled: Bool) throws
+  func setCompassEnabled(viewId: Int64, enabled: Bool) throws
+  func setRotateGesturesEnabled(viewId: Int64, enabled: Bool) throws
+  func setScrollGesturesEnabled(viewId: Int64, enabled: Bool) throws
+  func setScrollGesturesDuringRotateOrZoomEnabled(viewId: Int64, enabled: Bool) throws
+  func setTiltGesturesEnabled(viewId: Int64, enabled: Bool) throws
+  func setMapToolbarEnabled(viewId: Int64, enabled: Bool) throws
+  func setTrafficEnabled(viewId: Int64, enabled: Bool) throws
   func isMyLocationButtonEnabled(viewId: Int64) throws -> Bool
+  func isConsumeMyLocationButtonClickEventsEnabled(viewId: Int64) throws -> Bool
   func isZoomGesturesEnabled(viewId: Int64) throws -> Bool
   func isZoomControlsEnabled(viewId: Int64) throws -> Bool
   func isCompassEnabled(viewId: Int64) throws -> Bool
@@ -1810,6 +1613,7 @@ protocol NavigationViewApi {
   func updateCircles(viewId: Int64, circles: [CircleDto]) throws -> [CircleDto]
   func removeCircles(viewId: Int64, circles: [CircleDto]) throws
   func clearCircles(viewId: Int64) throws
+  func registerOnCameraChangedListener(viewId: Int64) throws
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -1858,25 +1662,25 @@ enum NavigationViewApiSetup {
     } else {
       isMyLocationEnabledChannel.setMessageHandler(nil)
     }
-    let enableMyLocationChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableMyLocation",
+    let setMyLocationEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMyLocationEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableMyLocationChannel.setMessageHandler { message, reply in
+      setMyLocationEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableMyLocation(viewId: viewIdArg, enabled: enabledArg)
+          try api.setMyLocationEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableMyLocationChannel.setMessageHandler(nil)
+      setMyLocationEnabledChannel.setMessageHandler(nil)
     }
     let getMyLocationChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getMyLocation",
@@ -1975,25 +1779,25 @@ enum NavigationViewApiSetup {
     } else {
       isNavigationTripProgressBarEnabledChannel.setMessageHandler(nil)
     }
-    let enableNavigationTripProgressBarChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableNavigationTripProgressBar",
+    let setNavigationTripProgressBarEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationTripProgressBarEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableNavigationTripProgressBarChannel.setMessageHandler { message, reply in
+      setNavigationTripProgressBarEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableNavigationTripProgressBar(viewId: viewIdArg, enabled: enabledArg)
+          try api.setNavigationTripProgressBarEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableNavigationTripProgressBarChannel.setMessageHandler(nil)
+      setNavigationTripProgressBarEnabledChannel.setMessageHandler(nil)
     }
     let isNavigationHeaderEnabledChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isNavigationHeaderEnabled",
@@ -2014,25 +1818,25 @@ enum NavigationViewApiSetup {
     } else {
       isNavigationHeaderEnabledChannel.setMessageHandler(nil)
     }
-    let enableNavigationHeaderChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableNavigationHeader",
+    let setNavigationHeaderEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationHeaderEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableNavigationHeaderChannel.setMessageHandler { message, reply in
+      setNavigationHeaderEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableNavigationHeader(viewId: viewIdArg, enabled: enabledArg)
+          try api.setNavigationHeaderEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableNavigationHeaderChannel.setMessageHandler(nil)
+      setNavigationHeaderEnabledChannel.setMessageHandler(nil)
     }
     let isNavigationFooterEnabledChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isNavigationFooterEnabled",
@@ -2053,25 +1857,25 @@ enum NavigationViewApiSetup {
     } else {
       isNavigationFooterEnabledChannel.setMessageHandler(nil)
     }
-    let enableNavigationFooterChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableNavigationFooter",
+    let setNavigationFooterEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationFooterEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableNavigationFooterChannel.setMessageHandler { message, reply in
+      setNavigationFooterEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableNavigationFooter(viewId: viewIdArg, enabled: enabledArg)
+          try api.setNavigationFooterEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableNavigationFooterChannel.setMessageHandler(nil)
+      setNavigationFooterEnabledChannel.setMessageHandler(nil)
     }
     let isRecenterButtonEnabledChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isRecenterButtonEnabled",
@@ -2092,25 +1896,25 @@ enum NavigationViewApiSetup {
     } else {
       isRecenterButtonEnabledChannel.setMessageHandler(nil)
     }
-    let enableRecenterButtonChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableRecenterButton",
+    let setRecenterButtonEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setRecenterButtonEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableRecenterButtonChannel.setMessageHandler { message, reply in
+      setRecenterButtonEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableRecenterButton(viewId: viewIdArg, enabled: enabledArg)
+          try api.setRecenterButtonEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableRecenterButtonChannel.setMessageHandler(nil)
+      setRecenterButtonEnabledChannel.setMessageHandler(nil)
     }
     let isSpeedLimitIconEnabledChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isSpeedLimitIconEnabled",
@@ -2131,25 +1935,25 @@ enum NavigationViewApiSetup {
     } else {
       isSpeedLimitIconEnabledChannel.setMessageHandler(nil)
     }
-    let enableSpeedLimitIconChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableSpeedLimitIcon",
+    let setSpeedLimitIconEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setSpeedLimitIconEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableSpeedLimitIconChannel.setMessageHandler { message, reply in
+      setSpeedLimitIconEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableSpeedLimitIcon(viewId: viewIdArg, enabled: enabledArg)
+          try api.setSpeedLimitIconEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableSpeedLimitIconChannel.setMessageHandler(nil)
+      setSpeedLimitIconEnabledChannel.setMessageHandler(nil)
     }
     let isSpeedometerEnabledChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isSpeedometerEnabled",
@@ -2170,64 +1974,64 @@ enum NavigationViewApiSetup {
     } else {
       isSpeedometerEnabledChannel.setMessageHandler(nil)
     }
-    let enableSpeedometerChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableSpeedometer",
+    let setSpeedometerEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setSpeedometerEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableSpeedometerChannel.setMessageHandler { message, reply in
+      setSpeedometerEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableSpeedometer(viewId: viewIdArg, enabled: enabledArg)
+          try api.setSpeedometerEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableSpeedometerChannel.setMessageHandler(nil)
+      setSpeedometerEnabledChannel.setMessageHandler(nil)
     }
-    let isIncidentCardsEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isIncidentCardsEnabled",
+    let isTrafficIncidentCardsEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isTrafficIncidentCardsEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      isIncidentCardsEnabledChannel.setMessageHandler { message, reply in
+      isTrafficIncidentCardsEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         do {
-          let result = try api.isIncidentCardsEnabled(viewId: viewIdArg)
+          let result = try api.isTrafficIncidentCardsEnabled(viewId: viewIdArg)
           reply(wrapResult(result))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      isIncidentCardsEnabledChannel.setMessageHandler(nil)
+      isTrafficIncidentCardsEnabledChannel.setMessageHandler(nil)
     }
-    let enableIncidentCardsChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableIncidentCards",
+    let setTrafficIncidentCardsEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTrafficIncidentCardsEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableIncidentCardsChannel.setMessageHandler { message, reply in
+      setTrafficIncidentCardsEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableIncidentCards(viewId: viewIdArg, enabled: enabledArg)
+          try api.setTrafficIncidentCardsEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableIncidentCardsChannel.setMessageHandler(nil)
+      setTrafficIncidentCardsEnabledChannel.setMessageHandler(nil)
     }
     let isNavigationUIEnabledChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isNavigationUIEnabled",
@@ -2248,25 +2052,25 @@ enum NavigationViewApiSetup {
     } else {
       isNavigationUIEnabledChannel.setMessageHandler(nil)
     }
-    let enableNavigationUIChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableNavigationUI",
+    let setNavigationUIEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationUIEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableNavigationUIChannel.setMessageHandler { message, reply in
+      setNavigationUIEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableNavigationUI(viewId: viewIdArg, enabled: enabledArg)
+          try api.setNavigationUIEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableNavigationUIChannel.setMessageHandler(nil)
+      setNavigationUIEnabledChannel.setMessageHandler(nil)
     }
     let getCameraPositionChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getCameraPosition",
@@ -2708,205 +2512,325 @@ enum NavigationViewApiSetup {
     } else {
       showRouteOverviewChannel.setMessageHandler(nil)
     }
-    let enableMyLocationButtonChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableMyLocationButton",
+    let getMinZoomPreferenceChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getMinZoomPreference",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableMyLocationButtonChannel.setMessageHandler { message, reply in
+      getMinZoomPreferenceChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
-        let enabledArg = args[1] as! Bool
         do {
-          try api.enableMyLocationButton(viewId: viewIdArg, enabled: enabledArg)
-          reply(wrapResult(nil))
+          let result = try api.getMinZoomPreference(viewId: viewIdArg)
+          reply(wrapResult(result))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableMyLocationButtonChannel.setMessageHandler(nil)
+      getMinZoomPreferenceChannel.setMessageHandler(nil)
     }
-    let enableZoomGesturesChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableZoomGestures",
+    let getMaxZoomPreferenceChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getMaxZoomPreference",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableZoomGesturesChannel.setMessageHandler { message, reply in
+      getMaxZoomPreferenceChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
-        let enabledArg = args[1] as! Bool
         do {
-          try api.enableZoomGestures(viewId: viewIdArg, enabled: enabledArg)
-          reply(wrapResult(nil))
+          let result = try api.getMaxZoomPreference(viewId: viewIdArg)
+          reply(wrapResult(result))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableZoomGesturesChannel.setMessageHandler(nil)
+      getMaxZoomPreferenceChannel.setMessageHandler(nil)
     }
-    let enableZoomControlsChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableZoomControls",
+    let resetMinMaxZoomPreferenceChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.resetMinMaxZoomPreference",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableZoomControlsChannel.setMessageHandler { message, reply in
+      resetMinMaxZoomPreferenceChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
-        let enabledArg = args[1] as! Bool
         do {
-          try api.enableZoomControls(viewId: viewIdArg, enabled: enabledArg)
+          try api.resetMinMaxZoomPreference(viewId: viewIdArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableZoomControlsChannel.setMessageHandler(nil)
+      resetMinMaxZoomPreferenceChannel.setMessageHandler(nil)
     }
-    let enableCompassChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableCompass",
+    let setMinZoomPreferenceChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMinZoomPreference",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableCompassChannel.setMessageHandler { message, reply in
+      setMinZoomPreferenceChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
-        let enabledArg = args[1] as! Bool
+        let minZoomPreferenceArg = args[1] as! Double
         do {
-          try api.enableCompass(viewId: viewIdArg, enabled: enabledArg)
+          try api.setMinZoomPreference(viewId: viewIdArg, minZoomPreference: minZoomPreferenceArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableCompassChannel.setMessageHandler(nil)
+      setMinZoomPreferenceChannel.setMessageHandler(nil)
     }
-    let enableRotateGesturesChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableRotateGestures",
+    let setMaxZoomPreferenceChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMaxZoomPreference",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableRotateGesturesChannel.setMessageHandler { message, reply in
+      setMaxZoomPreferenceChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
-        let enabledArg = args[1] as! Bool
+        let maxZoomPreferenceArg = args[1] as! Double
         do {
-          try api.enableRotateGestures(viewId: viewIdArg, enabled: enabledArg)
+          try api.setMaxZoomPreference(viewId: viewIdArg, maxZoomPreference: maxZoomPreferenceArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableRotateGesturesChannel.setMessageHandler(nil)
+      setMaxZoomPreferenceChannel.setMessageHandler(nil)
     }
-    let enableScrollGesturesChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableScrollGestures",
+    let setMyLocationButtonEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMyLocationButtonEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableScrollGesturesChannel.setMessageHandler { message, reply in
+      setMyLocationButtonEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableScrollGestures(viewId: viewIdArg, enabled: enabledArg)
+          try api.setMyLocationButtonEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableScrollGesturesChannel.setMessageHandler(nil)
+      setMyLocationButtonEnabledChannel.setMessageHandler(nil)
     }
-    let enableScrollGesturesDuringRotateOrZoomChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableScrollGesturesDuringRotateOrZoom",
+    let setConsumeMyLocationButtonClickEventsEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setConsumeMyLocationButtonClickEventsEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableScrollGesturesDuringRotateOrZoomChannel.setMessageHandler { message, reply in
+      setConsumeMyLocationButtonClickEventsEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableScrollGesturesDuringRotateOrZoom(viewId: viewIdArg, enabled: enabledArg)
+          try api.setConsumeMyLocationButtonClickEventsEnabled(
+            viewId: viewIdArg,
+            enabled: enabledArg
+          )
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableScrollGesturesDuringRotateOrZoomChannel.setMessageHandler(nil)
+      setConsumeMyLocationButtonClickEventsEnabledChannel.setMessageHandler(nil)
     }
-    let enableTiltGesturesChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableTiltGestures",
+    let setZoomGesturesEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setZoomGesturesEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableTiltGesturesChannel.setMessageHandler { message, reply in
+      setZoomGesturesEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableTiltGestures(viewId: viewIdArg, enabled: enabledArg)
+          try api.setZoomGesturesEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableTiltGesturesChannel.setMessageHandler(nil)
+      setZoomGesturesEnabledChannel.setMessageHandler(nil)
     }
-    let enableMapToolbarChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableMapToolbar",
+    let setZoomControlsEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setZoomControlsEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableMapToolbarChannel.setMessageHandler { message, reply in
+      setZoomControlsEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableMapToolbar(viewId: viewIdArg, enabled: enabledArg)
+          try api.setZoomControlsEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableMapToolbarChannel.setMessageHandler(nil)
+      setZoomControlsEnabledChannel.setMessageHandler(nil)
     }
-    let enableTrafficChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableTraffic",
+    let setCompassEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setCompassEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      enableTrafficChannel.setMessageHandler { message, reply in
+      setCompassEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         let enabledArg = args[1] as! Bool
         do {
-          try api.enableTraffic(viewId: viewIdArg, enabled: enabledArg)
+          try api.setCompassEnabled(viewId: viewIdArg, enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      enableTrafficChannel.setMessageHandler(nil)
+      setCompassEnabledChannel.setMessageHandler(nil)
+    }
+    let setRotateGesturesEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setRotateGesturesEnabled",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      setRotateGesturesEnabledChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
+        let enabledArg = args[1] as! Bool
+        do {
+          try api.setRotateGesturesEnabled(viewId: viewIdArg, enabled: enabledArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setRotateGesturesEnabledChannel.setMessageHandler(nil)
+    }
+    let setScrollGesturesEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setScrollGesturesEnabled",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      setScrollGesturesEnabledChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
+        let enabledArg = args[1] as! Bool
+        do {
+          try api.setScrollGesturesEnabled(viewId: viewIdArg, enabled: enabledArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setScrollGesturesEnabledChannel.setMessageHandler(nil)
+    }
+    let setScrollGesturesDuringRotateOrZoomEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setScrollGesturesDuringRotateOrZoomEnabled",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      setScrollGesturesDuringRotateOrZoomEnabledChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
+        let enabledArg = args[1] as! Bool
+        do {
+          try api.setScrollGesturesDuringRotateOrZoomEnabled(viewId: viewIdArg, enabled: enabledArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setScrollGesturesDuringRotateOrZoomEnabledChannel.setMessageHandler(nil)
+    }
+    let setTiltGesturesEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTiltGesturesEnabled",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      setTiltGesturesEnabledChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
+        let enabledArg = args[1] as! Bool
+        do {
+          try api.setTiltGesturesEnabled(viewId: viewIdArg, enabled: enabledArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setTiltGesturesEnabledChannel.setMessageHandler(nil)
+    }
+    let setMapToolbarEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMapToolbarEnabled",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      setMapToolbarEnabledChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
+        let enabledArg = args[1] as! Bool
+        do {
+          try api.setMapToolbarEnabled(viewId: viewIdArg, enabled: enabledArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setMapToolbarEnabledChannel.setMessageHandler(nil)
+    }
+    let setTrafficEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTrafficEnabled",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      setTrafficEnabledChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
+        let enabledArg = args[1] as! Bool
+        do {
+          try api.setTrafficEnabled(viewId: viewIdArg, enabled: enabledArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setTrafficEnabledChannel.setMessageHandler(nil)
     }
     let isMyLocationButtonEnabledChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isMyLocationButtonEnabled",
@@ -2926,6 +2850,25 @@ enum NavigationViewApiSetup {
       }
     } else {
       isMyLocationButtonEnabledChannel.setMessageHandler(nil)
+    }
+    let isConsumeMyLocationButtonClickEventsEnabledChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isConsumeMyLocationButtonClickEventsEnabled",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      isConsumeMyLocationButtonClickEventsEnabledChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
+        do {
+          let result = try api.isConsumeMyLocationButtonClickEventsEnabled(viewId: viewIdArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      isConsumeMyLocationButtonClickEventsEnabledChannel.setMessageHandler(nil)
     }
     let isZoomGesturesEnabledChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isZoomGesturesEnabled",
@@ -3509,6 +3452,167 @@ enum NavigationViewApiSetup {
     } else {
       clearCirclesChannel.setMessageHandler(nil)
     }
+    let registerOnCameraChangedListenerChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.registerOnCameraChangedListener",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      registerOnCameraChangedListenerChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
+        do {
+          try api.registerOnCameraChangedListener(viewId: viewIdArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      registerOnCameraChangedListenerChannel.setMessageHandler(nil)
+    }
+  }
+}
+
+private class ImageRegistryApiCodecReader: FlutterStandardReader {
+  override func readValue(ofType type: UInt8) -> Any? {
+    switch type {
+    case 128:
+      return ImageDescriptorDto.fromList(readValue() as! [Any?])
+    case 129:
+      return ImageDescriptorDto.fromList(readValue() as! [Any?])
+    default:
+      return super.readValue(ofType: type)
+    }
+  }
+}
+
+private class ImageRegistryApiCodecWriter: FlutterStandardWriter {
+  override func writeValue(_ value: Any) {
+    if let value = value as? ImageDescriptorDto {
+      super.writeByte(128)
+      super.writeValue(value.toList())
+    } else if let value = value as? ImageDescriptorDto {
+      super.writeByte(129)
+      super.writeValue(value.toList())
+    } else {
+      super.writeValue(value)
+    }
+  }
+}
+
+private class ImageRegistryApiCodecReaderWriter: FlutterStandardReaderWriter {
+  override func reader(with data: Data) -> FlutterStandardReader {
+    ImageRegistryApiCodecReader(data: data)
+  }
+
+  override func writer(with data: NSMutableData) -> FlutterStandardWriter {
+    ImageRegistryApiCodecWriter(data: data)
+  }
+}
+
+class ImageRegistryApiCodec: FlutterStandardMessageCodec {
+  static let shared = ImageRegistryApiCodec(readerWriter: ImageRegistryApiCodecReaderWriter())
+}
+
+/// Generated protocol from Pigeon that represents a handler of messages from Flutter.
+protocol ImageRegistryApi {
+  func registerBitmapImage(imageId: String, bytes: FlutterStandardTypedData,
+                           imagePixelRatio: Double, width: Double?,
+                           height: Double?) throws -> ImageDescriptorDto
+  func unregisterImage(imageDescriptor: ImageDescriptorDto) throws
+  func getRegisteredImages() throws -> [ImageDescriptorDto]
+  func clearRegisteredImages() throws
+}
+
+/// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
+enum ImageRegistryApiSetup {
+  /// The codec used by ImageRegistryApi.
+  static var codec: FlutterStandardMessageCodec { ImageRegistryApiCodec.shared }
+  /// Sets up an instance of `ImageRegistryApi` to handle messages through the `binaryMessenger`.
+  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: ImageRegistryApi?) {
+    let registerBitmapImageChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.registerBitmapImage",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      registerBitmapImageChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let imageIdArg = args[0] as! String
+        let bytesArg = args[1] as! FlutterStandardTypedData
+        let imagePixelRatioArg = args[2] as! Double
+        let widthArg: Double? = nilOrValue(args[3])
+        let heightArg: Double? = nilOrValue(args[4])
+        do {
+          let result = try api.registerBitmapImage(
+            imageId: imageIdArg,
+            bytes: bytesArg,
+            imagePixelRatio: imagePixelRatioArg,
+            width: widthArg,
+            height: heightArg
+          )
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      registerBitmapImageChannel.setMessageHandler(nil)
+    }
+    let unregisterImageChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.unregisterImage",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      unregisterImageChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let imageDescriptorArg = args[0] as! ImageDescriptorDto
+        do {
+          try api.unregisterImage(imageDescriptor: imageDescriptorArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      unregisterImageChannel.setMessageHandler(nil)
+    }
+    let getRegisteredImagesChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.getRegisteredImages",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      getRegisteredImagesChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.getRegisteredImages()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getRegisteredImagesChannel.setMessageHandler(nil)
+    }
+    let clearRegisteredImagesChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.clearRegisteredImages",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      clearRegisteredImagesChannel.setMessageHandler { _, reply in
+        do {
+          try api.clearRegisteredImages()
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      clearRegisteredImagesChannel.setMessageHandler(nil)
+    }
   }
 }
 
@@ -3516,17 +3620,9 @@ private class NavigationViewEventApiCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 128:
-      return CircleClickedEventDto.fromList(readValue() as! [Any?])
+      return CameraPositionDto.fromList(readValue() as! [Any?])
     case 129:
       return LatLngDto.fromList(readValue() as! [Any?])
-    case 130:
-      return MarkerDragEventDto.fromList(readValue() as! [Any?])
-    case 131:
-      return MarkerEventDto.fromList(readValue() as! [Any?])
-    case 132:
-      return PolygonClickedEventDto.fromList(readValue() as! [Any?])
-    case 133:
-      return PolylineClickedEventDto.fromList(readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -3535,23 +3631,11 @@ private class NavigationViewEventApiCodecReader: FlutterStandardReader {
 
 private class NavigationViewEventApiCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? CircleClickedEventDto {
+    if let value = value as? CameraPositionDto {
       super.writeByte(128)
       super.writeValue(value.toList())
     } else if let value = value as? LatLngDto {
       super.writeByte(129)
-      super.writeValue(value.toList())
-    } else if let value = value as? MarkerDragEventDto {
-      super.writeByte(130)
-      super.writeValue(value.toList())
-    } else if let value = value as? MarkerEventDto {
-      super.writeByte(131)
-      super.writeValue(value.toList())
-    } else if let value = value as? PolygonClickedEventDto {
-      super.writeByte(132)
-      super.writeValue(value.toList())
-    } else if let value = value as? PolylineClickedEventDto {
-      super.writeByte(133)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -3582,15 +3666,28 @@ protocol NavigationViewEventApiProtocol {
                            completion: @escaping (Result<Void, FlutterError>) -> Void)
   func onRecenterButtonClicked(viewId viewIdArg: Int64,
                                completion: @escaping (Result<Void, FlutterError>) -> Void)
-  func onMarkerEvent(msg msgArg: MarkerEventDto,
+  func onMarkerEvent(viewId viewIdArg: Int64, markerId markerIdArg: String,
+                     eventType eventTypeArg: MarkerEventTypeDto,
                      completion: @escaping (Result<Void, FlutterError>) -> Void)
-  func onMarkerDragEvent(msg msgArg: MarkerDragEventDto,
+  func onMarkerDragEvent(viewId viewIdArg: Int64, markerId markerIdArg: String,
+                         eventType eventTypeArg: MarkerDragEventTypeDto,
+                         position positionArg: LatLngDto,
                          completion: @escaping (Result<Void, FlutterError>) -> Void)
-  func onPolygonClicked(msg msgArg: PolygonClickedEventDto,
+  func onPolygonClicked(viewId viewIdArg: Int64, polygonId polygonIdArg: String,
                         completion: @escaping (Result<Void, FlutterError>) -> Void)
-  func onPolylineClicked(msg msgArg: PolylineClickedEventDto,
+  func onPolylineClicked(viewId viewIdArg: Int64, polylineId polylineIdArg: String,
                          completion: @escaping (Result<Void, FlutterError>) -> Void)
-  func onCircleClicked(msg msgArg: CircleClickedEventDto,
+  func onCircleClicked(viewId viewIdArg: Int64, circleId circleIdArg: String,
+                       completion: @escaping (Result<Void, FlutterError>) -> Void)
+  func onNavigationUIEnabledChanged(viewId viewIdArg: Int64,
+                                    navigationUIEnabled navigationUIEnabledArg: Bool,
+                                    completion: @escaping (Result<Void, FlutterError>) -> Void)
+  func onMyLocationClicked(viewId viewIdArg: Int64,
+                           completion: @escaping (Result<Void, FlutterError>) -> Void)
+  func onMyLocationButtonClicked(viewId viewIdArg: Int64,
+                                 completion: @escaping (Result<Void, FlutterError>) -> Void)
+  func onCameraChanged(viewId viewIdArg: Int64, eventType eventTypeArg: CameraEventTypeDto,
+                       position positionArg: CameraPositionDto,
                        completion: @escaping (Result<Void, FlutterError>) -> Void)
 }
 
@@ -3679,7 +3776,8 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
     }
   }
 
-  func onMarkerEvent(msg msgArg: MarkerEventDto,
+  func onMarkerEvent(viewId viewIdArg: Int64, markerId markerIdArg: String,
+                     eventType eventTypeArg: MarkerEventTypeDto,
                      completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerEvent"
@@ -3688,7 +3786,7 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
+    channel.sendMessage([viewIdArg, markerIdArg, eventTypeArg.rawValue] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -3704,7 +3802,9 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
     }
   }
 
-  func onMarkerDragEvent(msg msgArg: MarkerDragEventDto,
+  func onMarkerDragEvent(viewId viewIdArg: Int64, markerId markerIdArg: String,
+                         eventType eventTypeArg: MarkerDragEventTypeDto,
+                         position positionArg: LatLngDto,
                          completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerDragEvent"
@@ -3713,23 +3813,25 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
-      guard let listResponse = response as? [Any?] else {
-        completion(.failure(createConnectionError(withChannelName: channelName)))
-        return
+    channel
+      .sendMessage([viewIdArg, markerIdArg, eventTypeArg.rawValue,
+                    positionArg] as [Any?]) { response in
+        guard let listResponse = response as? [Any?] else {
+          completion(.failure(createConnectionError(withChannelName: channelName)))
+          return
+        }
+        if listResponse.count > 1 {
+          let code: String = listResponse[0] as! String
+          let message: String? = nilOrValue(listResponse[1])
+          let details: String? = nilOrValue(listResponse[2])
+          completion(.failure(FlutterError(code: code, message: message, details: details)))
+        } else {
+          completion(.success(()))
+        }
       }
-      if listResponse.count > 1 {
-        let code: String = listResponse[0] as! String
-        let message: String? = nilOrValue(listResponse[1])
-        let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(FlutterError(code: code, message: message, details: details)))
-      } else {
-        completion(.success(()))
-      }
-    }
   }
 
-  func onPolygonClicked(msg msgArg: PolygonClickedEventDto,
+  func onPolygonClicked(viewId viewIdArg: Int64, polygonId polygonIdArg: String,
                         completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onPolygonClicked"
@@ -3738,7 +3840,7 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
+    channel.sendMessage([viewIdArg, polygonIdArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -3754,7 +3856,7 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
     }
   }
 
-  func onPolylineClicked(msg msgArg: PolylineClickedEventDto,
+  func onPolylineClicked(viewId viewIdArg: Int64, polylineId polylineIdArg: String,
                          completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onPolylineClicked"
@@ -3763,7 +3865,7 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
+    channel.sendMessage([viewIdArg, polylineIdArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -3779,7 +3881,7 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
     }
   }
 
-  func onCircleClicked(msg msgArg: CircleClickedEventDto,
+  func onCircleClicked(viewId viewIdArg: Int64, circleId circleIdArg: String,
                        completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCircleClicked"
@@ -3788,7 +3890,109 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
+    channel.sendMessage([viewIdArg, circleIdArg] as [Any?]) { response in
+      guard let listResponse = response as? [Any?] else {
+        completion(.failure(createConnectionError(withChannelName: channelName)))
+        return
+      }
+      if listResponse.count > 1 {
+        let code: String = listResponse[0] as! String
+        let message: String? = nilOrValue(listResponse[1])
+        let details: String? = nilOrValue(listResponse[2])
+        completion(.failure(FlutterError(code: code, message: message, details: details)))
+      } else {
+        completion(.success(()))
+      }
+    }
+  }
+
+  func onNavigationUIEnabledChanged(viewId viewIdArg: Int64,
+                                    navigationUIEnabled navigationUIEnabledArg: Bool,
+                                    completion: @escaping (Result<Void, FlutterError>) -> Void) {
+    let channelName =
+      "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onNavigationUIEnabledChanged"
+    let channel = FlutterBasicMessageChannel(
+      name: channelName,
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    channel.sendMessage([viewIdArg, navigationUIEnabledArg] as [Any?]) { response in
+      guard let listResponse = response as? [Any?] else {
+        completion(.failure(createConnectionError(withChannelName: channelName)))
+        return
+      }
+      if listResponse.count > 1 {
+        let code: String = listResponse[0] as! String
+        let message: String? = nilOrValue(listResponse[1])
+        let details: String? = nilOrValue(listResponse[2])
+        completion(.failure(FlutterError(code: code, message: message, details: details)))
+      } else {
+        completion(.success(()))
+      }
+    }
+  }
+
+  func onMyLocationClicked(viewId viewIdArg: Int64,
+                           completion: @escaping (Result<Void, FlutterError>) -> Void) {
+    let channelName =
+      "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMyLocationClicked"
+    let channel = FlutterBasicMessageChannel(
+      name: channelName,
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    channel.sendMessage([viewIdArg] as [Any?]) { response in
+      guard let listResponse = response as? [Any?] else {
+        completion(.failure(createConnectionError(withChannelName: channelName)))
+        return
+      }
+      if listResponse.count > 1 {
+        let code: String = listResponse[0] as! String
+        let message: String? = nilOrValue(listResponse[1])
+        let details: String? = nilOrValue(listResponse[2])
+        completion(.failure(FlutterError(code: code, message: message, details: details)))
+      } else {
+        completion(.success(()))
+      }
+    }
+  }
+
+  func onMyLocationButtonClicked(viewId viewIdArg: Int64,
+                                 completion: @escaping (Result<Void, FlutterError>) -> Void) {
+    let channelName =
+      "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMyLocationButtonClicked"
+    let channel = FlutterBasicMessageChannel(
+      name: channelName,
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    channel.sendMessage([viewIdArg] as [Any?]) { response in
+      guard let listResponse = response as? [Any?] else {
+        completion(.failure(createConnectionError(withChannelName: channelName)))
+        return
+      }
+      if listResponse.count > 1 {
+        let code: String = listResponse[0] as! String
+        let message: String? = nilOrValue(listResponse[1])
+        let details: String? = nilOrValue(listResponse[2])
+        completion(.failure(FlutterError(code: code, message: message, details: details)))
+      } else {
+        completion(.success(()))
+      }
+    }
+  }
+
+  func onCameraChanged(viewId viewIdArg: Int64, eventType eventTypeArg: CameraEventTypeDto,
+                       position positionArg: CameraPositionDto,
+                       completion: @escaping (Result<Void, FlutterError>) -> Void) {
+    let channelName =
+      "dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCameraChanged"
+    let channel = FlutterBasicMessageChannel(
+      name: channelName,
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    channel.sendMessage([viewIdArg, eventTypeArg.rawValue, positionArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -3833,10 +4037,12 @@ private class NavigationSessionApiCodecReader: FlutterStandardReader {
     case 139:
       return RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(readValue() as! [Any?])
     case 140:
-      return RoutingOptionsDto.fromList(readValue() as! [Any?])
+      return RouteTokenOptionsDto.fromList(readValue() as! [Any?])
     case 141:
-      return SimulationOptionsDto.fromList(readValue() as! [Any?])
+      return RoutingOptionsDto.fromList(readValue() as! [Any?])
     case 142:
+      return SimulationOptionsDto.fromList(readValue() as! [Any?])
+    case 143:
       return SpeedAlertOptionsDto.fromList(readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -3882,14 +4088,17 @@ private class NavigationSessionApiCodecWriter: FlutterStandardWriter {
     } else if let value = value as? RouteSegmentTrafficDataRoadStretchRenderingDataDto {
       super.writeByte(139)
       super.writeValue(value.toList())
-    } else if let value = value as? RoutingOptionsDto {
+    } else if let value = value as? RouteTokenOptionsDto {
       super.writeByte(140)
       super.writeValue(value.toList())
-    } else if let value = value as? SimulationOptionsDto {
+    } else if let value = value as? RoutingOptionsDto {
       super.writeByte(141)
       super.writeValue(value.toList())
-    } else if let value = value as? SpeedAlertOptionsDto {
+    } else if let value = value as? SimulationOptionsDto {
       super.writeByte(142)
+      super.writeValue(value.toList())
+    } else if let value = value as? SpeedAlertOptionsDto {
+      super.writeByte(143)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -3915,7 +4124,8 @@ class NavigationSessionApiCodec: FlutterStandardMessageCodec {
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol NavigationSessionApi {
   /// General.
-  func createNavigationSession(completion: @escaping (Result<Void, Error>) -> Void)
+  func createNavigationSession(abnormalTerminationReportingEnabled: Bool,
+                               completion: @escaping (Result<Void, Error>) -> Void)
   func isInitialized() throws -> Bool
   func cleanup() throws
   func showTermsAndConditionsDialog(title: String, companyName: String,
@@ -3923,11 +4133,12 @@ protocol NavigationSessionApi {
                                     completion: @escaping (Result<Bool, Error>) -> Void)
   func areTermsAccepted() throws -> Bool
   func resetTermsAccepted() throws
+  func getNavSDKVersion() throws -> String
   /// Navigation.
   func isGuidanceRunning() throws -> Bool
   func startGuidance() throws
   func stopGuidance() throws
-  func setDestinations(msg: DestinationsDto,
+  func setDestinations(destinations: DestinationsDto,
                        completion: @escaping (Result<RouteStatusDto, Error>) -> Void)
   func clearDestinations() throws
   func continueToNextDestination() throws -> NavigationWaypointDto?
@@ -3984,15 +4195,20 @@ enum NavigationSessionApiSetup {
       codec: codec
     )
     if let api {
-      createNavigationSessionChannel.setMessageHandler { _, reply in
-        api.createNavigationSession { result in
-          switch result {
-          case .success:
-            reply(wrapResult(nil))
-          case let .failure(error):
-            reply(wrapError(error))
+      createNavigationSessionChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let abnormalTerminationReportingEnabledArg = args[0] as! Bool
+        api
+          .createNavigationSession(
+            abnormalTerminationReportingEnabled: abnormalTerminationReportingEnabledArg
+          ) { result in
+            switch result {
+            case .success:
+              reply(wrapResult(nil))
+            case let .failure(error):
+              reply(wrapError(error))
+            }
           }
-        }
       }
     } else {
       createNavigationSessionChannel.setMessageHandler(nil)
@@ -4092,6 +4308,23 @@ enum NavigationSessionApiSetup {
     } else {
       resetTermsAcceptedChannel.setMessageHandler(nil)
     }
+    let getNavSDKVersionChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.getNavSDKVersion",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      getNavSDKVersionChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.getNavSDKVersion()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getNavSDKVersionChannel.setMessageHandler(nil)
+    }
     /// Navigation.
     let isGuidanceRunningChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.isGuidanceRunning",
@@ -4152,8 +4385,8 @@ enum NavigationSessionApiSetup {
     if let api {
       setDestinationsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let msgArg = args[0] as! DestinationsDto
-        api.setDestinations(msg: msgArg) { result in
+        let destinationsArg = args[0] as! DestinationsDto
+        api.setDestinations(destinations: destinationsArg) { result in
           switch result {
           case let .success(res):
             reply(wrapResult(res.rawValue))
@@ -4576,27 +4809,9 @@ private class NavigationSessionEventApiCodecReader: FlutterStandardReader {
     case 128:
       return LatLngDto.fromList(readValue() as! [Any?])
     case 129:
-      return LatLngDto.fromList(readValue() as! [Any?])
-    case 130:
-      return NavigationSessionEventDto.fromList(readValue() as! [Any?])
-    case 131:
       return NavigationWaypointDto.fromList(readValue() as! [Any?])
-    case 132:
-      return OnArrivalEventDto.fromList(readValue() as! [Any?])
-    case 133:
-      return RemainingTimeOrDistanceChangedEventDto.fromList(readValue() as! [Any?])
-    case 134:
-      return ReroutingEventDto.fromList(readValue() as! [Any?])
-    case 135:
-      return RoadSnappedLocationUpdatedEventDto.fromList(readValue() as! [Any?])
-    case 136:
-      return RoadSnappedRawLocationUpdatedEventDto.fromList(readValue() as! [Any?])
-    case 137:
-      return RouteChangedEventDto.fromList(readValue() as! [Any?])
-    case 138:
+    case 130:
       return SpeedingUpdatedEventDto.fromList(readValue() as! [Any?])
-    case 139:
-      return TrafficUpdatedEventDto.fromList(readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -4608,38 +4823,11 @@ private class NavigationSessionEventApiCodecWriter: FlutterStandardWriter {
     if let value = value as? LatLngDto {
       super.writeByte(128)
       super.writeValue(value.toList())
-    } else if let value = value as? LatLngDto {
+    } else if let value = value as? NavigationWaypointDto {
       super.writeByte(129)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationSessionEventDto {
-      super.writeByte(130)
-      super.writeValue(value.toList())
-    } else if let value = value as? NavigationWaypointDto {
-      super.writeByte(131)
-      super.writeValue(value.toList())
-    } else if let value = value as? OnArrivalEventDto {
-      super.writeByte(132)
-      super.writeValue(value.toList())
-    } else if let value = value as? RemainingTimeOrDistanceChangedEventDto {
-      super.writeByte(133)
-      super.writeValue(value.toList())
-    } else if let value = value as? ReroutingEventDto {
-      super.writeByte(134)
-      super.writeValue(value.toList())
-    } else if let value = value as? RoadSnappedLocationUpdatedEventDto {
-      super.writeByte(135)
-      super.writeValue(value.toList())
-    } else if let value = value as? RoadSnappedRawLocationUpdatedEventDto {
-      super.writeByte(136)
-      super.writeValue(value.toList())
-    } else if let value = value as? RouteChangedEventDto {
-      super.writeByte(137)
-      super.writeValue(value.toList())
     } else if let value = value as? SpeedingUpdatedEventDto {
-      super.writeByte(138)
-      super.writeValue(value.toList())
-    } else if let value = value as? TrafficUpdatedEventDto {
-      super.writeByte(139)
+      super.writeByte(130)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -4664,26 +4852,25 @@ class NavigationSessionEventApiCodec: FlutterStandardMessageCodec {
 
 /// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
 protocol NavigationSessionEventApiProtocol {
-  func onNavigationSessionEvent(msg msgArg: NavigationSessionEventDto,
-                                completion: @escaping (Result<Void, FlutterError>) -> Void)
   func onSpeedingUpdated(msg msgArg: SpeedingUpdatedEventDto,
                          completion: @escaping (Result<Void, FlutterError>) -> Void)
-  func onRoadSnappedLocationUpdated(msg msgArg: RoadSnappedLocationUpdatedEventDto,
+  func onRoadSnappedLocationUpdated(location locationArg: LatLngDto,
                                     completion: @escaping (Result<Void, FlutterError>) -> Void)
-  func onRoadSnappedRawLocationUpdated(msg msgArg: RoadSnappedRawLocationUpdatedEventDto,
+  func onRoadSnappedRawLocationUpdated(location locationArg: LatLngDto,
                                        completion: @escaping (Result<Void, FlutterError>) -> Void)
-  func onArrival(msg msgArg: OnArrivalEventDto,
+  func onArrival(waypoint waypointArg: NavigationWaypointDto,
                  completion: @escaping (Result<Void, FlutterError>) -> Void)
-  func onRouteChanged(msg msgArg: RouteChangedEventDto,
-                      completion: @escaping (Result<Void, FlutterError>) -> Void)
-  func onRemainingTimeOrDistanceChanged(msg msgArg: RemainingTimeOrDistanceChangedEventDto,
+  func onRouteChanged(completion: @escaping (Result<Void, FlutterError>) -> Void)
+  func onRemainingTimeOrDistanceChanged(remainingTime remainingTimeArg: Double,
+                                        remainingDistance remainingDistanceArg: Double,
                                         completion: @escaping (Result<Void, FlutterError>) -> Void)
-  /// Android only event.
-  func onTrafficUpdated(msg msgArg: TrafficUpdatedEventDto,
-                        completion: @escaping (Result<Void, FlutterError>) -> Void)
-  /// Android only event.
-  func onRerouting(msg msgArg: ReroutingEventDto,
-                   completion: @escaping (Result<Void, FlutterError>) -> Void)
+  /// Android-only event.
+  func onTrafficUpdated(completion: @escaping (Result<Void, FlutterError>) -> Void)
+  /// Android-only event.
+  func onRerouting(completion: @escaping (Result<Void, FlutterError>) -> Void)
+  /// Android-only event.
+  func onGpsAvailabilityUpdate(available availableArg: Bool,
+                               completion: @escaping (Result<Void, FlutterError>) -> Void)
 }
 
 class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
@@ -4694,31 +4881,6 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
 
   var codec: FlutterStandardMessageCodec {
     NavigationSessionEventApiCodec.shared
-  }
-
-  func onNavigationSessionEvent(msg msgArg: NavigationSessionEventDto,
-                                completion: @escaping (Result<Void, FlutterError>) -> Void) {
-    let channelName =
-      "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onNavigationSessionEvent"
-    let channel = FlutterBasicMessageChannel(
-      name: channelName,
-      binaryMessenger: binaryMessenger,
-      codec: codec
-    )
-    channel.sendMessage([msgArg] as [Any?]) { response in
-      guard let listResponse = response as? [Any?] else {
-        completion(.failure(createConnectionError(withChannelName: channelName)))
-        return
-      }
-      if listResponse.count > 1 {
-        let code: String = listResponse[0] as! String
-        let message: String? = nilOrValue(listResponse[1])
-        let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(FlutterError(code: code, message: message, details: details)))
-      } else {
-        completion(.success(()))
-      }
-    }
   }
 
   func onSpeedingUpdated(msg msgArg: SpeedingUpdatedEventDto,
@@ -4746,7 +4908,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
     }
   }
 
-  func onRoadSnappedLocationUpdated(msg msgArg: RoadSnappedLocationUpdatedEventDto,
+  func onRoadSnappedLocationUpdated(location locationArg: LatLngDto,
                                     completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRoadSnappedLocationUpdated"
@@ -4755,7 +4917,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
+    channel.sendMessage([locationArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -4771,7 +4933,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
     }
   }
 
-  func onRoadSnappedRawLocationUpdated(msg msgArg: RoadSnappedRawLocationUpdatedEventDto,
+  func onRoadSnappedRawLocationUpdated(location locationArg: LatLngDto,
                                        completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRoadSnappedRawLocationUpdated"
@@ -4780,7 +4942,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
+    channel.sendMessage([locationArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -4796,7 +4958,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
     }
   }
 
-  func onArrival(msg msgArg: OnArrivalEventDto,
+  func onArrival(waypoint waypointArg: NavigationWaypointDto,
                  completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onArrival"
@@ -4805,7 +4967,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
+    channel.sendMessage([waypointArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -4821,8 +4983,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
     }
   }
 
-  func onRouteChanged(msg msgArg: RouteChangedEventDto,
-                      completion: @escaping (Result<Void, FlutterError>) -> Void) {
+  func onRouteChanged(completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRouteChanged"
     let channel = FlutterBasicMessageChannel(
@@ -4830,7 +4991,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
+    channel.sendMessage(nil) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -4846,7 +5007,8 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
     }
   }
 
-  func onRemainingTimeOrDistanceChanged(msg msgArg: RemainingTimeOrDistanceChangedEventDto,
+  func onRemainingTimeOrDistanceChanged(remainingTime remainingTimeArg: Double,
+                                        remainingDistance remainingDistanceArg: Double,
                                         completion: @escaping (Result<Void, FlutterError>)
                                           -> Void) {
     let channelName =
@@ -4856,7 +5018,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
+    channel.sendMessage([remainingTimeArg, remainingDistanceArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -4872,9 +5034,8 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
     }
   }
 
-  /// Android only event.
-  func onTrafficUpdated(msg msgArg: TrafficUpdatedEventDto,
-                        completion: @escaping (Result<Void, FlutterError>) -> Void) {
+  /// Android-only event.
+  func onTrafficUpdated(completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onTrafficUpdated"
     let channel = FlutterBasicMessageChannel(
@@ -4882,7 +5043,7 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
+    channel.sendMessage(nil) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -4898,9 +5059,8 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
     }
   }
 
-  /// Android only event.
-  func onRerouting(msg msgArg: ReroutingEventDto,
-                   completion: @escaping (Result<Void, FlutterError>) -> Void) {
+  /// Android-only event.
+  func onRerouting(completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
       "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRerouting"
     let channel = FlutterBasicMessageChannel(
@@ -4908,7 +5068,33 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
       binaryMessenger: binaryMessenger,
       codec: codec
     )
-    channel.sendMessage([msgArg] as [Any?]) { response in
+    channel.sendMessage(nil) { response in
+      guard let listResponse = response as? [Any?] else {
+        completion(.failure(createConnectionError(withChannelName: channelName)))
+        return
+      }
+      if listResponse.count > 1 {
+        let code: String = listResponse[0] as! String
+        let message: String? = nilOrValue(listResponse[1])
+        let details: String? = nilOrValue(listResponse[2])
+        completion(.failure(FlutterError(code: code, message: message, details: details)))
+      } else {
+        completion(.success(()))
+      }
+    }
+  }
+
+  /// Android-only event.
+  func onGpsAvailabilityUpdate(available availableArg: Bool,
+                               completion: @escaping (Result<Void, FlutterError>) -> Void) {
+    let channelName =
+      "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onGpsAvailabilityUpdate"
+    let channel = FlutterBasicMessageChannel(
+      name: channelName,
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    channel.sendMessage([availableArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return

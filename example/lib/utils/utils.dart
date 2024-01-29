@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+export 'constants.dart';
 export 'location_permissions.dart';
 export 'overlay_options.dart';
 export 'remaining_distance.dart';
 export 'remaining_time.dart';
 export 'snackbar.dart';
 export 'terms_of_service.dart';
+export 'waypoint_marker.dart';

@@ -39,58 +39,24 @@ enum MapType {
   hybrid,
 }
 
-/// Converts Maptype map type to pigeon DTO object.
-/// @nodoc
-MapTypeDto mapTypeToDto(MapType type) {
-  switch (type) {
-    case MapType.none:
-      return MapTypeDto.none;
-    case MapType.hybrid:
-      return MapTypeDto.hybrid;
-    case MapType.normal:
-      return MapTypeDto.normal;
-    case MapType.satellite:
-      return MapTypeDto.satellite;
-    case MapType.terrain:
-      return MapTypeDto.terrain;
-  }
-}
-
-/// Converts map type from pigeon DTO format.
-/// @nodoc
-MapType mapTypeFromDto(MapTypeDto type) {
-  switch (type) {
-    case MapTypeDto.none:
-      return MapType.none;
-    case MapTypeDto.hybrid:
-      return MapType.hybrid;
-    case MapTypeDto.normal:
-      return MapType.normal;
-    case MapTypeDto.satellite:
-      return MapType.satellite;
-    case MapTypeDto.terrain:
-      return MapType.terrain;
-  }
-}
-
 /// Represents the camera position in a Google Maps view.
 /// {@category Navigation View}
 class CameraPosition {
-  /// Creates a [CameraPosition] object.
+  /// Creates a [CameraPosition] object with map centered
+  /// to the [target] with the given [bearing], [tilt] and [zoom] level.
   ///
-  /// All parameters have default values of zero, with the [target]
-  /// set to the geographical coordinates (0,0).
+  /// By default, the camera centers on the geographical coordinates (0,0) with
+  /// no tilt (0 degrees), camera zoomed out (3.0) and the bearing heading north
+  /// (0 degrees).
   const CameraPosition(
       {this.bearing = 0,
       this.target = const LatLng(latitude: 0, longitude: 0),
       this.tilt = 0,
-      this.zoom = 0})
+      this.zoom = 3.0})
       : assert(0 <= bearing && bearing < 360,
             'Bearing must be between 0 and 360 degrees.'),
         assert(
-            0 <= tilt && tilt <= 90, 'Tilt must be between 0 and 90 degrees.'),
-        assert(googleMapsMinZoomLevel <= zoom && zoom <= googleMapsMaxZoomLevel,
-            'Zoom must be between $googleMapsMinZoomLevel and $googleMapsMaxZoomLevel.');
+            0 <= tilt && tilt <= 90, 'Tilt must be between 0 and 90 degrees.');
 
   /// Bearing of the camera, in degrees clockwise from true north.
   final double bearing;
@@ -105,7 +71,7 @@ class CameraPosition {
   final double zoom;
 }
 
-/// Parameter given to parameter given to the followMyLocation()
+/// Parameter given to parameter given to the [GoogleNavigationViewController.followMyLocation]
 /// to specify the orientation of the camera.
 /// {@category Navigation View}
 enum CameraPerspective {
@@ -119,39 +85,6 @@ enum CameraPerspective {
   topDownNorthUp
 }
 
-/// Converts the view event type from the Pigeon DTO format.
-/// @nodoc
-CameraPosition cameraPositionfromDto(CameraPositionDto position) {
-  return CameraPosition(
-      bearing: position.bearing,
-      target: latLngFromDto(position.target),
-      tilt: position.tilt,
-      zoom: position.zoom);
-}
-
-/// Converts the view event type to the Pigeon DTO format.
-/// @nodoc
-CameraPositionDto cameraPositionToDto(CameraPosition position) {
-  return CameraPositionDto(
-      bearing: position.bearing,
-      target: latLngToDto(position.target),
-      tilt: position.tilt,
-      zoom: position.zoom);
-}
-
-/// Converts the camera perspective to the Pigeon DTO format.
-/// @nodoc
-CameraPerspectiveDto cameraPerspectiveTypeToDto(CameraPerspective perspective) {
-  switch (perspective) {
-    case CameraPerspective.tilted:
-      return CameraPerspectiveDto.tilted;
-    case CameraPerspective.topDownHeadingUp:
-      return CameraPerspectiveDto.topDownHeadingUp;
-    case CameraPerspective.topDownNorthUp:
-      return CameraPerspectiveDto.topDownNorthUp;
-  }
-}
-
 /// Represents the click position in a Google Maps view.
 /// {@category Navigation View}
 class MapClickEvent {
@@ -160,6 +93,16 @@ class MapClickEvent {
 
   /// The location where the click happened.
   final LatLng target;
+}
+
+/// Represents navigation UI changed event in a view.
+/// {@category Navigation View}
+class NavigationUIEnabledChangedEvent {
+  /// Creates a [NavigationUIEnabledChangedEvent] object.
+  const NavigationUIEnabledChangedEvent(this.navigationUIEnabled);
+
+  /// Value representing whether UI changed or not.
+  final bool navigationUIEnabled;
 }
 
 /// Represents the long click position in a Google Maps view.
@@ -257,74 +200,6 @@ class RouteSegment {
   final NavigationWaypoint? destinationWaypoint;
 }
 
-/// Convert road stretch rendering data from Pigeon DTO format.
-/// @nodoc
-RouteSegmentTrafficDataRoadStretchRenderingData roadStretchRenderingDataFromDto(
-    RouteSegmentTrafficDataRoadStretchRenderingDataDto data) {
-  return RouteSegmentTrafficDataRoadStretchRenderingData(
-    style: () {
-      switch (data.style) {
-        case RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
-              .slowerTraffic:
-          return RouteSegmentTrafficDataRoadStretchRenderingDataStyle
-              .slowerTraffic;
-        case RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto.trafficJam:
-          return RouteSegmentTrafficDataRoadStretchRenderingDataStyle
-              .trafficJam;
-        case RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto.unknown:
-          return RouteSegmentTrafficDataRoadStretchRenderingDataStyle.unknown;
-      }
-    }(),
-    lengthMeters: data.lengthMeters,
-    offsetMeters: data.offsetMeters,
-  );
-}
-
-/// Convert route segment traffic data from DTO.
-/// @nodoc
-RouteSegmentTrafficData routeSegmentTrafficDataFromDto(
-    RouteSegmentTrafficDataDto data) {
-  return RouteSegmentTrafficData(
-    status: () {
-      switch (data.status) {
-        case RouteSegmentTrafficDataStatusDto.ok:
-          return RouteSegmentTrafficDataStatus.ok;
-        case RouteSegmentTrafficDataStatusDto.unavailable:
-          return RouteSegmentTrafficDataStatus.unavailable;
-      }
-    }(),
-    roadStretchRenderingDataList: data.roadStretchRenderingDataList
-        .where((RouteSegmentTrafficDataRoadStretchRenderingDataDto? d) =>
-            d != null)
-        .cast<RouteSegmentTrafficDataRoadStretchRenderingDataDto>()
-        .map((RouteSegmentTrafficDataRoadStretchRenderingDataDto d) =>
-            roadStretchRenderingDataFromDto(d))
-        .toList(),
-  );
-}
-
-/// Convert route segment from DTO.
-/// @nodoc
-RouteSegment routeSegmentFromDto(RouteSegmentDto segment) {
-  return RouteSegment(
-    destinationLatLng: LatLng(
-        latitude: segment.destinationLatLng.latitude,
-        longitude: segment.destinationLatLng.longitude),
-    destinationWaypoint: segment.destinationWaypoint != null
-        ? navigationWaypointFromDto(segment.destinationWaypoint!)
-        : null,
-    latLngs: segment.latLngs
-        ?.where((LatLngDto? p) => p != null)
-        .cast<LatLngDto>()
-        .map((LatLngDto p) =>
-            LatLng(latitude: p.latitude, longitude: p.longitude))
-        .toList(),
-    trafficData: segment.trafficData != null
-        ? routeSegmentTrafficDataFromDto(segment.trafficData!)
-        : null,
-  );
-}
-
 /// Internal camera update type.
 /// {@category Navigation View}
 enum CameraUpdateType {
@@ -388,6 +263,10 @@ class CameraUpdate {
 
   /// Returns a camera update that moves the camera target to the specified
   /// geographical location and zoom level.
+  ///
+  /// Zoom level is bound to minimum and maximum zoom preference. See
+  /// [GoogleNavigationViewController.setMinZoomPreference] and
+  /// [GoogleNavigationViewController.setMaxZoomPreference].
   static CameraUpdate newLatLngZoom(LatLng latLng, double zoom) {
     final CameraUpdate update = CameraUpdate._(CameraUpdateType.latLngZoom);
     update.latLng = latLng;
@@ -411,6 +290,10 @@ class CameraUpdate {
   /// Returns a camera update that modifies the camera zoom level by the
   /// specified amount. The optional [focus] is a screen point whose underlying
   /// geographical location should be invariant, if possible, by the movement.
+  ///
+  /// Zoom level is bound to minimum and maximum zoom preference. See
+  /// [GoogleNavigationViewController.setMinZoomPreference] and
+  /// [GoogleNavigationViewController.setMaxZoomPreference].
   static CameraUpdate zoomBy(double amount, {Offset? focus}) {
     final CameraUpdate update = CameraUpdate._(CameraUpdateType.zoomBy);
     update.zoomByAmount = amount;
@@ -423,6 +306,10 @@ class CameraUpdate {
   /// closer to the surface of the Earth.
   ///
   /// Equivalent to the result of calling `zoomBy(1.0)`.
+  ///
+  /// Zoom level is bound to minimum and maximum zoom preference. See
+  /// [GoogleNavigationViewController.setMinZoomPreference] and
+  /// [GoogleNavigationViewController.setMaxZoomPreference].
   static CameraUpdate zoomIn() {
     final CameraUpdate update = CameraUpdate._(CameraUpdateType.zoomBy);
     update.zoomByAmount = 1.0;
@@ -433,6 +320,10 @@ class CameraUpdate {
   /// further away from the surface of the Earth.
   ///
   /// Equivalent to the result of calling `zoomBy(-1.0)`.
+  ///
+  /// Zoom level is bound to minimum and maximum zoom preference. See
+  /// [GoogleNavigationViewController.setMinZoomPreference] and
+  /// [GoogleNavigationViewController.setMaxZoomPreference].
   static CameraUpdate zoomOut() {
     final CameraUpdate update = CameraUpdate._(CameraUpdateType.zoomBy);
     update.zoomByAmount = -1.0;
@@ -440,6 +331,10 @@ class CameraUpdate {
   }
 
   /// Returns a camera update that sets the camera zoom level.
+  ///
+  /// Zoom level is bound to minimum and maximum zoom preference. See
+  /// [GoogleNavigationViewController.setMinZoomPreference] and
+  /// [GoogleNavigationViewController.setMaxZoomPreference].
   static CameraUpdate zoomTo(double zoom) {
     final CameraUpdate update = CameraUpdate._(CameraUpdateType.zoomTo);
     update.zoom = zoom;
@@ -475,4 +370,48 @@ class CameraUpdate {
 
   /// The screen position co-ordinates for the zoom-by camera.
   Offset? focus;
+}
+
+/// My location clicked event.
+/// {@category Navigation View}
+class MyLocationClickedEvent {}
+
+/// My location button clicked event.
+/// {@category Navigation View}
+class MyLocationButtonClickedEvent {}
+
+/// Represents the event type for [CameraChangedEvent].
+/// {@category Navigation View}
+enum CameraEventType {
+  /// Camera move initiated by developer or in response to user action.
+  /// For example: zoom buttons, my location button, or marker clicks.
+  moveStartedByApi,
+
+  /// Camera move initiated in response to user gestures on the map.
+  moveStartedByGesture,
+
+  /// Called repeatedly as the camera continues to move.
+  onCameraMove,
+
+  /// Called when camera movement has ended.
+  onCameraIdle,
+
+  /// Called when camera starts following location (Android only).
+  onCameraStartedFollowingLocation,
+
+  /// Called when camera stops following location (Android only).
+  onCameraStoppedFollowingLocation
+}
+
+/// Represents camera changed events in a Google Maps view.
+/// {@category Navigation View}
+class CameraChangedEvent {
+  /// Creates a [CameraChangedEvent] object.
+  const CameraChangedEvent({required this.eventType, required this.position});
+
+  /// Event type that happened.
+  final CameraEventType eventType;
+
+  /// Current position of the camera.
+  final CameraPosition position;
 }

@@ -39,8 +39,8 @@ class GoogleMapsNavigationViewMessageHandler(
     return getView(viewId.toInt()).isMyLocationEnabled()
   }
 
-  override fun enableMyLocation(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).enableMyLocation(enabled)
+  override fun setMyLocationEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setMyLocationEnabled(enabled)
   }
 
   override fun getMapType(viewId: Long): MapTypeDto {
@@ -59,48 +59,56 @@ class GoogleMapsNavigationViewMessageHandler(
     view.setMapStyle(styleJson)
   }
 
-  override fun enableMyLocationButton(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).enableMyLocationButton(enabled)
+  override fun setMyLocationButtonEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setMyLocationButtonEnabled(enabled)
   }
 
-  override fun enableZoomGestures(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).enableZoomGestures(enabled)
+  override fun setConsumeMyLocationButtonClickEventsEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setConsumeMyLocationButtonClickEventsEnabled(enabled)
   }
 
-  override fun enableZoomControls(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).enableZoomControls(enabled)
+  override fun setZoomGesturesEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setZoomGesturesEnabled(enabled)
   }
 
-  override fun enableCompass(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).enableCompass(enabled)
+  override fun setZoomControlsEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setZoomControlsEnabled(enabled)
   }
 
-  override fun enableRotateGestures(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).enableRotateGestures(enabled)
+  override fun setCompassEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setCompassEnabled(enabled)
   }
 
-  override fun enableScrollGestures(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).enableScrollGestures(enabled)
+  override fun setRotateGesturesEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setRotateGesturesEnabled(enabled)
   }
 
-  override fun enableScrollGesturesDuringRotateOrZoom(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).enableScrollGesturesDuringRotateOrZoom(enabled)
+  override fun setScrollGesturesEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setScrollGesturesEnabled(enabled)
   }
 
-  override fun enableTiltGestures(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).enableTiltGestures(enabled)
+  override fun setScrollGesturesDuringRotateOrZoomEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setScrollGesturesDuringRotateOrZoomEnabled(enabled)
   }
 
-  override fun enableMapToolbar(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).enableMapToolbar(enabled)
+  override fun setTiltGesturesEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setTiltGesturesEnabled(enabled)
   }
 
-  override fun enableTraffic(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).enableTraffic(enabled)
+  override fun setMapToolbarEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setMapToolbarEnabled(enabled)
+  }
+
+  override fun setTrafficEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setTrafficEnabled(enabled)
   }
 
   override fun isMyLocationButtonEnabled(viewId: Long): Boolean {
     return getView(viewId.toInt()).isMyLocationButtonEnabled()
+  }
+
+  override fun isConsumeMyLocationButtonClickEventsEnabled(viewId: Long): Boolean {
+    return getView(viewId.toInt()).isConsumeMyLocationButtonClickEventsEnabled()
   }
 
   override fun isZoomGesturesEnabled(viewId: Long): Boolean {
@@ -288,68 +296,88 @@ class GoogleMapsNavigationViewMessageHandler(
     view?.followMyLocation(Convert.convertCameraPerspectiveFromDto(perspective), zoomLevel)
   }
 
-  override fun enableNavigationTripProgressBar(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).enableNavigationTripProgressBar(enabled)
+  override fun setNavigationTripProgressBarEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setNavigationTripProgressBarEnabled(enabled)
   }
 
   override fun isNavigationHeaderEnabled(viewId: Long): Boolean {
     return getView(viewId.toInt()).isNavigationHeaderEnabled()
   }
 
-  override fun enableNavigationHeader(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).enableNavigationHeader(enabled)
+  override fun setNavigationHeaderEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setNavigationHeaderEnabled(enabled)
   }
 
   override fun isNavigationFooterEnabled(viewId: Long): Boolean {
     return getView(viewId.toInt()).isNavigationFooterEnabled()
   }
 
-  override fun enableNavigationFooter(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).enableNavigationFooter(enabled)
+  override fun setNavigationFooterEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setNavigationFooterEnabled(enabled)
   }
 
   override fun isRecenterButtonEnabled(viewId: Long): Boolean {
     return getView(viewId.toInt()).isRecenterButtonEnabled()
   }
 
-  override fun enableRecenterButton(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).enableRecenterButton(enabled)
+  override fun setRecenterButtonEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setRecenterButtonEnabled(enabled)
   }
 
   override fun isSpeedLimitIconEnabled(viewId: Long): Boolean {
     return getView(viewId.toInt()).isSpeedLimitIconEnabled()
   }
 
-  override fun enableSpeedLimitIcon(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).enableSpeedLimitIcon(enabled)
+  override fun setSpeedLimitIconEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setSpeedLimitIconEnabled(enabled)
   }
 
   override fun isSpeedometerEnabled(viewId: Long): Boolean {
     return getView(viewId.toInt()).isSpeedometerEnabled()
   }
 
-  override fun enableSpeedometer(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).enableSpeedometer(enabled)
+  override fun setSpeedometerEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setSpeedometerEnabled(enabled)
   }
 
-  override fun isIncidentCardsEnabled(viewId: Long): Boolean {
-    return getView(viewId.toInt()).isIncidentCardsEnabled()
+  override fun isTrafficIncidentCardsEnabled(viewId: Long): Boolean {
+    return getView(viewId.toInt()).isTrafficIncidentCardsEnabled()
   }
 
-  override fun enableIncidentCards(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).enableIncidentCards(enabled)
+  override fun setTrafficIncidentCardsEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setTrafficIncidentCardsEnabled(enabled)
   }
 
   override fun isNavigationUIEnabled(viewId: Long): Boolean {
     return getView(viewId.toInt()).isNavigationUIEnabled()
   }
 
-  override fun enableNavigationUI(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).enableNavigationUI(enabled)
+  override fun setNavigationUIEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setNavigationUIEnabled(enabled)
   }
 
   override fun showRouteOverview(viewId: Long) {
     getView(viewId.toInt()).showRouteOverview()
+  }
+
+  override fun getMinZoomPreference(viewId: Long): Double {
+    return getView(viewId.toInt()).getMinZoomPreference().toDouble()
+  }
+
+  override fun getMaxZoomPreference(viewId: Long): Double {
+    return getView(viewId.toInt()).getMaxZoomPreference().toDouble()
+  }
+
+  override fun resetMinMaxZoomPreference(viewId: Long) {
+    getView(viewId.toInt()).resetMinMaxZoomPreference()
+  }
+
+  override fun setMinZoomPreference(viewId: Long, minZoomPreference: Double) {
+    getView(viewId.toInt()).setMinZoomPreference(minZoomPreference.toFloat())
+  }
+
+  override fun setMaxZoomPreference(viewId: Long, maxZoomPreference: Double) {
+    getView(viewId.toInt()).setMaxZoomPreference(maxZoomPreference.toFloat())
   }
 
   override fun getMarkers(viewId: Long): List<MarkerDto> {
@@ -401,15 +429,15 @@ class GoogleMapsNavigationViewMessageHandler(
   }
 
   override fun addPolylines(viewId: Long, polylines: List<PolylineDto>): List<PolylineDto> {
-    return getView(viewId.toInt()).addPolylines(polylines.filterNotNull())
+    return getView(viewId.toInt()).addPolylines(polylines)
   }
 
   override fun updatePolylines(viewId: Long, polylines: List<PolylineDto>): List<PolylineDto> {
-    return getView(viewId.toInt()).updatePolylines(polylines.filterNotNull())
+    return getView(viewId.toInt()).updatePolylines(polylines)
   }
 
   override fun removePolylines(viewId: Long, polylines: List<PolylineDto>) {
-    getView(viewId.toInt()).removePolylines(polylines.filterNotNull())
+    getView(viewId.toInt()).removePolylines(polylines)
   }
 
   override fun clearPolylines(viewId: Long) {
@@ -421,18 +449,22 @@ class GoogleMapsNavigationViewMessageHandler(
   }
 
   override fun addCircles(viewId: Long, circles: List<CircleDto>): List<CircleDto> {
-    return getView(viewId.toInt()).addCircles(circles.filterNotNull())
+    return getView(viewId.toInt()).addCircles(circles)
   }
 
   override fun updateCircles(viewId: Long, circles: List<CircleDto>): List<CircleDto> {
-    return getView(viewId.toInt()).updateCircles(circles.filterNotNull())
+    return getView(viewId.toInt()).updateCircles(circles)
   }
 
   override fun removeCircles(viewId: Long, circles: List<CircleDto>) {
-    getView(viewId.toInt()).removeCircles(circles.filterNotNull())
+    getView(viewId.toInt()).removeCircles(circles)
   }
 
   override fun clearCircles(viewId: Long) {
     getView(viewId.toInt()).clearCircles()
+  }
+
+  override fun registerOnCameraChangedListener(viewId: Long) {
+    getView(viewId.toInt()).registerOnCameraChangedListener()
   }
 }

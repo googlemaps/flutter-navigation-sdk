@@ -119,9 +119,3 @@ class LatLngBounds {
   @override
   int get hashCode => Object.hash(southwest.hashCode, northeast.hashCode);
 }
-
-/// Converts lat lng bounds to the Pigeon DTO format.
-/// @nodoc
-LatLngBoundsDto latLngBoundsToDto(LatLngBounds bounds) => LatLngBoundsDto(
-    northeast: latLngToDto(bounds.northeast),
-    southwest: latLngToDto(bounds.southwest));

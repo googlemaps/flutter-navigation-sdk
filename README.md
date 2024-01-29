@@ -141,7 +141,7 @@ class _NavigationSampleState extends State<NavigationSample> {
       body: _navigationSessionInitialized
           ? GoogleMapsNavigationView(
               onViewCreated: _onViewCreated,
-              initialNavigationUiEnabled: false,
+              initialNavigationUIEnabledPreference: NavigationUIEnabledPreference.disabled,
               // Other view initialization settings
             )
           : const Center(child: CircularProgressIndicator()),
@@ -150,7 +150,7 @@ class _NavigationSampleState extends State<NavigationSample> {
 
   void _onViewCreated(GoogleNavigationViewController controller) {
     _navigationViewController = controller;
-    controller.enableMyLocation(enabled: true);
+    controller.setMyLocationEnabled(true);
     // Additional setup can be added here.
   }
 

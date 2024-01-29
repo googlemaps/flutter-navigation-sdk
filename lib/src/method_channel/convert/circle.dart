@@ -11,40 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
-import 'package:flutter/material.dart';
+import 'dart:ui';
 
 import '../../../google_maps_navigation.dart';
-import 'marker_conversion.dart';
-import 'polyline_conversion.dart';
-
-/// [Circle] convert extension.
-extension ConvertCircle on Circle {
-  /// Convert [Circle] to [CircleDto].
-  CircleDto toDto() {
-    return CircleDto(circleId: circleId, options: options.toDto());
-  }
-}
-
-/// [CircleOptions] convert extension.
-extension ConvertCircleOptions on CircleOptions {
-  /// Convert [CircleOptions] to [CircleOptionsDto].
-  CircleOptionsDto toDto() {
-    return CircleOptionsDto(
-        position: position.toDto(),
-        radius: radius,
-        strokePattern:
-            strokePattern.map((PatternItem e) => e.toPatternItemDto()).toList(),
-        clickable: clickable,
-        fillColor: fillColor.value,
-        strokeColor: strokeColor.value,
-        strokeWidth: strokeWidth,
-        visible: visible,
-        zIndex: zIndex);
-  }
-}
+import '../method_channel.dart';
 
 /// [CircleDto] convert extension.
+/// @nodoc
 extension ConvertCircleDto on CircleDto {
   /// Convert [CircleDto] to [Circle].
   Circle toCircle() {
@@ -52,7 +25,17 @@ extension ConvertCircleDto on CircleDto {
   }
 }
 
+/// [Circle] convert extension.
+/// @nodoc
+extension ConvertCircle on Circle {
+  /// Convert [Circle] to [CircleDto].
+  CircleDto toDto() {
+    return CircleDto(circleId: circleId, options: options.toDto());
+  }
+}
+
 /// [CircleOptionsDto] convert extension.
+/// @nodoc
 extension ConvertCircleOptionsDto on CircleOptionsDto {
   /// Convert [CircleOptionsDto] to [CircleOptions].
   CircleOptions toCircleOptions() {
@@ -67,6 +50,25 @@ extension ConvertCircleOptionsDto on CircleOptionsDto {
             .map((PatternItemDto? e) => e?.toPatternItem())
             .whereType<PatternItem>()
             .toList(),
+        visible: visible,
+        zIndex: zIndex);
+  }
+}
+
+/// [CircleOptions] convert extension.
+/// @nodoc
+extension ConvertCircleOptions on CircleOptions {
+  /// Convert [CircleOptions] to [CircleOptionsDto].
+  CircleOptionsDto toDto() {
+    return CircleOptionsDto(
+        position: position.toDto(),
+        radius: radius,
+        strokePattern:
+            strokePattern.map((PatternItem pi) => pi.toDto()).toList(),
+        clickable: clickable,
+        fillColor: fillColor.value,
+        strokeColor: strokeColor.value,
+        strokeWidth: strokeWidth,
         visible: visible,
         zIndex: zIndex);
   }

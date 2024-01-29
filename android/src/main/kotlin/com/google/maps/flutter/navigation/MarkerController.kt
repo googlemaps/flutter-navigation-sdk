@@ -27,7 +27,8 @@ class MarkerController(
   anchorU: Float,
   anchorV: Float,
   infoWindowAnchorU: Float,
-  infoWindowAnchorV: Float
+  infoWindowAnchorV: Float,
+  registeredImage: RegisteredImage?
 ) : MarkerOptionsSink {
   var consumeTapEvents: Boolean = consumeTapEvents
     private set
@@ -43,6 +44,9 @@ class MarkerController(
     private set
 
   var infoWindowAnchorV: Float = infoWindowAnchorV
+    private set
+
+  var registeredImage: RegisteredImage? = registeredImage
     private set
 
   override fun setAlpha(alpha: Float) {
@@ -99,5 +103,14 @@ class MarkerController(
 
   fun remove() {
     marker.remove()
+  }
+
+  override fun setIcon(registeredImage: RegisteredImage?) {
+    this.registeredImage = registeredImage
+    if (registeredImage != null) {
+      marker.setIcon(registeredImage.bitmapDescriptor)
+    } else {
+      marker.setIcon(null)
+    }
   }
 }

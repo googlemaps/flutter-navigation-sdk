@@ -16,8 +16,17 @@ import Foundation
 import GoogleMaps
 
 extension Convert {
-  static func convertMapOptions(_ mapOptions: MapOptionsDto,
-                                navigationViewOptions: NavigationViewOptionsDto)
+  static func convertNavigationUIEnabledPreference(preference: NavigationUIEnabledPreferenceDto)
+    -> NavigationUIEnabledPreference {
+    switch preference {
+    case .automatic:
+      return .automatic
+    case .disabled:
+      return .disabled
+    }
+  }
+
+  static func convertMapOptions(_ mapOptions: MapOptionsDto)
     -> MapConfiguration {
     let cameraTargetBounds: GMSCoordinateBounds?
     if let bounds = mapOptions.cameraTargetBounds {
@@ -37,9 +46,7 @@ extension Convert {
       scrollGesturesEnabledDuringRotateOrZoom: mapOptions.scrollGesturesEnabledDuringRotateOrZoom,
       cameraTargetBounds: cameraTargetBounds,
       minZoomPreference: mapOptions.minZoomPreference.map { Float($0) },
-      maxZoomPreference: mapOptions.maxZoomPreference.map { Float($0) },
-
-      navigationUIEnabled: navigationViewOptions.navigationUIEnabled
+      maxZoomPreference: mapOptions.maxZoomPreference.map { Float($0) }
     )
   }
 }

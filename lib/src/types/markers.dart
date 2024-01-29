@@ -61,6 +61,7 @@ class MarkerOptions {
       this.anchor = const MarkerAnchor(u: 0.5, v: 1.0),
       this.draggable = false,
       this.flat = false,
+      this.icon = ImageDescriptor.defaultImage,
       this.consumeTapEvents = false,
       this.position = const LatLng(latitude: 0.0, longitude: 0.0),
       this.rotation = 0.0,
@@ -87,6 +88,12 @@ class MarkerOptions {
   ///
   /// By default, the marker is drawn facing the camera; [flat] is false.
   final bool flat;
+
+  /// Specifies the image ID of the bitmap drawn as the marker on the map.
+  /// The bitmap must be registered with [registerBitmapImage] before creating marker.
+  ///
+  /// By default, the icon ID is [ImageDescriptor.defaultImage], this draws the default marker icon.
+  final ImageDescriptor icon;
 
   /// Sets whether map view does the default behavior when clicking marker.
   /// If set to true default behaviour does not occur.
@@ -126,12 +133,14 @@ class MarkerOptions {
       MarkerAnchor? anchor,
       bool? draggable,
       bool? flat,
+      ImageDescriptor? icon,
       bool? consumeTapEvents,
       MarkerAnchor? infoWindowAnchor,
       LatLng? position,
       double? rotation,
       String? snippet,
       String? title,
+      InfoWindow? infoWindow,
       bool? visible,
       double? zIndex}) {
     return MarkerOptions(
@@ -139,10 +148,11 @@ class MarkerOptions {
         anchor: anchor ?? this.anchor,
         draggable: draggable ?? this.draggable,
         flat: flat ?? this.flat,
+        icon: icon ?? this.icon,
         consumeTapEvents: consumeTapEvents ?? this.consumeTapEvents,
         position: position ?? this.position,
         rotation: rotation ?? this.rotation,
-        infoWindow: infoWindow,
+        infoWindow: infoWindow ?? this.infoWindow,
         visible: visible ?? this.visible,
         zIndex: zIndex ?? this.zIndex);
   }
@@ -160,6 +170,7 @@ class MarkerOptions {
         anchor == other.anchor &&
         draggable == other.draggable &&
         flat == other.flat &&
+        icon == other.icon &&
         consumeTapEvents == other.consumeTapEvents &&
         position == other.position &&
         rotation == other.rotation &&
@@ -174,6 +185,7 @@ class MarkerOptions {
       anchor.hashCode,
       draggable.hashCode,
       flat.hashCode,
+      icon.hashCode,
       consumeTapEvents.hashCode,
       position.hashCode,
       rotation.hashCode,
@@ -258,4 +270,70 @@ class MarkerAnchor {
 
   @override
   int get hashCode => Object.hash(u.hashCode, v.hashCode);
+}
+
+/// Marker event types
+/// {@category Navigation View}
+enum MarkerEventType {
+  /// The marker has been tapped.
+  clicked,
+
+  /// The marker info window has been tapped.
+  infoWindowClicked,
+
+  /// The marker info window has been closed.
+  infoWindowClosed,
+
+  /// The marker info window has been long clicked.
+  infoWindowLongClicked,
+}
+
+/// Marker drag event types
+/// {@category Navigation View}
+enum MarkerDragEventType {
+  /// The marker is being dragged.
+  drag,
+
+  /// The marker drag has been started.
+  dragStart,
+
+  /// The marker drag has been ended.
+  dragEnd,
+}
+
+/// Marker event sent from platform side.
+/// {@category Navigation View}
+@immutable
+class MarkerEvent {
+  /// Initialize [MarkerEvent] object.
+  const MarkerEvent({
+    required this.markerId,
+    required this.eventType,
+  });
+
+  /// Id of the marker that has been tapped.
+  final String markerId;
+
+  /// Type of the event.
+  final MarkerEventType eventType;
+}
+
+/// Marker drag event sent from platform side.
+/// {@category Navigation View}
+@immutable
+class MarkerDragEvent {
+  /// Initialize [MarkerDragEvent] object.
+  const MarkerDragEvent(
+      {required this.markerId,
+      required this.eventType,
+      required this.position});
+
+  /// Id of the marker that has been tapped.
+  final String markerId;
+
+  /// Position of the marker that has been dragged.
+  final LatLng position;
+
+  /// Type of the event.
+  final MarkerDragEventType eventType;
 }

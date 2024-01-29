@@ -15,6 +15,9 @@
 import '../../google_maps_navigation.dart';
 
 /// Destinations main type.
+///
+/// Asserts if both [routeTokenOptions] and [routingOptions] are provided.
+///
 /// {@category Navigation}
 class Destinations {
   /// Destinations initializer with waypoints and options.
@@ -22,7 +25,9 @@ class Destinations {
     required this.waypoints,
     required this.displayOptions,
     this.routingOptions,
-  });
+    this.routeTokenOptions,
+  }) : assert(routeTokenOptions == null || routingOptions == null,
+            'Only one of routeTokenOptions or routingOptions can be provided');
 
   /// List of navigation waypoints.
   final List<NavigationWaypoint> waypoints;
@@ -32,6 +37,40 @@ class Destinations {
 
   /// Navigation routing options.
   final RoutingOptions? routingOptions;
+
+  /// Navigation route token options.
+  final RouteTokenOptions? routeTokenOptions;
+}
+
+/// Provides options for routing using a route token
+/// in the Google Maps Navigation SDK.
+///
+/// This class is used to specify routing preferences when using the
+/// [GoogleMapsNavigator.setDestinations] method. It allows the integration
+/// of a predefined route token, which the SDK can utilize for
+/// routing if possible.
+///
+/// {@category Navigation}
+class RouteTokenOptions {
+  /// Route token options initializer with token and travel mode.
+  ///
+  /// The [travelMode] must match the travel mode used to generate
+  /// the [routeToken].
+  RouteTokenOptions({
+    required this.routeToken,
+    required this.travelMode,
+  });
+
+  /// Route token.
+  final String routeToken;
+
+  /// Specifies the type of [NavigationTravelMode] used to determine the
+  /// navigation directions.
+  ///
+  /// It must match the travel mode used to generate the [routeToken].
+  /// If there is a mismatch, [travelMode] will override the travel mode used to
+  /// generate the [routeToken].
+  final NavigationTravelMode? travelMode;
 }
 
 /// Alternative routes strategy.
@@ -146,13 +185,15 @@ class NavigationDisplayOptions {
 /// initialization.
 /// {@category Navigation}
 class NavigationWaypoint {
-  NavigationWaypoint._({
+  /// Initializer for [NavigationWaypoint].
+  NavigationWaypoint({
     required this.title,
     this.target,
     this.placeID,
     this.preferSameSideOfRoad,
     this.preferredSegmentHeading,
-  });
+  }) : assert(target != null || placeID != null,
+            'Either target or placeID must be provided');
 
   /// Initialize waypoint with coordinates.
   NavigationWaypoint.withLatLngTarget({
@@ -189,179 +230,19 @@ class NavigationWaypoint {
   /// Place ID of the waypoint.
   String? placeID;
 
-  /// Same side of the road preference of the waypoint.
+  /// Prefer to arrive on the same side of the road as the waypoint—snapped to
+  /// the nearest sidewalk.
   bool? preferSameSideOfRoad;
 
   /// Preferred segment heading of the waypoint.
+  ///
+  /// An arrival heading that matches the direction of traffic flow on the same
+  /// side of the road as the waiting consumer.
+  ///
+  /// The Navigation SDK chooses the road segment closest to the waypoint—that
+  /// has a lane direction that aligns (within +/- 55 degrees) with the side of
+  /// the road that the waypoint is on.
   int? preferredSegmentHeading;
-}
-
-/// Navigation event messages that are returned from the native platforms.
-/// {@category Navigation}
-class NavigationSessionEvent {
-  /// Initializer for the event with type and message.
-  NavigationSessionEvent({
-    required this.type,
-    required this.message,
-  });
-
-  /// Type of the event
-  final NavigationSessionEventType type;
-
-  /// Message of the event.
-  final String message;
-}
-
-/// Navigation Session events that returned from the native platforms.
-/// {@category Navigation}
-enum NavigationSessionEventType {
-  /// Arrival event.
-  arrivalEvent,
-
-  ///Route changes event.
-  routeChanged,
-
-  /// Error received event.
-  errorReceived;
-}
-
-/// Converts navigation session event message from DTO.
-/// @nodoc
-NavigationSessionEvent navigationSessionEventFromDto(
-    NavigationSessionEventDto msg) {
-  final NavigationSessionEventType type = (() {
-    switch (msg.type) {
-      case NavigationSessionEventTypeDto.arrivalEvent:
-        return NavigationSessionEventType.arrivalEvent;
-      case NavigationSessionEventTypeDto.routeChanged:
-        return NavigationSessionEventType.routeChanged;
-      case NavigationSessionEventTypeDto.errorReceived:
-        return NavigationSessionEventType.errorReceived;
-    }
-  })();
-
-  return NavigationSessionEvent(
-    type: type,
-    message: msg.message,
-  );
-}
-
-/// Converts navigation destination to the Pigeon DTO format.
-/// @nodoc
-DestinationsDto navigationDestinationToDto(Destinations data) {
-  return DestinationsDto(
-      waypoints: data.waypoints.map(
-        (NavigationWaypoint e) {
-          return navigationWaypointToDto(e);
-        },
-      ).toList(),
-      displayOptions: navigationDisplayOptionsToDto(data.displayOptions),
-      routingOptions: data.routingOptions == null
-          ? null
-          : routingOptionsToDto(data.routingOptions!));
-}
-
-/// Converts waypoint from the Pigeon DTO format.
-/// @nodoc
-NavigationWaypoint navigationWaypointFromDto(NavigationWaypointDto waypoint) {
-  return NavigationWaypoint._(
-    title: waypoint.title,
-    target: waypoint.target != null ? latLngFromDto(waypoint.target!) : null,
-    placeID: waypoint.placeID,
-    preferSameSideOfRoad: waypoint.preferSameSideOfRoad,
-    preferredSegmentHeading: waypoint.preferredSegmentHeading,
-  );
-}
-
-/// Converts waypoint to the Pigeon DTO format.
-/// @nodoc
-NavigationWaypointDto navigationWaypointToDto(NavigationWaypoint waypoint) {
-  return NavigationWaypointDto(
-    title: waypoint.title,
-    target: waypoint.target != null ? latLngToDto(waypoint.target!) : null,
-    placeID: waypoint.placeID,
-    preferSameSideOfRoad: waypoint.preferSameSideOfRoad,
-    preferredSegmentHeading: waypoint.preferredSegmentHeading,
-  );
-}
-
-/// Converts display options to the Pigeon DTO format.
-/// @nodoc
-NavigationDisplayOptionsDto navigationDisplayOptionsToDto(
-    NavigationDisplayOptions options) {
-  return NavigationDisplayOptionsDto(
-    showDestinationMarkers: options.showDestinationMarkers,
-    showStopSigns: options.showStopSigns,
-    showTrafficLights: options.showTrafficLights,
-  );
-}
-
-/// Converts travel model to the Pigeon DTO format.
-/// @nodoc
-TravelModeDto? navigationTravelModeToDto(NavigationTravelMode? travelMode) {
-  switch (travelMode) {
-    case NavigationTravelMode.driving:
-      return TravelModeDto.driving;
-    case NavigationTravelMode.cycling:
-      return TravelModeDto.cycling;
-    case NavigationTravelMode.walking:
-      return TravelModeDto.walking;
-    case NavigationTravelMode.twoWheeler:
-      return TravelModeDto.twoWheeler;
-    case NavigationTravelMode.taxi:
-      return TravelModeDto.taxi;
-    case null:
-      return null;
-  }
-}
-
-/// Converts routing options to the Pigeon DTO format.
-/// @nodoc
-RoutingOptionsDto routingOptionsToDto(RoutingOptions options) {
-  return RoutingOptionsDto(
-    alternateRoutesStrategy:
-        navigationAlternateRoutesStrategyToDto(options.alternateRoutesStrategy),
-    routingStrategy:
-        navigationRoutingStrategyToPigeonFormat(options.routingStrategy),
-    targetDistanceMeters: options.targetDistanceMeters,
-    travelMode: navigationTravelModeToDto(options.travelMode),
-    avoidFerries: options.avoidFerries,
-    avoidHighways: options.avoidHighways,
-    avoidTolls: options.avoidTolls,
-    locationTimeoutMs: options.locationTimeoutMs,
-  );
-}
-
-/// Converts alternate routes strategy to the Pigeon DTO format.
-/// @nodoc
-AlternateRoutesStrategyDto? navigationAlternateRoutesStrategyToDto(
-    NavigationAlternateRoutesStrategy? strategy) {
-  switch (strategy) {
-    case NavigationAlternateRoutesStrategy.all:
-      return AlternateRoutesStrategyDto.all;
-    case NavigationAlternateRoutesStrategy.none:
-      return AlternateRoutesStrategyDto.none;
-    case NavigationAlternateRoutesStrategy.one:
-      return AlternateRoutesStrategyDto.one;
-    case null:
-      return null;
-  }
-}
-
-/// Converts routing strategy to the Pigeon DTO format.
-/// @nodoc
-RoutingStrategyDto? navigationRoutingStrategyToPigeonFormat(
-    NavigationRoutingStrategy? strategy) {
-  switch (strategy) {
-    case NavigationRoutingStrategy.defaultBest:
-      return RoutingStrategyDto.defaultBest;
-    case NavigationRoutingStrategy.deltaToTargetDistance:
-      return RoutingStrategyDto.deltaToTargetDistance;
-    case NavigationRoutingStrategy.shorter:
-      return RoutingStrategyDto.shorter;
-    case null:
-      return null;
-  }
 }
 
 /// Status of the navigation routing.
@@ -413,43 +294,6 @@ enum NavigationRouteStatus {
   quotaCheckFailed
 }
 
-/// Converts route status from the Pigeon DTO format.
-/// @nodoc
-NavigationRouteStatus navigationRouteStatusFromDto(RouteStatusDto status) {
-  switch (status) {
-    case RouteStatusDto.internalError:
-      return NavigationRouteStatus.internalError;
-    case RouteStatusDto.statusOk:
-      return NavigationRouteStatus.statusOk;
-    case RouteStatusDto.routeNotFound:
-      return NavigationRouteStatus.routeNotFound;
-    case RouteStatusDto.networkError:
-      return NavigationRouteStatus.networkError;
-    case RouteStatusDto.quotaExceeded:
-      return NavigationRouteStatus.quotaExceeded;
-    case RouteStatusDto.apiKeyNotAuthorized:
-      return NavigationRouteStatus.apiKeyNotAuthorized;
-    case RouteStatusDto.statusCanceled:
-      return NavigationRouteStatus.statusCanceled;
-    case RouteStatusDto.duplicateWaypointsError:
-      return NavigationRouteStatus.duplicateWaypointsError;
-    case RouteStatusDto.noWaypointsError:
-      return NavigationRouteStatus.noWaypointsError;
-    case RouteStatusDto.locationUnavailable:
-      return NavigationRouteStatus.locationUnavailable;
-    case RouteStatusDto.waypointError:
-      return NavigationRouteStatus.waypointError;
-    case RouteStatusDto.travelModeUnsupported:
-      return NavigationRouteStatus.travelModeUnsupported;
-    case RouteStatusDto.unknown:
-      return NavigationRouteStatus.unknown;
-    case RouteStatusDto.locationUnknown:
-      return NavigationRouteStatus.locationUnknown;
-    case RouteStatusDto.quotaCheckFailed:
-      return NavigationRouteStatus.quotaCheckFailed;
-  }
-}
-
 /// Time and distance to next waypoint.
 /// {@category Navigation}
 class NavigationTimeAndDistance {
@@ -464,13 +308,6 @@ class NavigationTimeAndDistance {
 
   /// Distance to destination.
   final double distance;
-}
-
-/// Converts time and distance from the Pigeon DTO format.
-/// @nodoc
-NavigationTimeAndDistance navigationTimeAndDistanceFromDto(
-    NavigationTimeAndDistanceDto td) {
-  return NavigationTimeAndDistance(time: td.time, distance: td.distance);
 }
 
 /// Navigation audio guidance type.
@@ -504,27 +341,4 @@ class NavigationAudioGuidanceSettings {
 
   /// Guidance type.
   final NavigationAudioGuidanceType? guidanceType;
-}
-
-/// Converts audio guidance settings to the Pigeon DTO format.
-/// @nodoc
-NavigationAudioGuidanceSettingsDto navigationAudioGuidanceSettingsToDto(
-    NavigationAudioGuidanceSettings settings) {
-  final AudioGuidanceTypeDto? guidanceType = (() {
-    switch (settings.guidanceType) {
-      case NavigationAudioGuidanceType.silent:
-        return AudioGuidanceTypeDto.silent;
-      case NavigationAudioGuidanceType.alertsAndGuidance:
-        return AudioGuidanceTypeDto.alertsAndGuidance;
-      case NavigationAudioGuidanceType.alertsOnly:
-        return AudioGuidanceTypeDto.alertsOnly;
-      case null:
-        return null;
-    }
-  })();
-  return NavigationAudioGuidanceSettingsDto(
-    isBluetoothAudioEnabled: settings.isBluetoothAudioEnabled,
-    isVibrationEnabled: settings.isVibrationEnabled,
-    guidanceType: guidanceType,
-  );
 }

@@ -26,14 +26,19 @@ import io.flutter.embedding.engine.plugins.lifecycle.FlutterLifecycleAdapter
 class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
   private lateinit var viewRegistry: GoogleMapsNavigationViewRegistry
   private lateinit var viewMessageHandler: GoogleMapsNavigationViewMessageHandler
+  private lateinit var imageRegistryMessageHandler: GoogleMapsImageRegistryMessageHandler
   private lateinit var navigationViewEventApi: NavigationViewEventApi
   private lateinit var _binding: FlutterPlugin.FlutterPluginBinding
   private lateinit var lifecycle: Lifecycle
+  private lateinit var imageRegistry: ImageRegistry
 
   override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
     viewRegistry = GoogleMapsNavigationViewRegistry()
+    imageRegistry = ImageRegistry()
     viewMessageHandler = GoogleMapsNavigationViewMessageHandler(viewRegistry)
     NavigationViewApi.setUp(binding.binaryMessenger, viewMessageHandler)
+    imageRegistryMessageHandler = GoogleMapsImageRegistryMessageHandler(imageRegistry)
+    ImageRegistryApi.setUp(binding.binaryMessenger, imageRegistryMessageHandler)
     navigationViewEventApi = NavigationViewEventApi(binding.binaryMessenger)
     _binding = binding
     binding.applicationContext.registerComponentCallbacks(viewRegistry)
@@ -41,12 +46,14 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
     NavigationViewApi.setUp(binding.binaryMessenger, null) // Cleanup
+    ImageRegistryApi.setUp(binding.binaryMessenger, null)
     GoogleMapsNavigationSessionManager.destroyInstance()
     binding.applicationContext.unregisterComponentCallbacks(viewRegistry)
   }
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-    val factory = GoogleMapsNavigationViewFactory(viewRegistry, navigationViewEventApi)
+    val factory =
+      GoogleMapsNavigationViewFactory(viewRegistry, navigationViewEventApi, imageRegistry)
     _binding.platformViewRegistry.registerViewFactory("google_maps_navigation", factory)
     GoogleMapsNavigationSessionManager.createInstance(_binding.binaryMessenger)
     val inspectorHandler = GoogleMapsNavigationInspectorHandler(viewRegistry)

@@ -40,6 +40,16 @@ List<Object?> wrapResponse(
   return <Object?>[error.code, error.message, error.details];
 }
 
+/// Determines the initial visibility of the navigation UI on map initialization.
+enum NavigationUIEnabledPreferenceDto {
+  /// Navigation UI gets enabled if the navigation
+  /// session has already been successfully started.
+  automatic,
+
+  /// Navigation UI is disabled.
+  disabled,
+}
+
 enum MapTypeDto {
   none,
   normal,
@@ -79,10 +89,13 @@ enum PatternTypeDto {
   gap,
 }
 
-enum NavigationSessionEventTypeDto {
-  arrivalEvent,
-  routeChanged,
-  errorReceived,
+enum CameraEventTypeDto {
+  moveStartedByApi,
+  moveStartedByGesture,
+  onCameraMove,
+  onCameraIdle,
+  onCameraStartedFollowingLocation,
+  onCameraStoppedFollowingLocation,
 }
 
 enum AlternateRoutesStrategyDto {
@@ -248,22 +261,23 @@ class MapOptionsDto {
 /// Object containing navigation options used to initialize Google Navigation view.
 class NavigationViewOptionsDto {
   NavigationViewOptionsDto({
-    required this.navigationUIEnabled,
+    required this.navigationUIEnabledPreference,
   });
 
   /// Determines the initial visibility of the navigation UI on map initialization.
-  bool navigationUIEnabled;
+  NavigationUIEnabledPreferenceDto navigationUIEnabledPreference;
 
   Object encode() {
     return <Object?>[
-      navigationUIEnabled,
+      navigationUIEnabledPreference.index,
     ];
   }
 
   static NavigationViewOptionsDto decode(Object result) {
     result as List<Object?>;
     return NavigationViewOptionsDto(
-      navigationUIEnabled: result[0]! as bool,
+      navigationUIEnabledPreference:
+          NavigationUIEnabledPreferenceDto.values[result[0]! as int],
     );
   }
 }
@@ -375,6 +389,7 @@ class MarkerOptionsDto {
     required this.infoWindow,
     required this.visible,
     required this.zIndex,
+    required this.icon,
   });
 
   double alpha;
@@ -397,6 +412,8 @@ class MarkerOptionsDto {
 
   double zIndex;
 
+  ImageDescriptorDto icon;
+
   Object encode() {
     return <Object?>[
       alpha,
@@ -409,6 +426,7 @@ class MarkerOptionsDto {
       infoWindow.encode(),
       visible,
       zIndex,
+      icon.encode(),
     ];
   }
 
@@ -425,6 +443,43 @@ class MarkerOptionsDto {
       infoWindow: InfoWindowDto.decode(result[7]! as List<Object?>),
       visible: result[8]! as bool,
       zIndex: result[9]! as double,
+      icon: ImageDescriptorDto.decode(result[10]! as List<Object?>),
+    );
+  }
+}
+
+class ImageDescriptorDto {
+  ImageDescriptorDto({
+    this.registeredImageId,
+    this.imagePixelRatio,
+    this.width,
+    this.height,
+  });
+
+  String? registeredImageId;
+
+  double? imagePixelRatio;
+
+  double? width;
+
+  double? height;
+
+  Object encode() {
+    return <Object?>[
+      registeredImageId,
+      imagePixelRatio,
+      width,
+      height,
+    ];
+  }
+
+  static ImageDescriptorDto decode(Object result) {
+    result as List<Object?>;
+    return ImageDescriptorDto(
+      registeredImageId: result[0] as String?,
+      imagePixelRatio: result[1] as double?,
+      width: result[2] as double?,
+      height: result[3] as double?,
     );
   }
 }
@@ -482,73 +537,6 @@ class MarkerAnchorDto {
     return MarkerAnchorDto(
       u: result[0]! as double,
       v: result[1]! as double,
-    );
-  }
-}
-
-class MarkerEventDto {
-  MarkerEventDto({
-    required this.viewId,
-    required this.markerId,
-    required this.eventType,
-  });
-
-  int viewId;
-
-  String markerId;
-
-  MarkerEventTypeDto eventType;
-
-  Object encode() {
-    return <Object?>[
-      viewId,
-      markerId,
-      eventType.index,
-    ];
-  }
-
-  static MarkerEventDto decode(Object result) {
-    result as List<Object?>;
-    return MarkerEventDto(
-      viewId: result[0]! as int,
-      markerId: result[1]! as String,
-      eventType: MarkerEventTypeDto.values[result[2]! as int],
-    );
-  }
-}
-
-class MarkerDragEventDto {
-  MarkerDragEventDto({
-    required this.viewId,
-    required this.markerId,
-    required this.eventType,
-    required this.position,
-  });
-
-  int viewId;
-
-  String markerId;
-
-  MarkerDragEventTypeDto eventType;
-
-  LatLngDto position;
-
-  Object encode() {
-    return <Object?>[
-      viewId,
-      markerId,
-      eventType.index,
-      position.encode(),
-    ];
-  }
-
-  static MarkerDragEventDto decode(Object result) {
-    result as List<Object?>;
-    return MarkerDragEventDto(
-      viewId: result[0]! as int,
-      markerId: result[1]! as String,
-      eventType: MarkerDragEventTypeDto.values[result[2]! as int],
-      position: LatLngDto.decode(result[3]! as List<Object?>),
     );
   }
 }
@@ -657,32 +645,6 @@ class PolygonHoleDto {
     result as List<Object?>;
     return PolygonHoleDto(
       points: (result[0] as List<Object?>?)!.cast<LatLngDto?>(),
-    );
-  }
-}
-
-class PolygonClickedEventDto {
-  PolygonClickedEventDto({
-    required this.viewId,
-    required this.polygonId,
-  });
-
-  int viewId;
-
-  String polygonId;
-
-  Object encode() {
-    return <Object?>[
-      viewId,
-      polygonId,
-    ];
-  }
-
-  static PolygonClickedEventDto decode(Object result) {
-    result as List<Object?>;
-    return PolygonClickedEventDto(
-      viewId: result[0]! as int,
-      polygonId: result[1]! as String,
     );
   }
 }
@@ -864,32 +826,6 @@ class PolylineOptionsDto {
   }
 }
 
-class PolylineClickedEventDto {
-  PolylineClickedEventDto({
-    required this.viewId,
-    required this.polylineId,
-  });
-
-  int viewId;
-
-  String polylineId;
-
-  Object encode() {
-    return <Object?>[
-      viewId,
-      polylineId,
-    ];
-  }
-
-  static PolylineClickedEventDto decode(Object result) {
-    result as List<Object?>;
-    return PolylineClickedEventDto(
-      viewId: result[0]! as int,
-      polylineId: result[1]! as String,
-    );
-  }
-}
-
 class CircleDto {
   CircleDto({
     required this.circleId,
@@ -979,54 +915,29 @@ class CircleOptionsDto {
   }
 }
 
-class CircleClickedEventDto {
-  CircleClickedEventDto({
-    required this.viewId,
-    required this.circleId,
+class RouteTokenOptionsDto {
+  RouteTokenOptionsDto({
+    required this.routeToken,
+    this.travelMode,
   });
 
-  int viewId;
+  String routeToken;
 
-  String circleId;
+  TravelModeDto? travelMode;
 
   Object encode() {
     return <Object?>[
-      viewId,
-      circleId,
+      routeToken,
+      travelMode?.index,
     ];
   }
 
-  static CircleClickedEventDto decode(Object result) {
+  static RouteTokenOptionsDto decode(Object result) {
     result as List<Object?>;
-    return CircleClickedEventDto(
-      viewId: result[0]! as int,
-      circleId: result[1]! as String,
-    );
-  }
-}
-
-class NavigationSessionEventDto {
-  NavigationSessionEventDto({
-    required this.type,
-    required this.message,
-  });
-
-  NavigationSessionEventTypeDto type;
-
-  String message;
-
-  Object encode() {
-    return <Object?>[
-      type.index,
-      message,
-    ];
-  }
-
-  static NavigationSessionEventDto decode(Object result) {
-    result as List<Object?>;
-    return NavigationSessionEventDto(
-      type: NavigationSessionEventTypeDto.values[result[0]! as int],
-      message: result[1]! as String,
+    return RouteTokenOptionsDto(
+      routeToken: result[0]! as String,
+      travelMode:
+          result[1] != null ? TravelModeDto.values[result[1]! as int] : null,
     );
   }
 }
@@ -1036,6 +947,7 @@ class DestinationsDto {
     required this.waypoints,
     required this.displayOptions,
     this.routingOptions,
+    this.routeTokenOptions,
   });
 
   List<NavigationWaypointDto?> waypoints;
@@ -1044,11 +956,14 @@ class DestinationsDto {
 
   RoutingOptionsDto? routingOptions;
 
+  RouteTokenOptionsDto? routeTokenOptions;
+
   Object encode() {
     return <Object?>[
       waypoints,
       displayOptions.encode(),
       routingOptions?.encode(),
+      routeTokenOptions?.encode(),
     ];
   }
 
@@ -1060,6 +975,9 @@ class DestinationsDto {
           NavigationDisplayOptionsDto.decode(result[1]! as List<Object?>),
       routingOptions: result[2] != null
           ? RoutingOptionsDto.decode(result[2]! as List<Object?>)
+          : null,
+      routeTokenOptions: result[3] != null
+          ? RouteTokenOptionsDto.decode(result[3]! as List<Object?>)
           : null,
     );
   }
@@ -1358,160 +1276,6 @@ class SpeedingUpdatedEventDto {
   }
 }
 
-class RoadSnappedLocationUpdatedEventDto {
-  RoadSnappedLocationUpdatedEventDto({
-    required this.location,
-  });
-
-  LatLngDto location;
-
-  Object encode() {
-    return <Object?>[
-      location.encode(),
-    ];
-  }
-
-  static RoadSnappedLocationUpdatedEventDto decode(Object result) {
-    result as List<Object?>;
-    return RoadSnappedLocationUpdatedEventDto(
-      location: LatLngDto.decode(result[0]! as List<Object?>),
-    );
-  }
-}
-
-class RoadSnappedRawLocationUpdatedEventDto {
-  RoadSnappedRawLocationUpdatedEventDto({
-    this.location,
-  });
-
-  LatLngDto? location;
-
-  Object encode() {
-    return <Object?>[
-      location?.encode(),
-    ];
-  }
-
-  static RoadSnappedRawLocationUpdatedEventDto decode(Object result) {
-    result as List<Object?>;
-    return RoadSnappedRawLocationUpdatedEventDto(
-      location: result[0] != null
-          ? LatLngDto.decode(result[0]! as List<Object?>)
-          : null,
-    );
-  }
-}
-
-class OnArrivalEventDto {
-  OnArrivalEventDto({
-    required this.waypoint,
-  });
-
-  NavigationWaypointDto waypoint;
-
-  Object encode() {
-    return <Object?>[
-      waypoint.encode(),
-    ];
-  }
-
-  static OnArrivalEventDto decode(Object result) {
-    result as List<Object?>;
-    return OnArrivalEventDto(
-      waypoint: NavigationWaypointDto.decode(result[0]! as List<Object?>),
-    );
-  }
-}
-
-class RemainingTimeOrDistanceChangedEventDto {
-  RemainingTimeOrDistanceChangedEventDto({
-    required this.remainingTime,
-    required this.remainingDistance,
-  });
-
-  double remainingTime;
-
-  double remainingDistance;
-
-  Object encode() {
-    return <Object?>[
-      remainingTime,
-      remainingDistance,
-    ];
-  }
-
-  static RemainingTimeOrDistanceChangedEventDto decode(Object result) {
-    result as List<Object?>;
-    return RemainingTimeOrDistanceChangedEventDto(
-      remainingTime: result[0]! as double,
-      remainingDistance: result[1]! as double,
-    );
-  }
-}
-
-class RouteChangedEventDto {
-  RouteChangedEventDto({
-    required this.message,
-  });
-
-  String message;
-
-  Object encode() {
-    return <Object?>[
-      message,
-    ];
-  }
-
-  static RouteChangedEventDto decode(Object result) {
-    result as List<Object?>;
-    return RouteChangedEventDto(
-      message: result[0]! as String,
-    );
-  }
-}
-
-class ReroutingEventDto {
-  ReroutingEventDto({
-    required this.message,
-  });
-
-  String message;
-
-  Object encode() {
-    return <Object?>[
-      message,
-    ];
-  }
-
-  static ReroutingEventDto decode(Object result) {
-    result as List<Object?>;
-    return ReroutingEventDto(
-      message: result[0]! as String,
-    );
-  }
-}
-
-class TrafficUpdatedEventDto {
-  TrafficUpdatedEventDto({
-    required this.message,
-  });
-
-  String message;
-
-  Object encode() {
-    return <Object?>[
-      message,
-    ];
-  }
-
-  static TrafficUpdatedEventDto decode(Object result) {
-    result as List<Object?>;
-    return TrafficUpdatedEventDto(
-      message: result[0]! as String,
-    );
-  }
-}
-
 class SpeedAlertOptionsDto {
   SpeedAlertOptionsDto({
     required this.severityUpgradeDurationSeconds,
@@ -1744,50 +1508,53 @@ class _NavigationViewApiCodec extends StandardMessageCodec {
     } else if (value is CircleOptionsDto) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
-    } else if (value is InfoWindowDto) {
+    } else if (value is ImageDescriptorDto) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngBoundsDto) {
+    } else if (value is InfoWindowDto) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngDto) {
+    } else if (value is LatLngBoundsDto) {
       buffer.putUint8(133);
       writeValue(buffer, value.encode());
     } else if (value is LatLngDto) {
       buffer.putUint8(134);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerAnchorDto) {
+    } else if (value is LatLngDto) {
       buffer.putUint8(135);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerDto) {
+    } else if (value is MarkerAnchorDto) {
       buffer.putUint8(136);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerOptionsDto) {
+    } else if (value is MarkerDto) {
       buffer.putUint8(137);
       writeValue(buffer, value.encode());
-    } else if (value is PatternItemDto) {
+    } else if (value is MarkerOptionsDto) {
       buffer.putUint8(138);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonDto) {
+    } else if (value is PatternItemDto) {
       buffer.putUint8(139);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonHoleDto) {
+    } else if (value is PolygonDto) {
       buffer.putUint8(140);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonOptionsDto) {
+    } else if (value is PolygonHoleDto) {
       buffer.putUint8(141);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineDto) {
+    } else if (value is PolygonOptionsDto) {
       buffer.putUint8(142);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineOptionsDto) {
+    } else if (value is PolylineDto) {
       buffer.putUint8(143);
       writeValue(buffer, value.encode());
-    } else if (value is StyleSpanDto) {
+    } else if (value is PolylineOptionsDto) {
       buffer.putUint8(144);
       writeValue(buffer, value.encode());
-    } else if (value is StyleSpanStrokeStyleDto) {
+    } else if (value is StyleSpanDto) {
       buffer.putUint8(145);
+      writeValue(buffer, value.encode());
+    } else if (value is StyleSpanStrokeStyleDto) {
+      buffer.putUint8(146);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -1804,34 +1571,36 @@ class _NavigationViewApiCodec extends StandardMessageCodec {
       case 130:
         return CircleOptionsDto.decode(readValue(buffer)!);
       case 131:
-        return InfoWindowDto.decode(readValue(buffer)!);
+        return ImageDescriptorDto.decode(readValue(buffer)!);
       case 132:
-        return LatLngBoundsDto.decode(readValue(buffer)!);
+        return InfoWindowDto.decode(readValue(buffer)!);
       case 133:
-        return LatLngDto.decode(readValue(buffer)!);
+        return LatLngBoundsDto.decode(readValue(buffer)!);
       case 134:
         return LatLngDto.decode(readValue(buffer)!);
       case 135:
-        return MarkerAnchorDto.decode(readValue(buffer)!);
+        return LatLngDto.decode(readValue(buffer)!);
       case 136:
-        return MarkerDto.decode(readValue(buffer)!);
+        return MarkerAnchorDto.decode(readValue(buffer)!);
       case 137:
-        return MarkerOptionsDto.decode(readValue(buffer)!);
+        return MarkerDto.decode(readValue(buffer)!);
       case 138:
-        return PatternItemDto.decode(readValue(buffer)!);
+        return MarkerOptionsDto.decode(readValue(buffer)!);
       case 139:
-        return PolygonDto.decode(readValue(buffer)!);
+        return PatternItemDto.decode(readValue(buffer)!);
       case 140:
-        return PolygonHoleDto.decode(readValue(buffer)!);
+        return PolygonDto.decode(readValue(buffer)!);
       case 141:
-        return PolygonOptionsDto.decode(readValue(buffer)!);
+        return PolygonHoleDto.decode(readValue(buffer)!);
       case 142:
-        return PolylineDto.decode(readValue(buffer)!);
+        return PolygonOptionsDto.decode(readValue(buffer)!);
       case 143:
-        return PolylineOptionsDto.decode(readValue(buffer)!);
+        return PolylineDto.decode(readValue(buffer)!);
       case 144:
-        return StyleSpanDto.decode(readValue(buffer)!);
+        return PolylineOptionsDto.decode(readValue(buffer)!);
       case 145:
+        return StyleSpanDto.decode(readValue(buffer)!);
+      case 146:
         return StyleSpanStrokeStyleDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -1903,9 +1672,9 @@ class NavigationViewApi {
     }
   }
 
-  Future<void> enableMyLocation(int viewId, bool enabled) async {
+  Future<void> setMyLocationEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableMyLocation';
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMyLocationEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2057,9 +1826,10 @@ class NavigationViewApi {
     }
   }
 
-  Future<void> enableNavigationTripProgressBar(int viewId, bool enabled) async {
+  Future<void> setNavigationTripProgressBarEnabled(
+      int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableNavigationTripProgressBar';
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationTripProgressBarEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2110,9 +1880,9 @@ class NavigationViewApi {
     }
   }
 
-  Future<void> enableNavigationHeader(int viewId, bool enabled) async {
+  Future<void> setNavigationHeaderEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableNavigationHeader';
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationHeaderEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2163,9 +1933,9 @@ class NavigationViewApi {
     }
   }
 
-  Future<void> enableNavigationFooter(int viewId, bool enabled) async {
+  Future<void> setNavigationFooterEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableNavigationFooter';
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationFooterEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2216,9 +1986,9 @@ class NavigationViewApi {
     }
   }
 
-  Future<void> enableRecenterButton(int viewId, bool enabled) async {
+  Future<void> setRecenterButtonEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableRecenterButton';
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setRecenterButtonEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2269,9 +2039,9 @@ class NavigationViewApi {
     }
   }
 
-  Future<void> enableSpeedLimitIcon(int viewId, bool enabled) async {
+  Future<void> setSpeedLimitIconEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableSpeedLimitIcon';
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setSpeedLimitIconEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2322,9 +2092,9 @@ class NavigationViewApi {
     }
   }
 
-  Future<void> enableSpeedometer(int viewId, bool enabled) async {
+  Future<void> setSpeedometerEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableSpeedometer';
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setSpeedometerEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2346,9 +2116,9 @@ class NavigationViewApi {
     }
   }
 
-  Future<bool> isIncidentCardsEnabled(int viewId) async {
+  Future<bool> isTrafficIncidentCardsEnabled(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isIncidentCardsEnabled';
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isTrafficIncidentCardsEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2375,9 +2145,9 @@ class NavigationViewApi {
     }
   }
 
-  Future<void> enableIncidentCards(int viewId, bool enabled) async {
+  Future<void> setTrafficIncidentCardsEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableIncidentCards';
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTrafficIncidentCardsEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2428,9 +2198,9 @@ class NavigationViewApi {
     }
   }
 
-  Future<void> enableNavigationUI(int viewId, bool enabled) async {
+  Future<void> setNavigationUIEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableNavigationUI';
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationUIEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2945,9 +2715,141 @@ class NavigationViewApi {
     }
   }
 
-  Future<void> enableMyLocationButton(int viewId, bool enabled) async {
+  Future<double> getMinZoomPreference(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableMyLocationButton';
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getMinZoomPreference';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[viewId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else if (__pigeon_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?)!;
+    }
+  }
+
+  Future<double> getMaxZoomPreference(int viewId) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getMaxZoomPreference';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[viewId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else if (__pigeon_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?)!;
+    }
+  }
+
+  Future<void> resetMinMaxZoomPreference(int viewId) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.resetMinMaxZoomPreference';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[viewId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<void> setMinZoomPreference(
+      int viewId, double minZoomPreference) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMinZoomPreference';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[viewId, minZoomPreference]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<void> setMaxZoomPreference(
+      int viewId, double maxZoomPreference) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMaxZoomPreference';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[viewId, maxZoomPreference]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<void> setMyLocationButtonEnabled(int viewId, bool enabled) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMyLocationButtonEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2969,130 +2871,10 @@ class NavigationViewApi {
     }
   }
 
-  Future<void> enableZoomGestures(int viewId, bool enabled) async {
-    const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableZoomGestures';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList = await __pigeon_channel
-        .send(<Object?>[viewId, enabled]) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<void> enableZoomControls(int viewId, bool enabled) async {
-    const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableZoomControls';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList = await __pigeon_channel
-        .send(<Object?>[viewId, enabled]) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<void> enableCompass(int viewId, bool enabled) async {
-    const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableCompass';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList = await __pigeon_channel
-        .send(<Object?>[viewId, enabled]) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<void> enableRotateGestures(int viewId, bool enabled) async {
-    const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableRotateGestures';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList = await __pigeon_channel
-        .send(<Object?>[viewId, enabled]) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<void> enableScrollGestures(int viewId, bool enabled) async {
-    const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableScrollGestures';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList = await __pigeon_channel
-        .send(<Object?>[viewId, enabled]) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<void> enableScrollGesturesDuringRotateOrZoom(
+  Future<void> setConsumeMyLocationButtonClickEventsEnabled(
       int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableScrollGesturesDuringRotateOrZoom';
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setConsumeMyLocationButtonClickEventsEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3114,9 +2896,9 @@ class NavigationViewApi {
     }
   }
 
-  Future<void> enableTiltGestures(int viewId, bool enabled) async {
+  Future<void> setZoomGesturesEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableTiltGestures';
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setZoomGesturesEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3138,9 +2920,9 @@ class NavigationViewApi {
     }
   }
 
-  Future<void> enableMapToolbar(int viewId, bool enabled) async {
+  Future<void> setZoomControlsEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableMapToolbar';
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setZoomControlsEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3162,9 +2944,154 @@ class NavigationViewApi {
     }
   }
 
-  Future<void> enableTraffic(int viewId, bool enabled) async {
+  Future<void> setCompassEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.enableTraffic';
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setCompassEnabled';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[viewId, enabled]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<void> setRotateGesturesEnabled(int viewId, bool enabled) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setRotateGesturesEnabled';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[viewId, enabled]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<void> setScrollGesturesEnabled(int viewId, bool enabled) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setScrollGesturesEnabled';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[viewId, enabled]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<void> setScrollGesturesDuringRotateOrZoomEnabled(
+      int viewId, bool enabled) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setScrollGesturesDuringRotateOrZoomEnabled';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[viewId, enabled]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<void> setTiltGesturesEnabled(int viewId, bool enabled) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTiltGesturesEnabled';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[viewId, enabled]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<void> setMapToolbarEnabled(int viewId, bool enabled) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMapToolbarEnabled';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[viewId, enabled]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<void> setTrafficEnabled(int viewId, bool enabled) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTrafficEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3189,6 +3116,35 @@ class NavigationViewApi {
   Future<bool> isMyLocationButtonEnabled(int viewId) async {
     const String __pigeon_channelName =
         'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isMyLocationButtonEnabled';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[viewId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else if (__pigeon_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (__pigeon_replyList[0] as bool?)!;
+    }
+  }
+
+  Future<bool> isConsumeMyLocationButtonClickEventsEnabled(int viewId) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isConsumeMyLocationButtonClickEventsEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -4047,29 +4003,41 @@ class NavigationViewApi {
       return;
     }
   }
+
+  Future<void> registerOnCameraChangedListener(int viewId) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.registerOnCameraChangedListener';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[viewId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
 }
 
-class _NavigationViewEventApiCodec extends StandardMessageCodec {
-  const _NavigationViewEventApiCodec();
+class _ImageRegistryApiCodec extends StandardMessageCodec {
+  const _ImageRegistryApiCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is CircleClickedEventDto) {
+    if (value is ImageDescriptorDto) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngDto) {
+    } else if (value is ImageDescriptorDto) {
       buffer.putUint8(129);
-      writeValue(buffer, value.encode());
-    } else if (value is MarkerDragEventDto) {
-      buffer.putUint8(130);
-      writeValue(buffer, value.encode());
-    } else if (value is MarkerEventDto) {
-      buffer.putUint8(131);
-      writeValue(buffer, value.encode());
-    } else if (value is PolygonClickedEventDto) {
-      buffer.putUint8(132);
-      writeValue(buffer, value.encode());
-    } else if (value is PolylineClickedEventDto) {
-      buffer.putUint8(133);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -4080,17 +4048,162 @@ class _NavigationViewEventApiCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 128:
-        return CircleClickedEventDto.decode(readValue(buffer)!);
+        return ImageDescriptorDto.decode(readValue(buffer)!);
+      case 129:
+        return ImageDescriptorDto.decode(readValue(buffer)!);
+      default:
+        return super.readValueOfType(type, buffer);
+    }
+  }
+}
+
+class ImageRegistryApi {
+  /// Constructor for [ImageRegistryApi].  The [binaryMessenger] named argument is
+  /// available for dependency injection.  If it is left null, the default
+  /// BinaryMessenger will be used which routes to the host platform.
+  ImageRegistryApi({BinaryMessenger? binaryMessenger})
+      : __pigeon_binaryMessenger = binaryMessenger;
+  final BinaryMessenger? __pigeon_binaryMessenger;
+
+  static const MessageCodec<Object?> pigeonChannelCodec =
+      _ImageRegistryApiCodec();
+
+  Future<ImageDescriptorDto> registerBitmapImage(
+      String imageId,
+      Uint8List bytes,
+      double imagePixelRatio,
+      double? width,
+      double? height) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.registerBitmapImage';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+            .send(<Object?>[imageId, bytes, imagePixelRatio, width, height])
+        as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else if (__pigeon_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (__pigeon_replyList[0] as ImageDescriptorDto?)!;
+    }
+  }
+
+  Future<void> unregisterImage(ImageDescriptorDto imageDescriptor) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.unregisterImage';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[imageDescriptor]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<List<ImageDescriptorDto?>> getRegisteredImages() async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.getRegisteredImages';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(null) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else if (__pigeon_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (__pigeon_replyList[0] as List<Object?>?)!
+          .cast<ImageDescriptorDto?>();
+    }
+  }
+
+  Future<void> clearRegisteredImages() async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.clearRegisteredImages';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(null) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+}
+
+class _NavigationViewEventApiCodec extends StandardMessageCodec {
+  const _NavigationViewEventApiCodec();
+  @override
+  void writeValue(WriteBuffer buffer, Object? value) {
+    if (value is CameraPositionDto) {
+      buffer.putUint8(128);
+      writeValue(buffer, value.encode());
+    } else if (value is LatLngDto) {
+      buffer.putUint8(129);
+      writeValue(buffer, value.encode());
+    } else {
+      super.writeValue(buffer, value);
+    }
+  }
+
+  @override
+  Object? readValueOfType(int type, ReadBuffer buffer) {
+    switch (type) {
+      case 128:
+        return CameraPositionDto.decode(readValue(buffer)!);
       case 129:
         return LatLngDto.decode(readValue(buffer)!);
-      case 130:
-        return MarkerDragEventDto.decode(readValue(buffer)!);
-      case 131:
-        return MarkerEventDto.decode(readValue(buffer)!);
-      case 132:
-        return PolygonClickedEventDto.decode(readValue(buffer)!);
-      case 133:
-        return PolylineClickedEventDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -4107,15 +4220,25 @@ abstract class NavigationViewEventApi {
 
   void onRecenterButtonClicked(int viewId);
 
-  void onMarkerEvent(MarkerEventDto msg);
+  void onMarkerEvent(int viewId, String markerId, MarkerEventTypeDto eventType);
 
-  void onMarkerDragEvent(MarkerDragEventDto msg);
+  void onMarkerDragEvent(int viewId, String markerId,
+      MarkerDragEventTypeDto eventType, LatLngDto position);
 
-  void onPolygonClicked(PolygonClickedEventDto msg);
+  void onPolygonClicked(int viewId, String polygonId);
 
-  void onPolylineClicked(PolylineClickedEventDto msg);
+  void onPolylineClicked(int viewId, String polylineId);
 
-  void onCircleClicked(CircleClickedEventDto msg);
+  void onCircleClicked(int viewId, String circleId);
+
+  void onNavigationUIEnabledChanged(int viewId, bool navigationUIEnabled);
+
+  void onMyLocationClicked(int viewId);
+
+  void onMyLocationButtonClicked(int viewId);
+
+  void onCameraChanged(
+      int viewId, CameraEventTypeDto eventType, CameraPositionDto position);
 
   static void setup(NavigationViewEventApi? api,
       {BinaryMessenger? binaryMessenger}) {
@@ -4222,11 +4345,19 @@ abstract class NavigationViewEventApi {
           assert(message != null,
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerEvent was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final MarkerEventDto? arg_msg = (args[0] as MarkerEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerEvent was null, expected non-null MarkerEventDto.');
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerEvent was null, expected non-null int.');
+          final String? arg_markerId = (args[1] as String?);
+          assert(arg_markerId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerEvent was null, expected non-null String.');
+          final MarkerEventTypeDto? arg_eventType = args[2] == null
+              ? null
+              : MarkerEventTypeDto.values[args[2]! as int];
+          assert(arg_eventType != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerEvent was null, expected non-null MarkerEventTypeDto.');
           try {
-            api.onMarkerEvent(arg_msg!);
+            api.onMarkerEvent(arg_viewId!, arg_markerId!, arg_eventType!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -4250,11 +4381,23 @@ abstract class NavigationViewEventApi {
           assert(message != null,
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerDragEvent was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final MarkerDragEventDto? arg_msg = (args[0] as MarkerDragEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerDragEvent was null, expected non-null MarkerDragEventDto.');
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerDragEvent was null, expected non-null int.');
+          final String? arg_markerId = (args[1] as String?);
+          assert(arg_markerId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerDragEvent was null, expected non-null String.');
+          final MarkerDragEventTypeDto? arg_eventType = args[2] == null
+              ? null
+              : MarkerDragEventTypeDto.values[args[2]! as int];
+          assert(arg_eventType != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerDragEvent was null, expected non-null MarkerDragEventTypeDto.');
+          final LatLngDto? arg_position = (args[3] as LatLngDto?);
+          assert(arg_position != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMarkerDragEvent was null, expected non-null LatLngDto.');
           try {
-            api.onMarkerDragEvent(arg_msg!);
+            api.onMarkerDragEvent(
+                arg_viewId!, arg_markerId!, arg_eventType!, arg_position!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -4278,12 +4421,14 @@ abstract class NavigationViewEventApi {
           assert(message != null,
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onPolygonClicked was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final PolygonClickedEventDto? arg_msg =
-              (args[0] as PolygonClickedEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onPolygonClicked was null, expected non-null PolygonClickedEventDto.');
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onPolygonClicked was null, expected non-null int.');
+          final String? arg_polygonId = (args[1] as String?);
+          assert(arg_polygonId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onPolygonClicked was null, expected non-null String.');
           try {
-            api.onPolygonClicked(arg_msg!);
+            api.onPolygonClicked(arg_viewId!, arg_polygonId!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -4307,12 +4452,14 @@ abstract class NavigationViewEventApi {
           assert(message != null,
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onPolylineClicked was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final PolylineClickedEventDto? arg_msg =
-              (args[0] as PolylineClickedEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onPolylineClicked was null, expected non-null PolylineClickedEventDto.');
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onPolylineClicked was null, expected non-null int.');
+          final String? arg_polylineId = (args[1] as String?);
+          assert(arg_polylineId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onPolylineClicked was null, expected non-null String.');
           try {
-            api.onPolylineClicked(arg_msg!);
+            api.onPolylineClicked(arg_viewId!, arg_polylineId!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -4336,12 +4483,139 @@ abstract class NavigationViewEventApi {
           assert(message != null,
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCircleClicked was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final CircleClickedEventDto? arg_msg =
-              (args[0] as CircleClickedEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCircleClicked was null, expected non-null CircleClickedEventDto.');
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCircleClicked was null, expected non-null int.');
+          final String? arg_circleId = (args[1] as String?);
+          assert(arg_circleId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCircleClicked was null, expected non-null String.');
           try {
-            api.onCircleClicked(arg_msg!);
+            api.onCircleClicked(arg_viewId!, arg_circleId!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onNavigationUIEnabledChanged',
+          pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        __pigeon_channel.setMessageHandler(null);
+      } else {
+        __pigeon_channel.setMessageHandler((Object? message) async {
+          assert(message != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onNavigationUIEnabledChanged was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onNavigationUIEnabledChanged was null, expected non-null int.');
+          final bool? arg_navigationUIEnabled = (args[1] as bool?);
+          assert(arg_navigationUIEnabled != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onNavigationUIEnabledChanged was null, expected non-null bool.');
+          try {
+            api.onNavigationUIEnabledChanged(
+                arg_viewId!, arg_navigationUIEnabled!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMyLocationClicked',
+          pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        __pigeon_channel.setMessageHandler(null);
+      } else {
+        __pigeon_channel.setMessageHandler((Object? message) async {
+          assert(message != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMyLocationClicked was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMyLocationClicked was null, expected non-null int.');
+          try {
+            api.onMyLocationClicked(arg_viewId!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMyLocationButtonClicked',
+          pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        __pigeon_channel.setMessageHandler(null);
+      } else {
+        __pigeon_channel.setMessageHandler((Object? message) async {
+          assert(message != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMyLocationButtonClicked was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onMyLocationButtonClicked was null, expected non-null int.');
+          try {
+            api.onMyLocationButtonClicked(arg_viewId!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCameraChanged',
+          pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        __pigeon_channel.setMessageHandler(null);
+      } else {
+        __pigeon_channel.setMessageHandler((Object? message) async {
+          assert(message != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCameraChanged was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCameraChanged was null, expected non-null int.');
+          final CameraEventTypeDto? arg_eventType = args[1] == null
+              ? null
+              : CameraEventTypeDto.values[args[1]! as int];
+          assert(arg_eventType != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCameraChanged was null, expected non-null CameraEventTypeDto.');
+          final CameraPositionDto? arg_position =
+              (args[2] as CameraPositionDto?);
+          assert(arg_position != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewEventApi.onCameraChanged was null, expected non-null CameraPositionDto.');
+          try {
+            api.onCameraChanged(arg_viewId!, arg_eventType!, arg_position!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -4395,14 +4669,17 @@ class _NavigationSessionApiCodec extends StandardMessageCodec {
     } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
       buffer.putUint8(139);
       writeValue(buffer, value.encode());
-    } else if (value is RoutingOptionsDto) {
+    } else if (value is RouteTokenOptionsDto) {
       buffer.putUint8(140);
       writeValue(buffer, value.encode());
-    } else if (value is SimulationOptionsDto) {
+    } else if (value is RoutingOptionsDto) {
       buffer.putUint8(141);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsDto) {
+    } else if (value is SimulationOptionsDto) {
       buffer.putUint8(142);
+      writeValue(buffer, value.encode());
+    } else if (value is SpeedAlertOptionsDto) {
+      buffer.putUint8(143);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -4438,10 +4715,12 @@ class _NavigationSessionApiCodec extends StandardMessageCodec {
         return RouteSegmentTrafficDataRoadStretchRenderingDataDto.decode(
             readValue(buffer)!);
       case 140:
-        return RoutingOptionsDto.decode(readValue(buffer)!);
+        return RouteTokenOptionsDto.decode(readValue(buffer)!);
       case 141:
-        return SimulationOptionsDto.decode(readValue(buffer)!);
+        return RoutingOptionsDto.decode(readValue(buffer)!);
       case 142:
+        return SimulationOptionsDto.decode(readValue(buffer)!);
+      case 143:
         return SpeedAlertOptionsDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -4461,7 +4740,8 @@ class NavigationSessionApi {
       _NavigationSessionApiCodec();
 
   /// General.
-  Future<void> createNavigationSession() async {
+  Future<void> createNavigationSession(
+      bool abnormalTerminationReportingEnabled) async {
     const String __pigeon_channelName =
         'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.createNavigationSession';
     final BasicMessageChannel<Object?> __pigeon_channel =
@@ -4470,8 +4750,8 @@ class NavigationSessionApi {
       pigeonChannelCodec,
       binaryMessenger: __pigeon_binaryMessenger,
     );
-    final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(null) as List<Object?>?;
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[abnormalTerminationReportingEnabled]) as List<Object?>?;
     if (__pigeon_replyList == null) {
       throw _createConnectionError(__pigeon_channelName);
     } else if (__pigeon_replyList.length > 1) {
@@ -4625,6 +4905,35 @@ class NavigationSessionApi {
     }
   }
 
+  Future<String> getNavSDKVersion() async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.getNavSDKVersion';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(null) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else if (__pigeon_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (__pigeon_replyList[0] as String?)!;
+    }
+  }
+
   /// Navigation.
   Future<bool> isGuidanceRunning() async {
     const String __pigeon_channelName =
@@ -4703,7 +5012,7 @@ class NavigationSessionApi {
     }
   }
 
-  Future<RouteStatusDto> setDestinations(DestinationsDto msg) async {
+  Future<RouteStatusDto> setDestinations(DestinationsDto destinations) async {
     const String __pigeon_channelName =
         'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.setDestinations';
     final BasicMessageChannel<Object?> __pigeon_channel =
@@ -4713,7 +5022,7 @@ class NavigationSessionApi {
       binaryMessenger: __pigeon_binaryMessenger,
     );
     final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(<Object?>[msg]) as List<Object?>?;
+        await __pigeon_channel.send(<Object?>[destinations]) as List<Object?>?;
     if (__pigeon_replyList == null) {
       throw _createConnectionError(__pigeon_channelName);
     } else if (__pigeon_replyList.length > 1) {
@@ -5293,38 +5602,11 @@ class _NavigationSessionEventApiCodec extends StandardMessageCodec {
     if (value is LatLngDto) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngDto) {
+    } else if (value is NavigationWaypointDto) {
       buffer.putUint8(129);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationSessionEventDto) {
-      buffer.putUint8(130);
-      writeValue(buffer, value.encode());
-    } else if (value is NavigationWaypointDto) {
-      buffer.putUint8(131);
-      writeValue(buffer, value.encode());
-    } else if (value is OnArrivalEventDto) {
-      buffer.putUint8(132);
-      writeValue(buffer, value.encode());
-    } else if (value is RemainingTimeOrDistanceChangedEventDto) {
-      buffer.putUint8(133);
-      writeValue(buffer, value.encode());
-    } else if (value is ReroutingEventDto) {
-      buffer.putUint8(134);
-      writeValue(buffer, value.encode());
-    } else if (value is RoadSnappedLocationUpdatedEventDto) {
-      buffer.putUint8(135);
-      writeValue(buffer, value.encode());
-    } else if (value is RoadSnappedRawLocationUpdatedEventDto) {
-      buffer.putUint8(136);
-      writeValue(buffer, value.encode());
-    } else if (value is RouteChangedEventDto) {
-      buffer.putUint8(137);
-      writeValue(buffer, value.encode());
     } else if (value is SpeedingUpdatedEventDto) {
-      buffer.putUint8(138);
-      writeValue(buffer, value.encode());
-    } else if (value is TrafficUpdatedEventDto) {
-      buffer.putUint8(139);
+      buffer.putUint8(130);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -5337,28 +5619,9 @@ class _NavigationSessionEventApiCodec extends StandardMessageCodec {
       case 128:
         return LatLngDto.decode(readValue(buffer)!);
       case 129:
-        return LatLngDto.decode(readValue(buffer)!);
-      case 130:
-        return NavigationSessionEventDto.decode(readValue(buffer)!);
-      case 131:
         return NavigationWaypointDto.decode(readValue(buffer)!);
-      case 132:
-        return OnArrivalEventDto.decode(readValue(buffer)!);
-      case 133:
-        return RemainingTimeOrDistanceChangedEventDto.decode(
-            readValue(buffer)!);
-      case 134:
-        return ReroutingEventDto.decode(readValue(buffer)!);
-      case 135:
-        return RoadSnappedLocationUpdatedEventDto.decode(readValue(buffer)!);
-      case 136:
-        return RoadSnappedRawLocationUpdatedEventDto.decode(readValue(buffer)!);
-      case 137:
-        return RouteChangedEventDto.decode(readValue(buffer)!);
-      case 138:
+      case 130:
         return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
-      case 139:
-        return TrafficUpdatedEventDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -5369,59 +5632,30 @@ abstract class NavigationSessionEventApi {
   static const MessageCodec<Object?> pigeonChannelCodec =
       _NavigationSessionEventApiCodec();
 
-  void onNavigationSessionEvent(NavigationSessionEventDto msg);
-
   void onSpeedingUpdated(SpeedingUpdatedEventDto msg);
 
-  void onRoadSnappedLocationUpdated(RoadSnappedLocationUpdatedEventDto msg);
+  void onRoadSnappedLocationUpdated(LatLngDto location);
 
-  void onRoadSnappedRawLocationUpdated(
-      RoadSnappedRawLocationUpdatedEventDto msg);
+  void onRoadSnappedRawLocationUpdated(LatLngDto location);
 
-  void onArrival(OnArrivalEventDto msg);
+  void onArrival(NavigationWaypointDto waypoint);
 
-  void onRouteChanged(RouteChangedEventDto msg);
+  void onRouteChanged();
 
   void onRemainingTimeOrDistanceChanged(
-      RemainingTimeOrDistanceChangedEventDto msg);
+      double remainingTime, double remainingDistance);
 
-  /// Android only event.
-  void onTrafficUpdated(TrafficUpdatedEventDto msg);
+  /// Android-only event.
+  void onTrafficUpdated();
 
-  /// Android only event.
-  void onRerouting(ReroutingEventDto msg);
+  /// Android-only event.
+  void onRerouting();
+
+  /// Android-only event.
+  void onGpsAvailabilityUpdate(bool available);
 
   static void setup(NavigationSessionEventApi? api,
       {BinaryMessenger? binaryMessenger}) {
-    {
-      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
-              Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onNavigationSessionEvent',
-          pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
-      if (api == null) {
-        __pigeon_channel.setMessageHandler(null);
-      } else {
-        __pigeon_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onNavigationSessionEvent was null.');
-          final List<Object?> args = (message as List<Object?>?)!;
-          final NavigationSessionEventDto? arg_msg =
-              (args[0] as NavigationSessionEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onNavigationSessionEvent was null, expected non-null NavigationSessionEventDto.');
-          try {
-            api.onNavigationSessionEvent(arg_msg!);
-            return wrapResponse(empty: true);
-          } on PlatformException catch (e) {
-            return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-                error: PlatformException(code: 'error', message: e.toString()));
-          }
-        });
-      }
-    }
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
@@ -5464,12 +5698,11 @@ abstract class NavigationSessionEventApi {
           assert(message != null,
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRoadSnappedLocationUpdated was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final RoadSnappedLocationUpdatedEventDto? arg_msg =
-              (args[0] as RoadSnappedLocationUpdatedEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRoadSnappedLocationUpdated was null, expected non-null RoadSnappedLocationUpdatedEventDto.');
+          final LatLngDto? arg_location = (args[0] as LatLngDto?);
+          assert(arg_location != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRoadSnappedLocationUpdated was null, expected non-null LatLngDto.');
           try {
-            api.onRoadSnappedLocationUpdated(arg_msg!);
+            api.onRoadSnappedLocationUpdated(arg_location!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -5493,12 +5726,11 @@ abstract class NavigationSessionEventApi {
           assert(message != null,
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRoadSnappedRawLocationUpdated was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final RoadSnappedRawLocationUpdatedEventDto? arg_msg =
-              (args[0] as RoadSnappedRawLocationUpdatedEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRoadSnappedRawLocationUpdated was null, expected non-null RoadSnappedRawLocationUpdatedEventDto.');
+          final LatLngDto? arg_location = (args[0] as LatLngDto?);
+          assert(arg_location != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRoadSnappedRawLocationUpdated was null, expected non-null LatLngDto.');
           try {
-            api.onRoadSnappedRawLocationUpdated(arg_msg!);
+            api.onRoadSnappedRawLocationUpdated(arg_location!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -5522,11 +5754,12 @@ abstract class NavigationSessionEventApi {
           assert(message != null,
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onArrival was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final OnArrivalEventDto? arg_msg = (args[0] as OnArrivalEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onArrival was null, expected non-null OnArrivalEventDto.');
+          final NavigationWaypointDto? arg_waypoint =
+              (args[0] as NavigationWaypointDto?);
+          assert(arg_waypoint != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onArrival was null, expected non-null NavigationWaypointDto.');
           try {
-            api.onArrival(arg_msg!);
+            api.onArrival(arg_waypoint!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -5547,15 +5780,8 @@ abstract class NavigationSessionEventApi {
         __pigeon_channel.setMessageHandler(null);
       } else {
         __pigeon_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRouteChanged was null.');
-          final List<Object?> args = (message as List<Object?>?)!;
-          final RouteChangedEventDto? arg_msg =
-              (args[0] as RouteChangedEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRouteChanged was null, expected non-null RouteChangedEventDto.');
           try {
-            api.onRouteChanged(arg_msg!);
+            api.onRouteChanged();
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -5579,12 +5805,15 @@ abstract class NavigationSessionEventApi {
           assert(message != null,
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRemainingTimeOrDistanceChanged was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final RemainingTimeOrDistanceChangedEventDto? arg_msg =
-              (args[0] as RemainingTimeOrDistanceChangedEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRemainingTimeOrDistanceChanged was null, expected non-null RemainingTimeOrDistanceChangedEventDto.');
+          final double? arg_remainingTime = (args[0] as double?);
+          assert(arg_remainingTime != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRemainingTimeOrDistanceChanged was null, expected non-null double.');
+          final double? arg_remainingDistance = (args[1] as double?);
+          assert(arg_remainingDistance != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRemainingTimeOrDistanceChanged was null, expected non-null double.');
           try {
-            api.onRemainingTimeOrDistanceChanged(arg_msg!);
+            api.onRemainingTimeOrDistanceChanged(
+                arg_remainingTime!, arg_remainingDistance!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -5605,15 +5834,8 @@ abstract class NavigationSessionEventApi {
         __pigeon_channel.setMessageHandler(null);
       } else {
         __pigeon_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onTrafficUpdated was null.');
-          final List<Object?> args = (message as List<Object?>?)!;
-          final TrafficUpdatedEventDto? arg_msg =
-              (args[0] as TrafficUpdatedEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onTrafficUpdated was null, expected non-null TrafficUpdatedEventDto.');
           try {
-            api.onTrafficUpdated(arg_msg!);
+            api.onTrafficUpdated();
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -5634,14 +5856,36 @@ abstract class NavigationSessionEventApi {
         __pigeon_channel.setMessageHandler(null);
       } else {
         __pigeon_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRerouting was null.');
-          final List<Object?> args = (message as List<Object?>?)!;
-          final ReroutingEventDto? arg_msg = (args[0] as ReroutingEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onRerouting was null, expected non-null ReroutingEventDto.');
           try {
-            api.onRerouting(arg_msg!);
+            api.onRerouting();
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onGpsAvailabilityUpdate',
+          pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        __pigeon_channel.setMessageHandler(null);
+      } else {
+        __pigeon_channel.setMessageHandler((Object? message) async {
+          assert(message != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onGpsAvailabilityUpdate was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_available = (args[0] as bool?);
+          assert(arg_available != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onGpsAvailabilityUpdate was null, expected non-null bool.');
+          try {
+            api.onGpsAvailabilityUpdate(arg_available!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

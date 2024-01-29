@@ -18,6 +18,7 @@ package com.google.maps.flutter.navigation
 
 import android.graphics.Color
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.Circle
 import com.google.android.gms.maps.model.JointType
 import com.google.android.gms.maps.model.LatLng
@@ -51,6 +52,8 @@ internal class ConvertTest {
   @MockK(relaxUnitFun = true) lateinit var circle: Circle
 
   @MockK(relaxUnitFun = true) lateinit var polyline: Polyline
+
+  @MockK(relaxUnitFun = true) lateinit var bitmapDescriptor: BitmapDescriptor
 
   @Test
   fun convertMapType_returnsExpectedValue() {
@@ -492,7 +495,7 @@ internal class ConvertTest {
 
   @Test
   fun markerControllerToMarkerOptions_returnsExpectedValue() {
-    val controller = MarkerController(marker, "Marker_01", true, 0.1F, 0.2F, 0.3F, 0.4F)
+    val controller = MarkerController(marker, "Marker_01", true, 0.1F, 0.2F, 0.3F, 0.4F, null)
     every { marker.alpha } returns 0.5F
     every { marker.isDraggable } returns true
     every { marker.isFlat } returns true
@@ -575,5 +578,16 @@ internal class ConvertTest {
     assertEquals(true, options.visible)
     assertEquals(4.0, options.zIndex)
     assertEquals(emptyList(), options.spans)
+  }
+
+  @Test
+  fun convertRegisteredImageToImageIdDto_returnsExpectedValue() {
+    val registeredImage = RegisteredImage("Image_0", bitmapDescriptor, 1.0, 10.0, 20.0)
+    val imageDescriptor = Convert.registeredImageToImageDescriptorDto(registeredImage)
+
+    assertEquals("Image_0", imageDescriptor.registeredImageId)
+    assertEquals(1.0, imageDescriptor.imagePixelRatio)
+    assertEquals(10.0, imageDescriptor.width)
+    assertEquals(20.0, imageDescriptor.height)
   }
 }

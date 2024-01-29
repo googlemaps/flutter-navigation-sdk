@@ -28,6 +28,9 @@ public class GoogleMapsNavigationPlugin: NSObject, FlutterPlugin {
   private static var navigationSessionManager: GoogleMapsNavigationSessionManager?
   private static var navigationInspectorHandler: GoogleMapsNavigationInspectorHandler?
 
+  private static var imageRegistryMessageHandler: GoogleMapsImageRegistryMessageHandler?
+  private static var imageRegistry: ImageRegistry?
+
   public static func register(with registrar: FlutterPluginRegistrar) {
     // Navigation View handling
     viewRegistry = GoogleMapsNavigationViewRegistry()
@@ -43,9 +46,11 @@ public class GoogleMapsNavigationPlugin: NSObject, FlutterPlugin {
     guard navigationViewEventApi != nil else {
       return
     }
+    imageRegistry = ImageRegistry()
     let factory = GoogleMapsNavigationViewFactory(
       viewRegistry: viewRegistry!,
-      navigationViewEventApi: navigationViewEventApi!
+      navigationViewEventApi: navigationViewEventApi!,
+      imageRegistry: imageRegistry!
     )
     registrar.register(factory, withId: "google_maps_navigation")
 
@@ -71,6 +76,13 @@ public class GoogleMapsNavigationPlugin: NSObject, FlutterPlugin {
     NavigationInspectorSetup.setUp(
       binaryMessenger: registrar.messenger(),
       api: navigationInspector
+    )
+
+    imageRegistryMessageHandler =
+      GoogleMapsImageRegistryMessageHandler(imageRegistry: imageRegistry!)
+    ImageRegistryApiSetup.setUp(
+      binaryMessenger: registrar.messenger(),
+      api: imageRegistryMessageHandler
     )
   }
 }

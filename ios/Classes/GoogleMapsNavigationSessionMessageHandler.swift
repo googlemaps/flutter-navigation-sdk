@@ -30,6 +30,7 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
                                     shouldOnlyShowDriverAwarenessDisclaimer: Bool,
                                     completion: @escaping (Result<Bool, Error>) -> Void) {
     if shouldOnlyShowDriverAwarenessDisclaimer {
+      // TODO: Disable driver awareness disclaimer on iOS due to the bug in the native side SDK
       completion(Result.failure(GoogleMapsNavigationSessionManagerError.notSupported))
       return
     }
@@ -51,9 +52,15 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
     try GoogleMapsNavigationSessionManager.shared.resetTermsAccepted()
   }
 
-  func createNavigationSession(completion: @escaping (Result<Void, Error>) -> Void) {
+  func getNavSDKVersion() -> String {
+    GoogleMapsNavigationSessionManager.shared.getNavSDKVersion()
+  }
+
+  func createNavigationSession(abnormalTerminationReportingEnabled: Bool,
+                               completion: @escaping (Result<Void, Error>) -> Void) {
     do {
-      try GoogleMapsNavigationSessionManager.shared.createNavigationSession()
+      try GoogleMapsNavigationSessionManager.shared
+        .createNavigationSession(abnormalTerminationReportingEnabled)
       completion(.success(()))
     } catch {
       completion(.failure(error))
@@ -65,7 +72,7 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
   }
 
   func cleanup() throws {
-    GoogleMapsNavigationSessionManager.shared.cleanup()
+    try GoogleMapsNavigationSessionManager.shared.cleanup()
   }
 
   /// Navigation actions
@@ -81,9 +88,12 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
     try GoogleMapsNavigationSessionManager.shared.stopGuidance()
   }
 
-  func setDestinations(msg: DestinationsDto,
+  func setDestinations(destinations: DestinationsDto,
                        completion: @escaping (Result<RouteStatusDto, Error>) -> Void) {
-    GoogleMapsNavigationSessionManager.shared.setDestinations(msg: msg, completion: completion)
+    GoogleMapsNavigationSessionManager.shared.setDestinations(
+      destinations: destinations,
+      completion: completion
+    )
   }
 
   func clearDestinations() throws {
@@ -206,11 +216,11 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
 
   /// Listeners
   func enableRoadSnappedLocationUpdates() throws {
-    try GoogleMapsNavigationSessionManager.shared.enableRoadSnappedLocationUpdates()
+    GoogleMapsNavigationSessionManager.shared.enableRoadSnappedLocationUpdates()
   }
 
   func disableRoadSnappedLocationUpdates() throws {
-    try GoogleMapsNavigationSessionManager.shared.disableRoadSnappedLocationUpdates()
+    GoogleMapsNavigationSessionManager.shared.disableRoadSnappedLocationUpdates()
   }
 
   func registerRemainingTimeOrDistanceChangedListener(remainingTimeThresholdSeconds: Int64,

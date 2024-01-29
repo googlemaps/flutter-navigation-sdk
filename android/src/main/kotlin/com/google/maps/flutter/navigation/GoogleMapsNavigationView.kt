@@ -26,6 +26,8 @@ import android.view.View
 import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.OnCameraFollowLocationCallback
+import com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.model.CameraPosition
@@ -48,6 +50,7 @@ internal constructor(
   private val viewId: Int,
   private val viewRegistry: GoogleMapsNavigationViewRegistry,
   private val navigationViewEventApi: NavigationViewEventApi,
+  private val imageRegistry: ImageRegistry
 ) : PlatformView {
   companion object {
     const val INVALIDATION_FRAME_SKIP_AMOUNT = 4 // Amount of skip frames before invalidation
@@ -62,6 +65,11 @@ internal constructor(
   private val _polylines = mutableListOf<PolylineController>()
   private val _circles = mutableListOf<CircleController>()
 
+  // Store preferred zoom values here because MapView getMinZoom and
+  // getMaxZoom always return min/max possible values and not the preferred ones.
+  private var _minZoomLevelPreference: Float? = null
+  private var _maxZoomLevelPreference: Float? = null
+
   /// Default values for UI features.
   private var _isNavigationTripProgressBarEnabled: Boolean = false
   private var _isNavigationHeaderEnabled: Boolean = true
@@ -69,7 +77,8 @@ internal constructor(
   private var _isRecenterButtonEnabled: Boolean = true
   private var _isSpeedLimitIconEnabled: Boolean = false
   private var _isSpeedometerEnabled: Boolean = false
-  private var _isIncidentCardsEnabled: Boolean = true
+  private var _isTrafficIncidentCardsEnabled: Boolean = true
+  private var _consumeMyLocationButtonClickEventsEnabled: Boolean = false
 
   // Nullable variable to hold the callback function
   private var _mapReadyCallback: ((Result<Unit>) -> Unit)? = null
@@ -88,13 +97,24 @@ internal constructor(
     _navigationView.onResume()
 
     // Initialize navigation view with given navigation view options
-    var navigatorInitialized = GoogleMapsNavigationSessionManager.getInstance().isInitialized()
-    var navigationViewEnabled = navigationOptions.navigationUiEnabled ?: navigatorInitialized
+    var navigationViewEnabled: Boolean = false
+    if (
+      navigationOptions.navigationUiEnabledPreference == NavigationUIEnabledPreference.AUTOMATIC
+    ) {
+      val navigatorInitialized = GoogleMapsNavigationSessionManager.getInstance().isInitialized()
+      if (navigatorInitialized) {
+        navigationViewEnabled = true
+      }
+    }
     _navigationView.isNavigationUiEnabled = navigationViewEnabled
+
+    _minZoomLevelPreference = mapOptions.minZoomPreference
+    _maxZoomLevelPreference = mapOptions.maxZoomPreference
 
     _navigationView.getMapAsync { map ->
       _map = map
       initListeners()
+      imageRegistry.mapViewInitializationComplete()
 
       // Re set navigation view enabled state as sometimes earlier value is not
       // respected.
@@ -141,6 +161,9 @@ internal constructor(
   private fun initListeners() {
     _navigationView.addOnRecenterButtonClickedListener {
       navigationViewEventApi.onRecenterButtonClicked(viewId.toLong()) {}
+    }
+    _navigationView.addOnNavigationUiChangedListener {
+      navigationViewEventApi.onNavigationUIEnabledChanged(viewId.toLong(), it) {}
     }
     getMap().setOnMapClickListener {
       navigationViewEventApi.onMapClickEvent(
@@ -200,20 +223,48 @@ internal constructor(
 
     getMap().setOnPolygonClickListener { polygon ->
       val polygonId = findPolygonId(polygon)
-      navigationViewEventApi.onPolygonClicked(PolygonClickedEventDto(viewId.toLong(), polygonId)) {}
+      navigationViewEventApi.onPolygonClicked(viewId.toLong(), polygonId) {}
     }
 
     getMap().setOnPolylineClickListener { polyline ->
       val polylineId = findPolylineId(polyline)
-      navigationViewEventApi.onPolylineClicked(
-        PolylineClickedEventDto(viewId.toLong(), polylineId)
-      ) {}
+      navigationViewEventApi.onPolylineClicked(viewId.toLong(), polylineId) {}
     }
 
     getMap().setOnCircleClickListener { circle ->
       val circleId = findCircleId(circle)
-      navigationViewEventApi.onCircleClicked(CircleClickedEventDto(viewId.toLong(), circleId)) {}
+      navigationViewEventApi.onCircleClicked(viewId.toLong(), circleId) {}
     }
+
+    getMap().setOnMyLocationClickListener {
+      navigationViewEventApi.onMyLocationClicked(viewId.toLong()) {}
+    }
+
+    getMap().setOnMyLocationButtonClickListener {
+      navigationViewEventApi.onMyLocationButtonClicked(viewId.toLong()) {}
+      _consumeMyLocationButtonClickEventsEnabled
+    }
+
+    getMap()
+      .setOnFollowMyLocationCallback(
+        object : OnCameraFollowLocationCallback {
+          override fun onCameraStartedFollowingLocation() {
+            navigationViewEventApi.onCameraChanged(
+              viewId.toLong(),
+              CameraEventTypeDto.ONCAMERASTARTEDFOLLOWINGLOCATION,
+              Convert.convertCameraPositionToDto(getMap().cameraPosition)
+            ) {}
+          }
+
+          override fun onCameraStoppedFollowingLocation() {
+            navigationViewEventApi.onCameraChanged(
+              viewId.toLong(),
+              CameraEventTypeDto.ONCAMERASTOPPEDFOLLOWINGLOCATION,
+              Convert.convertCameraPositionToDto(getMap().cameraPosition)
+            ) {}
+          }
+        }
+      )
   }
 
   @Throws(FlutterError::class)
@@ -225,14 +276,26 @@ internal constructor(
     }
   }
 
-  private fun invalidateViewAfterMapLoad() {
+  /**
+   * Workaround for map view not showing added or edited map objects immediately after add/edit.
+   * Schedules [NavigationView.invalidate] call after a certain amount of frames are drawn. In
+   * marker updates short delay is not enough, [doubleInvalidate] is set to true.
+   *
+   * @param doubleInvalidate if true, schedules another invalidate event after the first one.
+   */
+  private fun invalidateViewAfterMapLoad(doubleInvalidate: Boolean = false) {
     if (_loadedCallbackPending) {
       return
     }
     _loadedCallbackPending = true
     getMap().setOnMapLoadedCallback {
       _loadedCallbackPending = false
-      _frameDelayHandler.scheduleActionWithFrameDelay { _navigationView.invalidate() }
+      _frameDelayHandler.scheduleActionWithFrameDelay {
+        _navigationView.invalidate()
+        if (doubleInvalidate) {
+          _frameDelayHandler.scheduleActionWithFrameDelay { _navigationView.invalidate() }
+        }
+      }
     }
   }
 
@@ -307,19 +370,17 @@ internal constructor(
   @Throws(FlutterError::class)
   private fun sendMarkerEvent(marker: Marker, eventType: MarkerEventTypeDto) {
     val markerId = findMarkerId(marker)
-    navigationViewEventApi.onMarkerEvent(MarkerEventDto(viewId.toLong(), markerId, eventType)) {}
+    navigationViewEventApi.onMarkerEvent(viewId.toLong(), markerId, eventType) {}
   }
 
   @Throws(FlutterError::class)
   private fun sendMarkerDragEvent(marker: Marker, eventType: MarkerDragEventTypeDto) {
     val markerId = findMarkerId(marker)
     navigationViewEventApi.onMarkerDragEvent(
-      MarkerDragEventDto(
-        viewId.toLong(),
-        markerId,
-        eventType,
-        LatLngDto(marker.position.latitude, marker.position.longitude)
-      )
+      viewId.toLong(),
+      markerId,
+      eventType,
+      LatLngDto(marker.position.latitude, marker.position.longitude)
     ) {}
   }
 
@@ -328,52 +389,52 @@ internal constructor(
   }
 
   @SuppressLint("MissingPermission")
-  fun enableMyLocation(enabled: Boolean) {
+  fun setMyLocationEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
     getMap().isMyLocationEnabled = enabled
   }
 
-  fun enableMyLocationButton(enabled: Boolean) {
+  fun setMyLocationButtonEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
     getMap().uiSettings.isMyLocationButtonEnabled = enabled
   }
 
-  fun enableZoomGestures(enabled: Boolean) {
+  fun setZoomGesturesEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
     getMap().uiSettings.isZoomGesturesEnabled = enabled
   }
 
-  fun enableZoomControls(enabled: Boolean) {
+  fun setZoomControlsEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
     getMap().uiSettings.isZoomControlsEnabled = enabled
   }
 
-  fun enableCompass(enabled: Boolean) {
+  fun setCompassEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
     getMap().uiSettings.isCompassEnabled = enabled
   }
 
-  fun enableRotateGestures(enabled: Boolean) {
+  fun setRotateGesturesEnabled(enabled: Boolean) {
     getMap().uiSettings.isRotateGesturesEnabled = enabled
   }
 
-  fun enableScrollGestures(enabled: Boolean) {
+  fun setScrollGesturesEnabled(enabled: Boolean) {
     getMap().uiSettings.isScrollGesturesEnabled = enabled
   }
 
-  fun enableScrollGesturesDuringRotateOrZoom(enabled: Boolean) {
+  fun setScrollGesturesDuringRotateOrZoomEnabled(enabled: Boolean) {
     getMap().uiSettings.isScrollGesturesEnabledDuringRotateOrZoom = enabled
   }
 
-  fun enableTiltGestures(enabled: Boolean) {
+  fun setTiltGesturesEnabled(enabled: Boolean) {
     getMap().uiSettings.isTiltGesturesEnabled = enabled
   }
 
-  fun enableMapToolbar(enabled: Boolean) {
+  fun setMapToolbarEnabled(enabled: Boolean) {
     getMap().uiSettings.isMapToolbarEnabled = enabled
   }
 
-  fun enableTraffic(enabled: Boolean) {
+  fun setTrafficEnabled(enabled: Boolean) {
     getMap().isTrafficEnabled = enabled
   }
 
@@ -418,6 +479,7 @@ internal constructor(
   }
 
   fun getMyLocation(): Location? {
+    // Remove this functionality and either guide users to use separate flutter
     // library for geolocation or implement separate method under
     // [GoogleMapsNavigationSessionManager] to fetch the location
     // using the [FusedLocationProviderApi].
@@ -587,7 +649,7 @@ internal constructor(
     }
   }
 
-  fun enableNavigationTripProgressBar(enabled: Boolean) {
+  fun setNavigationTripProgressBarEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
     _navigationView.setTripProgressBarEnabled(enabled)
     _isNavigationTripProgressBarEnabled = enabled
@@ -597,7 +659,7 @@ internal constructor(
     return _isNavigationHeaderEnabled
   }
 
-  fun enableNavigationHeader(enabled: Boolean) {
+  fun setNavigationHeaderEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
     _navigationView.setHeaderEnabled(enabled)
     _isNavigationHeaderEnabled = enabled
@@ -607,7 +669,7 @@ internal constructor(
     return _isNavigationFooterEnabled
   }
 
-  fun enableNavigationFooter(enabled: Boolean) {
+  fun setNavigationFooterEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
     _navigationView.setEtaCardEnabled(enabled)
     _isNavigationFooterEnabled = enabled
@@ -617,7 +679,7 @@ internal constructor(
     return _isRecenterButtonEnabled
   }
 
-  fun enableRecenterButton(enabled: Boolean) {
+  fun setRecenterButtonEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
     _navigationView.setRecenterButtonEnabled(enabled)
     _isRecenterButtonEnabled = enabled
@@ -627,37 +689,37 @@ internal constructor(
     return _isSpeedLimitIconEnabled
   }
 
-  fun enableSpeedLimitIcon(enable: Boolean) {
+  fun setSpeedLimitIconEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
-    _navigationView.setSpeedLimitIconEnabled(enable)
-    _isSpeedLimitIconEnabled = enable
+    _navigationView.setSpeedLimitIconEnabled(enabled)
+    _isSpeedLimitIconEnabled = enabled
   }
 
   fun isSpeedometerEnabled(): Boolean {
     return _isSpeedometerEnabled
   }
 
-  fun enableSpeedometer(enable: Boolean) {
+  fun setSpeedometerEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
-    _navigationView.setSpeedometerEnabled(enable)
-    _isSpeedometerEnabled = enable
+    _navigationView.setSpeedometerEnabled(enabled)
+    _isSpeedometerEnabled = enabled
   }
 
-  fun isIncidentCardsEnabled(): Boolean {
-    return _isIncidentCardsEnabled
+  fun isTrafficIncidentCardsEnabled(): Boolean {
+    return _isTrafficIncidentCardsEnabled
   }
 
-  fun enableIncidentCards(enable: Boolean) {
+  fun setTrafficIncidentCardsEnabled(enabled: Boolean) {
     invalidateViewAfterMapLoad()
-    _navigationView.setTrafficIncidentCardsEnabled(enable)
-    _isIncidentCardsEnabled = enable
+    _navigationView.setTrafficIncidentCardsEnabled(enabled)
+    _isTrafficIncidentCardsEnabled = enabled
   }
 
   fun isNavigationUIEnabled(): Boolean {
     return _navigationView.isNavigationUiEnabled
   }
 
-  fun enableNavigationUI(enabled: Boolean) {
+  fun setNavigationUIEnabled(enabled: Boolean) {
     if (_navigationView.isNavigationUiEnabled != enabled) {
       invalidateViewAfterMapLoad()
       _navigationView.isNavigationUiEnabled = enabled
@@ -667,6 +729,46 @@ internal constructor(
   fun showRouteOverview() {
     invalidateViewAfterMapLoad()
     _navigationView.showRouteOverview()
+  }
+
+  fun getMinZoomPreference(): Float {
+    return _minZoomLevelPreference ?: getMap().minZoomLevel
+  }
+
+  fun getMaxZoomPreference(): Float {
+    return _maxZoomLevelPreference ?: getMap().maxZoomLevel
+  }
+
+  fun resetMinMaxZoomPreference() {
+    _minZoomLevelPreference = null
+    _maxZoomLevelPreference = null
+    getMap().resetMinMaxZoomPreference()
+  }
+
+  @Throws(FlutterError::class)
+  fun setMinZoomPreference(minZoomPreference: Float) {
+    if (minZoomPreference > (_maxZoomLevelPreference ?: getMap().maxZoomLevel)) {
+      throw FlutterError(
+        "minZoomGreaterThanMaxZoom",
+        "Minimum zoom level cannot be greater than maximum zoom level"
+      )
+    }
+
+    _minZoomLevelPreference = minZoomPreference
+    getMap().setMinZoomPreference(minZoomPreference)
+  }
+
+  @Throws(FlutterError::class)
+  fun setMaxZoomPreference(maxZoomPreference: Float) {
+    if (maxZoomPreference < (_minZoomLevelPreference ?: getMap().minZoomLevel)) {
+      throw FlutterError(
+        "maxZoomLessThanMinZoom",
+        "Maximum zoom level cannot be less than minimum zoom level"
+      )
+    }
+
+    _maxZoomLevelPreference = maxZoomPreference
+    getMap().setMaxZoomPreference(maxZoomPreference)
   }
 
   fun awaitMapReady(callback: (Result<Unit>) -> Unit) {
@@ -694,14 +796,15 @@ internal constructor(
   }
 
   fun addMarkers(markers: List<MarkerDto>): List<MarkerDto> {
-    invalidateViewAfterMapLoad()
     val result = mutableListOf<MarkerDto>()
     markers.forEach {
       val builder = MarkerBuilder()
-      Convert.sinkMarkerOptions(it.options, builder)
+      Convert.sinkMarkerOptions(it.options, builder, imageRegistry)
       val options = builder.build()
       val marker = getMap().addMarker(options)
       if (marker != null) {
+        val registeredImage =
+          it.options.icon.registeredImageId?.let { id -> imageRegistry.findRegisteredImage(id) }
         val controller =
           MarkerController(
             marker,
@@ -710,23 +813,26 @@ internal constructor(
             it.options.anchor.u.toFloat(),
             it.options.anchor.v.toFloat(),
             it.options.infoWindow.anchor.u.toFloat(),
-            it.options.infoWindow.anchor.v.toFloat()
+            it.options.infoWindow.anchor.v.toFloat(),
+            registeredImage
           )
         _markers.add(controller)
         result.add(it)
       }
     }
+    // Double invalidate map view. Marker icon updates seem to take extra
+    // time and some times icon did not update properly after single invalidate.
+    invalidateViewAfterMapLoad(true)
     return result
   }
 
   @Throws(FlutterError::class)
   fun updateMarkers(markers: List<MarkerDto>): List<MarkerDto> {
-    invalidateViewAfterMapLoad()
     val result = mutableListOf<MarkerDto>()
     var error: Throwable? = null
     markers.forEach {
       findMarkerController(it.markerId)?.let { controller ->
-        Convert.sinkMarkerOptions(it.options, controller)
+        Convert.sinkMarkerOptions(it.options, controller, imageRegistry)
         result.add(it)
       }
         ?: run {
@@ -734,6 +840,9 @@ internal constructor(
         }
     }
     error?.let { throw error as Throwable }
+    // Double invalidate map view. Marker icon updates seem to take extra
+    // time and some times icon did not update properly after single invalidate.
+    invalidateViewAfterMapLoad(true)
     return result
   }
 
@@ -919,7 +1028,7 @@ internal constructor(
       val builder = CircleBuilder()
       Convert.sinkCircleOptions(it.options, builder, density)
       val options = builder.build()
-      val circle = getMap()?.addCircle(options)
+      val circle = getMap().addCircle(options)
       if (circle != null) {
         val controller = CircleController(circle, it.circleId)
         _circles.add(controller)
@@ -943,6 +1052,7 @@ internal constructor(
           error = FlutterError("circleNotFound", "Failed to update circle with id ${it.circleId}")
         }
     }
+    error?.let { throw error as Throwable }
     return result
   }
 
@@ -965,5 +1075,47 @@ internal constructor(
     invalidateViewAfterMapLoad()
     _circles.forEach { controller -> controller.remove() }
     _circles.clear()
+  }
+
+  fun setConsumeMyLocationButtonClickEventsEnabled(enabled: Boolean) {
+    _consumeMyLocationButtonClickEventsEnabled = enabled
+  }
+
+  fun isConsumeMyLocationButtonClickEventsEnabled(): Boolean {
+    return _consumeMyLocationButtonClickEventsEnabled
+  }
+
+  fun registerOnCameraChangedListener() {
+    getMap().setOnCameraMoveStartedListener { reason ->
+      val event =
+        when (reason) {
+          OnCameraMoveStartedListener.REASON_API_ANIMATION,
+          OnCameraMoveStartedListener.REASON_DEVELOPER_ANIMATION ->
+            CameraEventTypeDto.MOVESTARTEDBYAPI
+          OnCameraMoveStartedListener.REASON_GESTURE -> CameraEventTypeDto.MOVESTARTEDBYGESTURE
+          else -> {
+            // This should not happen, added that the compiler does not complain.
+            throw RuntimeException("Unknown camera move started reason: $reason")
+          }
+        }
+      val position = Convert.convertCameraPositionToDto(getMap().cameraPosition)
+      navigationViewEventApi.onCameraChanged(viewId.toLong(), event, position) {}
+    }
+    getMap().setOnCameraMoveListener {
+      val position = Convert.convertCameraPositionToDto(getMap().cameraPosition)
+      navigationViewEventApi.onCameraChanged(
+        viewId.toLong(),
+        CameraEventTypeDto.ONCAMERAMOVE,
+        position
+      ) {}
+    }
+    getMap().setOnCameraIdleListener {
+      val position = Convert.convertCameraPositionToDto(getMap().cameraPosition)
+      navigationViewEventApi.onCameraChanged(
+        viewId.toLong(),
+        CameraEventTypeDto.ONCAMERAIDLE,
+        position
+      ) {}
+    }
   }
 }

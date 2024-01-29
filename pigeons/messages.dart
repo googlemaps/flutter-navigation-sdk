@@ -86,14 +86,24 @@ class MapOptionsDto {
   final LatLngBoundsDto? cameraTargetBounds;
 }
 
+/// Determines the initial visibility of the navigation UI on map initialization.
+enum NavigationUIEnabledPreferenceDto {
+  /// Navigation UI gets enabled if the navigation
+  /// session has already been successfully started.
+  automatic,
+
+  /// Navigation UI is disabled.
+  disabled
+}
+
 /// Object containing navigation options used to initialize Google Navigation view.
 class NavigationViewOptionsDto {
   NavigationViewOptionsDto({
-    required this.navigationUIEnabled,
+    required this.navigationUIEnabledPreference,
   });
 
   /// Determines the initial visibility of the navigation UI on map initialization.
-  final bool navigationUIEnabled;
+  final NavigationUIEnabledPreferenceDto navigationUIEnabledPreference;
 }
 
 /// A message for creating a new navigation view.
@@ -157,7 +167,8 @@ class MarkerOptionsDto {
       required this.rotation,
       required this.infoWindow,
       required this.visible,
-      required this.zIndex});
+      required this.zIndex,
+      required this.icon});
 
   final double alpha;
   final MarkerAnchorDto anchor;
@@ -169,6 +180,16 @@ class MarkerOptionsDto {
   final InfoWindowDto infoWindow;
   final bool visible;
   final double zIndex;
+  final ImageDescriptorDto icon;
+}
+
+class ImageDescriptorDto {
+  const ImageDescriptorDto(
+      {this.registeredImageId, this.imagePixelRatio, this.width, this.height});
+  final String? registeredImageId;
+  final double? imagePixelRatio;
+  final double? width;
+  final double? height;
 }
 
 class InfoWindowDto {
@@ -195,29 +216,7 @@ enum MarkerEventTypeDto {
   infoWindowLongClicked
 }
 
-class MarkerEventDto {
-  MarkerEventDto(
-      {required this.viewId, required this.markerId, required this.eventType});
-
-  final int viewId;
-  final String markerId;
-  final MarkerEventTypeDto eventType;
-}
-
 enum MarkerDragEventTypeDto { drag, dragStart, dragEnd }
-
-class MarkerDragEventDto {
-  MarkerDragEventDto(
-      {required this.viewId,
-      required this.markerId,
-      required this.eventType,
-      required this.position});
-
-  final int viewId;
-  final String markerId;
-  final MarkerDragEventTypeDto eventType;
-  final LatLngDto position;
-}
 
 class PolygonDto {
   const PolygonDto({required this.polygonId, required this.options});
@@ -252,12 +251,6 @@ class PolygonOptionsDto {
 class PolygonHoleDto {
   const PolygonHoleDto({required this.points});
   final List<LatLngDto?> points;
-}
-
-class PolygonClickedEventDto {
-  PolygonClickedEventDto({required this.viewId, required this.polygonId});
-  final int viewId;
-  final String polygonId;
 }
 
 class StyleSpanStrokeStyleDto {
@@ -330,16 +323,6 @@ class PolylineOptionsDto {
   final List<StyleSpanDto?> spans;
 }
 
-class PolylineClickedEventDto {
-  PolylineClickedEventDto({
-    required this.viewId,
-    required this.polylineId,
-  });
-
-  final int viewId;
-  final String polylineId;
-}
-
 class CircleDto {
   CircleDto({required this.circleId, required this.options});
 
@@ -374,14 +357,13 @@ class CircleOptionsDto {
   final bool clickable;
 }
 
-class CircleClickedEventDto {
-  CircleClickedEventDto({
-    required this.viewId,
-    required this.circleId,
-  });
-
-  final int viewId;
-  final String circleId;
+enum CameraEventTypeDto {
+  moveStartedByApi,
+  moveStartedByGesture,
+  onCameraMove,
+  onCameraIdle,
+  onCameraStartedFollowingLocation,
+  onCameraStoppedFollowingLocation
 }
 
 @HostApi(dartHostTestHandler: 'TestNavigationViewApi')
@@ -390,28 +372,28 @@ abstract class NavigationViewApi {
   void awaitMapReady(int viewId);
 
   bool isMyLocationEnabled(int viewId);
-  void enableMyLocation(int viewId, bool enabled);
+  void setMyLocationEnabled(int viewId, bool enabled);
   LatLngDto? getMyLocation(int viewId);
 
   MapTypeDto getMapType(int viewId);
   void setMapType(int viewId, MapTypeDto mapType);
   void setMapStyle(int viewId, String styleJson);
   bool isNavigationTripProgressBarEnabled(int viewId);
-  void enableNavigationTripProgressBar(int viewId, bool enabled);
+  void setNavigationTripProgressBarEnabled(int viewId, bool enabled);
   bool isNavigationHeaderEnabled(int viewId);
-  void enableNavigationHeader(int viewId, bool enabled);
+  void setNavigationHeaderEnabled(int viewId, bool enabled);
   bool isNavigationFooterEnabled(int viewId);
-  void enableNavigationFooter(int viewId, bool enabled);
+  void setNavigationFooterEnabled(int viewId, bool enabled);
   bool isRecenterButtonEnabled(int viewId);
-  void enableRecenterButton(int viewId, bool enabled);
+  void setRecenterButtonEnabled(int viewId, bool enabled);
   bool isSpeedLimitIconEnabled(int viewId);
-  void enableSpeedLimitIcon(int viewId, bool enabled);
+  void setSpeedLimitIconEnabled(int viewId, bool enabled);
   bool isSpeedometerEnabled(int viewId);
-  void enableSpeedometer(int viewId, bool enabled);
-  bool isIncidentCardsEnabled(int viewId);
-  void enableIncidentCards(int viewId, bool enabled);
+  void setSpeedometerEnabled(int viewId, bool enabled);
+  bool isTrafficIncidentCardsEnabled(int viewId);
+  void setTrafficIncidentCardsEnabled(int viewId, bool enabled);
   bool isNavigationUIEnabled(int viewId);
-  void enableNavigationUI(int viewId, bool enabled);
+  void setNavigationUIEnabled(int viewId, bool enabled);
 
   CameraPositionDto getCameraPosition(int viewId);
   LatLngBoundsDto getVisibleRegion(int viewId);
@@ -448,19 +430,26 @@ abstract class NavigationViewApi {
       int viewId, double zoomBy, double? focusDx, double? focusDy);
   void moveCameraToZoom(int viewId, double zoom);
   void showRouteOverview(int viewId);
+  double getMinZoomPreference(int viewId);
+  double getMaxZoomPreference(int viewId);
+  void resetMinMaxZoomPreference(int viewId);
+  void setMinZoomPreference(int viewId, double minZoomPreference);
+  void setMaxZoomPreference(int viewId, double maxZoomPreference);
 
-  void enableMyLocationButton(int viewId, bool enabled);
-  void enableZoomGestures(int viewId, bool enabled);
-  void enableZoomControls(int viewId, bool enabled);
-  void enableCompass(int viewId, bool enabled);
-  void enableRotateGestures(int viewId, bool enabled);
-  void enableScrollGestures(int viewId, bool enabled);
-  void enableScrollGesturesDuringRotateOrZoom(int viewId, bool enabled);
-  void enableTiltGestures(int viewId, bool enabled);
-  void enableMapToolbar(int viewId, bool enabled);
-  void enableTraffic(int viewId, bool enabled);
+  void setMyLocationButtonEnabled(int viewId, bool enabled);
+  void setConsumeMyLocationButtonClickEventsEnabled(int viewId, bool enabled);
+  void setZoomGesturesEnabled(int viewId, bool enabled);
+  void setZoomControlsEnabled(int viewId, bool enabled);
+  void setCompassEnabled(int viewId, bool enabled);
+  void setRotateGesturesEnabled(int viewId, bool enabled);
+  void setScrollGesturesEnabled(int viewId, bool enabled);
+  void setScrollGesturesDuringRotateOrZoomEnabled(int viewId, bool enabled);
+  void setTiltGesturesEnabled(int viewId, bool enabled);
+  void setMapToolbarEnabled(int viewId, bool enabled);
+  void setTrafficEnabled(int viewId, bool enabled);
 
   bool isMyLocationButtonEnabled(int viewId);
+  bool isConsumeMyLocationButtonClickEventsEnabled(int viewId);
   bool isZoomGesturesEnabled(int viewId);
   bool isZoomControlsEnabled(int viewId);
   bool isCompassEnabled(int viewId);
@@ -495,6 +484,17 @@ abstract class NavigationViewApi {
   List<CircleDto> updateCircles(int viewId, List<CircleDto> circles);
   void removeCircles(int viewId, List<CircleDto> circles);
   void clearCircles(int viewId);
+
+  void registerOnCameraChangedListener(int viewId);
+}
+
+@HostApi(dartHostTestHandler: 'TestImageRegistryApi')
+abstract class ImageRegistryApi {
+  ImageDescriptorDto registerBitmapImage(String imageId, Uint8List bytes,
+      double imagePixelRatio, double? width, double? height);
+  void unregisterImage(ImageDescriptorDto imageDescriptor);
+  List<ImageDescriptorDto> getRegisteredImages();
+  void clearRegisteredImages();
 }
 
 @FlutterApi()
@@ -502,26 +502,27 @@ abstract class NavigationViewEventApi {
   void onMapClickEvent(int viewId, LatLngDto latLng);
   void onMapLongClickEvent(int viewId, LatLngDto latLng);
   void onRecenterButtonClicked(int viewId);
-  void onMarkerEvent(MarkerEventDto msg);
-  void onMarkerDragEvent(MarkerDragEventDto msg);
-  void onPolygonClicked(PolygonClickedEventDto msg);
-  void onPolylineClicked(PolylineClickedEventDto msg);
-  void onCircleClicked(CircleClickedEventDto msg);
+  void onMarkerEvent(int viewId, String markerId, MarkerEventTypeDto eventType);
+  void onMarkerDragEvent(int viewId, String markerId,
+      MarkerDragEventTypeDto eventType, LatLngDto position);
+  void onPolygonClicked(int viewId, String polygonId);
+  void onPolylineClicked(int viewId, String polylineId);
+  void onCircleClicked(int viewId, String circleId);
+  void onNavigationUIEnabledChanged(int viewId, bool navigationUIEnabled);
+  void onMyLocationClicked(int viewId);
+  void onMyLocationButtonClicked(int viewId);
+  void onCameraChanged(
+      int viewId, CameraEventTypeDto eventType, CameraPositionDto position);
 }
 
-class NavigationSessionEventDto {
-  NavigationSessionEventDto({
-    required this.type,
-    required this.message,
+class RouteTokenOptionsDto {
+  RouteTokenOptionsDto({
+    required this.routeToken,
+    required this.travelMode,
   });
-  final NavigationSessionEventTypeDto type;
-  final String message;
-}
 
-enum NavigationSessionEventTypeDto {
-  arrivalEvent,
-  routeChanged,
-  errorReceived;
+  final String routeToken;
+  final TravelModeDto? travelMode;
 }
 
 class DestinationsDto {
@@ -529,10 +530,12 @@ class DestinationsDto {
     required this.waypoints,
     required this.displayOptions,
     this.routingOptions,
+    this.routeTokenOptions,
   });
   final List<NavigationWaypointDto?> waypoints;
   final NavigationDisplayOptionsDto displayOptions;
   final RoutingOptionsDto? routingOptions;
+  final RouteTokenOptionsDto? routeTokenOptions;
 }
 
 enum AlternateRoutesStrategyDto {
@@ -690,64 +693,6 @@ class SpeedingUpdatedEventDto {
   final SpeedAlertSeverityDto severity;
 }
 
-class RoadSnappedLocationUpdatedEventDto {
-  RoadSnappedLocationUpdatedEventDto({
-    required this.location,
-  });
-
-  final LatLngDto location;
-}
-
-class RoadSnappedRawLocationUpdatedEventDto {
-  RoadSnappedRawLocationUpdatedEventDto({
-    required this.location,
-  });
-
-  final LatLngDto? location;
-}
-
-class OnArrivalEventDto {
-  OnArrivalEventDto({
-    required this.waypoint,
-  });
-
-  final NavigationWaypointDto waypoint;
-}
-
-class RemainingTimeOrDistanceChangedEventDto {
-  RemainingTimeOrDistanceChangedEventDto({
-    required this.remainingTime,
-    required this.remainingDistance,
-  });
-
-  final double remainingTime;
-  final double remainingDistance;
-}
-
-class RouteChangedEventDto {
-  RouteChangedEventDto({
-    required this.message,
-  });
-
-  final String message;
-}
-
-class ReroutingEventDto {
-  ReroutingEventDto({
-    required this.message,
-  });
-
-  final String message;
-}
-
-class TrafficUpdatedEventDto {
-  TrafficUpdatedEventDto({
-    required this.message,
-  });
-
-  final String message;
-}
-
 class SpeedAlertOptionsThresholdPercentageDto {
   SpeedAlertOptionsThresholdPercentageDto({
     required this.percentage,
@@ -819,7 +764,7 @@ class RouteSegmentDto {
 abstract class NavigationSessionApi {
   /// General.
   @async
-  void createNavigationSession();
+  void createNavigationSession(bool abnormalTerminationReportingEnabled);
   bool isInitialized();
   void cleanup();
   @async
@@ -827,13 +772,14 @@ abstract class NavigationSessionApi {
       bool shouldOnlyShowDriverAwarenessDisclaimer);
   bool areTermsAccepted();
   void resetTermsAccepted();
+  String getNavSDKVersion();
 
   /// Navigation.
   bool isGuidanceRunning();
   void startGuidance();
   void stopGuidance();
   @async
-  RouteStatusDto setDestinations(DestinationsDto msg);
+  RouteStatusDto setDestinations(DestinationsDto destinations);
   void clearDestinations();
   NavigationWaypointDto? continueToNextDestination();
   NavigationTimeAndDistanceDto getCurrentTimeAndDistance();
@@ -881,22 +827,22 @@ abstract class NavigationSessionApi {
 
 @FlutterApi()
 abstract class NavigationSessionEventApi {
-  // Android and iOS errors need to be unified first.
-  void onNavigationSessionEvent(NavigationSessionEventDto msg);
   void onSpeedingUpdated(SpeedingUpdatedEventDto msg);
-  void onRoadSnappedLocationUpdated(RoadSnappedLocationUpdatedEventDto msg);
-  void onRoadSnappedRawLocationUpdated(
-      RoadSnappedRawLocationUpdatedEventDto msg);
-  void onArrival(OnArrivalEventDto msg);
-  void onRouteChanged(RouteChangedEventDto msg);
+  void onRoadSnappedLocationUpdated(LatLngDto location);
+  void onRoadSnappedRawLocationUpdated(LatLngDto location);
+  void onArrival(NavigationWaypointDto waypoint);
+  void onRouteChanged();
   void onRemainingTimeOrDistanceChanged(
-      RemainingTimeOrDistanceChangedEventDto msg);
+      double remainingTime, double remainingDistance);
 
-  /// Android only event.
-  void onTrafficUpdated(TrafficUpdatedEventDto msg);
+  /// Android-only event.
+  void onTrafficUpdated();
 
-  /// Android only event.
-  void onRerouting(ReroutingEventDto msg);
+  /// Android-only event.
+  void onRerouting();
+
+  /// Android-only event.
+  void onGpsAvailabilityUpdate(bool available);
 }
 
 @HostApi()

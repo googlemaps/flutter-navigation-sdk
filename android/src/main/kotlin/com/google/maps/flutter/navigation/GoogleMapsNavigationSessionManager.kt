@@ -19,6 +19,7 @@ package com.google.maps.flutter.navigation
 import android.app.Activity
 import android.location.Location
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.libraries.navigation.CustomRoutesOptions
 import com.google.android.libraries.navigation.DisplayOptions
 import com.google.android.libraries.navigation.NavigationApi
 import com.google.android.libraries.navigation.NavigationApi.NavigatorListener
@@ -34,6 +35,7 @@ import com.google.android.libraries.navigation.TermsAndConditionsCheckOption
 import com.google.android.libraries.navigation.TermsAndConditionsUIParams
 import com.google.android.libraries.navigation.TimeAndDistance
 import com.google.android.libraries.navigation.Waypoint
+import com.google.maps.flutter.navigation.Convert.convertTravelModeFromDto
 import io.flutter.plugin.common.BinaryMessenger
 import java.lang.ref.WeakReference
 
@@ -94,7 +96,9 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
     Navigator.RemainingTimeOrDistanceChangedListener? =
     null
   private var roadSnappedLocationProvider: RoadSnappedLocationProvider? = null
-  private var roadSnappedLocationListener: RoadSnappedLocationProvider.LocationListener? = null
+  private var roadSnappedLocationListener:
+    RoadSnappedLocationProvider.GpsAvailabilityEnhancedLocationListener? =
+    null
   private var speedingListener: SpeedingListener? = null
   private var weakActivity: WeakReference<Activity>? = null
 
@@ -104,7 +108,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   }
 
   /** Convenience function for returning the activity. */
-  fun getActivity(): Activity {
+  private fun getActivity(): Activity {
     return weakActivity?.get() ?: throw FlutterError("activityNotFound", "Activity not created.")
   }
 
@@ -127,8 +131,17 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
     }
   }
 
+  // Expose the navigator to the google_maps_driver side.
+  // DriverApi initialization requires navigator.
+  fun getNavigatorWithoutError(): Navigator? {
+    return navigator
+  }
+
   /** Creates Navigator instance. */
-  fun createNavigationSession(callback: (Result<Unit>) -> Unit) {
+  fun createNavigationSession(
+    abnormalTerminationReportingEnabled: Boolean,
+    callback: (Result<Unit>) -> Unit
+  ) {
     if (navigator != null) {
       // Navigator is already initialized, just re-register listeners.
       registerNavigationListeners()
@@ -150,6 +163,9 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
       )
       return
     }
+
+    // Enable or disable abnormal termination reporting.
+    NavigationApi.setAbnormalTerminationReportingEnabled(abnormalTerminationReportingEnabled)
 
     val listener =
       object : NavigatorListener {
@@ -287,10 +303,8 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
         Navigator.RemainingTimeOrDistanceChangedListener {
           val timeAndDistance = getNavigator().currentTimeAndDistance
           navigationSessionEventApi.onRemainingTimeOrDistanceChanged(
-            RemainingTimeOrDistanceChangedEventDto(
-              timeAndDistance.seconds.toDouble(),
-              timeAndDistance.meters.toDouble()
-            )
+            timeAndDistance.seconds.toDouble(),
+            timeAndDistance.meters.toDouble()
           ) {}
         }
     }
@@ -307,35 +321,26 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
     val navigator = getNavigator()
     if (arrivalListener == null) {
       arrivalListener =
-        Navigator.ArrivalListener { // Show an onscreen message
-          navigationSessionEventApi.onArrival(
-            OnArrivalEventDto(Convert.convertWaypointToDto(it.waypoint))
-          ) {}
+        Navigator.ArrivalListener {
+          navigationSessionEventApi.onArrival(Convert.convertWaypointToDto(it.waypoint)) {}
         }
       navigator.addArrivalListener(arrivalListener)
     }
 
     if (routeChangedListener == null) {
       routeChangedListener =
-        Navigator.RouteChangedListener { // Show an onscreen message when the route changes
-          navigationSessionEventApi.onRouteChanged(RouteChangedEventDto("")) {}
-        }
+        Navigator.RouteChangedListener { navigationSessionEventApi.onRouteChanged() {} }
       navigator.addRouteChangedListener(routeChangedListener)
     }
 
     if (reroutingListener == null) {
-      reroutingListener =
-        Navigator.ReroutingListener {
-          navigationSessionEventApi.onRerouting(ReroutingEventDto("")) {}
-        }
+      reroutingListener = Navigator.ReroutingListener { navigationSessionEventApi.onRerouting() {} }
       navigator.addReroutingListener(reroutingListener)
     }
 
     if (trafficUpdatedListener == null) {
       trafficUpdatedListener =
-        Navigator.TrafficUpdatedListener {
-          navigationSessionEventApi.onTrafficUpdated(TrafficUpdatedEventDto("")) {}
-        }
+        Navigator.TrafficUpdatedListener { navigationSessionEventApi.onTrafficUpdated() {} }
       navigator.addTrafficUpdatedListener(trafficUpdatedListener)
     }
 
@@ -381,9 +386,36 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
     waypoints: List<Waypoint>,
     routingOptions: RoutingOptions,
     displayOptions: DisplayOptions,
+    routeTokenOptions: RouteTokenOptionsDto?,
     callback: (Result<Navigator.RouteStatus>) -> Unit
   ) {
     try {
+      // If route toke options are present set token and travel mode if given.
+      if (routeTokenOptions != null) {
+        val customRoutesOptionBuilder =
+          CustomRoutesOptions.builder().setRouteToken(routeTokenOptions.routeToken)
+        if (routeTokenOptions.travelMode != null) {
+          customRoutesOptionBuilder.setTravelMode(
+            convertTravelModeFromDto(routeTokenOptions.travelMode)
+          )
+        }
+
+        val customRoutesOptions: CustomRoutesOptions
+        try {
+          customRoutesOptions = customRoutesOptionBuilder.build()
+        } catch (e: IllegalStateException) {
+          throw FlutterError(
+            "routeTokenMalformed",
+            "The route token passed is malformed",
+            e.message
+          )
+        }
+
+        getNavigator()
+          .setDestinations(waypoints, customRoutesOptions, displayOptions)
+          .setOnResultListener { callback(Result.success(it)) }
+        return
+      }
       getNavigator()
         .setDestinations(waypoints, routingOptions, displayOptions)
         .setOnResultListener { callback(Result.success(it)) }
@@ -512,8 +544,8 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
     }
   }
 
-  private fun sendNavigationSessionEvent(type: NavigationSessionEventTypeDto, message: String) {
-    navigationSessionEventApi.onNavigationSessionEvent(NavigationSessionEventDto(type, message)) {}
+  fun getNavSDKVersion(): String {
+    return NavigationApi.getNavSDKVersion()
   }
 
   /**
@@ -624,19 +656,21 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   fun enableRoadSnappedLocationUpdates() {
     if (roadSnappedLocationListener == null) {
       roadSnappedLocationListener =
-        object : RoadSnappedLocationProvider.LocationListener {
+        object : RoadSnappedLocationProvider.GpsAvailabilityEnhancedLocationListener {
           override fun onLocationChanged(location: Location) {
             navigationSessionEventApi.onRoadSnappedLocationUpdated(
-              RoadSnappedLocationUpdatedEventDto(LatLngDto(location.latitude, location.longitude))
+              LatLngDto(location.latitude, location.longitude)
             ) {}
           }
 
           override fun onRawLocationUpdate(location: Location) {
             navigationSessionEventApi.onRoadSnappedRawLocationUpdated(
-              RoadSnappedRawLocationUpdatedEventDto(
-                LatLngDto(location.latitude, location.longitude)
-              )
+              LatLngDto(location.latitude, location.longitude)
             ) {}
+          }
+
+          override fun onGpsAvailabilityUpdate(isGpsAvailable: Boolean) {
+            navigationSessionEventApi.onGpsAvailabilityUpdate(isGpsAvailable) {}
           }
         }
       getRoadSnappedLocationProvider()?.addLocationListener(roadSnappedLocationListener)

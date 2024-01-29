@@ -19,13 +19,15 @@ import '../google_maps_navigation.dart';
 import 'google_maps_navigation_platform_interface.dart';
 import 'inspector/inspector_ios.dart';
 import 'inspector/inspector_platform.dart';
-import 'method_channel/common_session_api.dart';
-import 'method_channel/common_view_api.dart';
+import 'method_channel/method_channel.dart';
 
 /// Google Maps Navigation Platform iOS specific functionalities.
 /// @nodoc
 class GoogleMapsNavigationIOS extends GoogleMapsNavigationPlatform
-    with CommonNavigationSessionAPI, CommonNavigationViewAPI {
+    with
+        CommonNavigationSessionAPI,
+        CommonNavigationViewAPI,
+        CommonImageRegistryAPI {
   /// Registers the iOS implementation of GoogleMapsNavigationPlatform.
   static void registerWith() {
     GoogleMapsNavigationPlatform.instance = GoogleMapsNavigationIOS();
