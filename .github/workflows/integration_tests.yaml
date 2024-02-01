@@ -30,8 +30,6 @@ jobs:
           ['example']
     runs-on: 
       labels: ubuntu-latest-8core
-    environment: 
-      name: MAPS
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
     steps:
@@ -103,8 +101,6 @@ jobs:
           ['example']
     runs-on: 
       labels: macos-13-large
-    environment: 
-      name: MAPS
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
     steps:

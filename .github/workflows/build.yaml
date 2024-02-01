@@ -99,8 +99,6 @@ jobs:
     timeout-minutes: 45
     runs-on: 
       labels: ubuntu-latest-8core
-    environment: 
-      name: MAPS
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
     steps:
@@ -125,8 +123,6 @@ jobs:
     if: contains(github.base_ref, 'main')
     timeout-minutes: 90
     runs-on: macos-latest-xlarge
-    environment: 
-      name: MAPS
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
     steps:
