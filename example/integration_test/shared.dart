@@ -35,7 +35,7 @@ export 'package:patrol/patrol.dart';
 
 /// Location coordinates for starting position simulation in Finland - Näkkäläntie.
 const double startLocationLat = 68.5938196099399;
-const double startLocationLon = 23.510696979963722;
+const double startLocationLng = 23.510696979963722;
 
 const NativeAutomatorConfig _nativeAutomatorConfig = NativeAutomatorConfig(
   findTimeout: Duration(seconds: 20),
@@ -162,7 +162,7 @@ Future<GoogleNavigationViewController> startNavigation(
 
   await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
     latitude: startLocationLat,
-    longitude: startLocationLon,
+    longitude: startLocationLng,
   ));
 
   /// Set Destination.
@@ -192,13 +192,32 @@ Future<GoogleNavigationViewController> startNavigation(
   return controller;
 }
 
-/// Start navigation without setting the destination and optionally
-/// simulating starting location with [simulateLocation] and skipping
-/// initialization with [initializeNavigation].
+/// Start navigation without setting the destination.
+///
+/// Optionally simulate the starting location with [simulateLocation],
+/// skip the initialization with [initializeNavigation] and set various
+/// event callback listener functions.
 Future<GoogleNavigationViewController> startNavigationWithoutDestination(
   PatrolIntegrationTester $, {
   bool initializeNavigation = true,
   bool simulateLocation = false,
+  void Function(String)? onMarkerClicked,
+  void Function(String)? onCircleClicked,
+  void Function(LatLng)? onMapClicked,
+  void Function(LatLng)? onMapLongClicked,
+  void Function(String, LatLng)? onMarkerDrag,
+  void Function(String, LatLng)? onMarkerDragEnd,
+  void Function(String, LatLng)? onMarkerDragStart,
+  void Function(String)? onMarkerInfoWindowClicked,
+  void Function(String)? onMarkerInfoWindowClosed,
+  void Function(String)? onMarkerInfoWindowLongClicked,
+  void Function(MyLocationButtonClickedEvent)? onMyLocationButtonClicked,
+  void Function(MyLocationClickedEvent)? onMyLocationClicked,
+  void Function(bool)? onNavigationUIEnabledChanged,
+  void Function(String)? onPolygonClicked,
+  void Function(String)? onPolylineClicked,
+  void Function(NavigationViewRecenterButtonClickedEvent)?
+      onRecenterButtonClicked,
   void Function(CameraPosition)? onCameraIdle,
 }) async {
   final Completer<GoogleNavigationViewController> controllerCompleter =
@@ -214,12 +233,28 @@ Future<GoogleNavigationViewController> startNavigationWithoutDestination(
       onViewCreated: (GoogleNavigationViewController viewController) {
         controllerCompleter.complete(viewController);
       },
-      onCameraIdle: onCameraIdle,
+      onMarkerClicked: onMarkerClicked,
+      onCircleClicked: onCircleClicked,
+      onMapClicked: onMapClicked,
+      onMapLongClicked: onMapLongClicked,
+      onMarkerDrag: onMarkerDrag,
+      onMarkerDragEnd: onMarkerDragEnd,
+      onMarkerDragStart: onMarkerDragStart,
+      onMarkerInfoWindowClicked: onMarkerInfoWindowClicked,
+      onMarkerInfoWindowClosed: onMarkerInfoWindowClosed,
+      onMarkerInfoWindowLongClicked: onMarkerInfoWindowLongClicked,
+      onMyLocationButtonClicked: onMyLocationButtonClicked,
+      onMyLocationClicked: onMyLocationClicked,
+      onNavigationUIEnabledChanged: onNavigationUIEnabledChanged,
+      onPolygonClicked: onPolygonClicked,
+      onPolylineClicked: onPolygonClicked,
+      onRecenterButtonClicked: onRecenterButtonClicked,
     ),
   );
 
   final GoogleNavigationViewController controller =
       await controllerCompleter.future;
+  await $.pumpAndSettle();
 
   if (initializeNavigation) {
     await GoogleMapsNavigator.initializeNavigationSession();
@@ -229,7 +264,7 @@ Future<GoogleNavigationViewController> startNavigationWithoutDestination(
   if (simulateLocation) {
     await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
       latitude: startLocationLat,
-      longitude: startLocationLon,
+      longitude: startLocationLng,
     ));
   }
 

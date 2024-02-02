@@ -93,10 +93,39 @@ void main() {
   });
 
   patrol('Test map UI settings', (PatrolIntegrationTester $) async {
+    /// The events are not tested because there's currently no reliable way to trigger them. 
+    void onMyLocationButtonClicked(MyLocationButtonClickedEvent event) {
+      debugPrint('My location button clicked event: currently $event');
+    }
+
+    /// The evot tested because there's no reliable way to trigger them currently. 
+    void onMyLocationClicked(MyLocationClickedEvent event) {
+      debugPrint('My location clicked event: currently $event');
+    }
+
+    /// The evot tested because there's no reliable way to trigger them currently. 
+    void onMapLongClicked(LatLng coordinates) {
+      debugPrint(
+          'Map clicked event lat: ${coordinates.latitude}, lng: ${coordinates.longitude}.');
+    }
+
     /// Set up navigation without initialization to test isMyLocationEnabled
-    /// is false before initialization is done.
+    /// is false before initialization is done. Test the onMapClicked event
+    /// and setting the other callback functions.
     final GoogleNavigationViewController controller =
-        await startNavigationWithoutDestination($, initializeNavigation: false);
+        await startNavigationWithoutDestination(
+      $,
+      initializeNavigation: false,
+      onMapClicked: expectAsync1((LatLng msg) {
+        expectSync(msg, isA<LatLng>());
+      }, count: 1, max: 1),
+      onMapLongClicked: onMapLongClicked,
+      onMyLocationButtonClicked: onMyLocationButtonClicked,
+      onMyLocationClicked: onMyLocationClicked,
+    );
+
+    /// Test that the onMapClicked event comes in.
+    await $.native.tap(Selector(enabled: true));
 
     /// Test the default values match with what has been documented in the
     /// API documentation in google_maps_navigation.dart file.
@@ -110,6 +139,9 @@ void main() {
         await controller.settings.isScrollGesturesEnabledDuringRotateOrZoom(),
         true);
     expect(await controller.settings.isTiltGesturesEnabled(), true);
+    if (Platform.isAndroid) {
+      expect(await controller.settings.isMapToolbarEnabled(), true);
+    }
 
     final List<bool> results = <bool>[true, false, true];
     for (final bool result in results) {
@@ -146,6 +178,9 @@ void main() {
       if (Platform.isAndroid) {
         await controller.settings.setZoomControlsEnabled(result);
         expect(await controller.settings.isZoomControlsEnabled(), result);
+
+        await controller.settings.setMapToolbarEnabled(result);
+        expect(await controller.settings.isMapToolbarEnabled(), result);
       }
     }
 
@@ -187,7 +222,7 @@ void main() {
     await viewController.setMapStyle(
         '[{"elementType":"geometry","stylers":[{"color":"#ffffff"}]}]');
 
-    // Test that null value doens't throw exception.
+    // Test that null value doesn't throw exception.
     await viewController.setMapStyle(null);
 
     // Test that invalid json throws exception.
