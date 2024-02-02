@@ -33,12 +33,12 @@ void main() {
       debugPrint('Marker clicked event: $event.');
     }
 
-    /// The events are not tested because there's currently no reliable way to trigger them. 
+    /// The events are not tested because there's currently no reliable way to trigger them.
     void onMarkerDrag(String event, LatLng coordinates) {
       debugPrint('Marker dragged event: $event. Coorinates: $coordinates.');
     }
 
-    /// The events are not tested because there's currently no reliable way to trigger them. 
+    /// The events are not tested because there's currently no reliable way to trigger them.
     void onMarkerInfoWindowAction(String event) {
       debugPrint('Marker dragged event: $event.');
     }
@@ -267,7 +267,7 @@ void main() {
   });
 
   patrol('Test polylines', (PatrolIntegrationTester $) async {
-    /// The events are not tested because there's currently no reliable way to trigger them. 
+    /// The events are not tested because there's currently no reliable way to trigger them.
     void onPolylineClicked(String event) {
       debugPrint('Polyline clicked event: $event.');
     }
@@ -486,7 +486,7 @@ void main() {
 
   patrol('Polygon tests', (PatrolIntegrationTester $) async {
     void onPolygonClicked(String event) {
-      /// The events are not tested because there's currently no reliable way to trigger them. 
+      /// The events are not tested because there's currently no reliable way to trigger them.
       debugPrint('Polygon clicked event: $event.');
     }
 
@@ -778,7 +778,7 @@ void main() {
 
   patrol('Circle tests', (PatrolIntegrationTester $) async {
     void onCircleClicked(String event) {
-      /// The events are not tested because there's currently no reliable way to trigger them. 
+      /// The events are not tested because there's currently no reliable way to trigger them.
       debugPrint('Circle clicked event: $event.');
     }
 

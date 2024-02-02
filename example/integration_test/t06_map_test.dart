@@ -93,17 +93,17 @@ void main() {
   });
 
   patrol('Test map UI settings', (PatrolIntegrationTester $) async {
-    /// The events are not tested because there's currently no reliable way to trigger them. 
+    /// The events are not tested because there's currently no reliable way to trigger them.
     void onMyLocationButtonClicked(MyLocationButtonClickedEvent event) {
       debugPrint('My location button clicked event: currently $event');
     }
 
-    /// The evot tested because there's no reliable way to trigger them currently. 
+    /// The evot tested because there's no reliable way to trigger them currently.
     void onMyLocationClicked(MyLocationClickedEvent event) {
       debugPrint('My location clicked event: currently $event');
     }
 
-    /// The evot tested because there's no reliable way to trigger them currently. 
+    /// The evot tested because there's no reliable way to trigger them currently.
     void onMapLongClicked(LatLng coordinates) {
       debugPrint(
           'Map clicked event lat: ${coordinates.latitude}, lng: ${coordinates.longitude}.');

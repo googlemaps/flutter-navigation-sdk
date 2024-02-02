@@ -40,6 +40,7 @@ void main() {
       (RemainingTimeOrDistanceChangedEvent event) {
         expectSync(event.remainingDistance, isA<double>());
         expectSync(event.remainingTime, isA<double>());
+
         /// Complete the eventReceived completer only once.
         if (!eventReceived.isCompleted) {
           eventReceived.complete();
@@ -185,6 +186,7 @@ void main() {
             expectAsync1(
       (RoadSnappedLocationUpdatedEvent event) {
         expectSync(event.location, isA<LatLng>());
+
         /// Complete the eventReceived completer only once.
         if (!eventReceived.isCompleted) {
           eventReceived.complete();
@@ -198,12 +200,11 @@ void main() {
     await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
     await $.pumpAndSettle();
 
-    /// Test setting the background location updates. 
+    /// Test setting the background location updates.
     if (Platform.isIOS) {
       await GoogleMapsNavigator.allowBackgroundLocationUpdates(true);
       await GoogleMapsNavigator.allowBackgroundLocationUpdates(false);
-    }
-    else if (Platform.isAndroid) {
+    } else if (Platform.isAndroid) {
       try {
         await GoogleMapsNavigator.allowBackgroundLocationUpdates(true);
         fail('Expected to get UnsupportedError');
@@ -229,6 +230,7 @@ void main() {
         GoogleMapsNavigator.setOnArrivalListener(expectAsync1(
       (OnArrivalEvent event) {
         expectSync(event.waypoint, isA<NavigationWaypoint>());
+
         /// Comoplete the eventReceived completer only once.
         if (!eventReceived.isCompleted) {
           eventReceived.complete();
@@ -238,7 +240,7 @@ void main() {
       max: -1,
     ));
 
-    /// The events are not tested because there's currently no reliable way to trigger them. 
+    /// The events are not tested because there's currently no reliable way to trigger them.
     void speedingUpdated(SpeedingUpdatedEvent event) {
       debugPrint('SpeedingUpdated: $event');
     }
@@ -313,7 +315,7 @@ void main() {
       ));
       await $.pumpAndSettle();
 
-      /// The events are not tested because there's currently no reliable way to trigger them. 
+      /// The events are not tested because there's currently no reliable way to trigger them.
       void onGpsAvailability(GpsAvailabilityUpdatedEvent event) {
         debugPrint('GpsAvailabilityEvent: $event');
       }

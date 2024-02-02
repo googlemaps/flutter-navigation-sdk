@@ -384,11 +384,10 @@ void main() {
     await controller.moveCamera(positionUpdate);
 
     // Wait for cameraIdleEvent before doing doing the tests.
-    await cameraIdleCompleter.future.timeout(
-      const Duration(seconds: 10),
-      onTimeout: () {
-        fail('Future timed out');
-      });
+    await cameraIdleCompleter.future.timeout(const Duration(seconds: 10),
+        onTimeout: () {
+      fail('Future timed out');
+    });
     camera = await controller.getCameraPosition();
 
     // Test stoppedFollowingMyLocation event is received on Android.
@@ -455,8 +454,7 @@ void main() {
   patrol('Test moveCamera() and animateCamera() with various options',
       (PatrolIntegrationTester $) async {
     /// Initialize navigation with the event listener functions.
-    final GoogleNavigationViewController controller =
-        await startNavigation(
+    final GoogleNavigationViewController controller = await startNavigation(
       $,
       onCameraIdle: onCameraIdle,
     );
@@ -466,11 +464,10 @@ void main() {
     Future<void> moveCamera(CameraUpdate update) async {
       resetCameraEventCompleters();
       await controller.moveCamera(update);
-      await cameraIdleCompleter.future
-          .timeout(const Duration(seconds: 10), onTimeout: () {
+      await cameraIdleCompleter.future.timeout(const Duration(seconds: 10),
+          onTimeout: () {
         fail('Future timed out');
-        }
-      );
+      });
     }
 
     // Create a wrapper for animateCamera() that waits until move is finished
@@ -492,12 +489,10 @@ void main() {
       );
 
       // Wait until the cameraIdle event comes in.
-      await cameraIdleCompleter.future.timeout(
-        const Duration(seconds: 10),
-        onTimeout: () {
-          fail('Future timed out');
-        }
-      );
+      await cameraIdleCompleter.future.timeout(const Duration(seconds: 10),
+          onTimeout: () {
+        fail('Future timed out');
+      });
     }
 
     final List<Future<void> Function(CameraUpdate update)> cameraMethods =
@@ -521,12 +516,10 @@ void main() {
     Future<void> moveCameraToStart() async {
       resetCameraEventCompleters();
       await controller.moveCamera(start);
-      await cameraIdleCompleter.future.timeout(
-        const Duration(seconds: 10),
-        onTimeout: () {
-          fail('Future timed out');
-        }
-      );
+      await cameraIdleCompleter.future.timeout(const Duration(seconds: 10),
+          onTimeout: () {
+        fail('Future timed out');
+      });
     }
 
     final CameraUpdate updateCameraPosition =

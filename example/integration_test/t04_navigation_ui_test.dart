@@ -36,7 +36,7 @@ void main() {
 
     await checkLocationDialogAndTosAcceptance($);
 
-    /// The events are not tested because there's no reliable way to trigger them currently. 
+    /// The events are not tested because there's no reliable way to trigger them currently.
     void onRecenterButtonClicked(
         NavigationViewRecenterButtonClickedEvent event) {
       debugPrint('Re-center button clicked event: $event.');
