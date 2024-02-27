@@ -46,7 +46,7 @@ jobs:
             sudo udevadm trigger --name-match=kvm
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-      - uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8
+      - uses: actions/cache@a2ed59d39b352305bdd2f628719a53b2cc4f9613
         name: AVD Cache
         id: avd-cache
         with:
@@ -110,7 +110,7 @@ jobs:
           flutter-version: '3.16.x'
           channel: 'stable'
           cache: true
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: '**/Pods'
           key: ${{ runner.os }}-pods-${{ hashFiles('**/*.podspec') }}

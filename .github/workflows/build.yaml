@@ -73,7 +73,7 @@ jobs:
           ['example']
     steps:
       - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: '**/Pods'
           key: ${{ runner.os }}-pods-${{ hashFiles('**/*.podspec') }}
@@ -135,7 +135,7 @@ jobs:
       - uses: bluefireteam/melos-action@dd3c344d731938d2ab2567a261f54a19a68b5f6a
         with:
           melos-version: '3.0.1'
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: '**/Pods'
           key: ${{ runner.os }}-pods-${{ hashFiles('**/*.podspec') }}
