@@ -143,11 +143,6 @@ void main() {
     expect(received.target.longitude, closeTo(expected.target.longitude, 0.02));
   }
 
-  // onTimeout fail function for futures.
-  void onTimeout() {
-    fail('Future timed out');
-  }
-
   patrol('Test camera modes', (PatrolIntegrationTester $) async {
     // Test that followMyLocation is not active and no stop or start events have come in.
     if (Platform.isAndroid) {
@@ -389,10 +384,10 @@ void main() {
     await controller.moveCamera(positionUpdate);
 
     // Wait for cameraIdleEvent before doing doing the tests.
-    await cameraIdleCompleter.future.timeout(
-      const Duration(seconds: 10),
-      onTimeout: onTimeout,
-    );
+    await cameraIdleCompleter.future.timeout(const Duration(seconds: 10),
+        onTimeout: () {
+      fail('Future timed out');
+    });
     camera = await controller.getCameraPosition();
 
     // Test stoppedFollowingMyLocation event is received on Android.
@@ -459,19 +454,20 @@ void main() {
   patrol('Test moveCamera() and animateCamera() with various options',
       (PatrolIntegrationTester $) async {
     /// Initialize navigation with the event listener functions.
-    final GoogleNavigationViewController controller =
-        await startNavigationWithoutDestination(
+    final GoogleNavigationViewController controller = await startNavigation(
       $,
-      simulateLocation: true,
       onCameraIdle: onCameraIdle,
     );
+    await GoogleMapsNavigator.stopGuidance();
 
     // Create a wrapper for moveCamera() that waits until the move is finished.
     Future<void> moveCamera(CameraUpdate update) async {
       resetCameraEventCompleters();
       await controller.moveCamera(update);
-      await cameraIdleCompleter.future
-          .timeout(const Duration(seconds: 10), onTimeout: onTimeout);
+      await cameraIdleCompleter.future.timeout(const Duration(seconds: 10),
+          onTimeout: () {
+        fail('Future timed out');
+      });
     }
 
     // Create a wrapper for animateCamera() that waits until move is finished
@@ -493,25 +489,25 @@ void main() {
       );
 
       // Wait until the cameraIdle event comes in.
-      await cameraIdleCompleter.future.timeout(
-        const Duration(seconds: 10),
-        onTimeout: onTimeout,
-      );
+      await cameraIdleCompleter.future.timeout(const Duration(seconds: 10),
+          onTimeout: () {
+        fail('Future timed out');
+      });
     }
 
     final List<Future<void> Function(CameraUpdate update)> cameraMethods =
         <Future<void> Function(CameraUpdate update)>[moveCamera, animateCamera];
 
     const double startLat = startLocationLat + 1;
-    const double startLon = startLocationLon + 1;
+    const double startLng = startLocationLng + 1;
     const LatLng target =
-        LatLng(latitude: startLat + 1, longitude: startLon + 1);
+        LatLng(latitude: startLat + 1, longitude: startLng + 1);
 
     final CameraUpdate start =
         CameraUpdate.newCameraPosition(const CameraPosition(
       target: LatLng(
         latitude: startLat,
-        longitude: startLon,
+        longitude: startLng,
       ),
       zoom: 9,
     ));
@@ -520,10 +516,10 @@ void main() {
     Future<void> moveCameraToStart() async {
       resetCameraEventCompleters();
       await controller.moveCamera(start);
-      await cameraIdleCompleter.future.timeout(
-        const Duration(seconds: 10),
-        onTimeout: onTimeout,
-      );
+      await cameraIdleCompleter.future.timeout(const Duration(seconds: 10),
+          onTimeout: () {
+        fail('Future timed out');
+      });
     }
 
     final CameraUpdate updateCameraPosition =

@@ -20,19 +20,32 @@
 // For more information about Flutter integration tests, please see
 // https://docs.flutter.dev/cookbook/testing/integration/introduction
 
+import 'dart:async';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'shared.dart';
 
 void main() {
   patrol('Test navigation OnRemainingTimeOrDistanceChanged event listener',
       (PatrolIntegrationTester $) async {
+    final Completer<void> eventReceived = Completer<void>();
+
     /// Set up navigation.
     await startNavigationWithoutDestination($);
 
     /// Set up the listener and the test.
-    GoogleMapsNavigator.setOnRemainingTimeOrDistanceChangedListener(
-        expectAsync1(
-      (RemainingTimeOrDistanceChangedEvent event) {},
+    final StreamSubscription<RemainingTimeOrDistanceChangedEvent> subscription =
+        GoogleMapsNavigator.setOnRemainingTimeOrDistanceChangedListener(
+            expectAsync1(
+      (RemainingTimeOrDistanceChangedEvent event) {
+        expectSync(event.remainingDistance, isA<double>());
+        expectSync(event.remainingTime, isA<double>());
+
+        /// Complete the eventReceived completer only once.
+        if (!eventReceived.isCompleted) {
+          eventReceived.complete();
+        }
+      },
       count: 1,
       max: -1,
     ));
@@ -68,16 +81,28 @@ void main() {
     /// Start simulation.
     await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
     await $.pumpAndSettle();
+
+    /// Wait until the event is received and then test cancelling the subscription.
+    await eventReceived.future;
+    await subscription.cancel();
   });
 
   patrol('Test navigation OnRouteChanged event listener',
       (PatrolIntegrationTester $) async {
+    final Completer<void> eventReceived = Completer<void>();
+
     /// Set up navigation.
     await startNavigationWithoutDestination($);
 
     /// Set up the listener and the test.
-    GoogleMapsNavigator.setOnRouteChangedListener(expectAsync0(
-      () {},
+    final StreamSubscription<void> subscription =
+        GoogleMapsNavigator.setOnRouteChangedListener(expectAsync0(
+      () {
+        /// Complete the eventReceived completer only once.
+        if (!eventReceived.isCompleted) {
+          eventReceived.complete();
+        }
+      },
       count: 1,
       max: -1,
     ));
@@ -114,10 +139,16 @@ void main() {
     /// Start simulation.
     await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
     await $.pumpAndSettle();
+
+    /// Wait until the event is received and then test cancelling the subscription.
+    await eventReceived.future;
+    await subscription.cancel();
   });
 
   patrol('Test navigation RoadSnappedLocationUpdated event listener',
       (PatrolIntegrationTester $) async {
+    final Completer<void> eventReceived = Completer<void>();
+
     /// Sert up navigation.
     await startNavigationWithoutDestination($);
 
@@ -150,9 +181,17 @@ void main() {
     await $.pumpAndSettle();
 
     /// Set up the listener and the test.
-    await GoogleMapsNavigator.setRoadSnappedLocationUpdatedListener(
-        expectAsync1(
-      (RoadSnappedLocationUpdatedEvent event) {},
+    final StreamSubscription<RoadSnappedLocationUpdatedEvent> subscription =
+        await GoogleMapsNavigator.setRoadSnappedLocationUpdatedListener(
+            expectAsync1(
+      (RoadSnappedLocationUpdatedEvent event) {
+        expectSync(event.location, isA<LatLng>());
+
+        /// Complete the eventReceived completer only once.
+        if (!eventReceived.isCompleted) {
+          eventReceived.complete();
+        }
+      },
       count: 1,
       max: -1,
     ));
@@ -161,7 +200,11 @@ void main() {
     await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
     await $.pumpAndSettle();
 
-    if (Platform.isAndroid) {
+    /// Test setting the background location updates.
+    if (Platform.isIOS) {
+      await GoogleMapsNavigator.allowBackgroundLocationUpdates(true);
+      await GoogleMapsNavigator.allowBackgroundLocationUpdates(false);
+    } else if (Platform.isAndroid) {
       try {
         await GoogleMapsNavigator.allowBackgroundLocationUpdates(true);
         fail('Expected to get UnsupportedError');
@@ -169,19 +212,44 @@ void main() {
         expect(e, const TypeMatcher<UnsupportedError>());
       }
     }
+
+    /// Wait until the event is received and then test cancelling the subscription.
+    await eventReceived.future;
+    await subscription.cancel();
   });
 
-  patrol('Test navigation onArrival event listener',
+  patrol('Test navigation onArrival and onSpeedingUpdated event listeners',
       (PatrolIntegrationTester $) async {
-    /// Set uo navigation.
+    final Completer<void> eventReceived = Completer<void>();
+
+    /// Set up navigation.
     await startNavigationWithoutDestination($);
 
-    /// Set up the listener and the test.
-    GoogleMapsNavigator.setOnArrivalListener(expectAsync1(
-      (OnArrivalEvent event) {},
+    /// Set up the listeners and the tests.
+    final StreamSubscription<OnArrivalEvent> onArrivalSubscription =
+        GoogleMapsNavigator.setOnArrivalListener(expectAsync1(
+      (OnArrivalEvent event) {
+        expectSync(event.waypoint, isA<NavigationWaypoint>());
+
+        /// Comoplete the eventReceived completer only once.
+        if (!eventReceived.isCompleted) {
+          eventReceived.complete();
+        }
+      },
       count: 1,
       max: -1,
     ));
+
+    /// The events are not tested because there's currently no reliable way to trigger them.
+    void speedingUpdated(SpeedingUpdatedEvent event) {
+      debugPrint('SpeedingUpdated: $event');
+    }
+
+    /// This event isn't reveived with iOS in this test scenario so skipping
+    /// the test that checks the event is received.
+    final StreamSubscription<SpeedingUpdatedEvent>
+        onSpeedingUpdatedSubscription =
+        GoogleMapsNavigator.setSpeedingUpdatedListener(speedingUpdated);
     await $.pumpAndSettle();
 
     await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
@@ -217,22 +285,46 @@ void main() {
       speedMultiplier: 100,
     ));
     await $.pumpAndSettle();
+
+    /// Wait until the event is received and then test cancelling the subscriptions.
+    await eventReceived.future;
+    await onArrivalSubscription.cancel();
+    await onSpeedingUpdatedSubscription.cancel();
   });
 
   /// Rerouting listener is Android only.
   if (Platform.isAndroid) {
-    patrol('Test navigation onRerouting event listener',
+    patrol('Test navigation onRerouting and onGpsAvailability event listeners',
         (PatrolIntegrationTester $) async {
+      final Completer<void> eventReceived = Completer<void>();
+
       /// Set up navigation.
       await startNavigationWithoutDestination($);
 
       /// Set up the rerouting listener with the test.
-      GoogleMapsNavigator.setOnReroutingListener(expectAsync1(
-        (OnArrivalEvent event) {},
+      final StreamSubscription<void> onReroutingSubscription =
+          GoogleMapsNavigator.setOnReroutingListener(expectAsync0(
+        () {
+          /// Complete the eventReceived completer only once.
+          if (!eventReceived.isCompleted) {
+            eventReceived.complete();
+          }
+        },
         count: 1,
         max: -1,
       ));
       await $.pumpAndSettle();
+
+      /// The events are not tested because there's currently no reliable way to trigger them.
+      void onGpsAvailability(GpsAvailabilityUpdatedEvent event) {
+        debugPrint('GpsAvailabilityEvent: $event');
+      }
+
+      /// Set up the gpsAvailability listener with the test.
+      final StreamSubscription<GpsAvailabilityUpdatedEvent>
+          onGpsAvailabilitySubscription =
+          await GoogleMapsNavigator.setOnGpsAvailabilityListener(
+              onGpsAvailability);
 
       /// Simulate location.
       await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
@@ -280,6 +372,11 @@ void main() {
               RoutingOptions(),
               SimulationOptions(speedMultiplier: 100));
       await $.pumpAndSettle();
+
+      /// Wait until the event is received and then test cancelling the subscriptions.
+      await eventReceived.future;
+      await onReroutingSubscription.cancel();
+      await onGpsAvailabilitySubscription.cancel();
     });
   }
 }

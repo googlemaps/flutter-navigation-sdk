@@ -104,14 +104,13 @@ Google Maps Flutter Navigation package has integration and unit tests.
 To run unit tests for the Google Maps Flutter Navigation plugin, navigate to the plugin's root directory and execute the `flutter test` command. Use the following command:
 
 ```bash
-flutter test
+melos run test:dart
 ```
 
 To run unit tests on Android call
 
 ```bash
-cd example/android
-./gradlew test
+melos run test:android
 ```
 
 To run unit tests on iOS, follow these steps:
@@ -119,6 +118,14 @@ To run unit tests on iOS, follow these steps:
 2. Navigate to the Test Navigator.
 3. Find and select the "RunnerTests" target.
 4. Click on the play icon button to run the tests.
+
+Or to run the iOS unit tests from command line, call
+
+```bash
+DEVICE='iPhone 15' melos run ios:test
+```
+
+Specify the device you want to run the tests on with the DEVICE env variable. 
 
 ### Integration tests
 

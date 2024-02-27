@@ -36,6 +36,12 @@ void main() {
 
     await checkLocationDialogAndTosAcceptance($);
 
+    /// The events are not tested because there's no reliable way to trigger them currently.
+    void onRecenterButtonClicked(
+        NavigationViewRecenterButtonClickedEvent event) {
+      debugPrint('Re-center button clicked event: $event.');
+    }
+
     /// Display navigation view.
     final Key key = GlobalKey();
     await pumpNavigationView(
@@ -49,6 +55,7 @@ void main() {
         onNavigationUIEnabledChanged: (bool isEnabled) {
           navigationUIisEnabled = isEnabled;
         },
+        onRecenterButtonClicked: onRecenterButtonClicked,
       ),
     );
 

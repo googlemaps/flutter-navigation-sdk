@@ -1,3 +1,19 @@
+## 0.2.1-beta
+
+This is the beta release of the Google Maps Navigation package for Flutter. It is an early look at the package and is intended for testing and feedback collection. The functionalities and APIs in this version are subject to change.
+
+**Key Features:**
+- Added a CI configuration for these jobs:
+  - Flutter analyze
+  - Format
+  - Unit tests for Dart, Android and iOS
+  - Build Android and iOS
+  - Integration tests for Android and iOS
+  - License header check
+- Added a dependabot configuration
+- Added more integration tests, mostly for event listeners
+- Improved the reliability of some flaky integration tests
+
 ## 0.2.0-beta
 
 This is the beta release of the Google Maps Navigation package for Flutter. It is an early look at the package and is intended for testing and feedback collection. The functionalities and APIs in this version are subject to change.

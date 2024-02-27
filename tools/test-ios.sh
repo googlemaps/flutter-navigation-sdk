@@ -1,3 +1,4 @@
+#!/bin/bash
 # Copyright 2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,10 +12,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+set -e
 
-assign_issues:
-  - ArturoSalazarB16
-  - caio1985
-assign_prs:
-  - ArturoSalazarB16
-  - caio1985
+DEVICE_NAME=${DEVICE:-'iPhone 14 Pro'} # Default to 'iPhone 14 Pro' if no argument is provided
+
+# Navigate to the ios directory and run xcodebuild with the provided device name
+cd ios && xcodebuild test \
+            -workspace Runner.xcworkspace \
+            -scheme Runner \
+            -only-testing RunnerTests \
+            -configuration Debug \
+            -sdk iphoneos -destination "platform=iOS Simulator,name=$DEVICE_NAME" \
+            -derivedDataPath ../build/ios_unit

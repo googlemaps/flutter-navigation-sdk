@@ -36,7 +36,7 @@ void main() {
 
   /// Start location coordinates in Finland (Näkkäläntie).
   const double startLat = startLocationLat;
-  const double startLon = startLocationLon;
+  const double startLng = startLocationLng;
 
   bool isPhysicalDevice = false;
   final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -55,9 +55,20 @@ void main() {
     final GoogleNavigationViewController viewController =
         await startNavigationWithoutDestination($);
 
+    /// Set audio guidance settings.
+    /// Cannot be verified, because native SDK lacks getter methods,
+    /// but exercise the API for basic sanity testing
+    final NavigationAudioGuidanceSettings settings =
+        NavigationAudioGuidanceSettings(
+      isBluetoothAudioEnabled: true,
+      isVibrationEnabled: true,
+      guidanceType: NavigationAudioGuidanceType.alertsAndGuidance,
+    );
+    await GoogleMapsNavigator.setAudioGuidance(settings);
+
     /// Specify tolerance and navigation end coordinates.
     const double tolerance = 0.0005;
-    const double endLat = 68.59451829688189, endLon = 23.512277951523007;
+    const double endLat = 68.59451829688189, endLng = 23.512277951523007;
 
     /// Finish executing the tests once onArrival event comes in
     /// and test that the guidance stops.
@@ -71,12 +82,12 @@ void main() {
     /// Simulate location and test it.
     await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
       latitude: startLat,
-      longitude: startLon,
+      longitude: startLng,
     ));
     await $.pumpAndSettle();
     final LatLng? currentLocation = await viewController.getMyLocation();
     expect(currentLocation?.latitude, closeTo(startLat, tolerance));
-    expect(currentLocation?.longitude, closeTo(startLon, tolerance));
+    expect(currentLocation?.longitude, closeTo(startLng, tolerance));
 
     /// Set Destination.
     final Destinations destinations = Destinations(
@@ -85,7 +96,7 @@ void main() {
           title: 'Näkkäläntie',
           target: const LatLng(
             latitude: endLat,
-            longitude: endLon,
+            longitude: endLng,
           ),
         ),
       ],
@@ -116,11 +127,11 @@ void main() {
       );
       expectSync(
         msg.location.longitude,
-        greaterThanOrEqualTo(startLon - tolerance),
+        greaterThanOrEqualTo(startLng - tolerance),
       );
       expectSync(
         msg.location.longitude,
-        lessThanOrEqualTo(endLon + tolerance),
+        lessThanOrEqualTo(endLng + tolerance),
       );
     }
 
@@ -146,12 +157,23 @@ void main() {
     final GoogleNavigationViewController viewController =
         await startNavigationWithoutDestination($);
 
+    /// Set audio guidance settings.
+    /// Cannot be verified, because native SDK lacks getter methods,
+    /// but exercise the API for basic sanity testing
+    final NavigationAudioGuidanceSettings settings =
+        NavigationAudioGuidanceSettings(
+      isBluetoothAudioEnabled: false,
+      isVibrationEnabled: false,
+      guidanceType: NavigationAudioGuidanceType.alertsOnly,
+    );
+    await GoogleMapsNavigator.setAudioGuidance(settings);
+
     /// Specify tolerance and navigation destination coordinates.
     const double tolerance = 0.0005;
     const double midLat = 68.59781164189049,
         midLon = 23.520303427087182,
         endLat = 68.60079240808535,
-        endLon = 23.527946512754752;
+        endLng = 23.527946512754752;
 
     Future<void> onArrivalEvent(OnArrivalEvent msg) async {
       arrivalEventCount += 1;
@@ -169,12 +191,12 @@ void main() {
     /// Simulate location and test it.
     await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
       latitude: startLat,
-      longitude: startLon,
+      longitude: startLng,
     ));
     await $.pumpAndSettle(timeout: const Duration(seconds: 1));
     final LatLng? currentLocation = await viewController.getMyLocation();
     expect(currentLocation!.latitude, closeTo(startLat, tolerance));
-    expect(currentLocation.longitude, closeTo(startLon, tolerance));
+    expect(currentLocation.longitude, closeTo(startLng, tolerance));
 
     /// Set Destination.
     final Destinations destinations = Destinations(
@@ -190,7 +212,7 @@ void main() {
           title: 'Näkkäläntie 2nd stop',
           target: const LatLng(
             latitude: endLat,
-            longitude: endLon,
+            longitude: endLng,
           ),
         ),
       ],
@@ -222,11 +244,11 @@ void main() {
         );
         expectSync(
           msg.location.longitude,
-          greaterThanOrEqualTo(startLon - tolerance),
+          greaterThanOrEqualTo(startLng - tolerance),
         );
         expectSync(
           msg.location.longitude,
-          lessThanOrEqualTo(endLon + tolerance),
+          lessThanOrEqualTo(endLng + tolerance),
         );
       }
     }
@@ -255,7 +277,7 @@ void main() {
 
     /// Specify tolerance and navigation end coordinates.
     const double tolerance = 0.0005;
-    const double endLat = 68.59451829688189, endLon = 23.512277951523007;
+    const double endLat = 68.59451829688189, endLng = 23.512277951523007;
 
     /// Create a waypoint.
     final List<NavigationWaypoint> waypoint = <NavigationWaypoint>[
@@ -263,7 +285,7 @@ void main() {
         title: 'Näkkäläntie',
         target: const LatLng(
           latitude: endLat,
-          longitude: endLon,
+          longitude: endLng,
         ),
       ),
     ];
@@ -360,7 +382,7 @@ void main() {
       /// Simulate location.
       await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
         latitude: startLat,
-        longitude: startLon,
+        longitude: startLng,
       ));
       debugPrint('Starting location set.');
       await $.pumpAndSettle();
@@ -372,7 +394,7 @@ void main() {
             'LatLngSimulator: ${msg.location.latitude}, ${msg.location.longitude}.');
         if ((!hasArrived) &&
             (endLat - msg.location.latitude <= tolerance) &&
-            (endLon - msg.location.longitude <= tolerance)) {
+            (endLng - msg.location.longitude <= tolerance)) {
           hasArrived = true;
           finishTest.complete();
         } else {
@@ -386,11 +408,11 @@ void main() {
           );
           expectSync(
             msg.location.longitude,
-            greaterThanOrEqualTo(startLon - tolerance),
+            greaterThanOrEqualTo(startLng - tolerance),
           );
           expectSync(
             msg.location.longitude,
-            lessThanOrEqualTo(endLon + tolerance),
+            lessThanOrEqualTo(endLng + tolerance),
           );
         }
       }
@@ -420,19 +442,19 @@ void main() {
 
     /// Specify tolerance and navigation end coordinates.
     const double tolerance = 0.0005;
-    const double endLat = 68.60338455021943, endLon = 23.548804200724454;
+    const double endLat = 68.60338455021943, endLng = 23.548804200724454;
 
     /// Simulate location.
     await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
       latitude: startLat,
-      longitude: startLon,
+      longitude: startLng,
     ));
     await $.pumpAndSettle();
 
     /// Test the location simulation.
     LatLng? currentLocation = await viewController.getMyLocation();
     expect(currentLocation!.latitude, closeTo(startLat, tolerance));
-    expect(currentLocation.longitude, closeTo(startLon, tolerance));
+    expect(currentLocation.longitude, closeTo(startLng, tolerance));
 
     /// Test the simulated location was removed when using Android.
     /// iOS Xcode simulators location is flaky making the test fail sometimes
@@ -443,13 +465,13 @@ void main() {
 
       currentLocation = await viewController.getMyLocation();
       expect(currentLocation!.latitude, isNot(closeTo(startLat, tolerance)));
-      expect(currentLocation.longitude, isNot(closeTo(startLon, tolerance)));
+      expect(currentLocation.longitude, isNot(closeTo(startLng, tolerance)));
     }
 
     /// Simulate location.
     await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
       latitude: startLat,
-      longitude: startLon,
+      longitude: startLng,
     ));
     await $.pumpAndSettle(duration: const Duration(seconds: 1));
 
@@ -460,7 +482,7 @@ void main() {
           title: 'Näkkäläntie',
           target: const LatLng(
             latitude: endLat,
-            longitude: endLon,
+            longitude: endLng,
           ),
         ),
       ],
@@ -497,6 +519,17 @@ void main() {
       (PatrolIntegrationTester $) async {
     /// Set up navigation.
     await startNavigationWithoutDestination($);
+
+    /// Set audio guidance settings.
+    /// Cannot be verified, because native SDK lacks getter methods,
+    /// but exercise the API for basic sanity testing
+    final NavigationAudioGuidanceSettings settings =
+        NavigationAudioGuidanceSettings(
+      isBluetoothAudioEnabled: false,
+      isVibrationEnabled: true,
+      guidanceType: NavigationAudioGuidanceType.silent,
+    );
+    await GoogleMapsNavigator.setAudioGuidance(settings);
 
     /// Simulate location (1298 California St)
     await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(

@@ -88,6 +88,12 @@ import GoogleNavigation
 }
 ```
 
+> [!NOTE]
+> Above code snipped also enables Metal rendering for Google Maps SDK. If you are not using Metal rendering, you can remove the following line:
+>  ```swift
+>  GMSServices.setMetalRendererEnabled(true)
+>  ```
+
 ## Usage
 
 You can now add a `GoogleMapsNavigationView` widget to your widget tree.

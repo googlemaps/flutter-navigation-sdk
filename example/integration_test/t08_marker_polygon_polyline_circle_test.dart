@@ -29,9 +29,32 @@ import 'shared.dart';
 
 void main() {
   patrol('Marker tests', (PatrolIntegrationTester $) async {
-    /// Set up navigation.
+    void onMarkerClicked(String event) {
+      debugPrint('Marker clicked event: $event.');
+    }
+
+    /// The events are not tested because there's currently no reliable way to trigger them.
+    void onMarkerDrag(String event, LatLng coordinates) {
+      debugPrint('Marker dragged event: $event. Coorinates: $coordinates.');
+    }
+
+    /// The events are not tested because there's currently no reliable way to trigger them.
+    void onMarkerInfoWindowAction(String event) {
+      debugPrint('Marker dragged event: $event.');
+    }
+
+    /// Set up navigation and test setting the callback functions.
     final GoogleNavigationViewController viewController =
-        await startNavigationWithoutDestination($);
+        await startNavigationWithoutDestination(
+      $,
+      onMarkerClicked: onMarkerClicked,
+      onMarkerDrag: onMarkerDrag,
+      onMarkerDragEnd: onMarkerDrag,
+      onMarkerDragStart: onMarkerDrag,
+      onMarkerInfoWindowClicked: onMarkerInfoWindowAction,
+      onMarkerInfoWindowClosed: onMarkerInfoWindowAction,
+      onMarkerInfoWindowLongClicked: onMarkerInfoWindowAction,
+    );
 
     // markerOne options.
     const MarkerOptions markerOneOptions = MarkerOptions(
@@ -244,9 +267,15 @@ void main() {
   });
 
   patrol('Test polylines', (PatrolIntegrationTester $) async {
-    /// Set up navigation.
+    /// The events are not tested because there's currently no reliable way to trigger them.
+    void onPolylineClicked(String event) {
+      debugPrint('Polyline clicked event: $event.');
+    }
+
+    /// Set up navigation and test setting the callback function.
     final GoogleNavigationViewController viewController =
-        await startNavigationWithoutDestination($);
+        await startNavigationWithoutDestination($,
+            onPolylineClicked: onPolylineClicked);
 
     await viewController.addPolylines(
       <PolylineOptions>[
@@ -456,9 +485,15 @@ void main() {
   });
 
   patrol('Polygon tests', (PatrolIntegrationTester $) async {
-    /// Set up navigation.
+    void onPolygonClicked(String event) {
+      /// The events are not tested because there's currently no reliable way to trigger them.
+      debugPrint('Polygon clicked event: $event.');
+    }
+
+    /// Set up navigation and test setting up the callback listener.
     final GoogleNavigationViewController viewController =
-        await startNavigationWithoutDestination($);
+        await startNavigationWithoutDestination($,
+            onPolygonClicked: onPolygonClicked);
 
     /// Creates square, 4 coordinates, from top left and bottom right coordinates.
     List<LatLng> createSquare(LatLng topLeft, LatLng bottomRight) {
@@ -742,9 +777,15 @@ void main() {
   });
 
   patrol('Circle tests', (PatrolIntegrationTester $) async {
-    /// Set up navigation.
+    void onCircleClicked(String event) {
+      /// The events are not tested because there's currently no reliable way to trigger them.
+      debugPrint('Circle clicked event: $event.');
+    }
+
+    /// Set up navigation and test setting up the callback functions.
     final GoogleNavigationViewController viewController =
-        await startNavigationWithoutDestination($);
+        await startNavigationWithoutDestination($,
+            onCircleClicked: onCircleClicked);
 
     // Add circle on the current camera position.
     final CameraPosition position = await viewController.getCameraPosition();

@@ -39,9 +39,9 @@ scripts:
   flutter-analyze:
     # We are setting the concurrency to 1 because a higher concurrency can crash
     # the analysis server on low performance machines (like GitHub Actions).
-    run: |
-      melos exec -c 1 -- \
-        flutter analyze . --fatal-infos
+    run: flutter analyze . --fatal-infos
+    exec:
+      concurrency: 1
     description: |
       Run `flutter analyze` in all packages.
     packageFilters:
@@ -69,9 +69,11 @@ scripts:
 
   format:android:
     run: |
-      melos exec -c 1 --fail-fast -- \
-        "if [ ! -f android/gradlew ]; then flutter build apk --config-only; fi \
-         && cd android && ./gradlew ktfmtFormat"
+      if [ ! -f android/gradlew ]; then flutter build apk --config-only; fi &&
+        cd android && ./gradlew ktfmtFormat
+    exec:
+      concurrency: 1
+      failFast: true
     description: |
       Formats the code of Android package with ktfmt.
     packageFilters:
@@ -79,18 +81,44 @@ scripts:
         - android
       scope: '*example*'
 
-  flutter-test:
-    run: |
-      melos exec -c 1 --fail-fast -- \
-        "flutter pub get && flutter test"
+  test:dart:
+    run: flutter pub get && flutter test
+    exec:
+      concurrency: 1
+      failFast: true
     description: Flutter test
     packageFilters:
       fileExists: 'pigeons/messages.dart'
 
-  flutter-build-android:
+  test:android:
     run: |
-      melos exec -c 1 --fail-fast -- \
-        "flutter pub get && flutter build apk && flutter build appbundle"
+      if [ ! -f android/gradlew ]; then flutter build apk --config-only; fi \
+        && cd android && ./gradlew test
+    exec:
+      concurrency: 1
+      failFast: true
+    description: Android native unit tests
+    packageFilters:
+      dirExists:
+        - android
+      scope: '*example*'
+
+  test:ios:
+    run: ../tools/test-ios.sh
+    exec:
+      concurrency: 1
+      failFast: true
+    description: iOS native unit tests
+    packageFilters:
+      dirExists:
+        - ios
+      scope: '*example*'
+
+  flutter-build-android:
+    run: flutter pub get && flutter build apk && flutter build appbundle
+    exec:
+      concurrency: 1
+      failFast: true
     description: Build a specific example app for Android.
     packageFilters:
       dirExists:
@@ -98,9 +126,10 @@ scripts:
       scope: '*example*'
 
   flutter-build-ios:
-    run: |
-      melos exec -c 1 --fail-fast -- \
-        "flutter pub get && flutter build ios --release --no-codesign"
+    run: flutter pub get && flutter build ios --release --no-codesign
+    exec:
+      concurrency: 1
+      failFast: true
     description: Build a specific example app for iOS.
     packageFilters:
       dirExists:
@@ -108,16 +137,16 @@ scripts:
       scope: '*example*'
 
   generate:mocks:
-    run: |
-      melos exec -- "dart run build_runner build --delete-conflicting-outputs" && 
+    exec: | 
+      dart run build_runner build --delete-conflicting-outputs && 
         melos run format --no-select && melos run add-license-header
     description: Generate the pigeon messages for all the supported packages.
     packageFilters:
       fileExists: 'pigeons/messages.dart'
 
   generate:pigeon:
-    run: |
-      melos exec -- "dart run pigeon --input ./pigeons/messages.dart" && 
+    exec: | 
+      dart run pigeon --input ./pigeons/messages.dart && 
         melos run format --no-select
     description: Generate the pigeon messages for all the supported packages.
     packageFilters:
