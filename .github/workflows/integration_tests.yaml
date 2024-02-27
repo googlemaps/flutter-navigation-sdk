@@ -34,7 +34,7 @@ jobs:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
     steps:
       - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
