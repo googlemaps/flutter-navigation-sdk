@@ -84,7 +84,7 @@ jobs:
         working-directory: ${{ matrix.working_directory }}
         run: patrol test --verbose
       - name: Upload test report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
           name: android_integration_test_report
@@ -139,7 +139,7 @@ jobs:
         run: |
           patrol test --dart-define=MAPS_API_KEY="$MAPS_API_KEY" --verbose -d 'Flutter-iPhone'
       - name: Upload test report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
           name: ios_integration_test_report
