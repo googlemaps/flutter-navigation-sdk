@@ -32,7 +32,7 @@ jobs:
       # check-license-header)
       - run: go install github.com/google/addlicense@latest
       - name: Install Flutter
-        uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
+        uses: subosito/flutter-action@2783a3f08e1baf891508463f8c6653c258246225
         with:
           channel: 'stable'
           cache: true
