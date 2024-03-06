@@ -13,8 +13,10 @@
 # limitations under the License.
 
 assign_issues:
+  - kevoye
   - ArturoSalazarB16
   - caio1985
 assign_prs:
+  - kevoye
   - ArturoSalazarB16
   - caio1985
