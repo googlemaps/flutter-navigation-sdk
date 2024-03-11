@@ -16,7 +16,7 @@ group 'com.google.maps.flutter.navigation'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.9.0'
+    ext.kotlin_version = '1.9.23'
     repositories {
         google()
         mavenCentral()
