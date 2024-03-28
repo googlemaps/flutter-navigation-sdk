@@ -160,6 +160,267 @@ enum RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto {
   trafficJam,
 }
 
+/// A set of values that specify the navigation action to take.
+enum ManeuverDto {
+  /// Arrival at a destination.
+  destination,
+
+  /// Starting point of the maneuver.
+  depart,
+
+  /// Arrival at a destination located on the left side of the road.
+  destinationLeft,
+
+  /// Arrival at a destination located on the right side of the road.
+  destinationRight,
+
+  /// Take the boat ferry.
+  ferryBoat,
+
+  /// Take the train ferry.
+  ferryTrain,
+
+  /// Current road joins another road slightly on the left.
+  forkLeft,
+
+  /// Current road joins another road slightly on the right.
+  forkRight,
+
+  /// Current road joins another on the left.
+  mergeLeft,
+
+  /// Current road joins another on the right.
+  mergeRight,
+
+  /// Current road joins another.
+  mergeUnspecified,
+
+  /// The street name changes.
+  nameChange,
+
+  /// Keep to the left side of the road when exiting a turnpike or freeway as the road diverges.
+  offRampKeepLeft,
+
+  /// Keep to the right side of the road when exiting a turnpike or freeway as the road diverges.
+  offRampKeepRight,
+
+  /// Regular left turn to exit a turnpike or freeway.
+  offRampLeft,
+
+  /// Regular right turn to exit a turnpike or freeway.
+  offRampRight,
+
+  /// Sharp left turn to exit a turnpike or freeway.
+  offRampSharpLeft,
+
+  /// Sharp right turn to exit a turnpike or freeway.
+  offRampSharpRight,
+
+  /// Slight left turn to exit a turnpike or freeway.
+  offRampSlightLeft,
+
+  /// Slight right turn to exit a turnpike or freeway.
+  offRampSlightRight,
+
+  /// Exit a turnpike or freeway.
+  offRampUnspecified,
+
+  /// Clockwise turn onto the opposite side of the street to exit a turnpike or freeway.
+  offRampUTurnClockwise,
+
+  /// Counterclockwise turn onto the opposite side of the street to exit a turnpike or freeway.
+  offRampUTurnCounterclockwise,
+
+  /// Keep to the left side of the road when entering a turnpike or freeway as the road diverges.
+  onRampKeepLeft,
+
+  /// Keep to the right side of the road when entering a turnpike or freeway as the road diverges.
+  onRampKeepRight,
+
+  /// Regular left turn to enter a turnpike or freeway.
+  onRampLeft,
+
+  /// Regular right turn to enter a turnpike or freeway.
+  onRampRight,
+
+  /// Sharp left turn to enter a turnpike or freeway.
+  onRampSharpLeft,
+
+  /// Sharp right turn to enter a turnpike or freeway.
+  onRampSharpRight,
+
+  /// Slight left turn to enter a turnpike or freeway.
+  onRampSlightLeft,
+
+  /// Slight right turn to enter a turnpike or freeway.
+  onRampSlightRight,
+
+  /// Enter a turnpike or freeway.
+  onRampUnspecified,
+
+  /// Clockwise turn onto the opposite side of the street to enter a turnpike or freeway.
+  onRampUTurnClockwise,
+
+  /// Counterclockwise turn onto the opposite side of the street to enter a turnpike or freeway.
+  onRampUTurnCounterclockwise,
+
+  /// Enter a roundabout in the clockwise direction.
+  roundaboutClockwise,
+
+  /// Enter a roundabout in the counterclockwise direction.
+  roundaboutCounterclockwise,
+
+  /// Exit a roundabout in the clockwise direction.
+  roundaboutExitClockwise,
+
+  /// Exit a roundabout in the counterclockwise direction.
+  roundaboutExitCounterclockwise,
+
+  /// Enter a roundabout in the clockwise direction and turn left.
+  roundaboutLeftClockwise,
+
+  /// Enter a roundabout in the counterclockwise direction and turn left.
+  roundaboutLeftCounterclockwise,
+
+  /// Enter a roundabout in the clockwise direction and turn right.
+  roundaboutRightClockwise,
+
+  /// Enter a roundabout in the counterclockwise direction and turn right.
+  roundaboutRightCounterclockwise,
+
+  /// Enter a roundabout in the clockwise direction and turn sharply to the left.
+  roundaboutSharpLeftClockwise,
+
+  /// Enter a roundabout in the counterclockwise direction and turn sharply to the left.
+  roundaboutSharpLeftCounterclockwise,
+
+  /// Enter a roundabout in the clockwise direction and turn sharply to the right.
+  roundaboutSharpRightClockwise,
+
+  /// Enter a roundabout in the counterclockwise direction and turn sharply to the right.
+  roundaboutSharpRightCounterclockwise,
+
+  /// Enter a roundabout in the clockwise direction and turn slightly left.
+  roundaboutSlightLeftClockwise,
+
+  /// Enter a roundabout in the counterclockwise direction and turn slightly to the left.
+  roundaboutSlightLeftCounterclockwise,
+
+  /// Enter a roundabout in the clockwise direction and turn slightly to the right.
+  roundaboutSlightRightClockwise,
+
+  /// Enter a roundabout in the counterclockwise direction and turn slightly to the right.
+  roundaboutSlightRightCounterclockwise,
+
+  /// Enter a roundabout in the clockwise direction and continue straight.
+  roundaboutStraightClockwise,
+
+  /// Enter a roundabout in the counterclockwise direction and continue straight.
+  roundaboutStraightCounterclockwise,
+
+  /// Enter a roundabout in the clockwise direction and turn clockwise onto the opposite side of the street.
+  roundaboutUTurnClockwise,
+
+  /// Enter a roundabout in the counterclockwise direction and turn counterclockwise onto the opposite side of the street.
+  roundaboutUTurnCounterclockwise,
+
+  /// Continue straight.
+  straight,
+
+  /// Keep left as the road diverges.
+  turnKeepLeft,
+
+  /// Keep right as the road diverges.
+  turnKeepRight,
+
+  /// Regular left turn at an intersection.
+  turnLeft,
+
+  /// Regular right turn at an intersection.
+  turnRight,
+
+  /// Sharp left turn at an intersection.
+  turnSharpLeft,
+
+  /// Sharp right turn at an intersection.
+  turnSharpRight,
+
+  /// Slight left turn at an intersection.
+  turnSlightLeft,
+
+  /// Slight right turn at an intersection.
+  turnSlightRight,
+
+  /// Clockwise turn onto the opposite side of the street.
+  turnUTurnClockwise,
+
+  /// Counterclockwise turn onto the opposite side of the street.
+  turnUTurnCounterclockwise,
+
+  /// Unknown maneuver.
+  unknown,
+}
+
+/// Whether this step is on a drive-on-right or drive-on-left route.
+enum DrivingSideDto {
+  /// Drive-on-left side.
+  left,
+
+  /// Unspecified side.
+  none,
+
+  /// Drive-on-right side.
+  right,
+}
+
+/// The state of navigation.
+enum NavStateDto {
+  /// Actively navigating.
+  enroute,
+
+  /// Actively navigating but searching for a new route.
+  rerouting,
+
+  /// Navigation has ended.
+  stopped,
+
+  /// Error or unspecified state.
+  unknown,
+}
+
+/// A set of values that specify the shape of the road path continuing from the Lane.
+enum LaneShapeDto {
+  /// Normal left turn (45-135 degrees).
+  normalLeft,
+
+  /// Normal right turn (45-135 degrees).
+  normalRight,
+
+  /// Sharp left turn (135-175 degrees).
+  sharpLeft,
+
+  /// Sharp right turn (135-175 degrees).
+  sharpRight,
+
+  /// Slight left turn (10-45 degrees).
+  slightLeft,
+
+  /// Slight right turn (10-45 degrees).
+  slightRight,
+
+  /// No turn.
+  straight,
+
+  /// Shape is unknown.
+  unknown,
+
+  /// A left turn onto the opposite side of the same street (175-180 degrees).
+  uTurnLeft,
+
+  /// A right turn onto the opposite side of the same street (175-180 degrees).
+  uTurnRight,
+}
+
 /// Object containing map options used to initialize Google Map view.
 class MapOptionsDto {
   MapOptionsDto({
@@ -1404,6 +1665,228 @@ class RouteSegmentDto {
       destinationWaypoint: result[3] != null
           ? NavigationWaypointDto.decode(result[3]! as List<Object?>)
           : null,
+    );
+  }
+}
+
+/// One of the possible directions from a lane at the end of a route step, and whether it is on the recommended route.
+class LaneDirectionDto {
+  LaneDirectionDto({
+    required this.laneShape,
+    required this.isRecommended,
+  });
+
+  /// Shape for this lane direction.
+  LaneShapeDto laneShape;
+
+  /// Whether this lane is recommended.
+  bool isRecommended;
+
+  Object encode() {
+    return <Object?>[
+      laneShape.index,
+      isRecommended,
+    ];
+  }
+
+  static LaneDirectionDto decode(Object result) {
+    result as List<Object?>;
+    return LaneDirectionDto(
+      laneShape: LaneShapeDto.values[result[0]! as int],
+      isRecommended: result[1]! as bool,
+    );
+  }
+}
+
+/// Single lane on the road at the end of a route step.
+class LaneDto {
+  LaneDto({
+    required this.laneDirections,
+  });
+
+  /// List of possible directions a driver can follow when using this lane at the end of the respective route step
+  List<LaneDirectionDto?> laneDirections;
+
+  Object encode() {
+    return <Object?>[
+      laneDirections,
+    ];
+  }
+
+  static LaneDto decode(Object result) {
+    result as List<Object?>;
+    return LaneDto(
+      laneDirections: (result[0] as List<Object?>?)!.cast<LaneDirectionDto?>(),
+    );
+  }
+}
+
+/// Information about a single step along a navigation route.
+class StepInfoDto {
+  StepInfoDto({
+    required this.distanceFromPrevStepMeters,
+    required this.timeFromPrevStepSeconds,
+    required this.drivingSide,
+    this.exitNumber,
+    required this.fullInstructions,
+    required this.fullRoadName,
+    required this.simpleRoadName,
+    required this.roundaboutTurnNumber,
+    required this.lanes,
+    required this.maneuver,
+    required this.stepNumber,
+  });
+
+  /// Distance in meters from the previous step to this step.
+  int distanceFromPrevStepMeters;
+
+  /// Time in seconds from the previous step to this step.
+  int timeFromPrevStepSeconds;
+
+  /// Whether this step is on a drive-on-right or drive-on-left route.
+  DrivingSideDto drivingSide;
+
+  /// The exit number if it exists.
+  String? exitNumber;
+
+  /// The full text of the instruction for this step.
+  String fullInstructions;
+
+  /// The full road name for this step.
+  String fullRoadName;
+
+  /// The simplified version of the road name.
+  String simpleRoadName;
+
+  /// The counted number of the exit to take relative to the location where the
+  /// roundabout was entered.
+  int roundaboutTurnNumber;
+
+  /// The list of available lanes at the end of this route step.
+  List<LaneDto?> lanes;
+
+  /// The maneuver for this step.
+  ManeuverDto maneuver;
+
+  /// The index of the step in the list of all steps in the route.
+  int stepNumber;
+
+  Object encode() {
+    return <Object?>[
+      distanceFromPrevStepMeters,
+      timeFromPrevStepSeconds,
+      drivingSide.index,
+      exitNumber,
+      fullInstructions,
+      fullRoadName,
+      simpleRoadName,
+      roundaboutTurnNumber,
+      lanes,
+      maneuver.index,
+      stepNumber,
+    ];
+  }
+
+  static StepInfoDto decode(Object result) {
+    result as List<Object?>;
+    return StepInfoDto(
+      distanceFromPrevStepMeters: result[0]! as int,
+      timeFromPrevStepSeconds: result[1]! as int,
+      drivingSide: DrivingSideDto.values[result[2]! as int],
+      exitNumber: result[3] as String?,
+      fullInstructions: result[4]! as String,
+      fullRoadName: result[5]! as String,
+      simpleRoadName: result[6]! as String,
+      roundaboutTurnNumber: result[7]! as int,
+      lanes: (result[8] as List<Object?>?)!.cast<LaneDto?>(),
+      maneuver: ManeuverDto.values[result[9]! as int],
+      stepNumber: result[10]! as int,
+    );
+  }
+}
+
+/// Contains information about the state of navigation, the current nav step if
+/// available, and remaining steps if available.
+class NavInfoDto {
+  NavInfoDto({
+    required this.navState,
+    required this.currentStep,
+    required this.remainingSteps,
+    required this.routeChanged,
+    required this.distanceToCurrentStepMeters,
+    required this.distanceToFinalDestinationMeters,
+    this.distanceToNextDestinationMeters,
+    required this.timeToCurrentStepSeconds,
+    required this.timeToFinalDestinationSeconds,
+    this.timeToNextDestinationSeconds,
+  });
+
+  /// The current state of navigation.
+  NavStateDto navState;
+
+  /// Information about the upcoming maneuver step.
+  StepInfoDto currentStep;
+
+  /// The remaining steps after the current step.
+  List<StepInfoDto?> remainingSteps;
+
+  /// Whether the route has changed since the last sent message.
+  bool routeChanged;
+
+  /// Estimated remaining distance in meters along the route to the
+  /// current step.
+  int distanceToCurrentStepMeters;
+
+  /// The estimated remaining distance in meters to the final destination which
+  /// is the last destination in a multi-destination trip.
+  int distanceToFinalDestinationMeters;
+
+  /// The estimated remaining distance in meters to the next destination.
+  ///
+  /// Android only.
+  int? distanceToNextDestinationMeters;
+
+  /// The estimated remaining time in seconds along the route to the
+  /// current step.
+  int timeToCurrentStepSeconds;
+
+  /// The estimated remaining time in seconds to the final destination which is
+  /// the last destination in a multi-destination trip.
+  int timeToFinalDestinationSeconds;
+
+  /// The estimated remaining time in seconds to the next destination.
+  ///
+  /// Android only.
+  int? timeToNextDestinationSeconds;
+
+  Object encode() {
+    return <Object?>[
+      navState.index,
+      currentStep.encode(),
+      remainingSteps,
+      routeChanged,
+      distanceToCurrentStepMeters,
+      distanceToFinalDestinationMeters,
+      distanceToNextDestinationMeters,
+      timeToCurrentStepSeconds,
+      timeToFinalDestinationSeconds,
+      timeToNextDestinationSeconds,
+    ];
+  }
+
+  static NavInfoDto decode(Object result) {
+    result as List<Object?>;
+    return NavInfoDto(
+      navState: NavStateDto.values[result[0]! as int],
+      currentStep: StepInfoDto.decode(result[1]! as List<Object?>),
+      remainingSteps: (result[2] as List<Object?>?)!.cast<StepInfoDto?>(),
+      routeChanged: result[3]! as bool,
+      distanceToCurrentStepMeters: result[4]! as int,
+      distanceToFinalDestinationMeters: result[5]! as int,
+      distanceToNextDestinationMeters: result[6] as int?,
+      timeToCurrentStepSeconds: result[7]! as int,
+      timeToFinalDestinationSeconds: result[8]! as int,
+      timeToNextDestinationSeconds: result[9] as int?,
     );
   }
 }
@@ -5565,6 +6048,56 @@ class NavigationSessionApi {
     }
   }
 
+  /// Enable Turn-by-Turn navigation events.
+  Future<void> enableTurnByTurnNavigationEvents(
+      int? numNextStepsToPreview) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.enableTurnByTurnNavigationEvents';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[numNextStepsToPreview]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<void> disableTurnByTurnNavigationEvents() async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.disableTurnByTurnNavigationEvents';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(null) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
   Future<void> registerRemainingTimeOrDistanceChangedListener(
       int remainingTimeThresholdSeconds,
       int remainingDistanceThresholdMeters) async {
@@ -5599,14 +6132,29 @@ class _NavigationSessionEventApiCodec extends StandardMessageCodec {
   const _NavigationSessionEventApiCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is LatLngDto) {
+    if (value is LaneDirectionDto) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationWaypointDto) {
+    } else if (value is LaneDto) {
       buffer.putUint8(129);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedingUpdatedEventDto) {
+    } else if (value is LatLngDto) {
       buffer.putUint8(130);
+      writeValue(buffer, value.encode());
+    } else if (value is NavInfoDto) {
+      buffer.putUint8(131);
+      writeValue(buffer, value.encode());
+    } else if (value is NavigationWaypointDto) {
+      buffer.putUint8(132);
+      writeValue(buffer, value.encode());
+    } else if (value is SpeedingUpdatedEventDto) {
+      buffer.putUint8(133);
+      writeValue(buffer, value.encode());
+    } else if (value is StepInfoDto) {
+      buffer.putUint8(134);
+      writeValue(buffer, value.encode());
+    } else if (value is StepInfoDto) {
+      buffer.putUint8(135);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -5617,11 +6165,21 @@ class _NavigationSessionEventApiCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 128:
-        return LatLngDto.decode(readValue(buffer)!);
+        return LaneDirectionDto.decode(readValue(buffer)!);
       case 129:
-        return NavigationWaypointDto.decode(readValue(buffer)!);
+        return LaneDto.decode(readValue(buffer)!);
       case 130:
+        return LatLngDto.decode(readValue(buffer)!);
+      case 131:
+        return NavInfoDto.decode(readValue(buffer)!);
+      case 132:
+        return NavigationWaypointDto.decode(readValue(buffer)!);
+      case 133:
         return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
+      case 134:
+        return StepInfoDto.decode(readValue(buffer)!);
+      case 135:
+        return StepInfoDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -5653,6 +6211,9 @@ abstract class NavigationSessionEventApi {
 
   /// Android-only event.
   void onGpsAvailabilityUpdate(bool available);
+
+  /// Turn-by-Turn navigation events.
+  void onNavInfo(NavInfoDto navInfo);
 
   static void setup(NavigationSessionEventApi? api,
       {BinaryMessenger? binaryMessenger}) {
@@ -5886,6 +6447,34 @@ abstract class NavigationSessionEventApi {
               'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onGpsAvailabilityUpdate was null, expected non-null bool.');
           try {
             api.onGpsAvailabilityUpdate(arg_available!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onNavInfo',
+          pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        __pigeon_channel.setMessageHandler(null);
+      } else {
+        __pigeon_channel.setMessageHandler((Object? message) async {
+          assert(message != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onNavInfo was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final NavInfoDto? arg_navInfo = (args[0] as NavInfoDto?);
+          assert(arg_navInfo != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onNavInfo was null, expected non-null NavInfoDto.');
+          try {
+            api.onNavInfo(arg_navInfo!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

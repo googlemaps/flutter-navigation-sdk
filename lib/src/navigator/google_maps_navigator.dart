@@ -251,11 +251,10 @@ class GoogleMapsNavigator {
   /// ```
   static StreamSubscription<RemainingTimeOrDistanceChangedEvent>
       setOnRemainingTimeOrDistanceChangedListener(
-          OnRemainingTimeOrDistanceChangedEventCallback listener,
-          // iOS default value.
-          {int remainingTimeThresholdSeconds = 1,
-          // iOS default value.
-          int remainingDistanceThresholdMeters = 1}) {
+    OnRemainingTimeOrDistanceChangedEventCallback listener, {
+    int remainingTimeThresholdSeconds = 1,
+    int remainingDistanceThresholdMeters = 1,
+  }) {
     assert(remainingTimeThresholdSeconds >= 0);
     assert(remainingDistanceThresholdMeters >= 0);
     GoogleMapsNavigationPlatform.instance
@@ -264,6 +263,53 @@ class GoogleMapsNavigator {
     return GoogleMapsNavigationPlatform.instance
         .getNavigationRemainingTimeOrDistanceChangedEventStream()
         .listen(listener);
+  }
+
+  static StreamController<NavInfoEvent>? _navInfoEventStreamController;
+
+  /// Sets the event channel listener for [NavInfoEvent]s.
+  ///
+  /// Returns a [StreamSubscription] for handling [NavInfoEvent]s.
+  /// This subscription must be canceled using `cancel()` when it is no longer
+  /// needed to stop receiving events and allow the stream to perform necessary
+  /// cleanup, such as releasing resources or shutting down event sources. The
+  /// cleanup is asynchronous, and the `cancel()` method returns a Future that
+  /// completes once the cleanup is done.
+  ///
+  /// Optional parameter [numNextStepsToPreview] can be used to set the maximum
+  /// number of next steps to preview. If set to null, all available steps will
+  /// be returned in the [NavInfo.remainingSteps].
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final subscription = setNavInfoListener(
+  ///   yourEventHandler,
+  ///   numNextStepsToPreview: 5,
+  /// );
+  /// // When done with the subscription
+  /// await subscription.cancel();
+  /// ```
+  static StreamSubscription<NavInfoEvent> setNavInfoListener(
+      OnNavInfoEventCallback listener,
+      {int? numNextStepsToPreview}) {
+    assert(numNextStepsToPreview != null && numNextStepsToPreview >= 0,
+        'numNextStepsToPreview must be a non-negative integer or null.');
+    if (_navInfoEventStreamController == null) {
+      _navInfoEventStreamController = StreamController<NavInfoEvent>.broadcast(
+        onCancel: () {
+          if (_navInfoEventStreamController?.hasListener ?? false) {
+            GoogleMapsNavigationPlatform.instance
+                .disableTurnByTurnNavigationEvents();
+          }
+        },
+      );
+      unawaited(_navInfoEventStreamController!
+          .addStream(GoogleMapsNavigationPlatform.instance.getNavInfoStream()));
+    }
+
+    GoogleMapsNavigationPlatform.instance
+        .enableTurnByTurnNavigationEvents(numNextStepsToPreview);
+    return _navInfoEventStreamController!.stream.listen(listener);
   }
 
   static StreamController<RoadSnappedLocationUpdatedEvent>?

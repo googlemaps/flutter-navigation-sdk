@@ -253,32 +253,32 @@ class _PolygonsPageState extends ExamplePageState<PolygonsPage> {
   @override
   Widget build(BuildContext context) => buildPage(
       context,
-      Padding(
-        padding: EdgeInsets.zero,
-        child: Column(children: <Widget>[
-          Expanded(
-              child: GoogleMapsNavigationView(
-            initialCameraPosition: const CameraPosition(
-                target: LatLng(latitude: 37.422, longitude: -122.084),
-                zoom: 12),
-            initialNavigationUIEnabledPreference:
-                NavigationUIEnabledPreference.disabled,
-            onViewCreated: _onViewCreated,
-            onPolygonClicked: _onPolygonClicked,
-          )),
-          const SizedBox(height: 10),
-          Text(
-            _polygons.isEmpty
-                ? 'No polygons added. Move camera to place polygon.'
-                : _selectedPolygon == null
-                    ? 'Click to select polygon'
-                    : 'Selected polygon ${_selectedPolygon!.polygonId}',
-            style: const TextStyle(fontSize: 15),
-            textAlign: TextAlign.center,
-          ),
-          bottomControls
-        ]),
-      ));
+      (BuildContext context) => Padding(
+            padding: EdgeInsets.zero,
+            child: Column(children: <Widget>[
+              Expanded(
+                  child: GoogleMapsNavigationView(
+                initialCameraPosition: const CameraPosition(
+                    target: LatLng(latitude: 37.422, longitude: -122.084),
+                    zoom: 12),
+                initialNavigationUIEnabledPreference:
+                    NavigationUIEnabledPreference.disabled,
+                onViewCreated: _onViewCreated,
+                onPolygonClicked: _onPolygonClicked,
+              )),
+              const SizedBox(height: 10),
+              Text(
+                _polygons.isEmpty
+                    ? 'No polygons added. Move camera to place polygon.'
+                    : _selectedPolygon == null
+                        ? 'Click to select polygon'
+                        : 'Selected polygon ${_selectedPolygon!.polygonId}',
+                style: const TextStyle(fontSize: 15),
+                textAlign: TextAlign.center,
+              ),
+              bottomControls
+            ]),
+          ));
 
   Widget get bottomControls {
     return Padding(

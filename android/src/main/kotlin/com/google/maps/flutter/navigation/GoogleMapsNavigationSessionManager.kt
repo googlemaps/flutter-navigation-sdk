@@ -17,12 +17,20 @@
 package com.google.maps.flutter.navigation
 
 import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import android.location.Location
+import android.util.DisplayMetrics
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.libraries.mapsplatform.turnbyturn.model.NavInfo
 import com.google.android.libraries.navigation.CustomRoutesOptions
 import com.google.android.libraries.navigation.DisplayOptions
 import com.google.android.libraries.navigation.NavigationApi
 import com.google.android.libraries.navigation.NavigationApi.NavigatorListener
+import com.google.android.libraries.navigation.NavigationUpdatesOptions
+import com.google.android.libraries.navigation.NavigationUpdatesOptions.GeneratedStepImagesType
 import com.google.android.libraries.navigation.Navigator
 import com.google.android.libraries.navigation.RoadSnappedLocationProvider
 import com.google.android.libraries.navigation.RouteSegment
@@ -38,6 +46,18 @@ import com.google.android.libraries.navigation.Waypoint
 import com.google.maps.flutter.navigation.Convert.convertTravelModeFromDto
 import io.flutter.plugin.common.BinaryMessenger
 import java.lang.ref.WeakReference
+
+val Context.lifecycleOwner: LifecycleOwner?
+  get() {
+    var context: Context? = this
+
+    while (context != null && context !is LifecycleOwner) {
+      val baseContext = (context as? ContextWrapper?)?.baseContext
+      context = if (baseContext == context) null else baseContext
+    }
+
+    return if (context is LifecycleOwner) context else null
+  }
 
 /** This class handles creation of navigation session and other navigation related tasks. */
 class GoogleMapsNavigationSessionManager
@@ -101,6 +121,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
     null
   private var speedingListener: SpeedingListener? = null
   private var weakActivity: WeakReference<Activity>? = null
+  private var turnByTurnEventsEnabled: Boolean = false
 
   /** Set activity instance to use. Some functions require [Activity] instance to show user UI. */
   fun onActivityCreated(activity: Activity) {
@@ -250,6 +271,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
     navigator.stopGuidance()
     navigator.clearDestinations()
     navigator.simulator.unsetUserLocation()
+    disableTurnByTurnNavigationEvents()
     unregisterListeners()
 
     // As unregisterListeners() is removing all listeners, we need to re-register them when
@@ -650,6 +672,70 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
    */
   fun resumeSimulation() {
     getNavigator().simulator.resume()
+  }
+
+  @Throws(FlutterError::class)
+  fun enableTurnByTurnNavigationEvents(
+    numNextStepsToPreview: Int,
+  ) {
+    if (!turnByTurnEventsEnabled && getActivity()?.lifecycleOwner != null) {
+
+      /// DisplayMetrics is required to be set for turn-by-turn updates.
+      /// But not used as image generation is disabled.
+      var displayMetrics = DisplayMetrics()
+      displayMetrics.density = 2.0f
+
+      // Configure options for navigation updates.
+      val options =
+        NavigationUpdatesOptions.builder()
+          .setNumNextStepsToPreview(numNextStepsToPreview)
+          .setGeneratedStepImagesType(GeneratedStepImagesType.NONE)
+          .setDisplayMetrics(displayMetrics)
+          .build()
+
+      // Attempt to register the service for navigation updates.
+      val success =
+        getNavigator()
+          .registerServiceForNavUpdates(
+            getActivity().packageName,
+            GoogleMapsNavigationNavUpdatesService::class.java.name,
+            options
+          )
+
+      if (success) {
+        val navInfoObserver: Observer<NavInfo> = Observer { navInfo ->
+          navigationSessionEventApi.onNavInfo(Convert.convertNavInfo(navInfo)) {}
+        }
+        GoogleMapsNavigationNavUpdatesService.navInfoLiveData.observe(
+          getActivity()!!.lifecycleOwner!!,
+          navInfoObserver
+        )
+        turnByTurnEventsEnabled = true
+      } else {
+        throw FlutterError(
+          "turnByTurnServiceError",
+          "Error while registering turn-by-turn updates service."
+        )
+      }
+    }
+  }
+
+  @Throws(FlutterError::class)
+  fun disableTurnByTurnNavigationEvents() {
+    if (turnByTurnEventsEnabled) {
+      GoogleMapsNavigationNavUpdatesService.navInfoLiveData.removeObservers(
+        getActivity()!!.lifecycleOwner!!
+      )
+      val success = getNavigator().unregisterServiceForNavUpdates()
+      if (success) {
+        turnByTurnEventsEnabled = false
+      } else {
+        throw FlutterError(
+          "turnByTurnServiceError",
+          "Error while unregistering turn-by-turn updates service."
+        )
+      }
+    }
   }
 
   @Throws(FlutterError::class)

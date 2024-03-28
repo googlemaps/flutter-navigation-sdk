@@ -95,14 +95,14 @@ abstract class ExamplePageState<T extends ExamplePage> extends State<T>
 
   /// Wraps page content with scaffold and overlay.
   @protected
-  Widget buildPage(BuildContext context, Widget child) {
+  Widget buildPage(BuildContext context, WidgetBuilder builder) {
     return Stack(
       children: <Widget>[
         Scaffold(
           appBar: AppBar(
             title: Text(widget.title),
           ),
-          body: child,
+          body: Builder(builder: (BuildContext context) => builder(context)),
         ),
         if (_isOverlayVisible) _buildOverlay(),
       ],

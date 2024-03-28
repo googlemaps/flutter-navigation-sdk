@@ -498,6 +498,38 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
     }
   }
 
+  /// Enables navigation info updates.
+  @override
+  Future<void> enableTurnByTurnNavigationEvents(
+      int? numNextStepsToPreview) async {
+    try {
+      return await _sessionApi
+          .enableTurnByTurnNavigationEvents(numNextStepsToPreview);
+    } on PlatformException catch (e) {
+      switch (e.code) {
+        case 'sessionNotInitialized':
+          throw const SessionNotInitializedException();
+        default:
+          rethrow;
+      }
+    }
+  }
+
+  /// Disables navigation info updates.
+  @override
+  Future<void> disableTurnByTurnNavigationEvents() async {
+    try {
+      return await _sessionApi.disableTurnByTurnNavigationEvents();
+    } on PlatformException catch (e) {
+      switch (e.code) {
+        case 'sessionNotInitialized':
+          throw const SessionNotInitializedException();
+        default:
+          rethrow;
+      }
+    }
+  }
+
   /// Get route segments.
   @override
   Future<List<RouteSegment>> getRouteSegments() async {
@@ -634,6 +666,12 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
     return _sessionApi.registerRemainingTimeOrDistanceChangedListener(
         remainingTimeThresholdSeconds, remainingDistanceThresholdMeters);
   }
+
+  /// Get navigation info event stream from the navigation session.
+  @override
+  Stream<NavInfoEvent> getNavInfoStream() {
+    return _sessionEventStreamController.stream.whereType<NavInfoEvent>();
+  }
 }
 
 /// Implementation for navigation session event API event handling.
@@ -696,6 +734,12 @@ class NavigationSessionEventApiImpl implements NavigationSessionEventApi {
       double remainingTime, double remainingDistance) {
     sessionEventStreamController.add(RemainingTimeOrDistanceChangedEvent(
         remainingTime: remainingTime, remainingDistance: remainingDistance));
+  }
+
+  @override
+  void onNavInfo(NavInfoDto navInfo) {
+    sessionEventStreamController
+        .add(NavInfoEvent(navInfo: navInfo.toNavInfo()));
   }
 }
 

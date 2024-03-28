@@ -128,6 +128,152 @@ enum Convert {
     return point
   }
 
+  static func convertStepInfo(_ stepInfo: GMSNavigationStepInfo) ->
+    StepInfoDto {
+    .init(
+      distanceFromPrevStepMeters: Int64(stepInfo.distanceFromPrevStepMeters),
+      timeFromPrevStepSeconds: Int64(stepInfo.timeFromPrevStepSeconds),
+      drivingSide: convertDrivingSide(side: stepInfo.drivingSide),
+      exitNumber: stepInfo.exitNumber,
+      fullInstructions: stepInfo.fullInstructionText,
+      fullRoadName: stepInfo.fullRoadName,
+      simpleRoadName: stepInfo.simpleRoadName,
+      roundaboutTurnNumber: stepInfo
+        .roundaboutTurnNumber >= 0 ? Int64(stepInfo.roundaboutTurnNumber) : 0,
+      lanes: [],
+      maneuver: convertManeuver(maneuver: stepInfo.maneuver),
+      stepNumber: Int64(stepInfo.stepNumber)
+    )
+  }
+
+  static func convertNavInfo(_ gmsNavInfo: GMSNavigationNavInfo, maxAmountOfRemainingSteps: Int64)
+    -> NavInfoDto {
+    let currentStepDto = convertStepInfo(gmsNavInfo.currentStep!)
+    let remainingStepsDto = gmsNavInfo.remainingSteps.prefix(Int(maxAmountOfRemainingSteps))
+      .map { convertStepInfo($0) }
+
+    return NavInfoDto(
+      navState: convertNavState(state: gmsNavInfo.navState),
+      currentStep: currentStepDto,
+      remainingSteps: remainingStepsDto,
+      routeChanged: gmsNavInfo.routeChanged,
+      distanceToCurrentStepMeters: Int64(gmsNavInfo.distanceToCurrentStepMeters
+        .isFinite ? round(gmsNavInfo.distanceToCurrentStepMeters) : 0),
+      distanceToFinalDestinationMeters: Int64(gmsNavInfo.distanceToFinalDestinationMeters
+        .isFinite ? round(gmsNavInfo.distanceToFinalDestinationMeters) : 0),
+      distanceToNextDestinationMeters: nil,
+      timeToCurrentStepSeconds: Int64(gmsNavInfo.timeToCurrentStepSeconds
+        .isFinite ? round(gmsNavInfo.timeToCurrentStepSeconds) : 0),
+      timeToFinalDestinationSeconds: Int64(gmsNavInfo.timeToFinalDestinationSeconds
+        .isFinite ? round(gmsNavInfo.timeToFinalDestinationSeconds) : 0),
+      timeToNextDestinationSeconds: nil
+    )
+  }
+
+  static func convertNavState(state: GMSNavigationNavState)
+    -> NavStateDto {
+    switch state {
+    case .enroute:
+      return .enroute
+    case .rerouting:
+      return .rerouting
+    case .stopped:
+      return .stopped
+    case .unknown:
+      return .unknown
+    @unknown default:
+      return .unknown
+    }
+  }
+
+  static func convertDrivingSide(side: GMSNavigationDrivingSide)
+    -> DrivingSideDto {
+    switch side {
+    case .none:
+      return .none
+    case .left:
+      return .left
+    case .right:
+      return .right
+
+    @unknown default:
+      return .none
+    }
+  }
+
+  static func convertManeuver(maneuver: GMSNavigationManeuver) -> ManeuverDto {
+    switch maneuver {
+    case .depart: return .depart
+    case .destination: return .destination
+    case .destinationLeft: return .destinationLeft
+    case .destinationRight: return .destinationRight
+    case .ferryBoat: return .ferryBoat
+    case .ferryTrain: return .ferryTrain
+    case .forkLeft: return .forkLeft
+    case .forkRight: return .forkRight
+    case .mergeLeft: return .mergeLeft
+    case .mergeRight: return .mergeRight
+    case .mergeUnspecified: return .mergeUnspecified
+    case .nameChange: return .nameChange
+    case .offRampKeepLeft: return .offRampKeepLeft
+    case .offRampKeepRight: return .offRampKeepRight
+    case .offRampLeft: return .offRampLeft
+    case .offRampRight: return .offRampRight
+    case .offRampSharpLeft: return .offRampSharpLeft
+    case .offRampSharpRight: return .offRampSharpRight
+    case .offRampSlightLeft: return .offRampSlightLeft
+    case .offRampSlightRight: return .offRampSlightRight
+    case .offRampUnspecified: return .offRampUnspecified
+    case .offRampUTurnClockwise: return .offRampUTurnClockwise
+    case .offRampUTurnCounterClockwise: return .offRampUTurnCounterclockwise
+    case .onRampKeepLeft: return .onRampKeepLeft
+    case .onRampKeepRight: return .onRampKeepRight
+    case .onRampLeft: return .onRampLeft
+    case .onRampRight: return .onRampRight
+    case .onRampSharpLeft: return .onRampSharpLeft
+    case .onRampSharpRight: return .onRampSharpRight
+    case .onRampSlightLeft: return .onRampSlightLeft
+    case .onRampSlightRight: return .onRampSlightRight
+    case .onRampUnspecified: return .onRampUnspecified
+    case .onRampUTurnClockwise: return .onRampUTurnClockwise
+    case .onRampUTurnCounterClockwise: return .onRampUTurnCounterclockwise
+    case .roundaboutClockwise: return .roundaboutClockwise
+    case .roundaboutCounterClockwise: return .roundaboutCounterclockwise
+    case .roundaboutExitClockwise: return .roundaboutExitClockwise
+    case .roundaboutExitCounterClockwise: return .roundaboutExitCounterclockwise
+    case .roundaboutLeftClockwise: return .roundaboutLeftClockwise
+    case .roundaboutLeftCounterClockwise: return .roundaboutLeftCounterclockwise
+    case .roundaboutRightClockwise: return .roundaboutRightClockwise
+    case .roundaboutRightCounterClockwise: return .roundaboutRightCounterclockwise
+    case .roundaboutSharpLeftClockwise: return .roundaboutSharpLeftClockwise
+    case .roundaboutSharpLeftCounterClockwise: return .roundaboutSharpLeftCounterclockwise
+    case .roundaboutSharpRightClockwise: return .roundaboutSharpRightClockwise
+    case .roundaboutSharpRightCounterClockwise: return .roundaboutSharpRightCounterclockwise
+    case .roundaboutSlightLeftClockwise: return .roundaboutSlightLeftClockwise
+    case .roundaboutSlightLeftCounterClockwise: return .roundaboutSlightLeftCounterclockwise
+    case .roundaboutSlightRightClockwise: return .roundaboutSlightRightClockwise
+    case .roundaboutSlightRightCounterClockwise: return .roundaboutSlightRightCounterclockwise
+    case .roundaboutStraightClockwise: return .roundaboutStraightClockwise
+    case .roundaboutStraightCounterClockwise: return .roundaboutStraightCounterclockwise
+    case .roundaboutUTurnClockwise: return .roundaboutUTurnClockwise
+    case .roundaboutUTurnCounterClockwise: return .roundaboutUTurnCounterclockwise
+    case .straight: return .straight
+    case .turnKeepLeft: return .turnKeepLeft
+    case .turnKeepRight: return .turnKeepRight
+    case .turnLeft: return .turnLeft
+    case .turnRight: return .turnRight
+    case .turnSharpLeft: return .turnSharpLeft
+    case .turnSharpRight: return .turnSharpRight
+    case .turnSlightLeft: return .turnSlightLeft
+    case .turnSlightRight: return .turnSlightRight
+    case .turnUTurnClockwise: return .turnUTurnClockwise
+    case .turnUTurnCounterClockwise: return .turnUTurnCounterclockwise
+    case .unknown: return .unknown
+    @unknown default:
+      return .unknown
+    }
+  }
+
   static func convertNavigationWayPoint(_ gmsNavigationWaypoint: GMSNavigationWaypoint)
     -> NavigationWaypointDto {
     .init(

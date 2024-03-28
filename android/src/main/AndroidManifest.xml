@@ -16,4 +16,9 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.google.maps.flutter.navigation">
+    <application>
+        <service
+        android:name="com.google.maps.flutter.navigation.GoogleMapsNavigationNavUpdatesService"
+        android:exported="false" />
+    </application>
 </manifest>

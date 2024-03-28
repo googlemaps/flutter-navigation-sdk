@@ -33,6 +33,12 @@ import com.google.android.gms.maps.model.Polygon
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.StrokeStyle
 import com.google.android.gms.maps.model.StyleSpan
+import com.google.android.libraries.mapsplatform.turnbyturn.model.DrivingSide
+import com.google.android.libraries.mapsplatform.turnbyturn.model.LaneDirection.LaneShape
+import com.google.android.libraries.mapsplatform.turnbyturn.model.Maneuver
+import com.google.android.libraries.mapsplatform.turnbyturn.model.NavInfo
+import com.google.android.libraries.mapsplatform.turnbyturn.model.NavState
+import com.google.android.libraries.mapsplatform.turnbyturn.model.StepInfo
 import com.google.android.libraries.navigation.AlternateRoutesStrategy
 import com.google.android.libraries.navigation.DisplayOptions
 import com.google.android.libraries.navigation.NavigationRoadStretchRenderingData
@@ -765,6 +771,160 @@ object Convert {
       is Dot -> PatternItemDto(PatternTypeDto.DOT)
       is Gap -> PatternItemDto(PatternTypeDto.GAP, patternItem.length.toDouble())
       else -> throw FlutterError("convertError", "Could not convert pattern item")
+    }
+  }
+
+  fun convertNavInfo(navInfo: NavInfo): NavInfoDto {
+    return NavInfoDto(
+      currentStep = convertNavInfoStepInfo(navInfo.currentStep),
+      remainingSteps = navInfo.remainingSteps.map { step -> convertNavInfoStepInfo(step) },
+      routeChanged = navInfo.routeChanged,
+      distanceToCurrentStepMeters = navInfo.distanceToCurrentStepMeters.toLong(),
+      distanceToNextDestinationMeters = navInfo.distanceToNextDestinationMeters.toLong(),
+      distanceToFinalDestinationMeters = navInfo.distanceToFinalDestinationMeters.toLong(),
+      timeToCurrentStepSeconds = navInfo.timeToCurrentStepSeconds.toLong(),
+      timeToNextDestinationSeconds = navInfo.timeToNextDestinationSeconds.toLong(),
+      timeToFinalDestinationSeconds = navInfo.timeToFinalDestinationSeconds.toLong(),
+      navState = convertNavState(navInfo.navState)
+    )
+  }
+
+  private fun convertNavState(state: Int): NavStateDto {
+    return when (state) {
+      NavState.ENROUTE -> NavStateDto.ENROUTE
+      NavState.REROUTING -> NavStateDto.REROUTING
+      NavState.STOPPED -> NavStateDto.STOPPED
+      NavState.UNKNOWN -> NavStateDto.UNKNOWN
+      else -> NavStateDto.UNKNOWN
+    }
+  }
+
+  private fun convertNavInfoStepInfo(stepInfo: StepInfo): StepInfoDto {
+    return StepInfoDto(
+      distanceFromPrevStepMeters = stepInfo.distanceFromPrevStepMeters.toLong(),
+      timeFromPrevStepSeconds = stepInfo.timeFromPrevStepSeconds.toLong(),
+      drivingSide = convertDrivingSide(stepInfo.drivingSide),
+      exitNumber = stepInfo.exitNumber,
+      fullInstructions = stepInfo.fullInstructionText,
+      fullRoadName = stepInfo.fullRoadName,
+      simpleRoadName = stepInfo.simpleRoadName,
+      roundaboutTurnNumber = stepInfo.roundaboutTurnNumber.toLong(),
+      stepNumber = stepInfo.stepNumber.toLong(),
+      lanes =
+        stepInfo.lanes.map { lane ->
+          LaneDto(
+            laneDirections =
+              lane.laneDirections().map { laneDirection ->
+                LaneDirectionDto(
+                  laneShape = convertLaneShape(laneDirection.laneShape()),
+                  isRecommended = laneDirection.isRecommended,
+                )
+              }
+          )
+        },
+      maneuver = convertManeuver(stepInfo.maneuver),
+    )
+  }
+
+  private fun convertLaneShape(laneShape: Int): LaneShapeDto {
+    return when (laneShape) {
+      LaneShape.UNKNOWN -> LaneShapeDto.UNKNOWN
+      LaneShape.STRAIGHT -> LaneShapeDto.STRAIGHT
+      LaneShape.SLIGHT_LEFT -> LaneShapeDto.SLIGHTLEFT
+      LaneShape.SLIGHT_RIGHT -> LaneShapeDto.SLIGHTRIGHT
+      LaneShape.SHARP_LEFT -> LaneShapeDto.SHARPLEFT
+      LaneShape.SHARP_RIGHT -> LaneShapeDto.SHARPRIGHT
+      LaneShape.NORMAL_LEFT -> LaneShapeDto.NORMALLEFT
+      LaneShape.NORMAL_RIGHT -> LaneShapeDto.NORMALRIGHT
+      LaneShape.U_TURN_LEFT -> LaneShapeDto.UTURNLEFT
+      LaneShape.U_TURN_RIGHT -> LaneShapeDto.UTURNRIGHT
+      else -> LaneShapeDto.UNKNOWN
+    }
+  }
+
+  private fun convertManeuver(maneuver: Int): ManeuverDto {
+    return when (maneuver) {
+      Maneuver.DEPART -> ManeuverDto.DEPART
+      Maneuver.DESTINATION -> ManeuverDto.DESTINATION
+      Maneuver.DESTINATION_LEFT -> ManeuverDto.DESTINATIONLEFT
+      Maneuver.DESTINATION_RIGHT -> ManeuverDto.DESTINATIONRIGHT
+      Maneuver.FERRY_BOAT -> ManeuverDto.FERRYBOAT
+      Maneuver.FERRY_TRAIN -> ManeuverDto.FERRYTRAIN
+      Maneuver.FORK_LEFT -> ManeuverDto.FORKLEFT
+      Maneuver.FORK_RIGHT -> ManeuverDto.FORKRIGHT
+      Maneuver.MERGE_LEFT -> ManeuverDto.MERGELEFT
+      Maneuver.MERGE_RIGHT -> ManeuverDto.MERGERIGHT
+      Maneuver.MERGE_UNSPECIFIED -> ManeuverDto.MERGEUNSPECIFIED
+      Maneuver.NAME_CHANGE -> ManeuverDto.NAMECHANGE
+      Maneuver.OFF_RAMP_KEEP_LEFT -> ManeuverDto.OFFRAMPKEEPLEFT
+      Maneuver.OFF_RAMP_KEEP_RIGHT -> ManeuverDto.OFFRAMPKEEPRIGHT
+      Maneuver.OFF_RAMP_LEFT -> ManeuverDto.OFFRAMPLEFT
+      Maneuver.OFF_RAMP_RIGHT -> ManeuverDto.OFFRAMPRIGHT
+      Maneuver.OFF_RAMP_SHARP_LEFT -> ManeuverDto.OFFRAMPSHARPLEFT
+      Maneuver.OFF_RAMP_SHARP_RIGHT -> ManeuverDto.OFFRAMPSHARPRIGHT
+      Maneuver.OFF_RAMP_SLIGHT_LEFT -> ManeuverDto.OFFRAMPSLIGHTLEFT
+      Maneuver.OFF_RAMP_SLIGHT_RIGHT -> ManeuverDto.OFFRAMPSLIGHTRIGHT
+      Maneuver.OFF_RAMP_U_TURN_CLOCKWISE -> ManeuverDto.OFFRAMPUNSPECIFIED
+      Maneuver.OFF_RAMP_U_TURN_COUNTERCLOCKWISE -> ManeuverDto.OFFRAMPUTURNCLOCKWISE
+      Maneuver.OFF_RAMP_UNSPECIFIED -> ManeuverDto.OFFRAMPUTURNCOUNTERCLOCKWISE
+      Maneuver.ON_RAMP_KEEP_LEFT -> ManeuverDto.ONRAMPKEEPLEFT
+      Maneuver.ON_RAMP_KEEP_RIGHT -> ManeuverDto.ONRAMPKEEPRIGHT
+      Maneuver.ON_RAMP_LEFT -> ManeuverDto.ONRAMPLEFT
+      Maneuver.ON_RAMP_RIGHT -> ManeuverDto.ONRAMPRIGHT
+      Maneuver.ON_RAMP_SHARP_LEFT -> ManeuverDto.ONRAMPSHARPLEFT
+      Maneuver.ON_RAMP_SHARP_RIGHT -> ManeuverDto.ONRAMPSHARPRIGHT
+      Maneuver.ON_RAMP_SLIGHT_LEFT -> ManeuverDto.ONRAMPSLIGHTLEFT
+      Maneuver.ON_RAMP_SLIGHT_RIGHT -> ManeuverDto.ONRAMPSLIGHTRIGHT
+      Maneuver.ON_RAMP_U_TURN_CLOCKWISE -> ManeuverDto.ONRAMPUNSPECIFIED
+      Maneuver.ON_RAMP_U_TURN_COUNTERCLOCKWISE -> ManeuverDto.ONRAMPUTURNCLOCKWISE
+      Maneuver.ON_RAMP_UNSPECIFIED -> ManeuverDto.ONRAMPUTURNCOUNTERCLOCKWISE
+      Maneuver.ROUNDABOUT_CLOCKWISE -> ManeuverDto.ROUNDABOUTCLOCKWISE
+      Maneuver.ROUNDABOUT_COUNTERCLOCKWISE -> ManeuverDto.ROUNDABOUTCOUNTERCLOCKWISE
+      Maneuver.ROUNDABOUT_EXIT_CLOCKWISE -> ManeuverDto.ROUNDABOUTEXITCLOCKWISE
+      Maneuver.ROUNDABOUT_EXIT_COUNTERCLOCKWISE -> ManeuverDto.ROUNDABOUTEXITCOUNTERCLOCKWISE
+      Maneuver.ROUNDABOUT_LEFT_CLOCKWISE -> ManeuverDto.ROUNDABOUTLEFTCLOCKWISE
+      Maneuver.ROUNDABOUT_LEFT_COUNTERCLOCKWISE -> ManeuverDto.ROUNDABOUTLEFTCOUNTERCLOCKWISE
+      Maneuver.ROUNDABOUT_RIGHT_CLOCKWISE -> ManeuverDto.ROUNDABOUTRIGHTCLOCKWISE
+      Maneuver.ROUNDABOUT_RIGHT_COUNTERCLOCKWISE -> ManeuverDto.ROUNDABOUTRIGHTCOUNTERCLOCKWISE
+      Maneuver.ROUNDABOUT_SHARP_LEFT_CLOCKWISE -> ManeuverDto.ROUNDABOUTSHARPLEFTCLOCKWISE
+      Maneuver.ROUNDABOUT_SHARP_LEFT_COUNTERCLOCKWISE ->
+        ManeuverDto.ROUNDABOUTSHARPLEFTCOUNTERCLOCKWISE
+      Maneuver.ROUNDABOUT_SHARP_RIGHT_CLOCKWISE -> ManeuverDto.ROUNDABOUTSHARPRIGHTCLOCKWISE
+      Maneuver.ROUNDABOUT_SHARP_RIGHT_COUNTERCLOCKWISE ->
+        ManeuverDto.ROUNDABOUTSHARPRIGHTCOUNTERCLOCKWISE
+      Maneuver.ROUNDABOUT_SLIGHT_LEFT_CLOCKWISE -> ManeuverDto.ROUNDABOUTSLIGHTLEFTCLOCKWISE
+      Maneuver.ROUNDABOUT_SLIGHT_LEFT_COUNTERCLOCKWISE ->
+        ManeuverDto.ROUNDABOUTSLIGHTLEFTCOUNTERCLOCKWISE
+      Maneuver.ROUNDABOUT_SLIGHT_RIGHT_CLOCKWISE -> ManeuverDto.ROUNDABOUTSLIGHTRIGHTCLOCKWISE
+      Maneuver.ROUNDABOUT_SLIGHT_RIGHT_COUNTERCLOCKWISE ->
+        ManeuverDto.ROUNDABOUTSLIGHTRIGHTCOUNTERCLOCKWISE
+      Maneuver.ROUNDABOUT_STRAIGHT_CLOCKWISE -> ManeuverDto.ROUNDABOUTSTRAIGHTCLOCKWISE
+      Maneuver.ROUNDABOUT_STRAIGHT_COUNTERCLOCKWISE ->
+        ManeuverDto.ROUNDABOUTSTRAIGHTCOUNTERCLOCKWISE
+      Maneuver.ROUNDABOUT_U_TURN_CLOCKWISE -> ManeuverDto.ROUNDABOUTUTURNCLOCKWISE
+      Maneuver.ROUNDABOUT_U_TURN_COUNTERCLOCKWISE -> ManeuverDto.ROUNDABOUTUTURNCOUNTERCLOCKWISE
+      Maneuver.STRAIGHT -> ManeuverDto.STRAIGHT
+      Maneuver.TURN_KEEP_LEFT -> ManeuverDto.TURNKEEPLEFT
+      Maneuver.TURN_KEEP_RIGHT -> ManeuverDto.TURNKEEPRIGHT
+      Maneuver.TURN_LEFT -> ManeuverDto.TURNLEFT
+      Maneuver.TURN_RIGHT -> ManeuverDto.TURNRIGHT
+      Maneuver.TURN_SHARP_LEFT -> ManeuverDto.TURNSHARPLEFT
+      Maneuver.TURN_SHARP_RIGHT -> ManeuverDto.TURNSHARPRIGHT
+      Maneuver.TURN_SLIGHT_LEFT -> ManeuverDto.TURNSLIGHTLEFT
+      Maneuver.TURN_SLIGHT_RIGHT -> ManeuverDto.TURNSLIGHTRIGHT
+      Maneuver.TURN_U_TURN_CLOCKWISE -> ManeuverDto.TURNUTURNCLOCKWISE
+      Maneuver.TURN_U_TURN_COUNTERCLOCKWISE -> ManeuverDto.TURNUTURNCOUNTERCLOCKWISE
+      Maneuver.UNKNOWN -> ManeuverDto.UNKNOWN
+      else -> ManeuverDto.UNKNOWN
+    }
+  }
+
+  private fun convertDrivingSide(side: Int): DrivingSideDto {
+    return when (side) {
+      DrivingSide.LEFT -> DrivingSideDto.LEFT
+      DrivingSide.RIGHT -> DrivingSideDto.RIGHT
+      DrivingSide.NONE -> DrivingSideDto.NONE
+      else -> DrivingSideDto.NONE
     }
   }
 

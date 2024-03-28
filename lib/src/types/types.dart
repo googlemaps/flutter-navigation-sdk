@@ -19,6 +19,7 @@ export 'lat_lng_bounds.dart';
 export 'markers.dart';
 export 'navigation_destinations.dart';
 export 'navigation_view_types.dart';
+export 'navinfo.dart';
 export 'polygons.dart';
 export 'polylines.dart';
 export 'simulation.dart';
