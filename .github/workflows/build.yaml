@@ -31,7 +31,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           cache: 'gradle'
-      - uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
+      - uses: subosito/flutter-action@3d804929922b667a63a229bc59037807f969e885
         with:
           channel: 'stable'
           cache: true
@@ -52,7 +52,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           cache: 'gradle'
-      - uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
+      - uses: subosito/flutter-action@3d804929922b667a63a229bc59037807f969e885
         with:
           flutter-version: '3.16.x'
           channel: 'stable'
@@ -79,7 +79,7 @@ jobs:
           key: ${{ runner.os }}-pods-${{ hashFiles('**/*.podspec') }}
           restore-keys: |
             ${{ runner.os }}-pods-
-      - uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
+      - uses: subosito/flutter-action@3d804929922b667a63a229bc59037807f969e885
         with:
           flutter-version: '3.16.x'
           channel: 'stable'
@@ -108,7 +108,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           cache: 'gradle'
-      - uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
+      - uses: subosito/flutter-action@3d804929922b667a63a229bc59037807f969e885
         with:
           channel: 'stable'
           cache: true
@@ -127,7 +127,7 @@ jobs:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
     steps:
       - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
-      - uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
+      - uses: subosito/flutter-action@3d804929922b667a63a229bc59037807f969e885
         with:
           channel: 'stable'
           cache: true
