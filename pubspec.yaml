@@ -16,7 +16,7 @@ name: google_maps_navigation
 description: A Google Maps Navigation plugin
 repository: https://github.com/googlemaps/flutter-navigation-sdk
 issue_tracker: https://github.com/googlemaps/flutter-navigation-sdk/issues
-version: 0.2.1-beta
+version: 0.2.2-beta
 publish_to: none
 
 environment:
