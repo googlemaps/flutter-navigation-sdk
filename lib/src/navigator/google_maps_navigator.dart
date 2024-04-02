@@ -292,7 +292,7 @@ class GoogleMapsNavigator {
   static StreamSubscription<NavInfoEvent> setNavInfoListener(
       OnNavInfoEventCallback listener,
       {int? numNextStepsToPreview}) {
-    assert(numNextStepsToPreview != null && numNextStepsToPreview >= 0,
+    assert(numNextStepsToPreview == null || numNextStepsToPreview >= 0,
         'numNextStepsToPreview must be a non-negative integer or null.');
     if (_navInfoEventStreamController == null) {
       _navInfoEventStreamController = StreamController<NavInfoEvent>.broadcast(
@@ -309,6 +309,7 @@ class GoogleMapsNavigator {
 
     GoogleMapsNavigationPlatform.instance
         .enableTurnByTurnNavigationEvents(numNextStepsToPreview);
+
     return _navInfoEventStreamController!.stream.listen(listener);
   }
 

@@ -31,7 +31,8 @@ void main() {
     final Completer<void> eventReceived = Completer<void>();
 
     /// Set up navigation.
-    await startNavigationWithoutDestination($);
+    final GoogleNavigationViewController navigationController =
+        await startNavigationWithoutDestination($);
 
     /// Set up the listener and the test.
     final StreamSubscription<RemainingTimeOrDistanceChangedEvent> subscription =
@@ -85,6 +86,134 @@ void main() {
     /// Wait until the event is received and then test cancelling the subscription.
     await eventReceived.future;
     await subscription.cancel();
+    await navigationController.clear();
+  });
+
+  patrol('Test NavInfoEvent listener', (PatrolIntegrationTester $) async {
+    final Completer<void> eventReceived = Completer<void>();
+
+    /// Set up navigation.
+    final GoogleNavigationViewController navigationController =
+        await startNavigationWithoutDestination($);
+
+    /// Set up the listener and the test.
+    final StreamSubscription<NavInfoEvent> subscription =
+        GoogleMapsNavigator.setNavInfoListener(expectAsync1(
+      (NavInfoEvent event) {
+        expectSync(event.navInfo, isA<NavInfo>());
+        expectSync(event.navInfo.remainingSteps.isNotEmpty, true);
+        expectSync(event.navInfo.remainingSteps.length > 1, true);
+
+        /// Complete the eventReceived completer only once.
+        if (!eventReceived.isCompleted) {
+          eventReceived.complete();
+        }
+      },
+      count: 1,
+      max: -1,
+    ));
+    await $.pumpAndSettle();
+
+    /// Simulate location (1298 California St)
+    await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
+      latitude: 37.79136614772824,
+      longitude: -122.41565900473043,
+    ));
+
+    /// Set Destination.
+    final Destinations destinations = Destinations(
+      waypoints: <NavigationWaypoint>[
+        NavigationWaypoint.withLatLngTarget(
+            title: 'Grace Cathedral',
+            target: const LatLng(
+              latitude: 37.791957,
+              longitude: -122.412529,
+            )),
+      ],
+      displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
+    );
+    final NavigationRouteStatus status =
+        await GoogleMapsNavigator.setDestinations(destinations);
+    expect(status, NavigationRouteStatus.statusOk);
+    await $.pumpAndSettle();
+
+    /// Start guidance.
+    await GoogleMapsNavigator.startGuidance();
+    await $.pumpAndSettle();
+
+    /// Start simulation.
+    await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
+    await $.pumpAndSettle();
+
+    /// Wait until the event is received and then test cancelling the subscription.
+    await eventReceived.future;
+    await subscription.cancel();
+    await navigationController.clear();
+  });
+
+  patrol('Test NavInfoEvent listener with numNextStepsToPreview value set to 1',
+      (PatrolIntegrationTester $) async {
+    final Completer<void> eventReceived = Completer<void>();
+
+    /// Set up navigation.
+    final GoogleNavigationViewController navigationController =
+        await startNavigationWithoutDestination($);
+
+    /// Set up the listener and the test.
+    final StreamSubscription<NavInfoEvent> subscription =
+        GoogleMapsNavigator.setNavInfoListener(
+            expectAsync1(
+              (NavInfoEvent event) {
+                expectSync(event.navInfo, isA<NavInfo>());
+                expectSync(event.navInfo.remainingSteps.isNotEmpty, true);
+                expectSync(event.navInfo.remainingSteps.length == 1, true);
+
+                /// Complete the eventReceived completer only once.
+                if (!eventReceived.isCompleted) {
+                  eventReceived.complete();
+                }
+              },
+              count: 1,
+              max: -1,
+            ),
+            numNextStepsToPreview: 1);
+    await $.pumpAndSettle();
+
+    /// Simulate location (1298 California St)
+    await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
+      latitude: 37.79136614772824,
+      longitude: -122.41565900473043,
+    ));
+
+    /// Set Destination.
+    final Destinations destinations = Destinations(
+      waypoints: <NavigationWaypoint>[
+        NavigationWaypoint.withLatLngTarget(
+            title: 'Grace Cathedral',
+            target: const LatLng(
+              latitude: 37.791957,
+              longitude: -122.412529,
+            )),
+      ],
+      displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
+    );
+    final NavigationRouteStatus status =
+        await GoogleMapsNavigator.setDestinations(destinations);
+    expect(status, NavigationRouteStatus.statusOk);
+    await $.pumpAndSettle();
+
+    /// Start guidance.
+    await GoogleMapsNavigator.startGuidance();
+    await $.pumpAndSettle();
+
+    /// Start simulation.
+    await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
+    await $.pumpAndSettle();
+
+    /// Wait until the event is received and then test cancelling the subscription.
+    await eventReceived.future;
+    await subscription.cancel();
+    await navigationController.clear();
   });
 
   patrol('Test navigation OnRouteChanged event listener',
