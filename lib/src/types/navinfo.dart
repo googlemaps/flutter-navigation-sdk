@@ -382,7 +382,7 @@ class NavInfo {
   NavState navState;
 
   /// Information about the upcoming maneuver step.
-  StepInfo currentStep;
+  StepInfo? currentStep;
 
   /// The remaining steps after the current step.
   List<StepInfo> remainingSteps;
@@ -392,11 +392,11 @@ class NavInfo {
 
   /// Estimated remaining distance in meters along the route to the
   /// current step.
-  final int distanceToCurrentStepMeters;
+  final int? distanceToCurrentStepMeters;
 
   /// The estimated remaining distance in meters to the final destination which
   /// is the last destination in a multi-destination trip.
-  final int distanceToFinalDestinationMeters;
+  final int? distanceToFinalDestinationMeters;
 
   /// The estimated remaining distance in meters to the next destination.
   ///
@@ -405,11 +405,11 @@ class NavInfo {
 
   /// The estimated remaining time in seconds along the route to the
   /// current step.
-  final int timeToCurrentStepSeconds;
+  final int? timeToCurrentStepSeconds;
 
   /// The estimated remaining time in seconds to the final destination which is
   /// the last destination in a multi-destination trip.
-  final int timeToFinalDestinationSeconds;
+  final int? timeToFinalDestinationSeconds;
 
   /// The estimated remaining time in seconds to the next destination.
   ///

@@ -1603,27 +1603,27 @@ struct NavInfoDto {
   /// The current state of navigation.
   var navState: NavStateDto
   /// Information about the upcoming maneuver step.
-  var currentStep: StepInfoDto
+  var currentStep: StepInfoDto?
   /// The remaining steps after the current step.
   var remainingSteps: [StepInfoDto?]
   /// Whether the route has changed since the last sent message.
   var routeChanged: Bool
   /// Estimated remaining distance in meters along the route to the
   /// current step.
-  var distanceToCurrentStepMeters: Int64
+  var distanceToCurrentStepMeters: Int64?
   /// The estimated remaining distance in meters to the final destination which
   /// is the last destination in a multi-destination trip.
-  var distanceToFinalDestinationMeters: Int64
+  var distanceToFinalDestinationMeters: Int64?
   /// The estimated remaining distance in meters to the next destination.
   ///
   /// Android only.
   var distanceToNextDestinationMeters: Int64?
   /// The estimated remaining time in seconds along the route to the
   /// current step.
-  var timeToCurrentStepSeconds: Int64
+  var timeToCurrentStepSeconds: Int64?
   /// The estimated remaining time in seconds to the final destination which is
   /// the last destination in a multi-destination trip.
-  var timeToFinalDestinationSeconds: Int64
+  var timeToFinalDestinationSeconds: Int64?
   /// The estimated remaining time in seconds to the next destination.
   ///
   /// Android only.
@@ -1631,18 +1631,22 @@ struct NavInfoDto {
 
   static func fromList(_ list: [Any?]) -> NavInfoDto? {
     let navState = NavStateDto(rawValue: list[0] as! Int)!
-    let currentStep = StepInfoDto.fromList(list[1] as! [Any?])!
+    var currentStep: StepInfoDto?
+    if let currentStepList: [Any?] = nilOrValue(list[1]) {
+      currentStep = StepInfoDto.fromList(currentStepList)
+    }
     let remainingSteps = list[2] as! [StepInfoDto?]
     let routeChanged = list[3] as! Bool
-    let distanceToCurrentStepMeters = list[4] is Int64 ? list[4] as! Int64 :
-      Int64(list[4] as! Int32)
-    let distanceToFinalDestinationMeters = list[5] is Int64 ? list[5] as! Int64 :
-      Int64(list[5] as! Int32)
+    let distanceToCurrentStepMeters: Int64? = isNullish(list[4]) ? nil :
+      (list[4] is Int64? ? list[4] as! Int64? : Int64(list[4] as! Int32))
+    let distanceToFinalDestinationMeters: Int64? = isNullish(list[5]) ? nil :
+      (list[5] is Int64? ? list[5] as! Int64? : Int64(list[5] as! Int32))
     let distanceToNextDestinationMeters: Int64? = isNullish(list[6]) ? nil :
       (list[6] is Int64? ? list[6] as! Int64? : Int64(list[6] as! Int32))
-    let timeToCurrentStepSeconds = list[7] is Int64 ? list[7] as! Int64 : Int64(list[7] as! Int32)
-    let timeToFinalDestinationSeconds = list[8] is Int64 ? list[8] as! Int64 :
-      Int64(list[8] as! Int32)
+    let timeToCurrentStepSeconds: Int64? = isNullish(list[7]) ? nil :
+      (list[7] is Int64? ? list[7] as! Int64? : Int64(list[7] as! Int32))
+    let timeToFinalDestinationSeconds: Int64? = isNullish(list[8]) ? nil :
+      (list[8] is Int64? ? list[8] as! Int64? : Int64(list[8] as! Int32))
     let timeToNextDestinationSeconds: Int64? = isNullish(list[9]) ? nil :
       (list[9] is Int64? ? list[9] as! Int64? : Int64(list[9] as! Int32))
 
@@ -1663,7 +1667,7 @@ struct NavInfoDto {
   func toList() -> [Any?] {
     [
       navState.rawValue,
-      currentStep.toList(),
+      currentStep?.toList(),
       remainingSteps,
       routeChanged,
       distanceToCurrentStepMeters,

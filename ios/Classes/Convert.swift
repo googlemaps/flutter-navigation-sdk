@@ -148,7 +148,8 @@ enum Convert {
 
   static func convertNavInfo(_ gmsNavInfo: GMSNavigationNavInfo, maxAmountOfRemainingSteps: Int64)
     -> NavInfoDto {
-    let currentStepDto = convertStepInfo(gmsNavInfo.currentStep!)
+    let currentStepDto = gmsNavInfo
+      .currentStep != nil ? convertStepInfo(gmsNavInfo.currentStep!) : nil
     let remainingStepsDto = gmsNavInfo.remainingSteps.prefix(Int(maxAmountOfRemainingSteps))
       .map { convertStepInfo($0) }
 

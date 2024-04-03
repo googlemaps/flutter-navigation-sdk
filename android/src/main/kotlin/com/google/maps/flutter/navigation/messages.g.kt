@@ -1674,18 +1674,18 @@ data class NavInfoDto(
   /** The current state of navigation. */
   val navState: NavStateDto,
   /** Information about the upcoming maneuver step. */
-  val currentStep: StepInfoDto,
+  val currentStep: StepInfoDto? = null,
   /** The remaining steps after the current step. */
   val remainingSteps: List<StepInfoDto?>,
   /** Whether the route has changed since the last sent message. */
   val routeChanged: Boolean,
   /** Estimated remaining distance in meters along the route to the current step. */
-  val distanceToCurrentStepMeters: Long,
+  val distanceToCurrentStepMeters: Long? = null,
   /**
    * The estimated remaining distance in meters to the final destination which is the last
    * destination in a multi-destination trip.
    */
-  val distanceToFinalDestinationMeters: Long,
+  val distanceToFinalDestinationMeters: Long? = null,
   /**
    * The estimated remaining distance in meters to the next destination.
    *
@@ -1693,12 +1693,12 @@ data class NavInfoDto(
    */
   val distanceToNextDestinationMeters: Long? = null,
   /** The estimated remaining time in seconds along the route to the current step. */
-  val timeToCurrentStepSeconds: Long,
+  val timeToCurrentStepSeconds: Long? = null,
   /**
    * The estimated remaining time in seconds to the final destination which is the last destination
    * in a multi-destination trip.
    */
-  val timeToFinalDestinationSeconds: Long,
+  val timeToFinalDestinationSeconds: Long? = null,
   /**
    * The estimated remaining time in seconds to the next destination.
    *
@@ -1710,16 +1710,17 @@ data class NavInfoDto(
     @Suppress("UNCHECKED_CAST")
     fun fromList(list: List<Any?>): NavInfoDto {
       val navState = NavStateDto.ofRaw(list[0] as Int)!!
-      val currentStep = StepInfoDto.fromList(list[1] as List<Any?>)
+      val currentStep: StepInfoDto? = (list[1] as List<Any?>?)?.let { StepInfoDto.fromList(it) }
       val remainingSteps = list[2] as List<StepInfoDto?>
       val routeChanged = list[3] as Boolean
-      val distanceToCurrentStepMeters = list[4].let { if (it is Int) it.toLong() else it as Long }
+      val distanceToCurrentStepMeters = list[4].let { if (it is Int) it.toLong() else it as Long? }
       val distanceToFinalDestinationMeters =
-        list[5].let { if (it is Int) it.toLong() else it as Long }
+        list[5].let { if (it is Int) it.toLong() else it as Long? }
       val distanceToNextDestinationMeters =
         list[6].let { if (it is Int) it.toLong() else it as Long? }
-      val timeToCurrentStepSeconds = list[7].let { if (it is Int) it.toLong() else it as Long }
-      val timeToFinalDestinationSeconds = list[8].let { if (it is Int) it.toLong() else it as Long }
+      val timeToCurrentStepSeconds = list[7].let { if (it is Int) it.toLong() else it as Long? }
+      val timeToFinalDestinationSeconds =
+        list[8].let { if (it is Int) it.toLong() else it as Long? }
       val timeToNextDestinationSeconds = list[9].let { if (it is Int) it.toLong() else it as Long? }
       return NavInfoDto(
         navState,
@@ -1739,7 +1740,7 @@ data class NavInfoDto(
   fun toList(): List<Any?> {
     return listOf<Any?>(
       navState.raw,
-      currentStep.toList(),
+      currentStep?.toList(),
       remainingSteps,
       routeChanged,
       distanceToCurrentStepMeters,

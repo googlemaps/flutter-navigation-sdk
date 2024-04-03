@@ -1810,14 +1810,14 @@ class StepInfoDto {
 class NavInfoDto {
   NavInfoDto({
     required this.navState,
-    required this.currentStep,
+    this.currentStep,
     required this.remainingSteps,
     required this.routeChanged,
-    required this.distanceToCurrentStepMeters,
-    required this.distanceToFinalDestinationMeters,
+    this.distanceToCurrentStepMeters,
+    this.distanceToFinalDestinationMeters,
     this.distanceToNextDestinationMeters,
-    required this.timeToCurrentStepSeconds,
-    required this.timeToFinalDestinationSeconds,
+    this.timeToCurrentStepSeconds,
+    this.timeToFinalDestinationSeconds,
     this.timeToNextDestinationSeconds,
   });
 
@@ -1825,7 +1825,7 @@ class NavInfoDto {
   NavStateDto navState;
 
   /// Information about the upcoming maneuver step.
-  StepInfoDto currentStep;
+  StepInfoDto? currentStep;
 
   /// The remaining steps after the current step.
   List<StepInfoDto?> remainingSteps;
@@ -1835,11 +1835,11 @@ class NavInfoDto {
 
   /// Estimated remaining distance in meters along the route to the
   /// current step.
-  int distanceToCurrentStepMeters;
+  int? distanceToCurrentStepMeters;
 
   /// The estimated remaining distance in meters to the final destination which
   /// is the last destination in a multi-destination trip.
-  int distanceToFinalDestinationMeters;
+  int? distanceToFinalDestinationMeters;
 
   /// The estimated remaining distance in meters to the next destination.
   ///
@@ -1848,11 +1848,11 @@ class NavInfoDto {
 
   /// The estimated remaining time in seconds along the route to the
   /// current step.
-  int timeToCurrentStepSeconds;
+  int? timeToCurrentStepSeconds;
 
   /// The estimated remaining time in seconds to the final destination which is
   /// the last destination in a multi-destination trip.
-  int timeToFinalDestinationSeconds;
+  int? timeToFinalDestinationSeconds;
 
   /// The estimated remaining time in seconds to the next destination.
   ///
@@ -1862,7 +1862,7 @@ class NavInfoDto {
   Object encode() {
     return <Object?>[
       navState.index,
-      currentStep.encode(),
+      currentStep?.encode(),
       remainingSteps,
       routeChanged,
       distanceToCurrentStepMeters,
@@ -1878,14 +1878,16 @@ class NavInfoDto {
     result as List<Object?>;
     return NavInfoDto(
       navState: NavStateDto.values[result[0]! as int],
-      currentStep: StepInfoDto.decode(result[1]! as List<Object?>),
+      currentStep: result[1] != null
+          ? StepInfoDto.decode(result[1]! as List<Object?>)
+          : null,
       remainingSteps: (result[2] as List<Object?>?)!.cast<StepInfoDto?>(),
       routeChanged: result[3]! as bool,
-      distanceToCurrentStepMeters: result[4]! as int,
-      distanceToFinalDestinationMeters: result[5]! as int,
+      distanceToCurrentStepMeters: result[4] as int?,
+      distanceToFinalDestinationMeters: result[5] as int?,
       distanceToNextDestinationMeters: result[6] as int?,
-      timeToCurrentStepSeconds: result[7]! as int,
-      timeToFinalDestinationSeconds: result[8]! as int,
+      timeToCurrentStepSeconds: result[7] as int?,
+      timeToFinalDestinationSeconds: result[8] as int?,
       timeToNextDestinationSeconds: result[9] as int?,
     );
   }

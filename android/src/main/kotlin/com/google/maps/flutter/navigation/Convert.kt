@@ -776,15 +776,15 @@ object Convert {
 
   fun convertNavInfo(navInfo: NavInfo): NavInfoDto {
     return NavInfoDto(
-      currentStep = convertNavInfoStepInfo(navInfo.currentStep),
-      remainingSteps = navInfo.remainingSteps.map { step -> convertNavInfoStepInfo(step) },
+      currentStep = navInfo.currentStep?.let { convertNavInfoStepInfo(it) },
+      remainingSteps = navInfo.remainingSteps.map { convertNavInfoStepInfo(it) },
       routeChanged = navInfo.routeChanged,
-      distanceToCurrentStepMeters = navInfo.distanceToCurrentStepMeters.toLong(),
-      distanceToNextDestinationMeters = navInfo.distanceToNextDestinationMeters.toLong(),
-      distanceToFinalDestinationMeters = navInfo.distanceToFinalDestinationMeters.toLong(),
-      timeToCurrentStepSeconds = navInfo.timeToCurrentStepSeconds.toLong(),
-      timeToNextDestinationSeconds = navInfo.timeToNextDestinationSeconds.toLong(),
-      timeToFinalDestinationSeconds = navInfo.timeToFinalDestinationSeconds.toLong(),
+      distanceToCurrentStepMeters = navInfo.distanceToCurrentStepMeters?.toLong(),
+      distanceToNextDestinationMeters = navInfo.distanceToNextDestinationMeters?.toLong(),
+      distanceToFinalDestinationMeters = navInfo.distanceToFinalDestinationMeters?.toLong(),
+      timeToCurrentStepSeconds = navInfo.timeToCurrentStepSeconds?.toLong(),
+      timeToNextDestinationSeconds = navInfo.timeToNextDestinationSeconds?.toLong(),
+      timeToFinalDestinationSeconds = navInfo.timeToFinalDestinationSeconds?.toLong(),
       navState = convertNavState(navInfo.navState)
     )
   }

@@ -20,7 +20,7 @@ import '../method_channel.dart';
 extension ConvertNavInfoDto on NavInfoDto {
   /// Converts [NavInfoDto] to [NavInfo]
   NavInfo toNavInfo() => NavInfo(
-        currentStep: currentStep.toStepInfo(),
+        currentStep: currentStep?.toStepInfo(),
         remainingSteps: remainingSteps
             .whereType<StepInfoDto>()
             .map<StepInfo>((StepInfoDto stepinfo) => stepinfo.toStepInfo())

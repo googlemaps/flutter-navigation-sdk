@@ -213,32 +213,39 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
     return Container(
       padding: const EdgeInsets.all(20),
       child: Column(children: <Widget>[
-        _getNavInfoWidgetForStep(
-            context, navInfo.currentStep, navInfo.distanceToCurrentStepMeters),
-        const SizedBox(height: 5),
-        Card(
-          color: Colors.green.shade400,
-          child: Padding(
-            padding: const EdgeInsets.all(5),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      Text(
-                        '${formatRemainingDuration(Duration(seconds: navInfo.timeToFinalDestinationSeconds))} and ${formatRemainingDistance(navInfo.distanceToFinalDestinationMeters)} to final destination.',
-                        style: navInfoTextStyle,
-                      ),
-                      const SizedBox(height: 5),
-                      Text(
-                        '${formatRemainingDuration(Duration(seconds: navInfo.timeToCurrentStepSeconds))} to current step.',
-                        style: navInfoTextStyle,
-                      ),
-                    ],
-                  )
-                ]),
-          ),
-        )
+        if (navInfo.navState == NavState.stopped)
+          const Text('Navigation stopped.'),
+        if (navInfo.currentStep != null) ...<Widget>[
+          _getNavInfoWidgetForStep(context, navInfo.currentStep!,
+              navInfo.distanceToCurrentStepMeters),
+          const SizedBox(height: 5),
+          Card(
+            color: Colors.green.shade400,
+            child: Padding(
+              padding: const EdgeInsets.all(5),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        if (navInfo.timeToFinalDestinationSeconds != null &&
+                            navInfo.distanceToFinalDestinationMeters != null)
+                          Text(
+                            '${formatRemainingDuration(Duration(seconds: navInfo.timeToFinalDestinationSeconds!))} and ${formatRemainingDistance(navInfo.distanceToFinalDestinationMeters!)} to final destination.',
+                            style: navInfoTextStyle,
+                          ),
+                        const SizedBox(height: 5),
+                        if (navInfo.timeToCurrentStepSeconds != null)
+                          Text(
+                            '${formatRemainingDuration(Duration(seconds: navInfo.timeToCurrentStepSeconds!))} to current step.',
+                            style: navInfoTextStyle,
+                          ),
+                      ],
+                    )
+                  ]),
+            ),
+          )
+        ]
       ]),
     );
   }
