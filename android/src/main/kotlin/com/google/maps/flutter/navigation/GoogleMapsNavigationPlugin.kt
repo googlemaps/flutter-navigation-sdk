@@ -74,7 +74,7 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
   }
 
   override fun onDetachedFromActivity() {
-    lifecycle.addObserver(GoogleMapsNavigationSessionManager.getInstance())
+    lifecycle.removeObserver(GoogleMapsNavigationSessionManager.getInstance())
     GoogleMapsNavigationSessionManager.getInstance().onActivityDestroyed()
     lifecycle.removeObserver(viewRegistry)
   }
