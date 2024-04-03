@@ -17,10 +17,9 @@
 package com.google.maps.flutter.navigation
 
 import android.app.Activity
-import android.content.Context
-import android.content.ContextWrapper
 import android.location.Location
 import android.util.DisplayMetrics
+import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.google.android.gms.maps.model.LatLng
@@ -47,21 +46,10 @@ import com.google.maps.flutter.navigation.Convert.convertTravelModeFromDto
 import io.flutter.plugin.common.BinaryMessenger
 import java.lang.ref.WeakReference
 
-val Context.lifecycleOwner: LifecycleOwner?
-  get() {
-    var context: Context? = this
-
-    while (context != null && context !is LifecycleOwner) {
-      val baseContext = (context as? ContextWrapper?)?.baseContext
-      context = if (baseContext == context) null else baseContext
-    }
-
-    return if (context is LifecycleOwner) context else null
-  }
-
 /** This class handles creation of navigation session and other navigation related tasks. */
 class GoogleMapsNavigationSessionManager
-private constructor(private val navigationSessionEventApi: NavigationSessionEventApi) {
+private constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
+  DefaultLifecycleObserver {
   companion object {
     private var instance: GoogleMapsNavigationSessionManager? = null
 
@@ -122,6 +110,19 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   private var speedingListener: SpeedingListener? = null
   private var weakActivity: WeakReference<Activity>? = null
   private var turnByTurnEventsEnabled: Boolean = false
+  private var weakLifecycleOwner: WeakReference<LifecycleOwner>? = null
+
+  override fun onCreate(owner: LifecycleOwner) {
+    weakLifecycleOwner = WeakReference(owner)
+  }
+
+  override fun onStart(owner: LifecycleOwner) {
+    weakLifecycleOwner = WeakReference(owner)
+  }
+
+  override fun onResume(owner: LifecycleOwner) {
+    weakLifecycleOwner = WeakReference(owner)
+  }
 
   /** Set activity instance to use. Some functions require [Activity] instance to show user UI. */
   fun onActivityCreated(activity: Activity) {
@@ -138,6 +139,8 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
     unregisterListeners()
     weakActivity?.clear()
     weakActivity = null
+    weakLifecycleOwner?.clear()
+    weakLifecycleOwner = null
   }
 
   @Throws(FlutterError::class)
@@ -271,7 +274,6 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
     navigator.stopGuidance()
     navigator.clearDestinations()
     navigator.simulator.unsetUserLocation()
-    disableTurnByTurnNavigationEvents()
     unregisterListeners()
 
     // As unregisterListeners() is removing all listeners, we need to re-register them when
@@ -306,8 +308,10 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
       speedingListener = null
     }
     if (roadSnappedLocationListener != null) {
-      getRoadSnappedLocationProvider()?.removeLocationListener(roadSnappedLocationListener)
-      roadSnappedLocationListener = null
+      disableRoadSnappedLocationUpdates()
+    }
+    if (turnByTurnEventsEnabled) {
+      disableTurnByTurnNavigationEvents()
     }
   }
 
@@ -678,7 +682,8 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   fun enableTurnByTurnNavigationEvents(
     numNextStepsToPreview: Int,
   ) {
-    if (!turnByTurnEventsEnabled && getActivity()?.lifecycleOwner != null) {
+    var lifeCycleOwner: LifecycleOwner? = weakLifecycleOwner?.get()
+    if (!turnByTurnEventsEnabled && lifeCycleOwner != null) {
 
       /// DisplayMetrics is required to be set for turn-by-turn updates.
       /// But not used as image generation is disabled.
@@ -707,7 +712,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
           navigationSessionEventApi.onNavInfo(Convert.convertNavInfo(navInfo)) {}
         }
         GoogleMapsNavigationNavUpdatesService.navInfoLiveData.observe(
-          getActivity()!!.lifecycleOwner!!,
+          lifeCycleOwner!!,
           navInfoObserver
         )
         turnByTurnEventsEnabled = true
@@ -722,10 +727,9 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
 
   @Throws(FlutterError::class)
   fun disableTurnByTurnNavigationEvents() {
-    if (turnByTurnEventsEnabled) {
-      GoogleMapsNavigationNavUpdatesService.navInfoLiveData.removeObservers(
-        getActivity()!!.lifecycleOwner!!
-      )
+    var lifeCycleOwner: LifecycleOwner? = weakLifecycleOwner?.get()
+    if (turnByTurnEventsEnabled && lifeCycleOwner != null) {
+      GoogleMapsNavigationNavUpdatesService.navInfoLiveData.removeObservers(lifeCycleOwner!!)
       val success = getNavigator().unregisterServiceForNavUpdates()
       if (success) {
         turnByTurnEventsEnabled = false
