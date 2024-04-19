@@ -60,6 +60,10 @@ class GoogleMapsNavigationSessionManager: NSObject {
 
   private var _session: GMSNavigationSession?
 
+  private var _sendTurnByTurnNavigationEvents = false
+
+  private var _numTurnByTurnNextStepsToPreview = Int64.max
+
   func getNavigator() throws -> GMSNavigator {
     guard let _session else { throw GoogleMapsNavigationSessionManagerError.sessionNotInitialized }
     guard let navigator = _session.navigator
@@ -468,6 +472,15 @@ class GoogleMapsNavigationSessionManager: NSObject {
     _session?.roadSnappedLocationProvider?.stopUpdatingLocation()
   }
 
+  func enableTurnByTurnNavigationEvents(numNextStepsToPreview: Int64?) {
+    _numTurnByTurnNextStepsToPreview = numNextStepsToPreview ?? Int64.max
+    _sendTurnByTurnNavigationEvents = true
+  }
+
+  func disableTurnByTurnNavigationEvents() {
+    _sendTurnByTurnNavigationEvents = false
+  }
+
   func registerRemainingTimeOrDistanceChangedListener(remainingTimeThresholdSeconds: Int64,
                                                       remainingDistanceThresholdMeters: Int64) {
     // Setting these will also enable listener.
@@ -534,5 +547,18 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
       remainingDistance: distance,
       completion: { _ in }
     )
+  }
+
+  func navigator(_ navigator: GMSNavigator,
+                 didUpdate navInfo: GMSNavigationNavInfo) {
+    if _sendTurnByTurnNavigationEvents {
+      _navigationSessionEventApi?.onNavInfo(
+        navInfo: Convert.convertNavInfo(
+          navInfo,
+          maxAmountOfRemainingSteps: _numTurnByTurnNextStepsToPreview
+        ),
+        completion: { _ in }
+      )
+    }
   }
 }

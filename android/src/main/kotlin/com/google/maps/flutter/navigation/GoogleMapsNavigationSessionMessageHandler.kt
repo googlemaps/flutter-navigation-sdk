@@ -255,6 +255,14 @@ class GoogleMapsNavigationSessionMessageHandler : NavigationSessionApi {
     manager().disableRoadSnappedLocationUpdates()
   }
 
+  override fun enableTurnByTurnNavigationEvents(numNextStepsToPreview: Long?) {
+    manager().enableTurnByTurnNavigationEvents(numNextStepsToPreview?.toInt() ?: Int.MAX_VALUE)
+  }
+
+  override fun disableTurnByTurnNavigationEvents() {
+    manager().disableTurnByTurnNavigationEvents()
+  }
+
   override fun registerRemainingTimeOrDistanceChangedListener(
     remainingTimeThresholdSeconds: Long,
     remainingDistanceThresholdMeters: Long

@@ -71,6 +71,9 @@ typedef OnRecenterButtonClicked = void Function(
 typedef OnRemainingTimeOrDistanceChangedEventCallback = void Function(
     RemainingTimeOrDistanceChangedEvent onRemainingTimeOrDistanceChangedEvent);
 
+/// Called on navigation info event.
+typedef OnNavInfoEventCallback = void Function(NavInfoEvent onNavInfo);
+
 /// Called during marker click event.
 typedef OnMarkerClicked = void Function(String markerId);
 

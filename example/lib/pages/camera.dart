@@ -125,28 +125,29 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
   @override
   Widget build(BuildContext context) => buildPage(
       context,
-      Stack(children: <Widget>[
-        GoogleMapsNavigationView(
-            initialNavigationUIEnabledPreference:
-                NavigationUIEnabledPreference.disabled,
-            onViewCreated: _onViewCreated,
-            onCameraMoveStarted: _onCameraMoveStarted,
-            onCameraMove: _onCameraMove,
-            onCameraIdle: _onCameraIdle,
-            onCameraStartedFollowingLocation: _onCameraStartedFollowingLocation,
-            onCameraStoppedFollowingLocation:
-                _onCameraStoppedFollowingLocation),
-        getOverlayOptionsButton(context, onPressed: () => toggleOverlay()),
-        if (_showCameraUpdates)
-          Container(
-            width: 180,
-            padding: const EdgeInsets.all(8),
-            decoration: const BoxDecoration(color: Colors.white),
-            child: Text(
-              _latestCameraUpdate,
-            ),
-          )
-      ]));
+      (BuildContext context) => Stack(children: <Widget>[
+            GoogleMapsNavigationView(
+                initialNavigationUIEnabledPreference:
+                    NavigationUIEnabledPreference.disabled,
+                onViewCreated: _onViewCreated,
+                onCameraMoveStarted: _onCameraMoveStarted,
+                onCameraMove: _onCameraMove,
+                onCameraIdle: _onCameraIdle,
+                onCameraStartedFollowingLocation:
+                    _onCameraStartedFollowingLocation,
+                onCameraStoppedFollowingLocation:
+                    _onCameraStoppedFollowingLocation),
+            getOverlayOptionsButton(context, onPressed: () => toggleOverlay()),
+            if (_showCameraUpdates)
+              Container(
+                width: 180,
+                padding: const EdgeInsets.all(8),
+                decoration: const BoxDecoration(color: Colors.white),
+                child: Text(
+                  _latestCameraUpdate,
+                ),
+              )
+          ]));
 
   void _onCameraMoveStarted(CameraPosition position, bool gesture) {
     if (_showCameraUpdates) {

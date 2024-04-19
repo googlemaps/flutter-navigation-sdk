@@ -168,6 +168,12 @@ abstract mixin class NavigationSessionAPIInterface {
   /// Disables road snapped location updates.
   Future<void> disableRoadSnappedLocationUpdates();
 
+  /// Enables navigation info updates.
+  Future<void> enableTurnByTurnNavigationEvents(int? numNextStepsToPreview);
+
+  /// Disables navigation info updates.
+  Future<void> disableTurnByTurnNavigationEvents();
+
   /// Get route segments.
   Future<List<RouteSegment>> getRouteSegments();
 
@@ -212,6 +218,9 @@ abstract mixin class NavigationSessionAPIInterface {
   /// Register remaining time or distance change listener with thresholds.
   Future<void> registerRemainingTimeOrDistanceChangedListener(
       int remainingTimeThresholdSeconds, int remainingDistanceThresholdMeters);
+
+  /// Get navigation info event stream from the navigation session.
+  Stream<NavInfoEvent> getNavInfoStream();
 }
 
 /// API interface for actions of the navigation view.

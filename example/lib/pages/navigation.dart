@@ -927,7 +927,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   @override
   Widget build(BuildContext context) => buildPage(
       context,
-      Padding(
+      (BuildContext context) => Padding(
           padding: EdgeInsets.zero,
           child: Stack(
             children: <Widget>[

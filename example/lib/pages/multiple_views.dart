@@ -65,33 +65,33 @@ class _MultiplexState extends ExamplePageState<MultipleMapViewsPage> {
   @override
   Widget build(BuildContext context) => buildPage(
       context,
-      Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              SizedBox(
-                height: 200,
-                child: GoogleMapsNavigationView(
-                  onViewCreated: _onViewCreated,
-                ),
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                height: 200,
-                child: GoogleMapsNavigationView(
-                  onViewCreated: _onViewCreated2,
-                ),
-              ),
-              const SizedBox(
-                height: 50,
-              ),
-              if (_firstNavigationController != null &&
-                  _secondNavigationController != null)
-                ElevatedButton(
-                  onPressed: _moveCameras,
-                  child: const Text('Move cameras'),
-                ),
-            ]),
-      ));
+      (BuildContext context) => Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  SizedBox(
+                    height: 200,
+                    child: GoogleMapsNavigationView(
+                      onViewCreated: _onViewCreated,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    height: 200,
+                    child: GoogleMapsNavigationView(
+                      onViewCreated: _onViewCreated2,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  if (_firstNavigationController != null &&
+                      _secondNavigationController != null)
+                    ElevatedButton(
+                      onPressed: _moveCameras,
+                      child: const Text('Move cameras'),
+                    ),
+                ]),
+          ));
 }

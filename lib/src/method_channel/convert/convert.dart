@@ -22,6 +22,7 @@ export 'marker.dart';
 export 'navigation.dart';
 export 'navigation_display_options.dart';
 export 'navigation_routing_options.dart';
+export 'navinfo.dart';
 export 'pattern.dart';
 export 'polygon.dart';
 export 'polyline.dart';

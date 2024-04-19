@@ -179,6 +179,190 @@ enum RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto: Int {
   case trafficJam = 2
 }
 
+/// A set of values that specify the navigation action to take.
+enum ManeuverDto: Int {
+  /// Arrival at a destination.
+  case destination = 0
+  /// Starting point of the maneuver.
+  case depart = 1
+  /// Arrival at a destination located on the left side of the road.
+  case destinationLeft = 2
+  /// Arrival at a destination located on the right side of the road.
+  case destinationRight = 3
+  /// Take the boat ferry.
+  case ferryBoat = 4
+  /// Take the train ferry.
+  case ferryTrain = 5
+  /// Current road joins another road slightly on the left.
+  case forkLeft = 6
+  /// Current road joins another road slightly on the right.
+  case forkRight = 7
+  /// Current road joins another on the left.
+  case mergeLeft = 8
+  /// Current road joins another on the right.
+  case mergeRight = 9
+  /// Current road joins another.
+  case mergeUnspecified = 10
+  /// The street name changes.
+  case nameChange = 11
+  /// Keep to the left side of the road when exiting a turnpike or freeway as the road diverges.
+  case offRampKeepLeft = 12
+  /// Keep to the right side of the road when exiting a turnpike or freeway as the road diverges.
+  case offRampKeepRight = 13
+  /// Regular left turn to exit a turnpike or freeway.
+  case offRampLeft = 14
+  /// Regular right turn to exit a turnpike or freeway.
+  case offRampRight = 15
+  /// Sharp left turn to exit a turnpike or freeway.
+  case offRampSharpLeft = 16
+  /// Sharp right turn to exit a turnpike or freeway.
+  case offRampSharpRight = 17
+  /// Slight left turn to exit a turnpike or freeway.
+  case offRampSlightLeft = 18
+  /// Slight right turn to exit a turnpike or freeway.
+  case offRampSlightRight = 19
+  /// Exit a turnpike or freeway.
+  case offRampUnspecified = 20
+  /// Clockwise turn onto the opposite side of the street to exit a turnpike or freeway.
+  case offRampUTurnClockwise = 21
+  /// Counterclockwise turn onto the opposite side of the street to exit a turnpike or freeway.
+  case offRampUTurnCounterclockwise = 22
+  /// Keep to the left side of the road when entering a turnpike or freeway as the road diverges.
+  case onRampKeepLeft = 23
+  /// Keep to the right side of the road when entering a turnpike or freeway as the road diverges.
+  case onRampKeepRight = 24
+  /// Regular left turn to enter a turnpike or freeway.
+  case onRampLeft = 25
+  /// Regular right turn to enter a turnpike or freeway.
+  case onRampRight = 26
+  /// Sharp left turn to enter a turnpike or freeway.
+  case onRampSharpLeft = 27
+  /// Sharp right turn to enter a turnpike or freeway.
+  case onRampSharpRight = 28
+  /// Slight left turn to enter a turnpike or freeway.
+  case onRampSlightLeft = 29
+  /// Slight right turn to enter a turnpike or freeway.
+  case onRampSlightRight = 30
+  /// Enter a turnpike or freeway.
+  case onRampUnspecified = 31
+  /// Clockwise turn onto the opposite side of the street to enter a turnpike or freeway.
+  case onRampUTurnClockwise = 32
+  /// Counterclockwise turn onto the opposite side of the street to enter a turnpike or freeway.
+  case onRampUTurnCounterclockwise = 33
+  /// Enter a roundabout in the clockwise direction.
+  case roundaboutClockwise = 34
+  /// Enter a roundabout in the counterclockwise direction.
+  case roundaboutCounterclockwise = 35
+  /// Exit a roundabout in the clockwise direction.
+  case roundaboutExitClockwise = 36
+  /// Exit a roundabout in the counterclockwise direction.
+  case roundaboutExitCounterclockwise = 37
+  /// Enter a roundabout in the clockwise direction and turn left.
+  case roundaboutLeftClockwise = 38
+  /// Enter a roundabout in the counterclockwise direction and turn left.
+  case roundaboutLeftCounterclockwise = 39
+  /// Enter a roundabout in the clockwise direction and turn right.
+  case roundaboutRightClockwise = 40
+  /// Enter a roundabout in the counterclockwise direction and turn right.
+  case roundaboutRightCounterclockwise = 41
+  /// Enter a roundabout in the clockwise direction and turn sharply to the left.
+  case roundaboutSharpLeftClockwise = 42
+  /// Enter a roundabout in the counterclockwise direction and turn sharply to the left.
+  case roundaboutSharpLeftCounterclockwise = 43
+  /// Enter a roundabout in the clockwise direction and turn sharply to the right.
+  case roundaboutSharpRightClockwise = 44
+  /// Enter a roundabout in the counterclockwise direction and turn sharply to the right.
+  case roundaboutSharpRightCounterclockwise = 45
+  /// Enter a roundabout in the clockwise direction and turn slightly left.
+  case roundaboutSlightLeftClockwise = 46
+  /// Enter a roundabout in the counterclockwise direction and turn slightly to the left.
+  case roundaboutSlightLeftCounterclockwise = 47
+  /// Enter a roundabout in the clockwise direction and turn slightly to the right.
+  case roundaboutSlightRightClockwise = 48
+  /// Enter a roundabout in the counterclockwise direction and turn slightly to the right.
+  case roundaboutSlightRightCounterclockwise = 49
+  /// Enter a roundabout in the clockwise direction and continue straight.
+  case roundaboutStraightClockwise = 50
+  /// Enter a roundabout in the counterclockwise direction and continue straight.
+  case roundaboutStraightCounterclockwise = 51
+  /// Enter a roundabout in the clockwise direction and turn clockwise onto the opposite side of the
+  /// street.
+  case roundaboutUTurnClockwise = 52
+  /// Enter a roundabout in the counterclockwise direction and turn counterclockwise onto the
+  /// opposite side of the street.
+  case roundaboutUTurnCounterclockwise = 53
+  /// Continue straight.
+  case straight = 54
+  /// Keep left as the road diverges.
+  case turnKeepLeft = 55
+  /// Keep right as the road diverges.
+  case turnKeepRight = 56
+  /// Regular left turn at an intersection.
+  case turnLeft = 57
+  /// Regular right turn at an intersection.
+  case turnRight = 58
+  /// Sharp left turn at an intersection.
+  case turnSharpLeft = 59
+  /// Sharp right turn at an intersection.
+  case turnSharpRight = 60
+  /// Slight left turn at an intersection.
+  case turnSlightLeft = 61
+  /// Slight right turn at an intersection.
+  case turnSlightRight = 62
+  /// Clockwise turn onto the opposite side of the street.
+  case turnUTurnClockwise = 63
+  /// Counterclockwise turn onto the opposite side of the street.
+  case turnUTurnCounterclockwise = 64
+  /// Unknown maneuver.
+  case unknown = 65
+}
+
+/// Whether this step is on a drive-on-right or drive-on-left route.
+enum DrivingSideDto: Int {
+  /// Drive-on-left side.
+  case left = 0
+  /// Unspecified side.
+  case none = 1
+  /// Drive-on-right side.
+  case right = 2
+}
+
+/// The state of navigation.
+enum NavStateDto: Int {
+  /// Actively navigating.
+  case enroute = 0
+  /// Actively navigating but searching for a new route.
+  case rerouting = 1
+  /// Navigation has ended.
+  case stopped = 2
+  /// Error or unspecified state.
+  case unknown = 3
+}
+
+/// A set of values that specify the shape of the road path continuing from the Lane.
+enum LaneShapeDto: Int {
+  /// Normal left turn (45-135 degrees).
+  case normalLeft = 0
+  /// Normal right turn (45-135 degrees).
+  case normalRight = 1
+  /// Sharp left turn (135-175 degrees).
+  case sharpLeft = 2
+  /// Sharp right turn (135-175 degrees).
+  case sharpRight = 3
+  /// Slight left turn (10-45 degrees).
+  case slightLeft = 4
+  /// Slight right turn (10-45 degrees).
+  case slightRight = 5
+  /// No turn.
+  case straight = 6
+  /// Shape is unknown.
+  case unknown = 7
+  /// A left turn onto the opposite side of the same street (175-180 degrees).
+  case uTurnLeft = 8
+  /// A right turn onto the opposite side of the same street (175-180 degrees).
+  case uTurnRight = 9
+}
+
 /// Object containing map options used to initialize Google Map view.
 ///
 /// Generated class from Pigeon that represents data sent in messages.
@@ -1283,6 +1467,215 @@ struct RouteSegmentDto {
       destinationLatLng.toList(),
       latLngs,
       destinationWaypoint?.toList(),
+    ]
+  }
+}
+
+/// One of the possible directions from a lane at the end of a route step, and whether it is on the
+/// recommended route.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct LaneDirectionDto {
+  /// Shape for this lane direction.
+  var laneShape: LaneShapeDto
+  /// Whether this lane is recommended.
+  var isRecommended: Bool
+
+  static func fromList(_ list: [Any?]) -> LaneDirectionDto? {
+    let laneShape = LaneShapeDto(rawValue: list[0] as! Int)!
+    let isRecommended = list[1] as! Bool
+
+    return LaneDirectionDto(
+      laneShape: laneShape,
+      isRecommended: isRecommended
+    )
+  }
+
+  func toList() -> [Any?] {
+    [
+      laneShape.rawValue,
+      isRecommended,
+    ]
+  }
+}
+
+/// Single lane on the road at the end of a route step.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct LaneDto {
+  /// List of possible directions a driver can follow when using this lane at the end of the
+  /// respective route step
+  var laneDirections: [LaneDirectionDto?]
+
+  static func fromList(_ list: [Any?]) -> LaneDto? {
+    let laneDirections = list[0] as! [LaneDirectionDto?]
+
+    return LaneDto(
+      laneDirections: laneDirections
+    )
+  }
+
+  func toList() -> [Any?] {
+    [
+      laneDirections,
+    ]
+  }
+}
+
+/// Information about a single step along a navigation route.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct StepInfoDto {
+  /// Distance in meters from the previous step to this step.
+  var distanceFromPrevStepMeters: Int64
+  /// Time in seconds from the previous step to this step.
+  var timeFromPrevStepSeconds: Int64
+  /// Whether this step is on a drive-on-right or drive-on-left route.
+  var drivingSide: DrivingSideDto
+  /// The exit number if it exists.
+  var exitNumber: String?
+  /// The full text of the instruction for this step.
+  var fullInstructions: String
+  /// The full road name for this step.
+  var fullRoadName: String
+  /// The simplified version of the road name.
+  var simpleRoadName: String
+  /// The counted number of the exit to take relative to the location where the
+  /// roundabout was entered.
+  var roundaboutTurnNumber: Int64
+  /// The list of available lanes at the end of this route step.
+  var lanes: [LaneDto?]
+  /// The maneuver for this step.
+  var maneuver: ManeuverDto
+  /// The index of the step in the list of all steps in the route.
+  var stepNumber: Int64
+
+  static func fromList(_ list: [Any?]) -> StepInfoDto? {
+    let distanceFromPrevStepMeters = list[0] is Int64 ? list[0] as! Int64 : Int64(list[0] as! Int32)
+    let timeFromPrevStepSeconds = list[1] is Int64 ? list[1] as! Int64 : Int64(list[1] as! Int32)
+    let drivingSide = DrivingSideDto(rawValue: list[2] as! Int)!
+    let exitNumber: String? = nilOrValue(list[3])
+    let fullInstructions = list[4] as! String
+    let fullRoadName = list[5] as! String
+    let simpleRoadName = list[6] as! String
+    let roundaboutTurnNumber = list[7] is Int64 ? list[7] as! Int64 : Int64(list[7] as! Int32)
+    let lanes = list[8] as! [LaneDto?]
+    let maneuver = ManeuverDto(rawValue: list[9] as! Int)!
+    let stepNumber = list[10] is Int64 ? list[10] as! Int64 : Int64(list[10] as! Int32)
+
+    return StepInfoDto(
+      distanceFromPrevStepMeters: distanceFromPrevStepMeters,
+      timeFromPrevStepSeconds: timeFromPrevStepSeconds,
+      drivingSide: drivingSide,
+      exitNumber: exitNumber,
+      fullInstructions: fullInstructions,
+      fullRoadName: fullRoadName,
+      simpleRoadName: simpleRoadName,
+      roundaboutTurnNumber: roundaboutTurnNumber,
+      lanes: lanes,
+      maneuver: maneuver,
+      stepNumber: stepNumber
+    )
+  }
+
+  func toList() -> [Any?] {
+    [
+      distanceFromPrevStepMeters,
+      timeFromPrevStepSeconds,
+      drivingSide.rawValue,
+      exitNumber,
+      fullInstructions,
+      fullRoadName,
+      simpleRoadName,
+      roundaboutTurnNumber,
+      lanes,
+      maneuver.rawValue,
+      stepNumber,
+    ]
+  }
+}
+
+/// Contains information about the state of navigation, the current nav step if
+/// available, and remaining steps if available.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct NavInfoDto {
+  /// The current state of navigation.
+  var navState: NavStateDto
+  /// Information about the upcoming maneuver step.
+  var currentStep: StepInfoDto?
+  /// The remaining steps after the current step.
+  var remainingSteps: [StepInfoDto?]
+  /// Whether the route has changed since the last sent message.
+  var routeChanged: Bool
+  /// Estimated remaining distance in meters along the route to the
+  /// current step.
+  var distanceToCurrentStepMeters: Int64?
+  /// The estimated remaining distance in meters to the final destination which
+  /// is the last destination in a multi-destination trip.
+  var distanceToFinalDestinationMeters: Int64?
+  /// The estimated remaining distance in meters to the next destination.
+  ///
+  /// Android only.
+  var distanceToNextDestinationMeters: Int64?
+  /// The estimated remaining time in seconds along the route to the
+  /// current step.
+  var timeToCurrentStepSeconds: Int64?
+  /// The estimated remaining time in seconds to the final destination which is
+  /// the last destination in a multi-destination trip.
+  var timeToFinalDestinationSeconds: Int64?
+  /// The estimated remaining time in seconds to the next destination.
+  ///
+  /// Android only.
+  var timeToNextDestinationSeconds: Int64?
+
+  static func fromList(_ list: [Any?]) -> NavInfoDto? {
+    let navState = NavStateDto(rawValue: list[0] as! Int)!
+    var currentStep: StepInfoDto?
+    if let currentStepList: [Any?] = nilOrValue(list[1]) {
+      currentStep = StepInfoDto.fromList(currentStepList)
+    }
+    let remainingSteps = list[2] as! [StepInfoDto?]
+    let routeChanged = list[3] as! Bool
+    let distanceToCurrentStepMeters: Int64? = isNullish(list[4]) ? nil :
+      (list[4] is Int64? ? list[4] as! Int64? : Int64(list[4] as! Int32))
+    let distanceToFinalDestinationMeters: Int64? = isNullish(list[5]) ? nil :
+      (list[5] is Int64? ? list[5] as! Int64? : Int64(list[5] as! Int32))
+    let distanceToNextDestinationMeters: Int64? = isNullish(list[6]) ? nil :
+      (list[6] is Int64? ? list[6] as! Int64? : Int64(list[6] as! Int32))
+    let timeToCurrentStepSeconds: Int64? = isNullish(list[7]) ? nil :
+      (list[7] is Int64? ? list[7] as! Int64? : Int64(list[7] as! Int32))
+    let timeToFinalDestinationSeconds: Int64? = isNullish(list[8]) ? nil :
+      (list[8] is Int64? ? list[8] as! Int64? : Int64(list[8] as! Int32))
+    let timeToNextDestinationSeconds: Int64? = isNullish(list[9]) ? nil :
+      (list[9] is Int64? ? list[9] as! Int64? : Int64(list[9] as! Int32))
+
+    return NavInfoDto(
+      navState: navState,
+      currentStep: currentStep,
+      remainingSteps: remainingSteps,
+      routeChanged: routeChanged,
+      distanceToCurrentStepMeters: distanceToCurrentStepMeters,
+      distanceToFinalDestinationMeters: distanceToFinalDestinationMeters,
+      distanceToNextDestinationMeters: distanceToNextDestinationMeters,
+      timeToCurrentStepSeconds: timeToCurrentStepSeconds,
+      timeToFinalDestinationSeconds: timeToFinalDestinationSeconds,
+      timeToNextDestinationSeconds: timeToNextDestinationSeconds
+    )
+  }
+
+  func toList() -> [Any?] {
+    [
+      navState.rawValue,
+      currentStep?.toList(),
+      remainingSteps,
+      routeChanged,
+      distanceToCurrentStepMeters,
+      distanceToFinalDestinationMeters,
+      distanceToNextDestinationMeters,
+      timeToCurrentStepSeconds,
+      timeToFinalDestinationSeconds,
+      timeToNextDestinationSeconds,
     ]
   }
 }
@@ -4177,6 +4570,9 @@ protocol NavigationSessionApi {
   /// Road snapped location updates.
   func enableRoadSnappedLocationUpdates() throws
   func disableRoadSnappedLocationUpdates() throws
+  /// Enable Turn-by-Turn navigation events.
+  func enableTurnByTurnNavigationEvents(numNextStepsToPreview: Int64?) throws
+  func disableTurnByTurnNavigationEvents() throws
   func registerRemainingTimeOrDistanceChangedListener(remainingTimeThresholdSeconds: Int64,
                                                       remainingDistanceThresholdMeters: Int64) throws
 }
@@ -4775,6 +5171,44 @@ enum NavigationSessionApiSetup {
     } else {
       disableRoadSnappedLocationUpdatesChannel.setMessageHandler(nil)
     }
+    /// Enable Turn-by-Turn navigation events.
+    let enableTurnByTurnNavigationEventsChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.enableTurnByTurnNavigationEvents",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      enableTurnByTurnNavigationEventsChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let numNextStepsToPreviewArg: Int64? = isNullish(args[0]) ? nil :
+          (args[0] is Int64? ? args[0] as! Int64? : Int64(args[0] as! Int32))
+        do {
+          try api.enableTurnByTurnNavigationEvents(numNextStepsToPreview: numNextStepsToPreviewArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      enableTurnByTurnNavigationEventsChannel.setMessageHandler(nil)
+    }
+    let disableTurnByTurnNavigationEventsChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.disableTurnByTurnNavigationEvents",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      disableTurnByTurnNavigationEventsChannel.setMessageHandler { _, reply in
+        do {
+          try api.disableTurnByTurnNavigationEvents()
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      disableTurnByTurnNavigationEventsChannel.setMessageHandler(nil)
+    }
     let registerRemainingTimeOrDistanceChangedListenerChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.registerRemainingTimeOrDistanceChangedListener",
       binaryMessenger: binaryMessenger,
@@ -4807,11 +5241,21 @@ private class NavigationSessionEventApiCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 128:
-      return LatLngDto.fromList(readValue() as! [Any?])
+      return LaneDirectionDto.fromList(readValue() as! [Any?])
     case 129:
-      return NavigationWaypointDto.fromList(readValue() as! [Any?])
+      return LaneDto.fromList(readValue() as! [Any?])
     case 130:
+      return LatLngDto.fromList(readValue() as! [Any?])
+    case 131:
+      return NavInfoDto.fromList(readValue() as! [Any?])
+    case 132:
+      return NavigationWaypointDto.fromList(readValue() as! [Any?])
+    case 133:
       return SpeedingUpdatedEventDto.fromList(readValue() as! [Any?])
+    case 134:
+      return StepInfoDto.fromList(readValue() as! [Any?])
+    case 135:
+      return StepInfoDto.fromList(readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -4820,14 +5264,29 @@ private class NavigationSessionEventApiCodecReader: FlutterStandardReader {
 
 private class NavigationSessionEventApiCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? LatLngDto {
+    if let value = value as? LaneDirectionDto {
       super.writeByte(128)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationWaypointDto {
+    } else if let value = value as? LaneDto {
       super.writeByte(129)
       super.writeValue(value.toList())
-    } else if let value = value as? SpeedingUpdatedEventDto {
+    } else if let value = value as? LatLngDto {
       super.writeByte(130)
+      super.writeValue(value.toList())
+    } else if let value = value as? NavInfoDto {
+      super.writeByte(131)
+      super.writeValue(value.toList())
+    } else if let value = value as? NavigationWaypointDto {
+      super.writeByte(132)
+      super.writeValue(value.toList())
+    } else if let value = value as? SpeedingUpdatedEventDto {
+      super.writeByte(133)
+      super.writeValue(value.toList())
+    } else if let value = value as? StepInfoDto {
+      super.writeByte(134)
+      super.writeValue(value.toList())
+    } else if let value = value as? StepInfoDto {
+      super.writeByte(135)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -4871,6 +5330,9 @@ protocol NavigationSessionEventApiProtocol {
   /// Android-only event.
   func onGpsAvailabilityUpdate(available availableArg: Bool,
                                completion: @escaping (Result<Void, FlutterError>) -> Void)
+  /// Turn-by-Turn navigation events.
+  func onNavInfo(navInfo navInfoArg: NavInfoDto,
+                 completion: @escaping (Result<Void, FlutterError>) -> Void)
 }
 
 class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
@@ -5095,6 +5557,32 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
       codec: codec
     )
     channel.sendMessage([availableArg] as [Any?]) { response in
+      guard let listResponse = response as? [Any?] else {
+        completion(.failure(createConnectionError(withChannelName: channelName)))
+        return
+      }
+      if listResponse.count > 1 {
+        let code: String = listResponse[0] as! String
+        let message: String? = nilOrValue(listResponse[1])
+        let details: String? = nilOrValue(listResponse[2])
+        completion(.failure(FlutterError(code: code, message: message, details: details)))
+      } else {
+        completion(.success(()))
+      }
+    }
+  }
+
+  /// Turn-by-Turn navigation events.
+  func onNavInfo(navInfo navInfoArg: NavInfoDto,
+                 completion: @escaping (Result<Void, FlutterError>) -> Void) {
+    let channelName =
+      "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onNavInfo"
+    let channel = FlutterBasicMessageChannel(
+      name: channelName,
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    channel.sendMessage([navInfoArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
