@@ -25,7 +25,7 @@ jobs:
     runs-on: 
       labels: ubuntu-latest-8core
     steps:
-      - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
+      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -46,7 +46,7 @@ jobs:
     runs-on: 
       labels: ubuntu-latest-8core
     steps:
-      - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
+      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -72,7 +72,7 @@ jobs:
         working_directory:
           ['example']
     steps:
-      - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
+      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b
       - uses: actions/cache@v3
         with:
           path: '**/Pods'
@@ -102,7 +102,7 @@ jobs:
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
     steps:
-      - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
+      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -126,7 +126,7 @@ jobs:
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
     steps:
-      - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
+      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b
       - uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
         with:
           channel: 'stable'
