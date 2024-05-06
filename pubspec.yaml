@@ -38,7 +38,7 @@ dev_dependencies:
     sdk: flutter
   melos: ^3.0.1
   mockito: 5.4.4
-  pigeon: 15.0.0
+  pigeon: 18.0.1
 
 flutter:
   plugin:
