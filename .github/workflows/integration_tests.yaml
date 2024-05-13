@@ -15,9 +15,14 @@
 name: Run integration tests
 on:
   pull_request:
+    types: [review_requested, ready_for_review]
   push:
     branches:
       - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   android:
