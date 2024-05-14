@@ -31,12 +31,12 @@ jobs:
       - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
       - uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
         with:
-          channel: 'stable'
+          channel: "stable"
           cache: true
       - uses: bluefireteam/melos-action@dd3c344d731938d2ab2567a261f54a19a68b5f6a
         with:
-          melos-version: '3.0.1'
-      - name: 'Run Flutter Analyze'
+          melos-version: "3.0.1"
+      - name: "Run Flutter Analyze"
         run: melos run flutter-analyze
 
   format:
@@ -46,15 +46,15 @@ jobs:
       - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
       - uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          distribution: "temurin"
+          java-version: "17"
       - uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
         with:
-          channel: 'stable'
+          channel: "stable"
           cache: true
       - uses: bluefireteam/melos-action@dd3c344d731938d2ab2567a261f54a19a68b5f6a
         with:
-          melos-version: '3.0.1'
+          melos-version: "3.0.1"
       - name: Restore Cache
         uses: actions/cache/restore@v3
         id: cache
@@ -62,7 +62,7 @@ jobs:
           path: /home/linuxbrew/.linuxbrew
           key: ${{ runner.os }}-linuxbrew-
       - uses: Homebrew/actions/setup-homebrew@master
-      - name: 'Install swiftformat v0.53'
+      - name: "Install swiftformat v0.53"
         run: |
           export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
           curl -O https://raw.githubusercontent.com/Homebrew/homebrew-core/86f85aaa82beba49f8a5aabf3a22508c9249f188/Formula/s/swiftformat.rb
@@ -74,14 +74,14 @@ jobs:
         with:
           path: /home/linuxbrew/.linuxbrew
           key: ${{ runner.os }}-linuxbrew-${{ hashFiles('Brewfile.lock.json') }}
-      - name: 'Formatter version'
+      - name: "Formatter version"
         run: |
           swiftformat --version
-      - name: 'Run format'
+      - name: "Run format"
         if: ${{ success() || failure() }}
         run: |
           melos run format
-      - name: 'Validate formatting'
+      - name: "Validate formatting"
         if: ${{ success() || failure() }}
         run: |
           ./.github/workflows/scripts/validate-formatting.sh

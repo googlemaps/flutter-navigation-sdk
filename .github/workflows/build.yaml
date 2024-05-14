@@ -27,82 +27,81 @@ concurrency:
 jobs:
   test-dart:
     timeout-minutes: 45
-    runs-on: 
+    runs-on:
       labels: ubuntu-latest-8core
     steps:
       - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
       - uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'gradle'
+          distribution: "temurin"
+          java-version: "17"
+          cache: "gradle"
       - uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
         with:
-          channel: 'stable'
+          channel: "stable"
           cache: true
       - uses: bluefireteam/melos-action@dd3c344d731938d2ab2567a261f54a19a68b5f6a
         with:
-          melos-version: '3.0.1'
-      - name: 'Run flutter test'
+          melos-version: "3.0.1"
+      - name: "Run flutter test"
         run: melos run test:dart
 
   test-android:
     timeout-minutes: 45
-    runs-on: 
+    runs-on:
       labels: ubuntu-latest-8core
     steps:
       - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
       - uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'gradle'
+          distribution: "temurin"
+          java-version: "17"
+          cache: "gradle"
       - uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
         with:
-          flutter-version: '3.16.x'
-          channel: 'stable'
+          flutter-version: "3.16.x"
+          channel: "stable"
           cache: true
       - uses: bluefireteam/melos-action@dd3c344d731938d2ab2567a261f54a19a68b5f6a
         with:
-          melos-version: '3.0.1'
-      - name: 'Run Android native unit tests'
+          melos-version: "3.0.1"
+      - name: "Run Android native unit tests"
         run: melos run test:android
 
   test-ios:
     timeout-minutes: 45
-    runs-on: 
+    runs-on:
       labels: macos-latest-xlarge
     strategy:
       matrix:
-        working_directory:
-          ['example']
+        working_directory: ["example"]
     steps:
       - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
       - uses: actions/cache@v3
         with:
-          path: '**/Pods'
+          path: "**/Pods"
           key: ${{ runner.os }}-pods-${{ hashFiles('**/*.podspec') }}
           restore-keys: |
             ${{ runner.os }}-pods-
       - uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
         with:
-          flutter-version: '3.16.x'
-          channel: 'stable'
+          flutter-version: "3.16.x"
+          channel: "stable"
           cache: true
       - uses: bluefireteam/melos-action@dd3c344d731938d2ab2567a261f54a19a68b5f6a
         with:
-          melos-version: '3.0.1'
+          melos-version: "3.0.1"
       - name: Generate necessary files with flutter build
         working-directory: ${{ matrix.working_directory }}
-        run: flutter build ios --config-only         
-      - name: 'Run iOS native unit tests'
+        run: flutter build ios --config-only
+      - name: "Run iOS native unit tests"
         run: DEVICE='iPhone 14 Pro' melos run test:ios
 
   build-android:
-    needs: [test-dart,test-android,test-ios]
+    needs: [test-dart, test-android, test-ios]
     if: contains(github.base_ref, 'main')
     timeout-minutes: 45
-    runs-on: 
+    runs-on:
       labels: ubuntu-latest-8core
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
@@ -110,21 +109,21 @@ jobs:
       - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
       - uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'gradle'
+          distribution: "temurin"
+          java-version: "17"
+          cache: "gradle"
       - uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
         with:
-          channel: 'stable'
+          channel: "stable"
           cache: true
       - uses: bluefireteam/melos-action@dd3c344d731938d2ab2567a261f54a19a68b5f6a
         with:
-          melos-version: '3.0.1'
-      - name: 'Run build for Android'
+          melos-version: "3.0.1"
+      - name: "Run build for Android"
         run: melos run flutter-build-android
 
   build-ios:
-    needs: [test-dart,test-android,test-ios]
+    needs: [test-dart, test-android, test-ios]
     if: contains(github.base_ref, 'main')
     timeout-minutes: 90
     runs-on: macos-latest-xlarge
@@ -134,17 +133,17 @@ jobs:
       - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
       - uses: subosito/flutter-action@48cafc24713cca54bbe03cdc3a423187d413aafa
         with:
-          channel: 'stable'
+          channel: "stable"
           cache: true
           architecture: x64
       - uses: bluefireteam/melos-action@dd3c344d731938d2ab2567a261f54a19a68b5f6a
         with:
-          melos-version: '3.0.1'
+          melos-version: "3.0.1"
       - uses: actions/cache@v3
         with:
-          path: '**/Pods'
+          path: "**/Pods"
           key: ${{ runner.os }}-pods-${{ hashFiles('**/*.podspec') }}
           restore-keys: |
             ${{ runner.os }}-pods-
-      - name: 'Run build for iOS'
+      - name: "Run build for iOS"
         run: melos run flutter-build-ios
