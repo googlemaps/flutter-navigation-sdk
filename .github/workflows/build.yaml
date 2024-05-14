@@ -15,7 +15,6 @@
 name: Run test and build
 on:
   pull_request:
-    types: [review_requested, ready_for_review]
   push:
     branches:
       - main
