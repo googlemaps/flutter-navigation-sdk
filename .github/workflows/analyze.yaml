@@ -62,7 +62,7 @@ jobs:
         id: cache
         with:
           path: /home/linuxbrew/.linuxbrew
-          key: ${{ runner.os }}-linuxbrew-
+          key: ${{ runner.os }}-linuxbrew
       - uses: Homebrew/actions/setup-homebrew@master
       - name: "Install swiftformat v0.53"
         if: steps.cache.outputs.cache-hit != 'true'
@@ -76,7 +76,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         with:
           path: /home/linuxbrew/.linuxbrew
-          key: ${{ runner.os }}-linuxbrew-${{ hashFiles('Brewfile.lock.json') }}
+          key: ${{ runner.os }}-linuxbrew
       - name: "Formatter version"
         run: |
           swiftformat --version
