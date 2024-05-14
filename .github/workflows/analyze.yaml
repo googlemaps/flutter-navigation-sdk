@@ -58,7 +58,7 @@ jobs:
         with:
           melos-version: "3.0.1"
       - name: Restore Cache
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         id: cache
         with:
           path: /home/linuxbrew/.linuxbrew
@@ -72,7 +72,7 @@ jobs:
           echo 'brew "swiftformat.rb"' > Brewfile
           brew bundle
       - name: Save Cache
-        uses: actions/cache/save@v3
+        uses: actions/cache/save@v4
         if: steps.cache.outputs.cache-hit != 'true'
         with:
           path: /home/linuxbrew/.linuxbrew
