@@ -34,7 +34,7 @@ jobs:
           flutter-version: "3.19.x"
           channel: "stable"
           cache: true
-      - uses: bluefireteam/melos-action@dd3c344d731938d2ab2567a261f54a19a68b5f6a
+      - uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
         with:
           melos-version: "3.0.1"
       - name: "Run Flutter Analyze"
@@ -54,7 +54,7 @@ jobs:
           flutter-version: "3.19.x"
           channel: "stable"
           cache: true
-      - uses: bluefireteam/melos-action@dd3c344d731938d2ab2567a261f54a19a68b5f6a
+      - uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
         with:
           melos-version: "3.0.1"
       - name: Restore Cache
