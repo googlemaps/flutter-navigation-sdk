@@ -37,6 +37,9 @@ export 'package:patrol/patrol.dart';
 const double startLocationLat = 68.5938196099399;
 const double startLocationLng = 23.510696979963722;
 
+/// Timeout for tests in seconds.
+const int testTimeoutSeconds = 240; // 4 minutes
+
 const NativeAutomatorConfig _nativeAutomatorConfig = NativeAutomatorConfig(
   findTimeout: Duration(seconds: 20),
 );
@@ -45,16 +48,24 @@ const NativeAutomatorConfig _nativeAutomatorConfig = NativeAutomatorConfig(
 void patrol(
   String description,
   Future<void> Function(PatrolIntegrationTester) callback, {
-  bool? skip,
+  bool skip = false,
+  int timeoutSeconds = testTimeoutSeconds,
   NativeAutomatorConfig? nativeAutomatorConfig,
 }) {
+  /// The patrolTest skip functionality does not work as expected and can
+  /// hang the test execution.
+  /// https://github.com/leancodepl/patrol/issues/1690
+  /// Skip the test manually for now.
+  if (skip) {
+    debugPrint('Skipping test: $description');
+    return;
+  }
   patrolTest(
     description,
-    timeout: const Timeout(
-        Duration(seconds: 240)), // Add a 4 minute timeout to tests.
-    nativeAutomatorConfig: nativeAutomatorConfig ?? _nativeAutomatorConfig,
-    skip: skip,
     callback,
+    skip: skip,
+    timeout: Timeout(Duration(seconds: timeoutSeconds)),
+    nativeAutomatorConfig: nativeAutomatorConfig ?? _nativeAutomatorConfig,
   );
 }
 
