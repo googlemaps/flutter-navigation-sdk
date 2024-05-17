@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name:  google_maps_flutter_navigation
+name: google_maps_flutter_navigation
 repository: https://github.com/googlemaps/flutter-navigation-sdk
 
 packages:
@@ -50,7 +50,9 @@ scripts:
 
   format:
     run: |
-      melos run format:dart && melos run format:ios && melos run format:android
+      melos run format:dart && \
+      melos run format:ios &&  \
+      melos run format:android
     description: |
       Formats the code of all packages (Dart, iOS, Android).
 
@@ -62,15 +64,17 @@ scripts:
 
   format:ios:
     run: |
-      swiftformat .
+      swiftformat --quiet .
     description: |
       Formats the code of iOS package with swiftformat.
        - Requires `swiftformat` (can be installed via Brew on macOS).
 
   format:android:
     run: |
-      if [ ! -f android/gradlew ]; then flutter build apk --config-only; fi &&
-        cd android && ./gradlew ktfmtFormat
+      if [ -d "example" ]; then cd example; fi && \
+        if [ ! -f android/gradlew ]; then flutter build apk --config-only; fi && \
+        cd android && \
+        ./gradlew ktfmtFormat
     exec:
       concurrency: 1
       failFast: true
@@ -79,7 +83,7 @@ scripts:
     packageFilters:
       dirExists:
         - android
-      scope: '*example*'
+      scope: "*example*"
 
   test:dart:
     run: flutter pub get && flutter test
@@ -88,12 +92,14 @@ scripts:
       failFast: true
     description: Flutter test
     packageFilters:
-      fileExists: 'pigeons/messages.dart'
+      fileExists: "pigeons/messages.dart"
 
   test:android:
     run: |
-      if [ ! -f android/gradlew ]; then flutter build apk --config-only; fi \
-        && cd android && ./gradlew test
+      if [ -d "example" ]; then cd example; fi && \
+        if [ ! -f android/gradlew ]; then flutter build apk --config-only; fi && \
+        cd android && \
+        ./gradlew test
     exec:
       concurrency: 1
       failFast: true
@@ -101,10 +107,12 @@ scripts:
     packageFilters:
       dirExists:
         - android
-      scope: '*example*'
+      scope: "*example*"
 
   test:ios:
-    run: ../tools/test-ios.sh
+    run: |
+      if [ -d "example" ]; then cd example; fi && \
+      ../tools/test-ios.sh
     exec:
       concurrency: 1
       failFast: true
@@ -112,10 +120,12 @@ scripts:
     packageFilters:
       dirExists:
         - ios
-      scope: '*example*'
+      scope: "*example*"
 
   flutter-build-android:
-    run: flutter pub get && flutter build apk && flutter build appbundle
+    run: |
+      if [ -d "example" ]; then cd example; fi && \
+      flutter pub get && flutter build apk && flutter build appbundle
     exec:
       concurrency: 1
       failFast: true
@@ -123,10 +133,12 @@ scripts:
     packageFilters:
       dirExists:
         - android
-      scope: '*example*'
+      scope: "*example*"
 
   flutter-build-ios:
-    run: flutter pub get && flutter build ios --release --no-codesign
+    run: |
+      if [ -d "example" ]; then cd example; fi && \
+      flutter pub get && flutter build ios --release --no-codesign
     exec:
       concurrency: 1
       failFast: true
@@ -134,23 +146,24 @@ scripts:
     packageFilters:
       dirExists:
         - ios
-      scope: '*example*'
+      scope: "*example*"
 
   generate:mocks:
-    exec: | 
-      dart run build_runner build --delete-conflicting-outputs && 
-        melos run format --no-select && melos run add-license-header
+    exec: |
+      dart run build_runner build --delete-conflicting-outputs && \
+        melos run format && \
+        melos run add-license-header
     description: Generate the pigeon messages for all the supported packages.
     packageFilters:
-      fileExists: 'pigeons/messages.dart'
+      fileExists: "pigeons/messages.dart"
 
   generate:pigeon:
-    exec: | 
-      dart run pigeon --input ./pigeons/messages.dart && 
-        melos run format --no-select
+    exec: |
+      dart run pigeon --input ./pigeons/messages.dart && \
+        melos run format
     description: Generate the pigeon messages for all the supported packages.
     packageFilters:
-      fileExists: 'pigeons/messages.dart'
+      fileExists: "pigeons/messages.dart"
 
   add-license-header:
     # If you add here another --ignore flag, add it also to
@@ -158,8 +171,10 @@ scripts:
     run: |
       addlicense -f header_template.txt \
         --ignore "**/Pods/**" \
-        --ignore "**/.dart_tool/flutter_build/**" \
+        --ignore "**/.dart_tool/**" \
         --ignore "**/example/build/**" \
+        --ignore "**/example/integration_test/test_bundle.dart" \
+        --ignore "build/**" \
         --ignore "**/GeneratedPluginRegistrant.*" \
         --ignore "**/flutter_export_environment.sh" \
         .
@@ -172,8 +187,10 @@ scripts:
       addlicense -f header_template.txt \
         --check \
         --ignore "**/Pods/**" \
-        --ignore "**/.dart_tool/flutter_build/**" \
+        --ignore "**/.dart_tool/**" \
         --ignore "**/example/build/**" \
+        --ignore "**/example/integration_test/test_bundle.dart" \
+        --ignore "build/**" \
         --ignore "**/GeneratedPluginRegistrant.*" \
         --ignore "**/flutter_export_environment.sh" \
         .
