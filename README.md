@@ -1,8 +1,11 @@
-# Google Maps Navigation (Preview)
+# Google Navigation for Flutter (Beta)
 
 ## Description
 
-This repository contains a Flutter plugin that provides a [Google Maps Navigation](https://developers.google.com/maps/documentation/navigation) widget.
+This repository contains a Flutter plugin that provides a [Google Navigation](https://developers.google.com/maps/documentation/navigation) widget to Flutter apps targeting Android and iOS.
+
+> [!NOTE]
+> This package is in Beta until it reaches version 1.0. According to [semantic versioning](https://semver.org/#spec-item-4), breaking changes may be introduced before 1.0.
 
 ## Requirements
 
