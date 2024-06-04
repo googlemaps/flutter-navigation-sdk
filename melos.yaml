@@ -112,7 +112,7 @@ scripts:
   test:ios:
     run: |
       if [ -d "example" ]; then cd example; fi && \
-      ../tools/test-ios.sh
+      ../tool/test-ios.sh
     exec:
       concurrency: 1
       failFast: true
