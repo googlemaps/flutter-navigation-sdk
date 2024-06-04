@@ -29,7 +29,9 @@ This repository contains a Flutter plugin that provides a [Google Maps Navigatio
 Follow the instructions below to add your API key to the appropriate files in your Flutter project:
 
 * To add the Google Navigation for Flutter package to your project, use the command:
-  `pub add google_navigation_flutter`
+  ```
+  pub add google_navigation_flutter
+  ```
 
 * Enable Google Maps SDK and Google Maps Navigation SDK for each platform.
   * Go to [Google Developers Console](https://console.cloud.google.com/).
@@ -45,7 +47,6 @@ Follow the instructions below to add your API key to the appropriate files in yo
 
 For more details, see [Google Navigation SDK Documentation](https://developers.google.com/maps/documentation/navigation).
 
-
 ### Android
 
 Set the `minSdkVersion` in `android/app/build.gradle`:
@@ -58,39 +59,22 @@ android {
 }
 ```
 
-To securely store your API key, it is recommended to use the [Google Maps Secrets Gradle Plugin](https://developers.google.com/maps/documentation/android-sdk/secrets-gradle-plugin). This plugin helps manage API keys without exposing them in your app's source code.
+Then define the [API key](https://developers.google.com/maps/flutter-package/config#step_4_add_your_api_key_to_the_project).
 
 See example configuration for secrets plugin at example applications [build.gradle](./example/android/app/build.gradle) file.
+To securely store your API key, it is recommended to use the [Google Maps Secrets Gradle Plugin](https://developers.google.com/maps/documentation/android-sdk/secrets-gradle-plugin). This plugin helps manage API keys without exposing them in your app's source code.
 
 ### iOS
 
-To set up, specify your API key in the application delegate `ios/Runner/AppDelegate.swift`:
+1. Open the ios/Podfile config file in your preferred IDE.
+1. Add the following lines to the beginning of this Podfile:
 
 ```swift
-import UIKit
-import Flutter
-import GoogleMaps
-import GoogleNavigation
-
-@UIApplicationMain
-@objc class AppDelegate: FlutterAppDelegate {
-  override func application(
-    _ application: UIApplication,
-    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-  ) -> Bool {
-    GMSServices.provideAPIKey("YOUR API KEY HERE")
-    GMSServices.setMetalRendererEnabled(true)
-    GeneratedPluginRegistrant.register(with: self)
-    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
-  }
-}
+  # Set platform to 14.0 to enable latest Google Maps SDK
+  platform :ios, '14.0'
 ```
 
-> [!NOTE]
-> Above code snipped also enables Metal rendering for Google Maps SDK. If you are not using Metal rendering, you can remove the following line:
->  ```swift
->  GMSServices.setMetalRendererEnabled(true)
->  ```
+Then define the [API key](https://developers.google.com/maps/flutter-package/config#step_4_add_your_api_key_to_the_project).
 
 ## Usage
 
