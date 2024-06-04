@@ -98,12 +98,12 @@ void main() {
       debugPrint('My location button clicked event: currently $event');
     }
 
-    /// The evot tested because there's no reliable way to trigger them currently.
+    /// The events are not tested because there's no reliable way to trigger them currently.
     void onMyLocationClicked(MyLocationClickedEvent event) {
       debugPrint('My location clicked event: currently $event');
     }
 
-    /// The evot tested because there's no reliable way to trigger them currently.
+    /// The events are not tested because there's no reliable way to trigger them currently.
     void onMapLongClicked(LatLng coordinates) {
       debugPrint(
           'Map clicked event lat: ${coordinates.latitude}, lng: ${coordinates.longitude}.');
@@ -118,14 +118,14 @@ void main() {
       initializeNavigation: false,
       onMapClicked: expectAsync1((LatLng msg) {
         expectSync(msg, isA<LatLng>());
-      }, count: 1, max: 1),
+      }, max: 1),
       onMapLongClicked: onMapLongClicked,
       onMyLocationButtonClicked: onMyLocationButtonClicked,
       onMyLocationClicked: onMyLocationClicked,
     );
 
     /// Test that the onMapClicked event comes in.
-    await $.native.tap(Selector(enabled: true));
+    await $.native.tapAt(const Offset(0.5, 0.5));
 
     /// Test the default values match with what has been documented in the
     /// API documentation in google_maps_navigation.dart file.

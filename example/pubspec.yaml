@@ -17,7 +17,7 @@ description: Demonstrates how to use the google_maps_navigation plugin.
 publish_to: "none"
 
 environment:
-  sdk: ">=3.1.0 <4.0.0"
+  sdk: ^3.4.0
 
 dependencies:
   cupertino_icons: ^1.0.2
@@ -35,8 +35,7 @@ dev_dependencies:
     sdk: flutter
   integration_test:
     sdk: flutter
-  patrol: ">=3.3.0 <3.4.0"
-  patrol_finders: "<2.1.0"
+  patrol: ^3.7.2
   pub_semver: ^2.1.4
 
 flutter:

@@ -38,7 +38,7 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@44ac965b96f18d999802d4b807e3256d5a3f9fa1
         with:
-          flutter-version: "3.19.x"
+          flutter-version: "3.22.x"
           channel: "stable"
           cache: true
       - name: Install Melos
