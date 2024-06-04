@@ -666,18 +666,18 @@ class GoogleNavigationViewController {
   /// Sets the event channel listener for the map click event listeners.
   void _setOnMapClickedListeners() {
     if (_viewState != null) {
-      if (_viewState?.widget.onMapClicked != null) {
+      if (_viewState.widget.onMapClicked != null) {
         GoogleMapsNavigationPlatform.instance
             .getMapClickEventStream(viewId: _viewId)
             .listen((MapClickEvent event) {
-          _viewState!.widget.onMapClicked!(event.target);
+          _viewState.widget.onMapClicked!(event.target);
         });
       }
-      if (_viewState?.widget.onMapLongClicked != null) {
+      if (_viewState.widget.onMapLongClicked != null) {
         GoogleMapsNavigationPlatform.instance
             .getMapLongClickEventStream(viewId: _viewId)
             .listen((MapLongClickEvent event) {
-          _viewState!.widget.onMapLongClicked!(event.target);
+          _viewState.widget.onMapLongClicked!(event.target);
         });
       }
     }
@@ -686,10 +686,10 @@ class GoogleNavigationViewController {
   /// Sets the event channel listener for the on recenter button clicked event.
   void _setOnRecenterButtonClickedListener() {
     if (_viewState != null &&
-        _viewState?.widget.onRecenterButtonClicked != null) {
+        _viewState.widget.onRecenterButtonClicked != null) {
       GoogleMapsNavigationPlatform.instance
           .getNavigationRecenterButtonClickedEventStream(viewId: _viewId)
-          .listen(_viewState?.widget.onRecenterButtonClicked);
+          .listen(_viewState.widget.onRecenterButtonClicked);
     }
   }
 
@@ -714,20 +714,20 @@ class GoogleNavigationViewController {
 
   /// Sets the event channel listener for the on my location clicked event.
   void _setOnMyLocationClickedListener() {
-    if (_viewState != null && _viewState?.widget.onMyLocationClicked != null) {
+    if (_viewState != null && _viewState.widget.onMyLocationClicked != null) {
       GoogleMapsNavigationPlatform.instance
           .getMyLocationClickedEventStream(viewId: _viewId)
-          .listen(_viewState?.widget.onMyLocationClicked);
+          .listen(_viewState.widget.onMyLocationClicked);
     }
   }
 
   /// Sets the event channel listener for the on my location button clicked event.
   void _setOnMyLocationButtonClickedListener() {
     if (_viewState != null &&
-        _viewState?.widget.onMyLocationButtonClicked != null) {
+        _viewState.widget.onMyLocationButtonClicked != null) {
       GoogleMapsNavigationPlatform.instance
           .getMyLocationButtonClickedEventStream(viewId: _viewId)
-          .listen(_viewState?.widget.onMyLocationButtonClicked);
+          .listen(_viewState.widget.onMyLocationButtonClicked);
     }
   }
 

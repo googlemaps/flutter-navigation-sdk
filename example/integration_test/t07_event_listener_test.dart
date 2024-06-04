@@ -47,7 +47,6 @@ void main() {
           eventReceived.complete();
         }
       },
-      count: 1,
       max: -1,
     ));
     await $.pumpAndSettle();
@@ -109,7 +108,6 @@ void main() {
           eventReceived.complete();
         }
       },
-      count: 1,
       max: -1,
     ));
     await $.pumpAndSettle();
@@ -173,7 +171,6 @@ void main() {
                   eventReceived.complete();
                 }
               },
-              count: 1,
               max: -1,
             ),
             numNextStepsToPreview: 1);
@@ -232,7 +229,6 @@ void main() {
           eventReceived.complete();
         }
       },
-      count: 1,
       max: -1,
     ));
     await $.pumpAndSettle();
@@ -321,7 +317,6 @@ void main() {
           eventReceived.complete();
         }
       },
-      count: 1,
       max: -1,
     ));
 
@@ -365,7 +360,6 @@ void main() {
           eventReceived.complete();
         }
       },
-      count: 1,
       max: -1,
     ));
 
@@ -439,7 +433,6 @@ void main() {
             eventReceived.complete();
           }
         },
-        count: 1,
         max: -1,
       ));
       await $.pumpAndSettle();

@@ -244,7 +244,7 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
         .elevatedButtonTheme
         .style!
         .copyWith(
-            minimumSize: MaterialStateProperty.all<Size>(const Size(107, 36)));
+            minimumSize: WidgetStateProperty.all<Size>(const Size(107, 36)));
 
     return Column(
       mainAxisSize: MainAxisSize.min,
