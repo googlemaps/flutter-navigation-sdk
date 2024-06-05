@@ -285,7 +285,7 @@ class _NavigationWithoutMapPageState
   Widget build(BuildContext context) {
     return buildPage(
         context,
-        SizedBox(
+        (BuildContext context) => SizedBox(
             width: double.infinity,
             child: Column(
               children: <Widget>[

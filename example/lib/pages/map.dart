@@ -98,77 +98,79 @@ class _MapPageState extends ExamplePageState<MapPage> {
 
     return buildPage(
         context,
-        Stack(
-          children: <Widget>[
-            GoogleMapsNavigationView(
-              onViewCreated: _onViewCreated,
-              onMyLocationClicked: _onMyLocationClicked,
-              onMyLocationButtonClicked: _onMyLocationButtonClicked,
-              initialNavigationUIEnabledPreference:
-                  NavigationUIEnabledPreference.disabled,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              child: Column(
-                children: <Widget>[
-                  ElevatedButton(
-                      style: mapTypeStyle,
-                      onPressed: mapType == MapType.normal
-                          ? null
-                          : () => setMapType(MapType.normal),
-                      child: const Text('Normal')),
-                  ElevatedButton(
-                      style: mapTypeStyle,
-                      onPressed: mapType == MapType.satellite
-                          ? null
-                          : () => setMapType(MapType.satellite),
-                      child: const Text('Satellite')),
-                  ElevatedButton(
-                      style: mapTypeStyle,
-                      onPressed: mapType == MapType.terrain
-                          ? null
-                          : () => setMapType(MapType.terrain),
-                      child: const Text('Terrain')),
-                  ElevatedButton(
-                      style: mapTypeStyle,
-                      onPressed: mapType == MapType.hybrid
-                          ? null
-                          : () => setMapType(MapType.hybrid),
-                      child: const Text('Hybrid')),
-                ],
-              ),
-            ),
-            if (mapType == MapType.normal)
-              Padding(
-                padding: isMyLocationEnabled && isMyLocationButtonEnabled
-                    ? const EdgeInsets.only(top: 50.0, right: 8.0)
-                    : const EdgeInsets.all(8.0),
-                child: Align(
-                  alignment: Alignment.topRight,
+        (BuildContext context) => Stack(
+              children: <Widget>[
+                GoogleMapsNavigationView(
+                  onViewCreated: _onViewCreated,
+                  onMyLocationClicked: _onMyLocationClicked,
+                  onMyLocationButtonClicked: _onMyLocationButtonClicked,
+                  initialNavigationUIEnabledPreference:
+                      NavigationUIEnabledPreference.disabled,
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   child: Column(
                     children: <Widget>[
                       ElevatedButton(
-                        style: mapTypeStyle,
-                        onPressed: () => setMapStyleDefault(),
-                        child: const Text('Default style'),
-                      ),
+                          style: mapTypeStyle,
+                          onPressed: mapType == MapType.normal
+                              ? null
+                              : () => setMapType(MapType.normal),
+                          child: const Text('Normal')),
                       ElevatedButton(
-                        style: mapTypeStyle,
-                        onPressed: () => setMapStyleNight(),
-                        child: const Text('Night style'),
-                      ),
+                          style: mapTypeStyle,
+                          onPressed: mapType == MapType.satellite
+                              ? null
+                              : () => setMapType(MapType.satellite),
+                          child: const Text('Satellite')),
                       ElevatedButton(
-                        style: mapTypeStyle,
-                        onPressed: () => setMapStyleSepia(),
-                        child: const Text('Sepia style'),
-                      ),
+                          style: mapTypeStyle,
+                          onPressed: mapType == MapType.terrain
+                              ? null
+                              : () => setMapType(MapType.terrain),
+                          child: const Text('Terrain')),
+                      ElevatedButton(
+                          style: mapTypeStyle,
+                          onPressed: mapType == MapType.hybrid
+                              ? null
+                              : () => setMapType(MapType.hybrid),
+                          child: const Text('Hybrid')),
                     ],
                   ),
                 ),
-              ),
-            getOverlayOptionsButton(context, onPressed: () => toggleOverlay())
-          ],
-        ));
+                if (mapType == MapType.normal)
+                  Padding(
+                    padding: isMyLocationEnabled && isMyLocationButtonEnabled
+                        ? const EdgeInsets.only(top: 50.0, right: 8.0)
+                        : const EdgeInsets.all(8.0),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: Column(
+                        children: <Widget>[
+                          ElevatedButton(
+                            style: mapTypeStyle,
+                            onPressed: () => setMapStyleDefault(),
+                            child: const Text('Default style'),
+                          ),
+                          ElevatedButton(
+                            style: mapTypeStyle,
+                            onPressed: () => setMapStyleNight(),
+                            child: const Text('Night style'),
+                          ),
+                          ElevatedButton(
+                            style: mapTypeStyle,
+                            onPressed: () => setMapStyleSepia(),
+                            child: const Text('Sepia style'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                getOverlayOptionsButton(context,
+                    onPressed: () => toggleOverlay())
+              ],
+            ));
   }
 
   @override

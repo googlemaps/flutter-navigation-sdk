@@ -276,6 +276,220 @@ enum class RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto(val raw: Int)
   }
 }
 
+/** A set of values that specify the navigation action to take. */
+enum class ManeuverDto(val raw: Int) {
+  /** Arrival at a destination. */
+  DESTINATION(0),
+  /** Starting point of the maneuver. */
+  DEPART(1),
+  /** Arrival at a destination located on the left side of the road. */
+  DESTINATIONLEFT(2),
+  /** Arrival at a destination located on the right side of the road. */
+  DESTINATIONRIGHT(3),
+  /** Take the boat ferry. */
+  FERRYBOAT(4),
+  /** Take the train ferry. */
+  FERRYTRAIN(5),
+  /** Current road joins another road slightly on the left. */
+  FORKLEFT(6),
+  /** Current road joins another road slightly on the right. */
+  FORKRIGHT(7),
+  /** Current road joins another on the left. */
+  MERGELEFT(8),
+  /** Current road joins another on the right. */
+  MERGERIGHT(9),
+  /** Current road joins another. */
+  MERGEUNSPECIFIED(10),
+  /** The street name changes. */
+  NAMECHANGE(11),
+  /** Keep to the left side of the road when exiting a turnpike or freeway as the road diverges. */
+  OFFRAMPKEEPLEFT(12),
+  /** Keep to the right side of the road when exiting a turnpike or freeway as the road diverges. */
+  OFFRAMPKEEPRIGHT(13),
+  /** Regular left turn to exit a turnpike or freeway. */
+  OFFRAMPLEFT(14),
+  /** Regular right turn to exit a turnpike or freeway. */
+  OFFRAMPRIGHT(15),
+  /** Sharp left turn to exit a turnpike or freeway. */
+  OFFRAMPSHARPLEFT(16),
+  /** Sharp right turn to exit a turnpike or freeway. */
+  OFFRAMPSHARPRIGHT(17),
+  /** Slight left turn to exit a turnpike or freeway. */
+  OFFRAMPSLIGHTLEFT(18),
+  /** Slight right turn to exit a turnpike or freeway. */
+  OFFRAMPSLIGHTRIGHT(19),
+  /** Exit a turnpike or freeway. */
+  OFFRAMPUNSPECIFIED(20),
+  /** Clockwise turn onto the opposite side of the street to exit a turnpike or freeway. */
+  OFFRAMPUTURNCLOCKWISE(21),
+  /** Counterclockwise turn onto the opposite side of the street to exit a turnpike or freeway. */
+  OFFRAMPUTURNCOUNTERCLOCKWISE(22),
+  /** Keep to the left side of the road when entering a turnpike or freeway as the road diverges. */
+  ONRAMPKEEPLEFT(23),
+  /**
+   * Keep to the right side of the road when entering a turnpike or freeway as the road diverges.
+   */
+  ONRAMPKEEPRIGHT(24),
+  /** Regular left turn to enter a turnpike or freeway. */
+  ONRAMPLEFT(25),
+  /** Regular right turn to enter a turnpike or freeway. */
+  ONRAMPRIGHT(26),
+  /** Sharp left turn to enter a turnpike or freeway. */
+  ONRAMPSHARPLEFT(27),
+  /** Sharp right turn to enter a turnpike or freeway. */
+  ONRAMPSHARPRIGHT(28),
+  /** Slight left turn to enter a turnpike or freeway. */
+  ONRAMPSLIGHTLEFT(29),
+  /** Slight right turn to enter a turnpike or freeway. */
+  ONRAMPSLIGHTRIGHT(30),
+  /** Enter a turnpike or freeway. */
+  ONRAMPUNSPECIFIED(31),
+  /** Clockwise turn onto the opposite side of the street to enter a turnpike or freeway. */
+  ONRAMPUTURNCLOCKWISE(32),
+  /** Counterclockwise turn onto the opposite side of the street to enter a turnpike or freeway. */
+  ONRAMPUTURNCOUNTERCLOCKWISE(33),
+  /** Enter a roundabout in the clockwise direction. */
+  ROUNDABOUTCLOCKWISE(34),
+  /** Enter a roundabout in the counterclockwise direction. */
+  ROUNDABOUTCOUNTERCLOCKWISE(35),
+  /** Exit a roundabout in the clockwise direction. */
+  ROUNDABOUTEXITCLOCKWISE(36),
+  /** Exit a roundabout in the counterclockwise direction. */
+  ROUNDABOUTEXITCOUNTERCLOCKWISE(37),
+  /** Enter a roundabout in the clockwise direction and turn left. */
+  ROUNDABOUTLEFTCLOCKWISE(38),
+  /** Enter a roundabout in the counterclockwise direction and turn left. */
+  ROUNDABOUTLEFTCOUNTERCLOCKWISE(39),
+  /** Enter a roundabout in the clockwise direction and turn right. */
+  ROUNDABOUTRIGHTCLOCKWISE(40),
+  /** Enter a roundabout in the counterclockwise direction and turn right. */
+  ROUNDABOUTRIGHTCOUNTERCLOCKWISE(41),
+  /** Enter a roundabout in the clockwise direction and turn sharply to the left. */
+  ROUNDABOUTSHARPLEFTCLOCKWISE(42),
+  /** Enter a roundabout in the counterclockwise direction and turn sharply to the left. */
+  ROUNDABOUTSHARPLEFTCOUNTERCLOCKWISE(43),
+  /** Enter a roundabout in the clockwise direction and turn sharply to the right. */
+  ROUNDABOUTSHARPRIGHTCLOCKWISE(44),
+  /** Enter a roundabout in the counterclockwise direction and turn sharply to the right. */
+  ROUNDABOUTSHARPRIGHTCOUNTERCLOCKWISE(45),
+  /** Enter a roundabout in the clockwise direction and turn slightly left. */
+  ROUNDABOUTSLIGHTLEFTCLOCKWISE(46),
+  /** Enter a roundabout in the counterclockwise direction and turn slightly to the left. */
+  ROUNDABOUTSLIGHTLEFTCOUNTERCLOCKWISE(47),
+  /** Enter a roundabout in the clockwise direction and turn slightly to the right. */
+  ROUNDABOUTSLIGHTRIGHTCLOCKWISE(48),
+  /** Enter a roundabout in the counterclockwise direction and turn slightly to the right. */
+  ROUNDABOUTSLIGHTRIGHTCOUNTERCLOCKWISE(49),
+  /** Enter a roundabout in the clockwise direction and continue straight. */
+  ROUNDABOUTSTRAIGHTCLOCKWISE(50),
+  /** Enter a roundabout in the counterclockwise direction and continue straight. */
+  ROUNDABOUTSTRAIGHTCOUNTERCLOCKWISE(51),
+  /**
+   * Enter a roundabout in the clockwise direction and turn clockwise onto the opposite side of the
+   * street.
+   */
+  ROUNDABOUTUTURNCLOCKWISE(52),
+  /**
+   * Enter a roundabout in the counterclockwise direction and turn counterclockwise onto the
+   * opposite side of the street.
+   */
+  ROUNDABOUTUTURNCOUNTERCLOCKWISE(53),
+  /** Continue straight. */
+  STRAIGHT(54),
+  /** Keep left as the road diverges. */
+  TURNKEEPLEFT(55),
+  /** Keep right as the road diverges. */
+  TURNKEEPRIGHT(56),
+  /** Regular left turn at an intersection. */
+  TURNLEFT(57),
+  /** Regular right turn at an intersection. */
+  TURNRIGHT(58),
+  /** Sharp left turn at an intersection. */
+  TURNSHARPLEFT(59),
+  /** Sharp right turn at an intersection. */
+  TURNSHARPRIGHT(60),
+  /** Slight left turn at an intersection. */
+  TURNSLIGHTLEFT(61),
+  /** Slight right turn at an intersection. */
+  TURNSLIGHTRIGHT(62),
+  /** Clockwise turn onto the opposite side of the street. */
+  TURNUTURNCLOCKWISE(63),
+  /** Counterclockwise turn onto the opposite side of the street. */
+  TURNUTURNCOUNTERCLOCKWISE(64),
+  /** Unknown maneuver. */
+  UNKNOWN(65);
+
+  companion object {
+    fun ofRaw(raw: Int): ManeuverDto? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** Whether this step is on a drive-on-right or drive-on-left route. */
+enum class DrivingSideDto(val raw: Int) {
+  /** Drive-on-left side. */
+  LEFT(0),
+  /** Unspecified side. */
+  NONE(1),
+  /** Drive-on-right side. */
+  RIGHT(2);
+
+  companion object {
+    fun ofRaw(raw: Int): DrivingSideDto? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** The state of navigation. */
+enum class NavStateDto(val raw: Int) {
+  /** Actively navigating. */
+  ENROUTE(0),
+  /** Actively navigating but searching for a new route. */
+  REROUTING(1),
+  /** Navigation has ended. */
+  STOPPED(2),
+  /** Error or unspecified state. */
+  UNKNOWN(3);
+
+  companion object {
+    fun ofRaw(raw: Int): NavStateDto? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** A set of values that specify the shape of the road path continuing from the Lane. */
+enum class LaneShapeDto(val raw: Int) {
+  /** Normal left turn (45-135 degrees). */
+  NORMALLEFT(0),
+  /** Normal right turn (45-135 degrees). */
+  NORMALRIGHT(1),
+  /** Sharp left turn (135-175 degrees). */
+  SHARPLEFT(2),
+  /** Sharp right turn (135-175 degrees). */
+  SHARPRIGHT(3),
+  /** Slight left turn (10-45 degrees). */
+  SLIGHTLEFT(4),
+  /** Slight right turn (10-45 degrees). */
+  SLIGHTRIGHT(5),
+  /** No turn. */
+  STRAIGHT(6),
+  /** Shape is unknown. */
+  UNKNOWN(7),
+  /** A left turn onto the opposite side of the same street (175-180 degrees). */
+  UTURNLEFT(8),
+  /** A right turn onto the opposite side of the same street (175-180 degrees). */
+  UTURNRIGHT(9);
+
+  companion object {
+    fun ofRaw(raw: Int): LaneShapeDto? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
 /**
  * Object containing map options used to initialize Google Map view.
  *
@@ -1311,6 +1525,230 @@ data class RouteSegmentDto(
       destinationLatLng.toList(),
       latLngs,
       destinationWaypoint?.toList(),
+    )
+  }
+}
+
+/**
+ * One of the possible directions from a lane at the end of a route step, and whether it is on the
+ * recommended route.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class LaneDirectionDto(
+  /** Shape for this lane direction. */
+  val laneShape: LaneShapeDto,
+  /** Whether this lane is recommended. */
+  val isRecommended: Boolean
+) {
+  companion object {
+    @Suppress("UNCHECKED_CAST")
+    fun fromList(list: List<Any?>): LaneDirectionDto {
+      val laneShape = LaneShapeDto.ofRaw(list[0] as Int)!!
+      val isRecommended = list[1] as Boolean
+      return LaneDirectionDto(laneShape, isRecommended)
+    }
+  }
+
+  fun toList(): List<Any?> {
+    return listOf<Any?>(
+      laneShape.raw,
+      isRecommended,
+    )
+  }
+}
+
+/**
+ * Single lane on the road at the end of a route step.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class LaneDto(
+  /**
+   * List of possible directions a driver can follow when using this lane at the end of the
+   * respective route step
+   */
+  val laneDirections: List<LaneDirectionDto?>
+) {
+  companion object {
+    @Suppress("UNCHECKED_CAST")
+    fun fromList(list: List<Any?>): LaneDto {
+      val laneDirections = list[0] as List<LaneDirectionDto?>
+      return LaneDto(laneDirections)
+    }
+  }
+
+  fun toList(): List<Any?> {
+    return listOf<Any?>(
+      laneDirections,
+    )
+  }
+}
+
+/**
+ * Information about a single step along a navigation route.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class StepInfoDto(
+  /** Distance in meters from the previous step to this step. */
+  val distanceFromPrevStepMeters: Long,
+  /** Time in seconds from the previous step to this step. */
+  val timeFromPrevStepSeconds: Long,
+  /** Whether this step is on a drive-on-right or drive-on-left route. */
+  val drivingSide: DrivingSideDto,
+  /** The exit number if it exists. */
+  val exitNumber: String? = null,
+  /** The full text of the instruction for this step. */
+  val fullInstructions: String,
+  /** The full road name for this step. */
+  val fullRoadName: String,
+  /** The simplified version of the road name. */
+  val simpleRoadName: String,
+  /**
+   * The counted number of the exit to take relative to the location where the roundabout was
+   * entered.
+   */
+  val roundaboutTurnNumber: Long,
+  /** The list of available lanes at the end of this route step. */
+  val lanes: List<LaneDto?>,
+  /** The maneuver for this step. */
+  val maneuver: ManeuverDto,
+  /** The index of the step in the list of all steps in the route. */
+  val stepNumber: Long
+) {
+  companion object {
+    @Suppress("UNCHECKED_CAST")
+    fun fromList(list: List<Any?>): StepInfoDto {
+      val distanceFromPrevStepMeters = list[0].let { if (it is Int) it.toLong() else it as Long }
+      val timeFromPrevStepSeconds = list[1].let { if (it is Int) it.toLong() else it as Long }
+      val drivingSide = DrivingSideDto.ofRaw(list[2] as Int)!!
+      val exitNumber = list[3] as String?
+      val fullInstructions = list[4] as String
+      val fullRoadName = list[5] as String
+      val simpleRoadName = list[6] as String
+      val roundaboutTurnNumber = list[7].let { if (it is Int) it.toLong() else it as Long }
+      val lanes = list[8] as List<LaneDto?>
+      val maneuver = ManeuverDto.ofRaw(list[9] as Int)!!
+      val stepNumber = list[10].let { if (it is Int) it.toLong() else it as Long }
+      return StepInfoDto(
+        distanceFromPrevStepMeters,
+        timeFromPrevStepSeconds,
+        drivingSide,
+        exitNumber,
+        fullInstructions,
+        fullRoadName,
+        simpleRoadName,
+        roundaboutTurnNumber,
+        lanes,
+        maneuver,
+        stepNumber
+      )
+    }
+  }
+
+  fun toList(): List<Any?> {
+    return listOf<Any?>(
+      distanceFromPrevStepMeters,
+      timeFromPrevStepSeconds,
+      drivingSide.raw,
+      exitNumber,
+      fullInstructions,
+      fullRoadName,
+      simpleRoadName,
+      roundaboutTurnNumber,
+      lanes,
+      maneuver.raw,
+      stepNumber,
+    )
+  }
+}
+
+/**
+ * Contains information about the state of navigation, the current nav step if available, and
+ * remaining steps if available.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class NavInfoDto(
+  /** The current state of navigation. */
+  val navState: NavStateDto,
+  /** Information about the upcoming maneuver step. */
+  val currentStep: StepInfoDto? = null,
+  /** The remaining steps after the current step. */
+  val remainingSteps: List<StepInfoDto?>,
+  /** Whether the route has changed since the last sent message. */
+  val routeChanged: Boolean,
+  /** Estimated remaining distance in meters along the route to the current step. */
+  val distanceToCurrentStepMeters: Long? = null,
+  /**
+   * The estimated remaining distance in meters to the final destination which is the last
+   * destination in a multi-destination trip.
+   */
+  val distanceToFinalDestinationMeters: Long? = null,
+  /**
+   * The estimated remaining distance in meters to the next destination.
+   *
+   * Android only.
+   */
+  val distanceToNextDestinationMeters: Long? = null,
+  /** The estimated remaining time in seconds along the route to the current step. */
+  val timeToCurrentStepSeconds: Long? = null,
+  /**
+   * The estimated remaining time in seconds to the final destination which is the last destination
+   * in a multi-destination trip.
+   */
+  val timeToFinalDestinationSeconds: Long? = null,
+  /**
+   * The estimated remaining time in seconds to the next destination.
+   *
+   * Android only.
+   */
+  val timeToNextDestinationSeconds: Long? = null
+) {
+  companion object {
+    @Suppress("UNCHECKED_CAST")
+    fun fromList(list: List<Any?>): NavInfoDto {
+      val navState = NavStateDto.ofRaw(list[0] as Int)!!
+      val currentStep: StepInfoDto? = (list[1] as List<Any?>?)?.let { StepInfoDto.fromList(it) }
+      val remainingSteps = list[2] as List<StepInfoDto?>
+      val routeChanged = list[3] as Boolean
+      val distanceToCurrentStepMeters = list[4].let { if (it is Int) it.toLong() else it as Long? }
+      val distanceToFinalDestinationMeters =
+        list[5].let { if (it is Int) it.toLong() else it as Long? }
+      val distanceToNextDestinationMeters =
+        list[6].let { if (it is Int) it.toLong() else it as Long? }
+      val timeToCurrentStepSeconds = list[7].let { if (it is Int) it.toLong() else it as Long? }
+      val timeToFinalDestinationSeconds =
+        list[8].let { if (it is Int) it.toLong() else it as Long? }
+      val timeToNextDestinationSeconds = list[9].let { if (it is Int) it.toLong() else it as Long? }
+      return NavInfoDto(
+        navState,
+        currentStep,
+        remainingSteps,
+        routeChanged,
+        distanceToCurrentStepMeters,
+        distanceToFinalDestinationMeters,
+        distanceToNextDestinationMeters,
+        timeToCurrentStepSeconds,
+        timeToFinalDestinationSeconds,
+        timeToNextDestinationSeconds
+      )
+    }
+  }
+
+  fun toList(): List<Any?> {
+    return listOf<Any?>(
+      navState.raw,
+      currentStep?.toList(),
+      remainingSteps,
+      routeChanged,
+      distanceToCurrentStepMeters,
+      distanceToFinalDestinationMeters,
+      distanceToNextDestinationMeters,
+      timeToCurrentStepSeconds,
+      timeToFinalDestinationSeconds,
+      timeToNextDestinationSeconds,
     )
   }
 }
@@ -4643,6 +5081,10 @@ interface NavigationSessionApi {
   fun enableRoadSnappedLocationUpdates()
 
   fun disableRoadSnappedLocationUpdates()
+  /** Enable Turn-by-Turn navigation events. */
+  fun enableTurnByTurnNavigationEvents(numNextStepsToPreview: Long?)
+
+  fun disableTurnByTurnNavigationEvents()
 
   fun registerRemainingTimeOrDistanceChangedListener(
     remainingTimeThresholdSeconds: Long,
@@ -5377,6 +5819,53 @@ interface NavigationSessionApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
+            "dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.enableTurnByTurnNavigationEvents",
+            codec
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val numNextStepsToPreviewArg =
+              args[0].let { if (it is Int) it.toLong() else it as Long? }
+            var wrapped: List<Any?>
+            try {
+              api.enableTurnByTurnNavigationEvents(numNextStepsToPreviewArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.disableTurnByTurnNavigationEvents",
+            codec
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              api.disableTurnByTurnNavigationEvents()
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
             "dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.registerRemainingTimeOrDistanceChangedListener",
             codec
           )
@@ -5412,13 +5901,28 @@ private object NavigationSessionEventApiCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
       128.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { LatLngDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { LaneDirectionDto.fromList(it) }
       }
       129.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { NavigationWaypointDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { LaneDto.fromList(it) }
       }
       130.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { LatLngDto.fromList(it) }
+      }
+      131.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { NavInfoDto.fromList(it) }
+      }
+      132.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { NavigationWaypointDto.fromList(it) }
+      }
+      133.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SpeedingUpdatedEventDto.fromList(it) }
+      }
+      134.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { StepInfoDto.fromList(it) }
+      }
+      135.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { StepInfoDto.fromList(it) }
       }
       else -> super.readValueOfType(type, buffer)
     }
@@ -5426,16 +5930,36 @@ private object NavigationSessionEventApiCodec : StandardMessageCodec() {
 
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
     when (value) {
-      is LatLngDto -> {
+      is LaneDirectionDto -> {
         stream.write(128)
         writeValue(stream, value.toList())
       }
-      is NavigationWaypointDto -> {
+      is LaneDto -> {
         stream.write(129)
         writeValue(stream, value.toList())
       }
-      is SpeedingUpdatedEventDto -> {
+      is LatLngDto -> {
         stream.write(130)
+        writeValue(stream, value.toList())
+      }
+      is NavInfoDto -> {
+        stream.write(131)
+        writeValue(stream, value.toList())
+      }
+      is NavigationWaypointDto -> {
+        stream.write(132)
+        writeValue(stream, value.toList())
+      }
+      is SpeedingUpdatedEventDto -> {
+        stream.write(133)
+        writeValue(stream, value.toList())
+      }
+      is StepInfoDto -> {
+        stream.write(134)
+        writeValue(stream, value.toList())
+      }
+      is StepInfoDto -> {
+        stream.write(135)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -5596,6 +6120,23 @@ class NavigationSessionEventApi(private val binaryMessenger: BinaryMessenger) {
       "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onGpsAvailabilityUpdate"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(availableArg)) {
+      if (it is List<*>) {
+        if (it.size > 1) {
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+        } else {
+          callback(Result.success(Unit))
+        }
+      } else {
+        callback(Result.failure(createConnectionError(channelName)))
+      }
+    }
+  }
+  /** Turn-by-Turn navigation events. */
+  fun onNavInfo(navInfoArg: NavInfoDto, callback: (Result<Unit>) -> Unit) {
+    val channelName =
+      "dev.flutter.pigeon.google_maps_navigation.NavigationSessionEventApi.onNavInfo"
+    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
+    channel.send(listOf(navInfoArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))

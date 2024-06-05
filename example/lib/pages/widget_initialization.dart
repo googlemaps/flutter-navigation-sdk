@@ -137,253 +137,256 @@ class _ViewInitializationPageState
   @override
   Widget build(BuildContext context) => buildPage(
       context,
-      Column(children: <Widget>[
-        Expanded(
-            child: Scrollbar(
-                thumbVisibility: true,
-                radius: const Radius.circular(30),
-                child: SingleChildScrollView(
-                    child: Column(
-                  children: <Widget>[
-                    ExpansionTile(
-                      title: const Text(
-                        'Map controls',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
+      (BuildContext context) => Column(children: <Widget>[
+            Expanded(
+                child: Scrollbar(
+                    thumbVisibility: true,
+                    radius: const Radius.circular(30),
+                    child: SingleChildScrollView(
+                        child: Column(
                       children: <Widget>[
-                        ExampleDropdownButton<MapType>(
-                          title: 'Map Type',
-                          value: _initialMapType,
-                          items: MapType.values,
-                          onChanged: (MapType? newValue) {
-                            setState(() {
-                              _initialMapType = newValue!;
-                            });
-                          },
-                        ),
-                        SwitchListTile(
-                          title: const Text('Compass Enabled'),
-                          value: _initialCompassEnabled,
-                          onChanged: (bool value) {
-                            setState(() {
-                              _initialCompassEnabled = value;
-                            });
-                          },
-                        ),
-                        SwitchListTile(
-                          title: const Text('Map Toolbar Enabled'),
-                          value: _initialMapToolbarEnabled,
-                          onChanged: (bool value) {
-                            setState(() {
-                              _initialMapToolbarEnabled = value;
-                            });
-                          },
-                        ),
-                        ExampleDropdownButton<TextDirection?>(
-                          title: 'Layout direction',
-                          value: _layoutDirection,
-                          items: const <TextDirection?>[
-                            null,
-                            ...TextDirection.values
-                          ],
-                          onChanged: (TextDirection? newValue) {
-                            setState(() {
-                              _layoutDirection = newValue;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                    ExpansionTile(
-                      title: const Text(
-                        'Camera controls',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      children: <Widget>[
-                        ExampleCameraPositionEditor(
-                          initialCameraPosition: _initialCameraPosition,
-                          onChanged: (CameraPosition newCameraPosition) {
-                            setState(() {
-                              _initialCameraPosition = newCameraPosition;
-                            });
-                          },
-                        ),
-                        SwitchListTile(
-                          title: const Text('Rotate Gestures Enabled'),
-                          value: _initialRotateGesturesEnabled,
-                          onChanged: (bool value) {
-                            setState(() {
-                              _initialRotateGesturesEnabled = value;
-                            });
-                          },
-                        ),
-                        SwitchListTile(
-                          title: const Text('Scroll Gestures Enabled'),
-                          value: _initialScrollGesturesEnabled,
-                          onChanged: (bool value) {
-                            setState(() {
-                              _initialScrollGesturesEnabled = value;
-                            });
-                          },
-                        ),
-                        SwitchListTile(
-                          title: const Text('Tilt Gestures Enabled'),
-                          value: _initialTiltGesturesEnabled,
-                          onChanged: (bool value) {
-                            setState(() {
-                              _initialTiltGesturesEnabled = value;
-                            });
-                          },
-                        ),
-                        SwitchListTile(
-                          title: const Text('Zoom Gestures Enabled'),
-                          value: _initialZoomGesturesEnabled,
-                          onChanged: (bool value) {
-                            setState(() {
-                              _initialZoomGesturesEnabled = value;
-                            });
-                          },
-                        ),
-                        SwitchListTile(
+                        ExpansionTile(
                           title: const Text(
-                              'Scroll gestures enabled during rotate or zoom'),
-                          value:
-                              _initialScrollGesturesEnabledDuringRotateOrZoom,
-                          onChanged: (bool value) {
-                            setState(() {
-                              _initialScrollGesturesEnabledDuringRotateOrZoom =
-                                  value;
-                            });
-                          },
-                        ),
-                        if (Platform.isAndroid)
-                          SwitchListTile(
-                            title: const Text('Zoom Controls Enabled'),
-                            value: _initialZoomControlsEnabled,
-                            onChanged: (bool value) {
-                              setState(() {
-                                _initialZoomControlsEnabled = value;
-                              });
-                            },
+                            'Map controls',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                        SwitchListTile(
-                          title: const Text('Min Zoom Preference Enabled'),
-                          value: _isMinZoomPreferenceEnabled,
-                          onChanged: (bool value) {
-                            setState(() {
-                              _isMinZoomPreferenceEnabled = value;
-                              _initialMinZoomPreference = value
-                                  ? _limitMinZoomReference(
-                                      googleMapsMinZoomLevel)
-                                  : null;
-                            });
-                          },
+                          children: <Widget>[
+                            ExampleDropdownButton<MapType>(
+                              title: 'Map Type',
+                              value: _initialMapType,
+                              items: MapType.values,
+                              onChanged: (MapType? newValue) {
+                                setState(() {
+                                  _initialMapType = newValue!;
+                                });
+                              },
+                            ),
+                            SwitchListTile(
+                              title: const Text('Compass Enabled'),
+                              value: _initialCompassEnabled,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  _initialCompassEnabled = value;
+                                });
+                              },
+                            ),
+                            SwitchListTile(
+                              title: const Text('Map Toolbar Enabled'),
+                              value: _initialMapToolbarEnabled,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  _initialMapToolbarEnabled = value;
+                                });
+                              },
+                            ),
+                            ExampleDropdownButton<TextDirection?>(
+                              title: 'Layout direction',
+                              value: _layoutDirection,
+                              items: const <TextDirection?>[
+                                null,
+                                ...TextDirection.values
+                              ],
+                              onChanged: (TextDirection? newValue) {
+                                setState(() {
+                                  _layoutDirection = newValue;
+                                });
+                              },
+                            ),
+                          ],
                         ),
-                        if (_isMinZoomPreferenceEnabled)
-                          ExampleSlider(
-                            value: _initialMinZoomPreference!,
-                            onChanged: (double newValue) {
-                              setState(() {
-                                _initialMinZoomPreference =
-                                    _limitMinZoomReference(newValue);
-                              });
-                            },
-                            title: 'Min Zoom Preference',
-                            min: googleMapsMinZoomLevel,
-                            max: googleMapsMaxZoomLevel,
+                        ExpansionTile(
+                          title: const Text(
+                            'Camera controls',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                        SwitchListTile(
-                          title: const Text('Max Zoom Preference Enabled'),
-                          value: _isMaxZoomPreferenceEnabled,
-                          onChanged: (bool value) {
-                            setState(() {
-                              _isMaxZoomPreferenceEnabled = value;
-                              _initialMaxZoomPreference = value
-                                  ? _limitMaxZoomReference(
-                                      googleMapsMaxZoomLevel)
-                                  : null;
-                            });
-                          },
+                          children: <Widget>[
+                            ExampleCameraPositionEditor(
+                              initialCameraPosition: _initialCameraPosition,
+                              onChanged: (CameraPosition newCameraPosition) {
+                                setState(() {
+                                  _initialCameraPosition = newCameraPosition;
+                                });
+                              },
+                            ),
+                            SwitchListTile(
+                              title: const Text('Rotate Gestures Enabled'),
+                              value: _initialRotateGesturesEnabled,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  _initialRotateGesturesEnabled = value;
+                                });
+                              },
+                            ),
+                            SwitchListTile(
+                              title: const Text('Scroll Gestures Enabled'),
+                              value: _initialScrollGesturesEnabled,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  _initialScrollGesturesEnabled = value;
+                                });
+                              },
+                            ),
+                            SwitchListTile(
+                              title: const Text('Tilt Gestures Enabled'),
+                              value: _initialTiltGesturesEnabled,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  _initialTiltGesturesEnabled = value;
+                                });
+                              },
+                            ),
+                            SwitchListTile(
+                              title: const Text('Zoom Gestures Enabled'),
+                              value: _initialZoomGesturesEnabled,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  _initialZoomGesturesEnabled = value;
+                                });
+                              },
+                            ),
+                            SwitchListTile(
+                              title: const Text(
+                                  'Scroll gestures enabled during rotate or zoom'),
+                              value:
+                                  _initialScrollGesturesEnabledDuringRotateOrZoom,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  _initialScrollGesturesEnabledDuringRotateOrZoom =
+                                      value;
+                                });
+                              },
+                            ),
+                            if (Platform.isAndroid)
+                              SwitchListTile(
+                                title: const Text('Zoom Controls Enabled'),
+                                value: _initialZoomControlsEnabled,
+                                onChanged: (bool value) {
+                                  setState(() {
+                                    _initialZoomControlsEnabled = value;
+                                  });
+                                },
+                              ),
+                            SwitchListTile(
+                              title: const Text('Min Zoom Preference Enabled'),
+                              value: _isMinZoomPreferenceEnabled,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  _isMinZoomPreferenceEnabled = value;
+                                  _initialMinZoomPreference = value
+                                      ? _limitMinZoomReference(
+                                          googleMapsMinZoomLevel)
+                                      : null;
+                                });
+                              },
+                            ),
+                            if (_isMinZoomPreferenceEnabled)
+                              ExampleSlider(
+                                value: _initialMinZoomPreference!,
+                                onChanged: (double newValue) {
+                                  setState(() {
+                                    _initialMinZoomPreference =
+                                        _limitMinZoomReference(newValue);
+                                  });
+                                },
+                                title: 'Min Zoom Preference',
+                                min: googleMapsMinZoomLevel,
+                                max: googleMapsMaxZoomLevel,
+                              ),
+                            SwitchListTile(
+                              title: const Text('Max Zoom Preference Enabled'),
+                              value: _isMaxZoomPreferenceEnabled,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  _isMaxZoomPreferenceEnabled = value;
+                                  _initialMaxZoomPreference = value
+                                      ? _limitMaxZoomReference(
+                                          googleMapsMaxZoomLevel)
+                                      : null;
+                                });
+                              },
+                            ),
+                            if (_isMaxZoomPreferenceEnabled)
+                              ExampleSlider(
+                                value: _initialMaxZoomPreference!,
+                                onChanged: (double newValue) {
+                                  setState(() {
+                                    _initialMaxZoomPreference =
+                                        _limitMaxZoomReference(newValue);
+                                  });
+                                },
+                                title: 'Max Zoom Preference',
+                                min: googleMapsMinZoomLevel,
+                                max: googleMapsMaxZoomLevel,
+                              ),
+                            SwitchListTile(
+                              title: const Text('Camera Target Bounds Enabled'),
+                              value: _initialCameraTargetBounds != null,
+                              onChanged: _toggleCameraTargetBounds,
+                            ),
+                            if (_initialCameraTargetBounds != null)
+                              ExampleLatLngBoundsEditor(
+                                title: 'Camera bounds',
+                                initiallyExpanded: true,
+                                initialBounds: _initialCameraTargetBounds!,
+                                onChanged: (LatLngBounds newBounds) {
+                                  setState(() {
+                                    _initialCameraTargetBounds = newBounds;
+                                  });
+                                  hideSnackBarMessage(context);
+                                },
+                                onAssert: (AssertionError error) =>
+                                    showSnackBarMessage(
+                                        context, error.message.toString()),
+                              ),
+                          ],
                         ),
-                        if (_isMaxZoomPreferenceEnabled)
-                          ExampleSlider(
-                            value: _initialMaxZoomPreference!,
-                            onChanged: (double newValue) {
-                              setState(() {
-                                _initialMaxZoomPreference =
-                                    _limitMaxZoomReference(newValue);
-                              });
-                            },
-                            title: 'Max Zoom Preference',
-                            min: googleMapsMinZoomLevel,
-                            max: googleMapsMaxZoomLevel,
-                          ),
-                        SwitchListTile(
-                          title: const Text('Camera Target Bounds Enabled'),
-                          value: _initialCameraTargetBounds != null,
-                          onChanged: _toggleCameraTargetBounds,
-                        ),
-                        if (_initialCameraTargetBounds != null)
-                          ExampleLatLngBoundsEditor(
-                            title: 'Camera bounds',
-                            initiallyExpanded: true,
-                            initialBounds: _initialCameraTargetBounds!,
-                            onChanged: (LatLngBounds newBounds) {
-                              setState(() {
-                                _initialCameraTargetBounds = newBounds;
-                              });
-                              hideSnackBarMessage(context);
-                            },
-                            onAssert: (AssertionError error) =>
-                                showSnackBarMessage(
-                                    context, error.message.toString()),
-                          ),
+                        ExpansionTile(
+                            title: const Text(
+                              'Navigation controls',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            children: <Widget>[
+                              ExampleDropdownButton<
+                                  NavigationUIEnabledPreference>(
+                                title: 'Navigation UI Enabled preference',
+                                value: _initialNavigationUIEnabledPreference,
+                                items: const <NavigationUIEnabledPreference>[
+                                  NavigationUIEnabledPreference.automatic,
+                                  NavigationUIEnabledPreference.disabled
+                                ],
+                                onChanged:
+                                    (NavigationUIEnabledPreference? newValue) {
+                                  setState(() {
+                                    _initialNavigationUIEnabledPreference =
+                                        newValue ??
+                                            NavigationUIEnabledPreference
+                                                .automatic;
+                                  });
+                                },
+                              ),
+                            ]),
                       ],
+                    )))),
+            Padding(
+              padding: const EdgeInsets.all(5),
+              child: Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 10,
+                  children: <Widget>[
+                    ElevatedButton(
+                      onPressed:
+                          !_navigationInitialized ? _startNavigation : null,
+                      child: Text(_navigationInitialized
+                          ? 'Initialized'
+                          : 'Init navigation'),
                     ),
-                    ExpansionTile(
-                        title: const Text(
-                          'Navigation controls',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        children: <Widget>[
-                          ExampleDropdownButton<NavigationUIEnabledPreference>(
-                            title: 'Navigation UI Enabled preference',
-                            value: _initialNavigationUIEnabledPreference,
-                            items: const <NavigationUIEnabledPreference>[
-                              NavigationUIEnabledPreference.automatic,
-                              NavigationUIEnabledPreference.disabled
-                            ],
-                            onChanged:
-                                (NavigationUIEnabledPreference? newValue) {
-                              setState(() {
-                                _initialNavigationUIEnabledPreference =
-                                    newValue ??
-                                        NavigationUIEnabledPreference.automatic;
-                              });
-                            },
-                          ),
-                        ]),
-                  ],
-                )))),
-        Padding(
-          padding: const EdgeInsets.all(5),
-          child: Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 10,
-              children: <Widget>[
-                ElevatedButton(
-                  onPressed: !_navigationInitialized ? _startNavigation : null,
-                  child: Text(_navigationInitialized
-                      ? 'Initialized'
-                      : 'Init navigation'),
-                ),
-                ElevatedButton(
-                  onPressed: () => _changePage(),
-                  child: const Text('Open map'),
-                ),
-              ]),
-        ),
-      ]));
+                    ElevatedButton(
+                      onPressed: () => _changePage(),
+                      child: const Text('Open map'),
+                    ),
+                  ]),
+            ),
+          ]));
 }
 
 class _InitializedViewPage extends StatelessWidget {

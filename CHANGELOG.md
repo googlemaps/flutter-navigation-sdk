@@ -1,3 +1,17 @@
+## 0.2.3-beta
+
+This is the beta release of the Google Maps Navigation package for Flutter. It is an early look at the package and is intended for testing and feedback collection. The functionalities and APIs in this version are subject to change.
+
+- Updates minimum supported SDK version to Flutter 3.22.1/Dart 3.4.
+- Update patrol version to 3.7.2
+
+## 0.2.2-beta
+
+This is the beta release of the Google Maps Navigation package for Flutter. It is an early look at the package and is intended for testing and feedback collection. The functionalities and APIs in this version are subject to change.
+
+**Key Features:**
+- Added GoogleMapsNavigator.setNavInfoListener method for registering a listener for navigation info update events (Turn-by-Turn navigation).
+
 ## 0.2.1-beta
 
 This is the beta release of the Google Maps Navigation package for Flutter. It is an early look at the package and is intended for testing and feedback collection. The functionalities and APIs in this version are subject to change.

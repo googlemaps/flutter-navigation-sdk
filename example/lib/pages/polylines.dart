@@ -207,32 +207,32 @@ class _PolylinesPageState extends ExamplePageState<PolylinesPage> {
   @override
   Widget build(BuildContext context) => buildPage(
       context,
-      Padding(
-        padding: EdgeInsets.zero,
-        child: Column(children: <Widget>[
-          Expanded(
-              child: GoogleMapsNavigationView(
-            initialCameraPosition: const CameraPosition(
-                target: LatLng(latitude: 37.422, longitude: -122.084),
-                zoom: 12),
-            initialNavigationUIEnabledPreference:
-                NavigationUIEnabledPreference.disabled,
-            onViewCreated: _onViewCreated,
-            onPolylineClicked: _onPolylineClicked,
-          )),
-          const SizedBox(height: 10),
-          Text(
-            _polylines.isEmpty
-                ? 'No polylines added. Move camera to place polyline.'
-                : _selectedPolyline == null
-                    ? 'Click to select polyline'
-                    : 'Selected polyline ${_selectedPolyline!.polylineId}',
-            style: const TextStyle(fontSize: 15),
-            textAlign: TextAlign.center,
-          ),
-          bottomControls
-        ]),
-      ));
+      (BuildContext context) => Padding(
+            padding: EdgeInsets.zero,
+            child: Column(children: <Widget>[
+              Expanded(
+                  child: GoogleMapsNavigationView(
+                initialCameraPosition: const CameraPosition(
+                    target: LatLng(latitude: 37.422, longitude: -122.084),
+                    zoom: 12),
+                initialNavigationUIEnabledPreference:
+                    NavigationUIEnabledPreference.disabled,
+                onViewCreated: _onViewCreated,
+                onPolylineClicked: _onPolylineClicked,
+              )),
+              const SizedBox(height: 10),
+              Text(
+                _polylines.isEmpty
+                    ? 'No polylines added. Move camera to place polyline.'
+                    : _selectedPolyline == null
+                        ? 'Click to select polyline'
+                        : 'Selected polyline ${_selectedPolyline!.polylineId}',
+                style: const TextStyle(fontSize: 15),
+                textAlign: TextAlign.center,
+              ),
+              bottomControls
+            ]),
+          ));
 
   Widget get bottomControls {
     return Padding(

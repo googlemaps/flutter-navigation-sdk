@@ -3705,6 +3705,11 @@ abstract class TestNavigationSessionApi {
 
   void disableRoadSnappedLocationUpdates();
 
+  /// Enable Turn-by-Turn navigation events.
+  void enableTurnByTurnNavigationEvents(int? numNextStepsToPreview);
+
+  void disableTurnByTurnNavigationEvents();
+
   void registerRemainingTimeOrDistanceChangedListener(
       int remainingTimeThresholdSeconds, int remainingDistanceThresholdMeters);
 
@@ -4582,6 +4587,60 @@ abstract class TestNavigationSessionApi {
                 (Object? message) async {
           try {
             api.disableRoadSnappedLocationUpdates();
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.enableTurnByTurnNavigationEvents',
+          pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(__pigeon_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
+                (Object? message) async {
+          assert(message != null,
+              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.enableTurnByTurnNavigationEvents was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_numNextStepsToPreview = (args[0] as int?);
+          try {
+            api.enableTurnByTurnNavigationEvents(arg_numNextStepsToPreview);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.disableTurnByTurnNavigationEvents',
+          pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(__pigeon_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
+                (Object? message) async {
+          try {
+            api.disableTurnByTurnNavigationEvents();
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

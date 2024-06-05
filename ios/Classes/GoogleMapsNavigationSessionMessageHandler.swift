@@ -223,6 +223,15 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
     GoogleMapsNavigationSessionManager.shared.disableRoadSnappedLocationUpdates()
   }
 
+  func enableTurnByTurnNavigationEvents(numNextStepsToPreview: Int64?) throws {
+    GoogleMapsNavigationSessionManager.shared
+      .enableTurnByTurnNavigationEvents(numNextStepsToPreview: numNextStepsToPreview)
+  }
+
+  func disableTurnByTurnNavigationEvents() throws {
+    GoogleMapsNavigationSessionManager.shared.disableTurnByTurnNavigationEvents()
+  }
+
   func registerRemainingTimeOrDistanceChangedListener(remainingTimeThresholdSeconds: Int64,
                                                       remainingDistanceThresholdMeters: Int64) throws {
     GoogleMapsNavigationSessionManager.shared.registerRemainingTimeOrDistanceChangedListener(

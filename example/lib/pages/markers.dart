@@ -224,35 +224,35 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
   @override
   Widget build(BuildContext context) => buildPage(
       context,
-      Padding(
-        padding: EdgeInsets.zero,
-        child: Column(children: <Widget>[
-          Expanded(
-            child: GoogleMapsNavigationView(
-              onViewCreated: _onViewCreated,
-              initialNavigationUIEnabledPreference:
-                  NavigationUIEnabledPreference.disabled,
-              onMarkerClicked: _onMarkerClicked,
-              onMarkerDrag: _onMarkerDrag,
-              onMarkerDragStart: _onMarkerDragStart,
-              onMarkerDragEnd: _onMarkerDragEnd,
-              onMarkerInfoWindowClicked: _onMarkerInfoWindowClicked,
-              onMarkerInfoWindowClosed: _onMarkerInfoWindowClosed,
-              onMarkerInfoWindowLongClicked: _onMarkerInfoWindowLongClicked,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            _markers.isEmpty
-                ? 'No markers added'
-                : _selectedMarker == null
-                    ? 'Click to select marker'
-                    : 'Selected marker ${_selectedMarker!.markerId}',
-            style: const TextStyle(fontSize: 15),
-          ),
-          bottomControls
-        ]),
-      ));
+      (BuildContext context) => Padding(
+            padding: EdgeInsets.zero,
+            child: Column(children: <Widget>[
+              Expanded(
+                child: GoogleMapsNavigationView(
+                  onViewCreated: _onViewCreated,
+                  initialNavigationUIEnabledPreference:
+                      NavigationUIEnabledPreference.disabled,
+                  onMarkerClicked: _onMarkerClicked,
+                  onMarkerDrag: _onMarkerDrag,
+                  onMarkerDragStart: _onMarkerDragStart,
+                  onMarkerDragEnd: _onMarkerDragEnd,
+                  onMarkerInfoWindowClicked: _onMarkerInfoWindowClicked,
+                  onMarkerInfoWindowClosed: _onMarkerInfoWindowClosed,
+                  onMarkerInfoWindowLongClicked: _onMarkerInfoWindowLongClicked,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                _markers.isEmpty
+                    ? 'No markers added'
+                    : _selectedMarker == null
+                        ? 'Click to select marker'
+                        : 'Selected marker ${_selectedMarker!.markerId}',
+                style: const TextStyle(fontSize: 15),
+              ),
+              bottomControls
+            ]),
+          ));
 
   Widget get bottomControls {
     final ButtonStyle style =
