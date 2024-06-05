@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: google_maps_navigation
+name: google_navigation_flutter
 description: A Google Maps Navigation plugin
 repository: https://github.com/googlemaps/flutter-navigation-sdk
 issue_tracker: https://github.com/googlemaps/flutter-navigation-sdk/issues
