@@ -1,98 +1,69 @@
-# Google Maps Navigation (Preview)
+# Google Navigation for Flutter (Beta)
 
 ## Description
 
-This repository contains a Flutter plugin that provides a [Google Maps Navigation](https://developers.google.com/maps/documentation/navigation) widget.
+This repository contains a Flutter plugin that provides a [Google Navigation](https://developers.google.com/maps/documentation/navigation) widget to Flutter apps targeting Android and iOS.
 
+> [!NOTE]
+> This package is in Beta until it reaches version 1.0. According to [semantic versioning](https://semver.org/#spec-item-4), breaking changes may be introduced before 1.0.
 
 ## Requirements
 
-|             | Android | iOS       |
-| ----------- | ------- | --------- |
-| **Support** | SDK 23+ | iOS 14.0+ |
+|                                 | Android | iOS       |
+| ------------------------------- | ------- | --------- |
+| **Minimum mobile OS supported** | API level 23+ | iOS 14.0+ |
 
 * A Flutter project
-* A Google Cloud project with the [Navigation SDK enabled](https://developers.google.com/maps/documentation/navigation/android-sdk/set-up-project) and the [Maps SDK for iOS enabled](https://developers.google.com/maps/documentation/navigation/ios-sdk/config)
+- A Google Cloud project with a Mobility solution enabled, such as On-Demand Rides and Deliveries or Last Mile Fleet Solution. This requires you to Contact Sales as described in the [Mobility services documentation](https://developers.google.com/maps/documentation/transportation-logistics/mobility).
+- In that Google Cloud project,  these four products also need to be enabled depending on the target(s) of your Flutter app:
+  - [Maps SDK for Android](https://developers.google.com/maps/documentation/android-sdk/cloud-setup#enabling-apis)
+  - [Navigation SDK for Android](https://developers.google.com/maps/documentation/navigation/android-sdk/set-up-project)
+  - [Maps SDK for iOS](https://developers.google.com/maps/documentation/ios-sdk/cloud-setup#enabling-apis)
+  - [Navigation SDK for iOS](https://developers.google.com/maps/documentation/navigation/ios-sdk/config)
 * An API key from the project above
 * If targeting Android, [Google Play Services](https://developers.google.com/android/guides/overview) installed and enabled
 * [Attributions and licensing text](https://developers.google.com/maps/documentation/navigation/android-sdk/set-up-project#include_the_required_attributions_in_your_app) added to your app
 
-## Installation
-
-1. This repository is currently private. You will need to add the package dependency using [Git with SSH](https://docs.flutter.dev/packages-and-plugins/using-packages#dependencies-on-unpublished-packages) in the app's `pubspec.yaml` file. See [Connecting to GitHub with SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh) for instructions on how to provide SSH keys.
-
-```
-  dependencies:
-    google_maps_navigation:
-      git:
-        url: git@github.com:googlemaps/flutter-navigation-sdk.git
-```
-
-2. Follow the instructions below to add your API key to the approrpiate files in your Flutter project.
-
-* Enable Google Maps SDK and Google Maps Navigation SDK for each platform.
-  * Go to [Google Developers Console](https://console.cloud.google.com/).
-  * Select the project where you want to enable Google Maps Navigation.
-  * Navigate to the "Google Maps Platform" through the main menu.
-  * Under the Google Maps Platform menu, go to "[APIs & Services](https://console.cloud.google.com/google/maps-apis/api-list)".
-  * For Android, enable "Maps SDK for Android" by selecting "ENABLE".
-  * For iOS, enable "Maps SDK for iOS" by selecting "ENABLE".
-
-* Generate an API key at <https://console.cloud.google.com/google/maps-apis/credentials>.
-
 > [!IMPORTANT]
 > [Apply API restrictions](https://developers.google.com/maps/api-security-best-practices#api-restriction) to the API key to limit usage to "Navigation SDK, "Maps SDK for Android", and "Maps SDK for iOS" for enhanced security and cost management. This helps guard against unauthorized use of your API key.
 
-* Add your API key to the Flutter project using [these instructions for the corresponding Android and iOS files](https://developers.google.com/maps/flutter-package/config#step_4_add_your_api_key_to_the_project).
+## Installation
+
+1. To add the Google Navigation for Flutter package to your project, use the command:
+  ```
+  pub add google_navigation_flutter
+  ```
+
+2. Set the minimum platform version for the platform(s) targeted by your app.
+
+    ### Android
+
+    Set the `minSdkVersion` in `android/app/build.gradle`:
+
+    ```groovy
+    android {
+        defaultConfig {
+            minSdkVersion 23
+        }
+    }
+    ```
+
+    ### iOS
+
+    1. Open the ios/Podfile config file in your preferred IDE.
+    1. Add the following lines to the beginning of this Podfile:
+
+    ```
+      # Set platform to 14.0 to enable latest Google Maps SDK
+      platform :ios, '14.0'
+    ```
+
+3. Add your API key to the Flutter project using [these instructions for the corresponding Android (build.gradle) and iOS (AppDelegate.swift) files](https://developers.google.com/maps/flutter-package/config#step_4_add_your_api_key_to_the_project). The instructions for this step in the google_maps_flutter package documentation apply to the google_navigation_flutter package as well.
+
+  See the example configuration for Secrets Gradle Plugin in the example app's [build.gradle](./example/android/app/build.gradle) file.
+  To securely load your API key, use the [Secrets Gradle Plugin](https://developers.google.com/maps/documentation/android-sdk/secrets-gradle-plugin). This plugin helps manage API keys without exposing them in your app's source code.
 
 For more details, see [Google Navigation SDK Documentation](https://developers.google.com/maps/documentation/navigation).
-
-
-### Android
-
-1. Set the `minSdkVersion` in `android/app/build.gradle`:
-
-```groovy
-android {
-    defaultConfig {
-        minSdkVersion 23
-    }
-}
-```
-
-To securely store your API key, it is recommended to use the [Google Maps Secrets Gradle Plugin](https://developers.google.com/maps/documentation/android-sdk/secrets-gradle-plugin). This plugin helps manage API keys without exposing them in your app's source code.
-
-See example configuration for secrets plugin at example applications [build.gradle](./example/android/app/build.gradle) file.
-
-### iOS
-
-To set up, specify your API key in the application delegate `ios/Runner/AppDelegate.m`:
-
-```swift
-import UIKit
-import Flutter
-import GoogleMaps
-import GoogleNavigation
-
-@UIApplicationMain
-@objc class AppDelegate: FlutterAppDelegate {
-  override func application(
-    _ application: UIApplication,
-    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-  ) -> Bool {
-    GMSServices.provideAPIKey("YOUR API KEY HERE")
-    GMSServices.setMetalRendererEnabled(true)
-    GeneratedPluginRegistrant.register(with: self)
-    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
-  }
-}
-```
-
-> [!NOTE]
-> Above code snipped also enables Metal rendering for Google Maps SDK. If you are not using Metal rendering, you can remove the following line:
->  ```swift
->  GMSServices.setMetalRendererEnabled(true)
->  ```
 
 ## Usage
 
@@ -192,7 +163,7 @@ PermissionStatus _locationPermissionStatus = PermissionStatus.denied;
 /// iOS: CoreLocation (Always and WhenInUse)
 Future<void> _requestLocationPermission() async {
   final PermissionStatus status = await Permission.location.request();
-  
+
   setState(() {
     _locationPermissionStatus = status;
   });
@@ -206,20 +177,21 @@ Widget build(BuildContext context) {
   ...
 }
 ```
+
 ## Contributing
 
 See the [Contributing guide](https://github.com/googlemaps/flutter-navigation-sdk/blob/main/CONTRIBUTING.md).
 
 ## Terms of Service
 
-This package uses Google Maps Platform services, and any use of Google Maps Platform is subject to the [Terms of Service](https://cloud.google.com/maps-platform/terms).
+This library uses Google Maps Platform services. Use of Google Maps Platform services through this library is subject to the [Google Maps Platform Terms of Service](https://cloud.google.com/maps-platform/terms).
 
-For clarity, this package, and each underlying component, is not a Google Maps Platform Core Service.
+This library is not a Google Maps Platform Core Service. Therefore, the Google Maps Platform Terms of Service (e.g. Technical Support Services, Service Level Agreements, and Deprecation Policy) do not apply to the code in this library.
 
 ## Support
 
 This package is offered via an open source license. It is not governed by the Google Maps Platform Support [Technical Support Services Guidelines](https://cloud.google.com/maps-platform/terms/tssg), the [SLA](https://cloud.google.com/maps-platform/terms/sla), or the [Deprecation Policy](https://cloud.google.com/maps-platform/terms) (however, any Google Maps Platform services used by the library remain subject to the Google Maps Platform Terms of Service).
 
-This package adheres to [semantic versioning](https://semver.org/) to indicate when backwards-incompatible changes are introduced. Accordingly, while the library is in version 0.x, backwards-incompatible changes may be introduced at any time. 
+This package adheres to [semantic versioning](https://semver.org/) to indicate when backwards-incompatible changes are introduced. Accordingly, while the library is in version 0.x, backwards-incompatible changes may be introduced at any time.
 
 If you find a bug, or have a feature request, please [file an issue](https://github.com/googlemaps/flutter-navigation-sdk/issues) on GitHub. If you would like to get answers to technical questions from other Google Maps Platform developers, ask through one of our [developer community channels](https://developers.google.com/maps/developer-community). If you'd like to contribute, please check the [Contributing guide](https://github.com/googlemaps/flutter-navigation-sdk/blob/main/CONTRIBUTING.md).
