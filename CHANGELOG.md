@@ -1,3 +1,11 @@
+## [0.3.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.2.3-beta...v0.3.0) (2024-06-05)
+
+### Features
+
+* update pubspec to prepare for 0.3.0 release ([#97](https://github.com/googlemaps/flutter-navigation-sdk/issues/97)) ([0114353](https://github.com/googlemaps/flutter-navigation-sdk/commit/011435382b8573b78fa21d25b27a8ccd524c9b88))
+* update README.md to prepare for publishing package to pub.dev
+
+
 ## 0.2.3-beta
 
 This is the beta release of the Google Maps Navigation package for Flutter. It is an early look at the package and is intended for testing and feedback collection. The functionalities and APIs in this version are subject to change.
@@ -48,7 +56,7 @@ This is the beta release of the Google Maps Navigation package for Flutter. It i
   - `onCameraStartedFollowingLocation`
   - `onCameraStoppedFollowingLocation`
 - Added `setConsumeMyLocationButtonClickEventsEnabled` method to control if the default my location button click event should be consumed by the plugin or not.
-- Added the following methods to control zoom level preferences of the map: `setMinZoomPreference`, `setMaxZoomPreference`, 
+- Added the following methods to control zoom level preferences of the map: `setMinZoomPreference`, `setMaxZoomPreference`,
 `getMinZoomPreference`, `getMaxZoomPreference` and `resetMinMaxZoomPreference`.
 - Added `GoogleMapsNavigator.getNavSDKVersion()` method to fetch the Navigation SDK version
 - `GoogleMapsNavigator.initializeNavigationSession()` now accepts optional parameter `abnormalTerminationReportingEnabled` to enable/disable reporting abnormal SDK terminations such as app crashes
