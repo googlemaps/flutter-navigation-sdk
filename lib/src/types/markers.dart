@@ -14,7 +14,7 @@
 
 import 'package:flutter/foundation.dart';
 
-import '../../google_maps_navigation.dart';
+import '../../google_navigation_flutter.dart';
 
 /// Marker that has beed added to the map.
 /// {@category Navigation View}

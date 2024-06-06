@@ -22,7 +22,7 @@ import 'package:flutter/foundation.dart' show ReadBuffer, WriteBuffer;
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:google_maps_navigation/src/method_channel/messages.g.dart';
+import 'package:google_navigation_flutter/src/method_channel/messages.g.dart';
 
 class _TestNavigationViewApiCodec extends StandardMessageCodec {
   const _TestNavigationViewApiCodec();
@@ -337,7 +337,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.awaitMapReady',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.awaitMapReady',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -348,11 +348,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.awaitMapReady was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.awaitMapReady was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.awaitMapReady was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.awaitMapReady was null, expected non-null int.');
           try {
             await api.awaitMapReady(arg_viewId!);
             return wrapResponse(empty: true);
@@ -368,7 +368,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isMyLocationEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isMyLocationEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -379,11 +379,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isMyLocationEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isMyLocationEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isMyLocationEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isMyLocationEnabled was null, expected non-null int.');
           try {
             final bool output = api.isMyLocationEnabled(arg_viewId!);
             return <Object?>[output];
@@ -399,7 +399,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMyLocationEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMyLocationEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -410,14 +410,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMyLocationEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMyLocationEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMyLocationEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMyLocationEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
           assert(arg_enabled != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMyLocationEnabled was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMyLocationEnabled was null, expected non-null bool.');
           try {
             api.setMyLocationEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
@@ -433,7 +433,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getMyLocation',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMyLocation',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -444,11 +444,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getMyLocation was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMyLocation was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getMyLocation was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMyLocation was null, expected non-null int.');
           try {
             final LatLngDto? output = api.getMyLocation(arg_viewId!);
             return <Object?>[output];
@@ -464,7 +464,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getMapType',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMapType',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -475,11 +475,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getMapType was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMapType was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getMapType was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMapType was null, expected non-null int.');
           try {
             final MapTypeDto output = api.getMapType(arg_viewId!);
             return <Object?>[output.index];
@@ -495,7 +495,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMapType',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMapType',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -506,15 +506,15 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMapType was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMapType was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMapType was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMapType was null, expected non-null int.');
           final MapTypeDto? arg_mapType =
               args[1] == null ? null : MapTypeDto.values[args[1]! as int];
           assert(arg_mapType != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMapType was null, expected non-null MapTypeDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMapType was null, expected non-null MapTypeDto.');
           try {
             api.setMapType(arg_viewId!, arg_mapType!);
             return wrapResponse(empty: true);
@@ -530,7 +530,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMapStyle',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMapStyle',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -541,14 +541,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMapStyle was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMapStyle was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMapStyle was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMapStyle was null, expected non-null int.');
           final String? arg_styleJson = (args[1] as String?);
           assert(arg_styleJson != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMapStyle was null, expected non-null String.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMapStyle was null, expected non-null String.');
           try {
             api.setMapStyle(arg_viewId!, arg_styleJson!);
             return wrapResponse(empty: true);
@@ -564,7 +564,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isNavigationTripProgressBarEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isNavigationTripProgressBarEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -575,11 +575,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isNavigationTripProgressBarEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isNavigationTripProgressBarEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isNavigationTripProgressBarEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isNavigationTripProgressBarEnabled was null, expected non-null int.');
           try {
             final bool output =
                 api.isNavigationTripProgressBarEnabled(arg_viewId!);
@@ -596,7 +596,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationTripProgressBarEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationTripProgressBarEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -607,14 +607,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationTripProgressBarEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationTripProgressBarEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationTripProgressBarEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationTripProgressBarEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
           assert(arg_enabled != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationTripProgressBarEnabled was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationTripProgressBarEnabled was null, expected non-null bool.');
           try {
             api.setNavigationTripProgressBarEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
@@ -630,7 +630,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isNavigationHeaderEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isNavigationHeaderEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -641,11 +641,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isNavigationHeaderEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isNavigationHeaderEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isNavigationHeaderEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isNavigationHeaderEnabled was null, expected non-null int.');
           try {
             final bool output = api.isNavigationHeaderEnabled(arg_viewId!);
             return <Object?>[output];
@@ -661,7 +661,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationHeaderEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationHeaderEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -672,14 +672,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationHeaderEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationHeaderEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationHeaderEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationHeaderEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
           assert(arg_enabled != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationHeaderEnabled was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationHeaderEnabled was null, expected non-null bool.');
           try {
             api.setNavigationHeaderEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
@@ -695,7 +695,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isNavigationFooterEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isNavigationFooterEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -706,11 +706,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isNavigationFooterEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isNavigationFooterEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isNavigationFooterEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isNavigationFooterEnabled was null, expected non-null int.');
           try {
             final bool output = api.isNavigationFooterEnabled(arg_viewId!);
             return <Object?>[output];
@@ -726,7 +726,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationFooterEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationFooterEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -737,14 +737,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationFooterEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationFooterEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationFooterEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationFooterEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
           assert(arg_enabled != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationFooterEnabled was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationFooterEnabled was null, expected non-null bool.');
           try {
             api.setNavigationFooterEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
@@ -760,7 +760,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isRecenterButtonEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isRecenterButtonEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -771,11 +771,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isRecenterButtonEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isRecenterButtonEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isRecenterButtonEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isRecenterButtonEnabled was null, expected non-null int.');
           try {
             final bool output = api.isRecenterButtonEnabled(arg_viewId!);
             return <Object?>[output];
@@ -791,7 +791,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setRecenterButtonEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setRecenterButtonEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -802,14 +802,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setRecenterButtonEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setRecenterButtonEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setRecenterButtonEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setRecenterButtonEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
           assert(arg_enabled != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setRecenterButtonEnabled was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setRecenterButtonEnabled was null, expected non-null bool.');
           try {
             api.setRecenterButtonEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
@@ -825,7 +825,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isSpeedLimitIconEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isSpeedLimitIconEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -836,11 +836,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isSpeedLimitIconEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isSpeedLimitIconEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isSpeedLimitIconEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isSpeedLimitIconEnabled was null, expected non-null int.');
           try {
             final bool output = api.isSpeedLimitIconEnabled(arg_viewId!);
             return <Object?>[output];
@@ -856,7 +856,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setSpeedLimitIconEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setSpeedLimitIconEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -867,14 +867,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setSpeedLimitIconEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setSpeedLimitIconEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setSpeedLimitIconEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setSpeedLimitIconEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
           assert(arg_enabled != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setSpeedLimitIconEnabled was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setSpeedLimitIconEnabled was null, expected non-null bool.');
           try {
             api.setSpeedLimitIconEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
@@ -890,7 +890,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isSpeedometerEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isSpeedometerEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -901,11 +901,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isSpeedometerEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isSpeedometerEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isSpeedometerEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isSpeedometerEnabled was null, expected non-null int.');
           try {
             final bool output = api.isSpeedometerEnabled(arg_viewId!);
             return <Object?>[output];
@@ -921,7 +921,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setSpeedometerEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setSpeedometerEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -932,14 +932,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setSpeedometerEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setSpeedometerEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setSpeedometerEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setSpeedometerEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
           assert(arg_enabled != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setSpeedometerEnabled was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setSpeedometerEnabled was null, expected non-null bool.');
           try {
             api.setSpeedometerEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
@@ -955,7 +955,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isTrafficIncidentCardsEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isTrafficIncidentCardsEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -966,11 +966,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isTrafficIncidentCardsEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isTrafficIncidentCardsEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isTrafficIncidentCardsEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isTrafficIncidentCardsEnabled was null, expected non-null int.');
           try {
             final bool output = api.isTrafficIncidentCardsEnabled(arg_viewId!);
             return <Object?>[output];
@@ -986,7 +986,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTrafficIncidentCardsEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setTrafficIncidentCardsEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -997,14 +997,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTrafficIncidentCardsEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setTrafficIncidentCardsEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTrafficIncidentCardsEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setTrafficIncidentCardsEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
           assert(arg_enabled != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTrafficIncidentCardsEnabled was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setTrafficIncidentCardsEnabled was null, expected non-null bool.');
           try {
             api.setTrafficIncidentCardsEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
@@ -1020,7 +1020,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isNavigationUIEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isNavigationUIEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1031,11 +1031,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isNavigationUIEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isNavigationUIEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isNavigationUIEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isNavigationUIEnabled was null, expected non-null int.');
           try {
             final bool output = api.isNavigationUIEnabled(arg_viewId!);
             return <Object?>[output];
@@ -1051,7 +1051,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationUIEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationUIEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1062,14 +1062,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationUIEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationUIEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationUIEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationUIEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
           assert(arg_enabled != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setNavigationUIEnabled was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationUIEnabled was null, expected non-null bool.');
           try {
             api.setNavigationUIEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
@@ -1085,7 +1085,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getCameraPosition',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getCameraPosition',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1096,11 +1096,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getCameraPosition was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getCameraPosition was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getCameraPosition was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getCameraPosition was null, expected non-null int.');
           try {
             final CameraPositionDto output = api.getCameraPosition(arg_viewId!);
             return <Object?>[output];
@@ -1116,7 +1116,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getVisibleRegion',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getVisibleRegion',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1127,11 +1127,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getVisibleRegion was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getVisibleRegion was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getVisibleRegion was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getVisibleRegion was null, expected non-null int.');
           try {
             final LatLngBoundsDto output = api.getVisibleRegion(arg_viewId!);
             return <Object?>[output];
@@ -1147,7 +1147,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.followMyLocation',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.followMyLocation',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1158,16 +1158,16 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.followMyLocation was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.followMyLocation was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.followMyLocation was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.followMyLocation was null, expected non-null int.');
           final CameraPerspectiveDto? arg_perspective = args[1] == null
               ? null
               : CameraPerspectiveDto.values[args[1]! as int];
           assert(arg_perspective != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.followMyLocation was null, expected non-null CameraPerspectiveDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.followMyLocation was null, expected non-null CameraPerspectiveDto.');
           final double? arg_zoomLevel = (args[2] as double?);
           try {
             api.followMyLocation(arg_viewId!, arg_perspective!, arg_zoomLevel);
@@ -1184,7 +1184,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraToCameraPosition',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToCameraPosition',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1195,15 +1195,15 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraToCameraPosition was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToCameraPosition was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraToCameraPosition was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToCameraPosition was null, expected non-null int.');
           final CameraPositionDto? arg_cameraPosition =
               (args[1] as CameraPositionDto?);
           assert(arg_cameraPosition != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraToCameraPosition was null, expected non-null CameraPositionDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToCameraPosition was null, expected non-null CameraPositionDto.');
           final int? arg_duration = (args[2] as int?);
           try {
             final bool output = await api.animateCameraToCameraPosition(
@@ -1221,7 +1221,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraToLatLng',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToLatLng',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1232,14 +1232,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraToLatLng was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToLatLng was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraToLatLng was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToLatLng was null, expected non-null int.');
           final LatLngDto? arg_point = (args[1] as LatLngDto?);
           assert(arg_point != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraToLatLng was null, expected non-null LatLngDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToLatLng was null, expected non-null LatLngDto.');
           final int? arg_duration = (args[2] as int?);
           try {
             final bool output = await api.animateCameraToLatLng(
@@ -1257,7 +1257,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraToLatLngBounds',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToLatLngBounds',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1268,17 +1268,17 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraToLatLngBounds was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToLatLngBounds was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraToLatLngBounds was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToLatLngBounds was null, expected non-null int.');
           final LatLngBoundsDto? arg_bounds = (args[1] as LatLngBoundsDto?);
           assert(arg_bounds != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraToLatLngBounds was null, expected non-null LatLngBoundsDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToLatLngBounds was null, expected non-null LatLngBoundsDto.');
           final double? arg_padding = (args[2] as double?);
           assert(arg_padding != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraToLatLngBounds was null, expected non-null double.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToLatLngBounds was null, expected non-null double.');
           final int? arg_duration = (args[3] as int?);
           try {
             final bool output = await api.animateCameraToLatLngBounds(
@@ -1296,7 +1296,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraToLatLngZoom',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToLatLngZoom',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1307,17 +1307,17 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraToLatLngZoom was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToLatLngZoom was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraToLatLngZoom was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToLatLngZoom was null, expected non-null int.');
           final LatLngDto? arg_point = (args[1] as LatLngDto?);
           assert(arg_point != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraToLatLngZoom was null, expected non-null LatLngDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToLatLngZoom was null, expected non-null LatLngDto.');
           final double? arg_zoom = (args[2] as double?);
           assert(arg_zoom != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraToLatLngZoom was null, expected non-null double.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToLatLngZoom was null, expected non-null double.');
           final int? arg_duration = (args[3] as int?);
           try {
             final bool output = await api.animateCameraToLatLngZoom(
@@ -1335,7 +1335,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraByScroll',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraByScroll',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1346,17 +1346,17 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraByScroll was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraByScroll was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraByScroll was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraByScroll was null, expected non-null int.');
           final double? arg_scrollByDx = (args[1] as double?);
           assert(arg_scrollByDx != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraByScroll was null, expected non-null double.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraByScroll was null, expected non-null double.');
           final double? arg_scrollByDy = (args[2] as double?);
           assert(arg_scrollByDy != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraByScroll was null, expected non-null double.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraByScroll was null, expected non-null double.');
           final int? arg_duration = (args[3] as int?);
           try {
             final bool output = await api.animateCameraByScroll(
@@ -1374,7 +1374,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraByZoom',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraByZoom',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1385,14 +1385,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraByZoom was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraByZoom was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraByZoom was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraByZoom was null, expected non-null int.');
           final double? arg_zoomBy = (args[1] as double?);
           assert(arg_zoomBy != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraByZoom was null, expected non-null double.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraByZoom was null, expected non-null double.');
           final double? arg_focusDx = (args[2] as double?);
           final double? arg_focusDy = (args[3] as double?);
           final int? arg_duration = (args[4] as int?);
@@ -1412,7 +1412,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraToZoom',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToZoom',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1423,14 +1423,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraToZoom was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToZoom was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraToZoom was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToZoom was null, expected non-null int.');
           final double? arg_zoom = (args[1] as double?);
           assert(arg_zoom != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.animateCameraToZoom was null, expected non-null double.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToZoom was null, expected non-null double.');
           final int? arg_duration = (args[2] as int?);
           try {
             final bool output = await api.animateCameraToZoom(
@@ -1448,7 +1448,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraToCameraPosition',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToCameraPosition',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1459,15 +1459,15 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraToCameraPosition was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToCameraPosition was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraToCameraPosition was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToCameraPosition was null, expected non-null int.');
           final CameraPositionDto? arg_cameraPosition =
               (args[1] as CameraPositionDto?);
           assert(arg_cameraPosition != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraToCameraPosition was null, expected non-null CameraPositionDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToCameraPosition was null, expected non-null CameraPositionDto.');
           try {
             api.moveCameraToCameraPosition(arg_viewId!, arg_cameraPosition!);
             return wrapResponse(empty: true);
@@ -1483,7 +1483,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraToLatLng',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToLatLng',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1494,14 +1494,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraToLatLng was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToLatLng was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraToLatLng was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToLatLng was null, expected non-null int.');
           final LatLngDto? arg_point = (args[1] as LatLngDto?);
           assert(arg_point != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraToLatLng was null, expected non-null LatLngDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToLatLng was null, expected non-null LatLngDto.');
           try {
             api.moveCameraToLatLng(arg_viewId!, arg_point!);
             return wrapResponse(empty: true);
@@ -1517,7 +1517,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraToLatLngBounds',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToLatLngBounds',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1528,17 +1528,17 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraToLatLngBounds was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToLatLngBounds was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraToLatLngBounds was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToLatLngBounds was null, expected non-null int.');
           final LatLngBoundsDto? arg_bounds = (args[1] as LatLngBoundsDto?);
           assert(arg_bounds != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraToLatLngBounds was null, expected non-null LatLngBoundsDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToLatLngBounds was null, expected non-null LatLngBoundsDto.');
           final double? arg_padding = (args[2] as double?);
           assert(arg_padding != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraToLatLngBounds was null, expected non-null double.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToLatLngBounds was null, expected non-null double.');
           try {
             api.moveCameraToLatLngBounds(
                 arg_viewId!, arg_bounds!, arg_padding!);
@@ -1555,7 +1555,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraToLatLngZoom',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToLatLngZoom',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1566,17 +1566,17 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraToLatLngZoom was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToLatLngZoom was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraToLatLngZoom was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToLatLngZoom was null, expected non-null int.');
           final LatLngDto? arg_point = (args[1] as LatLngDto?);
           assert(arg_point != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraToLatLngZoom was null, expected non-null LatLngDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToLatLngZoom was null, expected non-null LatLngDto.');
           final double? arg_zoom = (args[2] as double?);
           assert(arg_zoom != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraToLatLngZoom was null, expected non-null double.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToLatLngZoom was null, expected non-null double.');
           try {
             api.moveCameraToLatLngZoom(arg_viewId!, arg_point!, arg_zoom!);
             return wrapResponse(empty: true);
@@ -1592,7 +1592,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraByScroll',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraByScroll',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1603,17 +1603,17 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraByScroll was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraByScroll was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraByScroll was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraByScroll was null, expected non-null int.');
           final double? arg_scrollByDx = (args[1] as double?);
           assert(arg_scrollByDx != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraByScroll was null, expected non-null double.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraByScroll was null, expected non-null double.');
           final double? arg_scrollByDy = (args[2] as double?);
           assert(arg_scrollByDy != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraByScroll was null, expected non-null double.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraByScroll was null, expected non-null double.');
           try {
             api.moveCameraByScroll(
                 arg_viewId!, arg_scrollByDx!, arg_scrollByDy!);
@@ -1630,7 +1630,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraByZoom',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraByZoom',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1641,14 +1641,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraByZoom was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraByZoom was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraByZoom was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraByZoom was null, expected non-null int.');
           final double? arg_zoomBy = (args[1] as double?);
           assert(arg_zoomBy != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraByZoom was null, expected non-null double.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraByZoom was null, expected non-null double.');
           final double? arg_focusDx = (args[2] as double?);
           final double? arg_focusDy = (args[3] as double?);
           try {
@@ -1667,7 +1667,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraToZoom',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToZoom',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1678,14 +1678,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraToZoom was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToZoom was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraToZoom was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToZoom was null, expected non-null int.');
           final double? arg_zoom = (args[1] as double?);
           assert(arg_zoom != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.moveCameraToZoom was null, expected non-null double.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToZoom was null, expected non-null double.');
           try {
             api.moveCameraToZoom(arg_viewId!, arg_zoom!);
             return wrapResponse(empty: true);
@@ -1701,7 +1701,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.showRouteOverview',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.showRouteOverview',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1712,11 +1712,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.showRouteOverview was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.showRouteOverview was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.showRouteOverview was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.showRouteOverview was null, expected non-null int.');
           try {
             api.showRouteOverview(arg_viewId!);
             return wrapResponse(empty: true);
@@ -1732,7 +1732,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getMinZoomPreference',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMinZoomPreference',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1743,11 +1743,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getMinZoomPreference was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMinZoomPreference was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getMinZoomPreference was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMinZoomPreference was null, expected non-null int.');
           try {
             final double output = api.getMinZoomPreference(arg_viewId!);
             return <Object?>[output];
@@ -1763,7 +1763,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getMaxZoomPreference',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMaxZoomPreference',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1774,11 +1774,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getMaxZoomPreference was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMaxZoomPreference was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getMaxZoomPreference was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMaxZoomPreference was null, expected non-null int.');
           try {
             final double output = api.getMaxZoomPreference(arg_viewId!);
             return <Object?>[output];
@@ -1794,7 +1794,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.resetMinMaxZoomPreference',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.resetMinMaxZoomPreference',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1805,11 +1805,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.resetMinMaxZoomPreference was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.resetMinMaxZoomPreference was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.resetMinMaxZoomPreference was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.resetMinMaxZoomPreference was null, expected non-null int.');
           try {
             api.resetMinMaxZoomPreference(arg_viewId!);
             return wrapResponse(empty: true);
@@ -1825,7 +1825,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMinZoomPreference',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMinZoomPreference',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1836,14 +1836,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMinZoomPreference was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMinZoomPreference was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMinZoomPreference was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMinZoomPreference was null, expected non-null int.');
           final double? arg_minZoomPreference = (args[1] as double?);
           assert(arg_minZoomPreference != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMinZoomPreference was null, expected non-null double.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMinZoomPreference was null, expected non-null double.');
           try {
             api.setMinZoomPreference(arg_viewId!, arg_minZoomPreference!);
             return wrapResponse(empty: true);
@@ -1859,7 +1859,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMaxZoomPreference',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMaxZoomPreference',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1870,14 +1870,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMaxZoomPreference was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMaxZoomPreference was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMaxZoomPreference was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMaxZoomPreference was null, expected non-null int.');
           final double? arg_maxZoomPreference = (args[1] as double?);
           assert(arg_maxZoomPreference != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMaxZoomPreference was null, expected non-null double.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMaxZoomPreference was null, expected non-null double.');
           try {
             api.setMaxZoomPreference(arg_viewId!, arg_maxZoomPreference!);
             return wrapResponse(empty: true);
@@ -1893,7 +1893,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMyLocationButtonEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMyLocationButtonEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1904,14 +1904,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMyLocationButtonEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMyLocationButtonEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMyLocationButtonEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMyLocationButtonEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
           assert(arg_enabled != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMyLocationButtonEnabled was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMyLocationButtonEnabled was null, expected non-null bool.');
           try {
             api.setMyLocationButtonEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
@@ -1927,7 +1927,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setConsumeMyLocationButtonClickEventsEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setConsumeMyLocationButtonClickEventsEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1938,14 +1938,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setConsumeMyLocationButtonClickEventsEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setConsumeMyLocationButtonClickEventsEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setConsumeMyLocationButtonClickEventsEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setConsumeMyLocationButtonClickEventsEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
           assert(arg_enabled != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setConsumeMyLocationButtonClickEventsEnabled was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setConsumeMyLocationButtonClickEventsEnabled was null, expected non-null bool.');
           try {
             api.setConsumeMyLocationButtonClickEventsEnabled(
                 arg_viewId!, arg_enabled!);
@@ -1962,7 +1962,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setZoomGesturesEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setZoomGesturesEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -1973,14 +1973,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setZoomGesturesEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setZoomGesturesEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setZoomGesturesEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setZoomGesturesEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
           assert(arg_enabled != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setZoomGesturesEnabled was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setZoomGesturesEnabled was null, expected non-null bool.');
           try {
             api.setZoomGesturesEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
@@ -1996,7 +1996,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setZoomControlsEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setZoomControlsEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2007,14 +2007,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setZoomControlsEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setZoomControlsEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setZoomControlsEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setZoomControlsEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
           assert(arg_enabled != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setZoomControlsEnabled was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setZoomControlsEnabled was null, expected non-null bool.');
           try {
             api.setZoomControlsEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
@@ -2030,7 +2030,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setCompassEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setCompassEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2041,14 +2041,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setCompassEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setCompassEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setCompassEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setCompassEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
           assert(arg_enabled != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setCompassEnabled was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setCompassEnabled was null, expected non-null bool.');
           try {
             api.setCompassEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
@@ -2064,7 +2064,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setRotateGesturesEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setRotateGesturesEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2075,14 +2075,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setRotateGesturesEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setRotateGesturesEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setRotateGesturesEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setRotateGesturesEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
           assert(arg_enabled != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setRotateGesturesEnabled was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setRotateGesturesEnabled was null, expected non-null bool.');
           try {
             api.setRotateGesturesEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
@@ -2098,7 +2098,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setScrollGesturesEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setScrollGesturesEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2109,14 +2109,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setScrollGesturesEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setScrollGesturesEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setScrollGesturesEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setScrollGesturesEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
           assert(arg_enabled != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setScrollGesturesEnabled was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setScrollGesturesEnabled was null, expected non-null bool.');
           try {
             api.setScrollGesturesEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
@@ -2132,7 +2132,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setScrollGesturesDuringRotateOrZoomEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setScrollGesturesDuringRotateOrZoomEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2143,14 +2143,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setScrollGesturesDuringRotateOrZoomEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setScrollGesturesDuringRotateOrZoomEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setScrollGesturesDuringRotateOrZoomEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setScrollGesturesDuringRotateOrZoomEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
           assert(arg_enabled != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setScrollGesturesDuringRotateOrZoomEnabled was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setScrollGesturesDuringRotateOrZoomEnabled was null, expected non-null bool.');
           try {
             api.setScrollGesturesDuringRotateOrZoomEnabled(
                 arg_viewId!, arg_enabled!);
@@ -2167,7 +2167,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTiltGesturesEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setTiltGesturesEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2178,14 +2178,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTiltGesturesEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setTiltGesturesEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTiltGesturesEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setTiltGesturesEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
           assert(arg_enabled != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTiltGesturesEnabled was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setTiltGesturesEnabled was null, expected non-null bool.');
           try {
             api.setTiltGesturesEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
@@ -2201,7 +2201,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMapToolbarEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMapToolbarEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2212,14 +2212,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMapToolbarEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMapToolbarEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMapToolbarEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMapToolbarEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
           assert(arg_enabled != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setMapToolbarEnabled was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMapToolbarEnabled was null, expected non-null bool.');
           try {
             api.setMapToolbarEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
@@ -2235,7 +2235,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTrafficEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setTrafficEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2246,14 +2246,14 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTrafficEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setTrafficEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTrafficEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setTrafficEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
           assert(arg_enabled != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.setTrafficEnabled was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setTrafficEnabled was null, expected non-null bool.');
           try {
             api.setTrafficEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
@@ -2269,7 +2269,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isMyLocationButtonEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isMyLocationButtonEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2280,11 +2280,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isMyLocationButtonEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isMyLocationButtonEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isMyLocationButtonEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isMyLocationButtonEnabled was null, expected non-null int.');
           try {
             final bool output = api.isMyLocationButtonEnabled(arg_viewId!);
             return <Object?>[output];
@@ -2300,7 +2300,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isConsumeMyLocationButtonClickEventsEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isConsumeMyLocationButtonClickEventsEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2311,11 +2311,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isConsumeMyLocationButtonClickEventsEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isConsumeMyLocationButtonClickEventsEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isConsumeMyLocationButtonClickEventsEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isConsumeMyLocationButtonClickEventsEnabled was null, expected non-null int.');
           try {
             final bool output =
                 api.isConsumeMyLocationButtonClickEventsEnabled(arg_viewId!);
@@ -2332,7 +2332,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isZoomGesturesEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isZoomGesturesEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2343,11 +2343,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isZoomGesturesEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isZoomGesturesEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isZoomGesturesEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isZoomGesturesEnabled was null, expected non-null int.');
           try {
             final bool output = api.isZoomGesturesEnabled(arg_viewId!);
             return <Object?>[output];
@@ -2363,7 +2363,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isZoomControlsEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isZoomControlsEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2374,11 +2374,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isZoomControlsEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isZoomControlsEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isZoomControlsEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isZoomControlsEnabled was null, expected non-null int.');
           try {
             final bool output = api.isZoomControlsEnabled(arg_viewId!);
             return <Object?>[output];
@@ -2394,7 +2394,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isCompassEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isCompassEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2405,11 +2405,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isCompassEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isCompassEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isCompassEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isCompassEnabled was null, expected non-null int.');
           try {
             final bool output = api.isCompassEnabled(arg_viewId!);
             return <Object?>[output];
@@ -2425,7 +2425,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isRotateGesturesEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isRotateGesturesEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2436,11 +2436,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isRotateGesturesEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isRotateGesturesEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isRotateGesturesEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isRotateGesturesEnabled was null, expected non-null int.');
           try {
             final bool output = api.isRotateGesturesEnabled(arg_viewId!);
             return <Object?>[output];
@@ -2456,7 +2456,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isScrollGesturesEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isScrollGesturesEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2467,11 +2467,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isScrollGesturesEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isScrollGesturesEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isScrollGesturesEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isScrollGesturesEnabled was null, expected non-null int.');
           try {
             final bool output = api.isScrollGesturesEnabled(arg_viewId!);
             return <Object?>[output];
@@ -2487,7 +2487,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isScrollGesturesEnabledDuringRotateOrZoom',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isScrollGesturesEnabledDuringRotateOrZoom',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2498,11 +2498,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isScrollGesturesEnabledDuringRotateOrZoom was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isScrollGesturesEnabledDuringRotateOrZoom was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isScrollGesturesEnabledDuringRotateOrZoom was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isScrollGesturesEnabledDuringRotateOrZoom was null, expected non-null int.');
           try {
             final bool output =
                 api.isScrollGesturesEnabledDuringRotateOrZoom(arg_viewId!);
@@ -2519,7 +2519,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isTiltGesturesEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isTiltGesturesEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2530,11 +2530,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isTiltGesturesEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isTiltGesturesEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isTiltGesturesEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isTiltGesturesEnabled was null, expected non-null int.');
           try {
             final bool output = api.isTiltGesturesEnabled(arg_viewId!);
             return <Object?>[output];
@@ -2550,7 +2550,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isMapToolbarEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isMapToolbarEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2561,11 +2561,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isMapToolbarEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isMapToolbarEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isMapToolbarEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isMapToolbarEnabled was null, expected non-null int.');
           try {
             final bool output = api.isMapToolbarEnabled(arg_viewId!);
             return <Object?>[output];
@@ -2581,7 +2581,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isTrafficEnabled',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isTrafficEnabled',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2592,11 +2592,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isTrafficEnabled was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isTrafficEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.isTrafficEnabled was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isTrafficEnabled was null, expected non-null int.');
           try {
             final bool output = api.isTrafficEnabled(arg_viewId!);
             return <Object?>[output];
@@ -2612,7 +2612,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getMarkers',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMarkers',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2623,11 +2623,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getMarkers was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMarkers was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getMarkers was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMarkers was null, expected non-null int.');
           try {
             final List<MarkerDto?> output = api.getMarkers(arg_viewId!);
             return <Object?>[output];
@@ -2643,7 +2643,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.addMarkers',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addMarkers',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2654,15 +2654,15 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.addMarkers was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addMarkers was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.addMarkers was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addMarkers was null, expected non-null int.');
           final List<MarkerDto?>? arg_markers =
               (args[1] as List<Object?>?)?.cast<MarkerDto?>();
           assert(arg_markers != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.addMarkers was null, expected non-null List<MarkerDto?>.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addMarkers was null, expected non-null List<MarkerDto?>.');
           try {
             final List<MarkerDto?> output =
                 api.addMarkers(arg_viewId!, arg_markers!);
@@ -2679,7 +2679,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.updateMarkers',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updateMarkers',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2690,15 +2690,15 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.updateMarkers was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updateMarkers was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.updateMarkers was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updateMarkers was null, expected non-null int.');
           final List<MarkerDto?>? arg_markers =
               (args[1] as List<Object?>?)?.cast<MarkerDto?>();
           assert(arg_markers != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.updateMarkers was null, expected non-null List<MarkerDto?>.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updateMarkers was null, expected non-null List<MarkerDto?>.');
           try {
             final List<MarkerDto?> output =
                 api.updateMarkers(arg_viewId!, arg_markers!);
@@ -2715,7 +2715,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.removeMarkers',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removeMarkers',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2726,15 +2726,15 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.removeMarkers was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removeMarkers was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.removeMarkers was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removeMarkers was null, expected non-null int.');
           final List<MarkerDto?>? arg_markers =
               (args[1] as List<Object?>?)?.cast<MarkerDto?>();
           assert(arg_markers != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.removeMarkers was null, expected non-null List<MarkerDto?>.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removeMarkers was null, expected non-null List<MarkerDto?>.');
           try {
             api.removeMarkers(arg_viewId!, arg_markers!);
             return wrapResponse(empty: true);
@@ -2750,7 +2750,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.clearMarkers',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clearMarkers',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2761,11 +2761,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.clearMarkers was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clearMarkers was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.clearMarkers was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clearMarkers was null, expected non-null int.');
           try {
             api.clearMarkers(arg_viewId!);
             return wrapResponse(empty: true);
@@ -2781,7 +2781,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.clear',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clear',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2792,11 +2792,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.clear was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clear was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.clear was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clear was null, expected non-null int.');
           try {
             api.clear(arg_viewId!);
             return wrapResponse(empty: true);
@@ -2812,7 +2812,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getPolygons',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getPolygons',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2823,11 +2823,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getPolygons was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getPolygons was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getPolygons was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getPolygons was null, expected non-null int.');
           try {
             final List<PolygonDto?> output = api.getPolygons(arg_viewId!);
             return <Object?>[output];
@@ -2843,7 +2843,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.addPolygons',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addPolygons',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2854,15 +2854,15 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.addPolygons was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addPolygons was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.addPolygons was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addPolygons was null, expected non-null int.');
           final List<PolygonDto?>? arg_polygons =
               (args[1] as List<Object?>?)?.cast<PolygonDto?>();
           assert(arg_polygons != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.addPolygons was null, expected non-null List<PolygonDto?>.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addPolygons was null, expected non-null List<PolygonDto?>.');
           try {
             final List<PolygonDto?> output =
                 api.addPolygons(arg_viewId!, arg_polygons!);
@@ -2879,7 +2879,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.updatePolygons',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updatePolygons',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2890,15 +2890,15 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.updatePolygons was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updatePolygons was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.updatePolygons was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updatePolygons was null, expected non-null int.');
           final List<PolygonDto?>? arg_polygons =
               (args[1] as List<Object?>?)?.cast<PolygonDto?>();
           assert(arg_polygons != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.updatePolygons was null, expected non-null List<PolygonDto?>.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updatePolygons was null, expected non-null List<PolygonDto?>.');
           try {
             final List<PolygonDto?> output =
                 api.updatePolygons(arg_viewId!, arg_polygons!);
@@ -2915,7 +2915,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.removePolygons',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removePolygons',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2926,15 +2926,15 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.removePolygons was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removePolygons was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.removePolygons was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removePolygons was null, expected non-null int.');
           final List<PolygonDto?>? arg_polygons =
               (args[1] as List<Object?>?)?.cast<PolygonDto?>();
           assert(arg_polygons != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.removePolygons was null, expected non-null List<PolygonDto?>.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removePolygons was null, expected non-null List<PolygonDto?>.');
           try {
             api.removePolygons(arg_viewId!, arg_polygons!);
             return wrapResponse(empty: true);
@@ -2950,7 +2950,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.clearPolygons',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clearPolygons',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2961,11 +2961,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.clearPolygons was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clearPolygons was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.clearPolygons was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clearPolygons was null, expected non-null int.');
           try {
             api.clearPolygons(arg_viewId!);
             return wrapResponse(empty: true);
@@ -2981,7 +2981,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getPolylines',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getPolylines',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -2992,11 +2992,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getPolylines was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getPolylines was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getPolylines was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getPolylines was null, expected non-null int.');
           try {
             final List<PolylineDto?> output = api.getPolylines(arg_viewId!);
             return <Object?>[output];
@@ -3012,7 +3012,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.addPolylines',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addPolylines',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3023,15 +3023,15 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.addPolylines was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addPolylines was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.addPolylines was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addPolylines was null, expected non-null int.');
           final List<PolylineDto?>? arg_polylines =
               (args[1] as List<Object?>?)?.cast<PolylineDto?>();
           assert(arg_polylines != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.addPolylines was null, expected non-null List<PolylineDto?>.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addPolylines was null, expected non-null List<PolylineDto?>.');
           try {
             final List<PolylineDto?> output =
                 api.addPolylines(arg_viewId!, arg_polylines!);
@@ -3048,7 +3048,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.updatePolylines',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updatePolylines',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3059,15 +3059,15 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.updatePolylines was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updatePolylines was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.updatePolylines was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updatePolylines was null, expected non-null int.');
           final List<PolylineDto?>? arg_polylines =
               (args[1] as List<Object?>?)?.cast<PolylineDto?>();
           assert(arg_polylines != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.updatePolylines was null, expected non-null List<PolylineDto?>.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updatePolylines was null, expected non-null List<PolylineDto?>.');
           try {
             final List<PolylineDto?> output =
                 api.updatePolylines(arg_viewId!, arg_polylines!);
@@ -3084,7 +3084,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.removePolylines',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removePolylines',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3095,15 +3095,15 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.removePolylines was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removePolylines was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.removePolylines was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removePolylines was null, expected non-null int.');
           final List<PolylineDto?>? arg_polylines =
               (args[1] as List<Object?>?)?.cast<PolylineDto?>();
           assert(arg_polylines != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.removePolylines was null, expected non-null List<PolylineDto?>.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removePolylines was null, expected non-null List<PolylineDto?>.');
           try {
             api.removePolylines(arg_viewId!, arg_polylines!);
             return wrapResponse(empty: true);
@@ -3119,7 +3119,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.clearPolylines',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clearPolylines',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3130,11 +3130,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.clearPolylines was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clearPolylines was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.clearPolylines was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clearPolylines was null, expected non-null int.');
           try {
             api.clearPolylines(arg_viewId!);
             return wrapResponse(empty: true);
@@ -3150,7 +3150,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getCircles',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getCircles',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3161,11 +3161,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getCircles was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getCircles was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.getCircles was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getCircles was null, expected non-null int.');
           try {
             final List<CircleDto?> output = api.getCircles(arg_viewId!);
             return <Object?>[output];
@@ -3181,7 +3181,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.addCircles',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addCircles',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3192,15 +3192,15 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.addCircles was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addCircles was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.addCircles was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addCircles was null, expected non-null int.');
           final List<CircleDto?>? arg_circles =
               (args[1] as List<Object?>?)?.cast<CircleDto?>();
           assert(arg_circles != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.addCircles was null, expected non-null List<CircleDto?>.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addCircles was null, expected non-null List<CircleDto?>.');
           try {
             final List<CircleDto?> output =
                 api.addCircles(arg_viewId!, arg_circles!);
@@ -3217,7 +3217,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.updateCircles',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updateCircles',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3228,15 +3228,15 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.updateCircles was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updateCircles was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.updateCircles was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updateCircles was null, expected non-null int.');
           final List<CircleDto?>? arg_circles =
               (args[1] as List<Object?>?)?.cast<CircleDto?>();
           assert(arg_circles != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.updateCircles was null, expected non-null List<CircleDto?>.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updateCircles was null, expected non-null List<CircleDto?>.');
           try {
             final List<CircleDto?> output =
                 api.updateCircles(arg_viewId!, arg_circles!);
@@ -3253,7 +3253,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.removeCircles',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removeCircles',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3264,15 +3264,15 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.removeCircles was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removeCircles was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.removeCircles was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removeCircles was null, expected non-null int.');
           final List<CircleDto?>? arg_circles =
               (args[1] as List<Object?>?)?.cast<CircleDto?>();
           assert(arg_circles != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.removeCircles was null, expected non-null List<CircleDto?>.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removeCircles was null, expected non-null List<CircleDto?>.');
           try {
             api.removeCircles(arg_viewId!, arg_circles!);
             return wrapResponse(empty: true);
@@ -3288,7 +3288,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.clearCircles',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clearCircles',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3299,11 +3299,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.clearCircles was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clearCircles was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.clearCircles was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clearCircles was null, expected non-null int.');
           try {
             api.clearCircles(arg_viewId!);
             return wrapResponse(empty: true);
@@ -3319,7 +3319,7 @@ abstract class TestNavigationViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.registerOnCameraChangedListener',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.registerOnCameraChangedListener',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3330,11 +3330,11 @@ abstract class TestNavigationViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.registerOnCameraChangedListener was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.registerOnCameraChangedListener was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationViewApi.registerOnCameraChangedListener was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.registerOnCameraChangedListener was null, expected non-null int.');
           try {
             api.registerOnCameraChangedListener(arg_viewId!);
             return wrapResponse(empty: true);
@@ -3398,7 +3398,7 @@ abstract class TestImageRegistryApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.registerBitmapImage',
+          'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.registerBitmapImage',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3409,17 +3409,17 @@ abstract class TestImageRegistryApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.registerBitmapImage was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.registerBitmapImage was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final String? arg_imageId = (args[0] as String?);
           assert(arg_imageId != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.registerBitmapImage was null, expected non-null String.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.registerBitmapImage was null, expected non-null String.');
           final Uint8List? arg_bytes = (args[1] as Uint8List?);
           assert(arg_bytes != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.registerBitmapImage was null, expected non-null Uint8List.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.registerBitmapImage was null, expected non-null Uint8List.');
           final double? arg_imagePixelRatio = (args[2] as double?);
           assert(arg_imagePixelRatio != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.registerBitmapImage was null, expected non-null double.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.registerBitmapImage was null, expected non-null double.');
           final double? arg_width = (args[3] as double?);
           final double? arg_height = (args[4] as double?);
           try {
@@ -3442,7 +3442,7 @@ abstract class TestImageRegistryApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.unregisterImage',
+          'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.unregisterImage',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3453,12 +3453,12 @@ abstract class TestImageRegistryApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.unregisterImage was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.unregisterImage was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final ImageDescriptorDto? arg_imageDescriptor =
               (args[0] as ImageDescriptorDto?);
           assert(arg_imageDescriptor != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.unregisterImage was null, expected non-null ImageDescriptorDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.unregisterImage was null, expected non-null ImageDescriptorDto.');
           try {
             api.unregisterImage(arg_imageDescriptor!);
             return wrapResponse(empty: true);
@@ -3474,7 +3474,7 @@ abstract class TestImageRegistryApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.getRegisteredImages',
+          'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.getRegisteredImages',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3499,7 +3499,7 @@ abstract class TestImageRegistryApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.ImageRegistryApi.clearRegisteredImages',
+          'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.clearRegisteredImages',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3718,7 +3718,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.createNavigationSession',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3729,12 +3729,12 @@ abstract class TestNavigationSessionApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.createNavigationSession was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final bool? arg_abnormalTerminationReportingEnabled =
               (args[0] as bool?);
           assert(arg_abnormalTerminationReportingEnabled != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.createNavigationSession was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession was null, expected non-null bool.');
           try {
             await api.createNavigationSession(
                 arg_abnormalTerminationReportingEnabled!);
@@ -3751,7 +3751,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.isInitialized',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.isInitialized',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3776,7 +3776,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.cleanup',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.cleanup',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3801,7 +3801,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.showTermsAndConditionsDialog',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.showTermsAndConditionsDialog',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3812,18 +3812,18 @@ abstract class TestNavigationSessionApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.showTermsAndConditionsDialog was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.showTermsAndConditionsDialog was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final String? arg_title = (args[0] as String?);
           assert(arg_title != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.showTermsAndConditionsDialog was null, expected non-null String.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.showTermsAndConditionsDialog was null, expected non-null String.');
           final String? arg_companyName = (args[1] as String?);
           assert(arg_companyName != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.showTermsAndConditionsDialog was null, expected non-null String.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.showTermsAndConditionsDialog was null, expected non-null String.');
           final bool? arg_shouldOnlyShowDriverAwarenessDisclaimer =
               (args[2] as bool?);
           assert(arg_shouldOnlyShowDriverAwarenessDisclaimer != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.showTermsAndConditionsDialog was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.showTermsAndConditionsDialog was null, expected non-null bool.');
           try {
             final bool output = await api.showTermsAndConditionsDialog(
                 arg_title!,
@@ -3842,7 +3842,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.areTermsAccepted',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.areTermsAccepted',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3867,7 +3867,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.resetTermsAccepted',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.resetTermsAccepted',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3892,7 +3892,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.getNavSDKVersion',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getNavSDKVersion',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3917,7 +3917,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.isGuidanceRunning',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.isGuidanceRunning',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3942,7 +3942,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.startGuidance',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.startGuidance',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3967,7 +3967,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.stopGuidance',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.stopGuidance',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3992,7 +3992,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.setDestinations',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setDestinations',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4003,12 +4003,12 @@ abstract class TestNavigationSessionApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.setDestinations was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setDestinations was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final DestinationsDto? arg_destinations =
               (args[0] as DestinationsDto?);
           assert(arg_destinations != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.setDestinations was null, expected non-null DestinationsDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setDestinations was null, expected non-null DestinationsDto.');
           try {
             final RouteStatusDto output =
                 await api.setDestinations(arg_destinations!);
@@ -4025,7 +4025,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.clearDestinations',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.clearDestinations',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4050,7 +4050,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.continueToNextDestination',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.continueToNextDestination',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4076,7 +4076,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.getCurrentTimeAndDistance',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getCurrentTimeAndDistance',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4102,7 +4102,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.setAudioGuidance',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setAudioGuidance',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4113,12 +4113,12 @@ abstract class TestNavigationSessionApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.setAudioGuidance was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setAudioGuidance was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final NavigationAudioGuidanceSettingsDto? arg_settings =
               (args[0] as NavigationAudioGuidanceSettingsDto?);
           assert(arg_settings != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.setAudioGuidance was null, expected non-null NavigationAudioGuidanceSettingsDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setAudioGuidance was null, expected non-null NavigationAudioGuidanceSettingsDto.');
           try {
             api.setAudioGuidance(arg_settings!);
             return wrapResponse(empty: true);
@@ -4134,7 +4134,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.setSpeedAlertOptions',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setSpeedAlertOptions',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4145,12 +4145,12 @@ abstract class TestNavigationSessionApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.setSpeedAlertOptions was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setSpeedAlertOptions was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final SpeedAlertOptionsDto? arg_options =
               (args[0] as SpeedAlertOptionsDto?);
           assert(arg_options != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.setSpeedAlertOptions was null, expected non-null SpeedAlertOptionsDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setSpeedAlertOptions was null, expected non-null SpeedAlertOptionsDto.');
           try {
             api.setSpeedAlertOptions(arg_options!);
             return wrapResponse(empty: true);
@@ -4166,7 +4166,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.getRouteSegments',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getRouteSegments',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4191,7 +4191,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.getTraveledRoute',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getTraveledRoute',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4216,7 +4216,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.getCurrentRouteSegment',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getCurrentRouteSegment',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4241,7 +4241,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.setUserLocation',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setUserLocation',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4252,11 +4252,11 @@ abstract class TestNavigationSessionApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.setUserLocation was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setUserLocation was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final LatLngDto? arg_location = (args[0] as LatLngDto?);
           assert(arg_location != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.setUserLocation was null, expected non-null LatLngDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setUserLocation was null, expected non-null LatLngDto.');
           try {
             api.setUserLocation(arg_location!);
             return wrapResponse(empty: true);
@@ -4272,7 +4272,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.removeUserLocation',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.removeUserLocation',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4297,7 +4297,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.simulateLocationsAlongExistingRoute',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongExistingRoute',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4322,7 +4322,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.simulateLocationsAlongExistingRouteWithOptions',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongExistingRouteWithOptions',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4333,12 +4333,12 @@ abstract class TestNavigationSessionApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.simulateLocationsAlongExistingRouteWithOptions was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongExistingRouteWithOptions was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final SimulationOptionsDto? arg_options =
               (args[0] as SimulationOptionsDto?);
           assert(arg_options != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.simulateLocationsAlongExistingRouteWithOptions was null, expected non-null SimulationOptionsDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongExistingRouteWithOptions was null, expected non-null SimulationOptionsDto.');
           try {
             api.simulateLocationsAlongExistingRouteWithOptions(arg_options!);
             return wrapResponse(empty: true);
@@ -4354,7 +4354,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.simulateLocationsAlongNewRoute',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRoute',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4365,12 +4365,12 @@ abstract class TestNavigationSessionApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.simulateLocationsAlongNewRoute was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRoute was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final List<NavigationWaypointDto?>? arg_waypoints =
               (args[0] as List<Object?>?)?.cast<NavigationWaypointDto?>();
           assert(arg_waypoints != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.simulateLocationsAlongNewRoute was null, expected non-null List<NavigationWaypointDto?>.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRoute was null, expected non-null List<NavigationWaypointDto?>.');
           try {
             final RouteStatusDto output =
                 await api.simulateLocationsAlongNewRoute(arg_waypoints!);
@@ -4387,7 +4387,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingOptions',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingOptions',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4398,16 +4398,16 @@ abstract class TestNavigationSessionApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingOptions was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingOptions was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final List<NavigationWaypointDto?>? arg_waypoints =
               (args[0] as List<Object?>?)?.cast<NavigationWaypointDto?>();
           assert(arg_waypoints != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingOptions was null, expected non-null List<NavigationWaypointDto?>.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingOptions was null, expected non-null List<NavigationWaypointDto?>.');
           final RoutingOptionsDto? arg_routingOptions =
               (args[1] as RoutingOptionsDto?);
           assert(arg_routingOptions != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingOptions was null, expected non-null RoutingOptionsDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingOptions was null, expected non-null RoutingOptionsDto.');
           try {
             final RouteStatusDto output =
                 await api.simulateLocationsAlongNewRouteWithRoutingOptions(
@@ -4425,7 +4425,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4436,20 +4436,20 @@ abstract class TestNavigationSessionApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final List<NavigationWaypointDto?>? arg_waypoints =
               (args[0] as List<Object?>?)?.cast<NavigationWaypointDto?>();
           assert(arg_waypoints != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions was null, expected non-null List<NavigationWaypointDto?>.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions was null, expected non-null List<NavigationWaypointDto?>.');
           final RoutingOptionsDto? arg_routingOptions =
               (args[1] as RoutingOptionsDto?);
           assert(arg_routingOptions != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions was null, expected non-null RoutingOptionsDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions was null, expected non-null RoutingOptionsDto.');
           final SimulationOptionsDto? arg_simulationOptions =
               (args[2] as SimulationOptionsDto?);
           assert(arg_simulationOptions != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions was null, expected non-null SimulationOptionsDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions was null, expected non-null SimulationOptionsDto.');
           try {
             final RouteStatusDto output = await api
                 .simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
@@ -4469,7 +4469,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.pauseSimulation',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.pauseSimulation',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4494,7 +4494,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.resumeSimulation',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.resumeSimulation',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4519,7 +4519,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.allowBackgroundLocationUpdates',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.allowBackgroundLocationUpdates',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4530,11 +4530,11 @@ abstract class TestNavigationSessionApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.allowBackgroundLocationUpdates was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.allowBackgroundLocationUpdates was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final bool? arg_allow = (args[0] as bool?);
           assert(arg_allow != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.allowBackgroundLocationUpdates was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.allowBackgroundLocationUpdates was null, expected non-null bool.');
           try {
             api.allowBackgroundLocationUpdates(arg_allow!);
             return wrapResponse(empty: true);
@@ -4550,7 +4550,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.enableRoadSnappedLocationUpdates',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.enableRoadSnappedLocationUpdates',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4575,7 +4575,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.disableRoadSnappedLocationUpdates',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.disableRoadSnappedLocationUpdates',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4600,7 +4600,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.enableTurnByTurnNavigationEvents',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.enableTurnByTurnNavigationEvents',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4611,7 +4611,7 @@ abstract class TestNavigationSessionApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.enableTurnByTurnNavigationEvents was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.enableTurnByTurnNavigationEvents was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_numNextStepsToPreview = (args[0] as int?);
           try {
@@ -4629,7 +4629,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.disableTurnByTurnNavigationEvents',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.disableTurnByTurnNavigationEvents',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4654,7 +4654,7 @@ abstract class TestNavigationSessionApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.registerRemainingTimeOrDistanceChangedListener',
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.registerRemainingTimeOrDistanceChangedListener',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4665,14 +4665,14 @@ abstract class TestNavigationSessionApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.registerRemainingTimeOrDistanceChangedListener was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.registerRemainingTimeOrDistanceChangedListener was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_remainingTimeThresholdSeconds = (args[0] as int?);
           assert(arg_remainingTimeThresholdSeconds != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.registerRemainingTimeOrDistanceChangedListener was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.registerRemainingTimeOrDistanceChangedListener was null, expected non-null int.');
           final int? arg_remainingDistanceThresholdMeters = (args[1] as int?);
           assert(arg_remainingDistanceThresholdMeters != null,
-              'Argument for dev.flutter.pigeon.google_maps_navigation.NavigationSessionApi.registerRemainingTimeOrDistanceChangedListener was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.registerRemainingTimeOrDistanceChangedListener was null, expected non-null int.');
           try {
             api.registerRemainingTimeOrDistanceChangedListener(
                 arg_remainingTimeThresholdSeconds!,

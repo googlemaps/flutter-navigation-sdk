@@ -18,7 +18,7 @@ import 'dart:typed_data';
 import 'package:flutter/widgets.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-import '../google_maps_navigation.dart';
+import '../google_navigation_flutter.dart';
 
 /// Callback signature for when a map view is ready.
 ///

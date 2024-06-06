@@ -16,8 +16,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-import '../google_maps_navigation.dart';
-import 'google_maps_navigation_platform_interface.dart';
+import '../google_navigation_flutter.dart';
+import 'google_navigation_flutter_platform_interface.dart';
 import 'inspector/inspector_android.dart';
 import 'inspector/inspector_platform.dart';
 import 'method_channel/method_channel.dart';
@@ -42,7 +42,7 @@ class GoogleMapsNavigationAndroid extends GoogleMapsNavigationPlatform
     ensureViewAPISetUp();
 
     // This is used in the platform side to register the platform view.
-    const String viewType = 'google_maps_navigation';
+    const String viewType = 'google_navigation_flutter';
 
     // Build creation params used to initialize navigation view with initial parameters
     final NavigationViewCreationOptionsDto creationParams =

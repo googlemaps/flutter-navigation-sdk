@@ -16,7 +16,7 @@
 
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:google_maps_navigation/google_maps_navigation.dart';
+import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 import '../utils/utils.dart';
 import '../widgets/widgets.dart';
 

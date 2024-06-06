@@ -14,7 +14,7 @@
 
 import 'dart:ui';
 
-import '../../google_maps_navigation.dart';
+import '../../google_navigation_flutter.dart';
 
 /// Navigation view recenter clicked event.
 /// {@category Navigation View}

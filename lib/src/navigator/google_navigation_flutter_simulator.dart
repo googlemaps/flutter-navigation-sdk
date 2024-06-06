@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import '../../google_maps_navigation.dart';
-import '../google_maps_navigation_platform_interface.dart';
+import '../../google_navigation_flutter.dart';
+import '../google_navigation_flutter_platform_interface.dart';
 
 /// Simulator handles actions of the navigation simulation
 /// {@category Navigation}

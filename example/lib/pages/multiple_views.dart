@@ -15,7 +15,7 @@
 // ignore_for_file: public_member_api_docs, unused_field, use_setters_to_change_properties
 
 import 'package:flutter/material.dart';
-import 'package:google_maps_navigation/google_maps_navigation.dart';
+import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 import '../widgets/widgets.dart';
 
 class MultipleMapViewsPage extends ExamplePage {

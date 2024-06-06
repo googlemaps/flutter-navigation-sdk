@@ -16,7 +16,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 
-import '../../google_maps_navigation.dart';
+import '../../google_navigation_flutter.dart';
 
 /// Encapsulates the initial configuration required to initialize the navigation map view.
 ///

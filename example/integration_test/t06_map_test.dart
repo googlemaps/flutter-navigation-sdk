@@ -128,7 +128,7 @@ void main() {
     await $.native.tapAt(const Offset(0.5, 0.5));
 
     /// Test the default values match with what has been documented in the
-    /// API documentation in google_maps_navigation.dart file.
+    /// API documentation in google_navigation_flutter.dart file.
     expect(await controller.isMyLocationEnabled(), false);
     expect(await controller.settings.isMyLocationButtonEnabled(), true);
     expect(await controller.settings.isZoomGesturesEnabled(), true);

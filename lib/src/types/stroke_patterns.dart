@@ -15,7 +15,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../google_maps_navigation.dart';
+import '../../google_navigation_flutter.dart';
 
 /// Pattern used in the stroke pattern for a [Polyline] or the outline of a [Polygon] or [Circle].
 /// {@category Navigation View}

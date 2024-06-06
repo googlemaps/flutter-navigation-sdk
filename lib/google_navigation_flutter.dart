@@ -13,8 +13,8 @@
 // limitations under the License.
 
 export 'src/google_maps_image_registry.dart';
-export 'src/google_maps_navigation.dart';
-export 'src/google_maps_navigation_android.dart';
-export 'src/google_maps_navigation_ios.dart';
-export 'src/navigator/google_maps_navigator.dart';
+export 'src/google_navigation_flutter.dart';
+export 'src/google_navigation_flutter_android.dart';
+export 'src/google_navigation_flutter_ios.dart';
+export 'src/navigator/google_navigation_flutter_navigator.dart';
 export 'src/types/types.dart';

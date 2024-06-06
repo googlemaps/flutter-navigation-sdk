@@ -17,8 +17,8 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:stream_transform/stream_transform.dart';
 
-import '../../google_maps_navigation.dart';
-import '../google_maps_navigation_platform_interface.dart';
+import '../../google_navigation_flutter.dart';
+import '../google_navigation_flutter_platform_interface.dart';
 import 'convert/navigation_waypoint.dart';
 import 'method_channel.dart';
 

@@ -14,10 +14,10 @@
 
 import 'dart:async';
 
-import '../../google_maps_navigation.dart';
-import '../google_maps_navigation_platform_interface.dart';
+import '../../google_navigation_flutter.dart';
+import '../google_navigation_flutter_platform_interface.dart';
 
-import 'google_maps_navigation_simulator.dart';
+import 'google_navigation_flutter_simulator.dart';
 
 /// GoogleMapsNavigator handles general actions of the navigation SDK
 /// and allows creating navigation session controller.

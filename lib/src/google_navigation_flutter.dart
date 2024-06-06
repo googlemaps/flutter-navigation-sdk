@@ -18,8 +18,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import '../google_maps_navigation.dart';
-import 'google_maps_navigation_platform_interface.dart';
+import '../google_navigation_flutter.dart';
+import 'google_navigation_flutter_platform_interface.dart';
 
 /// The view creation callback.
 typedef OnCreatedCallback = void Function(

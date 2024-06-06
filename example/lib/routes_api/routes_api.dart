@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import 'dart:convert';
-import 'package:google_maps_navigation/google_maps_navigation.dart';
+import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 import 'package:http/http.dart' as http;
 
 // Note: This Routes API implementation is ment to be used only to
