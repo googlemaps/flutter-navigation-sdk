@@ -52,7 +52,7 @@ public class GoogleMapsNavigationPlugin: NSObject, FlutterPlugin {
       navigationViewEventApi: navigationViewEventApi!,
       imageRegistry: imageRegistry!
     )
-    registrar.register(factory, withId: "google_maps_navigation")
+    registrar.register(factory, withId: "google_navigation_flutter")
 
     navigationSessionEventApi = NavigationSessionEventApi(
       binaryMessenger: registrar.messenger()

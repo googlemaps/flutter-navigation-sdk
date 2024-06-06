@@ -14,12 +14,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_maps_navigation/google_maps_navigation.dart';
-import 'package:google_maps_navigation/src/google_maps_navigation_platform_interface.dart';
-import 'package:google_maps_navigation/src/method_channel/method_channel.dart';
+import 'package:google_navigation_flutter/google_navigation_flutter.dart';
+import 'package:google_navigation_flutter/src/google_navigation_flutter_platform_interface.dart';
+import 'package:google_navigation_flutter/src/method_channel/method_channel.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'google_maps_navigation_test.mocks.dart';
+import 'google_navigation_flutter_test.mocks.dart';
 import 'messages_test.g.dart';
 
 @GenerateMocks(<Type>[

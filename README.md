@@ -78,7 +78,7 @@ in an unbounded widget will cause the application to throw a Flutter exception.
 
 ```dart
 import 'package:flutter/material.dart';
-import 'package:google_maps_navigation/google_maps_navigation.dart';
+import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 
 class NavigationSample extends StatefulWidget {
   const NavigationSample({super.key});

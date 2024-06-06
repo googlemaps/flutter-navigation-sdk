@@ -17,7 +17,7 @@ import GoogleNavigation
 import UIKit
 import XCTest
 
-@testable import google_maps_navigation
+@testable import google_navigation_flutter
 
 class MockImageRegistry: ImageRegistry {
   let image = UIImage()

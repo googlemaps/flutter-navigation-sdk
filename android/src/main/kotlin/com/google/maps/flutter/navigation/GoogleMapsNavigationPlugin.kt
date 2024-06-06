@@ -54,7 +54,7 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
     val factory =
       GoogleMapsNavigationViewFactory(viewRegistry, navigationViewEventApi, imageRegistry)
-    _binding.platformViewRegistry.registerViewFactory("google_maps_navigation", factory)
+    _binding.platformViewRegistry.registerViewFactory("google_navigation_flutter", factory)
     GoogleMapsNavigationSessionManager.createInstance(_binding.binaryMessenger)
     val inspectorHandler = GoogleMapsNavigationInspectorHandler(viewRegistry)
     NavigationInspector.setUp(_binding.binaryMessenger, inspectorHandler)

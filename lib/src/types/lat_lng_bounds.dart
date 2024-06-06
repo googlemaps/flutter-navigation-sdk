@@ -14,7 +14,7 @@
 
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-import '../../google_maps_navigation.dart';
+import '../../google_navigation_flutter.dart';
 
 /// LatLngBounds bounds object.
 /// {@category Navigation View}

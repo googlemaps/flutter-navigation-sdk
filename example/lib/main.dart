@@ -18,7 +18,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:google_maps_navigation/google_maps_navigation.dart';
+import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'pages/circles.dart';
 import 'pages/pages.dart';
@@ -101,7 +101,7 @@ class _NavigationDemoState extends State<NavigationBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Google Maps Navigation examples')),
+      appBar: AppBar(title: const Text('Google Navigation Flutter examples')),
       body: SafeArea(
           top: false,
           minimum: const EdgeInsets.all(8.0),

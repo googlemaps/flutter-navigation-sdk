@@ -1,9 +1,9 @@
 #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint google_maps_navigation.podspec` to validate before publishing.
+# Run `pod lib lint google_navigation_flutter.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'google_maps_navigation'
+  s.name             = 'google_navigation_flutter'
   s.version          = '0.0.1'
   s.summary          = 'A Google Maps Navigation Flutter plugin.'
   s.description      = <<-DESC
@@ -21,5 +21,5 @@ A Google Maps Navigation Flutter plugin.
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
   s.swift_version = '5.0'
-  s.resource_bundles = {'google_maps_navigation_privacy_info' => ['Resources/PrivacyInfo.xcprivacy']}
+  s.resource_bundles = {'google_navigation_flutter_privacy_info' => ['Resources/PrivacyInfo.xcprivacy']}
 end

@@ -14,7 +14,7 @@
 
 import 'dart:typed_data';
 
-import 'google_maps_navigation_platform_interface.dart';
+import 'google_navigation_flutter_platform_interface.dart';
 import 'types/types.dart';
 
 /// Register bitmap image to image registry.

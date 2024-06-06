@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import 'package:flutter/material.dart';
-import 'package:google_maps_navigation/google_maps_navigation.dart';
+import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 
 /// Maps [Maneuver] values to Material Icons.
 IconData getManeuverIcon(Maneuver maneuver) {

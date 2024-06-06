@@ -17,7 +17,7 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import '../method_channel/method_channel.dart';
 
 /// The interface that platform-specific implementations of
-/// `google_maps_navigation` can extend to support state inspection in tests.
+/// `google_navigation_flutter` can extend to support state inspection in tests.
 ///
 /// Avoid `implements` of this interface. Using `implements` makes adding any
 /// new methods here a breaking change for end users of your platform!

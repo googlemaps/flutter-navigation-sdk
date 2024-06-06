@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: google_maps_navigation_example
-description: Demonstrates how to use the google_maps_navigation plugin.
+name: google_navigation_flutter_example
+description: Demonstrates how to use the google_navigation_flutter plugin.
 publish_to: "none"
 
 environment:
@@ -24,7 +24,7 @@ dependencies:
   device_info_plus: ^9.1.0
   flutter:
     sdk: flutter
-  google_maps_navigation:
+  google_navigation_flutter:
     path: ../
   http: ^1.1.2
   permission_handler: ^11.1.0

@@ -16,7 +16,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:google_maps_navigation/google_maps_navigation.dart';
+import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 
 import '../routes_api/routes_api.dart';
 import '../utils/utils.dart';
@@ -205,7 +205,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       if (mounted && _userLocation == null) {
         _userLocation = await _navigationViewController?.getMyLocation() ??
             cameraLocationMIT;
-        setState(() {});
+        if (mounted) {
+          setState(() {});
+        }
       }
     });
   }
@@ -476,10 +478,12 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   }
 
   void _onNavigationUIEnabledChanged(bool enabled) {
-    setState(() {
-      _navigationUIEnabled = enabled;
-      _onNavigationUIEnabledChangedEventCallCount += 1;
-    });
+    if (mounted) {
+      setState(() {
+        _navigationUIEnabled = enabled;
+        _onNavigationUIEnabledChangedEventCallCount += 1;
+      });
+    }
   }
 
   Future<void> _startGuidedNavigation() async {

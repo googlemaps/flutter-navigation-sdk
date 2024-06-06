@@ -14,8 +14,8 @@
 
 import 'package:flutter/services.dart';
 
-import '../../google_maps_navigation.dart';
-import '../google_maps_navigation_platform_interface.dart';
+import '../../google_navigation_flutter.dart';
+import '../google_navigation_flutter_platform_interface.dart';
 import 'method_channel.dart';
 
 /// @nodoc

@@ -1,6 +1,6 @@
-# google_maps_navigation_example
+# google_navigation_flutter_example
 
-Demonstrates how to use the google_maps_navigation plugin.
+Demonstrates how to use the google_navigation_flutter plugin.
 
 ## Setting up API Keys
 

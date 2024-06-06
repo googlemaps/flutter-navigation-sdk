@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import '../../google_maps_navigation.dart';
+import '../../google_navigation_flutter.dart';
 
 /// Destinations main type.
 ///
