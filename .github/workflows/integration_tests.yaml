@@ -107,7 +107,7 @@ jobs:
         patrol_cli_version: [2.7.0]
         working_directory: ["example"]
     runs-on:
-      labels: macos-13-large
+      labels: macos-14-large
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
     steps:
@@ -128,8 +128,8 @@ jobs:
           key: ${{ runner.os }}-pods-${{ hashFiles('**/*.podspec') }}
           restore-keys: |
             ${{ runner.os }}-pods-
-      - name: Select XCode 15.1
-        run: sudo xcode-select -s '/Applications/Xcode_15.1.app/Contents/Developer'
+      - name: Select XCode 15.4
+        run: sudo xcode-select -s '/Applications/Xcode_15.4.app/Contents/Developer'
       - name: Start iOS simulator
         run: |
           RESULT=0
@@ -139,7 +139,7 @@ jobs:
                   echo -e "Deleted Flutter-iPhone"
               fi
           done
-          xcrun simctl create "Flutter-iPhone" "com.apple.CoreSimulator.SimDeviceType.iPhone-14-Pro" "com.apple.CoreSimulator.SimRuntime.iOS-17-2" | xargs xcrun simctl boot
+          xcrun simctl create "Flutter-iPhone" "com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro" "com.apple.CoreSimulator.SimRuntime.iOS-17-5" | xargs xcrun simctl boot
           xcrun simctl list
       - name: Install patrol_cli
         run: flutter pub global activate patrol_cli ${{ matrix.patrol_cli_version }}
