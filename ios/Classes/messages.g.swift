@@ -1680,7 +1680,7 @@ struct NavInfoDto {
   }
 }
 
-private class _NavigationViewCreationApiCodecReader: FlutterStandardReader {
+private class NavigationViewCreationApiCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 128:
@@ -1701,7 +1701,7 @@ private class _NavigationViewCreationApiCodecReader: FlutterStandardReader {
   }
 }
 
-private class _NavigationViewCreationApiCodecWriter: FlutterStandardWriter {
+private class NavigationViewCreationApiCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
     if let value = value as? CameraPositionDto {
       super.writeByte(128)
@@ -1727,55 +1727,57 @@ private class _NavigationViewCreationApiCodecWriter: FlutterStandardWriter {
   }
 }
 
-private class _NavigationViewCreationApiCodecReaderWriter: FlutterStandardReaderWriter {
+private class NavigationViewCreationApiCodecReaderWriter: FlutterStandardReaderWriter {
   override func reader(with data: Data) -> FlutterStandardReader {
-    _NavigationViewCreationApiCodecReader(data: data)
+    NavigationViewCreationApiCodecReader(data: data)
   }
 
   override func writer(with data: NSMutableData) -> FlutterStandardWriter {
-    _NavigationViewCreationApiCodecWriter(data: data)
+    NavigationViewCreationApiCodecWriter(data: data)
   }
 }
 
-class _NavigationViewCreationApiCodec: FlutterStandardMessageCodec {
+class NavigationViewCreationApiCodec: FlutterStandardMessageCodec {
   static let shared =
-    _NavigationViewCreationApiCodec(readerWriter: _NavigationViewCreationApiCodecReaderWriter())
+    NavigationViewCreationApiCodec(readerWriter: NavigationViewCreationApiCodecReaderWriter())
 }
 
 /// Pigeon only generates messages if the messages are used in API.
 /// [MapOptionsDto] is encoded and decoded directly to generate
-/// a PlatformView creation message. This API should never be used directly.
+/// a PlatformView creation message.
+///
+/// This API should never be used directly.
 ///
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
-protocol _NavigationViewCreationApi {
-  func _create(msg: NavigationViewCreationOptionsDto) throws
+protocol NavigationViewCreationApi {
+  func create(msg: NavigationViewCreationOptionsDto) throws
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-enum _NavigationViewCreationApiSetup {
-  /// The codec used by _NavigationViewCreationApi.
-  static var codec: FlutterStandardMessageCodec { _NavigationViewCreationApiCodec.shared }
-  /// Sets up an instance of `_NavigationViewCreationApi` to handle messages through the
+enum NavigationViewCreationApiSetup {
+  /// The codec used by NavigationViewCreationApi.
+  static var codec: FlutterStandardMessageCodec { NavigationViewCreationApiCodec.shared }
+  /// Sets up an instance of `NavigationViewCreationApi` to handle messages through the
   /// `binaryMessenger`.
-  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _NavigationViewCreationApi?) {
-    let _createChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter._NavigationViewCreationApi._create",
+  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: NavigationViewCreationApi?) {
+    let createChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewCreationApi.create",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
     if let api {
-      _createChannel.setMessageHandler { message, reply in
+      createChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let msgArg = args[0] as! NavigationViewCreationOptionsDto
         do {
-          try api._create(msg: msgArg)
+          try api.create(msg: msgArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      _createChannel.setMessageHandler(nil)
+      createChannel.setMessageHandler(nil)
     }
   }
 }
