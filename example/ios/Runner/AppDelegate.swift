@@ -31,7 +31,6 @@ import GoogleNavigation
         mapsApiKey = "YOUR_API_KEY"
     }
     GMSServices.provideAPIKey(mapsApiKey)
-    GMSServices.setMetalRendererEnabled(true)
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
