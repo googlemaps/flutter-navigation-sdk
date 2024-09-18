@@ -97,7 +97,7 @@ class _NavigationSampleState extends State<NavigationSample> {
 
   Future<void> _initializeNavigationSession() async {
     if (!await GoogleMapsNavigator.areTermsAccepted()) {
-      await GoogleMapsNavigationManager.showTermsAndConditionsDialog(
+      await GoogleMapsNavigator.showTermsAndConditionsDialog(
         'Example title',
         'Example company',
       );
