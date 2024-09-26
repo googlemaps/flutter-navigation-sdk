@@ -27,6 +27,15 @@ import 'package:pigeon/pigeon.dart';
   ),
 )
 
+/// Describes the type of map to construct.
+enum MapViewTypeDto {
+  /// Navigation view supports navigation overlay, and current navigation session is displayed on the map.
+  navigation,
+
+  /// Classic map view, without navigation overlay.
+  map,
+}
+
 /// Object containing map options used to initialize Google Map view.
 class MapOptionsDto {
   MapOptionsDto({
@@ -110,13 +119,15 @@ class NavigationViewOptionsDto {
 ///
 /// This message is used to initialize a new navigation view with a
 /// specified initial parameters.
-class NavigationViewCreationOptionsDto {
-  NavigationViewCreationOptionsDto({
+class ViewCreationOptionsDto {
+  ViewCreationOptionsDto({
+    required this.mapViewType,
     required this.mapOptions,
     required this.navigationViewOptions,
   });
+  final MapViewTypeDto mapViewType;
   final MapOptionsDto mapOptions;
-  final NavigationViewOptionsDto navigationViewOptions;
+  final NavigationViewOptionsDto? navigationViewOptions;
 }
 
 /// Pigeon only generates messages if the messages are used in API.
@@ -126,7 +137,7 @@ class NavigationViewCreationOptionsDto {
 // ignore: unused_element
 abstract class _NavigationViewCreationApi {
   // ignore: unused_element
-  void _create(NavigationViewCreationOptionsDto msg);
+  void _create(ViewCreationOptionsDto msg);
 }
 
 enum MapTypeDto { none, normal, satellite, terrain, hybrid }
@@ -366,8 +377,8 @@ enum CameraEventTypeDto {
   onCameraStoppedFollowingLocation
 }
 
-@HostApi(dartHostTestHandler: 'TestNavigationViewApi')
-abstract class NavigationViewApi {
+@HostApi(dartHostTestHandler: 'TestMapViewApi')
+abstract class MapViewApi {
   @async
   void awaitMapReady(int viewId);
 
@@ -498,7 +509,7 @@ abstract class ImageRegistryApi {
 }
 
 @FlutterApi()
-abstract class NavigationViewEventApi {
+abstract class ViewEventApi {
   void onMapClickEvent(int viewId, LatLngDto latLng);
   void onMapLongClickEvent(int viewId, LatLngDto latLng);
   void onRecenterButtonClicked(int viewId);
