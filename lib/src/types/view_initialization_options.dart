@@ -37,13 +37,13 @@ import '../../google_navigation_flutter.dart';
 /// ```
 /// {@category Navigation View}
 @immutable
-class NavigationViewInitializationOptions {
-  /// Creates a new instance of [NavigationViewInitializationOptions] with the given initial
+class MapViewInitializationOptions {
+  /// Creates a new instance of [MapViewInitializationOptions ] with the given initial
   /// parameters to configure the navigation view.
-  const NavigationViewInitializationOptions({
+  const MapViewInitializationOptions({
     required this.layoutDirection,
     required this.mapOptions,
-    required this.navigationViewOptions,
+    this.navigationViewOptions,
     this.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
   });
 
@@ -51,7 +51,7 @@ class NavigationViewInitializationOptions {
   final MapOptions mapOptions;
 
   /// The initial navigation options for the navigation view.
-  final NavigationViewOptions navigationViewOptions;
+  final NavigationViewOptions? navigationViewOptions;
 
   /// A direction in which text flows on the widget.
   final TextDirection layoutDirection;
@@ -85,19 +85,19 @@ class MapOptions {
   /// Creates a new instance of [MapOptions] with the given initial
   /// parameters to configure the map view.
   const MapOptions({
-    required this.cameraPosition,
-    required this.mapType,
-    required this.compassEnabled,
-    required this.rotateGesturesEnabled,
-    required this.scrollGesturesEnabled,
-    required this.tiltGesturesEnabled,
-    required this.zoomGesturesEnabled,
-    required this.scrollGesturesEnabledDuringRotateOrZoom,
-    required this.mapToolbarEnabled,
-    required this.minZoomPreference,
-    required this.maxZoomPreference,
-    required this.zoomControlsEnabled,
-    required this.cameraTargetBounds,
+    this.cameraPosition = const CameraPosition(),
+    this.mapType = MapType.normal,
+    this.compassEnabled = true,
+    this.rotateGesturesEnabled = true,
+    this.scrollGesturesEnabled = true,
+    this.tiltGesturesEnabled = true,
+    this.zoomGesturesEnabled = true,
+    this.scrollGesturesEnabledDuringRotateOrZoom = true,
+    this.mapToolbarEnabled = true,
+    this.minZoomPreference,
+    this.maxZoomPreference,
+    this.zoomControlsEnabled = true,
+    this.cameraTargetBounds,
   }) : assert(
             minZoomPreference == null ||
                 maxZoomPreference == null ||
@@ -111,24 +111,53 @@ class MapOptions {
   final MapType mapType;
 
   /// Specifies whether the compass should be enabled.
+  ///
+  /// The compass is an icon on the map that indicates the direction of north on the map.
+  /// If enabled, it is only shown when the camera is tilted or rotated away from
+  /// its default orientation (tilt of 0 and a bearing of 0).
+  ///
+  /// By default, the compass is enabled.
   final bool compassEnabled;
 
   /// Specifies whether rotate gestures should be enabled.
+  ///
+  /// If enabled, users can use a two-finger rotate gesture to rotate the camera.
+  /// If disabled, users cannot rotate the camera via gestures.
+  /// This setting doesn't restrict the user from tapping the compass icon to reset the camera orientation,
+  /// nor does it restrict programmatic movements and animation of the camera.
+  ///
+  /// By default, the rotation gestures are enabled.
   final bool rotateGesturesEnabled;
 
   /// Specifies whether scroll gestures should be enabled.
+  ///
+  /// By default, the scroll gestures are enabled.
   final bool scrollGesturesEnabled;
 
   /// Specifies whether tilt gestures should be enabled.
+  ///
+  /// By default, the tilt gestures are enabled.
   final bool tiltGesturesEnabled;
 
   /// Specifies whether zoom gestures should be enabled.
+  ///
+  /// By default, the zoom gestures enabled.
   final bool zoomGesturesEnabled;
 
   /// Specifies whether scroll gestures during rotate or zoom should be enabled.
+  ///
+  /// If enabled, users can swipe to pan the camera. If disabled, swiping has no effect.
+  /// This setting doesn't restrict programmatic movement and animation of the camera.
+  ///
+  /// By default, the zoom gestures enabled.
   final bool scrollGesturesEnabledDuringRotateOrZoom;
 
   /// Specifies whether the mapToolbar should be enabled. Only applicable on Android.
+  ///
+  /// If enabled, and the Map Toolbar can be shown in the current context,
+  /// users will see a bar with various context-dependent actions.
+  ///
+  /// By default, the Map Toolbar is enabled.
   final bool mapToolbarEnabled;
 
   /// Specifies a preferred lower bound for camera zoom.
@@ -136,16 +165,21 @@ class MapOptions {
   /// Null value means unbounded.
   final double? minZoomPreference;
 
-  /// Specifies a preferred upper bound for camera zoom.
+  /// Specifies a preferred lower bound for camera zoom.
   ///
   /// Null value means unbounded.
+  /// Null by default (not limited).
   final double? maxZoomPreference;
 
   /// Specifies whether the zoom controls should be enabled. Only applicable on Android.
+  ///
+  /// By default, the zoom controls are enabled.
   final bool zoomControlsEnabled;
 
   /// Specifies a bounds to constrain the camera target, so that when users scroll and pan the map,
   /// the camera target does not move outside these bounds.
+  ///
+  /// Null by default (unbounded).
   final LatLngBounds? cameraTargetBounds;
 }
 

@@ -18,3 +18,7 @@ export 'src/google_navigation_flutter_android.dart';
 export 'src/google_navigation_flutter_ios.dart';
 export 'src/navigator/google_navigation_flutter_navigator.dart';
 export 'src/types/types.dart';
+export 'src/google_maps_navigation_view.dart';
+export 'src/google_maps_map_view.dart';
+export 'src/google_maps_map_view_controller.dart';
+export 'src/google_maps_navigation_view_controller.dart';
