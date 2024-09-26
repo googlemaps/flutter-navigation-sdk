@@ -23,16 +23,22 @@ import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 import '../utils/utils.dart';
 import '../widgets/widgets.dart';
 
-class MapPage extends ExamplePage {
-  const MapPage({super.key})
-      : super(leading: const Icon(Icons.map), title: 'Map');
+/// A page to demonstrate the basic classic Google Map without navigation features.
+///
+/// All features used in this example are available as well with [GoogleMapsNavigationView].
+/// Uses [GoogleMapView] to display a standard map view.
+class BasicMapPage extends ExamplePage {
+  /// Constructs a [BasicMapPage].
+  const BasicMapPage({super.key})
+      : super(
+            leading: const Icon(Icons.map), title: 'Basic Google Map Controls');
 
   @override
-  ExamplePageState<MapPage> createState() => _MapPageState();
+  ExamplePageState<BasicMapPage> createState() => _MapPageState();
 }
 
-class _MapPageState extends ExamplePageState<MapPage> {
-  late final GoogleNavigationViewController _navigationViewController;
+class _MapPageState extends ExamplePageState<BasicMapPage> {
+  late final GoogleMapViewController _mapViewController;
   late bool isMyLocationEnabled = false;
   late bool isMyLocationButtonEnabled = true;
   late bool consumeMyLocationButtonClickEvent = false;
@@ -48,29 +54,29 @@ class _MapPageState extends ExamplePageState<MapPage> {
 
   Future<void> setMapType(MapType type) async {
     mapType = type;
-    await _navigationViewController.setMapType(mapType: type);
+    await _mapViewController.setMapType(mapType: type);
     setState(() {});
   }
 
   Future<void> setMapStyleDefault() async {
-    await _navigationViewController.setMapStyle(null);
+    await _mapViewController.setMapStyle(null);
   }
 
   Future<void> setMapStyleNight() async {
     final String jsonString =
         await rootBundle.loadString('assets/night_style.json');
-    await _navigationViewController.setMapStyle(jsonString);
+    await _mapViewController.setMapStyle(jsonString);
   }
 
   Future<void> setMapStyleSepia() async {
     final String jsonString =
         await rootBundle.loadString('assets/sepia_style.json');
-    await _navigationViewController.setMapStyle(jsonString);
+    await _mapViewController.setMapStyle(jsonString);
   }
 
   // ignore: use_setters_to_change_properties
-  Future<void> _onViewCreated(GoogleNavigationViewController controller) async {
-    _navigationViewController = controller;
+  Future<void> _onViewCreated(GoogleMapViewController controller) async {
+    _mapViewController = controller;
     setState(() {});
   }
 
@@ -100,12 +106,10 @@ class _MapPageState extends ExamplePageState<MapPage> {
         context,
         (BuildContext context) => Stack(
               children: <Widget>[
-                GoogleMapsNavigationView(
+                GoogleMapsMapView(
                   onViewCreated: _onViewCreated,
                   onMyLocationClicked: _onMyLocationClicked,
                   onMyLocationButtonClicked: _onMyLocationButtonClicked,
-                  initialNavigationUIEnabledPreference:
-                      NavigationUIEnabledPreference.disabled,
                 ),
                 Padding(
                   padding:
@@ -178,10 +182,9 @@ class _MapPageState extends ExamplePageState<MapPage> {
     return Column(children: <Widget>[
       SwitchListTile(
           onChanged: (bool newValue) async {
-            await _navigationViewController.settings
-                .setCompassEnabled(newValue);
+            await _mapViewController.settings.setCompassEnabled(newValue);
             final bool enabled =
-                await _navigationViewController.settings.isCompassEnabled();
+                await _mapViewController.settings.isCompassEnabled();
             setState(() {
               isCompassEnabled = enabled;
             });
@@ -193,9 +196,8 @@ class _MapPageState extends ExamplePageState<MapPage> {
           value: isMyLocationEnabled,
           controlAffinity: ListTileControlAffinity.leading,
           onChanged: (bool newValue) async {
-            await _navigationViewController.setMyLocationEnabled(newValue);
-            final bool enabled =
-                await _navigationViewController.isMyLocationEnabled();
+            await _mapViewController.setMyLocationEnabled(newValue);
+            final bool enabled = await _mapViewController.isMyLocationEnabled();
             setState(() {
               isMyLocationEnabled = enabled;
             });
@@ -207,9 +209,9 @@ class _MapPageState extends ExamplePageState<MapPage> {
           controlAffinity: ListTileControlAffinity.leading,
           onChanged: isMyLocationEnabled
               ? (bool newValue) async {
-                  await _navigationViewController.settings
+                  await _mapViewController.settings
                       .setMyLocationButtonEnabled(newValue);
-                  final bool enabled = await _navigationViewController.settings
+                  final bool enabled = await _mapViewController.settings
                       .isMyLocationButtonEnabled();
                   setState(() {
                     isMyLocationButtonEnabled = enabled;
@@ -223,9 +225,9 @@ class _MapPageState extends ExamplePageState<MapPage> {
           controlAffinity: ListTileControlAffinity.leading,
           onChanged: isMyLocationEnabled && isMyLocationButtonEnabled
               ? (bool newValue) async {
-                  await _navigationViewController.settings
+                  await _mapViewController.settings
                       .setConsumeMyLocationButtonClickEventsEnabled(newValue);
-                  final bool enabled = await _navigationViewController.settings
+                  final bool enabled = await _mapViewController.settings
                       .isConsumeMyLocationButtonClickEventsEnabled();
                   setState(() {
                     consumeMyLocationButtonClickEvent = enabled;
@@ -235,10 +237,9 @@ class _MapPageState extends ExamplePageState<MapPage> {
           visualDensity: VisualDensity.compact),
       SwitchListTile(
           onChanged: (bool newValue) async {
-            await _navigationViewController.settings
-                .setZoomGesturesEnabled(newValue);
-            final bool enabled = await _navigationViewController.settings
-                .isZoomGesturesEnabled();
+            await _mapViewController.settings.setZoomGesturesEnabled(newValue);
+            final bool enabled =
+                await _mapViewController.settings.isZoomGesturesEnabled();
             setState(() {
               isZoomGesturesEnabled = enabled;
             });
@@ -248,10 +249,10 @@ class _MapPageState extends ExamplePageState<MapPage> {
       if (Platform.isAndroid)
         SwitchListTile(
             onChanged: (bool newValue) async {
-              await _navigationViewController.settings
+              await _mapViewController.settings
                   .setZoomControlsEnabled(newValue);
-              final bool enabled = await _navigationViewController.settings
-                  .isZoomControlsEnabled();
+              final bool enabled =
+                  await _mapViewController.settings.isZoomControlsEnabled();
               setState(() {
                 isZoomControlsEnabled = enabled;
               });
@@ -260,10 +261,10 @@ class _MapPageState extends ExamplePageState<MapPage> {
             value: isZoomControlsEnabled),
       SwitchListTile(
           onChanged: (bool newValue) async {
-            await _navigationViewController.settings
+            await _mapViewController.settings
                 .setRotateGesturesEnabled(newValue);
-            final bool enabled = await _navigationViewController.settings
-                .isRotateGesturesEnabled();
+            final bool enabled =
+                await _mapViewController.settings.isRotateGesturesEnabled();
             setState(() {
               isRotateGesturesEnabled = enabled;
             });
@@ -272,10 +273,10 @@ class _MapPageState extends ExamplePageState<MapPage> {
           value: isRotateGesturesEnabled),
       SwitchListTile(
           onChanged: (bool newValue) async {
-            await _navigationViewController.settings
+            await _mapViewController.settings
                 .setScrollGesturesEnabled(newValue);
-            final bool enabled = await _navigationViewController.settings
-                .isScrollGesturesEnabled();
+            final bool enabled =
+                await _mapViewController.settings.isScrollGesturesEnabled();
             setState(() {
               isScrollGesturesEnabled = enabled;
             });
@@ -284,9 +285,9 @@ class _MapPageState extends ExamplePageState<MapPage> {
           value: isScrollGesturesEnabled),
       SwitchListTile(
           onChanged: (bool newValue) async {
-            await _navigationViewController.settings
+            await _mapViewController.settings
                 .setScrollGesturesDuringRotateOrZoomEnabled(newValue);
-            final bool enabled = await _navigationViewController.settings
+            final bool enabled = await _mapViewController.settings
                 .isScrollGesturesEnabledDuringRotateOrZoom();
             setState(() {
               isScrollGesturesEnabledDuringRotateOrZoom = enabled;
@@ -296,10 +297,9 @@ class _MapPageState extends ExamplePageState<MapPage> {
           value: isScrollGesturesEnabledDuringRotateOrZoom),
       SwitchListTile(
           onChanged: (bool newValue) async {
-            await _navigationViewController.settings
-                .setTiltGesturesEnabled(newValue);
-            final bool enabled = await _navigationViewController.settings
-                .isTiltGesturesEnabled();
+            await _mapViewController.settings.setTiltGesturesEnabled(newValue);
+            final bool enabled =
+                await _mapViewController.settings.isTiltGesturesEnabled();
             setState(() {
               isTiltGesturesEnabled = enabled;
             });
@@ -308,10 +308,9 @@ class _MapPageState extends ExamplePageState<MapPage> {
           value: isTiltGesturesEnabled),
       SwitchListTile(
           onChanged: (bool newValue) async {
-            await _navigationViewController.settings
-                .setTrafficEnabled(newValue);
+            await _mapViewController.settings.setTrafficEnabled(newValue);
             final bool enabled =
-                await _navigationViewController.settings.isTrafficEnabled();
+                await _mapViewController.settings.isTrafficEnabled();
             setState(() {
               isTrafficEnabled = enabled;
             });

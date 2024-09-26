@@ -19,7 +19,7 @@ enum GoogleMapsNavigationViewHandlerError: Error {
   case badFunctionCall
 }
 
-class GoogleMapsNavigationViewMessageHandler: NavigationViewApi {
+class GoogleMapsNavigationViewMessageHandler: MapViewApi {
   private let viewRegistry: GoogleMapsNavigationViewRegistry
 
   init(viewRegistry: GoogleMapsNavigationViewRegistry) {

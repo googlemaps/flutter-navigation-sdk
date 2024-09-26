@@ -34,4 +34,9 @@ class GoogleMapsNavigationViewRegistry {
   func getAllRegisteredViews() -> [GoogleMapsNavigationView] {
     Array(views.values)
   }
+
+  func getAllRegisteredNavigationViewIds() -> [Int64] {
+    // Filter the views dictionary to include only those views that are navigation views
+    views.filter { $0.value.isNavigationView() }.map(\.key)
+  }
 }
