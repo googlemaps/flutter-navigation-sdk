@@ -16,12 +16,14 @@ import Foundation
 import GoogleMaps
 
 extension Convert {
-  static func convertNavigationUIEnabledPreference(preference: NavigationUIEnabledPreferenceDto)
+  static func convertNavigationUIEnabledPreference(preference: NavigationUIEnabledPreferenceDto?)
     -> NavigationUIEnabledPreference {
     switch preference {
     case .automatic:
       return .automatic
     case .disabled:
+      return .disabled
+    default:
       return .disabled
     }
   }

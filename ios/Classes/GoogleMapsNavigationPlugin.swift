@@ -20,7 +20,7 @@ extension FlutterError: Error {}
 public class GoogleMapsNavigationPlugin: NSObject, FlutterPlugin {
   private static var viewRegistry: GoogleMapsNavigationViewRegistry?
   private static var viewMessageHandler: GoogleMapsNavigationViewMessageHandler?
-  private static var navigationViewEventApi: NavigationViewEventApi?
+  private static var viewEventApi: ViewEventApi?
   private static var navigationInspector: NavigationInspector?
 
   private static var sessionMessageHandler: GoogleMapsNavigationSessionMessageHandler?
@@ -38,18 +38,18 @@ public class GoogleMapsNavigationPlugin: NSObject, FlutterPlugin {
       return
     }
     viewMessageHandler = GoogleMapsNavigationViewMessageHandler(viewRegistry: viewRegistry!)
-    NavigationViewApiSetup.setUp(
+    MapViewApiSetup.setUp(
       binaryMessenger: registrar.messenger(),
       api: viewMessageHandler
     )
-    navigationViewEventApi = NavigationViewEventApi(binaryMessenger: registrar.messenger())
-    guard navigationViewEventApi != nil else {
+    viewEventApi = ViewEventApi(binaryMessenger: registrar.messenger())
+    guard viewEventApi != nil else {
       return
     }
     imageRegistry = ImageRegistry()
     let factory = GoogleMapsNavigationViewFactory(
       viewRegistry: viewRegistry!,
-      navigationViewEventApi: navigationViewEventApi!,
+      viewEventApi: viewEventApi!,
       imageRegistry: imageRegistry!
     )
     registrar.register(factory, withId: "google_navigation_flutter")

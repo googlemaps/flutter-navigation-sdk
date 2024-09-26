@@ -46,8 +46,6 @@ class GoogleMapsMapView extends StatefulWidget {
       this.initialMaxZoomPreference,
       this.initialZoomControlsEnabled = true,
       this.initialCameraTargetBounds,
-      this.initialNavigationUIEnabledPreference =
-          NavigationUIEnabledPreference.automatic,
       this.layoutDirection,
       this.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
       this.onRecenterButtonClicked,
@@ -155,21 +153,6 @@ class GoogleMapsMapView extends StatefulWidget {
   /// Null by default (unbounded).
   final LatLngBounds? initialCameraTargetBounds;
 
-  /// Determines the initial visibility of the navigation UI on map initialization.
-  ///
-  /// By default set to [NavigationUIEnabledPreference.automatic],
-  /// meaning the navigation UI gets enabled if the navigation
-  /// session has already been successfully started.
-  ///
-  /// If set to [NavigationUIEnabledPreference.disabled] the navigation view
-  /// initially displays a classic map view.
-  ///
-  /// Note on Android enabling the navigation UI for the view requires that the
-  /// navigation session has already been successfully started with
-  /// [GoogleMapsNavigator.initializeNavigationSession]. On iOS accepting
-  /// the terms and conditions is enough.
-  final NavigationUIEnabledPreference initialNavigationUIEnabledPreference;
-
   /// Which gestures should be forwarded to the PlatformView.
   ///
   /// When this set is empty, the map will only handle pointer events for gestures that
@@ -253,29 +236,27 @@ class GoogleMapsMapViewState extends State<GoogleMapsMapView> {
   Widget build(BuildContext context) {
     return GoogleMapsNavigationPlatform.instance.buildMapView(
         initializationOptions: MapViewInitializationOptions(
-            layoutDirection: widget.layoutDirection ??
-                Directionality.maybeOf(context) ??
-                TextDirection.ltr,
-            gestureRecognizers: widget.gestureRecognizers,
-            mapOptions: MapOptions(
-              cameraPosition: widget.initialCameraPosition,
-              mapType: widget.initialMapType,
-              compassEnabled: widget.initialCompassEnabled,
-              rotateGesturesEnabled: widget.initialRotateGesturesEnabled,
-              scrollGesturesEnabled: widget.initialScrollGesturesEnabled,
-              tiltGesturesEnabled: widget.initialTiltGesturesEnabled,
-              zoomGesturesEnabled: widget.initialZoomGesturesEnabled,
-              scrollGesturesEnabledDuringRotateOrZoom:
-                  widget.initialScrollGesturesEnabledDuringRotateOrZoom,
-              mapToolbarEnabled: widget.initialMapToolbarEnabled,
-              minZoomPreference: widget.initialMinZoomPreference,
-              maxZoomPreference: widget.initialMaxZoomPreference,
-              zoomControlsEnabled: widget.initialZoomControlsEnabled,
-              cameraTargetBounds: widget.initialCameraTargetBounds,
-            ),
-            navigationViewOptions: NavigationViewOptions(
-                navigationUIEnabledPreference:
-                    widget.initialNavigationUIEnabledPreference)),
+          layoutDirection: widget.layoutDirection ??
+              Directionality.maybeOf(context) ??
+              TextDirection.ltr,
+          gestureRecognizers: widget.gestureRecognizers,
+          mapOptions: MapOptions(
+            cameraPosition: widget.initialCameraPosition,
+            mapType: widget.initialMapType,
+            compassEnabled: widget.initialCompassEnabled,
+            rotateGesturesEnabled: widget.initialRotateGesturesEnabled,
+            scrollGesturesEnabled: widget.initialScrollGesturesEnabled,
+            tiltGesturesEnabled: widget.initialTiltGesturesEnabled,
+            zoomGesturesEnabled: widget.initialZoomGesturesEnabled,
+            scrollGesturesEnabledDuringRotateOrZoom:
+                widget.initialScrollGesturesEnabledDuringRotateOrZoom,
+            mapToolbarEnabled: widget.initialMapToolbarEnabled,
+            minZoomPreference: widget.initialMinZoomPreference,
+            maxZoomPreference: widget.initialMaxZoomPreference,
+            zoomControlsEnabled: widget.initialZoomControlsEnabled,
+            cameraTargetBounds: widget.initialCameraTargetBounds,
+          ),
+        ),
         onMapReady: _onPlatformViewCreated);
   }
 

@@ -28,16 +28,11 @@ class GoogleMapViewController {
   /// Initializes the event channel listeners for the map view instance.
   void _initListeners() {
     _setOnMapClickedListeners();
-    _setOnRecenterButtonClickedListener();
     _setOnMarkerClickedListeners();
     _setOnMarkerDragListeners();
     _setOnPolygonClickedListener();
     _setOnPolylineClickedListener();
     _setOnCircleClickedListener();
-    _setOnNavigationUIEnabledChangedListener();
-    _setOnMyLocationClickedListener();
-    _setOnMyLocationButtonClickedListener();
-    _setOnCameraChangedListener();
   }
 
   /// Sets the event channel listener for the map click event listeners.
@@ -60,16 +55,6 @@ class GoogleMapViewController {
     }
   }
 
-  /// Sets the event channel listener for the on recenter button clicked event.
-  void _setOnRecenterButtonClickedListener() {
-    if (_viewState != null &&
-        _viewState.widget.onRecenterButtonClicked != null) {
-      GoogleMapsNavigationPlatform.instance
-          .getNavigationRecenterButtonClickedEventStream(viewId: _viewId)
-          .listen(_viewState.widget.onRecenterButtonClicked);
-    }
-  }
-
   /// Sets the event channel listener for the marker clicked events.
   void _setOnMarkerClickedListeners() {
     GoogleMapsNavigationPlatform.instance
@@ -85,56 +70,6 @@ class GoogleMapViewController {
         case MarkerEventType.infoWindowLongClicked:
           _viewState?.widget.onMarkerInfoWindowLongClicked
               ?.call(event.markerId);
-      }
-    });
-  }
-
-  /// Sets the event channel listener for the on my location clicked event.
-  void _setOnMyLocationClickedListener() {
-    if (_viewState != null && _viewState.widget.onMyLocationClicked != null) {
-      GoogleMapsNavigationPlatform.instance
-          .getMyLocationClickedEventStream(viewId: _viewId)
-          .listen(_viewState.widget.onMyLocationClicked);
-    }
-  }
-
-  /// Sets the event channel listener for the on my location button clicked event.
-  void _setOnMyLocationButtonClickedListener() {
-    if (_viewState != null &&
-        _viewState.widget.onMyLocationButtonClicked != null) {
-      GoogleMapsNavigationPlatform.instance
-          .getMyLocationButtonClickedEventStream(viewId: _viewId)
-          .listen(_viewState.widget.onMyLocationButtonClicked);
-    }
-  }
-
-  /// Sets the event channel listener for camera changed events.
-  void _setOnCameraChangedListener() {
-    // Register listeners if any of the callbacks are not null.
-    if (_viewState?.widget.onCameraMoveStarted != null ||
-        _viewState?.widget.onCameraMove != null ||
-        _viewState?.widget.onCameraIdle != null) {
-      GoogleMapsNavigationPlatform.instance
-          .registerOnCameraChangedListener(viewId: _viewId);
-    }
-    GoogleMapsNavigationPlatform.instance
-        .getCameraChangedEventStream(viewId: _viewId)
-        .listen((CameraChangedEvent event) {
-      switch (event.eventType) {
-        case CameraEventType.moveStartedByApi:
-          _viewState?.widget.onCameraMoveStarted?.call(event.position, false);
-        case CameraEventType.moveStartedByGesture:
-          _viewState?.widget.onCameraMoveStarted?.call(event.position, true);
-        case CameraEventType.onCameraMove:
-          _viewState?.widget.onCameraMove?.call(event.position);
-        case CameraEventType.onCameraIdle:
-          _viewState?.widget.onCameraIdle?.call(event.position);
-        case CameraEventType.onCameraStartedFollowingLocation:
-          _viewState?.widget.onCameraStartedFollowingLocation
-              ?.call(event.position);
-        case CameraEventType.onCameraStoppedFollowingLocation:
-          _viewState?.widget.onCameraStoppedFollowingLocation
-              ?.call(event.position);
       }
     });
   }
@@ -181,16 +116,6 @@ class GoogleMapViewController {
         .getCircleClickedEventStream(viewId: _viewId)
         .listen((CircleClickedEvent event) {
       _viewState?.widget.onCircleClicked?.call(event.circleId);
-    });
-  }
-
-  /// Sets the event channel listener for the navigation UI enabled changed event.
-  void _setOnNavigationUIEnabledChangedListener() {
-    GoogleMapsNavigationPlatform.instance
-        .getNavigationUIEnabledChangedEventStream(viewId: _viewId)
-        .listen((NavigationUIEnabledChangedEvent event) {
-      _viewState?.widget.onNavigationUIEnabledChanged
-          ?.call(event.navigationUIEnabled);
     });
   }
 
