@@ -34,8 +34,8 @@ export 'package:google_navigation_flutter/google_navigation_flutter.dart';
 export 'package:patrol/patrol.dart';
 
 /// Location coordinates for starting position simulation in Finland - Näkkäläntie.
-const double startLocationLat = 68.5938196099399;
-const double startLocationLng = 23.510696979963722;
+const double startLocationLat = 68.593793;
+const double startLocationLng = 23.510763;
 
 /// Timeout for tests in seconds.
 const int testTimeoutSeconds = 240; // 4 minutes
@@ -175,6 +175,7 @@ Future<GoogleNavigationViewController> startNavigation(
     latitude: startLocationLat,
     longitude: startLocationLng,
   ));
+  await $.pumpAndSettle(timeout: const Duration(seconds: 1));
 
   /// Set Destination.
   final Destinations destinations = Destinations(
@@ -277,6 +278,7 @@ Future<GoogleNavigationViewController> startNavigationWithoutDestination(
       latitude: startLocationLat,
       longitude: startLocationLng,
     ));
+    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
   }
 
   return controller;

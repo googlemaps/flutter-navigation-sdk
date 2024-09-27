@@ -91,10 +91,10 @@ void main() {
       final Destinations destinations = Destinations(
           waypoints: <NavigationWaypoint>[
             NavigationWaypoint.withLatLngTarget(
-                title: 'Grace Cathedral',
+                title: 'California St & Jones St',
                 target: const LatLng(
-                  latitude: 37.791957,
-                  longitude: -122.412529,
+                  latitude: 37.791424,
+                  longitude: -122.414139,
                 )),
           ],
           displayOptions:

@@ -78,15 +78,16 @@ void main() {
       latitude: 37.79136614772824,
       longitude: -122.41565900473043,
     ));
+    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
 
     /// Set Destination.
     final Destinations destinations = Destinations(
       waypoints: <NavigationWaypoint>[
         NavigationWaypoint.withLatLngTarget(
-          title: 'Grace Cathedral',
+          title: 'California St & Jones St',
           target: const LatLng(
-            latitude: 37.791957,
-            longitude: -122.412529,
+            latitude: 37.791424,
+            longitude: -122.414139,
           ),
         ),
       ],
@@ -172,5 +173,7 @@ void main() {
       final bool isEnabled = await viewController.isRecenterButtonEnabled();
       expect(isEnabled, result);
     }
+
+    await GoogleMapsNavigator.cleanup();
   });
 }

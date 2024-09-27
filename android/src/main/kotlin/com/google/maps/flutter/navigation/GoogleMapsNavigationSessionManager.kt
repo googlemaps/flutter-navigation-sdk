@@ -712,7 +712,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
           navigationSessionEventApi.onNavInfo(Convert.convertNavInfo(navInfo)) {}
         }
         GoogleMapsNavigationNavUpdatesService.navInfoLiveData.observe(
-          lifeCycleOwner!!,
+          lifeCycleOwner,
           navInfoObserver
         )
         turnByTurnEventsEnabled = true
@@ -729,7 +729,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   fun disableTurnByTurnNavigationEvents() {
     var lifeCycleOwner: LifecycleOwner? = weakLifecycleOwner?.get()
     if (turnByTurnEventsEnabled && lifeCycleOwner != null) {
-      GoogleMapsNavigationNavUpdatesService.navInfoLiveData.removeObservers(lifeCycleOwner!!)
+      GoogleMapsNavigationNavUpdatesService.navInfoLiveData.removeObservers(lifeCycleOwner)
       val success = getNavigator().unregisterServiceForNavUpdates()
       if (success) {
         turnByTurnEventsEnabled = false
