@@ -29,7 +29,7 @@ This repository contains a Flutter plugin that provides a [Google Navigation](ht
 
 1. To add the Google Navigation for Flutter package to your project, use the command:
   ```
-  pub add google_navigation_flutter
+  flutter pub add google_navigation_flutter
   ```
 
 2. Set the minimum platform version for the platform(s) targeted by your app.
@@ -97,7 +97,7 @@ class _NavigationSampleState extends State<NavigationSample> {
 
   Future<void> _initializeNavigationSession() async {
     if (!await GoogleMapsNavigator.areTermsAccepted()) {
-      await GoogleMapsNavigationManager.showTermsAndConditionsDialog(
+      await GoogleMapsNavigator.showTermsAndConditionsDialog(
         'Example title',
         'Example company',
       );
