@@ -28,16 +28,16 @@ jobs:
     timeout-minutes: 45
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b
-        name: Checkout code
-      - uses: subosito/flutter-action@44ac965b96f18d999802d4b807e3256d5a3f9fa1
-        name: Setup flutter
+      - name: Checkout code
+        uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b
+      - name: Setup flutter
+        uses: subosito/flutter-action@44ac965b96f18d999802d4b807e3256d5a3f9fa1
         with:
           flutter-version: "3.22.x"
           channel: "stable"
           cache: true
-      - uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
-        name: Setup melos
+      - name: Setup melos
+        uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
         with:
           melos-version: "6.0.0"
       - name: "Run Flutter Analyze"
@@ -47,21 +47,21 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b
-        name: Checkout code
-      - uses: actions/setup-java@v4
-        name: Setup java
+      - name: Checkout code
+        uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b
+      - name: Setup java
+        uses: actions/setup-java@v4
         with:
           distribution: "temurin"
           java-version: "17"
-      - uses: subosito/flutter-action@44ac965b96f18d999802d4b807e3256d5a3f9fa1
-        name: Setup flutter
+      - name: Setup flutter
+        uses: subosito/flutter-action@44ac965b96f18d999802d4b807e3256d5a3f9fa1
         with:
           flutter-version: "3.22.x"
           channel: "stable"
           cache: true
-      - uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
-        name: Setup melos
+      - name: Setup melos
+        uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
         with:
           melos-version: "6.0.0"
       - name: Restore Cache
@@ -70,8 +70,9 @@ jobs:
         with:
           path: /home/linuxbrew/.linuxbrew
           key: ${{ runner.os }}-linuxbrew
-      - uses: Homebrew/actions/setup-homebrew@master
-      - name: "Install swiftformat v0.53"
+      - name: Setup homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+      - name: Install swiftformat
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
@@ -84,14 +85,14 @@ jobs:
         with:
           path: /home/linuxbrew/.linuxbrew
           key: ${{ runner.os }}-linuxbrew
-      - name: "Formatter version"
+      - name: Formatter version
         run: |
           swiftformat --version
-      - name: "Run format"
+      - name: Run format
         if: ${{ success() || failure() }}
         run: |
           melos run format
-      - name: "Validate formatting"
+      - name: Validate formatting
         if: ${{ success() || failure() }}
         run: |
           ./.github/workflows/scripts/validate-formatting.sh
