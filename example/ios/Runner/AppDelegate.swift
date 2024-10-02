@@ -17,7 +17,7 @@ import Flutter
 import GoogleMaps
 import GoogleNavigation
 
-@UIApplicationMain
+@main
 @objc class AppDelegate: FlutterAppDelegate {
   override func application(
     _ application: UIApplication,

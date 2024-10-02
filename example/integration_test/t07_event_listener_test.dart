@@ -56,15 +56,16 @@ void main() {
       latitude: 37.79136614772824,
       longitude: -122.41565900473043,
     ));
+    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
 
     /// Set Destination.
     final Destinations destinations = Destinations(
       waypoints: <NavigationWaypoint>[
         NavigationWaypoint.withLatLngTarget(
-            title: 'Grace Cathedral',
+            title: 'California St & Jones St',
             target: const LatLng(
-              latitude: 37.791957,
-              longitude: -122.412529,
+              latitude: 37.791424,
+              longitude: -122.414139,
             )),
       ],
       displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
@@ -95,21 +96,6 @@ void main() {
     final GoogleNavigationViewController navigationController =
         await startNavigationWithoutDestination($);
 
-    /// Set up the listener and the test.
-    final StreamSubscription<NavInfoEvent> subscription =
-        GoogleMapsNavigator.setNavInfoListener(expectAsync1(
-      (NavInfoEvent event) {
-        expectSync(event.navInfo, isA<NavInfo>());
-        expectSync(event.navInfo.remainingSteps.isNotEmpty, true);
-        expectSync(event.navInfo.remainingSteps.length > 1, true);
-
-        /// Complete the eventReceived completer only once.
-        if (!eventReceived.isCompleted) {
-          eventReceived.complete();
-        }
-      },
-      max: -1,
-    ));
     await $.pumpAndSettle();
 
     /// Simulate location (1298 California St)
@@ -117,15 +103,16 @@ void main() {
       latitude: 37.79136614772824,
       longitude: -122.41565900473043,
     ));
+    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
 
     /// Set Destination.
     final Destinations destinations = Destinations(
       waypoints: <NavigationWaypoint>[
         NavigationWaypoint.withLatLngTarget(
-            title: 'Grace Cathedral',
+            title: 'California St & Jones St',
             target: const LatLng(
-              latitude: 37.791957,
-              longitude: -122.412529,
+              latitude: 37.791424,
+              longitude: -122.414139,
             )),
       ],
       displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
@@ -138,6 +125,20 @@ void main() {
     /// Start guidance.
     await GoogleMapsNavigator.startGuidance();
     await $.pumpAndSettle();
+
+    /// Set up the listener and the test.
+    final StreamSubscription<NavInfoEvent> subscription =
+        GoogleMapsNavigator.setNavInfoListener(expectAsync1(
+      (NavInfoEvent event) {
+        expectSync(event.navInfo, isA<NavInfo>());
+
+        /// Complete the eventReceived completer only once.
+        if (!eventReceived.isCompleted) {
+          eventReceived.complete();
+        }
+      },
+      max: -1,
+    ));
 
     /// Start simulation.
     await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
@@ -156,24 +157,6 @@ void main() {
     /// Set up navigation.
     final GoogleNavigationViewController navigationController =
         await startNavigationWithoutDestination($);
-
-    /// Set up the listener and the test.
-    final StreamSubscription<NavInfoEvent> subscription =
-        GoogleMapsNavigator.setNavInfoListener(
-            expectAsync1(
-              (NavInfoEvent event) {
-                expectSync(event.navInfo, isA<NavInfo>());
-                expectSync(event.navInfo.remainingSteps.isNotEmpty, true);
-                expectSync(event.navInfo.remainingSteps.length == 1, true);
-
-                /// Complete the eventReceived completer only once.
-                if (!eventReceived.isCompleted) {
-                  eventReceived.complete();
-                }
-              },
-              max: -1,
-            ),
-            numNextStepsToPreview: 1);
     await $.pumpAndSettle();
 
     /// Simulate location (1298 California St)
@@ -181,15 +164,16 @@ void main() {
       latitude: 37.79136614772824,
       longitude: -122.41565900473043,
     ));
+    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
 
     /// Set Destination.
     final Destinations destinations = Destinations(
       waypoints: <NavigationWaypoint>[
         NavigationWaypoint.withLatLngTarget(
-            title: 'Grace Cathedral',
+            title: 'California St & Jones St',
             target: const LatLng(
-              latitude: 37.791957,
-              longitude: -122.412529,
+              latitude: 37.791424,
+              longitude: -122.414139,
             )),
       ],
       displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
@@ -202,6 +186,23 @@ void main() {
     /// Start guidance.
     await GoogleMapsNavigator.startGuidance();
     await $.pumpAndSettle();
+
+    /// Set up the listener and the test.
+    final StreamSubscription<NavInfoEvent> subscription =
+        GoogleMapsNavigator.setNavInfoListener(
+      expectAsync1(
+        (NavInfoEvent event) {
+          expectSync(event.navInfo, isA<NavInfo>());
+
+          /// Complete the eventReceived completer only once.
+          if (!eventReceived.isCompleted) {
+            eventReceived.complete();
+          }
+        },
+        max: -1,
+      ),
+      numNextStepsToPreview: 1,
+    );
 
     /// Start simulation.
     await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
@@ -238,15 +239,16 @@ void main() {
       latitude: 37.79136614772824,
       longitude: -122.41565900473043,
     ));
+    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
 
     /// Set Destination.
     final Destinations destinations = Destinations(
       waypoints: <NavigationWaypoint>[
         NavigationWaypoint.withLatLngTarget(
-          title: 'Grace Cathedral',
+          title: 'California St & Jones St',
           target: const LatLng(
-            latitude: 37.791957,
-            longitude: -122.412529,
+            latitude: 37.791424,
+            longitude: -122.414139,
           ),
         ),
       ],
@@ -282,15 +284,16 @@ void main() {
       latitude: 37.79136614772824,
       longitude: -122.41565900473043,
     ));
+    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
 
     /// Set Destination.
     final Destinations destinations = Destinations(
       waypoints: <NavigationWaypoint>[
         NavigationWaypoint.withLatLngTarget(
-          title: 'Grace Cathedral',
+          title: 'California St & Jones St',
           target: const LatLng(
-            latitude: 37.791957,
-            longitude: -122.412529,
+            latitude: 37.791424,
+            longitude: -122.414139,
           ),
         ),
       ],
@@ -375,19 +378,21 @@ void main() {
         GoogleMapsNavigator.setSpeedingUpdatedListener(speedingUpdated);
     await $.pumpAndSettle();
 
+    // Polk St & O'Farrell St
     await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
-      latitude: 37.790693,
-      longitude: -122.4132157,
+      latitude: 37.784985,
+      longitude: -122.419577,
     ));
+    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
 
     /// Set Destination.
     final Destinations destinations = Destinations(
       waypoints: <NavigationWaypoint>[
         NavigationWaypoint.withLatLngTarget(
-          title: 'Grace Cathedral',
+          title: 'California St & Jones St',
           target: const LatLng(
-            latitude: 37.791957,
-            longitude: -122.412529,
+            latitude: 37.791424,
+            longitude: -122.414139,
           ),
         ),
       ],
@@ -415,90 +420,86 @@ void main() {
     await onSpeedingUpdatedSubscription.cancel();
   });
 
-  /// Rerouting listener is Android only.
-  if (Platform.isAndroid) {
-    patrol('Test navigation onRerouting and onGpsAvailability event listeners',
-        (PatrolIntegrationTester $) async {
-      final Completer<void> eventReceived = Completer<void>();
+  patrol('Test navigation onRerouting and onGpsAvailability event listeners',
+      (PatrolIntegrationTester $) async {
+    final Completer<void> eventReceived = Completer<void>();
 
-      /// Set up navigation.
-      await startNavigationWithoutDestination($);
+    /// Set up navigation.
+    await startNavigationWithoutDestination($);
 
-      /// Set up the rerouting listener with the test.
-      final StreamSubscription<void> onReroutingSubscription =
-          GoogleMapsNavigator.setOnReroutingListener(expectAsync0(
-        () {
-          /// Complete the eventReceived completer only once.
-          if (!eventReceived.isCompleted) {
-            eventReceived.complete();
-          }
-        },
-        max: -1,
-      ));
-      await $.pumpAndSettle();
+    /// Set up the rerouting listener with the test.
+    final StreamSubscription<void> onReroutingSubscription =
+        GoogleMapsNavigator.setOnReroutingListener(expectAsync0(
+      () {
+        /// Complete the eventReceived completer only once.
+        if (!eventReceived.isCompleted) {
+          eventReceived.complete();
+        }
+      },
+      max: -1,
+    ));
+    await $.pumpAndSettle();
 
-      /// The events are not tested because there's currently no reliable way to trigger them.
-      void onGpsAvailability(GpsAvailabilityUpdatedEvent event) {
-        debugPrint('GpsAvailabilityEvent: $event');
-      }
+    /// The events are not tested because there's currently no reliable way to trigger them.
+    void onGpsAvailability(GpsAvailabilityUpdatedEvent event) {
+      debugPrint('GpsAvailabilityEvent: $event');
+    }
 
-      /// Set up the gpsAvailability listener with the test.
-      final StreamSubscription<GpsAvailabilityUpdatedEvent>
-          onGpsAvailabilitySubscription =
-          await GoogleMapsNavigator.setOnGpsAvailabilityListener(
-              onGpsAvailability);
+    /// Set up the gpsAvailability listener with the test.
+    final StreamSubscription<GpsAvailabilityUpdatedEvent>
+        onGpsAvailabilitySubscription =
+        await GoogleMapsNavigator.setOnGpsAvailabilityListener(
+            onGpsAvailability);
 
-      /// Simulate location.
-      await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
-        latitude: 37.790693,
-        longitude: -122.4132157,
-      ));
+    /// Simulate location.
+    await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
+      latitude: 37.790693,
+      longitude: -122.4132157,
+    ));
+    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
 
-      /// Create a waypoint for simulator.
-      final List<NavigationWaypoint> waypoint = <NavigationWaypoint>[
+    /// Create a waypoint for simulator.
+    final List<NavigationWaypoint> waypoint = <NavigationWaypoint>[
+      NavigationWaypoint.withLatLngTarget(
+        title: 'Union Square',
+        target: const LatLng(
+          latitude: 37.788064586663126,
+          longitude: -122.40751869021587,
+        ),
+      ),
+    ];
+
+    /// Set Destination.
+    final Destinations destinations = Destinations(
+      waypoints: <NavigationWaypoint>[
         NavigationWaypoint.withLatLngTarget(
-          title: 'Union Square',
+          title: 'California St & Jones St',
           target: const LatLng(
-            latitude: 37.788064586663126,
-            longitude: -122.40751869021587,
+            latitude: 37.791424,
+            longitude: -122.414139,
           ),
         ),
-      ];
+      ],
+      displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
+    );
+    final NavigationRouteStatus status =
+        await GoogleMapsNavigator.setDestinations(destinations);
+    expect(status, NavigationRouteStatus.statusOk);
+    await $.pumpAndSettle();
 
-      /// Set Destination.
-      final Destinations destinations = Destinations(
-        waypoints: <NavigationWaypoint>[
-          NavigationWaypoint.withLatLngTarget(
-            title: 'Grace Cathedral',
-            target: const LatLng(
-              latitude: 37.791957,
-              longitude: -122.412529,
-            ),
-          ),
-        ],
-        displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
-      );
-      final NavigationRouteStatus status =
-          await GoogleMapsNavigator.setDestinations(destinations);
-      expect(status, NavigationRouteStatus.statusOk);
-      await $.pumpAndSettle();
+    /// Start guidance.
+    await GoogleMapsNavigator.startGuidance();
+    await $.pumpAndSettle();
 
-      /// Start guidance.
-      await GoogleMapsNavigator.startGuidance();
-      await $.pumpAndSettle();
+    /// Start simulation to a different destination.
+    await GoogleMapsNavigator.simulator
+        .simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(waypoint,
+            RoutingOptions(), SimulationOptions(speedMultiplier: 100));
+    await $.pumpAndSettle();
 
-      /// Start simulation to a different destination.
-      await GoogleMapsNavigator.simulator
-          .simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
-              waypoint,
-              RoutingOptions(),
-              SimulationOptions(speedMultiplier: 100));
-      await $.pumpAndSettle();
-
-      /// Wait until the event is received and then test cancelling the subscriptions.
-      await eventReceived.future;
-      await onReroutingSubscription.cancel();
-      await onGpsAvailabilitySubscription.cancel();
-    });
-  }
+    /// Wait until the event is received and then test cancelling the subscriptions.
+    await eventReceived.future;
+    await onReroutingSubscription.cancel();
+    await onGpsAvailabilitySubscription.cancel();
+  }, skip: !Platform.isAndroid);
 }

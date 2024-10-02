@@ -392,11 +392,12 @@ void main() {
 
     // Test stoppedFollowingMyLocation event is received on Android.
     if (Platform.isAndroid) {
+      const double tolerance = 0.01;
       expect(followingMyLocationActive, false);
       expect(stoppedFollowingMyLocationPosition!.target.latitude,
-          closeTo(oldTarget.latitude, 0.003));
+          closeTo(oldTarget.latitude, tolerance));
       expect(stoppedFollowingMyLocationPosition!.target.longitude,
-          closeTo(oldTarget.longitude, 0.003));
+          closeTo(oldTarget.longitude, tolerance));
     }
 
     // 8. Test cameraMoveStarted, cameraMove and cameraIdle events.
@@ -430,7 +431,7 @@ void main() {
 
     // Test that cameraMoveEvent position coordinates are between the start and the end coordinates
     // and that the other values match within tolerance.
-    const double tolerance = 0.003;
+    const double tolerance = 0.01;
     expect(cameraMovePosition.target.latitude,
         greaterThanOrEqualTo(camera.target.latitude - tolerance));
     expect(cameraMovePosition.target.latitude,

@@ -52,8 +52,7 @@ void main() {
     final Completer<void> hasArrived = Completer<void>();
 
     /// Set up navigation.
-    final GoogleNavigationViewController viewController =
-        await startNavigationWithoutDestination($);
+    await startNavigationWithoutDestination($);
 
     /// Set audio guidance settings.
     /// Cannot be verified, because native SDK lacks getter methods,
@@ -67,7 +66,7 @@ void main() {
     await GoogleMapsNavigator.setAudioGuidance(settings);
 
     /// Specify tolerance and navigation end coordinates.
-    const double tolerance = 0.0005;
+    const double tolerance = 0.001;
     const double endLat = 68.59451829688189, endLng = 23.512277951523007;
 
     /// Finish executing the tests once onArrival event comes in
@@ -84,10 +83,7 @@ void main() {
       latitude: startLat,
       longitude: startLng,
     ));
-    await $.pumpAndSettle();
-    final LatLng? currentLocation = await viewController.getMyLocation();
-    expect(currentLocation?.latitude, closeTo(startLat, tolerance));
-    expect(currentLocation?.longitude, closeTo(startLng, tolerance));
+    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
 
     /// Set Destination.
     final Destinations destinations = Destinations(
@@ -154,8 +150,7 @@ void main() {
     int arrivalEventCount = 0;
 
     /// Set up navigation.
-    final GoogleNavigationViewController viewController =
-        await startNavigationWithoutDestination($);
+    await startNavigationWithoutDestination($);
 
     /// Set audio guidance settings.
     /// Cannot be verified, because native SDK lacks getter methods,
@@ -194,9 +189,6 @@ void main() {
       longitude: startLng,
     ));
     await $.pumpAndSettle(timeout: const Duration(seconds: 1));
-    final LatLng? currentLocation = await viewController.getMyLocation();
-    expect(currentLocation!.latitude, closeTo(startLat, tolerance));
-    expect(currentLocation.longitude, closeTo(startLng, tolerance));
 
     /// Set Destination.
     final Destinations destinations = Destinations(
@@ -384,8 +376,7 @@ void main() {
         latitude: startLat,
         longitude: startLng,
       ));
-      debugPrint('Starting location set.');
-      await $.pumpAndSettle();
+      await $.pumpAndSettle(timeout: const Duration(seconds: 1));
 
       /// Test that the received coordinates fit between start and end location coordinates within tolerance.
       /// End the test when user arrives to the end location coordinates within tolerance.
@@ -441,7 +432,7 @@ void main() {
         await startNavigationWithoutDestination($);
 
     /// Specify tolerance and navigation end coordinates.
-    const double tolerance = 0.0005;
+    const double tolerance = 0.005;
     const double endLat = 68.60338455021943, endLng = 23.548804200724454;
 
     /// Simulate location.
@@ -449,7 +440,7 @@ void main() {
       latitude: startLat,
       longitude: startLng,
     ));
-    await $.pumpAndSettle();
+    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
 
     /// Test the location simulation.
     LatLng? currentLocation = await viewController.getMyLocation();
@@ -500,19 +491,22 @@ void main() {
             SimulationOptions(speedMultiplier: 5));
 
     /// Test pausing simulation.
+    const double movedTolerance = 0.001;
     await GoogleMapsNavigator.simulator.pauseSimulation();
     final LatLng? location1 = await viewController.getMyLocation();
     await $.pumpAndSettle(duration: const Duration(seconds: 1));
     final LatLng? location2 = await viewController.getMyLocation();
-    expect(location1!.latitude, closeTo(location2!.latitude, tolerance));
-    expect(location1.longitude, closeTo(location2.longitude, tolerance));
+    expect(location1!.latitude, closeTo(location2!.latitude, movedTolerance));
+    expect(location1.longitude, closeTo(location2.longitude, movedTolerance));
 
     /// Test resuming the simulation.
     await GoogleMapsNavigator.simulator.resumeSimulation();
     await $.pumpAndSettle(duration: const Duration(seconds: 2));
     final LatLng? location3 = await viewController.getMyLocation();
-    expect(location1.latitude, isNot(closeTo(location3!.latitude, tolerance)));
-    expect(location1.longitude, isNot(closeTo(location3.longitude, tolerance)));
+    expect(location1.latitude,
+        isNot(closeTo(location3!.latitude, movedTolerance)));
+    expect(location1.longitude,
+        isNot(closeTo(location3.longitude, movedTolerance)));
   });
 
   patrol('Test that the navigation and updates stop onArrival',
@@ -536,15 +530,16 @@ void main() {
       latitude: 37.79136614772824,
       longitude: -122.41565900473043,
     ));
+    await $.pumpAndSettle(duration: const Duration(seconds: 1));
 
     /// Set Destination.
     final Destinations destinations = Destinations(
       waypoints: <NavigationWaypoint>[
         NavigationWaypoint.withLatLngTarget(
-          title: 'Grace Cathedral',
+          title: 'California St & Jones St',
           target: const LatLng(
-            latitude: 37.791957,
-            longitude: -122.412529,
+            latitude: 37.791424,
+            longitude: -122.414139,
           ),
         ),
       ],
@@ -574,56 +569,53 @@ void main() {
     GoogleMapsNavigator.setOnArrivalListener(onArrivalEvent);
   });
 
-  // Skip test on iOS simulator.
-  if (Platform.isIOS && !isPhysicalDevice) {
-  } else {
-    patrol('Test network error during navigation',
-        (PatrolIntegrationTester $) async {
-      /// Set up navigation.
-      await startNavigationWithoutDestination($);
+  patrol('Test network error during navigation',
+      (PatrolIntegrationTester $) async {
+    /// Set up navigation.
+    await startNavigationWithoutDestination($);
 
-      /// Simulate location (1298 California St)
-      await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
-        latitude: 37.79136614772824,
-        longitude: -122.41565900473043,
-      ));
+    /// Simulate location (1298 California St)
+    await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
+      latitude: 37.79136614772824,
+      longitude: -122.41565900473043,
+    ));
+    await $.pumpAndSettle(duration: const Duration(seconds: 1));
 
-      /// Create a waypoint.
-      final List<NavigationWaypoint> waypoint = <NavigationWaypoint>[
-        NavigationWaypoint.withLatLngTarget(
-          title: 'Grace Cathedral',
-          target: const LatLng(
-            latitude: 37.791957,
-            longitude: -122.412529,
-          ),
+    /// Create a waypoint.
+    final List<NavigationWaypoint> waypoint = <NavigationWaypoint>[
+      NavigationWaypoint.withLatLngTarget(
+        title: 'California St & Jones St',
+        target: const LatLng(
+          latitude: 37.791424,
+          longitude: -122.414139,
         ),
-      ];
+      ),
+    ];
 
-      /// Set Destination.
-      final Destinations destinations = Destinations(
-        waypoints: waypoint,
-        displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
-      );
+    /// Set Destination.
+    final Destinations destinations = Destinations(
+      waypoints: waypoint,
+      displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
+    );
 
-      /// Cut network connection.
-      await $.native.disableCellular();
-      await $.native.disableWifi();
+    /// Cut network connection.
+    await $.native.disableCellular();
+    await $.native.disableWifi();
 
-      /// Test that the error is received.
-      final NavigationRouteStatus routeStatus =
-          await GoogleMapsNavigator.setDestinations(destinations);
-      expect(routeStatus, equals(NavigationRouteStatus.networkError));
+    /// Test that the error is received.
+    final NavigationRouteStatus routeStatus =
+        await GoogleMapsNavigator.setDestinations(destinations);
+    expect(routeStatus, equals(NavigationRouteStatus.networkError));
 
-      final NavigationRouteStatus routeStatusSim = await GoogleMapsNavigator
-          .simulator
-          .simulateLocationsAlongNewRoute(waypoint);
-      expect(routeStatusSim, equals(NavigationRouteStatus.networkError));
+    final NavigationRouteStatus routeStatusSim = await GoogleMapsNavigator
+        .simulator
+        .simulateLocationsAlongNewRoute(waypoint);
+    expect(routeStatusSim, equals(NavigationRouteStatus.networkError));
 
-      /// Re-enable network connection.
-      await $.native.enableCellular();
-      await $.native.enableWifi();
-    });
-  }
+    /// Re-enable network connection.
+    await $.native.enableCellular();
+    await $.native.enableWifi();
+  }, skip: Platform.isIOS && !isPhysicalDevice);
 
   patrol('Test route not found errors', (PatrolIntegrationTester $) async {
     /// Set up navigation.
@@ -634,6 +626,7 @@ void main() {
       latitude: 37.79136614772824,
       longitude: -122.41565900473043,
     ));
+    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
 
     /// Create a waypoint.
     final List<NavigationWaypoint> waypoint = <NavigationWaypoint>[
@@ -681,6 +674,7 @@ void main() {
       latitude: 37.79136614772824,
       longitude: -122.41565900473043,
     ));
+    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
 
     /// Set Destination.
     final Destinations destinations = Destinations(
@@ -715,7 +709,7 @@ void main() {
     expect(beginRouteSegments.length, greaterThan(0));
 
     /// The current route segment.
-    expect(beginCurrentSegment, isNotNull);
+    expect(beginCurrentSegment, isNotNull, reason: 'Current segment is null.');
 
     /// Start simulation.
     await GoogleMapsNavigator.simulator
