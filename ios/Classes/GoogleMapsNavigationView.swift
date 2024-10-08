@@ -406,7 +406,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   }
 
   func showStopSigns(show: Bool) {
-    _navigationView.settings.showsDestinationMarkers = show
+    _navigationView.settings.showsStopSigns = show
   }
 
   func isNavigationTripProgressBarEnabled() throws -> Bool {

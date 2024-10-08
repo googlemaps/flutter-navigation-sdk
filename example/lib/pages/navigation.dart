@@ -800,7 +800,11 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
     return Destinations(
       waypoints: _waypoints,
-      displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
+      displayOptions: NavigationDisplayOptions(
+        showDestinationMarkers: false,
+        showStopSigns: true,
+        showTrafficLights: true,
+      ),
       routingOptions: RoutingOptions(travelMode: _travelMode),
     );
   }
