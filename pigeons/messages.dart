@@ -121,12 +121,12 @@ class NavigationViewCreationOptionsDto {
 
 /// Pigeon only generates messages if the messages are used in API.
 /// [MapOptionsDto] is encoded and decoded directly to generate
-/// a PlatformView creation message. This API should never be used directly.
+/// a PlatformView creation message.
+///
+/// This API should never be used directly.
 @HostApi()
-// ignore: unused_element
-abstract class _NavigationViewCreationApi {
-  // ignore: unused_element
-  void _create(NavigationViewCreationOptionsDto msg);
+abstract class NavigationViewCreationApi {
+  void create(NavigationViewCreationOptionsDto msg);
 }
 
 enum MapTypeDto { none, normal, satellite, terrain, hybrid }
