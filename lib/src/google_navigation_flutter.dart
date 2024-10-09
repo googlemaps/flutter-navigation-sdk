@@ -840,6 +840,8 @@ class GoogleNavigationViewController {
   /// It should be one of the values defined in the [MapType] enum,
   /// such as [MapType.normal], [MapType.satellite], [MapType.terrain],
   /// or [MapType.hybrid].
+  /// 
+  /// MapType.terrain does not work during navigation.
   ///
   /// Example usage:
   /// ```dart
