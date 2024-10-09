@@ -38,35 +38,29 @@ void main() {
             key: key,
             onViewCreated: (GoogleNavigationViewController controller) {}));
 
-    final List<bool> results = <bool>[true, false, true];
-    for (final bool result in results) {
-      /// Reset TOS acceptance.
-      await GoogleMapsNavigator.resetTermsAccepted();
-      expect(await GoogleMapsNavigator.areTermsAccepted(), false);
+    /// Reset TOS acceptance.
+    await GoogleMapsNavigator.resetTermsAccepted();
+    expect(await GoogleMapsNavigator.areTermsAccepted(), false);
 
-      /// Request native TOS dialog.
-      final Future<bool> tosAccepted =
-          GoogleMapsNavigator.showTermsAndConditionsDialog(
-        'test_title',
-        'test_company_name',
-      );
+    /// Request native TOS dialog.
+    final Future<bool> tosAccepted =
+        GoogleMapsNavigator.showTermsAndConditionsDialog(
+      'test_title',
+      'test_company_name',
+    );
 
-      // Tap accept or cancel.
-      if (Platform.isAndroid) {
-        await $.native.tap(Selector(text: result ? 'Yes, I am in' : 'Cancel'));
-      } else if (Platform.isIOS) {
-        await $.native
-            .tap(Selector(text: result ? "YES, I'M IN" : 'NO THANKS'));
-      } else {
-        fail('Unsupported platform: ${Platform.operatingSystem}');
-      }
-
-      // Check that the results match.
-      await tosAccepted.then((bool accept) {
-        expect(accept, result);
-      });
-      expect(await GoogleMapsNavigator.areTermsAccepted(), result);
+    // Tap got it.
+    if (Platform.isAndroid || Platform.isIOS) {
+      await $.native.tap(Selector(text: 'Got It'));
+    } else {
+      fail('Unsupported platform: ${Platform.operatingSystem}');
     }
+
+    // Check that the results match.
+    await tosAccepted.then((bool accept) {
+      expect(accept, true);
+    });
+    expect(await GoogleMapsNavigator.areTermsAccepted(), true);
 
     // If terms have already been accepted another call to showTermsAndConditionsDialog()
     // should just return true without errors and without showing any dialogs.

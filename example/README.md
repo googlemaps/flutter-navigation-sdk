@@ -63,7 +63,6 @@ override func application(
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
 ) -> Bool { 
     GMSServices.provideAPIKey("YOUR_API_KEY") // REPLACE THIS TEXT WITH YOUR API KEY
-    GMSServices.setMetalRendererEnabled(true)
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
 }

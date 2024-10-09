@@ -32,7 +32,7 @@ enum MapType {
   /// Satellite map.
   satellite,
 
-  /// Terrain map.
+  /// Terrain map. (Does not work during navigation)
   terrain,
 
   /// Hybrid map.
