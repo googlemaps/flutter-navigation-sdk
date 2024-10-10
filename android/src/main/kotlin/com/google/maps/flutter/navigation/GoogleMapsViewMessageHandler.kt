@@ -19,11 +19,20 @@ package com.google.maps.flutter.navigation
 import android.content.res.Resources
 
 /** GoogleMapsNavigationMessageHandler */
-class GoogleMapsNavigationViewMessageHandler(
-  private val viewRegistry: GoogleMapsNavigationViewRegistry
-) : NavigationViewApi {
-  private fun getView(viewId: Int): GoogleMapsNavigationView {
-    val view = viewRegistry.getView(viewId)
+class GoogleMapsViewMessageHandler(
+  private val viewRegistry: GoogleMapsViewRegistry
+) : MapViewApi {
+
+  private fun getNavigationView(viewId: Int): GoogleMapsNavigationView {
+    val view = viewRegistry.getNavigationView(viewId)
+    if (view != null) {
+      return view
+    } else {
+      throw FlutterError("viewNotFound", "No valid navigation view found")
+    }
+  }
+  private fun getView(viewId: Int): GoogleMapsBaseMapView {
+    val view = viewRegistry.getMapView(viewId)
     if (view != null) {
       return view
     } else {
@@ -284,7 +293,7 @@ class GoogleMapsNavigationViewMessageHandler(
   }
 
   override fun isNavigationTripProgressBarEnabled(viewId: Long): Boolean {
-    return getView(viewId.toInt()).isNavigationTripProgressBarEnabled()
+    return getNavigationView(viewId.toInt()).isNavigationTripProgressBarEnabled()
   }
 
   override fun followMyLocation(
@@ -292,92 +301,92 @@ class GoogleMapsNavigationViewMessageHandler(
     perspective: CameraPerspectiveDto,
     zoomLevel: Double?
   ) {
-    val view = viewRegistry.getView(viewId.toInt())
+    val view = viewRegistry.getMapView(viewId.toInt())
     view?.followMyLocation(Convert.convertCameraPerspectiveFromDto(perspective), zoomLevel)
   }
 
   override fun setNavigationTripProgressBarEnabled(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).setNavigationTripProgressBarEnabled(enabled)
+    getNavigationView(viewId.toInt()).setNavigationTripProgressBarEnabled(enabled)
   }
 
   override fun isNavigationHeaderEnabled(viewId: Long): Boolean {
-    return getView(viewId.toInt()).isNavigationHeaderEnabled()
+    return getNavigationView(viewId.toInt()).isNavigationHeaderEnabled()
   }
 
   override fun setNavigationHeaderEnabled(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).setNavigationHeaderEnabled(enabled)
+    getNavigationView(viewId.toInt()).setNavigationHeaderEnabled(enabled)
   }
 
   override fun isNavigationFooterEnabled(viewId: Long): Boolean {
-    return getView(viewId.toInt()).isNavigationFooterEnabled()
+    return getNavigationView(viewId.toInt()).isNavigationFooterEnabled()
   }
 
   override fun setNavigationFooterEnabled(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).setNavigationFooterEnabled(enabled)
+    getNavigationView(viewId.toInt()).setNavigationFooterEnabled(enabled)
   }
 
   override fun isRecenterButtonEnabled(viewId: Long): Boolean {
-    return getView(viewId.toInt()).isRecenterButtonEnabled()
+    return getNavigationView(viewId.toInt()).isRecenterButtonEnabled()
   }
 
   override fun setRecenterButtonEnabled(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).setRecenterButtonEnabled(enabled)
+    getNavigationView(viewId.toInt()).setRecenterButtonEnabled(enabled)
   }
 
   override fun isSpeedLimitIconEnabled(viewId: Long): Boolean {
-    return getView(viewId.toInt()).isSpeedLimitIconEnabled()
+    return getNavigationView(viewId.toInt()).isSpeedLimitIconEnabled()
   }
 
   override fun setSpeedLimitIconEnabled(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).setSpeedLimitIconEnabled(enabled)
+    getNavigationView(viewId.toInt()).setSpeedLimitIconEnabled(enabled)
   }
 
   override fun isSpeedometerEnabled(viewId: Long): Boolean {
-    return getView(viewId.toInt()).isSpeedometerEnabled()
+    return getNavigationView(viewId.toInt()).isSpeedometerEnabled()
   }
 
   override fun setSpeedometerEnabled(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).setSpeedometerEnabled(enabled)
+    getNavigationView(viewId.toInt()).setSpeedometerEnabled(enabled)
   }
 
   override fun isTrafficIncidentCardsEnabled(viewId: Long): Boolean {
-    return getView(viewId.toInt()).isTrafficIncidentCardsEnabled()
+    return getNavigationView(viewId.toInt()).isTrafficIncidentCardsEnabled()
   }
 
   override fun setTrafficIncidentCardsEnabled(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).setTrafficIncidentCardsEnabled(enabled)
+    getNavigationView(viewId.toInt()).setTrafficIncidentCardsEnabled(enabled)
   }
 
   override fun isNavigationUIEnabled(viewId: Long): Boolean {
-    return getView(viewId.toInt()).isNavigationUIEnabled()
+    return getNavigationView(viewId.toInt()).isNavigationUIEnabled()
   }
 
   override fun setNavigationUIEnabled(viewId: Long, enabled: Boolean) {
-    getView(viewId.toInt()).setNavigationUIEnabled(enabled)
+    getNavigationView(viewId.toInt()).setNavigationUIEnabled(enabled)
   }
 
   override fun showRouteOverview(viewId: Long) {
-    getView(viewId.toInt()).showRouteOverview()
+    getNavigationView(viewId.toInt()).showRouteOverview()
   }
 
   override fun getMinZoomPreference(viewId: Long): Double {
-    return getView(viewId.toInt()).getMinZoomPreference().toDouble()
+    return getNavigationView(viewId.toInt()).getMinZoomPreference().toDouble()
   }
 
   override fun getMaxZoomPreference(viewId: Long): Double {
-    return getView(viewId.toInt()).getMaxZoomPreference().toDouble()
+    return getNavigationView(viewId.toInt()).getMaxZoomPreference().toDouble()
   }
 
   override fun resetMinMaxZoomPreference(viewId: Long) {
-    getView(viewId.toInt()).resetMinMaxZoomPreference()
+    getNavigationView(viewId.toInt()).resetMinMaxZoomPreference()
   }
 
   override fun setMinZoomPreference(viewId: Long, minZoomPreference: Double) {
-    getView(viewId.toInt()).setMinZoomPreference(minZoomPreference.toFloat())
+    getNavigationView(viewId.toInt()).setMinZoomPreference(minZoomPreference.toFloat())
   }
 
   override fun setMaxZoomPreference(viewId: Long, maxZoomPreference: Double) {
-    getView(viewId.toInt()).setMaxZoomPreference(maxZoomPreference.toFloat())
+    getNavigationView(viewId.toInt()).setMaxZoomPreference(maxZoomPreference.toFloat())
   }
 
   override fun getMarkers(viewId: Long): List<MarkerDto> {
@@ -465,6 +474,6 @@ class GoogleMapsNavigationViewMessageHandler(
   }
 
   override fun registerOnCameraChangedListener(viewId: Long) {
-    getView(viewId.toInt()).registerOnCameraChangedListener()
+    getNavigationView(viewId.toInt()).registerOnCameraChangedListener()
   }
 }

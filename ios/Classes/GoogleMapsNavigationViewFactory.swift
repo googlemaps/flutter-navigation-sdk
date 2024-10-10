@@ -37,7 +37,7 @@ class GoogleMapsNavigationViewFactory: NSObject, FlutterPlatformViewFactory {
               arguments args: Any?) -> FlutterPlatformView {
     guard let argsList = args as? [Any?],
           let params = ViewCreationOptionsDto.fromList(argsList) else {
-      fatalError("Failed to decode NavigationViewCreationOptionsDto")
+      fatalError("Failed to decode ViewCreationOptionsDto")
     }
 
     let mapConfiguration = Convert.convertMapOptions(params.mapOptions)
