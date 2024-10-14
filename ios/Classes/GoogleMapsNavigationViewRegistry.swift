@@ -14,24 +14,42 @@
 
 class GoogleMapsNavigationViewRegistry {
   private var views: [Int64: GoogleMapsNavigationView] = [:]
+  // Using a concurrent queue with a barrier ensures that write operations are serialized,
+  // meaning each write completes before another write can access the shared resource.
+  // Multiple read operations can still proceed concurrently as long as no write is in progress.
+  private let queue = DispatchQueue(label: "thread_safe_queue", attributes: .concurrent)
 
   func registerView(viewId: Int64, view: GoogleMapsNavigationView) {
-    views[viewId] = view
+    queue.async(flags: .barrier) { [weak self] in
+      DispatchQueue.main.async {
+        self?.views[viewId] = view
+      }
+    }
   }
 
   func unregisterView(viewId: Int64) {
-    views.removeValue(forKey: viewId)
+    queue.async(flags: .barrier) { [weak self] in
+      DispatchQueue.main.async {
+        self?.views.removeValue(forKey: viewId)
+      }
+    }
   }
 
   func getView(viewId: Int64) -> GoogleMapsNavigationView? {
-    views[viewId]
+    queue.sync {
+      views[viewId]
+    }
   }
 
   func getAllRegisteredViewIds() -> [Int64] {
-    Array(views.keys)
+    queue.sync {
+      Array(views.keys)
+    }
   }
 
   func getAllRegisteredViews() -> [GoogleMapsNavigationView] {
-    Array(views.values)
+    queue.sync {
+      Array(views.values)
+    }
   }
 }
