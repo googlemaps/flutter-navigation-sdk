@@ -17,7 +17,10 @@ class GoogleMapsNavigationViewRegistry {
   // Using a concurrent queue with a barrier ensures that write operations are serialized,
   // meaning each write completes before another write can access the shared resource.
   // Multiple read operations can still proceed concurrently as long as no write is in progress.
-  private let queue = DispatchQueue(label: "google_navigation_flutter.thread_safe_view_registry_queue", attributes: .concurrent)
+  private let queue = DispatchQueue(
+    label: "google_navigation_flutter.thread_safe_view_registry_queue",
+    attributes: .concurrent
+  )
 
   func registerView(viewId: Int64, view: GoogleMapsNavigationView) {
     queue.async(flags: .barrier) { [weak self] in
