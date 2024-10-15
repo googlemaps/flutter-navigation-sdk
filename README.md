@@ -19,7 +19,7 @@ This repository contains a Flutter plugin that provides a [Google Navigation](ht
   *  If you are not a Mobility Services developer, refer to [Setup Google Cloud Project](https://developers.google.com/maps/documentation/navigation/android-sdk/cloud-setup) for instructions.
 * An [API key](https://console.cloud.google.com/google/maps-apis/credentials) from the project above
   * The API key must be configured for both Android and iOS. Refer to [Android Using Api Keys](https://developers.google.com/maps/documentation/navigation/android-sdk/get-api-key) and [iOS Using Api Keys](https://developers.google.com/maps/documentation/navigation/ios-sdk/get-api-key) respectively for instructions.
-* If targeting Android, [Google Play Services](https://developers.google.com/android/guides/overview) installed and enabled
+* If targeting Android, [Google Play Services](https://developers.google.com/android/guides/overview) installed and enabled and minimum Kotlin version 2.0
 * [Attributions and licensing text](https://developers.google.com/maps/documentation/navigation/android-sdk/set-up-project#include_the_required_attributions_in_your_app) added to your app
 
 > [!IMPORTANT]
