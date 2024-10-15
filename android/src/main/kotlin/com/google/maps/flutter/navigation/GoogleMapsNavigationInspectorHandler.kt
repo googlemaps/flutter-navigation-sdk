@@ -14,9 +14,8 @@
 
 package com.google.maps.flutter.navigation
 
-class GoogleMapsNavigationInspectorHandler(
-  private val viewRegistry: GoogleMapsViewRegistry
-) : NavigationInspector {
+class GoogleMapsNavigationInspectorHandler(private val viewRegistry: GoogleMapsViewRegistry) :
+  NavigationInspector {
   private fun manager(): GoogleMapsNavigationSessionManager {
     return GoogleMapsNavigationSessionManager.getInstance()
   }

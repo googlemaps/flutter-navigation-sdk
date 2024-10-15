@@ -66,8 +66,7 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   void ensureViewAPISetUp() {
     if (!_viewApiHasBeenSetUp) {
       ViewEventApi.setup(
-        ViewEventApiImpl(
-            viewEventStreamController: _viewEventStreamController),
+        ViewEventApiImpl(viewEventStreamController: _viewEventStreamController),
       );
       _viewApiHasBeenSetUp = true;
     }

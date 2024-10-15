@@ -30,11 +30,8 @@ class GoogleMapsViewFactory(
     val params = ViewCreationOptionsDto.fromList(args as List<Any?>)
     val mapOptions = Convert.convertMapOptionsFromDto(params.mapOptions)
     if (params.mapViewType == MapViewTypeDto.NAVIGATION) {
-      val navigationViewOptionsDto = params.navigationViewOptions?.let {
-        Convert.convertNavigationViewOptionsFromDto(
-          it
-        )
-      }
+      val navigationViewOptionsDto =
+        params.navigationViewOptions?.let { Convert.convertNavigationViewOptionsFromDto(it) }
       return GoogleMapsNavigationView(
         context,
         mapOptions,
@@ -45,14 +42,7 @@ class GoogleMapsViewFactory(
         imageRegistry
       )
     } else {
-      return GoogleMapView(
-        context,
-        mapOptions,
-        viewId,
-        viewEventApi,
-        viewRegistry,
-        imageRegistry
-      )
+      return GoogleMapView(context, mapOptions, viewId, viewEventApi, viewRegistry, imageRegistry)
     }
   }
 }

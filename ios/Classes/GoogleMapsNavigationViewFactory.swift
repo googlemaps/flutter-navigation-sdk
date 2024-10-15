@@ -51,7 +51,8 @@ class GoogleMapsNavigationViewFactory: NSObject, FlutterPlatformViewFactory {
       viewRegistry: viewRegistry,
       viewEventApi: viewEventApi,
       navigationUIEnabledPreference: Convert
-        .convertNavigationUIEnabledPreference(preference: params.navigationViewOptions?.navigationUIEnabledPreference),
+        .convertNavigationUIEnabledPreference(preference: params.navigationViewOptions?
+          .navigationUIEnabledPreference),
       mapConfiguration: mapConfiguration,
       imageRegistry: imageRegistry
     )

@@ -22,17 +22,16 @@ import 'package:mockito/mockito.dart';
 import 'google_navigation_flutter_test.mocks.dart';
 import 'messages_test.g.dart';
 
-@GenerateMocks(<Type>[
-  TestNavigationSessionApi,
-  TestNavigationViewApi,
-  TestImageRegistryApi
-])
+@GenerateMocks(
+    <Type>[TestNavigationSessionApi, TestMapViewApi, TestImageRegistryApi])
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   void onViewCreated(GoogleNavigationViewController controller) {}
+  void onNavigationViewCreated(GoogleNavigationViewController controller) {}
+  void onMapViewCreated(GoogleMapViewController controller) {}
 
   late MockTestNavigationSessionApi sessionMockApi;
-  late MockTestNavigationViewApi viewMockApi;
+  late MockTestMapViewApi viewMockApi;
   late MockTestImageRegistryApi imageRegistryMockApi;
 
   final List<GoogleMapsNavigationPlatform> platforms =
@@ -43,10 +42,10 @@ void main() {
 
   setUp(() {
     sessionMockApi = MockTestNavigationSessionApi();
-    viewMockApi = MockTestNavigationViewApi();
+    viewMockApi = MockTestMapViewApi();
     imageRegistryMockApi = MockTestImageRegistryApi();
     TestNavigationSessionApi.setup(sessionMockApi);
-    TestNavigationViewApi.setup(viewMockApi);
+    TestMapViewApi.setup(viewMockApi);
     TestImageRegistryApi.setup(imageRegistryMockApi);
   });
 
@@ -61,16 +60,27 @@ void main() {
         GoogleMapsNavigationPlatform.instance = platform;
       });
 
-      testWidgets('renders Google Maps Navigation',
+      testWidgets('renders Google Maps Navigation View',
           (WidgetTester tester) async {
         await tester.pumpWidget(
           MaterialApp(
             home: GoogleMapsNavigationView(
-              onViewCreated: onViewCreated,
+              onViewCreated: onNavigationViewCreated,
             ),
           ),
         );
         expect(find.byType(GoogleMapsNavigationView), findsOneWidget);
+      });
+
+      testWidgets('renders Google Maps View', (WidgetTester tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: GoogleMapsMapView(
+              onViewCreated: onMapViewCreated,
+            ),
+          ),
+        );
+        expect(find.byType(GoogleMapsMapView), findsOneWidget);
       });
 
       group('Navigation view API', () {

@@ -25,9 +25,9 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 
 /** GoogleMapsNavigationViewRegistry */
-class GoogleMapsViewRegistry :
-  DefaultLifecycleObserver, ComponentCallbacks, ComponentCallbacks2 {
-  // Separate lists for navigation views, to be able to access them separately for navigation only operations.
+class GoogleMapsViewRegistry : DefaultLifecycleObserver, ComponentCallbacks, ComponentCallbacks2 {
+  // Separate lists for navigation views, to be able to access them separately for navigation only
+  // operations.
   private val navigationViews: SparseArray<GoogleMapsNavigationView> = SparseArray()
 
   // This list contains all map views, including navigation views.

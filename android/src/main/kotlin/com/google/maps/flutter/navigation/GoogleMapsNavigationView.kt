@@ -16,26 +16,13 @@
 
 package com.google.maps.flutter.navigation
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
-import android.content.res.Resources
-import android.graphics.Point
-import android.location.Location
 import android.view.View
-import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.GoogleMap.OnCameraFollowLocationCallback
 import com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener
-import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener
 import com.google.android.gms.maps.GoogleMapOptions
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.Circle
-import com.google.android.gms.maps.model.FollowMyLocationOptions
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.Polygon
 import com.google.android.gms.maps.model.Polyline
@@ -389,19 +376,11 @@ internal constructor(
     }
     getMap().setOnCameraMoveListener {
       val position = Convert.convertCameraPositionToDto(getMap().cameraPosition)
-      viewEventApi.onCameraChanged(
-        viewId.toLong(),
-        CameraEventTypeDto.ONCAMERAMOVE,
-        position
-      ) {}
+      viewEventApi.onCameraChanged(viewId.toLong(), CameraEventTypeDto.ONCAMERAMOVE, position) {}
     }
     getMap().setOnCameraIdleListener {
       val position = Convert.convertCameraPositionToDto(getMap().cameraPosition)
-      viewEventApi.onCameraChanged(
-        viewId.toLong(),
-        CameraEventTypeDto.ONCAMERAIDLE,
-        position
-      ) {}
+      viewEventApi.onCameraChanged(viewId.toLong(), CameraEventTypeDto.ONCAMERAIDLE, position) {}
     }
   }
 }

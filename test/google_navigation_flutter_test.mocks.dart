@@ -445,12 +445,11 @@ class MockTestNavigationSessionApi extends _i1.Mock
       );
 }
 
-/// A class which mocks [TestNavigationViewApi].
+/// A class which mocks [TestMapViewApi].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTestNavigationViewApi extends _i1.Mock
-    implements _i3.TestNavigationViewApi {
-  MockTestNavigationViewApi() {
+class MockTestMapViewApi extends _i1.Mock implements _i3.TestMapViewApi {
+  MockTestMapViewApi() {
     _i1.throwOnMissingStub(this);
   }
 

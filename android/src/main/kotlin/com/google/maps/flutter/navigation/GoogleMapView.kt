@@ -24,60 +24,60 @@ import io.flutter.plugin.platform.PlatformView
 
 class GoogleMapView
 internal constructor(
-    context: Context,
-    mapOptions: GoogleMapOptions,
-    viewId: Int,
-    viewEventApi: ViewEventApi,
-    private val viewRegistry: GoogleMapsViewRegistry,
-    imageRegistry: ImageRegistry
+  context: Context,
+  mapOptions: GoogleMapOptions,
+  viewId: Int,
+  viewEventApi: ViewEventApi,
+  private val viewRegistry: GoogleMapsViewRegistry,
+  imageRegistry: ImageRegistry
 ) : PlatformView, GoogleMapsBaseMapView(viewId, viewEventApi, imageRegistry) {
-    private val _mapView: MapView = MapView(context, mapOptions)
+  private val _mapView: MapView = MapView(context, mapOptions)
 
-    override fun getView(): View {
-        return _mapView
+  override fun getView(): View {
+    return _mapView
+  }
+
+  init {
+    // Call all of these three lifecycle functions in sequence to fully
+    // initialize the map view.
+    _mapView.onCreate(context.applicationInfo.metaData)
+    _mapView.onStart()
+    _mapView.onResume()
+
+    _mapView.getMapAsync { map ->
+      setMap(map)
+      initListeners()
+      imageRegistry.mapViewInitializationComplete()
+      mapReady()
+      invalidateViewAfterMapLoad()
     }
 
-    init {
-        // Call all of these three lifecycle functions in sequence to fully
-        // initialize the map view.
-        _mapView.onCreate(context.applicationInfo.metaData)
-        _mapView.onStart()
-        _mapView.onResume()
+    viewRegistry.registerMapView(viewId, this)
+  }
 
-        _mapView.getMapAsync { map ->
-            setMap(map)
-            initListeners()
-            imageRegistry.mapViewInitializationComplete()
-            mapReady()
-            invalidateViewAfterMapLoad()
-        }
+  override fun dispose() {
+    // When view is disposed, all of these lifecycle functions must be
+    // called to properly dispose navigation view and prevent leaks.
+    _mapView.onPause()
+    _mapView.onStop()
+    _mapView.onDestroy()
 
-        viewRegistry.registerMapView(viewId, this)
-    }
+    viewRegistry.unregisterMapView(viewId)
+  }
 
-    override fun dispose() {
-        // When view is disposed, all of these lifecycle functions must be
-        // called to properly dispose navigation view and prevent leaks.
-        _mapView.onPause()
-        _mapView.onStop()
-        _mapView.onDestroy()
+  override fun onStart() {
+    _mapView.onStart()
+  }
 
-        viewRegistry.unregisterMapView(viewId)
-    }
+  override fun onResume() {
+    _mapView.onResume()
+  }
 
-    override fun onStart() {
-        _mapView.onStart()
-    }
+  override fun onStop() {
+    _mapView.onStop()
+  }
 
-    override fun onResume() {
-        _mapView.onResume()
-    }
-
-    override fun onStop() {
-        _mapView.onStop()
-    }
-
-    override fun onPause() {
-        _mapView.onPause()
-    }
+  override fun onPause() {
+    _mapView.onPause()
+  }
 }

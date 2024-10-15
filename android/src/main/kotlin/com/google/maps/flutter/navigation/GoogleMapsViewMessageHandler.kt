@@ -19,9 +19,7 @@ package com.google.maps.flutter.navigation
 import android.content.res.Resources
 
 /** GoogleMapsNavigationMessageHandler */
-class GoogleMapsViewMessageHandler(
-  private val viewRegistry: GoogleMapsViewRegistry
-) : MapViewApi {
+class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegistry) : MapViewApi {
 
   private fun getNavigationView(viewId: Int): GoogleMapsNavigationView {
     val view = viewRegistry.getNavigationView(viewId)
@@ -31,6 +29,7 @@ class GoogleMapsViewMessageHandler(
       throw FlutterError("viewNotFound", "No valid navigation view found")
     }
   }
+
   private fun getView(viewId: Int): GoogleMapsBaseMapView {
     val view = viewRegistry.getMapView(viewId)
     if (view != null) {
