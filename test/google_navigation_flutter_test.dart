@@ -26,7 +26,6 @@ import 'messages_test.g.dart';
     <Type>[TestNavigationSessionApi, TestMapViewApi, TestImageRegistryApi])
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  void onViewCreated(GoogleNavigationViewController controller) {}
   void onNavigationViewCreated(GoogleNavigationViewController controller) {}
   void onMapViewCreated(GoogleMapViewController controller) {}
 
