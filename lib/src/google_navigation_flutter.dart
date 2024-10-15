@@ -841,6 +841,8 @@ class GoogleNavigationViewController {
   /// such as [MapType.normal], [MapType.satellite], [MapType.terrain],
   /// or [MapType.hybrid].
   ///
+  /// MapType.terrain does not work during navigation.
+  ///
   /// Example usage:
   /// ```dart
   /// _navigationViewController.changeMapType(MapType.satellite);
