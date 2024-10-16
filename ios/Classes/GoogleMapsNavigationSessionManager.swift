@@ -136,7 +136,7 @@ class GoogleMapsNavigationSessionManager: NSObject {
     _session?.roadSnappedLocationProvider?.add(self)
 
     // Attach navigation session to all existing maps views.
-    try _viewRegistry?.getAllRegisteredViewIds().forEach { id in
+    try _viewRegistry?.getAllRegisteredNavigationViewIds().forEach { id in
       try attachNavigationSessionToMapView(mapId: id)
     }
   }
