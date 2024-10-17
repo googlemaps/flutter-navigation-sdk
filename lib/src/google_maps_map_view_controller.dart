@@ -15,13 +15,13 @@
 import '../google_navigation_flutter.dart';
 import 'google_navigation_flutter_platform_interface.dart';
 
-/// Navigation View Controller class to handle navigation view events.
-/// {@category Navigation View}
+/// Map View Controller class to handle map view events.
+/// {@category Map View}
 class GoogleMapViewController {
   /// Basic constructor.
   ///
   /// Don't create this directly, but access through
-  /// [GoogleMapsNavigationView.onViewCreated] callback.
+  /// [GoogleMapsMapView.onViewCreated] callback.
   GoogleMapViewController(this._viewId, [this._viewState])
       : settings = NavigationViewUISettings(_viewId) {
     _initListeners();
@@ -135,11 +135,6 @@ class GoogleMapViewController {
 
   /// Change status of my location enabled.
   ///
-  /// By default, the my location layer is disabled, but gets
-  /// automatically enabled on Android when the navigation starts.
-  ///
-  /// On iOS this property doesn't control the my location indication during
-  /// the navigation.
   Future<void> setMyLocationEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance
         .setMyLocationEnabled(viewId: _viewId, enabled: enabled);
@@ -159,7 +154,7 @@ class GoogleMapViewController {
   ///
   /// Example usage:
   /// ```dart
-  /// _navigationViewController.changeMapType(MapType.satellite);
+  /// _mapViewController.changeMapType(MapType.satellite);
   /// ```
   Future<void> setMapType({required MapType mapType}) async {
     return GoogleMapsNavigationPlatform.instance
@@ -180,11 +175,6 @@ class GoogleMapViewController {
 
   /// Gets whether the my location is enabled or disabled.
   ///
-  /// By default, the my location layer is disabled, but gets
-  /// automatically enabled on Android when the navigation starts.
-  ///
-  /// On iOS this property doesn't control the my location indication during
-  /// the navigation.
   Future<bool> isMyLocationEnabled() async {
     return GoogleMapsNavigationPlatform.instance
         .isMyLocationEnabled(viewId: _viewId);
@@ -194,19 +184,6 @@ class GoogleMapViewController {
   ///
   /// Use [perspective] to specify the orientation of the camera
   /// and optional [zoomLevel] to control the map zoom.
-  ///
-  /// Automatically started in the perspective [CameraPerspective.tilted] when
-  /// the navigation is initialized with [GoogleMapsNavigator.initializeNavigationSession]
-  /// or when navigation UI gets re-enabled with [setNavigationUIEnabled].
-  ///
-  /// In Android, you can use [GoogleMapsNavigationView.onCameraStartedFollowingLocation]
-  /// and [GoogleMapsNavigationView.onCameraStoppedFollowingLocation] callbacks
-  /// to detect when the follow location mode is enabled or disabled.
-  ///
-  /// Note there are small differences on how Android and iOS handle the camera
-  /// during the follow my location mode (tilt, zoom, transitions, etc.).
-  ///
-  /// See also [GoogleMapsNavigator.startGuidance], [showRouteOverview] and [animateCamera].
   Future<void> followMyLocation(CameraPerspective perspective,
       {double? zoomLevel}) async {
     return GoogleMapsNavigationPlatform.instance.followMyLocation(
@@ -269,58 +246,6 @@ class GoogleMapViewController {
         .moveCamera(viewId: _viewId, cameraUpdate: cameraUpdate);
   }
 
-  /// Is the navigation trip progress bar enabled.
-  Future<bool> isNavigationTripProgressBarEnabled() {
-    return GoogleMapsNavigationPlatform.instance
-        .isNavigationTripProgressBarEnabled(viewId: _viewId);
-  }
-
-  /// Enable or disable the navigation trip progress bar.
-  ///
-  /// By default, the navigation trip progress bar is disabled.
-  Future<void> setNavigationTripProgressBarEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance
-        .setNavigationTripProgressBarEnabled(
-      viewId: _viewId,
-      enabled: enabled,
-    );
-  }
-
-  /// Is the navigation header enabled.
-  Future<bool> isNavigationHeaderEnabled() {
-    return GoogleMapsNavigationPlatform.instance
-        .isNavigationHeaderEnabled(viewId: _viewId);
-  }
-
-  /// Enable or disable the navigation header.
-  ///
-  /// By default, the navigation header is enabled.
-  Future<void> setNavigationHeaderEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance.setNavigationHeaderEnabled(
-      viewId: _viewId,
-      enabled: enabled,
-    );
-  }
-
-  /// Is the navigation footer enabled.
-  Future<bool> isNavigationFooterEnabled() {
-    return GoogleMapsNavigationPlatform.instance
-        .isNavigationFooterEnabled(viewId: _viewId);
-  }
-
-  /// Enable or disable the navigation footer.
-  ///
-  /// By default, the navigation footer is enabled.
-  ///
-  /// Also known as ETA card, for example in Android
-  /// calls [setEtaCardEnabled().](https://developers.google.com/maps/documentation/navigation/android-sdk/v1/reference/com/google/android/libraries/navigation/NavigationView#setEtaCardEnabled(boolean))
-  Future<void> setNavigationFooterEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance.setNavigationFooterEnabled(
-      viewId: _viewId,
-      enabled: enabled,
-    );
-  }
-
   /// Is the recenter button enabled.
   Future<bool> isRecenterButtonEnabled() {
     return GoogleMapsNavigationPlatform.instance
@@ -334,87 +259,6 @@ class GoogleMapViewController {
     return GoogleMapsNavigationPlatform.instance.setRecenterButtonEnabled(
       viewId: _viewId,
       enabled: enabled,
-    );
-  }
-
-  /// Can the speed limit indication be displayed.
-  Future<bool> isSpeedLimitIconEnabled() {
-    return GoogleMapsNavigationPlatform.instance
-        .isSpeedLimitIconEnabled(viewId: _viewId);
-  }
-
-  /// Allow showing the speed limit indicator.
-  ///
-  /// By default, the speed limit is not displayed.
-  Future<void> setSpeedLimitIconEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance.setSpeedLimitIconEnabled(
-      viewId: _viewId,
-      enabled: enabled,
-    );
-  }
-
-  /// Can the speedometer be displayed.
-  Future<bool> isSpeedometerEnabled() {
-    return GoogleMapsNavigationPlatform.instance
-        .isSpeedometerEnabled(viewId: _viewId);
-  }
-
-  /// Allow showing the speedometer.
-  ///
-  /// By default, the speedometer is not displayed.
-  Future<void> setSpeedometerEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance.setSpeedometerEnabled(
-      viewId: _viewId,
-      enabled: enabled,
-    );
-  }
-
-  /// Are the incident cards displayed.
-  Future<bool> isTrafficIncidentCardsEnabled() {
-    return GoogleMapsNavigationPlatform.instance
-        .isTrafficIncidentCardsEnabled(viewId: _viewId);
-  }
-
-  /// Enable or disable showing of the incident cards.
-  ///
-  /// By default, the incident cards are shown.
-  Future<void> setTrafficIncidentCardsEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance.setTrafficIncidentCardsEnabled(
-      viewId: _viewId,
-      enabled: enabled,
-    );
-  }
-
-  /// Check if the navigation user interface is shown.
-  Future<bool> isNavigationUIEnabled() {
-    return GoogleMapsNavigationPlatform.instance
-        .isNavigationUIEnabled(viewId: _viewId);
-  }
-
-  /// Show or hide the navigation user interface shown on top of the map.
-  ///
-  /// When enabled also actives [followMyLocation] camera mode.
-  ///
-  /// Disabling hides routes on iOS, but on Android the routes stay visible.
-  ///
-  /// By default, the navigation UI is enabled when the session has been
-  /// initialized with [GoogleMapsNavigator.initializeNavigationSession].
-  ///
-  /// Fails on Android if the navigation session has not been initialized,
-  /// and on iOS if the terms and conditions have not been accepted.
-  Future<void> setNavigationUIEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance.setNavigationUIEnabled(
-      viewId: _viewId,
-      enabled: enabled,
-    );
-  }
-
-  /// Move the map camera to show the route overview.
-  ///
-  /// See also [followMyLocation] and [animateCamera].
-  Future<void> showRouteOverview() {
-    return GoogleMapsNavigationPlatform.instance.showRouteOverview(
-      viewId: _viewId,
     );
   }
 

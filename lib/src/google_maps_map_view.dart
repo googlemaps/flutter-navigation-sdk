@@ -24,13 +24,13 @@ typedef OnMapViewCreatedCallback = void Function(
   GoogleMapViewController controller,
 );
 
-/// The main map view widget for Google Maps Navigation.
-/// {@category Navigation View}
+/// The main map view widget for Google Maps Map View.
+/// {@category Map View}
 class GoogleMapsMapView extends StatefulWidget {
-  /// The main widget for embedding Google Maps Navigation into a Flutter application.
+  /// The main widget for embedding Google Maps Map View into a Flutter application.
   ///
   /// After creating the map view, the [onViewCreated] callback is triggered, providing a
-  /// [GoogleNavigationViewController] that you can use to interact with the map programmatically.
+  /// [GoogleMapViewController] that you can use to interact with the map programmatically.
   ///
   /// Example usage:
   /// ```dart
@@ -75,7 +75,6 @@ class GoogleMapsMapView extends StatefulWidget {
       this.onPolygonClicked,
       this.onPolylineClicked,
       this.onCircleClicked,
-      this.onNavigationUIEnabledChanged,
       this.onMyLocationClicked,
       this.onMyLocationButtonClicked,
       this.onCameraMoveStarted,
@@ -214,9 +213,6 @@ class GoogleMapsMapView extends StatefulWidget {
   /// On circle clicked callback.
   final OnCircleClicked? onCircleClicked;
 
-  /// On navigation UI enabled changed callback.
-  final OnNavigationUIEnabledChanged? onNavigationUIEnabledChanged;
-
   /// On my location clicked callback.
   final OnMyLocationClicked? onMyLocationClicked;
 
@@ -243,8 +239,8 @@ class GoogleMapsMapView extends StatefulWidget {
   State createState() => GoogleMapsMapViewState();
 }
 
-/// Google Maps Navigation.
-/// {@category Navigation View}
+/// Google Maps Map View.
+/// {@category Map View}
 class GoogleMapsMapViewState extends State<GoogleMapsMapView> {
   @override
   Widget build(BuildContext context) {
