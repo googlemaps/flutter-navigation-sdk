@@ -20,6 +20,7 @@ import '../../google_navigation_flutter.dart';
 
 /// Polygon that has beed added to map.
 /// {@category Navigation View}
+/// {@category Map View}
 @immutable
 class Polygon {
   /// Construct [Polygon].
@@ -55,6 +56,7 @@ class Polygon {
 
 /// Defines PolygonOptions for a polygon.
 /// {@category Navigation View}
+/// {@category Map View}
 @immutable
 class PolygonOptions {
   /// Initialize [PolygonOptions] object.
@@ -172,6 +174,7 @@ class PolygonOptions {
 
 /// Event emitted when a polygon is clicked.
 /// {@category Navigation View}
+/// {@category Map View}
 @immutable
 class PolygonClickedEvent {
   /// Initialize [PolygonClickedEvent] object.

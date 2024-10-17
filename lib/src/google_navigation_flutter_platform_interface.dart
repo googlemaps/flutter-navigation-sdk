@@ -26,6 +26,15 @@ import '../google_navigation_flutter.dart';
 /// @nodoc
 typedef MapReadyCallback = void Function(int viewId);
 
+/// Describes the type of Google map view to construct.
+enum MapViewType {
+  /// Navigation view supports navigation overlay, and current navigation session is displayed on the map.
+  navigation,
+
+  /// Classic map view, without navigation overlay.
+  map,
+}
+
 /// Google Maps Navigation Platform Interface for iOS and Android implementations.
 /// @nodoc
 abstract class GoogleMapsNavigationPlatform extends PlatformInterface
@@ -58,6 +67,17 @@ abstract class GoogleMapsNavigationPlatform extends PlatformInterface
     PlatformInterface.verifyToken(instance, _token);
   }
 
+  /// Builds and returns a classic GoogleMaps map view.
+  ///
+  /// This method is responsible for creating a navigation view with the
+  /// provided [initializationOptions].
+  ///
+  /// The [onMapReady] callback is invoked once the platform view has been created
+  /// and is ready for interaction.
+  Widget buildMapView(
+      {required MapViewInitializationOptions initializationOptions,
+      required MapReadyCallback onMapReady});
+
   /// Builds and returns a navigation view.
   ///
   /// This method is responsible for creating a navigation view with the
@@ -65,8 +85,8 @@ abstract class GoogleMapsNavigationPlatform extends PlatformInterface
   ///
   /// The [onMapReady] callback is invoked once the platform view has been created
   /// and is ready for interaction.
-  Widget buildView(
-      {required NavigationViewInitializationOptions initializationOptions,
+  Widget buildNavigationView(
+      {required MapViewInitializationOptions initializationOptions,
       required MapReadyCallback onMapReady});
 }
 

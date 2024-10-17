@@ -22,6 +22,7 @@ class NavigationViewRecenterButtonClickedEvent {}
 
 /// Map type.
 /// {@category Navigation View}
+/// {@category Map View}
 enum MapType {
   /// No type set.
   none,
@@ -41,6 +42,7 @@ enum MapType {
 
 /// Represents the camera position in a Google Maps view.
 /// {@category Navigation View}
+/// {@category Map View}
 class CameraPosition {
   /// Creates a [CameraPosition] object with map centered
   /// to the [target] with the given [bearing], [tilt] and [zoom] level.
@@ -74,6 +76,7 @@ class CameraPosition {
 /// Parameter given to parameter given to the [GoogleNavigationViewController.followMyLocation]
 /// to specify the orientation of the camera.
 /// {@category Navigation View}
+/// {@category Map View}
 enum CameraPerspective {
   /// A tilted perspective facing in the same direction as the user.
   tilted,
@@ -87,6 +90,7 @@ enum CameraPerspective {
 
 /// Represents the click position in a Google Maps view.
 /// {@category Navigation View}
+/// {@category Map View}
 class MapClickEvent {
   /// Creates a [MapClickEvent] object.
   const MapClickEvent(this.target);
@@ -107,6 +111,7 @@ class NavigationUIEnabledChangedEvent {
 
 /// Represents the long click position in a Google Maps view.
 /// {@category Navigation View}
+/// {@category Map View}
 class MapLongClickEvent {
   /// Creates a [MapLongClickEvent] object.
   const MapLongClickEvent(this.target);
@@ -202,6 +207,7 @@ class RouteSegment {
 
 /// Internal camera update type.
 /// {@category Navigation View}
+/// {@category Map View}
 enum CameraUpdateType {
   /// Camera update to a camera position.
   cameraPosition,
@@ -228,6 +234,7 @@ enum CameraUpdateType {
 /// Defines a camera move, supporting absolute moves as well as moves relative
 /// the current position.
 /// {@category Navigation View}
+/// {@category Map View}
 class CameraUpdate {
   CameraUpdate._(this.type);
 
@@ -374,14 +381,17 @@ class CameraUpdate {
 
 /// My location clicked event.
 /// {@category Navigation View}
+/// {@category Map View}
 class MyLocationClickedEvent {}
 
 /// My location button clicked event.
 /// {@category Navigation View}
+/// {@category Map View}
 class MyLocationButtonClickedEvent {}
 
 /// Represents the event type for [CameraChangedEvent].
 /// {@category Navigation View}
+/// {@category Map View}
 enum CameraEventType {
   /// Camera move initiated by developer or in response to user action.
   /// For example: zoom buttons, my location button, or marker clicks.
@@ -405,6 +415,7 @@ enum CameraEventType {
 
 /// Represents camera changed events in a Google Maps view.
 /// {@category Navigation View}
+/// {@category Map View}
 class CameraChangedEvent {
   /// Creates a [CameraChangedEvent] object.
   const CameraChangedEvent({required this.eventType, required this.position});

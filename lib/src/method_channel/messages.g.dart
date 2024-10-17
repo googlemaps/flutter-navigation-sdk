@@ -40,6 +40,15 @@ List<Object?> wrapResponse(
   return <Object?>[error.code, error.message, error.details];
 }
 
+/// Describes the type of map to construct.
+enum MapViewTypeDto {
+  /// Navigation view supports navigation overlay, and current navigation session is displayed on the map.
+  navigation,
+
+  /// Classic map view, without navigation overlay.
+  map,
+}
+
 /// Determines the initial visibility of the navigation UI on map initialization.
 enum NavigationUIEnabledPreferenceDto {
   /// Navigation UI gets enabled if the navigation
@@ -547,29 +556,35 @@ class NavigationViewOptionsDto {
 ///
 /// This message is used to initialize a new navigation view with a
 /// specified initial parameters.
-class NavigationViewCreationOptionsDto {
-  NavigationViewCreationOptionsDto({
+class ViewCreationOptionsDto {
+  ViewCreationOptionsDto({
+    required this.mapViewType,
     required this.mapOptions,
-    required this.navigationViewOptions,
+    this.navigationViewOptions,
   });
+
+  MapViewTypeDto mapViewType;
 
   MapOptionsDto mapOptions;
 
-  NavigationViewOptionsDto navigationViewOptions;
+  NavigationViewOptionsDto? navigationViewOptions;
 
   Object encode() {
     return <Object?>[
+      mapViewType.index,
       mapOptions.encode(),
-      navigationViewOptions.encode(),
+      navigationViewOptions?.encode(),
     ];
   }
 
-  static NavigationViewCreationOptionsDto decode(Object result) {
+  static ViewCreationOptionsDto decode(Object result) {
     result as List<Object?>;
-    return NavigationViewCreationOptionsDto(
-      mapOptions: MapOptionsDto.decode(result[0]! as List<Object?>),
-      navigationViewOptions:
-          NavigationViewOptionsDto.decode(result[1]! as List<Object?>),
+    return ViewCreationOptionsDto(
+      mapViewType: MapViewTypeDto.values[result[0]! as int],
+      mapOptions: MapOptionsDto.decode(result[1]! as List<Object?>),
+      navigationViewOptions: result[2] != null
+          ? NavigationViewOptionsDto.decode(result[2]! as List<Object?>)
+          : null,
     );
   }
 }
@@ -1909,10 +1924,10 @@ class __NavigationViewCreationApiCodec extends StandardMessageCodec {
     } else if (value is MapOptionsDto) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationViewCreationOptionsDto) {
+    } else if (value is NavigationViewOptionsDto) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationViewOptionsDto) {
+    } else if (value is ViewCreationOptionsDto) {
       buffer.putUint8(133);
       writeValue(buffer, value.encode());
     } else {
@@ -1932,9 +1947,9 @@ class __NavigationViewCreationApiCodec extends StandardMessageCodec {
       case 131:
         return MapOptionsDto.decode(readValue(buffer)!);
       case 132:
-        return NavigationViewCreationOptionsDto.decode(readValue(buffer)!);
-      case 133:
         return NavigationViewOptionsDto.decode(readValue(buffer)!);
+      case 133:
+        return ViewCreationOptionsDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -1955,7 +1970,7 @@ class _NavigationViewCreationApi {
   static const MessageCodec<Object?> pigeonChannelCodec =
       __NavigationViewCreationApiCodec();
 
-  Future<void> _create(NavigationViewCreationOptionsDto msg) async {
+  Future<void> _create(ViewCreationOptionsDto msg) async {
     const String __pigeon_channelName =
         'dev.flutter.pigeon.google_navigation_flutter._NavigationViewCreationApi._create';
     final BasicMessageChannel<Object?> __pigeon_channel =
@@ -1980,8 +1995,8 @@ class _NavigationViewCreationApi {
   }
 }
 
-class _NavigationViewApiCodec extends StandardMessageCodec {
-  const _NavigationViewApiCodec();
+class _MapViewApiCodec extends StandardMessageCodec {
+  const _MapViewApiCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is CameraPositionDto) {
@@ -2093,20 +2108,19 @@ class _NavigationViewApiCodec extends StandardMessageCodec {
   }
 }
 
-class NavigationViewApi {
-  /// Constructor for [NavigationViewApi].  The [binaryMessenger] named argument is
+class MapViewApi {
+  /// Constructor for [MapViewApi].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  NavigationViewApi({BinaryMessenger? binaryMessenger})
+  MapViewApi({BinaryMessenger? binaryMessenger})
       : __pigeon_binaryMessenger = binaryMessenger;
   final BinaryMessenger? __pigeon_binaryMessenger;
 
-  static const MessageCodec<Object?> pigeonChannelCodec =
-      _NavigationViewApiCodec();
+  static const MessageCodec<Object?> pigeonChannelCodec = _MapViewApiCodec();
 
   Future<void> awaitMapReady(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.awaitMapReady';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.awaitMapReady';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2130,7 +2144,7 @@ class NavigationViewApi {
 
   Future<bool> isMyLocationEnabled(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isMyLocationEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2159,7 +2173,7 @@ class NavigationViewApi {
 
   Future<void> setMyLocationEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMyLocationEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2183,7 +2197,7 @@ class NavigationViewApi {
 
   Future<LatLngDto?> getMyLocation(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMyLocation';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMyLocation';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2207,7 +2221,7 @@ class NavigationViewApi {
 
   Future<MapTypeDto> getMapType(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMapType';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapType';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2236,7 +2250,7 @@ class NavigationViewApi {
 
   Future<void> setMapType(int viewId, MapTypeDto mapType) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMapType';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapType';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2260,7 +2274,7 @@ class NavigationViewApi {
 
   Future<void> setMapStyle(int viewId, String styleJson) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMapStyle';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapStyle';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2284,7 +2298,7 @@ class NavigationViewApi {
 
   Future<bool> isNavigationTripProgressBarEnabled(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isNavigationTripProgressBarEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationTripProgressBarEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2314,7 +2328,7 @@ class NavigationViewApi {
   Future<void> setNavigationTripProgressBarEnabled(
       int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationTripProgressBarEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationTripProgressBarEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2338,7 +2352,7 @@ class NavigationViewApi {
 
   Future<bool> isNavigationHeaderEnabled(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isNavigationHeaderEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationHeaderEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2367,7 +2381,7 @@ class NavigationViewApi {
 
   Future<void> setNavigationHeaderEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationHeaderEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationHeaderEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2391,7 +2405,7 @@ class NavigationViewApi {
 
   Future<bool> isNavigationFooterEnabled(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isNavigationFooterEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationFooterEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2420,7 +2434,7 @@ class NavigationViewApi {
 
   Future<void> setNavigationFooterEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationFooterEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationFooterEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2444,7 +2458,7 @@ class NavigationViewApi {
 
   Future<bool> isRecenterButtonEnabled(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isRecenterButtonEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRecenterButtonEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2473,7 +2487,7 @@ class NavigationViewApi {
 
   Future<void> setRecenterButtonEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setRecenterButtonEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRecenterButtonEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2497,7 +2511,7 @@ class NavigationViewApi {
 
   Future<bool> isSpeedLimitIconEnabled(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isSpeedLimitIconEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedLimitIconEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2526,7 +2540,7 @@ class NavigationViewApi {
 
   Future<void> setSpeedLimitIconEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setSpeedLimitIconEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedLimitIconEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2550,7 +2564,7 @@ class NavigationViewApi {
 
   Future<bool> isSpeedometerEnabled(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isSpeedometerEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedometerEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2579,7 +2593,7 @@ class NavigationViewApi {
 
   Future<void> setSpeedometerEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setSpeedometerEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedometerEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2603,7 +2617,7 @@ class NavigationViewApi {
 
   Future<bool> isTrafficIncidentCardsEnabled(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isTrafficIncidentCardsEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficIncidentCardsEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2632,7 +2646,7 @@ class NavigationViewApi {
 
   Future<void> setTrafficIncidentCardsEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setTrafficIncidentCardsEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficIncidentCardsEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2656,7 +2670,7 @@ class NavigationViewApi {
 
   Future<bool> isNavigationUIEnabled(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isNavigationUIEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationUIEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2685,7 +2699,7 @@ class NavigationViewApi {
 
   Future<void> setNavigationUIEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationUIEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationUIEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2709,7 +2723,7 @@ class NavigationViewApi {
 
   Future<CameraPositionDto> getCameraPosition(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getCameraPosition';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCameraPosition';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2738,7 +2752,7 @@ class NavigationViewApi {
 
   Future<LatLngBoundsDto> getVisibleRegion(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getVisibleRegion';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getVisibleRegion';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2768,7 +2782,7 @@ class NavigationViewApi {
   Future<void> followMyLocation(
       int viewId, CameraPerspectiveDto perspective, double? zoomLevel) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.followMyLocation';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.followMyLocation';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2794,7 +2808,7 @@ class NavigationViewApi {
   Future<bool> animateCameraToCameraPosition(
       int viewId, CameraPositionDto cameraPosition, int? duration) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToCameraPosition';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToCameraPosition';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2824,7 +2838,7 @@ class NavigationViewApi {
   Future<bool> animateCameraToLatLng(
       int viewId, LatLngDto point, int? duration) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToLatLng';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLng';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2854,7 +2868,7 @@ class NavigationViewApi {
   Future<bool> animateCameraToLatLngBounds(
       int viewId, LatLngBoundsDto bounds, double padding, int? duration) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToLatLngBounds';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngBounds';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2884,7 +2898,7 @@ class NavigationViewApi {
   Future<bool> animateCameraToLatLngZoom(
       int viewId, LatLngDto point, double zoom, int? duration) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToLatLngZoom';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngZoom';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2914,7 +2928,7 @@ class NavigationViewApi {
   Future<bool> animateCameraByScroll(
       int viewId, double scrollByDx, double scrollByDy, int? duration) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraByScroll';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByScroll';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2945,7 +2959,7 @@ class NavigationViewApi {
   Future<bool> animateCameraByZoom(int viewId, double zoomBy, double? focusDx,
       double? focusDy, int? duration) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraByZoom';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByZoom';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2976,7 +2990,7 @@ class NavigationViewApi {
   Future<bool> animateCameraToZoom(
       int viewId, double zoom, int? duration) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToZoom';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToZoom';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3006,7 +3020,7 @@ class NavigationViewApi {
   Future<void> moveCameraToCameraPosition(
       int viewId, CameraPositionDto cameraPosition) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToCameraPosition';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToCameraPosition';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3030,7 +3044,7 @@ class NavigationViewApi {
 
   Future<void> moveCameraToLatLng(int viewId, LatLngDto point) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToLatLng';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLng';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3055,7 +3069,7 @@ class NavigationViewApi {
   Future<void> moveCameraToLatLngBounds(
       int viewId, LatLngBoundsDto bounds, double padding) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToLatLngBounds';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngBounds';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3080,7 +3094,7 @@ class NavigationViewApi {
   Future<void> moveCameraToLatLngZoom(
       int viewId, LatLngDto point, double zoom) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToLatLngZoom';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngZoom';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3105,7 +3119,7 @@ class NavigationViewApi {
   Future<void> moveCameraByScroll(
       int viewId, double scrollByDx, double scrollByDy) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraByScroll';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByScroll';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3130,7 +3144,7 @@ class NavigationViewApi {
   Future<void> moveCameraByZoom(
       int viewId, double zoomBy, double? focusDx, double? focusDy) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraByZoom';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByZoom';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3154,7 +3168,7 @@ class NavigationViewApi {
 
   Future<void> moveCameraToZoom(int viewId, double zoom) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToZoom';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToZoom';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3178,7 +3192,7 @@ class NavigationViewApi {
 
   Future<void> showRouteOverview(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.showRouteOverview';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showRouteOverview';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3202,7 +3216,7 @@ class NavigationViewApi {
 
   Future<double> getMinZoomPreference(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMinZoomPreference';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMinZoomPreference';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3231,7 +3245,7 @@ class NavigationViewApi {
 
   Future<double> getMaxZoomPreference(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMaxZoomPreference';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMaxZoomPreference';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3260,7 +3274,7 @@ class NavigationViewApi {
 
   Future<void> resetMinMaxZoomPreference(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.resetMinMaxZoomPreference';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.resetMinMaxZoomPreference';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3285,7 +3299,7 @@ class NavigationViewApi {
   Future<void> setMinZoomPreference(
       int viewId, double minZoomPreference) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMinZoomPreference';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMinZoomPreference';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3310,7 +3324,7 @@ class NavigationViewApi {
   Future<void> setMaxZoomPreference(
       int viewId, double maxZoomPreference) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMaxZoomPreference';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMaxZoomPreference';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3334,7 +3348,7 @@ class NavigationViewApi {
 
   Future<void> setMyLocationButtonEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMyLocationButtonEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationButtonEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3359,7 +3373,7 @@ class NavigationViewApi {
   Future<void> setConsumeMyLocationButtonClickEventsEnabled(
       int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setConsumeMyLocationButtonClickEventsEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setConsumeMyLocationButtonClickEventsEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3383,7 +3397,7 @@ class NavigationViewApi {
 
   Future<void> setZoomGesturesEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setZoomGesturesEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomGesturesEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3407,7 +3421,7 @@ class NavigationViewApi {
 
   Future<void> setZoomControlsEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setZoomControlsEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomControlsEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3431,7 +3445,7 @@ class NavigationViewApi {
 
   Future<void> setCompassEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setCompassEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setCompassEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3455,7 +3469,7 @@ class NavigationViewApi {
 
   Future<void> setRotateGesturesEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setRotateGesturesEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRotateGesturesEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3479,7 +3493,7 @@ class NavigationViewApi {
 
   Future<void> setScrollGesturesEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setScrollGesturesEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3504,7 +3518,7 @@ class NavigationViewApi {
   Future<void> setScrollGesturesDuringRotateOrZoomEnabled(
       int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setScrollGesturesDuringRotateOrZoomEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesDuringRotateOrZoomEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3528,7 +3542,7 @@ class NavigationViewApi {
 
   Future<void> setTiltGesturesEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setTiltGesturesEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTiltGesturesEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3552,7 +3566,7 @@ class NavigationViewApi {
 
   Future<void> setMapToolbarEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMapToolbarEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapToolbarEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3576,7 +3590,7 @@ class NavigationViewApi {
 
   Future<void> setTrafficEnabled(int viewId, bool enabled) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setTrafficEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3600,7 +3614,7 @@ class NavigationViewApi {
 
   Future<bool> isMyLocationButtonEnabled(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isMyLocationButtonEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationButtonEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3629,7 +3643,7 @@ class NavigationViewApi {
 
   Future<bool> isConsumeMyLocationButtonClickEventsEnabled(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isConsumeMyLocationButtonClickEventsEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isConsumeMyLocationButtonClickEventsEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3658,7 +3672,7 @@ class NavigationViewApi {
 
   Future<bool> isZoomGesturesEnabled(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isZoomGesturesEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomGesturesEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3687,7 +3701,7 @@ class NavigationViewApi {
 
   Future<bool> isZoomControlsEnabled(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isZoomControlsEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomControlsEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3716,7 +3730,7 @@ class NavigationViewApi {
 
   Future<bool> isCompassEnabled(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isCompassEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isCompassEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3745,7 +3759,7 @@ class NavigationViewApi {
 
   Future<bool> isRotateGesturesEnabled(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isRotateGesturesEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRotateGesturesEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3774,7 +3788,7 @@ class NavigationViewApi {
 
   Future<bool> isScrollGesturesEnabled(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isScrollGesturesEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3803,7 +3817,7 @@ class NavigationViewApi {
 
   Future<bool> isScrollGesturesEnabledDuringRotateOrZoom(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isScrollGesturesEnabledDuringRotateOrZoom';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabledDuringRotateOrZoom';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3832,7 +3846,7 @@ class NavigationViewApi {
 
   Future<bool> isTiltGesturesEnabled(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isTiltGesturesEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTiltGesturesEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3861,7 +3875,7 @@ class NavigationViewApi {
 
   Future<bool> isMapToolbarEnabled(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isMapToolbarEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMapToolbarEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3890,7 +3904,7 @@ class NavigationViewApi {
 
   Future<bool> isTrafficEnabled(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isTrafficEnabled';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficEnabled';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3919,7 +3933,7 @@ class NavigationViewApi {
 
   Future<List<MarkerDto?>> getMarkers(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMarkers';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMarkers';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3949,7 +3963,7 @@ class NavigationViewApi {
   Future<List<MarkerDto?>> addMarkers(
       int viewId, List<MarkerDto?> markers) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addMarkers';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addMarkers';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -3979,7 +3993,7 @@ class NavigationViewApi {
   Future<List<MarkerDto?>> updateMarkers(
       int viewId, List<MarkerDto?> markers) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updateMarkers';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateMarkers';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -4008,7 +4022,7 @@ class NavigationViewApi {
 
   Future<void> removeMarkers(int viewId, List<MarkerDto?> markers) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removeMarkers';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeMarkers';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -4032,7 +4046,7 @@ class NavigationViewApi {
 
   Future<void> clearMarkers(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clearMarkers';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearMarkers';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -4056,7 +4070,7 @@ class NavigationViewApi {
 
   Future<void> clear(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clear';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clear';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -4080,7 +4094,7 @@ class NavigationViewApi {
 
   Future<List<PolygonDto?>> getPolygons(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getPolygons';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolygons';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -4110,7 +4124,7 @@ class NavigationViewApi {
   Future<List<PolygonDto?>> addPolygons(
       int viewId, List<PolygonDto?> polygons) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addPolygons';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolygons';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -4140,7 +4154,7 @@ class NavigationViewApi {
   Future<List<PolygonDto?>> updatePolygons(
       int viewId, List<PolygonDto?> polygons) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updatePolygons';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolygons';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -4169,7 +4183,7 @@ class NavigationViewApi {
 
   Future<void> removePolygons(int viewId, List<PolygonDto?> polygons) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removePolygons';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolygons';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -4193,7 +4207,7 @@ class NavigationViewApi {
 
   Future<void> clearPolygons(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clearPolygons';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolygons';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -4217,7 +4231,7 @@ class NavigationViewApi {
 
   Future<List<PolylineDto?>> getPolylines(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getPolylines';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolylines';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -4247,7 +4261,7 @@ class NavigationViewApi {
   Future<List<PolylineDto?>> addPolylines(
       int viewId, List<PolylineDto?> polylines) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addPolylines';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolylines';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -4277,7 +4291,7 @@ class NavigationViewApi {
   Future<List<PolylineDto?>> updatePolylines(
       int viewId, List<PolylineDto?> polylines) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updatePolylines';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolylines';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -4306,7 +4320,7 @@ class NavigationViewApi {
 
   Future<void> removePolylines(int viewId, List<PolylineDto?> polylines) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removePolylines';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolylines';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -4330,7 +4344,7 @@ class NavigationViewApi {
 
   Future<void> clearPolylines(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clearPolylines';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolylines';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -4354,7 +4368,7 @@ class NavigationViewApi {
 
   Future<List<CircleDto?>> getCircles(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getCircles';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCircles';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -4384,7 +4398,7 @@ class NavigationViewApi {
   Future<List<CircleDto?>> addCircles(
       int viewId, List<CircleDto?> circles) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addCircles';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addCircles';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -4414,7 +4428,7 @@ class NavigationViewApi {
   Future<List<CircleDto?>> updateCircles(
       int viewId, List<CircleDto?> circles) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updateCircles';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateCircles';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -4443,7 +4457,7 @@ class NavigationViewApi {
 
   Future<void> removeCircles(int viewId, List<CircleDto?> circles) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removeCircles';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeCircles';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -4467,7 +4481,7 @@ class NavigationViewApi {
 
   Future<void> clearCircles(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clearCircles';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearCircles';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -4491,7 +4505,7 @@ class NavigationViewApi {
 
   Future<void> registerOnCameraChangedListener(int viewId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.registerOnCameraChangedListener';
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.registerOnCameraChangedListener';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -4667,8 +4681,8 @@ class ImageRegistryApi {
   }
 }
 
-class _NavigationViewEventApiCodec extends StandardMessageCodec {
-  const _NavigationViewEventApiCodec();
+class _ViewEventApiCodec extends StandardMessageCodec {
+  const _ViewEventApiCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is CameraPositionDto) {
@@ -4695,9 +4709,8 @@ class _NavigationViewEventApiCodec extends StandardMessageCodec {
   }
 }
 
-abstract class NavigationViewEventApi {
-  static const MessageCodec<Object?> pigeonChannelCodec =
-      _NavigationViewEventApiCodec();
+abstract class ViewEventApi {
+  static const MessageCodec<Object?> pigeonChannelCodec = _ViewEventApiCodec();
 
   void onMapClickEvent(int viewId, LatLngDto latLng);
 
@@ -4725,12 +4738,11 @@ abstract class NavigationViewEventApi {
   void onCameraChanged(
       int viewId, CameraEventTypeDto eventType, CameraPositionDto position);
 
-  static void setup(NavigationViewEventApi? api,
-      {BinaryMessenger? binaryMessenger}) {
+  static void setup(ViewEventApi? api, {BinaryMessenger? binaryMessenger}) {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMapClickEvent',
+          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapClickEvent',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4738,14 +4750,14 @@ abstract class NavigationViewEventApi {
       } else {
         __pigeon_channel.setMessageHandler((Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMapClickEvent was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapClickEvent was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMapClickEvent was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapClickEvent was null, expected non-null int.');
           final LatLngDto? arg_latLng = (args[1] as LatLngDto?);
           assert(arg_latLng != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMapClickEvent was null, expected non-null LatLngDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapClickEvent was null, expected non-null LatLngDto.');
           try {
             api.onMapClickEvent(arg_viewId!, arg_latLng!);
             return wrapResponse(empty: true);
@@ -4761,7 +4773,7 @@ abstract class NavigationViewEventApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMapLongClickEvent',
+          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapLongClickEvent',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4769,14 +4781,14 @@ abstract class NavigationViewEventApi {
       } else {
         __pigeon_channel.setMessageHandler((Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMapLongClickEvent was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapLongClickEvent was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMapLongClickEvent was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapLongClickEvent was null, expected non-null int.');
           final LatLngDto? arg_latLng = (args[1] as LatLngDto?);
           assert(arg_latLng != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMapLongClickEvent was null, expected non-null LatLngDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapLongClickEvent was null, expected non-null LatLngDto.');
           try {
             api.onMapLongClickEvent(arg_viewId!, arg_latLng!);
             return wrapResponse(empty: true);
@@ -4792,7 +4804,7 @@ abstract class NavigationViewEventApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onRecenterButtonClicked',
+          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onRecenterButtonClicked',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4800,11 +4812,11 @@ abstract class NavigationViewEventApi {
       } else {
         __pigeon_channel.setMessageHandler((Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onRecenterButtonClicked was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onRecenterButtonClicked was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onRecenterButtonClicked was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onRecenterButtonClicked was null, expected non-null int.');
           try {
             api.onRecenterButtonClicked(arg_viewId!);
             return wrapResponse(empty: true);
@@ -4820,7 +4832,7 @@ abstract class NavigationViewEventApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMarkerEvent',
+          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerEvent',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4828,19 +4840,19 @@ abstract class NavigationViewEventApi {
       } else {
         __pigeon_channel.setMessageHandler((Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMarkerEvent was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerEvent was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMarkerEvent was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerEvent was null, expected non-null int.');
           final String? arg_markerId = (args[1] as String?);
           assert(arg_markerId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMarkerEvent was null, expected non-null String.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerEvent was null, expected non-null String.');
           final MarkerEventTypeDto? arg_eventType = args[2] == null
               ? null
               : MarkerEventTypeDto.values[args[2]! as int];
           assert(arg_eventType != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMarkerEvent was null, expected non-null MarkerEventTypeDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerEvent was null, expected non-null MarkerEventTypeDto.');
           try {
             api.onMarkerEvent(arg_viewId!, arg_markerId!, arg_eventType!);
             return wrapResponse(empty: true);
@@ -4856,7 +4868,7 @@ abstract class NavigationViewEventApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMarkerDragEvent',
+          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerDragEvent',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4864,22 +4876,22 @@ abstract class NavigationViewEventApi {
       } else {
         __pigeon_channel.setMessageHandler((Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMarkerDragEvent was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerDragEvent was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMarkerDragEvent was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerDragEvent was null, expected non-null int.');
           final String? arg_markerId = (args[1] as String?);
           assert(arg_markerId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMarkerDragEvent was null, expected non-null String.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerDragEvent was null, expected non-null String.');
           final MarkerDragEventTypeDto? arg_eventType = args[2] == null
               ? null
               : MarkerDragEventTypeDto.values[args[2]! as int];
           assert(arg_eventType != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMarkerDragEvent was null, expected non-null MarkerDragEventTypeDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerDragEvent was null, expected non-null MarkerDragEventTypeDto.');
           final LatLngDto? arg_position = (args[3] as LatLngDto?);
           assert(arg_position != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMarkerDragEvent was null, expected non-null LatLngDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerDragEvent was null, expected non-null LatLngDto.');
           try {
             api.onMarkerDragEvent(
                 arg_viewId!, arg_markerId!, arg_eventType!, arg_position!);
@@ -4896,7 +4908,7 @@ abstract class NavigationViewEventApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onPolygonClicked',
+          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolygonClicked',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4904,14 +4916,14 @@ abstract class NavigationViewEventApi {
       } else {
         __pigeon_channel.setMessageHandler((Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onPolygonClicked was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolygonClicked was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onPolygonClicked was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolygonClicked was null, expected non-null int.');
           final String? arg_polygonId = (args[1] as String?);
           assert(arg_polygonId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onPolygonClicked was null, expected non-null String.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolygonClicked was null, expected non-null String.');
           try {
             api.onPolygonClicked(arg_viewId!, arg_polygonId!);
             return wrapResponse(empty: true);
@@ -4927,7 +4939,7 @@ abstract class NavigationViewEventApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onPolylineClicked',
+          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolylineClicked',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4935,14 +4947,14 @@ abstract class NavigationViewEventApi {
       } else {
         __pigeon_channel.setMessageHandler((Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onPolylineClicked was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolylineClicked was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onPolylineClicked was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolylineClicked was null, expected non-null int.');
           final String? arg_polylineId = (args[1] as String?);
           assert(arg_polylineId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onPolylineClicked was null, expected non-null String.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolylineClicked was null, expected non-null String.');
           try {
             api.onPolylineClicked(arg_viewId!, arg_polylineId!);
             return wrapResponse(empty: true);
@@ -4958,7 +4970,7 @@ abstract class NavigationViewEventApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onCircleClicked',
+          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCircleClicked',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4966,14 +4978,14 @@ abstract class NavigationViewEventApi {
       } else {
         __pigeon_channel.setMessageHandler((Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onCircleClicked was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCircleClicked was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onCircleClicked was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCircleClicked was null, expected non-null int.');
           final String? arg_circleId = (args[1] as String?);
           assert(arg_circleId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onCircleClicked was null, expected non-null String.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCircleClicked was null, expected non-null String.');
           try {
             api.onCircleClicked(arg_viewId!, arg_circleId!);
             return wrapResponse(empty: true);
@@ -4989,7 +5001,7 @@ abstract class NavigationViewEventApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onNavigationUIEnabledChanged',
+          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onNavigationUIEnabledChanged',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4997,14 +5009,14 @@ abstract class NavigationViewEventApi {
       } else {
         __pigeon_channel.setMessageHandler((Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onNavigationUIEnabledChanged was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onNavigationUIEnabledChanged was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onNavigationUIEnabledChanged was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onNavigationUIEnabledChanged was null, expected non-null int.');
           final bool? arg_navigationUIEnabled = (args[1] as bool?);
           assert(arg_navigationUIEnabled != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onNavigationUIEnabledChanged was null, expected non-null bool.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onNavigationUIEnabledChanged was null, expected non-null bool.');
           try {
             api.onNavigationUIEnabledChanged(
                 arg_viewId!, arg_navigationUIEnabled!);
@@ -5021,7 +5033,7 @@ abstract class NavigationViewEventApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMyLocationClicked',
+          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationClicked',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -5029,11 +5041,11 @@ abstract class NavigationViewEventApi {
       } else {
         __pigeon_channel.setMessageHandler((Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMyLocationClicked was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationClicked was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMyLocationClicked was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationClicked was null, expected non-null int.');
           try {
             api.onMyLocationClicked(arg_viewId!);
             return wrapResponse(empty: true);
@@ -5049,7 +5061,7 @@ abstract class NavigationViewEventApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMyLocationButtonClicked',
+          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationButtonClicked',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -5057,11 +5069,11 @@ abstract class NavigationViewEventApi {
       } else {
         __pigeon_channel.setMessageHandler((Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMyLocationButtonClicked was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationButtonClicked was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMyLocationButtonClicked was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationButtonClicked was null, expected non-null int.');
           try {
             api.onMyLocationButtonClicked(arg_viewId!);
             return wrapResponse(empty: true);
@@ -5077,7 +5089,7 @@ abstract class NavigationViewEventApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onCameraChanged',
+          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCameraChanged',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -5085,20 +5097,20 @@ abstract class NavigationViewEventApi {
       } else {
         __pigeon_channel.setMessageHandler((Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onCameraChanged was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCameraChanged was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onCameraChanged was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCameraChanged was null, expected non-null int.');
           final CameraEventTypeDto? arg_eventType = args[1] == null
               ? null
               : CameraEventTypeDto.values[args[1]! as int];
           assert(arg_eventType != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onCameraChanged was null, expected non-null CameraEventTypeDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCameraChanged was null, expected non-null CameraEventTypeDto.');
           final CameraPositionDto? arg_position =
               (args[2] as CameraPositionDto?);
           assert(arg_position != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onCameraChanged was null, expected non-null CameraPositionDto.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCameraChanged was null, expected non-null CameraPositionDto.');
           try {
             api.onCameraChanged(arg_viewId!, arg_eventType!, arg_position!);
             return wrapResponse(empty: true);

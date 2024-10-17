@@ -19,6 +19,7 @@ import '../../google_navigation_flutter.dart';
 
 /// Pattern used in the stroke pattern for a [Polyline] or the outline of a [Polygon] or [Circle].
 /// {@category Navigation View}
+/// {@category Map View}
 enum PatternType {
   /// Dash pattern.
   dash,
@@ -32,6 +33,7 @@ enum PatternType {
 
 /// Item used in the stroke pattern for a Polyline or the outline of a Polygon or Circle.
 /// {@category Navigation View}
+/// {@category Map View}
 abstract class PatternItem {
   /// Initialize [PatternItem] object.
   const PatternItem(this.type);
@@ -42,6 +44,7 @@ abstract class PatternItem {
 
 /// Class representing a dash used in the stroke pattern for a [Polyline] or the outline of a [Polygon] or [Circle].
 /// {@category Navigation View}
+/// {@category Map View}
 @immutable
 class DashPattern extends PatternItem {
   /// Initialize [DashPattern] object.
@@ -67,6 +70,7 @@ class DashPattern extends PatternItem {
 
 /// Class representing a dot used in the stroke pattern for a [Polyline] or the outline of a [Polygon] or [Circle].
 /// {@category Navigation View}
+/// {@category Map View}
 @immutable
 class DotPattern extends PatternItem {
   /// Initialize [DotPattern] object.
@@ -75,6 +79,7 @@ class DotPattern extends PatternItem {
 
 /// Class representing a gap used in the stroke pattern for a [Polyline] or the outline of a [Polygon] or [Circle].
 /// {@category Navigation View}
+/// {@category Map View}
 @immutable
 class GapPattern extends PatternItem {
   /// Initialize [GapPattern] object.

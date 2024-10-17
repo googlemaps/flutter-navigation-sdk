@@ -19,6 +19,7 @@ import '../../google_navigation_flutter.dart';
 
 /// Polyline that has beed added to map.
 /// {@category Navigation View}
+/// {@category Map View}
 @immutable
 class Polyline {
   /// Construct [Polyline].
@@ -54,6 +55,7 @@ class Polyline {
 
 /// Defines PolylineOptions for a polyline.
 /// {@category Navigation View}
+/// {@category Map View}
 @immutable
 class PolylineOptions {
   /// Initialize [PolylineOptions] object.
@@ -165,6 +167,7 @@ class PolylineOptions {
 
 /// Style for stroke of a polyline.
 /// {@category Navigation View}
+/// {@category Map View}
 class StyleSpanStrokeStyle {
   /// Initialize with solid color.
   StyleSpanStrokeStyle.solidColor({
@@ -189,6 +192,7 @@ class StyleSpanStrokeStyle {
 
 /// Style and length of a stroke on polyline.
 /// {@category Navigation View}
+/// {@category Map View}
 class StyleSpan {
   /// Initialize with length and style.
   StyleSpan({
@@ -205,6 +209,7 @@ class StyleSpan {
 
 /// Joint types for [Polyline] and outline of [Polygon].
 /// {@category Navigation View}
+/// {@category Map View}
 enum StrokeJointType {
   /// Flat bevel on the outside of the joint.
   bevel,
@@ -218,6 +223,7 @@ enum StrokeJointType {
 
 /// Event emitted when a polyline is clicked.
 /// {@category Navigation View}
+/// {@category Map View}
 @immutable
 class PolylineClickedEvent {
   /// Initialize [PolylineClickedEvent] object.

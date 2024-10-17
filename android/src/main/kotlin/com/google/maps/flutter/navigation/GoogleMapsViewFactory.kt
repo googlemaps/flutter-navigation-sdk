@@ -21,24 +21,28 @@ import io.flutter.plugin.common.StandardMessageCodec
 import io.flutter.plugin.platform.PlatformView
 import io.flutter.plugin.platform.PlatformViewFactory
 
-class GoogleMapsNavigationViewFactory(
-  private val viewRegistry: GoogleMapsNavigationViewRegistry,
-  private val navigationViewEventApi: NavigationViewEventApi,
+class GoogleMapsViewFactory(
+  private val viewRegistry: GoogleMapsViewRegistry,
+  private val viewEventApi: ViewEventApi,
   private val imageRegistry: ImageRegistry
 ) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
   override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
-    val params = NavigationViewCreationOptionsDto.fromList(args as List<Any?>)
+    val params = ViewCreationOptionsDto.fromList(args as List<Any?>)
     val mapOptions = Convert.convertMapOptionsFromDto(params.mapOptions)
-    val navigationViewOptions =
-      Convert.convertNavigationViewOptionsFromDto(params.navigationViewOptions)
-    return GoogleMapsNavigationView(
-      context,
-      mapOptions,
-      navigationViewOptions,
-      viewId,
-      viewRegistry,
-      navigationViewEventApi,
-      imageRegistry
-    )
+    if (params.mapViewType == MapViewTypeDto.NAVIGATION) {
+      val navigationViewOptionsDto =
+        params.navigationViewOptions?.let { Convert.convertNavigationViewOptionsFromDto(it) }
+      return GoogleMapsNavigationView(
+        context,
+        mapOptions,
+        navigationViewOptionsDto,
+        viewId,
+        viewRegistry,
+        viewEventApi,
+        imageRegistry
+      )
+    } else {
+      return GoogleMapView(context, mapOptions, viewId, viewEventApi, viewRegistry, imageRegistry)
+    }
   }
 }

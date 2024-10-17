@@ -72,6 +72,8 @@ The view can be controlled with the `GoogleNavigationViewController` that is pas
 The `GoogleMapsNavigationView` widget should be used within a widget with a bounded size. Using it
 in an unbounded widget will cause the application to throw a Flutter exception.
 
+You can also add a bare GoogleMapsMapView that works as a normal map view without navigation functionality.
+
 ### Add a navigation view
 
 ```dart
@@ -137,6 +139,29 @@ class _NavigationSampleState extends State<NavigationSample> {
     super.dispose();
   }
 }
+```
+
+### Add a map view
+
+```dart
+@override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Google Maps Navigation Sample')),
+      body: _navigationSessionInitialized
+          ? GoogleMapsMapView(
+              onViewCreated: _onViewCreated,
+              initialCameraPosition: CameraPosition(
+                // Initialize map to user location.
+                target: _userLocation!,
+                zoom: 15,
+              ),
+              // Other view initialization settings
+            )
+          : const Center(child: CircularProgressIndicator()),
+    );
+  }
+
 ```
 
 See the [example](./example) directory for a complete navigation sample app.

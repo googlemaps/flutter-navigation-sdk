@@ -17,6 +17,7 @@ import 'package:flutter/foundation.dart';
 /// LatLng coordinate object.
 /// {@category Navigation}
 /// {@category Navigation View}
+/// {@category Map View}
 @immutable
 class LatLng {
   /// Initializes a [LatLng] with the provided latitude and longitude values.

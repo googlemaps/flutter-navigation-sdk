@@ -60,6 +60,15 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
+/// Describes the type of map to construct.
+enum MapViewTypeDto: Int {
+  /// Navigation view supports navigation overlay, and current navigation session is displayed on
+  /// the map.
+  case navigation = 0
+  /// Classic map view, without navigation overlay.
+  case map = 1
+}
+
 /// Determines the initial visibility of the navigation UI on map initialization.
 enum NavigationUIEnabledPreferenceDto: Int {
   /// Navigation UI gets enabled if the navigation
@@ -477,15 +486,21 @@ struct NavigationViewOptionsDto {
 /// specified initial parameters.
 ///
 /// Generated class from Pigeon that represents data sent in messages.
-struct NavigationViewCreationOptionsDto {
+struct ViewCreationOptionsDto {
+  var mapViewType: MapViewTypeDto
   var mapOptions: MapOptionsDto
-  var navigationViewOptions: NavigationViewOptionsDto
+  var navigationViewOptions: NavigationViewOptionsDto?
 
-  static func fromList(_ list: [Any?]) -> NavigationViewCreationOptionsDto? {
-    let mapOptions = MapOptionsDto.fromList(list[0] as! [Any?])!
-    let navigationViewOptions = NavigationViewOptionsDto.fromList(list[1] as! [Any?])!
+  static func fromList(_ list: [Any?]) -> ViewCreationOptionsDto? {
+    let mapViewType = MapViewTypeDto(rawValue: list[0] as! Int)!
+    let mapOptions = MapOptionsDto.fromList(list[1] as! [Any?])!
+    var navigationViewOptions: NavigationViewOptionsDto?
+    if let navigationViewOptionsList: [Any?] = nilOrValue(list[2]) {
+      navigationViewOptions = NavigationViewOptionsDto.fromList(navigationViewOptionsList)
+    }
 
-    return NavigationViewCreationOptionsDto(
+    return ViewCreationOptionsDto(
+      mapViewType: mapViewType,
       mapOptions: mapOptions,
       navigationViewOptions: navigationViewOptions
     )
@@ -493,8 +508,9 @@ struct NavigationViewCreationOptionsDto {
 
   func toList() -> [Any?] {
     [
+      mapViewType.rawValue,
       mapOptions.toList(),
-      navigationViewOptions.toList(),
+      navigationViewOptions?.toList(),
     ]
   }
 }
@@ -1692,9 +1708,9 @@ private class _NavigationViewCreationApiCodecReader: FlutterStandardReader {
     case 131:
       return MapOptionsDto.fromList(readValue() as! [Any?])
     case 132:
-      return NavigationViewCreationOptionsDto.fromList(readValue() as! [Any?])
-    case 133:
       return NavigationViewOptionsDto.fromList(readValue() as! [Any?])
+    case 133:
+      return ViewCreationOptionsDto.fromList(readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -1715,10 +1731,10 @@ private class _NavigationViewCreationApiCodecWriter: FlutterStandardWriter {
     } else if let value = value as? MapOptionsDto {
       super.writeByte(131)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationViewCreationOptionsDto {
+    } else if let value = value as? NavigationViewOptionsDto {
       super.writeByte(132)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationViewOptionsDto {
+    } else if let value = value as? ViewCreationOptionsDto {
       super.writeByte(133)
       super.writeValue(value.toList())
     } else {
@@ -1748,7 +1764,7 @@ class _NavigationViewCreationApiCodec: FlutterStandardMessageCodec {
 ///
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol _NavigationViewCreationApi {
-  func _create(msg: NavigationViewCreationOptionsDto) throws
+  func _create(msg: ViewCreationOptionsDto) throws
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -1766,7 +1782,7 @@ enum _NavigationViewCreationApiSetup {
     if let api {
       _createChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let msgArg = args[0] as! NavigationViewCreationOptionsDto
+        let msgArg = args[0] as! ViewCreationOptionsDto
         do {
           try api._create(msg: msgArg)
           reply(wrapResult(nil))
@@ -1780,7 +1796,7 @@ enum _NavigationViewCreationApiSetup {
   }
 }
 
-private class NavigationViewApiCodecReader: FlutterStandardReader {
+private class MapViewApiCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 128:
@@ -1827,7 +1843,7 @@ private class NavigationViewApiCodecReader: FlutterStandardReader {
   }
 }
 
-private class NavigationViewApiCodecWriter: FlutterStandardWriter {
+private class MapViewApiCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
     if let value = value as? CameraPositionDto {
       super.writeByte(128)
@@ -1892,22 +1908,22 @@ private class NavigationViewApiCodecWriter: FlutterStandardWriter {
   }
 }
 
-private class NavigationViewApiCodecReaderWriter: FlutterStandardReaderWriter {
+private class MapViewApiCodecReaderWriter: FlutterStandardReaderWriter {
   override func reader(with data: Data) -> FlutterStandardReader {
-    NavigationViewApiCodecReader(data: data)
+    MapViewApiCodecReader(data: data)
   }
 
   override func writer(with data: NSMutableData) -> FlutterStandardWriter {
-    NavigationViewApiCodecWriter(data: data)
+    MapViewApiCodecWriter(data: data)
   }
 }
 
-class NavigationViewApiCodec: FlutterStandardMessageCodec {
-  static let shared = NavigationViewApiCodec(readerWriter: NavigationViewApiCodecReaderWriter())
+class MapViewApiCodec: FlutterStandardMessageCodec {
+  static let shared = MapViewApiCodec(readerWriter: MapViewApiCodecReaderWriter())
 }
 
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
-protocol NavigationViewApi {
+protocol MapViewApi {
   func awaitMapReady(viewId: Int64, completion: @escaping (Result<Void, Error>) -> Void)
   func isMyLocationEnabled(viewId: Int64) throws -> Bool
   func setMyLocationEnabled(viewId: Int64, enabled: Bool) throws
@@ -2010,13 +2026,13 @@ protocol NavigationViewApi {
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-enum NavigationViewApiSetup {
-  /// The codec used by NavigationViewApi.
-  static var codec: FlutterStandardMessageCodec { NavigationViewApiCodec.shared }
-  /// Sets up an instance of `NavigationViewApi` to handle messages through the `binaryMessenger`.
-  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: NavigationViewApi?) {
+enum MapViewApiSetup {
+  /// The codec used by MapViewApi.
+  static var codec: FlutterStandardMessageCodec { MapViewApiCodec.shared }
+  /// Sets up an instance of `MapViewApi` to handle messages through the `binaryMessenger`.
+  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: MapViewApi?) {
     let awaitMapReadyChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.awaitMapReady",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.awaitMapReady",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2037,7 +2053,7 @@ enum NavigationViewApiSetup {
       awaitMapReadyChannel.setMessageHandler(nil)
     }
     let isMyLocationEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isMyLocationEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2056,7 +2072,7 @@ enum NavigationViewApiSetup {
       isMyLocationEnabledChannel.setMessageHandler(nil)
     }
     let setMyLocationEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMyLocationEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2076,7 +2092,7 @@ enum NavigationViewApiSetup {
       setMyLocationEnabledChannel.setMessageHandler(nil)
     }
     let getMyLocationChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMyLocation",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMyLocation",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2095,7 +2111,7 @@ enum NavigationViewApiSetup {
       getMyLocationChannel.setMessageHandler(nil)
     }
     let getMapTypeChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMapType",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapType",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2114,7 +2130,7 @@ enum NavigationViewApiSetup {
       getMapTypeChannel.setMessageHandler(nil)
     }
     let setMapTypeChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMapType",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapType",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2134,7 +2150,7 @@ enum NavigationViewApiSetup {
       setMapTypeChannel.setMessageHandler(nil)
     }
     let setMapStyleChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMapStyle",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapStyle",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2154,7 +2170,7 @@ enum NavigationViewApiSetup {
       setMapStyleChannel.setMessageHandler(nil)
     }
     let isNavigationTripProgressBarEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isNavigationTripProgressBarEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationTripProgressBarEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2173,7 +2189,7 @@ enum NavigationViewApiSetup {
       isNavigationTripProgressBarEnabledChannel.setMessageHandler(nil)
     }
     let setNavigationTripProgressBarEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationTripProgressBarEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationTripProgressBarEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2193,7 +2209,7 @@ enum NavigationViewApiSetup {
       setNavigationTripProgressBarEnabledChannel.setMessageHandler(nil)
     }
     let isNavigationHeaderEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isNavigationHeaderEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationHeaderEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2212,7 +2228,7 @@ enum NavigationViewApiSetup {
       isNavigationHeaderEnabledChannel.setMessageHandler(nil)
     }
     let setNavigationHeaderEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationHeaderEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationHeaderEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2232,7 +2248,7 @@ enum NavigationViewApiSetup {
       setNavigationHeaderEnabledChannel.setMessageHandler(nil)
     }
     let isNavigationFooterEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isNavigationFooterEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationFooterEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2251,7 +2267,7 @@ enum NavigationViewApiSetup {
       isNavigationFooterEnabledChannel.setMessageHandler(nil)
     }
     let setNavigationFooterEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationFooterEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationFooterEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2271,7 +2287,7 @@ enum NavigationViewApiSetup {
       setNavigationFooterEnabledChannel.setMessageHandler(nil)
     }
     let isRecenterButtonEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isRecenterButtonEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRecenterButtonEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2290,7 +2306,7 @@ enum NavigationViewApiSetup {
       isRecenterButtonEnabledChannel.setMessageHandler(nil)
     }
     let setRecenterButtonEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setRecenterButtonEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRecenterButtonEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2310,7 +2326,7 @@ enum NavigationViewApiSetup {
       setRecenterButtonEnabledChannel.setMessageHandler(nil)
     }
     let isSpeedLimitIconEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isSpeedLimitIconEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedLimitIconEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2329,7 +2345,7 @@ enum NavigationViewApiSetup {
       isSpeedLimitIconEnabledChannel.setMessageHandler(nil)
     }
     let setSpeedLimitIconEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setSpeedLimitIconEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedLimitIconEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2349,7 +2365,7 @@ enum NavigationViewApiSetup {
       setSpeedLimitIconEnabledChannel.setMessageHandler(nil)
     }
     let isSpeedometerEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isSpeedometerEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedometerEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2368,7 +2384,7 @@ enum NavigationViewApiSetup {
       isSpeedometerEnabledChannel.setMessageHandler(nil)
     }
     let setSpeedometerEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setSpeedometerEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedometerEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2388,7 +2404,7 @@ enum NavigationViewApiSetup {
       setSpeedometerEnabledChannel.setMessageHandler(nil)
     }
     let isTrafficIncidentCardsEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isTrafficIncidentCardsEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficIncidentCardsEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2407,7 +2423,7 @@ enum NavigationViewApiSetup {
       isTrafficIncidentCardsEnabledChannel.setMessageHandler(nil)
     }
     let setTrafficIncidentCardsEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setTrafficIncidentCardsEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficIncidentCardsEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2427,7 +2443,7 @@ enum NavigationViewApiSetup {
       setTrafficIncidentCardsEnabledChannel.setMessageHandler(nil)
     }
     let isNavigationUIEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isNavigationUIEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationUIEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2446,7 +2462,7 @@ enum NavigationViewApiSetup {
       isNavigationUIEnabledChannel.setMessageHandler(nil)
     }
     let setNavigationUIEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setNavigationUIEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationUIEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2466,7 +2482,7 @@ enum NavigationViewApiSetup {
       setNavigationUIEnabledChannel.setMessageHandler(nil)
     }
     let getCameraPositionChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getCameraPosition",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCameraPosition",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2485,7 +2501,7 @@ enum NavigationViewApiSetup {
       getCameraPositionChannel.setMessageHandler(nil)
     }
     let getVisibleRegionChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getVisibleRegion",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getVisibleRegion",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2504,7 +2520,7 @@ enum NavigationViewApiSetup {
       getVisibleRegionChannel.setMessageHandler(nil)
     }
     let followMyLocationChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.followMyLocation",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.followMyLocation",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2529,7 +2545,7 @@ enum NavigationViewApiSetup {
       followMyLocationChannel.setMessageHandler(nil)
     }
     let animateCameraToCameraPositionChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToCameraPosition",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToCameraPosition",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2557,7 +2573,7 @@ enum NavigationViewApiSetup {
       animateCameraToCameraPositionChannel.setMessageHandler(nil)
     }
     let animateCameraToLatLngChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToLatLng",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLng",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2583,7 +2599,7 @@ enum NavigationViewApiSetup {
       animateCameraToLatLngChannel.setMessageHandler(nil)
     }
     let animateCameraToLatLngBoundsChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToLatLngBounds",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngBounds",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2613,7 +2629,7 @@ enum NavigationViewApiSetup {
       animateCameraToLatLngBoundsChannel.setMessageHandler(nil)
     }
     let animateCameraToLatLngZoomChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToLatLngZoom",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngZoom",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2643,7 +2659,7 @@ enum NavigationViewApiSetup {
       animateCameraToLatLngZoomChannel.setMessageHandler(nil)
     }
     let animateCameraByScrollChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraByScroll",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByScroll",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2673,7 +2689,7 @@ enum NavigationViewApiSetup {
       animateCameraByScrollChannel.setMessageHandler(nil)
     }
     let animateCameraByZoomChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraByZoom",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByZoom",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2705,7 +2721,7 @@ enum NavigationViewApiSetup {
       animateCameraByZoomChannel.setMessageHandler(nil)
     }
     let animateCameraToZoomChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.animateCameraToZoom",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToZoom",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2729,7 +2745,7 @@ enum NavigationViewApiSetup {
       animateCameraToZoomChannel.setMessageHandler(nil)
     }
     let moveCameraToCameraPositionChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToCameraPosition",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToCameraPosition",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2749,7 +2765,7 @@ enum NavigationViewApiSetup {
       moveCameraToCameraPositionChannel.setMessageHandler(nil)
     }
     let moveCameraToLatLngChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToLatLng",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLng",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2769,7 +2785,7 @@ enum NavigationViewApiSetup {
       moveCameraToLatLngChannel.setMessageHandler(nil)
     }
     let moveCameraToLatLngBoundsChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToLatLngBounds",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngBounds",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2794,7 +2810,7 @@ enum NavigationViewApiSetup {
       moveCameraToLatLngBoundsChannel.setMessageHandler(nil)
     }
     let moveCameraToLatLngZoomChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToLatLngZoom",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngZoom",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2815,7 +2831,7 @@ enum NavigationViewApiSetup {
       moveCameraToLatLngZoomChannel.setMessageHandler(nil)
     }
     let moveCameraByScrollChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraByScroll",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByScroll",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2840,7 +2856,7 @@ enum NavigationViewApiSetup {
       moveCameraByScrollChannel.setMessageHandler(nil)
     }
     let moveCameraByZoomChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraByZoom",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByZoom",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2867,7 +2883,7 @@ enum NavigationViewApiSetup {
       moveCameraByZoomChannel.setMessageHandler(nil)
     }
     let moveCameraToZoomChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.moveCameraToZoom",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToZoom",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2887,7 +2903,7 @@ enum NavigationViewApiSetup {
       moveCameraToZoomChannel.setMessageHandler(nil)
     }
     let showRouteOverviewChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.showRouteOverview",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showRouteOverview",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2906,7 +2922,7 @@ enum NavigationViewApiSetup {
       showRouteOverviewChannel.setMessageHandler(nil)
     }
     let getMinZoomPreferenceChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMinZoomPreference",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMinZoomPreference",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2925,7 +2941,7 @@ enum NavigationViewApiSetup {
       getMinZoomPreferenceChannel.setMessageHandler(nil)
     }
     let getMaxZoomPreferenceChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMaxZoomPreference",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMaxZoomPreference",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2944,7 +2960,7 @@ enum NavigationViewApiSetup {
       getMaxZoomPreferenceChannel.setMessageHandler(nil)
     }
     let resetMinMaxZoomPreferenceChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.resetMinMaxZoomPreference",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.resetMinMaxZoomPreference",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2963,7 +2979,7 @@ enum NavigationViewApiSetup {
       resetMinMaxZoomPreferenceChannel.setMessageHandler(nil)
     }
     let setMinZoomPreferenceChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMinZoomPreference",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMinZoomPreference",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -2983,7 +2999,7 @@ enum NavigationViewApiSetup {
       setMinZoomPreferenceChannel.setMessageHandler(nil)
     }
     let setMaxZoomPreferenceChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMaxZoomPreference",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMaxZoomPreference",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3003,7 +3019,7 @@ enum NavigationViewApiSetup {
       setMaxZoomPreferenceChannel.setMessageHandler(nil)
     }
     let setMyLocationButtonEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMyLocationButtonEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationButtonEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3023,7 +3039,7 @@ enum NavigationViewApiSetup {
       setMyLocationButtonEnabledChannel.setMessageHandler(nil)
     }
     let setConsumeMyLocationButtonClickEventsEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setConsumeMyLocationButtonClickEventsEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setConsumeMyLocationButtonClickEventsEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3046,7 +3062,7 @@ enum NavigationViewApiSetup {
       setConsumeMyLocationButtonClickEventsEnabledChannel.setMessageHandler(nil)
     }
     let setZoomGesturesEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setZoomGesturesEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomGesturesEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3066,7 +3082,7 @@ enum NavigationViewApiSetup {
       setZoomGesturesEnabledChannel.setMessageHandler(nil)
     }
     let setZoomControlsEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setZoomControlsEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomControlsEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3086,7 +3102,7 @@ enum NavigationViewApiSetup {
       setZoomControlsEnabledChannel.setMessageHandler(nil)
     }
     let setCompassEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setCompassEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setCompassEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3106,7 +3122,7 @@ enum NavigationViewApiSetup {
       setCompassEnabledChannel.setMessageHandler(nil)
     }
     let setRotateGesturesEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setRotateGesturesEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRotateGesturesEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3126,7 +3142,7 @@ enum NavigationViewApiSetup {
       setRotateGesturesEnabledChannel.setMessageHandler(nil)
     }
     let setScrollGesturesEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setScrollGesturesEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3146,7 +3162,7 @@ enum NavigationViewApiSetup {
       setScrollGesturesEnabledChannel.setMessageHandler(nil)
     }
     let setScrollGesturesDuringRotateOrZoomEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setScrollGesturesDuringRotateOrZoomEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesDuringRotateOrZoomEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3166,7 +3182,7 @@ enum NavigationViewApiSetup {
       setScrollGesturesDuringRotateOrZoomEnabledChannel.setMessageHandler(nil)
     }
     let setTiltGesturesEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setTiltGesturesEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTiltGesturesEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3186,7 +3202,7 @@ enum NavigationViewApiSetup {
       setTiltGesturesEnabledChannel.setMessageHandler(nil)
     }
     let setMapToolbarEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setMapToolbarEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapToolbarEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3206,7 +3222,7 @@ enum NavigationViewApiSetup {
       setMapToolbarEnabledChannel.setMessageHandler(nil)
     }
     let setTrafficEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.setTrafficEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3226,7 +3242,7 @@ enum NavigationViewApiSetup {
       setTrafficEnabledChannel.setMessageHandler(nil)
     }
     let isMyLocationButtonEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isMyLocationButtonEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationButtonEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3245,7 +3261,7 @@ enum NavigationViewApiSetup {
       isMyLocationButtonEnabledChannel.setMessageHandler(nil)
     }
     let isConsumeMyLocationButtonClickEventsEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isConsumeMyLocationButtonClickEventsEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isConsumeMyLocationButtonClickEventsEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3264,7 +3280,7 @@ enum NavigationViewApiSetup {
       isConsumeMyLocationButtonClickEventsEnabledChannel.setMessageHandler(nil)
     }
     let isZoomGesturesEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isZoomGesturesEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomGesturesEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3283,7 +3299,7 @@ enum NavigationViewApiSetup {
       isZoomGesturesEnabledChannel.setMessageHandler(nil)
     }
     let isZoomControlsEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isZoomControlsEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomControlsEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3302,7 +3318,7 @@ enum NavigationViewApiSetup {
       isZoomControlsEnabledChannel.setMessageHandler(nil)
     }
     let isCompassEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isCompassEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isCompassEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3321,7 +3337,7 @@ enum NavigationViewApiSetup {
       isCompassEnabledChannel.setMessageHandler(nil)
     }
     let isRotateGesturesEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isRotateGesturesEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRotateGesturesEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3340,7 +3356,7 @@ enum NavigationViewApiSetup {
       isRotateGesturesEnabledChannel.setMessageHandler(nil)
     }
     let isScrollGesturesEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isScrollGesturesEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3359,7 +3375,7 @@ enum NavigationViewApiSetup {
       isScrollGesturesEnabledChannel.setMessageHandler(nil)
     }
     let isScrollGesturesEnabledDuringRotateOrZoomChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isScrollGesturesEnabledDuringRotateOrZoom",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabledDuringRotateOrZoom",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3378,7 +3394,7 @@ enum NavigationViewApiSetup {
       isScrollGesturesEnabledDuringRotateOrZoomChannel.setMessageHandler(nil)
     }
     let isTiltGesturesEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isTiltGesturesEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTiltGesturesEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3397,7 +3413,7 @@ enum NavigationViewApiSetup {
       isTiltGesturesEnabledChannel.setMessageHandler(nil)
     }
     let isMapToolbarEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isMapToolbarEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMapToolbarEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3416,7 +3432,7 @@ enum NavigationViewApiSetup {
       isMapToolbarEnabledChannel.setMessageHandler(nil)
     }
     let isTrafficEnabledChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.isTrafficEnabled",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficEnabled",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3435,7 +3451,7 @@ enum NavigationViewApiSetup {
       isTrafficEnabledChannel.setMessageHandler(nil)
     }
     let getMarkersChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getMarkers",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMarkers",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3454,7 +3470,7 @@ enum NavigationViewApiSetup {
       getMarkersChannel.setMessageHandler(nil)
     }
     let addMarkersChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addMarkers",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addMarkers",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3474,7 +3490,7 @@ enum NavigationViewApiSetup {
       addMarkersChannel.setMessageHandler(nil)
     }
     let updateMarkersChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updateMarkers",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateMarkers",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3494,7 +3510,7 @@ enum NavigationViewApiSetup {
       updateMarkersChannel.setMessageHandler(nil)
     }
     let removeMarkersChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removeMarkers",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeMarkers",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3514,7 +3530,7 @@ enum NavigationViewApiSetup {
       removeMarkersChannel.setMessageHandler(nil)
     }
     let clearMarkersChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clearMarkers",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearMarkers",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3533,7 +3549,7 @@ enum NavigationViewApiSetup {
       clearMarkersChannel.setMessageHandler(nil)
     }
     let clearChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clear",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clear",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3552,7 +3568,7 @@ enum NavigationViewApiSetup {
       clearChannel.setMessageHandler(nil)
     }
     let getPolygonsChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getPolygons",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolygons",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3571,7 +3587,7 @@ enum NavigationViewApiSetup {
       getPolygonsChannel.setMessageHandler(nil)
     }
     let addPolygonsChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addPolygons",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolygons",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3591,7 +3607,7 @@ enum NavigationViewApiSetup {
       addPolygonsChannel.setMessageHandler(nil)
     }
     let updatePolygonsChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updatePolygons",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolygons",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3611,7 +3627,7 @@ enum NavigationViewApiSetup {
       updatePolygonsChannel.setMessageHandler(nil)
     }
     let removePolygonsChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removePolygons",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolygons",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3631,7 +3647,7 @@ enum NavigationViewApiSetup {
       removePolygonsChannel.setMessageHandler(nil)
     }
     let clearPolygonsChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clearPolygons",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolygons",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3650,7 +3666,7 @@ enum NavigationViewApiSetup {
       clearPolygonsChannel.setMessageHandler(nil)
     }
     let getPolylinesChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getPolylines",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolylines",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3669,7 +3685,7 @@ enum NavigationViewApiSetup {
       getPolylinesChannel.setMessageHandler(nil)
     }
     let addPolylinesChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addPolylines",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolylines",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3689,7 +3705,7 @@ enum NavigationViewApiSetup {
       addPolylinesChannel.setMessageHandler(nil)
     }
     let updatePolylinesChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updatePolylines",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolylines",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3709,7 +3725,7 @@ enum NavigationViewApiSetup {
       updatePolylinesChannel.setMessageHandler(nil)
     }
     let removePolylinesChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removePolylines",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolylines",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3729,7 +3745,7 @@ enum NavigationViewApiSetup {
       removePolylinesChannel.setMessageHandler(nil)
     }
     let clearPolylinesChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clearPolylines",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolylines",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3748,7 +3764,7 @@ enum NavigationViewApiSetup {
       clearPolylinesChannel.setMessageHandler(nil)
     }
     let getCirclesChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.getCircles",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCircles",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3767,7 +3783,7 @@ enum NavigationViewApiSetup {
       getCirclesChannel.setMessageHandler(nil)
     }
     let addCirclesChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.addCircles",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addCircles",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3787,7 +3803,7 @@ enum NavigationViewApiSetup {
       addCirclesChannel.setMessageHandler(nil)
     }
     let updateCirclesChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.updateCircles",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateCircles",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3807,7 +3823,7 @@ enum NavigationViewApiSetup {
       updateCirclesChannel.setMessageHandler(nil)
     }
     let removeCirclesChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.removeCircles",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeCircles",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3827,7 +3843,7 @@ enum NavigationViewApiSetup {
       removeCirclesChannel.setMessageHandler(nil)
     }
     let clearCirclesChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.clearCircles",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearCircles",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -3846,7 +3862,7 @@ enum NavigationViewApiSetup {
       clearCirclesChannel.setMessageHandler(nil)
     }
     let registerOnCameraChangedListenerChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.NavigationViewApi.registerOnCameraChangedListener",
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.registerOnCameraChangedListener",
       binaryMessenger: binaryMessenger,
       codec: codec
     )
@@ -4009,7 +4025,7 @@ enum ImageRegistryApiSetup {
   }
 }
 
-private class NavigationViewEventApiCodecReader: FlutterStandardReader {
+private class ViewEventApiCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 128:
@@ -4022,7 +4038,7 @@ private class NavigationViewEventApiCodecReader: FlutterStandardReader {
   }
 }
 
-private class NavigationViewEventApiCodecWriter: FlutterStandardWriter {
+private class ViewEventApiCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
     if let value = value as? CameraPositionDto {
       super.writeByte(128)
@@ -4036,23 +4052,22 @@ private class NavigationViewEventApiCodecWriter: FlutterStandardWriter {
   }
 }
 
-private class NavigationViewEventApiCodecReaderWriter: FlutterStandardReaderWriter {
+private class ViewEventApiCodecReaderWriter: FlutterStandardReaderWriter {
   override func reader(with data: Data) -> FlutterStandardReader {
-    NavigationViewEventApiCodecReader(data: data)
+    ViewEventApiCodecReader(data: data)
   }
 
   override func writer(with data: NSMutableData) -> FlutterStandardWriter {
-    NavigationViewEventApiCodecWriter(data: data)
+    ViewEventApiCodecWriter(data: data)
   }
 }
 
-class NavigationViewEventApiCodec: FlutterStandardMessageCodec {
-  static let shared =
-    NavigationViewEventApiCodec(readerWriter: NavigationViewEventApiCodecReaderWriter())
+class ViewEventApiCodec: FlutterStandardMessageCodec {
+  static let shared = ViewEventApiCodec(readerWriter: ViewEventApiCodecReaderWriter())
 }
 
 /// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
-protocol NavigationViewEventApiProtocol {
+protocol ViewEventApiProtocol {
   func onMapClickEvent(viewId viewIdArg: Int64, latLng latLngArg: LatLngDto,
                        completion: @escaping (Result<Void, FlutterError>) -> Void)
   func onMapLongClickEvent(viewId viewIdArg: Int64, latLng latLngArg: LatLngDto,
@@ -4084,20 +4099,19 @@ protocol NavigationViewEventApiProtocol {
                        completion: @escaping (Result<Void, FlutterError>) -> Void)
 }
 
-class NavigationViewEventApi: NavigationViewEventApiProtocol {
+class ViewEventApi: ViewEventApiProtocol {
   private let binaryMessenger: FlutterBinaryMessenger
   init(binaryMessenger: FlutterBinaryMessenger) {
     self.binaryMessenger = binaryMessenger
   }
 
   var codec: FlutterStandardMessageCodec {
-    NavigationViewEventApiCodec.shared
+    ViewEventApiCodec.shared
   }
 
   func onMapClickEvent(viewId viewIdArg: Int64, latLng latLngArg: LatLngDto,
                        completion: @escaping (Result<Void, FlutterError>) -> Void) {
-    let channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMapClickEvent"
+    let channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapClickEvent"
     let channel = FlutterBasicMessageChannel(
       name: channelName,
       binaryMessenger: binaryMessenger,
@@ -4122,7 +4136,7 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
   func onMapLongClickEvent(viewId viewIdArg: Int64, latLng latLngArg: LatLngDto,
                            completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMapLongClickEvent"
+      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapLongClickEvent"
     let channel = FlutterBasicMessageChannel(
       name: channelName,
       binaryMessenger: binaryMessenger,
@@ -4147,7 +4161,7 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
   func onRecenterButtonClicked(viewId viewIdArg: Int64,
                                completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onRecenterButtonClicked"
+      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onRecenterButtonClicked"
     let channel = FlutterBasicMessageChannel(
       name: channelName,
       binaryMessenger: binaryMessenger,
@@ -4172,8 +4186,7 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
   func onMarkerEvent(viewId viewIdArg: Int64, markerId markerIdArg: String,
                      eventType eventTypeArg: MarkerEventTypeDto,
                      completion: @escaping (Result<Void, FlutterError>) -> Void) {
-    let channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMarkerEvent"
+    let channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerEvent"
     let channel = FlutterBasicMessageChannel(
       name: channelName,
       binaryMessenger: binaryMessenger,
@@ -4199,8 +4212,7 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
                          eventType eventTypeArg: MarkerDragEventTypeDto,
                          position positionArg: LatLngDto,
                          completion: @escaping (Result<Void, FlutterError>) -> Void) {
-    let channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMarkerDragEvent"
+    let channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerDragEvent"
     let channel = FlutterBasicMessageChannel(
       name: channelName,
       binaryMessenger: binaryMessenger,
@@ -4226,8 +4238,7 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
 
   func onPolygonClicked(viewId viewIdArg: Int64, polygonId polygonIdArg: String,
                         completion: @escaping (Result<Void, FlutterError>) -> Void) {
-    let channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onPolygonClicked"
+    let channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolygonClicked"
     let channel = FlutterBasicMessageChannel(
       name: channelName,
       binaryMessenger: binaryMessenger,
@@ -4251,8 +4262,7 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
 
   func onPolylineClicked(viewId viewIdArg: Int64, polylineId polylineIdArg: String,
                          completion: @escaping (Result<Void, FlutterError>) -> Void) {
-    let channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onPolylineClicked"
+    let channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolylineClicked"
     let channel = FlutterBasicMessageChannel(
       name: channelName,
       binaryMessenger: binaryMessenger,
@@ -4276,8 +4286,7 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
 
   func onCircleClicked(viewId viewIdArg: Int64, circleId circleIdArg: String,
                        completion: @escaping (Result<Void, FlutterError>) -> Void) {
-    let channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onCircleClicked"
+    let channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCircleClicked"
     let channel = FlutterBasicMessageChannel(
       name: channelName,
       binaryMessenger: binaryMessenger,
@@ -4303,7 +4312,7 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
                                     navigationUIEnabled navigationUIEnabledArg: Bool,
                                     completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onNavigationUIEnabledChanged"
+      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onNavigationUIEnabledChanged"
     let channel = FlutterBasicMessageChannel(
       name: channelName,
       binaryMessenger: binaryMessenger,
@@ -4328,7 +4337,7 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
   func onMyLocationClicked(viewId viewIdArg: Int64,
                            completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMyLocationClicked"
+      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationClicked"
     let channel = FlutterBasicMessageChannel(
       name: channelName,
       binaryMessenger: binaryMessenger,
@@ -4353,7 +4362,7 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
   func onMyLocationButtonClicked(viewId viewIdArg: Int64,
                                  completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onMyLocationButtonClicked"
+      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationButtonClicked"
     let channel = FlutterBasicMessageChannel(
       name: channelName,
       binaryMessenger: binaryMessenger,
@@ -4378,8 +4387,7 @@ class NavigationViewEventApi: NavigationViewEventApiProtocol {
   func onCameraChanged(viewId viewIdArg: Int64, eventType eventTypeArg: CameraEventTypeDto,
                        position positionArg: CameraPositionDto,
                        completion: @escaping (Result<Void, FlutterError>) -> Void) {
-    let channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationViewEventApi.onCameraChanged"
+    let channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCameraChanged"
     let channel = FlutterBasicMessageChannel(
       name: channelName,
       binaryMessenger: binaryMessenger,
