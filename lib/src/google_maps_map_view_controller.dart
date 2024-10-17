@@ -226,7 +226,7 @@ class GoogleMapViewController {
   /// On iOS [duration] and [onFinished] are not supported and defining them
   /// does nothing.
   ///
-  /// See also [moveCamera], [followMyLocation], [showRouteOverview].
+  /// See also [moveCamera], [followMyLocation].
   Future<void> animateCamera(CameraUpdate cameraUpdate,
       {Duration? duration, AnimationFinishedCallback? onFinished}) {
     return GoogleMapsNavigationPlatform.instance.animateCamera(

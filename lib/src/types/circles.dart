@@ -19,6 +19,7 @@ import '../../google_navigation_flutter.dart';
 
 /// Circle that has beed added to map.
 /// {@category Navigation View}
+/// {@category Map View}
 @immutable
 class Circle {
   /// Construct [Circle].
@@ -54,6 +55,7 @@ class Circle {
 
 /// Defines CircleOptions for a circle.
 /// {@category Navigation View}
+/// {@category Map View}
 @immutable
 class CircleOptions {
   /// Initialize [CircleOptions] object.
@@ -157,6 +159,7 @@ class CircleOptions {
 
 /// Event emitted when a circle is clicked.
 /// {@category Navigation View}
+/// {@category Map View}
 @immutable
 class CircleClickedEvent {
   /// Initialize [CircleClickedEvent] object.

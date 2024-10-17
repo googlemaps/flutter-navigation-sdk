@@ -18,6 +18,7 @@ import '../../google_navigation_flutter.dart';
 
 /// Marker that has beed added to the map.
 /// {@category Navigation View}
+/// {@category Map View}
 @immutable
 class Marker {
   /// Construct [Marker]
@@ -53,6 +54,7 @@ class Marker {
 
 /// Defines MarkerOptions for a marker.
 /// {@category Navigation View}
+/// {@category Map View}
 @immutable
 class MarkerOptions {
   /// Initialize MarkerOptions object.
@@ -196,6 +198,7 @@ class MarkerOptions {
 
 /// Text labels for [Marker] info window.
 /// {@category Navigation View}
+/// {@category Map View}
 @immutable
 class InfoWindow {
   /// Construct [InfoWindow] object.
@@ -243,6 +246,7 @@ class InfoWindow {
 
 /// Specifies the anchor to be at a particular point in the marker image.
 /// {@category Navigation View}
+/// {@category Map View}
 @immutable
 class MarkerAnchor {
   /// Initialize MarkerAnchor object.
@@ -274,6 +278,7 @@ class MarkerAnchor {
 
 /// Marker event types
 /// {@category Navigation View}
+/// {@category Map View}
 enum MarkerEventType {
   /// The marker has been tapped.
   clicked,
@@ -290,6 +295,7 @@ enum MarkerEventType {
 
 /// Marker drag event types
 /// {@category Navigation View}
+/// {@category Map View}
 enum MarkerDragEventType {
   /// The marker is being dragged.
   drag,
@@ -303,6 +309,7 @@ enum MarkerDragEventType {
 
 /// Marker event sent from platform side.
 /// {@category Navigation View}
+/// {@category Map View}
 @immutable
 class MarkerEvent {
   /// Initialize [MarkerEvent] object.
@@ -320,6 +327,7 @@ class MarkerEvent {
 
 /// Marker drag event sent from platform side.
 /// {@category Navigation View}
+/// {@category Map View}
 @immutable
 class MarkerDragEvent {
   /// Initialize [MarkerDragEvent] object.

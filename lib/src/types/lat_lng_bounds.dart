@@ -18,6 +18,7 @@ import '../../google_navigation_flutter.dart';
 
 /// LatLngBounds bounds object.
 /// {@category Navigation View}
+/// {@category Map View}
 @immutable
 class LatLngBounds {
   /// Initialize LatLngBounds with the given southwest and northeast points.

@@ -36,6 +36,7 @@ import '../../google_navigation_flutter.dart';
 /// );
 /// ```
 /// {@category Navigation View}
+/// {@category Map View}
 @immutable
 class MapViewInitializationOptions {
   /// Creates a new instance of [MapViewInitializationOptions ] with the given initial
@@ -80,6 +81,7 @@ class MapViewInitializationOptions {
 /// );
 /// ```
 /// {@category Navigation View}
+/// {@category Map View}
 @immutable
 class MapOptions {
   /// Creates a new instance of [MapOptions] with the given initial

@@ -161,6 +161,7 @@ typedef OnCameraStoppedFollowingLocation = void Function(
 
 /// Settings for the user interface of the map.
 /// {@category Navigation View}
+/// {@category Map View}
 class NavigationViewUISettings {
   /// [NavigationViewUISettings] constructor.
   NavigationViewUISettings(this._viewId);
@@ -347,6 +348,7 @@ class NavigationViewUISettings {
 /// [GoogleNavigationViewController.removeMarkers] failed
 /// to find the marker given to the method.
 /// {@category Navigation View}
+/// {@category Map View}
 class MarkerNotFoundException implements Exception {
   /// Default constructor for [MarkerNotFoundException].
   const MarkerNotFoundException();
@@ -356,6 +358,7 @@ class MarkerNotFoundException implements Exception {
 /// [GoogleNavigationViewController.removePolygons] failed
 /// to find the polygon given to the method.
 /// {@category Navigation View}
+/// {@category Map View}
 class PolygonNotFoundException implements Exception {
   /// Default constructor for [PolygonNotFoundException].
   const PolygonNotFoundException();
@@ -365,6 +368,7 @@ class PolygonNotFoundException implements Exception {
 /// [GoogleNavigationViewController.removePolylines] failed
 /// to find the polyline given to the method.
 /// {@category Navigation View}
+/// {@category Map View}
 class PolylineNotFoundException implements Exception {
   /// Default constructor for [PolylineNotFoundException].
   const PolylineNotFoundException();
@@ -374,6 +378,7 @@ class PolylineNotFoundException implements Exception {
 /// [GoogleNavigationViewController.removeCircles] failed
 /// to find the circle given to the method.
 /// {@category Navigation View}
+/// {@category Map View}
 class CircleNotFoundException implements Exception {
   /// Default constructor for [CircleNotFoundException].
   const CircleNotFoundException();
@@ -381,6 +386,7 @@ class CircleNotFoundException implements Exception {
 
 /// [GoogleNavigationViewController.setMapStyle] failed to set the map style.
 /// {@category Navigation View}
+/// {@category Map View}
 class MapStyleException implements Exception {
   /// Default constructor for [MapStyleException].
   const MapStyleException();
@@ -388,6 +394,7 @@ class MapStyleException implements Exception {
 
 /// [GoogleNavigationViewController.setMaxZoomPreference] failed to set zoom level.
 /// {@category Navigation View}
+/// {@category Map View}
 class MaxZoomRangeException implements Exception {
   /// Default constructor for [MaxZoomRangeException].
   const MaxZoomRangeException();
@@ -400,6 +407,7 @@ class MaxZoomRangeException implements Exception {
 
 /// [GoogleNavigationViewController.setMinZoomPreference] failed to set zoom level.
 /// {@category Navigation View}
+/// {@category Map View}
 class MinZoomRangeException implements Exception {
   /// Default constructor for [MinZoomRangeException].
   const MinZoomRangeException();
