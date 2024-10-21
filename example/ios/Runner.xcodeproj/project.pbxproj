@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		2A18B91A2AB17E8000172055 /* ConvertTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A18B9192AB17E8000172055 /* ConvertTests.swift */; };
+		2A8C4ABC2CC646F200168311 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
+		2A8C4ABD2CC646F200168311 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
+		2A8C4AC12CC646F200168311 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		2A8C4AC22CC646F200168311 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
+		2A8C4AC32CC646F200168311 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
+		2A8C4AC42CC646F200168311 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		506F574D2AD8012C004AC70F /* RunnerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 506F574C2AD8012C004AC70F /* RunnerUITests.m */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
@@ -18,6 +24,8 @@
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		9BAC8E60A263AA40A946AFCF /* Pods_Runner_RunnerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 981DBDBFB0E241F931B1E394 /* Pods_Runner_RunnerUITests.framework */; };
 		C9CBB6602AD89694007C737E /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 506F57582AD8055D004AC70F /* XCTest.framework */; platformFilter = ios; };
+		D3A3B5ED895816BDF2A70351 /* Pods_RunnerCarPlay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B269F01B5CD151328AA7F8EB /* Pods_RunnerCarPlay.framework */; };
+		DA52652595AF0077243F8014 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64B801515FD75D36D58A86FE /* Pods_Runner.framework */; };
 		EDFE577D2F64CF5D3712A4E9 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64B801515FD75D36D58A86FE /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
 
@@ -39,6 +47,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		2A8C4AC52CC646F200168311 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9705A1C41CF9048500538489 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -56,6 +74,8 @@
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		2A18B9192AB17E8000172055 /* ConvertTests.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = ConvertTests.swift; sourceTree = "<group>"; };
+		2A8C4ACD2CC646F200168311 /* RunnerCarPlay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RunnerCarPlay.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A8C4ACE2CC646F300168311 /* Runner copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Runner copy-Info.plist"; path = "/Users/illuminati1911/Development/Codemate/Google/flutter-navigation-sdk/example/ios/Runner copy-Info.plist"; sourceTree = "<absolute>"; };
 		2EAF2B705FB6C39F7F5344DA /* Pods-Runner-RunnerUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner-RunnerUITests.debug.xcconfig"; path = "Target Support Files/Pods-Runner-RunnerUITests/Pods-Runner-RunnerUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		331C8081294A63A400263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
@@ -79,12 +99,24 @@
 		981DBDBFB0E241F931B1E394 /* Pods_Runner_RunnerUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner_RunnerUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B707C730235859544DEFD11 /* Pods-RunnerTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile.xcconfig"; sourceTree = "<group>"; };
 		A6E86B897576AE6CE04EDE41 /* Pods-Runner-RunnerUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner-RunnerUITests.release.xcconfig"; path = "Target Support Files/Pods-Runner-RunnerUITests/Pods-Runner-RunnerUITests.release.xcconfig"; sourceTree = "<group>"; };
+		B269F01B5CD151328AA7F8EB /* Pods_RunnerCarPlay.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerCarPlay.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B35F8B4336F9E9672910B2A8 /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B7C92A3F95B466A95C6F8F82 /* Pods-RunnerCarPlay.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerCarPlay.profile.xcconfig"; path = "Target Support Files/Pods-RunnerCarPlay/Pods-RunnerCarPlay.profile.xcconfig"; sourceTree = "<group>"; };
+		C8406E69EBE45F2EF856A867 /* Pods-RunnerCarPlay.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerCarPlay.debug.xcconfig"; path = "Target Support Files/Pods-RunnerCarPlay/Pods-RunnerCarPlay.debug.xcconfig"; sourceTree = "<group>"; };
 		D775A5369CBCF55F2213A29D /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
+		F66F7193CD255958326CC224 /* Pods-RunnerCarPlay.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerCarPlay.release.xcconfig"; path = "Target Support Files/Pods-RunnerCarPlay/Pods-RunnerCarPlay.release.xcconfig"; sourceTree = "<group>"; };
 		FD0B54A81651AC7754FA8D08 /* Pods-Runner-RunnerUITests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner-RunnerUITests.profile.xcconfig"; path = "Target Support Files/Pods-Runner-RunnerUITests/Pods-Runner-RunnerUITests.profile.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		2A8C4ABE2CC646F200168311 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D3A3B5ED895816BDF2A70351 /* Pods_RunnerCarPlay.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		506F57472AD8012C004AC70F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -99,6 +131,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EDFE577D2F64CF5D3712A4E9 /* Pods_Runner.framework in Frameworks */,
+				DA52652595AF0077243F8014 /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,6 +183,7 @@
 				331C8082294A63A400263BE5 /* RunnerTests */,
 				B4BA1BEAC2BEB85CFA23AC70 /* Pods */,
 				D4FC7F50F97CE4722BF9D43C /* Frameworks */,
+				2A8C4ACE2CC646F300168311 /* Runner copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -159,6 +193,7 @@
 				97C146EE1CF9000F007C117D /* Runner.app */,
 				331C8081294A63A400263BE5 /* RunnerTests.xctest */,
 				506F574A2AD8012C004AC70F /* RunnerUITests.xctest */,
+				2A8C4ACD2CC646F200168311 /* RunnerCarPlay.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -190,6 +225,9 @@
 				2EAF2B705FB6C39F7F5344DA /* Pods-Runner-RunnerUITests.debug.xcconfig */,
 				A6E86B897576AE6CE04EDE41 /* Pods-Runner-RunnerUITests.release.xcconfig */,
 				FD0B54A81651AC7754FA8D08 /* Pods-Runner-RunnerUITests.profile.xcconfig */,
+				C8406E69EBE45F2EF856A867 /* Pods-RunnerCarPlay.debug.xcconfig */,
+				F66F7193CD255958326CC224 /* Pods-RunnerCarPlay.release.xcconfig */,
+				B7C92A3F95B466A95C6F8F82 /* Pods-RunnerCarPlay.profile.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -201,6 +239,7 @@
 				64B801515FD75D36D58A86FE /* Pods_Runner.framework */,
 				981DBDBFB0E241F931B1E394 /* Pods_Runner_RunnerUITests.framework */,
 				054752A3C68A7FF5D59CC247 /* Pods_RunnerTests.framework */,
+				B269F01B5CD151328AA7F8EB /* Pods_RunnerCarPlay.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -208,6 +247,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		2A8C4AB82CC646F200168311 /* RunnerCarPlay */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2A8C4AC92CC646F200168311 /* Build configuration list for PBXNativeTarget "RunnerCarPlay" */;
+			buildPhases = (
+				DB054ED881210D00E963C46A /* [CP] Check Pods Manifest.lock */,
+				2A8C4ABA2CC646F200168311 /* Run Script */,
+				2A8C4ABB2CC646F200168311 /* Sources */,
+				2A8C4ABE2CC646F200168311 /* Frameworks */,
+				2A8C4AC02CC646F200168311 /* Resources */,
+				2A8C4AC52CC646F200168311 /* Embed Frameworks */,
+				2A8C4AC62CC646F200168311 /* Thin Binary */,
+				BAAF78ADF4EC76C6CC3D931D /* [CP] Embed Pods Frameworks */,
+				E1A54FD049B3FD079D5EAF0B /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RunnerCarPlay;
+			productName = Runner;
+			productReference = 2A8C4ACD2CC646F200168311 /* RunnerCarPlay.app */;
+			productType = "com.apple.product-type.application";
+		};
 		331C8080294A63A400263BE5 /* RunnerTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 331C8087294A63A400263BE5 /* Build configuration list for PBXNativeTarget "RunnerTests" */;
@@ -311,6 +373,7 @@
 			projectRoot = "";
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
+				2A8C4AB82CC646F200168311 /* RunnerCarPlay */,
 				331C8080294A63A400263BE5 /* RunnerTests */,
 				506F57492AD8012C004AC70F /* RunnerUITests */,
 			);
@@ -318,6 +381,17 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		2A8C4AC02CC646F200168311 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A8C4AC12CC646F200168311 /* LaunchScreen.storyboard in Resources */,
+				2A8C4AC22CC646F200168311 /* AppFrameworkInfo.plist in Resources */,
+				2A8C4AC32CC646F200168311 /* Assets.xcassets in Resources */,
+				2A8C4AC42CC646F200168311 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		331C807F294A63A400263BE5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -384,6 +458,37 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		2A8C4ABA2CC646F200168311 /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
+		};
+		2A8C4AC62CC646F200168311 /* Thin Binary */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}",
+			);
+			name = "Thin Binary";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin\n";
 		};
 		3AC0A81F7D36AA565D151485 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -469,6 +574,23 @@
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
 		};
+		BAAF78ADF4EC76C6CC3D931D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RunnerCarPlay/Pods-RunnerCarPlay-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RunnerCarPlay/Pods-RunnerCarPlay-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RunnerCarPlay/Pods-RunnerCarPlay-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		D1AE5F46BE0FA1B15C1D9A70 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -506,6 +628,45 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DB054ED881210D00E963C46A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RunnerCarPlay-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E1A54FD049B3FD079D5EAF0B /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RunnerCarPlay/Pods-RunnerCarPlay-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-RunnerCarPlay/Pods-RunnerCarPlay-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RunnerCarPlay/Pods-RunnerCarPlay-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F18CEB3456BF1353653A4B93 /* [CP] Check Pods Manifest.lock */ = {
@@ -550,6 +711,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		2A8C4ABB2CC646F200168311 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A8C4ABC2CC646F200168311 /* AppDelegate.swift in Sources */,
+				2A8C4ABD2CC646F200168311 /* GeneratedPluginRegistrant.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		331C807D294A63A400263BE5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -675,6 +845,79 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.google.maps.flutter.navigationExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Profile;
+		};
+		2A8C4ACA2CC646F200168311 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9740EEB21CF90195004384FC /* Debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = 5LUR69Y2U9;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = "Runner copy-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -D CARPLAY";
+				PRODUCT_BUNDLE_IDENTIFIER = com.google.maps.flutter.navigationExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		2A8C4ACB2CC646F200168311 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = 5LUR69Y2U9;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = "Runner copy-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -D CARPLAY";
+				PRODUCT_BUNDLE_IDENTIFIER = com.google.maps.flutter.navigationExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		2A8C4ACC2CC646F200168311 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7AFA3C8E1D35360C0083082E /* Release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = 5LUR69Y2U9;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = "Runner copy-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -D CARPLAY";
 				PRODUCT_BUNDLE_IDENTIFIER = com.google.maps.flutter.navigationExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -979,6 +1222,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		2A8C4AC92CC646F200168311 /* Build configuration list for PBXNativeTarget "RunnerCarPlay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2A8C4ACA2CC646F200168311 /* Debug */,
+				2A8C4ACB2CC646F200168311 /* Release */,
+				2A8C4ACC2CC646F200168311 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		331C8087294A63A400263BE5 /* Build configuration list for PBXNativeTarget "RunnerTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
