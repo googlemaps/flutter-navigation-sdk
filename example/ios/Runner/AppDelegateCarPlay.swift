@@ -16,6 +16,7 @@ import UIKit
 import Flutter
 import GoogleMaps
 import GoogleNavigation
+import CarPlay
 
 @objc class AppDelegateCarPlay: FlutterAppDelegate {
   override func application(
@@ -31,8 +32,19 @@ import GoogleNavigation
       mapsApiKey = "YOUR_API_KEY"
     }
     GMSServices.provideAPIKey(mapsApiKey)
-    GeneratedPluginRegistrant.register(with: self)
-    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+    return true
+  }
+
+  override func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+    if connectingSceneSession.role == .carTemplateApplication {
+      let scene = UISceneConfiguration(name: "CarPlay", sessionRole: connectingSceneSession.role)
+      scene.delegateClass = CarSceneDelegate.self
+      return scene
+    } else {
+      let scene = UISceneConfiguration(name: "Phone", sessionRole: connectingSceneSession.role)
+      scene.delegateClass = PhoneSceneDelegate.self
+      return scene
+    }
   }
 
   // Helper function to find the Maps API key from the Dart defines
