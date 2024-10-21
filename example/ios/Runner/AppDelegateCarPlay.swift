@@ -17,12 +17,12 @@ import Flutter
 import GoogleMaps
 import GoogleNavigation
 
-@objc class AppDelegate: FlutterAppDelegate {
+@objc class AppDelegateCarPlay: FlutterAppDelegate {
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    print("NO CARPLAY")
+    print("YES CARPLAY")
     // 1. Try to find the Maps API key from the environment variables.
     // 2. Try to find the Maps API key from the Dart defines.
     // 3. Use the default Maps API key "YOUR_API_KEY".
