@@ -18,7 +18,7 @@ import UIKit
 extension FlutterError: Error {}
 
 public class GoogleMapsNavigationPlugin: NSObject, FlutterPlugin {
-  private static var viewRegistry: GoogleMapsNavigationViewRegistry?
+  static var viewRegistry: GoogleMapsNavigationViewRegistry?
   private static var viewMessageHandler: GoogleMapsNavigationViewMessageHandler?
   private static var viewEventApi: ViewEventApi?
   private static var navigationInspector: NavigationInspector?
@@ -29,7 +29,7 @@ public class GoogleMapsNavigationPlugin: NSObject, FlutterPlugin {
   private static var navigationInspectorHandler: GoogleMapsNavigationInspectorHandler?
 
   private static var imageRegistryMessageHandler: GoogleMapsImageRegistryMessageHandler?
-  private static var imageRegistry: ImageRegistry?
+  static var imageRegistry: ImageRegistry?
 
   public static func register(with registrar: FlutterPluginRegistrar) {
     // Navigation View handling

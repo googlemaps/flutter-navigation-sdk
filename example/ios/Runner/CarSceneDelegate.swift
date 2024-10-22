@@ -14,13 +14,17 @@
 
 import UIKit
 import CarPlay
+import google_navigation_flutter
 
-class CarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
-  var interfaceController: CPInterfaceController?
+class CarSceneDelegate: BaseCarSceneDelegate {
+  override func getTemplate() -> CPMapTemplate {
+    let template = CPMapTemplate()
+    template.showPanningInterface(animated: true)
 
-  func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didConnect interfaceController: CPInterfaceController) {
-    self.interfaceController = interfaceController
-    let listTemplate = CPListTemplate(title: "CarPlay Scene", sections: [])
-    interfaceController.setRootTemplate(listTemplate, animated: true) { _, _ in }
+    let button = CPBarButton(title: "Custom Event") { _ in
+
+    }
+    template.leadingNavigationBarButtons = [button]
+    return template
   }
 }
