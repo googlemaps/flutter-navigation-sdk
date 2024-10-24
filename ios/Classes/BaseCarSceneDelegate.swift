@@ -80,7 +80,8 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
           zoomGesturesEnabled: true,
           scrollGesturesEnabledDuringRotateOrZoom: false
         ),
-        imageRegistry: imageRegistry
+        imageRegistry: imageRegistry,
+        isCarPlayView: true
       )
       self.navView?.setNavigationHeaderEnabled(false)
       self.navView?.setRecenterButtonEnabled(false)

@@ -48,6 +48,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   private var _consumeMyLocationButtonClickEventsEnabled: Bool = false
   private var _listenCameraChanges = false
   var isAttachedToSession: Bool = false
+  private let _isCarPlayView: Bool
 
   func view() -> UIView {
     _mapView
@@ -59,13 +60,18 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
        viewRegistry registry: GoogleMapsNavigationViewRegistry,
        viewEventApi: ViewEventApi,
        navigationUIEnabledPreference: NavigationUIEnabledPreference,
-       mapConfiguration: MapConfiguration, imageRegistry: ImageRegistry) {
+       mapConfiguration: MapConfiguration, 
+       imageRegistry: ImageRegistry,
+       // If isCarPlayView is set to true, viewId will be ignored.
+       isCarPlayView: Bool = false
+  ) {
     _viewId = viewId
     _isNavigationView = isNavigationView
     _viewRegistry = registry
     _viewEventApi = viewEventApi
     _mapConfiguration = mapConfiguration
     _imageRegistry = imageRegistry
+    _isCarPlayView = isCarPlayView
 
     let mapViewOptions = GMSMapViewOptions()
     _mapConfiguration.apply(to: mapViewOptions, withFrame: frame)
@@ -77,13 +83,21 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     _navigationUIEnabledPreference = navigationUIEnabledPreference
     applyNavigationUIEnabledPreference()
 
-    registry.registerView(viewId: viewId, view: self)
+    if isCarPlayView {
+      registry.registerCarPlayView(view: self)
+    } else {
+      registry.registerView(viewId: viewId, view: self)
+    }
     _mapView.delegate = self
     _mapView.viewSettledDelegate = self
   }
 
   deinit {
-    _viewRegistry.unregisterView(viewId: _viewId)
+    if _isCarPlayView {
+      _viewRegistry.unregisterCarPlayView()
+    } else {
+      _viewRegistry.unregisterView(viewId: _viewId)
+    }
     _mapView.delegate = nil
   }
 

@@ -33,14 +33,14 @@ public class GoogleMapsNavigationPlugin: NSObject, FlutterPlugin {
   private static var isPluginInitialized: Bool = false  {
     didSet {
       if isPluginInitialized {
-        pluginInitializedCallback?(viewRegistry!, navigationViewEventApi!, imageRegistry!)
+        pluginInitializedCallback?(viewRegistry!, viewEventApi!, imageRegistry!)
       }
     }
   }
-  static var pluginInitializedCallback: ((GoogleMapsNavigationViewRegistry, NavigationViewEventApi, ImageRegistry) -> Void)? {
+  static var pluginInitializedCallback: ((GoogleMapsNavigationViewRegistry, ViewEventApi, ImageRegistry) -> Void)? {
     didSet {
       if isPluginInitialized {
-        pluginInitializedCallback?(viewRegistry!, navigationViewEventApi!, imageRegistry!)
+        pluginInitializedCallback?(viewRegistry!, viewEventApi!, imageRegistry!)
       }
     }
   }
