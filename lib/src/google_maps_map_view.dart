@@ -26,7 +26,7 @@ typedef OnMapViewCreatedCallback = void Function(
 
 /// The main map view widget for Google Maps Map View.
 /// {@category Map View}
-class GoogleMapsMapView extends StatefulWidget {
+class GoogleMapsMapView extends GoogleMapsBaseMapView {
   /// The main widget for embedding Google Maps Map View into a Flutter application.
   ///
   /// After creating the map view, the [onViewCreated] callback is triggered, providing a
@@ -47,6 +47,74 @@ class GoogleMapsMapView extends StatefulWidget {
   const GoogleMapsMapView(
       {super.key,
       required this.onViewCreated,
+      super.initialCameraPosition = const CameraPosition(),
+      super.initialMapType = MapType.normal,
+      super.initialCompassEnabled = true,
+      super.initialRotateGesturesEnabled = true,
+      super.initialScrollGesturesEnabled = true,
+      super.initialTiltGesturesEnabled = true,
+      super.initialZoomGesturesEnabled = true,
+      super.initialScrollGesturesEnabledDuringRotateOrZoom = true,
+      super.initialMapToolbarEnabled = true,
+      super.initialMinZoomPreference,
+      super.initialMaxZoomPreference,
+      super.initialZoomControlsEnabled = true,
+      super.initialCameraTargetBounds,
+      super.layoutDirection,
+      super.gestureRecognizers =
+          const <Factory<OneSequenceGestureRecognizer>>{},
+      super.onRecenterButtonClicked,
+      super.onMarkerClicked,
+      super.onMarkerDrag,
+      super.onMarkerDragStart,
+      super.onMarkerDragEnd,
+      super.onMarkerInfoWindowClicked,
+      super.onMarkerInfoWindowClosed,
+      super.onMarkerInfoWindowLongClicked,
+      super.onMapClicked,
+      super.onMapLongClicked,
+      super.onPolygonClicked,
+      super.onPolylineClicked,
+      super.onCircleClicked,
+      super.onMyLocationClicked,
+      super.onMyLocationButtonClicked,
+      super.onCameraMoveStarted,
+      super.onCameraMove,
+      super.onCameraIdle,
+      super.onCameraStartedFollowingLocation,
+      super.onCameraStoppedFollowingLocation});
+
+  /// On view created callback.
+  final OnMapViewCreatedCallback onViewCreated;
+
+  /// Creates a [State] for this [GoogleMapsBaseMapView].
+  @override
+  State createState() => GoogleMapsMapViewState();
+}
+
+/// The base view for map view and navigation view.
+/// {@category Map View}
+@protected
+abstract class GoogleMapsBaseMapView extends StatefulWidget {
+  /// The main widget for embedding Google Maps Map View into a Flutter application.
+  ///
+  /// After creating the map view, the [onViewCreated] callback is triggered, providing a
+  /// [GoogleMapViewController] that you can use to interact with the map programmatically.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// GoogleMapsMapView(
+  ///   onViewCreated: (controller) {
+  ///     // Use the controller to interact with the map.
+  ///   },
+  ///   initialCameraPosition: CameraPosition(
+  ///     // Initial camera position parameters
+  ///   ),
+  ///   // Other initial map settings...
+  /// )
+  /// ```
+  const GoogleMapsBaseMapView(
+      {super.key,
       this.initialCameraPosition = const CameraPosition(),
       this.initialMapType = MapType.normal,
       this.initialCompassEnabled = true,
@@ -82,9 +150,6 @@ class GoogleMapsMapView extends StatefulWidget {
       this.onCameraIdle,
       this.onCameraStartedFollowingLocation,
       this.onCameraStoppedFollowingLocation});
-
-  /// On view created callback.
-  final OnMapViewCreatedCallback onViewCreated;
 
   /// The initial positioning of the camera in the map view.
   final CameraPosition initialCameraPosition;
@@ -233,15 +298,78 @@ class GoogleMapsMapView extends StatefulWidget {
 
   /// On camera stopped following location callback (Android-only).
   final OnCameraStoppedFollowingLocation? onCameraStoppedFollowingLocation;
+}
 
-  /// Creates a [State] for this [GoogleMapsMapView].
-  @override
-  State createState() => GoogleMapsMapViewState();
+abstract class MapViewState<T extends GoogleMapsBaseMapView> extends State<T> {
+  @protected
+  void initMapViewListeners(int viewId) {
+    if (widget.onMapClicked != null) {
+      GoogleMapsNavigationPlatform.instance
+          .getMapClickEventStream(viewId: viewId)
+          .listen((MapClickEvent event) {
+        widget.onMapClicked!(event.target);
+      });
+    }
+
+    if (widget.onMapLongClicked != null) {
+      GoogleMapsNavigationPlatform.instance
+          .getMapLongClickEventStream(viewId: viewId)
+          .listen((MapLongClickEvent event) {
+        widget.onMapLongClicked!(event.target);
+      });
+    }
+
+    GoogleMapsNavigationPlatform.instance
+        .getMarkerEventStream(viewId: viewId)
+        .listen((MarkerEvent event) {
+      switch (event.eventType) {
+        case MarkerEventType.clicked:
+          widget.onMarkerClicked?.call(event.markerId);
+        case MarkerEventType.infoWindowClicked:
+          widget.onMarkerInfoWindowClicked?.call(event.markerId);
+        case MarkerEventType.infoWindowClosed:
+          widget.onMarkerInfoWindowClosed?.call(event.markerId);
+        case MarkerEventType.infoWindowLongClicked:
+          widget.onMarkerInfoWindowLongClicked?.call(event.markerId);
+      }
+    });
+
+    GoogleMapsNavigationPlatform.instance
+        .getMarkerDragEventStream(viewId: viewId)
+        .listen((MarkerDragEvent event) {
+      switch (event.eventType) {
+        case MarkerDragEventType.drag:
+          widget.onMarkerDrag?.call(event.markerId, event.position);
+        case MarkerDragEventType.dragEnd:
+          widget.onMarkerDragEnd?.call(event.markerId, event.position);
+        case MarkerDragEventType.dragStart:
+          widget.onMarkerDragStart?.call(event.markerId, event.position);
+      }
+
+      GoogleMapsNavigationPlatform.instance
+          .getPolygonClickedEventStream(viewId: viewId)
+          .listen((PolygonClickedEvent event) {
+        widget.onPolygonClicked?.call(event.polygonId);
+      });
+
+      GoogleMapsNavigationPlatform.instance
+          .getPolylineClickedEventStream(viewId: viewId)
+          .listen((PolylineClickedEvent event) {
+        widget.onPolylineClicked?.call(event.polylineId);
+      });
+
+      GoogleMapsNavigationPlatform.instance
+          .getCircleClickedEventStream(viewId: viewId)
+          .listen((CircleClickedEvent event) {
+        widget.onCircleClicked?.call(event.circleId);
+      });
+    });
+  }
 }
 
 /// Google Maps Map View.
 /// {@category Map View}
-class GoogleMapsMapViewState extends State<GoogleMapsMapView> {
+class GoogleMapsMapViewState extends MapViewState<GoogleMapsMapView> {
   @override
   Widget build(BuildContext context) {
     return GoogleMapsNavigationPlatform.instance.buildMapView(
@@ -272,8 +400,10 @@ class GoogleMapsMapViewState extends State<GoogleMapsMapView> {
 
   /// Callback method when platform view is created.
   void _onPlatformViewCreated(int viewId) {
+    initMapViewListeners(viewId);
+
     final GoogleMapViewController viewController =
-        GoogleMapViewController(viewId, this);
+        GoogleMapViewController(viewId);
     widget.onViewCreated(viewController);
   }
 }

@@ -21,15 +21,11 @@ class GoogleMapViewController {
   /// Basic constructor.
   ///
   /// Don't create this directly, but access through
-  /// [GoogleMapsMapView.onViewCreated] callback.
-  GoogleMapViewController(this._viewId, [this._viewState])
-      : settings = NavigationViewUISettings(_viewId) {
-    _initListeners();
-  }
+  /// [GoogleMapsBaseMapView.onViewCreated] callback.
+  GoogleMapViewController(this._viewId)
+      : settings = NavigationViewUISettings(_viewId);
 
   final int _viewId;
-
-  final GoogleMapsMapViewState? _viewState;
 
   /// Settings for the user interface of the map.
   final NavigationViewUISettings settings;
@@ -37,100 +33,6 @@ class GoogleMapViewController {
   /// Getter for view ID.
   int getViewId() {
     return _viewId;
-  }
-
-  /// Initializes the event channel listeners for the map view instance.
-  void _initListeners() {
-    _setOnMapClickedListeners();
-    _setOnMarkerClickedListeners();
-    _setOnMarkerDragListeners();
-    _setOnPolygonClickedListener();
-    _setOnPolylineClickedListener();
-    _setOnCircleClickedListener();
-  }
-
-  /// Sets the event channel listener for the map click event listeners.
-  void _setOnMapClickedListeners() {
-    if (_viewState != null) {
-      if (_viewState.widget.onMapClicked != null) {
-        GoogleMapsNavigationPlatform.instance
-            .getMapClickEventStream(viewId: _viewId)
-            .listen((MapClickEvent event) {
-          _viewState.widget.onMapClicked!(event.target);
-        });
-      }
-      if (_viewState.widget.onMapLongClicked != null) {
-        GoogleMapsNavigationPlatform.instance
-            .getMapLongClickEventStream(viewId: _viewId)
-            .listen((MapLongClickEvent event) {
-          _viewState.widget.onMapLongClicked!(event.target);
-        });
-      }
-    }
-  }
-
-  /// Sets the event channel listener for the marker clicked events.
-  void _setOnMarkerClickedListeners() {
-    GoogleMapsNavigationPlatform.instance
-        .getMarkerEventStream(viewId: _viewId)
-        .listen((MarkerEvent event) {
-      switch (event.eventType) {
-        case MarkerEventType.clicked:
-          _viewState?.widget.onMarkerClicked?.call(event.markerId);
-        case MarkerEventType.infoWindowClicked:
-          _viewState?.widget.onMarkerInfoWindowClicked?.call(event.markerId);
-        case MarkerEventType.infoWindowClosed:
-          _viewState?.widget.onMarkerInfoWindowClosed?.call(event.markerId);
-        case MarkerEventType.infoWindowLongClicked:
-          _viewState?.widget.onMarkerInfoWindowLongClicked
-              ?.call(event.markerId);
-      }
-    });
-  }
-
-  /// Sets the event channel listener for the marker drag event.
-  void _setOnMarkerDragListeners() {
-    GoogleMapsNavigationPlatform.instance
-        .getMarkerDragEventStream(viewId: _viewId)
-        .listen((MarkerDragEvent event) {
-      switch (event.eventType) {
-        case MarkerDragEventType.drag:
-          _viewState?.widget.onMarkerDrag?.call(event.markerId, event.position);
-        case MarkerDragEventType.dragEnd:
-          _viewState?.widget.onMarkerDragEnd
-              ?.call(event.markerId, event.position);
-        case MarkerDragEventType.dragStart:
-          _viewState?.widget.onMarkerDragStart
-              ?.call(event.markerId, event.position);
-      }
-    });
-  }
-
-  /// Sets the event channel listener for the polygon clicked event.
-  void _setOnPolygonClickedListener() {
-    GoogleMapsNavigationPlatform.instance
-        .getPolygonClickedEventStream(viewId: _viewId)
-        .listen((PolygonClickedEvent event) {
-      _viewState?.widget.onPolygonClicked?.call(event.polygonId);
-    });
-  }
-
-  /// Sets the event channel listener for the polyline clicked event.
-  void _setOnPolylineClickedListener() {
-    GoogleMapsNavigationPlatform.instance
-        .getPolylineClickedEventStream(viewId: _viewId)
-        .listen((PolylineClickedEvent event) {
-      _viewState?.widget.onPolylineClicked?.call(event.polylineId);
-    });
-  }
-
-  /// Sets the event channel listener for the circle clicked event.
-  void _setOnCircleClickedListener() {
-    GoogleMapsNavigationPlatform.instance
-        .getCircleClickedEventStream(viewId: _viewId)
-        .listen((CircleClickedEvent event) {
-      _viewState?.widget.onCircleClicked?.call(event.circleId);
-    });
   }
 
   /// Change status of my location enabled.
