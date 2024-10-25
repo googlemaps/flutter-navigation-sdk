@@ -92,27 +92,11 @@ class GoogleMapsMapView extends GoogleMapsBaseMapView {
   State createState() => GoogleMapsMapViewState();
 }
 
-/// The base view for map view and navigation view.
+/// The base view for map view and navigation view. Not to be used by itself.
 /// {@category Map View}
 @protected
 abstract class GoogleMapsBaseMapView extends StatefulWidget {
-  /// The main widget for embedding Google Maps Map View into a Flutter application.
-  ///
-  /// After creating the map view, the [onViewCreated] callback is triggered, providing a
-  /// [GoogleMapViewController] that you can use to interact with the map programmatically.
-  ///
-  /// Example usage:
-  /// ```dart
-  /// GoogleMapsMapView(
-  ///   onViewCreated: (controller) {
-  ///     // Use the controller to interact with the map.
-  ///   },
-  ///   initialCameraPosition: CameraPosition(
-  ///     // Initial camera position parameters
-  ///   ),
-  ///   // Other initial map settings...
-  /// )
-  /// ```
+  /// Abstract base class that contans the shared logic of GoogleMapsMapView and GoogleMapsNavigation View.
   const GoogleMapsBaseMapView(
       {super.key,
       this.initialCameraPosition = const CameraPosition(),
