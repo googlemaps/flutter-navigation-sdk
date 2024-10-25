@@ -171,67 +171,6 @@ internal constructor(
     super.initListeners()
   }
 
-  @Throws(FlutterError::class)
-  private fun findMarkerId(marker: Marker): String {
-    return _markers.find { it.marker == marker }?.markerId
-      ?: throw FlutterError("markerNotFound", "Could not find the marker.")
-  }
-
-  @Throws(FlutterError::class)
-  private fun findMarkerController(markerId: String): MarkerController? {
-    return _markers.find { it.markerId == markerId }
-  }
-
-  @Throws(FlutterError::class)
-  private fun findPolygonId(polygon: Polygon): String {
-    return _polygons.find { it.polygon == polygon }?.polygonId
-      ?: throw FlutterError("polygonNotFound", "Could not find the polygon.")
-  }
-
-  @Throws(FlutterError::class)
-  private fun findPolylineId(polyline: Polyline): String {
-    return _polylines.find { it.polyline == polyline }?.polylineId
-      ?: throw FlutterError("polylineNotFound", "Could not find the polyline.")
-  }
-
-  @Throws(FlutterError::class)
-  private fun findCircleId(circle: Circle): String {
-    return _circles.find { it.circle == circle }?.circleId
-      ?: throw FlutterError("circleNotFound", "Could not find the circle")
-  }
-
-  @Throws(FlutterError::class)
-  private fun findPolygonController(polygonId: String): PolygonController? {
-    return _polygons.find { it.polygonId == polygonId }
-  }
-
-  @Throws(FlutterError::class)
-  private fun findPolylineController(polylineId: String): PolylineController? {
-    return _polylines.find { it.polylineId == polylineId }
-  }
-
-  @Throws(FlutterError::class)
-  private fun findCircleController(circleId: String): CircleController? {
-    return _circles.find { it.circleId == circleId }
-  }
-
-  @Throws(FlutterError::class)
-  private fun sendMarkerEvent(marker: Marker, eventType: MarkerEventTypeDto) {
-    val markerId = findMarkerId(marker)
-    viewEventApi.onMarkerEvent(viewId.toLong(), markerId, eventType) {}
-  }
-
-  @Throws(FlutterError::class)
-  private fun sendMarkerDragEvent(marker: Marker, eventType: MarkerDragEventTypeDto) {
-    val markerId = findMarkerId(marker)
-    viewEventApi.onMarkerDragEvent(
-      viewId.toLong(),
-      markerId,
-      eventType,
-      LatLngDto(marker.position.latitude, marker.position.longitude)
-    ) {}
-  }
-
   fun isNavigationTripProgressBarEnabled(): Boolean {
     return _isNavigationTripProgressBarEnabled
   }
