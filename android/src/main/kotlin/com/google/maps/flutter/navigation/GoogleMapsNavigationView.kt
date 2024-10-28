@@ -34,23 +34,8 @@ internal constructor(
   private val viewRegistry: GoogleMapsViewRegistry,
   viewEventApi: ViewEventApi,
   private val imageRegistry: ImageRegistry
-) : PlatformView, GoogleMapsBaseMapView(viewId, viewEventApi, imageRegistry) {
-  companion object {
-    const val INVALIDATION_FRAME_SKIP_AMOUNT = 4 // Amount of skip frames before invalidation
-  }
-
+) : PlatformView, GoogleMapsBaseMapView(viewId, mapOptions, viewEventApi, imageRegistry) {
   private val _navigationView: NavigationView = NavigationView(context, mapOptions)
-  private val _frameDelayHandler = FrameDelayHandler(INVALIDATION_FRAME_SKIP_AMOUNT)
-  private var _loadedCallbackPending = false
-  private val _markers = mutableListOf<MarkerController>()
-  private val _polygons = mutableListOf<PolygonController>()
-  private val _polylines = mutableListOf<PolylineController>()
-  private val _circles = mutableListOf<CircleController>()
-
-  // Store preferred zoom values here because MapView getMinZoom and
-  // getMaxZoom always return min/max possible values and not the preferred ones.
-  private var _minZoomLevelPreference: Float? = null
-  private var _maxZoomLevelPreference: Float? = null
 
   /// Default values for UI features.
   private var _isNavigationTripProgressBarEnabled: Boolean = false
@@ -60,9 +45,6 @@ internal constructor(
   private var _isSpeedLimitIconEnabled: Boolean = false
   private var _isSpeedometerEnabled: Boolean = false
   private var _isTrafficIncidentCardsEnabled: Boolean = true
-
-  // Nullable variable to hold the callback function
-  private var _mapReadyCallback: ((Result<Unit>) -> Unit)? = null
 
   override fun getView(): View {
     return _navigationView
@@ -86,9 +68,6 @@ internal constructor(
       }
     }
     _navigationView.isNavigationUiEnabled = navigationViewEnabled
-
-    _minZoomLevelPreference = mapOptions.minZoomPreference
-    _maxZoomLevelPreference = mapOptions.maxZoomPreference
 
     _navigationView.getMapAsync { map ->
       setMap(map)
@@ -251,46 +230,6 @@ internal constructor(
   fun showRouteOverview() {
     invalidateViewAfterMapLoad()
     _navigationView.showRouteOverview()
-  }
-
-  fun getMinZoomPreference(): Float {
-    return _minZoomLevelPreference ?: getMap().minZoomLevel
-  }
-
-  fun getMaxZoomPreference(): Float {
-    return _maxZoomLevelPreference ?: getMap().maxZoomLevel
-  }
-
-  fun resetMinMaxZoomPreference() {
-    _minZoomLevelPreference = null
-    _maxZoomLevelPreference = null
-    getMap().resetMinMaxZoomPreference()
-  }
-
-  @Throws(FlutterError::class)
-  fun setMinZoomPreference(minZoomPreference: Float) {
-    if (minZoomPreference > (_maxZoomLevelPreference ?: getMap().maxZoomLevel)) {
-      throw FlutterError(
-        "minZoomGreaterThanMaxZoom",
-        "Minimum zoom level cannot be greater than maximum zoom level"
-      )
-    }
-
-    _minZoomLevelPreference = minZoomPreference
-    getMap().setMinZoomPreference(minZoomPreference)
-  }
-
-  @Throws(FlutterError::class)
-  fun setMaxZoomPreference(maxZoomPreference: Float) {
-    if (maxZoomPreference < (_minZoomLevelPreference ?: getMap().minZoomLevel)) {
-      throw FlutterError(
-        "maxZoomLessThanMinZoom",
-        "Maximum zoom level cannot be less than minimum zoom level"
-      )
-    }
-
-    _maxZoomLevelPreference = maxZoomPreference
-    getMap().setMaxZoomPreference(maxZoomPreference)
   }
 
   fun registerOnCameraChangedListener() {

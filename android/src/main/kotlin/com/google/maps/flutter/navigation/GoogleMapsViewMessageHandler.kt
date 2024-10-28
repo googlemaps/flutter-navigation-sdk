@@ -369,23 +369,23 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
   }
 
   override fun getMinZoomPreference(viewId: Long): Double {
-    return getNavigationView(viewId.toInt()).getMinZoomPreference().toDouble()
+    return getView(viewId.toInt()).getMinZoomPreference().toDouble()
   }
 
   override fun getMaxZoomPreference(viewId: Long): Double {
-    return getNavigationView(viewId.toInt()).getMaxZoomPreference().toDouble()
+    return getView(viewId.toInt()).getMaxZoomPreference().toDouble()
   }
 
   override fun resetMinMaxZoomPreference(viewId: Long) {
-    getNavigationView(viewId.toInt()).resetMinMaxZoomPreference()
+    getView(viewId.toInt()).resetMinMaxZoomPreference()
   }
 
   override fun setMinZoomPreference(viewId: Long, minZoomPreference: Double) {
-    getNavigationView(viewId.toInt()).setMinZoomPreference(minZoomPreference.toFloat())
+    getView(viewId.toInt()).setMinZoomPreference(minZoomPreference.toFloat())
   }
 
   override fun setMaxZoomPreference(viewId: Long, maxZoomPreference: Double) {
-    getNavigationView(viewId.toInt()).setMaxZoomPreference(maxZoomPreference.toFloat())
+    getView(viewId.toInt()).setMaxZoomPreference(maxZoomPreference.toFloat())
   }
 
   override fun getMarkers(viewId: Long): List<MarkerDto> {
