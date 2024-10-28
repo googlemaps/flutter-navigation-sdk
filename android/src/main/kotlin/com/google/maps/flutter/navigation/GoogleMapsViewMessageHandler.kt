@@ -18,7 +18,7 @@ package com.google.maps.flutter.navigation
 
 import android.content.res.Resources
 
-/** GoogleMapsNavigationMessageHandler */
+/** GoogleMapsViewMessageHandler */
 class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegistry) : MapViewApi {
 
   private fun getNavigationView(viewId: Int): GoogleMapsNavigationView {

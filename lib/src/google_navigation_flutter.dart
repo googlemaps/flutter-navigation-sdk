@@ -17,11 +17,6 @@ import 'dart:async';
 import '../google_navigation_flutter.dart';
 import 'google_navigation_flutter_platform_interface.dart';
 
-/// The view creation callback.
-typedef OnCreatedCallback = void Function(
-  GoogleNavigationViewController controller,
-);
-
 /// Called during speeding event.
 typedef OnSpeedingUpdatedEventCallback = void Function(
   SpeedingUpdatedEvent onSpeedingUpdatedEvent,

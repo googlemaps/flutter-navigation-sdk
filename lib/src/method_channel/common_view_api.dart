@@ -22,7 +22,7 @@ import '../google_navigation_flutter_platform_interface.dart';
 import 'method_channel.dart';
 
 /// @nodoc
-/// Class that handles navigation view communications.
+/// Class that handles map view and navigation view communications.
 mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   final MapViewApi _viewApi = MapViewApi();
   bool _viewApiHasBeenSetUp = false;

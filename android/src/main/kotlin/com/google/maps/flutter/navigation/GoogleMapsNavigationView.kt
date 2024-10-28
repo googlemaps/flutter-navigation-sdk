@@ -22,10 +22,6 @@ import android.view.View
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener
 import com.google.android.gms.maps.GoogleMapOptions
-import com.google.android.gms.maps.model.Circle
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.Polygon
-import com.google.android.gms.maps.model.Polyline
 import com.google.android.libraries.navigation.NavigationView
 import io.flutter.plugin.platform.PlatformView
 

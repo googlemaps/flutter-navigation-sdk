@@ -24,74 +24,6 @@ typedef OnMapViewCreatedCallback = void Function(
   GoogleMapViewController controller,
 );
 
-/// The main map view widget for Google Maps Map View.
-/// {@category Map View}
-class GoogleMapsMapView extends GoogleMapsBaseMapView {
-  /// The main widget for embedding Google Maps Map View into a Flutter application.
-  ///
-  /// After creating the map view, the [onViewCreated] callback is triggered, providing a
-  /// [GoogleMapViewController] that you can use to interact with the map programmatically.
-  ///
-  /// Example usage:
-  /// ```dart
-  /// GoogleMapsMapView(
-  ///   onViewCreated: (controller) {
-  ///     // Use the controller to interact with the map.
-  ///   },
-  ///   initialCameraPosition: CameraPosition(
-  ///     // Initial camera position parameters
-  ///   ),
-  ///   // Other initial map settings...
-  /// )
-  /// ```
-  const GoogleMapsMapView(
-      {super.key,
-      required this.onViewCreated,
-      super.initialCameraPosition = const CameraPosition(),
-      super.initialMapType = MapType.normal,
-      super.initialCompassEnabled = true,
-      super.initialRotateGesturesEnabled = true,
-      super.initialScrollGesturesEnabled = true,
-      super.initialTiltGesturesEnabled = true,
-      super.initialZoomGesturesEnabled = true,
-      super.initialScrollGesturesEnabledDuringRotateOrZoom = true,
-      super.initialMapToolbarEnabled = true,
-      super.initialMinZoomPreference,
-      super.initialMaxZoomPreference,
-      super.initialZoomControlsEnabled = true,
-      super.initialCameraTargetBounds,
-      super.layoutDirection,
-      super.gestureRecognizers =
-          const <Factory<OneSequenceGestureRecognizer>>{},
-      super.onRecenterButtonClicked,
-      super.onMarkerClicked,
-      super.onMarkerDrag,
-      super.onMarkerDragStart,
-      super.onMarkerDragEnd,
-      super.onMarkerInfoWindowClicked,
-      super.onMarkerInfoWindowClosed,
-      super.onMarkerInfoWindowLongClicked,
-      super.onMapClicked,
-      super.onMapLongClicked,
-      super.onPolygonClicked,
-      super.onPolylineClicked,
-      super.onCircleClicked,
-      super.onMyLocationClicked,
-      super.onMyLocationButtonClicked,
-      super.onCameraMoveStarted,
-      super.onCameraMove,
-      super.onCameraIdle,
-      super.onCameraStartedFollowingLocation,
-      super.onCameraStoppedFollowingLocation});
-
-  /// On view created callback.
-  final OnMapViewCreatedCallback onViewCreated;
-
-  /// Creates a [State] for this [GoogleMapsBaseMapView].
-  @override
-  State createState() => GoogleMapsMapViewState();
-}
-
 /// The base view for map view and navigation view. Not to be used by itself.
 /// {@category Map View}
 @protected
@@ -282,6 +214,74 @@ abstract class GoogleMapsBaseMapView extends StatefulWidget {
 
   /// On camera stopped following location callback (Android-only).
   final OnCameraStoppedFollowingLocation? onCameraStoppedFollowingLocation;
+}
+
+/// The main map view widget for Google Maps Map View.
+/// {@category Map View}
+class GoogleMapsMapView extends GoogleMapsBaseMapView {
+  /// The main widget for embedding Google Maps Map View into a Flutter application.
+  ///
+  /// After creating the map view, the [onViewCreated] callback is triggered, providing a
+  /// [GoogleMapViewController] that you can use to interact with the map programmatically.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// GoogleMapsMapView(
+  ///   onViewCreated: (controller) {
+  ///     // Use the controller to interact with the map.
+  ///   },
+  ///   initialCameraPosition: CameraPosition(
+  ///     // Initial camera position parameters
+  ///   ),
+  ///   // Other initial map settings...
+  /// )
+  /// ```
+  const GoogleMapsMapView(
+      {super.key,
+      required this.onViewCreated,
+      super.initialCameraPosition = const CameraPosition(),
+      super.initialMapType = MapType.normal,
+      super.initialCompassEnabled = true,
+      super.initialRotateGesturesEnabled = true,
+      super.initialScrollGesturesEnabled = true,
+      super.initialTiltGesturesEnabled = true,
+      super.initialZoomGesturesEnabled = true,
+      super.initialScrollGesturesEnabledDuringRotateOrZoom = true,
+      super.initialMapToolbarEnabled = true,
+      super.initialMinZoomPreference,
+      super.initialMaxZoomPreference,
+      super.initialZoomControlsEnabled = true,
+      super.initialCameraTargetBounds,
+      super.layoutDirection,
+      super.gestureRecognizers =
+          const <Factory<OneSequenceGestureRecognizer>>{},
+      super.onRecenterButtonClicked,
+      super.onMarkerClicked,
+      super.onMarkerDrag,
+      super.onMarkerDragStart,
+      super.onMarkerDragEnd,
+      super.onMarkerInfoWindowClicked,
+      super.onMarkerInfoWindowClosed,
+      super.onMarkerInfoWindowLongClicked,
+      super.onMapClicked,
+      super.onMapLongClicked,
+      super.onPolygonClicked,
+      super.onPolylineClicked,
+      super.onCircleClicked,
+      super.onMyLocationClicked,
+      super.onMyLocationButtonClicked,
+      super.onCameraMoveStarted,
+      super.onCameraMove,
+      super.onCameraIdle,
+      super.onCameraStartedFollowingLocation,
+      super.onCameraStoppedFollowingLocation});
+
+  /// On view created callback.
+  final OnMapViewCreatedCallback onViewCreated;
+
+  /// Creates a [State] for this [GoogleMapsMapView].
+  @override
+  State createState() => GoogleMapsMapViewState();
 }
 
 abstract class MapViewState<T extends GoogleMapsBaseMapView> extends State<T> {
