@@ -231,30 +231,4 @@ internal constructor(
     invalidateViewAfterMapLoad()
     _navigationView.showRouteOverview()
   }
-
-  fun registerOnCameraChangedListener() {
-    getMap().setOnCameraMoveStartedListener { reason ->
-      val event =
-        when (reason) {
-          OnCameraMoveStartedListener.REASON_API_ANIMATION,
-          OnCameraMoveStartedListener.REASON_DEVELOPER_ANIMATION ->
-            CameraEventTypeDto.MOVESTARTEDBYAPI
-          OnCameraMoveStartedListener.REASON_GESTURE -> CameraEventTypeDto.MOVESTARTEDBYGESTURE
-          else -> {
-            // This should not happen, added that the compiler does not complain.
-            throw RuntimeException("Unknown camera move started reason: $reason")
-          }
-        }
-      val position = Convert.convertCameraPositionToDto(getMap().cameraPosition)
-      viewEventApi.onCameraChanged(viewId.toLong(), event, position) {}
-    }
-    getMap().setOnCameraMoveListener {
-      val position = Convert.convertCameraPositionToDto(getMap().cameraPosition)
-      viewEventApi.onCameraChanged(viewId.toLong(), CameraEventTypeDto.ONCAMERAMOVE, position) {}
-    }
-    getMap().setOnCameraIdleListener {
-      val position = Convert.convertCameraPositionToDto(getMap().cameraPosition)
-      viewEventApi.onCameraChanged(viewId.toLong(), CameraEventTypeDto.ONCAMERAIDLE, position) {}
-    }
-  }
 }

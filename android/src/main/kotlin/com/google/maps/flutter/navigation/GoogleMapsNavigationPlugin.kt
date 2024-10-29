@@ -27,7 +27,7 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
   private lateinit var viewRegistry: GoogleMapsViewRegistry
   private lateinit var viewMessageHandler: GoogleMapsViewMessageHandler
   private lateinit var imageRegistryMessageHandler: GoogleMapsImageRegistryMessageHandler
-  private lateinit var navigationViewEventApi: ViewEventApi
+  private lateinit var viewEventApi: ViewEventApi
   private lateinit var _binding: FlutterPlugin.FlutterPluginBinding
   private lateinit var lifecycle: Lifecycle
   private lateinit var imageRegistry: ImageRegistry
@@ -39,7 +39,7 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
     MapViewApi.setUp(binding.binaryMessenger, viewMessageHandler)
     imageRegistryMessageHandler = GoogleMapsImageRegistryMessageHandler(imageRegistry)
     ImageRegistryApi.setUp(binding.binaryMessenger, imageRegistryMessageHandler)
-    navigationViewEventApi = ViewEventApi(binding.binaryMessenger)
+    viewEventApi = ViewEventApi(binding.binaryMessenger)
     _binding = binding
     binding.applicationContext.registerComponentCallbacks(viewRegistry)
   }
@@ -52,7 +52,7 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
   }
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-    val factory = GoogleMapsViewFactory(viewRegistry, navigationViewEventApi, imageRegistry)
+    val factory = GoogleMapsViewFactory(viewRegistry, viewEventApi, imageRegistry)
     _binding.platformViewRegistry.registerViewFactory("google_navigation_flutter", factory)
     GoogleMapsNavigationSessionManager.createInstance(_binding.binaryMessenger)
     val inspectorHandler = GoogleMapsNavigationInspectorHandler(viewRegistry)

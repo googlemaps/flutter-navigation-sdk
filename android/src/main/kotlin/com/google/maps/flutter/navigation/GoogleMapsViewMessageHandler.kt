@@ -473,6 +473,6 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
   }
 
   override fun registerOnCameraChangedListener(viewId: Long) {
-    getNavigationView(viewId.toInt()).registerOnCameraChangedListener()
+    getView(viewId.toInt()).registerOnCameraChangedListener()
   }
 }

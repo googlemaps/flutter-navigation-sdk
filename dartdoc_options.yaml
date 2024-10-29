@@ -26,7 +26,7 @@ dartdoc:
     "Image Registry":
       markdown: doc/image-registry.md
       name: Image Registry
-  categoryOrder: ["Map View", "Navigation", "Navigation View", "Image Registry"]
+  categoryOrder: ["Navigation", "Navigation View", "Map View", "Image Registry"]
   showUndocumentedCategories: true
   nodoc: ['**/*.g.dart']
 
