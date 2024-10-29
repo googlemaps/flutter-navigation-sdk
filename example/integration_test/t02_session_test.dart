@@ -49,9 +49,11 @@ void main() {
       'test_company_name',
     );
 
-    // Tap got it.
-    if (Platform.isAndroid || Platform.isIOS) {
-      await $.native.tap(Selector(text: 'Got It'));
+    // Tap ok.
+    if (Platform.isAndroid) {
+      await $.native.tap(Selector(text: "Got It"));
+    } else if (Platform.isIOS) {
+      await $.native.tap(Selector(text: "OK"));
     } else {
       fail('Unsupported platform: ${Platform.operatingSystem}');
     }
@@ -96,7 +98,13 @@ void main() {
               shouldOnlyShowDriverAwarenessDisclaimer: true);
 
       // Accept driver awareness disclaimer.
-      await $.native.tap(Selector(text: 'Got It'));
+      if (Platform.isAndroid) {
+        await $.native.tap(Selector(text: "Got It"));
+      } else if (Platform.isIOS) {
+        await $.native.tap(Selector(text: "OK"));
+      } else {
+        fail('Unsupported platform: ${Platform.operatingSystem}');
+      }
 
       // Check that the results match.
       await tosAccepted.then((bool accept) {

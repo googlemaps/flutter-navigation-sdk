@@ -23,7 +23,7 @@ import 'method_channel.dart';
 
 /// @nodoc
 /// Class that handles map view and navigation view communications.
-mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
+mixin CommonMapViewAPI on MapViewAPIInterface {
   final MapViewApi _viewApi = MapViewApi();
   bool _viewApiHasBeenSetUp = false;
   final StreamController<_ViewIdEventWrapper> _viewEventStreamController =

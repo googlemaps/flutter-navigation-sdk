@@ -40,7 +40,7 @@ enum MapViewType {
 abstract class GoogleMapsNavigationPlatform extends PlatformInterface
     with
         NavigationSessionAPIInterface,
-        NavigationViewAPIInterface,
+        MapViewAPIInterface,
         ImageRegistryAPIInterface {
   /// Constructs a GoogleMapsNavigationPlatform.
   GoogleMapsNavigationPlatform() : super(token: _token);
@@ -245,7 +245,7 @@ abstract mixin class NavigationSessionAPIInterface {
 
 /// API interface for actions of the navigation view.
 /// @nodoc
-abstract mixin class NavigationViewAPIInterface {
+abstract mixin class MapViewAPIInterface {
   /// Awaits the platform view to be ready for communication.
   Future<void> awaitMapReady({required int viewId});
 

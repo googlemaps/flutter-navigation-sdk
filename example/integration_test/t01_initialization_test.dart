@@ -265,4 +265,81 @@ void main() {
     expect(await controller.getMaxZoomPreference(), maxZoomPreference);
     expect(await controller.isNavigationUIEnabled(), true);
   });
+
+  patrol('C03 - Test Maps initialization without navigation',
+      (PatrolIntegrationTester $) async {
+    final Completer<GoogleMapViewController> viewControllerCompleter =
+        Completer<GoogleMapViewController>();
+
+    const CameraPosition cameraPosition =
+        CameraPosition(target: LatLng(latitude: 65, longitude: 25.5), zoom: 12);
+    const MapType mapType = MapType.satellite;
+    const bool compassEnabled = false;
+    const bool rotateGesturesEnabled = false;
+    const bool scrollGesturesEnabled = false;
+    const bool tiltGesturesEnabled = false;
+    const bool zoomGesturesEnabled = false;
+    const bool scrollGesturesEnabledDuringRotateOrZoom = false;
+    const bool mapToolbarEnabled = false;
+    const bool zoomControlsEnabled = false;
+    const double minZoomPreference = 5.0;
+    const double maxZoomPreference = 18.0;
+
+    /// Display navigation view.
+    final Key key = GlobalKey();
+    await pumpMapView(
+      $,
+      GoogleMapsMapView(
+        key: key,
+        onViewCreated: (GoogleMapViewController controller) {
+          controller.setMyLocationEnabled(true);
+          viewControllerCompleter.complete(controller);
+        },
+        initialCameraPosition: cameraPosition,
+        initialMapType: mapType,
+        initialCompassEnabled: compassEnabled,
+        initialRotateGesturesEnabled: rotateGesturesEnabled,
+        initialScrollGesturesEnabled: scrollGesturesEnabled,
+        initialTiltGesturesEnabled: tiltGesturesEnabled,
+        initialZoomGesturesEnabled: zoomGesturesEnabled,
+        initialScrollGesturesEnabledDuringRotateOrZoom:
+            scrollGesturesEnabledDuringRotateOrZoom,
+        initialMapToolbarEnabled: mapToolbarEnabled,
+        initialZoomControlsEnabled: zoomControlsEnabled,
+        initialMinZoomPreference: minZoomPreference,
+        initialMaxZoomPreference: maxZoomPreference,
+      ),
+    );
+
+    final GoogleMapViewController controller =
+        await viewControllerCompleter.future;
+    final CameraPosition cameraOut = await controller.getCameraPosition();
+
+    expect(cameraOut.target.latitude,
+        closeTo(cameraPosition.target.latitude, 0.1));
+    expect(cameraOut.target.longitude,
+        closeTo(cameraPosition.target.longitude, 0.1));
+    expect(cameraOut.zoom, closeTo(cameraPosition.zoom, 0.1));
+    expect(await controller.getMapType(), mapType);
+    expect(await controller.settings.isCompassEnabled(), compassEnabled);
+    expect(await controller.settings.isRotateGesturesEnabled(),
+        rotateGesturesEnabled);
+    expect(await controller.settings.isScrollGesturesEnabled(),
+        scrollGesturesEnabled);
+    expect(
+        await controller.settings.isTiltGesturesEnabled(), tiltGesturesEnabled);
+    expect(
+        await controller.settings.isZoomGesturesEnabled(), zoomGesturesEnabled);
+    expect(
+        await controller.settings.isScrollGesturesEnabledDuringRotateOrZoom(),
+        scrollGesturesEnabledDuringRotateOrZoom);
+    if (Platform.isAndroid) {
+      expect(
+          await controller.settings.isMapToolbarEnabled(), mapToolbarEnabled);
+      expect(await controller.settings.isZoomControlsEnabled(),
+          zoomControlsEnabled);
+    }
+    expect(await controller.getMinZoomPreference(), minZoomPreference);
+    expect(await controller.getMaxZoomPreference(), maxZoomPreference);
+  });
 }

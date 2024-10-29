@@ -21,7 +21,7 @@ class GoogleMapViewController {
   /// Basic constructor.
   ///
   /// Don't create this directly, but access through
-  /// [GoogleMapsBaseMapView.onViewCreated] callback.
+  /// [GoogleMapsMapView.onViewCreated] callback.
   GoogleMapViewController(this._viewId)
       : settings = NavigationViewUISettings(_viewId);
 
