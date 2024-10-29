@@ -25,18 +25,35 @@ import 'method_channel/method_channel.dart';
 /// Google Maps Navigation Platform Android specific functionalities.
 /// @nodoc
 class GoogleMapsNavigationAndroid extends GoogleMapsNavigationPlatform
-    with
-        CommonNavigationSessionAPI,
-        CommonNavigationViewAPI,
-        CommonImageRegistryAPI {
+    with CommonNavigationSessionAPI, CommonMapViewAPI, CommonImageRegistryAPI {
   /// Registers the Android implementation of GoogleMapsNavigationPlatform.
   static void registerWith() {
     GoogleMapsNavigationPlatform.instance = GoogleMapsNavigationAndroid();
   }
 
   @override
-  Widget buildView(
-      {required NavigationViewInitializationOptions initializationOptions,
+  Widget buildMapView(
+      {required MapViewInitializationOptions initializationOptions,
+      required MapReadyCallback onMapReady}) {
+    return _buildView(
+        mapViewType: MapViewType.map,
+        initializationOptions: initializationOptions,
+        onMapReady: onMapReady);
+  }
+
+  @override
+  Widget buildNavigationView(
+      {required MapViewInitializationOptions initializationOptions,
+      required MapReadyCallback onMapReady}) {
+    return _buildView(
+        mapViewType: MapViewType.navigation,
+        initializationOptions: initializationOptions,
+        onMapReady: onMapReady);
+  }
+
+  Widget _buildView(
+      {required MapViewType mapViewType,
+      required MapViewInitializationOptions initializationOptions,
       required MapReadyCallback onMapReady}) {
     // Initialize method channel for view communication if needed.
     ensureViewAPISetUp();
@@ -45,8 +62,8 @@ class GoogleMapsNavigationAndroid extends GoogleMapsNavigationPlatform
     const String viewType = 'google_navigation_flutter';
 
     // Build creation params used to initialize navigation view with initial parameters
-    final NavigationViewCreationOptionsDto creationParams =
-        buildNavigationViewCreationOptions(initializationOptions);
+    final ViewCreationOptionsDto creationParams =
+        buildNavigationViewCreationOptions(mapViewType, initializationOptions);
 
     return PlatformViewLink(
       viewType: viewType,

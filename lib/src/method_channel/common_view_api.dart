@@ -22,9 +22,9 @@ import '../google_navigation_flutter_platform_interface.dart';
 import 'method_channel.dart';
 
 /// @nodoc
-/// Class that handles navigation view communications.
-mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
-  final NavigationViewApi _viewApi = NavigationViewApi();
+/// Class that handles map view and navigation view communications.
+mixin CommonMapViewAPI on MapViewAPIInterface {
+  final MapViewApi _viewApi = MapViewApi();
   bool _viewApiHasBeenSetUp = false;
   final StreamController<_ViewIdEventWrapper> _viewEventStreamController =
       StreamController<_ViewIdEventWrapper>.broadcast();
@@ -65,17 +65,22 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
   /// called when initializing navigation view.
   void ensureViewAPISetUp() {
     if (!_viewApiHasBeenSetUp) {
-      NavigationViewEventApi.setup(
-        NavigationViewEventApiImpl(
-            viewEventStreamController: _viewEventStreamController),
+      ViewEventApi.setup(
+        ViewEventApiImpl(viewEventStreamController: _viewEventStreamController),
       );
       _viewApiHasBeenSetUp = true;
     }
   }
 
   /// Builds creation params used to initialize navigation view with initial parameters.
-  NavigationViewCreationOptionsDto buildNavigationViewCreationOptions(
-      NavigationViewInitializationOptions initializationSettings) {
+  ViewCreationOptionsDto buildNavigationViewCreationOptions(
+      MapViewType mapViewType,
+      MapViewInitializationOptions initializationSettings) {
+    assert(
+        mapViewType == MapViewType.navigation ||
+            initializationSettings.navigationViewOptions == null,
+        'Navigation view options can only be set when using navigation view type');
+
     /// Map options
     final MapOptions mapOptions = initializationSettings.mapOptions;
     final CameraPosition cameraPosition = mapOptions.cameraPosition;
@@ -103,12 +108,28 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
         zoomControlsEnabled: mapOptions.zoomControlsEnabled,
         cameraTargetBounds: mapOptions.cameraTargetBounds?.toDto());
 
-    // Navigation options
-    final NavigationViewOptionsDto navigationOptionsMessage =
-        initializationSettings.navigationViewOptions.toDto();
+    // Initialize navigation view options if given
+    NavigationViewOptionsDto? navigationOptionsMessage;
+    final NavigationViewOptions? navigationViewOptions =
+        initializationSettings.navigationViewOptions;
+    if (navigationViewOptions != null) {
+      switch (navigationViewOptions.navigationUIEnabledPreference) {
+        case NavigationUIEnabledPreference.automatic:
+          navigationOptionsMessage = NavigationViewOptionsDto(
+              navigationUIEnabledPreference:
+                  NavigationUIEnabledPreferenceDto.automatic);
+        case NavigationUIEnabledPreference.disabled:
+          navigationOptionsMessage = NavigationViewOptionsDto(
+              navigationUIEnabledPreference:
+                  NavigationUIEnabledPreferenceDto.disabled);
+      }
+    }
 
-    // Build NavigationViewCreationMessage
-    return NavigationViewCreationOptionsDto(
+    // Build ViewCreationMessage
+    return ViewCreationOptionsDto(
+        mapViewType: mapViewType == MapViewType.navigation
+            ? MapViewTypeDto.navigation
+            : MapViewTypeDto.map,
         mapOptions: mapOptionsMessage,
         navigationViewOptions: navigationOptionsMessage);
   }
@@ -978,9 +999,9 @@ mixin CommonNavigationViewAPI on NavigationViewAPIInterface {
 }
 
 /// Implementation for navigation view event API event handling.
-class NavigationViewEventApiImpl implements NavigationViewEventApi {
+class ViewEventApiImpl implements ViewEventApi {
   /// Initialize implementation for NavigationViewEventApi.
-  const NavigationViewEventApiImpl({
+  const ViewEventApiImpl({
     required StreamController<Object> viewEventStreamController,
   }) : _viewEventStreamController = viewEventStreamController;
 

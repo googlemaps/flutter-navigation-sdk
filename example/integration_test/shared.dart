@@ -33,6 +33,20 @@ export 'package:flutter_test/flutter_test.dart';
 export 'package:google_navigation_flutter/google_navigation_flutter.dart';
 export 'package:patrol/patrol.dart';
 
+// Type used for iterating over different maps to be tested.
+enum TestMapType {
+  /// Regular google map view.
+  map,
+
+  /// Navigation map.
+  navigation,
+}
+
+const List<TestMapType> testMapTypes = <TestMapType>[
+  TestMapType.map,
+  TestMapType.navigation
+];
+
 /// Location coordinates for starting position simulation in Finland - Näkkäläntie.
 const double startLocationLat = 68.593793;
 const double startLocationLng = 23.510763;
@@ -87,6 +101,24 @@ Widget wrapNavigationView(GoogleMapsNavigationView navigationView) {
   );
 }
 
+/// Pumps a [mapView] widget in tester [$] and then waits until it settles.
+Future<void> pumpMapView(
+    PatrolIntegrationTester $, GoogleMapsMapView mapView) async {
+  await $.pumpWidget(wrapMapView(mapView));
+  await $.pumpAndSettle();
+}
+
+/// Wraps a [mapView] in widgets.
+Widget wrapMapView(GoogleMapsMapView mapView) {
+  return MaterialApp(
+    home: Scaffold(
+      body: Center(
+        child: mapView,
+      ),
+    ),
+  );
+}
+
 Future<void> checkTermsAndConditionsAcceptance(
     PatrolIntegrationTester $) async {
   if (!await GoogleMapsNavigator.areTermsAccepted()) {
@@ -99,8 +131,10 @@ Future<void> checkTermsAndConditionsAcceptance(
 
     await $.pumpAndSettle();
     // Tap accept or cancel.
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (Platform.isAndroid) {
       await $.native.tap(Selector(text: "Got It"));
+    } else if (Platform.isIOS) {
+      await $.native.tap(Selector(text: "OK"));
     } else {
       fail('Unsupported platform: ${Platform.operatingSystem}');
     }
@@ -202,6 +236,81 @@ Future<GoogleNavigationViewController> startNavigation(
   return controller;
 }
 
+/// Returns a map view controller based on the provided test map type.
+Future<GoogleMapViewController> getMapViewControllerForTestMapType(
+  PatrolIntegrationTester $, {
+  required TestMapType testMapType,
+  bool initializeNavigation = true,
+  bool simulateLocation = false,
+  void Function(String)? onMarkerClicked,
+  void Function(String)? onCircleClicked,
+  void Function(LatLng)? onMapClicked,
+  void Function(LatLng)? onMapLongClicked,
+  void Function(String, LatLng)? onMarkerDrag,
+  void Function(String, LatLng)? onMarkerDragEnd,
+  void Function(String, LatLng)? onMarkerDragStart,
+  void Function(String)? onMarkerInfoWindowClicked,
+  void Function(String)? onMarkerInfoWindowClosed,
+  void Function(String)? onMarkerInfoWindowLongClicked,
+  void Function(MyLocationButtonClickedEvent)? onMyLocationButtonClicked,
+  void Function(MyLocationClickedEvent)? onMyLocationClicked,
+  void Function(bool)? onNavigationUIEnabledChanged,
+  void Function(String)? onPolygonClicked,
+  void Function(String)? onPolylineClicked,
+  void Function(NavigationViewRecenterButtonClickedEvent)?
+      onRecenterButtonClicked,
+  void Function(CameraPosition)? onCameraIdle,
+}) async {
+  GoogleMapViewController viewController;
+
+  switch (testMapType) {
+    /// Set up map.
+    case TestMapType.map:
+      viewController = await startMapView(
+        $,
+        onMarkerClicked: onMarkerClicked,
+        onCircleClicked: onCircleClicked,
+        onMapClicked: onMapClicked,
+        onMapLongClicked: onMapLongClicked,
+        onMarkerDrag: onMarkerDrag,
+        onMarkerDragEnd: onMarkerDragEnd,
+        onMarkerDragStart: onMarkerDragStart,
+        onMarkerInfoWindowClicked: onMarkerInfoWindowClicked,
+        onMarkerInfoWindowClosed: onMarkerInfoWindowClosed,
+        onMarkerInfoWindowLongClicked: onMarkerInfoWindowLongClicked,
+        onMyLocationButtonClicked: onMyLocationButtonClicked,
+        onMyLocationClicked: onMyLocationClicked,
+        onPolygonClicked: onPolygonClicked,
+        onPolylineClicked: onPolygonClicked,
+      ); // Instantiate a regular map.
+      break;
+
+    /// Set up navigation map.
+    case TestMapType.navigation:
+      viewController = await startNavigationWithoutDestination($,
+          initializeNavigation: initializeNavigation,
+          simulateLocation: simulateLocation,
+          onMarkerClicked: onMarkerClicked,
+          onCircleClicked: onCircleClicked,
+          onMapClicked: onMapClicked,
+          onMapLongClicked: onMapLongClicked,
+          onMarkerDrag: onMarkerDrag,
+          onMarkerDragEnd: onMarkerDragEnd,
+          onMarkerDragStart: onMarkerDragStart,
+          onMarkerInfoWindowClicked: onMarkerInfoWindowClicked,
+          onMarkerInfoWindowClosed: onMarkerInfoWindowClosed,
+          onMarkerInfoWindowLongClicked: onMarkerInfoWindowLongClicked,
+          onMyLocationButtonClicked: onMyLocationButtonClicked,
+          onMyLocationClicked: onMyLocationClicked,
+          onPolygonClicked: onPolygonClicked,
+          onPolylineClicked: onPolygonClicked,
+          onRecenterButtonClicked:
+              onRecenterButtonClicked); // Instantiate a navigation map.
+      break;
+  }
+  return viewController;
+}
+
 /// Start navigation without setting the destination.
 ///
 /// Optionally simulate the starting location with [simulateLocation],
@@ -278,6 +387,66 @@ Future<GoogleNavigationViewController> startNavigationWithoutDestination(
     ));
     await $.pumpAndSettle(timeout: const Duration(seconds: 1));
   }
+
+  return controller;
+}
+
+/// Start regular map view.
+///
+/// Optionally set various event callback listener functions.
+Future<GoogleMapViewController> startMapView(
+  PatrolIntegrationTester $, {
+  void Function(String)? onMarkerClicked,
+  void Function(String)? onCircleClicked,
+  void Function(LatLng)? onMapClicked,
+  void Function(LatLng)? onMapLongClicked,
+  void Function(String, LatLng)? onMarkerDrag,
+  void Function(String, LatLng)? onMarkerDragEnd,
+  void Function(String, LatLng)? onMarkerDragStart,
+  void Function(String)? onMarkerInfoWindowClicked,
+  void Function(String)? onMarkerInfoWindowClosed,
+  void Function(String)? onMarkerInfoWindowLongClicked,
+  void Function(MyLocationButtonClickedEvent)? onMyLocationButtonClicked,
+  void Function(MyLocationClickedEvent)? onMyLocationClicked,
+  void Function(String)? onPolygonClicked,
+  void Function(String)? onPolylineClicked,
+  void Function(NavigationViewRecenterButtonClickedEvent)?
+      onRecenterButtonClicked,
+  void Function(CameraPosition)? onCameraIdle,
+}) async {
+  final Completer<GoogleMapViewController> controllerCompleter =
+      Completer<GoogleMapViewController>();
+
+  //await checkLocationDialogAndTosAcceptance($);
+
+  final Key key = GlobalKey();
+  await pumpMapView(
+    $,
+    GoogleMapsMapView(
+      key: key,
+      onViewCreated: (GoogleMapViewController viewController) {
+        controllerCompleter.complete(viewController);
+      },
+      onMarkerClicked: onMarkerClicked,
+      onCircleClicked: onCircleClicked,
+      onMapClicked: onMapClicked,
+      onMapLongClicked: onMapLongClicked,
+      onMarkerDrag: onMarkerDrag,
+      onMarkerDragEnd: onMarkerDragEnd,
+      onMarkerDragStart: onMarkerDragStart,
+      onMarkerInfoWindowClicked: onMarkerInfoWindowClicked,
+      onMarkerInfoWindowClosed: onMarkerInfoWindowClosed,
+      onMarkerInfoWindowLongClicked: onMarkerInfoWindowLongClicked,
+      onMyLocationButtonClicked: onMyLocationButtonClicked,
+      onMyLocationClicked: onMyLocationClicked,
+      onPolygonClicked: onPolygonClicked,
+      onPolylineClicked: onPolygonClicked,
+      onRecenterButtonClicked: onRecenterButtonClicked,
+    ),
+  );
+
+  final GoogleMapViewController controller = await controllerCompleter.future;
+  await $.pumpAndSettle();
 
   return controller;
 }

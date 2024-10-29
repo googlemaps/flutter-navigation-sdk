@@ -29,10 +29,11 @@ enum GoogleMapsNavigationViewError: Error {
 }
 
 class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelegate {
-  private var _navigationView: ViewStateAwareGMSMapView!
+  private var _mapView: ViewStateAwareGMSMapView!
   private var _viewRegistry: GoogleMapsNavigationViewRegistry
-  private var _navigationViewEventApi: NavigationViewEventApi
+  private var _viewEventApi: ViewEventApi
   private var _viewId: Int64
+  private var _isNavigationView: Bool
   private var _myLocationButton: Bool = true
   private var _markerControllers: [MarkerController] = []
   private var _gmsPolygons: [GMSPolygon] = []
@@ -49,25 +50,27 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   var isAttachedToSession: Bool = false
 
   func view() -> UIView {
-    _navigationView
+    _mapView
   }
 
   init(frame: CGRect,
        viewIdentifier viewId: Int64,
+       isNavigationView: Bool,
        viewRegistry registry: GoogleMapsNavigationViewRegistry,
-       navigationViewEventApi: NavigationViewEventApi,
+       viewEventApi: ViewEventApi,
        navigationUIEnabledPreference: NavigationUIEnabledPreference,
        mapConfiguration: MapConfiguration, imageRegistry: ImageRegistry) {
     _viewId = viewId
+    _isNavigationView = isNavigationView
     _viewRegistry = registry
-    _navigationViewEventApi = navigationViewEventApi
+    _viewEventApi = viewEventApi
     _mapConfiguration = mapConfiguration
     _imageRegistry = imageRegistry
 
     let mapViewOptions = GMSMapViewOptions()
     _mapConfiguration.apply(to: mapViewOptions, withFrame: frame)
-    _navigationView = ViewStateAwareGMSMapView(options: mapViewOptions)
-    _mapConfiguration.apply(to: _navigationView)
+    _mapView = ViewStateAwareGMSMapView(options: mapViewOptions)
+    _mapConfiguration.apply(to: _mapView)
 
     super.init()
 
@@ -75,26 +78,31 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     applyNavigationUIEnabledPreference()
 
     registry.registerView(viewId: viewId, view: self)
-    _navigationView.delegate = self
-    _navigationView.viewSettledDelegate = self
+    _mapView.delegate = self
+    _mapView.viewSettledDelegate = self
   }
 
   deinit {
     _viewRegistry.unregisterView(viewId: _viewId)
-    _navigationView.delegate = nil
+    _mapView.delegate = nil
+  }
+
+  func isNavigationView() -> Bool {
+    _isNavigationView
   }
 
   func onViewSettled(_ view: UIView) {
-    _mapConfiguration.applyCameraPosition(to: _navigationView)
+    _mapConfiguration.applyCameraPosition(to: _mapView)
 
-    // Attach possible navigation session to map.
-    GoogleMapsNavigationSessionManager.shared.attachNavigationSessionToMapView(
-      mapView: self
-    )
+    // Attach possible navigation session to map if map is navigation view.
+    if _isNavigationView {
+      GoogleMapsNavigationSessionManager.shared.attachNavigationSessionToMapView(
+        mapView: self
+      )
+      applyNavigationUIEnabledPreference()
+    }
 
-    applyNavigationUIEnabledPreference()
-
-    _navigationView.needsUpdateConstraints()
+    _mapView.needsUpdateConstraints()
 
     // Inform the flutter implementation that view is ready to be controlled.
     _mapViewReady = true
@@ -128,7 +136,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   }
 
   func isMyLocationEnabled() throws -> Bool {
-    _navigationView.isMyLocationEnabled
+    _mapView.isMyLocationEnabled
   }
 
   private func findMarkerController(markerId: String) throws -> MarkerController {
@@ -174,21 +182,21 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   }
 
   func setMyLocationEnabled(_ enabled: Bool) throws {
-    _navigationView.isMyLocationEnabled = enabled
+    _mapView.isMyLocationEnabled = enabled
     try updateMyLocationButton()
   }
 
   func getMapType() -> GMSMapViewType {
-    _navigationView.mapType
+    _mapView.mapType
   }
 
   func setMapType(mapType: GMSMapViewType) throws {
-    _navigationView.mapType = mapType
+    _mapView.mapType = mapType
   }
 
   func setMapStyle(styleJson: String) throws {
     do {
-      _navigationView.mapStyle = try GMSMapStyle(jsonString: styleJson)
+      _mapView.mapStyle = try GMSMapStyle(jsonString: styleJson)
     } catch {
       throw GoogleMapsNavigationViewError.mapStyleError
     }
@@ -202,12 +210,12 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   func updateMyLocationButton() throws {
     // Align the behavior with Android: the default value of myLocationButton is true,
     // but it is not shown if my location is disabled.
-    _navigationView.settings.myLocationButton = _navigationView
+    _mapView.settings.myLocationButton = _mapView
       .isMyLocationEnabled && _myLocationButton
   }
 
   func setZoomGesturesEnabled(_ enabled: Bool) throws {
-    _navigationView.settings.zoomGestures = enabled
+    _mapView.settings.zoomGestures = enabled
   }
 
   func setZoomControlsEnabled(_ enabled: Bool) throws {
@@ -215,23 +223,23 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   }
 
   func setCompassEnabled(_ enabled: Bool) throws {
-    _navigationView.settings.compassButton = enabled
+    _mapView.settings.compassButton = enabled
   }
 
   func setRotateGesturesEnabled(_ enabled: Bool) throws {
-    _navigationView.settings.rotateGestures = enabled
+    _mapView.settings.rotateGestures = enabled
   }
 
   func setScrollGesturesEnabled(_ enabled: Bool) throws {
-    _navigationView.settings.scrollGestures = enabled
+    _mapView.settings.scrollGestures = enabled
   }
 
   func setScrollGesturesDuringRotateOrZoomEnabled(_ enabled: Bool) throws {
-    _navigationView.settings.allowScrollGesturesDuringRotateOrZoom = enabled
+    _mapView.settings.allowScrollGesturesDuringRotateOrZoom = enabled
   }
 
   func setTiltGesturesEnabled(_ enabled: Bool) throws {
-    _navigationView.settings.tiltGestures = enabled
+    _mapView.settings.tiltGestures = enabled
   }
 
   func setMapToolbarEnabled(_ enabled: Bool) throws {
@@ -239,7 +247,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   }
 
   func setTrafficEnabled(_ enabled: Bool) throws {
-    _navigationView.isTrafficEnabled = enabled
+    _mapView.isTrafficEnabled = enabled
   }
 
   func isMyLocationButtonEnabled() -> Bool {
@@ -247,7 +255,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   }
 
   func isZoomGesturesEnabled() -> Bool {
-    _navigationView.settings.zoomGestures
+    _mapView.settings.zoomGestures
   }
 
   func isZoomControlsEnabled() throws -> Bool {
@@ -255,23 +263,23 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   }
 
   func isCompassEnabled() -> Bool {
-    _navigationView.settings.compassButton
+    _mapView.settings.compassButton
   }
 
   func isRotateGesturesEnabled() -> Bool {
-    _navigationView.settings.rotateGestures
+    _mapView.settings.rotateGestures
   }
 
   func isScrollGesturesEnabled() -> Bool {
-    _navigationView.settings.scrollGestures
+    _mapView.settings.scrollGestures
   }
 
   func isScrollGesturesEnabledDuringRotateOrZoom() -> Bool {
-    _navigationView.settings.allowScrollGesturesDuringRotateOrZoom
+    _mapView.settings.allowScrollGesturesDuringRotateOrZoom
   }
 
   func isTiltGesturesEnabled() -> Bool {
-    _navigationView.settings.tiltGestures
+    _mapView.settings.tiltGestures
   }
 
   func isMapToolbarEnabled() throws -> Bool {
@@ -279,15 +287,15 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   }
 
   func isTrafficEnabled() -> Bool {
-    _navigationView.isTrafficEnabled
+    _mapView.isTrafficEnabled
   }
 
   func showRouteOverview() {
-    _navigationView.cameraMode = .overview
+    _mapView.cameraMode = .overview
   }
 
   func getMyLocation() -> CLLocationCoordinate2D? {
-    if let location = _navigationView.myLocation {
+    if let location = _mapView.myLocation {
       return location.coordinate
     } else {
       return nil
@@ -295,82 +303,82 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   }
 
   func getCameraPosition() -> GMSCameraPosition {
-    _navigationView.camera
+    _mapView.camera
   }
 
   func getVisibleRegion() -> GMSCoordinateBounds {
-    GMSCoordinateBounds(region: _navigationView.projection.visibleRegion())
+    GMSCoordinateBounds(region: _mapView.projection.visibleRegion())
   }
 
   func animateCameraToCameraPosition(cameraPosition: GMSCameraPosition) {
-    _navigationView.animate(with: GMSCameraUpdate.setCamera(cameraPosition))
+    _mapView.animate(with: GMSCameraUpdate.setCamera(cameraPosition))
   }
 
   func animateCameraToLatLng(point: CLLocationCoordinate2D) {
-    _navigationView.animate(with: GMSCameraUpdate.setTarget(point))
+    _mapView.animate(with: GMSCameraUpdate.setTarget(point))
   }
 
   func animateCameraToLatLngBounds(bounds: GMSCoordinateBounds, padding: Double) {
-    _navigationView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: padding))
+    _mapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: padding))
   }
 
   func animateCameraToLatLngZoom(point: CLLocationCoordinate2D, zoom: Double) {
-    _navigationView.animate(with: GMSCameraUpdate.setTarget(point, zoom: Float(zoom)))
+    _mapView.animate(with: GMSCameraUpdate.setTarget(point, zoom: Float(zoom)))
   }
 
   func animateCameraByScroll(dx: Double, dy: Double) {
-    _navigationView.animate(with: GMSCameraUpdate.scrollBy(x: CGFloat(dx), y: CGFloat(dy)))
+    _mapView.animate(with: GMSCameraUpdate.scrollBy(x: CGFloat(dx), y: CGFloat(dy)))
   }
 
   func animateCameraByZoom(zoomBy: Double, focus: CGPoint?) {
     if focus != nil {
-      _navigationView.animate(with: GMSCameraUpdate.zoom(by: Float(zoomBy), at: focus!))
+      _mapView.animate(with: GMSCameraUpdate.zoom(by: Float(zoomBy), at: focus!))
     } else {
-      _navigationView.animate(with: GMSCameraUpdate.zoom(by: Float(zoomBy)))
+      _mapView.animate(with: GMSCameraUpdate.zoom(by: Float(zoomBy)))
     }
   }
 
   func animateCameraToZoom(zoom: Double) {
-    _navigationView.animate(with: GMSCameraUpdate.zoom(to: Float(zoom)))
+    _mapView.animate(with: GMSCameraUpdate.zoom(to: Float(zoom)))
   }
 
   func moveCameraToCameraPosition(cameraPosition: GMSCameraPosition) {
-    _navigationView.moveCamera(GMSCameraUpdate.setCamera(cameraPosition))
+    _mapView.moveCamera(GMSCameraUpdate.setCamera(cameraPosition))
   }
 
   func moveCameraToLatLng(point: CLLocationCoordinate2D) {
-    _navigationView.moveCamera(GMSCameraUpdate.setTarget(point))
+    _mapView.moveCamera(GMSCameraUpdate.setTarget(point))
   }
 
   func moveCameraToLatLngBounds(bounds: GMSCoordinateBounds, padding: Double) {
-    _navigationView.moveCamera(GMSCameraUpdate.fit(bounds, withPadding: padding))
+    _mapView.moveCamera(GMSCameraUpdate.fit(bounds, withPadding: padding))
   }
 
   func moveCameraToLatLngZoom(point: CLLocationCoordinate2D, zoom: Double) {
-    _navigationView.moveCamera(GMSCameraUpdate.setTarget(point, zoom: Float(zoom)))
+    _mapView.moveCamera(GMSCameraUpdate.setTarget(point, zoom: Float(zoom)))
   }
 
   func moveCameraByScroll(dx: Double, dy: Double) {
-    _navigationView.moveCamera(GMSCameraUpdate.scrollBy(x: CGFloat(dx), y: CGFloat(dy)))
+    _mapView.moveCamera(GMSCameraUpdate.scrollBy(x: CGFloat(dx), y: CGFloat(dy)))
   }
 
   func moveCameraByZoom(zoomBy: Double, focus: CGPoint?) {
     if focus != nil {
-      _navigationView.moveCamera(GMSCameraUpdate.zoom(by: Float(zoomBy), at: focus!))
+      _mapView.moveCamera(GMSCameraUpdate.zoom(by: Float(zoomBy), at: focus!))
     } else {
-      _navigationView.moveCamera(GMSCameraUpdate.zoom(by: Float(zoomBy)))
+      _mapView.moveCamera(GMSCameraUpdate.zoom(by: Float(zoomBy)))
     }
   }
 
   func moveCameraToZoom(zoom: Double) {
-    _navigationView.moveCamera(GMSCameraUpdate.zoom(to: Float(zoom)))
+    _mapView.moveCamera(GMSCameraUpdate.zoom(to: Float(zoom)))
   }
 
   func followMyLocation(perspective: GMSNavigationCameraPerspective, zoomLevel: Double?) {
-    _navigationView.followingPerspective = perspective
-    _navigationView.cameraMode = .following
+    _mapView.followingPerspective = perspective
+    _mapView.cameraMode = .following
     if zoomLevel != nil {
-      _navigationView.followingZoomLevel = Float(zoomLevel!)
+      _mapView.followingZoomLevel = Float(zoomLevel!)
     }
   }
 
@@ -379,105 +387,110 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     // Navigation UI delegate needs to be set after attaching
     // the session to the map view.
 
-    let navigationWasEnabled = _navigationView.isNavigationEnabled
+    if !_isNavigationView {
+      // Navigation session cannot be attached to view that is not initialized as navigation view.
+      return false
+    }
 
-    let result = _navigationView.enableNavigation(with: session)
+    let navigationWasEnabled = _mapView.isNavigationEnabled
 
-    if navigationWasEnabled != _navigationView.isNavigationEnabled {
+    let result = _mapView.enableNavigation(with: session)
+
+    if navigationWasEnabled != _mapView.isNavigationEnabled {
       // Navigation UI got enabled, send enabled change event.
-      _navigationViewEventApi
+      _viewEventApi
         .onNavigationUIEnabledChanged(
           viewId: _viewId,
-          navigationUIEnabled: _navigationView.isNavigationEnabled
+          navigationUIEnabled: _mapView.isNavigationEnabled
         ) { _ in }
     }
 
-    _navigationView.navigationUIDelegate = self
+    _mapView.navigationUIDelegate = self
     isAttachedToSession = true
     return result
   }
 
   func showDestinationMarkers(show: Bool) {
-    _navigationView.settings.showsDestinationMarkers = show
+    _mapView.settings.showsDestinationMarkers = show
   }
 
   func showTrafficLights(show: Bool) {
-    _navigationView.settings.showsTrafficLights = show
+    _mapView.settings.showsTrafficLights = show
   }
 
   func showStopSigns(show: Bool) {
-    _navigationView.settings.showsStopSigns = show
+    _mapView.settings.showsStopSigns = show
   }
 
   func isNavigationTripProgressBarEnabled() throws -> Bool {
-    _navigationView.settings.isNavigationTripProgressBarEnabled
+    _mapView.settings.isNavigationTripProgressBarEnabled
   }
 
   func setNavigationTripProgressBarEnabled(_ enabled: Bool) {
-    _navigationView.settings.isNavigationTripProgressBarEnabled = enabled
+    _mapView.settings.isNavigationTripProgressBarEnabled = enabled
   }
 
   func isNavigationHeaderEnabled() -> Bool {
-    _navigationView.settings.isNavigationHeaderEnabled
+    _mapView.settings.isNavigationHeaderEnabled
   }
 
   func setNavigationHeaderEnabled(_ enabled: Bool) {
-    _navigationView.settings.isNavigationHeaderEnabled = enabled
+    _mapView.settings.isNavigationHeaderEnabled = enabled
   }
 
   func isNavigationFooterEnabled() -> Bool {
-    _navigationView.settings.isNavigationFooterEnabled
+    _mapView.settings.isNavigationFooterEnabled
   }
 
   func setNavigationFooterEnabled(_ enabled: Bool) {
-    _navigationView.settings.isNavigationFooterEnabled = enabled
+    _mapView.settings.isNavigationFooterEnabled = enabled
   }
 
   func isRecenterButtonEnabled() -> Bool {
-    _navigationView.settings.isRecenterButtonEnabled
+    _mapView.settings.isRecenterButtonEnabled
   }
 
   func setRecenterButtonEnabled(_ enabled: Bool) {
-    _navigationView.settings.isRecenterButtonEnabled = enabled
+    _mapView.settings.isRecenterButtonEnabled = enabled
   }
 
   func isSpeedLimitIconEnabled() -> Bool {
-    _navigationView.shouldDisplaySpeedLimit
+    _mapView.shouldDisplaySpeedLimit
   }
 
   func setSpeedLimitIconEnabled(_ enabled: Bool) {
-    _navigationView.shouldDisplaySpeedLimit = enabled
+    _mapView.shouldDisplaySpeedLimit = enabled
   }
 
   func isSpeedometerEnabled() -> Bool {
-    _navigationView.shouldDisplaySpeedometer
+    _mapView.shouldDisplaySpeedometer
   }
 
   func setSpeedometerEnabled(_ enabled: Bool) {
-    _navigationView.shouldDisplaySpeedometer = enabled
+    _mapView.shouldDisplaySpeedometer = enabled
   }
 
   func isTrafficIncidentCardsEnabled() -> Bool {
-    _navigationView.settings.showsIncidentCards
+    _mapView.settings.showsIncidentCards
   }
 
   func setTrafficIncidentCardsEnabled(_ enabled: Bool) {
-    _navigationView.settings.showsIncidentCards = enabled
+    _mapView.settings.showsIncidentCards = enabled
   }
 
   func isNavigationUIEnabled() -> Bool {
-    _navigationView.isNavigationEnabled
+    _mapView.isNavigationEnabled
   }
 
   func setNavigationUIEnabled(_ enabled: Bool) {
-    if _navigationView.isNavigationEnabled != enabled {
-      _navigationView.isNavigationEnabled = enabled
-      _navigationViewEventApi
+    if _mapView.isNavigationEnabled != enabled {
+      _mapView.isNavigationEnabled = enabled
+      _viewEventApi
         .onNavigationUIEnabledChanged(viewId: _viewId, navigationUIEnabled: enabled) { _ in }
 
       if !enabled {
-        let camera = _navigationView.camera
-        _navigationView.animate(to: GMSCameraPosition(
+        let camera = _mapView.camera
+        _mapView.animate(to: GMSCameraPosition(
           target: camera.target,
           zoom: camera.zoom,
           bearing: 0.0,
@@ -488,31 +501,31 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   }
 
   func getMinZoomPreference() -> Float {
-    _navigationView.minZoom
+    _mapView.minZoom
   }
 
   func getMaxZoomPreference() -> Float {
-    _navigationView.maxZoom
+    _mapView.maxZoom
   }
 
   func resetMinMaxZoomPreference() {
-    _navigationView.setMinZoom(kGMSMinZoomLevel, maxZoom: kGMSMaxZoomLevel)
+    _mapView.setMinZoom(kGMSMinZoomLevel, maxZoom: kGMSMaxZoomLevel)
   }
 
   func setMinZoomPreference(minZoomPreference: Float) throws {
-    if minZoomPreference > _navigationView.maxZoom {
+    if minZoomPreference > _mapView.maxZoom {
       throw GoogleMapsNavigationViewError.minZoomGreaterThanMaxZoom
     }
 
-    _navigationView.setMinZoom(minZoomPreference, maxZoom: _navigationView.maxZoom)
+    _mapView.setMinZoom(minZoomPreference, maxZoom: _mapView.maxZoom)
   }
 
   func setMaxZoomPreference(maxZoomPreference: Float) throws {
-    if maxZoomPreference < _navigationView.minZoom {
+    if maxZoomPreference < _mapView.minZoom {
       throw GoogleMapsNavigationViewError.maxZoomLessThanMinZoom
     }
 
-    _navigationView.setMinZoom(_navigationView.minZoom, maxZoom: maxZoomPreference)
+    _mapView.setMinZoom(_mapView.minZoom, maxZoom: maxZoomPreference)
   }
 
   func getMarkers() -> [MarkerDto] {
@@ -527,7 +540,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
         markerController.update(from: marker, imageRegistry: _imageRegistry)
         // Handle visibility property on iOS by removing/not putting the marker
         // on the map.
-        markerController.gmsMarker.map = marker.isVisible() ? _navigationView : nil
+        markerController.gmsMarker.map = marker.isVisible() ? _mapView : nil
         _markerControllers.append(markerController)
         return marker
       }
@@ -542,7 +555,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
         markerController.update(from: updatedMarker, imageRegistry: _imageRegistry)
         // Handle visibility property on iOS by removing/not putting the marker
         // on the map.
-        markerController.gmsMarker.map = updatedMarker.isVisible() ? _navigationView : nil
+        markerController.gmsMarker.map = updatedMarker.isVisible() ? _mapView : nil
         return updatedMarker
       }
     return markers
@@ -578,7 +591,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
         gmsPolygon.setPolygonId(polygon.polygonId)
         // Handle visibility property on iOS by removing/not putting the polygon
         // on the map.
-        gmsPolygon.map = polygon.isVisible() ? _navigationView : nil
+        gmsPolygon.map = polygon.isVisible() ? _mapView : nil
         _gmsPolygons.append(gmsPolygon)
         return polygon
       }
@@ -593,7 +606,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
         gmsPolygon.update(from: pigeonPolygon)
         // Handle visibility property on iOS by removing/not putting the polygon
         // on the map.
-        gmsPolygon.map = pigeonPolygon.isVisible() ? _navigationView : nil
+        gmsPolygon.map = pigeonPolygon.isVisible() ? _mapView : nil
         return pigeonPolygon
       }
     return polygons
@@ -629,7 +642,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
         gmsPolyline.setPolylineId(polyline.polylineId)
         // Handle visibility property on iOS by removing/not putting the polyline
         // on the map.
-        gmsPolyline.map = polyline.isVisible() ? _navigationView : nil
+        gmsPolyline.map = polyline.isVisible() ? _mapView : nil
         _gmsPolylines.append(gmsPolyline)
         return polyline
       }
@@ -644,7 +657,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
         gmsPolyline.update(from: pigeonPolyline)
         // Handle visibility property on iOS by removing/not putting the polyline
         // on the map.
-        gmsPolyline.map = pigeonPolyline.isVisible() ? _navigationView : nil
+        gmsPolyline.map = pigeonPolyline.isVisible() ? _mapView : nil
         return pigeonPolyline
       }
     return polylines
@@ -680,7 +693,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
         gmsCircle.setCircleId(circle.circleId)
         // Handle visibility property on iOS by removing/not putting the circle
         // on the map.
-        gmsCircle.map = circle.isVisible() ? _navigationView : nil
+        gmsCircle.map = circle.isVisible() ? _mapView : nil
         _gmsCircles.append(gmsCircle)
         return circle
       }
@@ -695,7 +708,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
         gmsCircle.update(from: pigeonCircle)
         // Handle visibility property on iOS by removing/not putting the circle
         // on the map.
-        gmsCircle.map = pigeonCircle.isVisible() ? _navigationView : nil
+        gmsCircle.map = pigeonCircle.isVisible() ? _mapView : nil
         return pigeonCircle
       }
     return circles
@@ -725,14 +738,14 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     _gmsPolylines.removeAll()
     _gmsPolygons.removeAll()
     _gmsCircles.removeAll()
-    _navigationView.clear()
+    _mapView.clear()
   }
 
   private func sendMarkerEvent(marker: GMSMarker, eventType: MarkerEventTypeDto) {
     do {
       let markerController = try findMarkerController(gmsMarker: marker)
 
-      _navigationViewEventApi.onMarkerEvent(
+      _viewEventApi.onMarkerEvent(
         viewId: _viewId,
         markerId: markerController.markerId,
         eventType: eventType,
@@ -747,7 +760,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
                                    eventType: MarkerDragEventTypeDto) {
     do {
       let markerController = try findMarkerController(gmsMarker: marker)
-      _navigationViewEventApi.onMarkerDragEvent(
+      _viewEventApi.onMarkerDragEvent(
         viewId: _viewId,
         markerId: markerController.markerId,
         eventType: eventType,
@@ -780,13 +793,13 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
 
 extension GoogleMapsNavigationView: GMSMapViewNavigationUIDelegate {
   func mapViewDidTapRecenterButton(_ mapView: GMSMapView) {
-    _navigationViewEventApi.onRecenterButtonClicked(viewId: _viewId) { _ in }
+    _viewEventApi.onRecenterButtonClicked(viewId: _viewId) { _ in }
   }
 }
 
 extension GoogleMapsNavigationView: GMSMapViewDelegate {
   func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-    _navigationViewEventApi.onMapClickEvent(
+    _viewEventApi.onMapClickEvent(
       viewId: _viewId,
       latLng: .init(
         latitude: coordinate.latitude,
@@ -797,7 +810,7 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
   }
 
   func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
-    _navigationViewEventApi.onMapLongClickEvent(
+    _viewEventApi.onMapLongClickEvent(
       viewId: _viewId,
       latLng: .init(
         latitude: coordinate.latitude,
@@ -848,19 +861,19 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
 
   func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
     if let polygon = overlay as? GMSPolygon {
-      _navigationViewEventApi.onPolygonClicked(
+      _viewEventApi.onPolygonClicked(
         viewId: _viewId,
         polygonId: polygon.getPolygonId(),
         completion: { _ in }
       )
     } else if let polyline = overlay as? GMSPolyline {
-      _navigationViewEventApi.onPolylineClicked(
+      _viewEventApi.onPolylineClicked(
         viewId: _viewId,
         polylineId: polyline.getPolylineId(),
         completion: { _ in }
       )
     } else if let circle = overlay as? GMSCircle {
-      _navigationViewEventApi.onCircleClicked(
+      _viewEventApi.onCircleClicked(
         viewId: _viewId,
         circleId: circle.getCircleId(),
         completion: { _ in }
@@ -869,18 +882,18 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
   }
 
   func mapView(_ mapView: GMSMapView, didTapMyLocation location: CLLocationCoordinate2D) {
-    _navigationViewEventApi.onMyLocationClicked(viewId: _viewId, completion: { _ in })
+    _viewEventApi.onMyLocationClicked(viewId: _viewId, completion: { _ in })
   }
 
   func didTapMyLocationButton(for mapView: GMSMapView) -> Bool {
-    _navigationViewEventApi.onMyLocationButtonClicked(viewId: _viewId, completion: { _ in })
+    _viewEventApi.onMyLocationButtonClicked(viewId: _viewId, completion: { _ in })
     return _consumeMyLocationButtonClickEventsEnabled
   }
 
   func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
     if _listenCameraChanges {
       let position = Convert.convertCameraPosition(position: mapView.camera)
-      _navigationViewEventApi.onCameraChanged(
+      _viewEventApi.onCameraChanged(
         viewId: _viewId,
         eventType: gesture ? .moveStartedByGesture : .moveStartedByApi,
         position: position,
@@ -891,7 +904,7 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
 
   func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
     if _listenCameraChanges {
-      _navigationViewEventApi.onCameraChanged(
+      _viewEventApi.onCameraChanged(
         viewId: _viewId,
         eventType: .onCameraIdle,
         position: Convert.convertCameraPosition(position: position),
@@ -902,7 +915,7 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
 
   func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
     if _listenCameraChanges {
-      _navigationViewEventApi.onCameraChanged(
+      _viewEventApi.onCameraChanged(
         viewId: _viewId,
         eventType: .onCameraMove,
         position: Convert.convertCameraPosition(position: position),

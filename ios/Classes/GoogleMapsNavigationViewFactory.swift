@@ -17,13 +17,13 @@ import UIKit
 
 class GoogleMapsNavigationViewFactory: NSObject, FlutterPlatformViewFactory {
   private var viewRegistry: GoogleMapsNavigationViewRegistry
-  private var navigationViewEventApi: NavigationViewEventApi
+  private var viewEventApi: ViewEventApi
   private var imageRegistry: ImageRegistry
 
   init(viewRegistry: GoogleMapsNavigationViewRegistry,
-       navigationViewEventApi: NavigationViewEventApi, imageRegistry: ImageRegistry) {
+       viewEventApi: ViewEventApi, imageRegistry: ImageRegistry) {
     self.viewRegistry = viewRegistry
-    self.navigationViewEventApi = navigationViewEventApi
+    self.viewEventApi = viewEventApi
     self.imageRegistry = imageRegistry
     super.init()
   }
@@ -36,19 +36,22 @@ class GoogleMapsNavigationViewFactory: NSObject, FlutterPlatformViewFactory {
               viewIdentifier viewId: Int64,
               arguments args: Any?) -> FlutterPlatformView {
     guard let argsList = args as? [Any?],
-          let params = NavigationViewCreationOptionsDto.fromList(argsList) else {
-      fatalError("Failed to decode NavigationViewCreationOptionsDto")
+          let params = ViewCreationOptionsDto.fromList(argsList) else {
+      fatalError("Failed to decode ViewCreationOptionsDto")
     }
 
     let mapConfiguration = Convert.convertMapOptions(params.mapOptions)
 
+    let isNavigationView = params.mapViewType == MapViewTypeDto.navigation
+
     return GoogleMapsNavigationView(
       frame: frame,
       viewIdentifier: viewId,
+      isNavigationView: isNavigationView,
       viewRegistry: viewRegistry,
-      navigationViewEventApi: navigationViewEventApi,
+      viewEventApi: viewEventApi,
       navigationUIEnabledPreference: Convert
-        .convertNavigationUIEnabledPreference(preference: params.navigationViewOptions
+        .convertNavigationUIEnabledPreference(preference: params.navigationViewOptions?
           .navigationUIEnabledPreference),
       mapConfiguration: mapConfiguration,
       imageRegistry: imageRegistry
