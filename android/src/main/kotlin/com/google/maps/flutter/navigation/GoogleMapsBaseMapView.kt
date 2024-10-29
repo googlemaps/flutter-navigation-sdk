@@ -910,7 +910,8 @@ abstract class GoogleMapsBaseMapView(
           GoogleMap.OnCameraMoveStartedListener.REASON_API_ANIMATION,
           GoogleMap.OnCameraMoveStartedListener.REASON_DEVELOPER_ANIMATION ->
             CameraEventTypeDto.MOVESTARTEDBYAPI
-          GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE -> CameraEventTypeDto.MOVESTARTEDBYGESTURE
+          GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE ->
+            CameraEventTypeDto.MOVESTARTEDBYGESTURE
           else -> {
             // This should not happen, added that the compiler does not complain.
             throw RuntimeException("Unknown camera move started reason: $reason")

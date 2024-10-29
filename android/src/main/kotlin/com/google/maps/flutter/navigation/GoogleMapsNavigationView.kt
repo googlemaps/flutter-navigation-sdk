@@ -20,7 +20,6 @@ import android.content.Context
 import android.content.res.Configuration
 import android.view.View
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap.OnCameraMoveStartedListener
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.libraries.navigation.NavigationView
 import io.flutter.plugin.platform.PlatformView

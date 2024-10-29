@@ -28,8 +28,9 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'shared.dart';
 
 void main() {
-  patrol('Marker tests', (PatrolIntegrationTester $) async {
-    for (final TestMapType testMapType in testMapTypes) {
+  for (final TestMapType testMapType in testMapTypes) {
+    patrol('Marker tests (${testMapType.name})',
+        (PatrolIntegrationTester $) async {
       void onMarkerClicked(String event) {
         debugPrint('Marker clicked event: $event.');
       }
@@ -269,11 +270,12 @@ void main() {
       await viewController.clear();
       getClearMarkerList = await viewController.getMarkers();
       expect(getClearMarkerList, isEmpty);
-    }
-  });
+    });
+  }
 
-  patrol('Test polylines', (PatrolIntegrationTester $) async {
-    for (final TestMapType testMapType in testMapTypes) {
+  for (final TestMapType testMapType in testMapTypes) {
+    patrol('Test polylines (${testMapType.name})',
+        (PatrolIntegrationTester $) async {
       /// The events are not tested because there's currently no reliable way to trigger them.
       void onPolylineClicked(String event) {
         debugPrint('Polyline clicked event: $event.');
@@ -493,13 +495,12 @@ void main() {
       final List<Polyline?> receivedPolylines8 =
           await viewController.getPolylines();
       expect(receivedPolylines8.length, 0);
-    }
-  });
+    });
+  }
 
-  patrol('Polygon tests', (PatrolIntegrationTester $) async {
-    // This value is used to track the cirlcle offset for circle ids during each iteration for each test map type.
-    int polygonStartIndex = 0;
-    for (final TestMapType testMapType in testMapTypes) {
+  for (final TestMapType testMapType in testMapTypes) {
+    patrol('Polygon tests (${testMapType.name})',
+        (PatrolIntegrationTester $) async {
       void onPolygonClicked(String event) {
         /// The events are not tested because there's currently no reliable way to trigger them.
         debugPrint('Polygon clicked event: $event.');
@@ -589,7 +590,7 @@ void main() {
 
       /// Test PolygonOptions default values against addPolygons and getPolygons responses.
       for (final Polygon polygon in polygonList) {
-        expect(polygon.polygonId, 'Polygon_$polygonStartIndex');
+        expect(polygon.polygonId, 'Polygon_0');
         expect(polygon.options.points, options.points);
         expect(polygon.options.holes, options.holes);
 
@@ -673,7 +674,7 @@ void main() {
 
       /// Test PolygonOptions updated values against updatePolygons and getPolygons responses.
       for (final Polygon updatedPolygon in updatedPolygonList) {
-        expect(updatedPolygon.polygonId, 'Polygon_$polygonStartIndex');
+        expect(updatedPolygon.polygonId, 'Polygon_0');
         expect(updatedPolygon.options.points, updatedOptions.points);
         expect(updatedPolygon.options.holes, updatedOptions.holes);
         expect(updatedPolygon.options.clickable, updatedOptions.clickable);
@@ -690,12 +691,12 @@ void main() {
       final List<Polygon?> polygons2 =
           await viewController.addPolygons(<PolygonOptions>[updatedOptions]);
       expect(polygons2.length, 1);
-      expect(polygons2[0]!.polygonId, 'Polygon_${polygonStartIndex + 1}');
+      expect(polygons2[0]!.polygonId, 'Polygon_1');
 
       getPolygons = await viewController.getPolygons();
       expect(getPolygons.length, 2);
-      expect(getPolygons[0]!.polygonId, 'Polygon_$polygonStartIndex');
-      expect(getPolygons[1]!.polygonId, 'Polygon_${polygonStartIndex + 1}');
+      expect(getPolygons[0]!.polygonId, 'Polygon_0');
+      expect(getPolygons[1]!.polygonId, 'Polygon_1');
 
       final List<Polygon> polygonList2 = <Polygon>[
         polygons2[0]!,
@@ -716,44 +717,44 @@ void main() {
       final List<Polygon?> polygons3 =
           await viewController.addPolygons(<PolygonOptions>[options]);
       expect(polygons3.length, 1);
-      expect(polygons3[0]!.polygonId, 'Polygon_${polygonStartIndex + 2}');
+      expect(polygons3[0]!.polygonId, 'Polygon_2');
 
       getPolygons = await viewController.getPolygons();
       expect(getPolygons.length, 3);
-      expect(getPolygons[0]!.polygonId, 'Polygon_$polygonStartIndex');
-      expect(getPolygons[1]!.polygonId, 'Polygon_${polygonStartIndex + 1}');
-      expect(getPolygons[2]!.polygonId, 'Polygon_${polygonStartIndex + 2}');
+      expect(getPolygons[0]!.polygonId, 'Polygon_0');
+      expect(getPolygons[1]!.polygonId, 'Polygon_1');
+      expect(getPolygons[2]!.polygonId, 'Polygon_2');
 
       /// Test removing the first polygon.
       await viewController.removePolygons(<Polygon>[getPolygons.first!]);
 
       getPolygons = await viewController.getPolygons();
       expect(getPolygons.length, 2);
-      expect(getPolygons[0]!.polygonId, 'Polygon_${polygonStartIndex + 1}');
-      expect(getPolygons[1]!.polygonId, 'Polygon_${polygonStartIndex + 2}');
+      expect(getPolygons[0]!.polygonId, 'Polygon_1');
+      expect(getPolygons[1]!.polygonId, 'Polygon_2');
 
       /// Test removing the last polygon.
       await viewController.removePolygons(<Polygon>[getPolygons.last!]);
 
       getPolygons = await viewController.getPolygons();
       expect(getPolygons.length, 1);
-      expect(getPolygons[0]!.polygonId, 'Polygon_${polygonStartIndex + 1}');
+      expect(getPolygons[0]!.polygonId, 'Polygon_1');
 
       /// Add multiple polygons to test clearPolygons().
       final List<Polygon?> polygons4 = await viewController
           .addPolygons(<PolygonOptions>[updatedOptions, options, options]);
 
       expect(polygons4.length, 3);
-      expect(polygons4[0]!.polygonId, 'Polygon_${polygonStartIndex + 3}');
-      expect(polygons4[1]!.polygonId, 'Polygon_${polygonStartIndex + 4}');
-      expect(polygons4[2]!.polygonId, 'Polygon_${polygonStartIndex + 5}');
+      expect(polygons4[0]!.polygonId, 'Polygon_3');
+      expect(polygons4[1]!.polygonId, 'Polygon_4');
+      expect(polygons4[2]!.polygonId, 'Polygon_5');
 
       getPolygons = await viewController.getPolygons();
       expect(getPolygons.length, 4);
-      expect(getPolygons[0]!.polygonId, 'Polygon_${polygonStartIndex + 1}');
-      expect(getPolygons[1]!.polygonId, 'Polygon_${polygonStartIndex + 3}');
-      expect(getPolygons[2]!.polygonId, 'Polygon_${polygonStartIndex + 4}');
-      expect(getPolygons[3]!.polygonId, 'Polygon_${polygonStartIndex + 5}');
+      expect(getPolygons[0]!.polygonId, 'Polygon_1');
+      expect(getPolygons[1]!.polygonId, 'Polygon_3');
+      expect(getPolygons[2]!.polygonId, 'Polygon_4');
+      expect(getPolygons[3]!.polygonId, 'Polygon_5');
 
       /// Test clearPolygons().
       await viewController.clearPolygons();
@@ -797,14 +798,12 @@ void main() {
 
       getPolygons = await viewController.getPolygons();
       expect(getPolygons, isEmpty);
-      polygonStartIndex += 11;
-    }
-  });
+    });
+  }
 
-  patrol('Circle tests', (PatrolIntegrationTester $) async {
-    // This value is used to track the cirlcle offset for circle ids during each iteration for each test map type.
-    int circleStartIndex = 0;
-    for (final TestMapType testMapType in testMapTypes) {
+  for (final TestMapType testMapType in testMapTypes) {
+    patrol('Circle tests (${testMapType.name})',
+        (PatrolIntegrationTester $) async {
       void onCircleClicked(String event) {
         /// The events are not tested because there's currently no reliable way to trigger them.
         debugPrint('Circle clicked event: $event.');
@@ -828,7 +827,7 @@ void main() {
 
       /// Test CircleOptions default values against addCircles and getCircles responses.
       for (final Circle circle in circleList) {
-        expect(circle.circleId, 'Circle_$circleStartIndex');
+        expect(circle.circleId, 'Circle_0');
         expect(circle.options.position, options.position);
         expect(circle.options.radius, options.radius);
 
@@ -878,7 +877,7 @@ void main() {
 
       /// Test CircleOptions updated values against updateCircles and getCircles responses.
       for (final Circle updatedCircle in updatedCircleList) {
-        expect(updatedCircle.circleId, 'Circle_$circleStartIndex');
+        expect(updatedCircle.circleId, 'Circle_0');
         expect(updatedCircle.options.position, updatedOptions.position);
         expect(updatedCircle.options.radius, updatedOptions.radius);
         expect(updatedCircle.options.clickable, updatedOptions.clickable);
@@ -896,12 +895,12 @@ void main() {
       final List<Circle?> circles2 =
           await viewController.addCircles(<CircleOptions>[updatedOptions]);
       expect(circles2.length, 1);
-      expect(circles2[0]!.circleId, 'Circle_${circleStartIndex + 1}');
+      expect(circles2[0]!.circleId, 'Circle_1');
 
       getCircles = await viewController.getCircles();
       expect(getCircles.length, 2);
-      expect(getCircles[0]!.circleId, 'Circle_$circleStartIndex');
-      expect(getCircles[1]!.circleId, 'Circle_${circleStartIndex + 1}');
+      expect(getCircles[0]!.circleId, 'Circle_0');
+      expect(getCircles[1]!.circleId, 'Circle_1');
 
       final List<Circle> circleList2 = <Circle>[
         circles2[0]!,
@@ -924,44 +923,44 @@ void main() {
       final List<Circle?> circles3 =
           await viewController.addCircles(<CircleOptions>[options]);
       expect(circles3.length, 1);
-      expect(circles3[0]!.circleId, 'Circle_${circleStartIndex + 2}');
+      expect(circles3[0]!.circleId, 'Circle_2');
 
       getCircles = await viewController.getCircles();
       expect(getCircles.length, 3);
-      expect(getCircles[0]!.circleId, 'Circle_$circleStartIndex');
-      expect(getCircles[1]!.circleId, 'Circle_${circleStartIndex + 1}');
-      expect(getCircles[2]!.circleId, 'Circle_${circleStartIndex + 2}');
+      expect(getCircles[0]!.circleId, 'Circle_0');
+      expect(getCircles[1]!.circleId, 'Circle_1');
+      expect(getCircles[2]!.circleId, 'Circle_2');
 
       /// Test removing the first circle.
       await viewController.removeCircles(<Circle>[getCircles.first!]);
 
       getCircles = await viewController.getCircles();
       expect(getCircles.length, 2);
-      expect(getCircles[0]!.circleId, 'Circle_${circleStartIndex + 1}');
-      expect(getCircles[1]!.circleId, 'Circle_${circleStartIndex + 2}');
+      expect(getCircles[0]!.circleId, 'Circle_1');
+      expect(getCircles[1]!.circleId, 'Circle_2');
 
       /// Test removing the last circle.
       await viewController.removeCircles(<Circle>[getCircles.last!]);
 
       getCircles = await viewController.getCircles();
       expect(getCircles.length, 1);
-      expect(getCircles[0]!.circleId, 'Circle_${circleStartIndex + 1}');
+      expect(getCircles[0]!.circleId, 'Circle_1');
 
       /// Add multiple circles to test clearCircles().
       final List<Circle?> circles4 = await viewController
           .addCircles(<CircleOptions>[updatedOptions, options, options]);
 
       expect(circles4.length, 3);
-      expect(circles4[0]!.circleId, 'Circle_${circleStartIndex + 3}');
-      expect(circles4[1]!.circleId, 'Circle_${circleStartIndex + 4}');
-      expect(circles4[2]!.circleId, 'Circle_${circleStartIndex + 5}');
+      expect(circles4[0]!.circleId, 'Circle_3');
+      expect(circles4[1]!.circleId, 'Circle_4');
+      expect(circles4[2]!.circleId, 'Circle_5');
 
       getCircles = await viewController.getCircles();
       expect(getCircles.length, 4);
-      expect(getCircles[0]!.circleId, 'Circle_${circleStartIndex + 1}');
-      expect(getCircles[1]!.circleId, 'Circle_${circleStartIndex + 3}');
-      expect(getCircles[2]!.circleId, 'Circle_${circleStartIndex + 4}');
-      expect(getCircles[3]!.circleId, 'Circle_${circleStartIndex + 5}');
+      expect(getCircles[0]!.circleId, 'Circle_1');
+      expect(getCircles[1]!.circleId, 'Circle_3');
+      expect(getCircles[2]!.circleId, 'Circle_4');
+      expect(getCircles[3]!.circleId, 'Circle_5');
 
       /// Test clearCircles().
       await viewController.clearCircles();
@@ -996,7 +995,6 @@ void main() {
       } on CircleNotFoundException catch (e) {
         expect(e, isNotNull);
       }
-      circleStartIndex += 11;
-    }
-  });
+    });
+  }
 }

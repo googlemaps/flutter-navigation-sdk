@@ -26,8 +26,9 @@ import 'package:flutter/material.dart';
 import 'shared.dart';
 
 void main() {
-  patrol('Test map types', (PatrolIntegrationTester $) async {
-    for (final TestMapType testMapType in testMapTypes) {
+  for (final TestMapType testMapType in testMapTypes) {
+    patrol('Test map types (${testMapType.name})',
+        (PatrolIntegrationTester $) async {
       /// Get viewController for the test type (navigation map or regular map).
       GoogleMapViewController viewController =
           await getMapViewControllerForTestMapType($, testMapType: testMapType);
@@ -46,12 +47,12 @@ void main() {
         await viewController.setMapType(mapType: type);
         expect(await viewController.getMapType(), type);
       }
-    }
-  });
+    });
+  }
 
-  patrol('Test platform view creation params',
-      (PatrolIntegrationTester $) async {
-    for (final TestMapType testMapType in testMapTypes) {
+  for (final TestMapType testMapType in testMapTypes) {
+    patrol('Test platform view creation params (${testMapType.name})',
+        (PatrolIntegrationTester $) async {
       final Completer<GoogleMapViewController> controllerCompleter =
           Completer<GoogleMapViewController>();
 
@@ -118,11 +119,12 @@ void main() {
         expect(await controller.settings.isZoomControlsEnabled(), false);
         expect(await controller.settings.isMapToolbarEnabled(), false);
       }
-    }
-  });
+    });
+  }
 
-  patrol('Test map UI settings', (PatrolIntegrationTester $) async {
-    for (final TestMapType testMapType in testMapTypes) {
+  for (final TestMapType testMapType in testMapTypes) {
+    patrol('Test map UI settings (${testMapType.name})',
+        (PatrolIntegrationTester $) async {
       /// The events are not tested because there's currently no reliable way to trigger them.
       void onMyLocationButtonClicked(MyLocationButtonClickedEvent event) {
         debugPrint('My location button clicked event: currently $event');
@@ -245,11 +247,12 @@ void main() {
           expect(e, const TypeMatcher<UnsupportedError>());
         }
       }
-    }
-  });
+    });
+  }
 
-  patrol('Test map style', (PatrolIntegrationTester $) async {
-    for (final TestMapType testMapType in testMapTypes) {
+  for (final TestMapType testMapType in testMapTypes) {
+    patrol('Test map style (${testMapType.name})',
+        (PatrolIntegrationTester $) async {
       /// Get viewController for the test type (navigation map or regular map).
       GoogleMapViewController viewController =
           await getMapViewControllerForTestMapType($, testMapType: testMapType);
@@ -268,11 +271,12 @@ void main() {
       } on MapStyleException catch (e) {
         expect(e, isNotNull);
       }
-    }
-  });
+    });
+  }
 
-  patrol('Test min max zoom level', (PatrolIntegrationTester $) async {
-    for (final TestMapType testMapType in testMapTypes) {
+  for (final TestMapType testMapType in testMapTypes) {
+    patrol('Test min max zoom level (${testMapType.name})',
+        (PatrolIntegrationTester $) async {
       /// For some reason the functionality works on Android example app, but it doesn't work
       /// during the testing. Will skip Android testing for now.
       final Completer<GoogleMapViewController> viewControllerCompleter =
@@ -359,6 +363,6 @@ void main() {
       // Expect the same values. The actual zoom level will be limited by the map.
       expect(newMinZoomPreference, 0.0);
       expect(newMaxZoomPreference, 50.0);
-    }
-  });
+    });
+  }
 }
