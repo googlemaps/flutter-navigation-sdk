@@ -196,7 +196,6 @@ enum Convert {
       return .left
     case .right:
       return .right
-
     @unknown default:
       return .none
     }

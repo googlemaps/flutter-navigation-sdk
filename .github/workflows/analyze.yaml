@@ -70,13 +70,12 @@ jobs:
         with:
           path: /home/linuxbrew/.linuxbrew
           key: ${{ runner.os }}-linuxbrew
-      - name: Setup homebrew
-        uses: Homebrew/actions/setup-homebrew@master
-      - name: Install swiftformat
+      - name: Install swiftformat 0.54.6
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
-          curl -O https://raw.githubusercontent.com/Homebrew/homebrew-core/86f85aaa82beba49f8a5aabf3a22508c9249f188/Formula/s/swiftformat.rb
+          curl -O https://raw.githubusercontent.com/Homebrew/homebrew-core/4564fbc21a326c4eb349327ce327cbe983bf302a/Formula/s/swiftformat.rb
           echo 'brew "swiftformat.rb"' > Brewfile
           brew bundle
       - name: Save Cache
@@ -87,10 +86,12 @@ jobs:
           key: ${{ runner.os }}-linuxbrew
       - name: Formatter version
         run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           swiftformat --version
       - name: Run format
         if: ${{ success() || failure() }}
         run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           melos run format
       - name: Validate formatting
         if: ${{ success() || failure() }}
