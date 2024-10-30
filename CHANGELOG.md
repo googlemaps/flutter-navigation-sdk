@@ -6,6 +6,20 @@
 * update README.md to prepare for publishing package to pub.dev
 
 
+## [0.4.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.3.0...v0.4.0) (2024-10-30)
+
+
+### Features
+
+* standalone classic mapview ([#181](https://github.com/googlemaps/flutter-navigation-sdk/issues/181)) ([e85f590](https://github.com/googlemaps/flutter-navigation-sdk/commit/e85f59070639a9ad97e970b8e9df25d54b938293))
+* update navigation sdk versions (iOS -&gt; 9.1.2, Android -> 6.0.0) and min iOS version to 15 ([#177](https://github.com/googlemaps/flutter-navigation-sdk/issues/177)) ([fa9eb88](https://github.com/googlemaps/flutter-navigation-sdk/commit/fa9eb880247496a2a583011853e5b9a6cbc953be))
+
+
+### Bug Fixes
+
+* make ios map view array thread safe ([#180](https://github.com/googlemaps/flutter-navigation-sdk/issues/180)) ([8f0283f](https://github.com/googlemaps/flutter-navigation-sdk/commit/8f0283ffc8885fa085b8c47edeeb2b6c44693e14))
+* showStopLights and showDestinationMarkers functionality on iOS ([#178](https://github.com/googlemaps/flutter-navigation-sdk/issues/178)) ([d882837](https://github.com/googlemaps/flutter-navigation-sdk/commit/d882837589b380b29fbdb6c4d823ef2844394f11))
+
 ## 0.2.3-beta
 
 This is the beta release of the Google Maps Navigation package for Flutter. It is an early look at the package and is intended for testing and feedback collection. The functionalities and APIs in this version are subject to change.
