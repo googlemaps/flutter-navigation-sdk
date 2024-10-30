@@ -10,9 +10,9 @@ _See also: [Flutter's code of conduct](https://flutter.io/design-principles/#cod
 - **Code Formatting:** [`swiftformat`](https://github.com/nicklockwood/SwiftFormat) (available via brew on macOS, on Windows install Swift toolchain and build SwiftFormat from git sources). 
 
 ### 1.1. Installing swiftformat
-The CI is locked to swiftformat 0.53 version which you can install with the command below:
+The CI is locked to swiftformat 0.54.6 version which you can install with the command below:
 ```bash
-curl -O https://raw.githubusercontent.com/Homebrew/homebrew-core/86f85aaa82beba49f8a5aabf3a22508c9249f188/Formula/s/swiftformat.rb
+curl -O https://raw.githubusercontent.com/Homebrew/homebrew-core/4564fbc21a326c4eb349327ce327cbe983bf302a/Formula/s/swiftformat.rb
 brew install swiftformat.rb
 ```
 
