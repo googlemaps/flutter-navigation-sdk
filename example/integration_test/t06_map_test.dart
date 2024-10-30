@@ -26,12 +26,14 @@ import 'package:flutter/material.dart';
 import 'shared.dart';
 
 void main() {
-  for (final TestMapType testMapType in testMapTypes) {
-    patrol('Test map types (${testMapType.name})',
-        (PatrolIntegrationTester $) async {
+  final mapTypeVariants = getMapTypeVariants();
+  patrol(
+    'Test map types',
+    (PatrolIntegrationTester $) async {
       /// Get viewController for the test type (navigation map or regular map).
       GoogleMapViewController viewController =
-          await getMapViewControllerForTestMapType($, testMapType: testMapType);
+          await getMapViewControllerForTestMapType($,
+              testMapType: mapTypeVariants.currentValue!);
 
       // Test default type.
       expect(await viewController.getMapType(), MapType.normal);
@@ -47,17 +49,18 @@ void main() {
         await viewController.setMapType(mapType: type);
         expect(await viewController.getMapType(), type);
       }
-    });
-  }
+    },
+    variant: mapTypeVariants,
+  );
 
-  for (final TestMapType testMapType in testMapTypes) {
-    patrol('Test platform view creation params (${testMapType.name})',
-        (PatrolIntegrationTester $) async {
+  patrol(
+    'Test platform view creation params',
+    (PatrolIntegrationTester $) async {
       final Completer<GoogleMapViewController> controllerCompleter =
           Completer<GoogleMapViewController>();
 
-      switch (testMapType) {
-        case TestMapType.map:
+      switch (mapTypeVariants.currentValue!) {
+        case TestMapType.mapView:
           final Key key = GlobalKey();
           await pumpMapView(
             $,
@@ -78,7 +81,7 @@ void main() {
             ),
           );
           break;
-        case TestMapType.navigation:
+        case TestMapType.navigationView:
           final Key key = GlobalKey();
           await pumpNavigationView(
             $,
@@ -119,12 +122,13 @@ void main() {
         expect(await controller.settings.isZoomControlsEnabled(), false);
         expect(await controller.settings.isMapToolbarEnabled(), false);
       }
-    });
-  }
+    },
+    variant: mapTypeVariants,
+  );
 
-  for (final TestMapType testMapType in testMapTypes) {
-    patrol('Test map UI settings (${testMapType.name})',
-        (PatrolIntegrationTester $) async {
+  patrol(
+    'Test map UI settings',
+    (PatrolIntegrationTester $) async {
       /// The events are not tested because there's currently no reliable way to trigger them.
       void onMyLocationButtonClicked(MyLocationButtonClickedEvent event) {
         debugPrint('My location button clicked event: currently $event');
@@ -149,7 +153,7 @@ void main() {
           /// Get viewController for the test type (navigation map or regular map).
           await getMapViewControllerForTestMapType(
         $,
-        testMapType: testMapType,
+        testMapType: mapTypeVariants.currentValue!,
         initializeNavigation: false,
         onMapClicked: expectAsync1((LatLng msg) {
           expectSync(msg, isA<LatLng>());
@@ -247,15 +251,17 @@ void main() {
           expect(e, const TypeMatcher<UnsupportedError>());
         }
       }
-    });
-  }
+    },
+    variant: mapTypeVariants,
+  );
 
-  for (final TestMapType testMapType in testMapTypes) {
-    patrol('Test map style (${testMapType.name})',
-        (PatrolIntegrationTester $) async {
+  patrol(
+    'Test map style',
+    (PatrolIntegrationTester $) async {
       /// Get viewController for the test type (navigation map or regular map).
       GoogleMapViewController viewController =
-          await getMapViewControllerForTestMapType($, testMapType: testMapType);
+          await getMapViewControllerForTestMapType($,
+              testMapType: mapTypeVariants.currentValue!);
 
       // Test that valid json doens't throw exception.
       await viewController.setMapStyle(
@@ -271,12 +277,13 @@ void main() {
       } on MapStyleException catch (e) {
         expect(e, isNotNull);
       }
-    });
-  }
+    },
+    variant: mapTypeVariants,
+  );
 
-  for (final TestMapType testMapType in testMapTypes) {
-    patrol('Test min max zoom level (${testMapType.name})',
-        (PatrolIntegrationTester $) async {
+  patrol(
+    'Test min max zoom level',
+    (PatrolIntegrationTester $) async {
       /// For some reason the functionality works on Android example app, but it doesn't work
       /// during the testing. Will skip Android testing for now.
       final Completer<GoogleMapViewController> viewControllerCompleter =
@@ -284,8 +291,8 @@ void main() {
 
       await checkLocationDialogAcceptance($);
 
-      switch (testMapType) {
-        case TestMapType.map:
+      switch (mapTypeVariants.currentValue!) {
+        case TestMapType.mapView:
 
           /// Display map view.
           final Key key = GlobalKey();
@@ -299,7 +306,7 @@ void main() {
             ),
           );
           break;
-        case TestMapType.navigation:
+        case TestMapType.navigationView:
 
           /// Display navigation view.
           final Key key = GlobalKey();
@@ -363,6 +370,7 @@ void main() {
       // Expect the same values. The actual zoom level will be limited by the map.
       expect(newMinZoomPreference, 0.0);
       expect(newMaxZoomPreference, 50.0);
-    });
-  }
+    },
+    variant: mapTypeVariants,
+  );
 }

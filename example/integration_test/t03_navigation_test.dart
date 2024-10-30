@@ -598,23 +598,30 @@ void main() {
       displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
     );
 
-    /// Cut network connection.
-    await $.native.disableCellular();
-    await $.native.disableWifi();
+    try {
+      /// Cut network connection.
+      await $.native.disableCellular();
+      await $.native.disableWifi();
 
-    /// Test that the error is received.
-    final NavigationRouteStatus routeStatus =
-        await GoogleMapsNavigator.setDestinations(destinations);
-    expect(routeStatus, equals(NavigationRouteStatus.networkError));
+      // Wait a while to ensure network is down.
+      await $.pumpAndSettle(duration: const Duration(seconds: 1));
 
-    final NavigationRouteStatus routeStatusSim = await GoogleMapsNavigator
-        .simulator
-        .simulateLocationsAlongNewRoute(waypoint);
-    expect(routeStatusSim, equals(NavigationRouteStatus.networkError));
+      /// Test that the error is received.
+      final NavigationRouteStatus routeStatus =
+          await GoogleMapsNavigator.setDestinations(destinations);
+      expect(routeStatus, equals(NavigationRouteStatus.networkError),
+          reason: 'setDestinations did not return networkError');
 
-    /// Re-enable network connection.
-    await $.native.enableCellular();
-    await $.native.enableWifi();
+      final NavigationRouteStatus routeStatusSim = await GoogleMapsNavigator
+          .simulator
+          .simulateLocationsAlongNewRoute(waypoint);
+      expect(routeStatusSim, equals(NavigationRouteStatus.networkError),
+          reason: 'simulateLocationsAlongNewRoute did not return networkError');
+    } finally {
+      /// Re-enable network connection.
+      await $.native.enableCellular();
+      await $.native.enableWifi();
+    }
   }, skip: Platform.isIOS && !isPhysicalDevice);
 
   patrol('Test route not found errors', (PatrolIntegrationTester $) async {
