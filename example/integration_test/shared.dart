@@ -14,6 +14,7 @@
 
 import 'dart:async';
 import 'dart:io';
+import 'package:meta/meta.dart';
 
 // This is a basic Flutter integration test.
 //
@@ -36,16 +37,22 @@ export 'package:patrol/patrol.dart';
 // Type used for iterating over different maps to be tested.
 enum TestMapType {
   /// Regular google map view.
-  map,
+  mapView,
 
-  /// Navigation map.
-  navigation,
+  /// Navigation map view.
+  navigationView,
 }
 
+// Map types to be tested
 const List<TestMapType> testMapTypes = <TestMapType>[
-  TestMapType.map,
-  TestMapType.navigation
+  TestMapType.mapView,
+  TestMapType.navigationView
 ];
+
+// Get a variants for the test map types.
+ValueVariant<TestMapType> getMapTypeVariants() {
+  return ValueVariant<TestMapType>(testMapTypes.toSet());
+}
 
 /// Location coordinates for starting position simulation in Finland - Näkkäläntie.
 const double startLocationLat = 68.593793;
@@ -59,12 +66,14 @@ const NativeAutomatorConfig _nativeAutomatorConfig = NativeAutomatorConfig(
 );
 
 /// Create a wrapper [patrol] for [patrolTest] with custom options.
+@isTest
 void patrol(
   String description,
   Future<void> Function(PatrolIntegrationTester) callback, {
   bool skip = false,
   int timeoutSeconds = testTimeoutSeconds,
   NativeAutomatorConfig? nativeAutomatorConfig,
+  TestVariant<Object?> variant = const DefaultTestVariant(),
 }) {
   /// The patrolTest skip functionality does not work as expected and can
   /// hang the test execution.
@@ -74,10 +83,12 @@ void patrol(
     debugPrint('Skipping test: $description');
     return;
   }
+
   patrolTest(
     description,
     callback,
     skip: skip,
+    variant: variant,
     timeout: Timeout(Duration(seconds: timeoutSeconds)),
     nativeAutomatorConfig: nativeAutomatorConfig ?? _nativeAutomatorConfig,
   );
@@ -265,7 +276,7 @@ Future<GoogleMapViewController> getMapViewControllerForTestMapType(
 
   switch (testMapType) {
     /// Set up map.
-    case TestMapType.map:
+    case TestMapType.mapView:
       viewController = await startMapView(
         $,
         onMarkerClicked: onMarkerClicked,
@@ -286,7 +297,7 @@ Future<GoogleMapViewController> getMapViewControllerForTestMapType(
       break;
 
     /// Set up navigation map.
-    case TestMapType.navigation:
+    case TestMapType.navigationView:
       viewController = await startNavigationWithoutDestination($,
           initializeNavigation: initializeNavigation,
           simulateLocation: simulateLocation,
