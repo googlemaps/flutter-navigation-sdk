@@ -71,15 +71,15 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     _mapConfiguration.apply(to: mapViewOptions, withFrame: frame)
     _mapView = ViewStateAwareGMSMapView(options: mapViewOptions)
     _mapConfiguration.apply(to: _mapView)
-
-    super.init()
-
     _navigationUIEnabledPreference = navigationUIEnabledPreference
-    applyNavigationUIEnabledPreference()
 
     registry.registerView(viewId: viewId, view: self)
     _mapView.delegate = self
     _mapView.viewSettledDelegate = self
+
+    super.init()
+
+    applyNavigationUIEnabledPreference()
   }
 
   deinit {
