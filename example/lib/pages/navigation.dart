@@ -73,6 +73,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   /// Navigation view controller used to interact with the navigation view.
   GoogleNavigationViewController? _navigationViewController;
 
+  final GoogleMapsAutoViewController _autoViewController =
+      GoogleMapsAutoViewController();
+
   /// Latest user location received from the navigator.
   LatLng? _userLocation;
 
@@ -194,6 +197,10 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       debugPrint('Navigator has been initialized: $_navigatorInitialized');
     }
     setState(() {});
+  }
+
+  Future<void> _setMapTypeForAuto() async {
+    await _autoViewController.setMapType(mapType: MapType.satellite);
   }
 
   /// iOS emulator does not update location and does not fire roadsnapping
@@ -1419,6 +1426,20 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                       }),
                 ]),
           )),
+      Card(
+        child: ExpansionTile(
+            title: const Text('Auto view'),
+            collapsedTextColor: getExpansionTileTextColor(
+                !_navigatorInitialized || _navigationViewController == null),
+            collapsedIconColor: getExpansionTileTextColor(
+                !_navigatorInitialized || _navigationViewController == null),
+            children: <Widget>[
+              ElevatedButton(
+                onPressed: () => _setMapTypeForAuto(),
+                child: const Text('Set map type'),
+              ),
+            ]),
+      ),
       IgnorePointer(
           ignoring: !_navigatorInitialized || _navigationViewController == null,
           child: Card(

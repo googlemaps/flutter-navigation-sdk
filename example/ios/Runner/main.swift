@@ -13,17 +13,17 @@
 // limitations under the License.
 
 #if CARPLAY
-UIApplicationMain(
-  CommandLine.argc,
-  CommandLine.unsafeArgv,
-  nil,
-  NSStringFromClass(AppDelegateCarPlay.self)
-)
+  UIApplicationMain(
+    CommandLine.argc,
+    CommandLine.unsafeArgv,
+    nil,
+    NSStringFromClass(AppDelegateCarPlay.self)
+  )
 #else
-UIApplicationMain(
-  CommandLine.argc,
-  CommandLine.unsafeArgv,
-  nil,
-  NSStringFromClass(AppDelegate.self)
-)
+  UIApplicationMain(
+    CommandLine.argc,
+    CommandLine.unsafeArgv,
+    nil,
+    NSStringFromClass(AppDelegate.self)
+  )
 #endif

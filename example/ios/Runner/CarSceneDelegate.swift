@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import UIKit
 import CarPlay
 import google_navigation_flutter
+import UIKit
 
 class CarSceneDelegate: BaseCarSceneDelegate {
   override func getTemplate() -> CPMapTemplate {
@@ -22,7 +22,6 @@ class CarSceneDelegate: BaseCarSceneDelegate {
     template.showPanningInterface(animated: true)
 
     let button = CPBarButton(title: "Custom Event") { _ in
-
     }
     template.leadingNavigationBarButtons = [button]
     return template

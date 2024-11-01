@@ -1,0 +1,69 @@
+/*
+ * Copyright 2023 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.maps.flutter.navigation
+
+import android.view.View
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMapOptions
+import com.google.android.libraries.navigation.NavigationViewForAuto
+import io.flutter.plugin.platform.PlatformView
+
+class GoogleMapsAutoMapView
+internal constructor(
+  mapOptions: GoogleMapOptions,
+  viewId: Int,
+  viewEventApi: ViewEventApi,
+  private val viewRegistry: GoogleMapsViewRegistry,
+  imageRegistry: ImageRegistry,
+  private val mapView: NavigationViewForAuto,
+  private val map: GoogleMap
+) : PlatformView, GoogleMapsBaseMapView(viewId, mapOptions, viewEventApi, imageRegistry) {
+
+  override fun getView(): View {
+    return mapView
+  }
+
+  init {
+    setMap(map)
+    initListeners()
+    imageRegistry.mapViewInitializationComplete()
+    mapReady()
+    invalidateViewAfterMapLoad()
+
+    viewRegistry.registerAndroidAutoView(this)
+  }
+
+  override fun dispose() {
+    viewRegistry.unregisterAndroidAutoView()
+  }
+
+  override fun onStart() {
+    mapView.onStart()
+  }
+
+  override fun onResume() {
+    mapView.onResume()
+  }
+
+  override fun onStop() {
+    mapView.onStop()
+  }
+
+  override fun onPause() {
+    mapView.onPause()
+  }
+}

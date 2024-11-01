@@ -5610,6 +5610,37 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
 }
 
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
+protocol AutoMapViewApi {
+  func setMapType(mapType: MapTypeDto) throws
+}
+
+/// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
+enum AutoMapViewApiSetup {
+  /// The codec used by AutoMapViewApi.
+  /// Sets up an instance of `AutoMapViewApi` to handle messages through the `binaryMessenger`.
+  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: AutoMapViewApi?) {
+    let setMapTypeChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapType",
+      binaryMessenger: binaryMessenger
+    )
+    if let api {
+      setMapTypeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let mapTypeArg = MapTypeDto(rawValue: args[0] as! Int)!
+        do {
+          try api.setMapType(mapType: mapTypeArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setMapTypeChannel.setMessageHandler(nil)
+    }
+  }
+}
+
+/// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol NavigationInspector {
   func isViewAttachedToSession(viewId: Int64) throws -> Bool
 }

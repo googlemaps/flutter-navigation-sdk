@@ -60,11 +60,10 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
        viewRegistry registry: GoogleMapsNavigationViewRegistry,
        viewEventApi: ViewEventApi,
        navigationUIEnabledPreference: NavigationUIEnabledPreference,
-       mapConfiguration: MapConfiguration, 
+       mapConfiguration: MapConfiguration,
        imageRegistry: ImageRegistry,
        // If isCarPlayView is set to true, viewId will be ignored.
-       isCarPlayView: Bool = false
-  ) {
+       isCarPlayView: Bool = false) {
     _viewId = viewId
     _isNavigationView = isNavigationView
     _viewRegistry = registry

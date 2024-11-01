@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Foundation
 import CarPlay
+import Foundation
 import GoogleMaps
 
-open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPMapTemplateDelegate {
+open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate,
+  CPMapTemplateDelegate {
   private var interfaceController: CPInterfaceController?
   private var carWindow: CPWindow?
   private var mapTemplate: CPMapTemplate?
@@ -26,12 +27,14 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
   private var viewControllerRegistered: Bool = false
   private var templateApplicationScene: CPTemplateApplicationScene?
 
-  public func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didConnect interfaceController: CPInterfaceController, to window: CPWindow) {
+  public func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene,
+                                       didConnect interfaceController: CPInterfaceController,
+                                       to window: CPWindow) {
     self.interfaceController = interfaceController
-    self.carWindow = window
-    self.mapTemplate = getTemplate()
+    carWindow = window
+    mapTemplate = getTemplate()
     self.templateApplicationScene = templateApplicationScene
-    self.mapTemplate?.mapDelegate = self
+    mapTemplate?.mapDelegate = self
     createVC()
   }
 
@@ -41,15 +44,17 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
     return template
   }
 
-  open func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didDisconnect interfaceController: CPInterfaceController, from window: CPWindow) {
+  open func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene,
+                                     didDisconnect interfaceController: CPInterfaceController,
+                                     from window: CPWindow) {
     unRegisterViewController()
     self.interfaceController = nil
-    self.carWindow = nil
-    self.mapTemplate = nil
-    self.navView = nil
-    self.navViewController = nil
-    self.viewControllerRegistered = false
-    self.sessionAttached = false
+    carWindow = nil
+    mapTemplate = nil
+    navView = nil
+    navViewController = nil
+    viewControllerRegistered = false
+    sessionAttached = false
   }
 
   open func sceneDidBecomeActive(_ scene: UIScene) {
@@ -59,54 +64,54 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
   func createVC() {
     guard
       let templateApplicationScene,
-      self.navView == nil
+      navView == nil
     else { return }
-    
-    GoogleMapsNavigationPlugin.pluginInitializedCallback = { [weak self] viewRegistry, navigationViewEventApi, imageRegistry in
-      guard let self else { return }
-      self.navView = GoogleMapsNavigationView(
-        frame: templateApplicationScene.carWindow.screen.bounds,
-        viewIdentifier: 9999,
-        viewRegistry: viewRegistry,
-        navigationViewEventApi: navigationViewEventApi,
-        navigationUIEnabledPreference: NavigationUIEnabledPreference.automatic,
-        mapConfiguration: MapConfiguration(
-          cameraPosition: GMSCameraPosition(latitude: 51.51, longitude: 0.12, zoom: 5),
-          mapType: .normal,
-          compassEnabled: true,
-          rotateGesturesEnabled: false,
-          scrollGesturesEnabled: true,
-          tiltGesturesEnabled: false,
-          zoomGesturesEnabled: true,
-          scrollGesturesEnabledDuringRotateOrZoom: false
-        ),
-        imageRegistry: imageRegistry,
-        isCarPlayView: true
-      )
-      self.navView?.setNavigationHeaderEnabled(false)
-      self.navView?.setRecenterButtonEnabled(false)
-      self.navView?.setNavigationFooterEnabled(false)
-      self.navView?.setSpeedometerEnabled(false)
-      self.navViewController = UIViewController()
-      self.navViewController?.view = self.navView?.view()
-      self.carWindow?.rootViewController = self.navViewController
-      self.interfaceController?.setRootTemplate(self.mapTemplate!, animated: true) { _, _ in }
-    }
+
+    GoogleMapsNavigationPlugin
+      .pluginInitializedCallback =
+      { [weak self] viewRegistry, navigationViewEventApi, imageRegistry in
+        guard let self else { return }
+        self.navView = GoogleMapsNavigationView(
+          frame: templateApplicationScene.carWindow.screen.bounds,
+          viewIdentifier: 9999,
+          isNavigationView: true,
+          viewRegistry: viewRegistry,
+          viewEventApi: navigationViewEventApi,
+          navigationUIEnabledPreference: NavigationUIEnabledPreference.automatic,
+          mapConfiguration: MapConfiguration(
+            cameraPosition: GMSCameraPosition(latitude: 51.51, longitude: 0.12, zoom: 5),
+            mapType: .normal,
+            compassEnabled: true,
+            rotateGesturesEnabled: false,
+            scrollGesturesEnabled: true,
+            tiltGesturesEnabled: false,
+            zoomGesturesEnabled: true,
+            scrollGesturesEnabledDuringRotateOrZoom: false
+          ),
+          imageRegistry: imageRegistry,
+          isCarPlayView: true
+        )
+        self.navView?.setNavigationHeaderEnabled(false)
+        self.navView?.setRecenterButtonEnabled(false)
+        self.navView?.setNavigationFooterEnabled(false)
+        self.navView?.setSpeedometerEnabled(false)
+        self.navViewController = UIViewController()
+        self.navViewController?.view = self.navView?.view()
+        self.carWindow?.rootViewController = self.navViewController
+        self.interfaceController?.setRootTemplate(self.mapTemplate!, animated: true) { _, _ in }
+      }
   }
 
-  func registerViewController() {
+  func registerViewController() {}
 
-  }
-
-  func unRegisterViewController() {
-
-  }
+  func unRegisterViewController() {}
 
   // CPMapTemplateDelegate
 
-  open func mapTemplate(_ mapTemplate: CPMapTemplate, panWith direction: CPMapTemplate.PanDirection) {
+  open func mapTemplate(_ mapTemplate: CPMapTemplate,
+                        panWith direction: CPMapTemplate.PanDirection) {
     let scrollAmount = scrollAmount(for: direction)
-    self.navView?.animateCameraByScroll(dx: scrollAmount.x, dy: scrollAmount.y)
+    navView?.animateCameraByScroll(dx: scrollAmount.x, dy: scrollAmount.y)
   }
 
   func scrollAmount(for direction: CPMapTemplate.PanDirection) -> CGPoint {
@@ -126,8 +131,8 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
       scrollAmount.y = scrollDistance
     }
 
-    if scrollAmount.x != 0 && scrollAmount.y != 0 {
-      let factor: CGFloat = CGFloat(Double(1.0 / sqrt(2.0)))
+    if scrollAmount.x != 0, scrollAmount.y != 0 {
+      let factor = CGFloat(Double(1.0 / sqrt(2.0)))
       scrollAmount.x *= factor
       scrollAmount.y *= factor
     }

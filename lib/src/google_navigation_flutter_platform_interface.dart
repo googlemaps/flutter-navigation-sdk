@@ -41,6 +41,7 @@ abstract class GoogleMapsNavigationPlatform extends PlatformInterface
     with
         NavigationSessionAPIInterface,
         MapViewAPIInterface,
+        AutoMapViewAPIInterface,
         ImageRegistryAPIInterface {
   /// Constructs a GoogleMapsNavigationPlatform.
   GoogleMapsNavigationPlatform() : super(token: _token);
@@ -570,6 +571,11 @@ abstract mixin class MapViewAPIInterface {
     throw UnimplementedError(
         'enableDebugInspection() has not been implemented.');
   }
+}
+
+abstract mixin class AutoMapViewAPIInterface {
+  /// Modified visible map type.
+  Future<void> setMapTypeForAuto({required MapType mapType});
 }
 
 /// API interface for actions of the image registry.

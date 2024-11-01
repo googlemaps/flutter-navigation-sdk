@@ -29,6 +29,6 @@ class GoogleMapsAutoViewController {
   /// ```
   Future<void> setMapType({required MapType mapType}) async {
     return GoogleMapsNavigationPlatform.instance
-        .setMapType(viewId: 0, mapType: mapType); // TODO: fix viewId
+        .setMapTypeForAuto(mapType: mapType);
   }
 }

@@ -33,6 +33,8 @@ class GoogleMapsViewRegistry : DefaultLifecycleObserver, ComponentCallbacks, Com
   // This list contains all map views, including navigation views.
   private val allMapViews: SparseArray<GoogleMapsBaseMapView> = SparseArray()
 
+  private var androidAutoView: GoogleMapsAutoMapView? = null
+
   fun registerNavigationView(viewId: Int, view: GoogleMapsNavigationView) {
     // Navigation views are added both lists.
     navigationViews.put(viewId, view)
@@ -41,6 +43,10 @@ class GoogleMapsViewRegistry : DefaultLifecycleObserver, ComponentCallbacks, Com
 
   fun registerMapView(viewId: Int, view: GoogleMapsBaseMapView) {
     allMapViews.put(viewId, view)
+  }
+
+  fun registerAndroidAutoView(view: GoogleMapsAutoMapView) {
+    androidAutoView = view
   }
 
   fun unregisterNavigationView(viewId: Int) {
@@ -53,6 +59,10 @@ class GoogleMapsViewRegistry : DefaultLifecycleObserver, ComponentCallbacks, Com
     allMapViews.remove(viewId)
   }
 
+  fun unregisterAndroidAutoView() {
+    androidAutoView = null
+  }
+
   fun getNavigationView(viewId: Int): GoogleMapsNavigationView? {
     return navigationViews.get(viewId)
   }
@@ -61,20 +71,28 @@ class GoogleMapsViewRegistry : DefaultLifecycleObserver, ComponentCallbacks, Com
     return allMapViews.get(viewId)
   }
 
+  fun getAndroidAutoView(): GoogleMapsAutoMapView? {
+    return androidAutoView
+  }
+
   override fun onStart(owner: LifecycleOwner) {
     allMapViews.forEach { _, view -> view.onStart() }
+    androidAutoView?.onStart()
   }
 
   override fun onResume(owner: LifecycleOwner) {
     allMapViews.forEach { _, view -> view.onResume() }
+    androidAutoView?.onResume()
   }
 
   override fun onPause(owner: LifecycleOwner) {
     allMapViews.forEach { _, view -> view.onPause() }
+    androidAutoView?.onPause()
   }
 
   override fun onStop(owner: LifecycleOwner) {
     allMapViews.forEach { _, view -> view.onStop() }
+    androidAutoView?.onStop()
   }
 
   override fun onConfigurationChanged(configuration: Configuration) {

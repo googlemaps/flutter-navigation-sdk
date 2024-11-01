@@ -12,14 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'src/google_maps_image_registry.dart';
-export 'src/google_navigation_flutter.dart';
-export 'src/google_navigation_flutter_android.dart';
-export 'src/google_navigation_flutter_ios.dart';
-export 'src/navigator/google_navigation_flutter_navigator.dart';
-export 'src/types/types.dart';
-export 'src/google_maps_navigation_view.dart';
-export 'src/google_maps_map_view.dart';
-export 'src/google_maps_map_view_controller.dart';
-export 'src/google_maps_navigation_view_controller.dart';
-export 'src/google_maps_auto_view_controller.dart';
+import 'dart:async';
+import 'dart:io';
+
+import 'package:flutter/services.dart';
+
+import '../../google_navigation_flutter.dart';
+import '../google_navigation_flutter_platform_interface.dart';
+import 'method_channel.dart';
+
+/// @nodoc
+/// Class that handles map view and navigation view communications.
+mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
+  final AutoMapViewApi _viewApi = AutoMapViewApi();
+
+  @override
+  Future<void> setMapTypeForAuto({required MapType mapType}) {
+    return _viewApi.setMapType(mapType.toDto());
+  }
+}

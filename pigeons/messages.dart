@@ -1255,6 +1255,11 @@ abstract class NavigationSessionEventApi {
 }
 
 @HostApi()
+abstract class AutoMapViewApi {
+  void setMapType(MapTypeDto mapType);
+}
+
+@HostApi()
 abstract class NavigationInspector {
   bool isViewAttachedToSession(int viewId);
 }

@@ -27,17 +27,20 @@ public class GoogleMapsNavigationPlugin: NSObject, FlutterPlugin {
   private static var navigationSessionEventApi: NavigationSessionEventApi?
   private static var navigationSessionManager: GoogleMapsNavigationSessionManager?
   private static var navigationInspectorHandler: GoogleMapsNavigationInspectorHandler?
+  private static var autoViewMessageHandler: GoogleMapsAutoViewMessageHandler?
 
   private static var imageRegistryMessageHandler: GoogleMapsImageRegistryMessageHandler?
   static var imageRegistry: ImageRegistry?
-  private static var isPluginInitialized: Bool = false  {
+  private static var isPluginInitialized: Bool = false {
     didSet {
       if isPluginInitialized {
         pluginInitializedCallback?(viewRegistry!, viewEventApi!, imageRegistry!)
       }
     }
   }
-  static var pluginInitializedCallback: ((GoogleMapsNavigationViewRegistry, ViewEventApi, ImageRegistry) -> Void)? {
+
+  static var pluginInitializedCallback: ((GoogleMapsNavigationViewRegistry, ViewEventApi,
+                                          ImageRegistry) -> Void)? {
     didSet {
       if isPluginInitialized {
         pluginInitializedCallback?(viewRegistry!, viewEventApi!, imageRegistry!)
@@ -82,6 +85,13 @@ public class GoogleMapsNavigationPlugin: NSObject, FlutterPlugin {
     NavigationSessionApiSetup.setUp(
       binaryMessenger: registrar.messenger(),
       api: sessionMessageHandler
+    )
+
+    // CarPlay map view message handling
+    autoViewMessageHandler = GoogleMapsAutoViewMessageHandler(viewRegistry: viewRegistry!)
+    AutoMapViewApiSetup.setUp(
+      binaryMessenger: registrar.messenger(),
+      api: autoViewMessageHandler
     )
 
     navigationInspector = GoogleMapsNavigationInspectorHandler(

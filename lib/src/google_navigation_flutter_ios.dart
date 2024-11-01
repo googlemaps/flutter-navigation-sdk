@@ -14,6 +14,7 @@
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_navigation_flutter/src/method_channel/common_auto_view_api.dart';
 
 import '../google_navigation_flutter.dart';
 import 'google_navigation_flutter_platform_interface.dart';
@@ -24,7 +25,11 @@ import 'method_channel/method_channel.dart';
 /// Google Maps Navigation Platform iOS specific functionalities.
 /// @nodoc
 class GoogleMapsNavigationIOS extends GoogleMapsNavigationPlatform
-    with CommonNavigationSessionAPI, CommonMapViewAPI, CommonImageRegistryAPI {
+    with
+        CommonNavigationSessionAPI,
+        CommonMapViewAPI,
+        CommonAutoMapViewAPI,
+        CommonImageRegistryAPI {
   /// Registers the iOS implementation of GoogleMapsNavigationPlatform.
   static void registerWith() {
     GoogleMapsNavigationPlatform.instance = GoogleMapsNavigationIOS();

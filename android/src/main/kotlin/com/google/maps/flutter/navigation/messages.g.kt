@@ -6091,6 +6091,43 @@ class NavigationSessionEventApi(private val binaryMessenger: BinaryMessenger) {
 }
 
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
+interface AutoMapViewApi {
+  fun setMapType(mapType: MapTypeDto)
+
+  companion object {
+    /** The codec used by AutoMapViewApi. */
+    val codec: MessageCodec<Any?> by lazy { StandardMessageCodec() }
+    /** Sets up an instance of `AutoMapViewApi` to handle messages through the `binaryMessenger`. */
+    @Suppress("UNCHECKED_CAST")
+    fun setUp(binaryMessenger: BinaryMessenger, api: AutoMapViewApi?) {
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapType",
+            codec
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val mapTypeArg = MapTypeDto.ofRaw(args[0] as Int)!!
+            var wrapped: List<Any?>
+            try {
+              api.setMapType(mapTypeArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+    }
+  }
+}
+/** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface NavigationInspector {
   fun isViewAttachedToSession(viewId: Long): Boolean
 

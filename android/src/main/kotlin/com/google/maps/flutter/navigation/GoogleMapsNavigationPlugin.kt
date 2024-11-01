@@ -24,15 +24,25 @@ import io.flutter.embedding.engine.plugins.lifecycle.FlutterLifecycleAdapter
 
 /** GoogleMapsNavigationPlugin */
 class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
-  private lateinit var viewRegistry: GoogleMapsViewRegistry
+  companion object {
+    private var instance: GoogleMapsNavigationPlugin? = null
+
+    fun getInstance(): GoogleMapsNavigationPlugin? {
+      return instance
+    }
+  }
+
+  internal lateinit var viewRegistry: GoogleMapsViewRegistry
   private lateinit var viewMessageHandler: GoogleMapsViewMessageHandler
   private lateinit var imageRegistryMessageHandler: GoogleMapsImageRegistryMessageHandler
-  private lateinit var viewEventApi: ViewEventApi
+  internal lateinit var viewEventApi: ViewEventApi
   private lateinit var _binding: FlutterPlugin.FlutterPluginBinding
   private lateinit var lifecycle: Lifecycle
-  private lateinit var imageRegistry: ImageRegistry
+  internal lateinit var imageRegistry: ImageRegistry
+  private lateinit var autoViewMessageHandler: GoogleMapsAutoViewMessageHandler
 
   override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+    instance = this
     viewRegistry = GoogleMapsViewRegistry()
     imageRegistry = ImageRegistry()
     viewMessageHandler = GoogleMapsViewMessageHandler(viewRegistry)
@@ -42,6 +52,8 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
     viewEventApi = ViewEventApi(binding.binaryMessenger)
     _binding = binding
     binding.applicationContext.registerComponentCallbacks(viewRegistry)
+    autoViewMessageHandler = GoogleMapsAutoViewMessageHandler(viewRegistry)
+    AutoMapViewApi.setUp(binding.binaryMessenger, autoViewMessageHandler)
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -49,6 +61,7 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
     ImageRegistryApi.setUp(binding.binaryMessenger, null)
     GoogleMapsNavigationSessionManager.destroyInstance()
     binding.applicationContext.unregisterComponentCallbacks(viewRegistry)
+    instance = null
   }
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
