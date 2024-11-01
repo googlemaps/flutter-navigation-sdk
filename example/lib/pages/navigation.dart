@@ -203,6 +203,25 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     await _autoViewController.setMapType(mapType: MapType.satellite);
   }
 
+  Future<void> _moveCameraForAuto() async {
+    final CameraUpdate positionUpdate = CameraUpdate.newLatLng(const LatLng(
+        latitude: 60.34856639667419, longitude: 25.03459821831162));
+    await _autoViewController.moveCamera(positionUpdate);
+  }
+
+  Future<void> _addMarkerForAuto() async {
+    LatLng myLocation = (await _autoViewController.getCameraPosition()).target;
+    // markerOne options.
+    MarkerOptions markerOptions = MarkerOptions(
+      position: myLocation,
+      infoWindow: const InfoWindow(
+        title: 'Auto marker',
+        snippet: 'autoMarkerOne',
+      ),
+    );
+    await _autoViewController.addMarkers([markerOptions]);
+  }
+
   /// iOS emulator does not update location and does not fire roadsnapping
   /// events. Initialize user location to [cameraLocationMIT] if user
   /// location is not available after timeout.
@@ -1437,6 +1456,14 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
               ElevatedButton(
                 onPressed: () => _setMapTypeForAuto(),
                 child: const Text('Set map type'),
+              ),
+              ElevatedButton(
+                onPressed: () => _moveCameraForAuto(),
+                child: const Text('Move camera'),
+              ),
+              ElevatedButton(
+                onPressed: () => _addMarkerForAuto(),
+                child: const Text('Add marker'),
               ),
             ]),
       ),

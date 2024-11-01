@@ -1256,7 +1256,103 @@ abstract class NavigationSessionEventApi {
 
 @HostApi()
 abstract class AutoMapViewApi {
+  @async
+  void awaitMapReady();
+
+  bool isMyLocationEnabled();
+  void setMyLocationEnabled(bool enabled);
+  LatLngDto? getMyLocation();
+
+  MapTypeDto getMapType();
   void setMapType(MapTypeDto mapType);
+  void setMapStyle(String styleJson);
+
+  CameraPositionDto getCameraPosition();
+  LatLngBoundsDto getVisibleRegion();
+
+  void followMyLocation(CameraPerspectiveDto perspective, double? zoomLevel);
+  @async
+  bool animateCameraToCameraPosition(
+      CameraPositionDto cameraPosition, int? duration);
+  @async
+  bool animateCameraToLatLng(LatLngDto point, int? duration);
+  @async
+  bool animateCameraToLatLngBounds(
+      LatLngBoundsDto bounds, double padding, int? duration);
+  @async
+  bool animateCameraToLatLngZoom(LatLngDto point, double zoom, int? duration);
+  @async
+  bool animateCameraByScroll(
+      double scrollByDx, double scrollByDy, int? duration);
+  @async
+  bool animateCameraByZoom(
+      double zoomBy, double? focusDx, double? focusDy, int? duration);
+  @async
+  bool animateCameraToZoom(double zoom, int? duration);
+
+  void moveCameraToCameraPosition(CameraPositionDto cameraPosition);
+  void moveCameraToLatLng(LatLngDto point);
+  void moveCameraToLatLngBounds(LatLngBoundsDto bounds, double padding);
+  void moveCameraToLatLngZoom(LatLngDto point, double zoom);
+  void moveCameraByScroll(double scrollByDx, double scrollByDy);
+  void moveCameraByZoom(double zoomBy, double? focusDx, double? focusDy);
+  void moveCameraToZoom(double zoom);
+  double getMinZoomPreference();
+  double getMaxZoomPreference();
+  void resetMinMaxZoomPreference();
+  void setMinZoomPreference(double minZoomPreference);
+  void setMaxZoomPreference(double maxZoomPreference);
+
+  void setMyLocationButtonEnabled(bool enabled);
+  void setConsumeMyLocationButtonClickEventsEnabled(bool enabled);
+  void setZoomGesturesEnabled(bool enabled);
+  void setZoomControlsEnabled(bool enabled);
+  void setCompassEnabled(bool enabled);
+  void setRotateGesturesEnabled(bool enabled);
+  void setScrollGesturesEnabled(bool enabled);
+  void setScrollGesturesDuringRotateOrZoomEnabled(bool enabled);
+  void setTiltGesturesEnabled(bool enabled);
+  void setMapToolbarEnabled(bool enabled);
+  void setTrafficEnabled(bool enabled);
+
+  bool isMyLocationButtonEnabled();
+  bool isConsumeMyLocationButtonClickEventsEnabled();
+  bool isZoomGesturesEnabled();
+  bool isZoomControlsEnabled();
+  bool isCompassEnabled();
+  bool isRotateGesturesEnabled();
+  bool isScrollGesturesEnabled();
+  bool isScrollGesturesEnabledDuringRotateOrZoom();
+  bool isTiltGesturesEnabled();
+  bool isMapToolbarEnabled();
+  bool isTrafficEnabled();
+
+  List<MarkerDto> getMarkers();
+  List<MarkerDto> addMarkers(List<MarkerDto> markers);
+  List<MarkerDto> updateMarkers(List<MarkerDto> markers);
+  void removeMarkers(List<MarkerDto> markers);
+  void clearMarkers();
+  void clear();
+
+  List<PolygonDto> getPolygons();
+  List<PolygonDto> addPolygons(List<PolygonDto> polygons);
+  List<PolygonDto> updatePolygons(List<PolygonDto> polygons);
+  void removePolygons(List<PolygonDto> polygons);
+  void clearPolygons();
+
+  List<PolylineDto> getPolylines();
+  List<PolylineDto> addPolylines(List<PolylineDto> polylines);
+  List<PolylineDto> updatePolylines(List<PolylineDto> polylines);
+  void removePolylines(List<PolylineDto> polylines);
+  void clearPolylines();
+
+  List<CircleDto> getCircles();
+  List<CircleDto> addCircles(List<CircleDto> circles);
+  List<CircleDto> updateCircles(List<CircleDto> circles);
+  void removeCircles(List<CircleDto> circles);
+  void clearCircles();
+
+  void registerOnCameraChangedListener();
 }
 
 @HostApi()

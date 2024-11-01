@@ -574,8 +574,210 @@ abstract mixin class MapViewAPIInterface {
 }
 
 abstract mixin class AutoMapViewAPIInterface {
+  /// Awaits the platform view to be ready for communication.
+  Future<void> awaitMapReadyForAuto();
+
+  /// Get the preference for whether the my location should be enabled or disabled.
+  Future<bool> isMyLocationEnabledForAuto();
+
+  /// Enabled location in the auto map view.
+  Future<void> setMyLocationEnabledForAuto({required bool enabled});
+
+  /// Get the map type.
+  Future<MapType> getMapTypeForAuto();
+
   /// Modified visible map type.
   Future<void> setMapTypeForAuto({required MapType mapType});
+
+  /// Set map style by json string.
+  Future<void> setMapStyleForAuto(String? styleJson);
+
+  /// Enables or disables the my-location button.
+  Future<void> setMyLocationButtonEnabledForAuto({required bool enabled});
+
+  /// Enables or disables if the my location button consumes click events.
+  Future<void> setConsumeMyLocationButtonClickEventsEnabledForAuto(
+      {required bool enabled});
+
+  /// Enables or disables the zoom gestures.
+  Future<void> setZoomGesturesEnabledForAuto({required bool enabled});
+
+  /// Enables or disables the zoom controls.
+  Future<void> setZoomControlsEnabledForAuto({required bool enabled});
+
+  /// Enables or disables the compass.
+  Future<void> setCompassEnabledForAuto({required bool enabled});
+
+  /// Sets the preference for whether rotate gestures should be enabled or disabled.
+  Future<void> setRotateGesturesEnabledForAuto({required bool enabled});
+
+  /// Sets the preference for whether scroll gestures should be enabled or disabled.
+  Future<void> setScrollGesturesEnabledForAuto({required bool enabled});
+
+  /// Sets the preference for whether scroll gestures can take place at the same time as a zoom or rotate gesture.
+  Future<void> setScrollGesturesDuringRotateOrZoomEnabledForAuto(
+      {required bool enabled});
+
+  /// Sets the preference for whether tilt gestures should be enabled or disabled.
+  Future<void> setTiltGesturesEnabledForAuto({required bool enabled});
+
+  /// Sets the preference for whether the Map Toolbar should be enabled or disabled.
+  Future<void> setMapToolbarEnabledForAuto({required bool enabled});
+
+  /// Turns the traffic layer on or off.
+  Future<void> setTrafficEnabledForAuto({required bool enabled});
+
+  /// Get the preference for whether the my location button should be enabled or disabled.
+  Future<bool> isMyLocationButtonEnabledForAuto();
+
+  /// Get the preference for whether the my location button consumes click events.
+  Future<bool> isConsumeMyLocationButtonClickEventsEnabledForAuto();
+
+  /// Gets the preference for whether zoom gestures should be enabled or disabled.
+  Future<bool> isZoomGesturesEnabledForAuto();
+
+  /// Gets the preference for whether zoom controls should be enabled or disabled.
+  Future<bool> isZoomControlsEnabledForAuto();
+
+  /// Gets the preference for whether compass should be enabled or disabled.
+  Future<bool> isCompassEnabledForAuto();
+
+  /// Gets the preference for whether rotate gestures should be enabled or disabled.
+  Future<bool> isRotateGesturesEnabledForAuto();
+
+  /// Gets the preference for whether scroll gestures should be enabled or disabled.
+  Future<bool> isScrollGesturesEnabledForAuto();
+
+  /// Gets the preference for whether scroll gestures can take place at the same time as a zoom or rotate gesture.
+  Future<bool> isScrollGesturesEnabledDuringRotateOrZoomForAuto();
+
+  /// Gets the preference for whether tilt gestures should be enabled or disabled.
+  Future<bool> isTiltGesturesEnabledForAuto();
+
+  /// Gets whether the Map Toolbar is enabled/disabled.
+  Future<bool> isMapToolbarEnabledForAuto();
+
+  /// Checks whether the map is drawing traffic data.
+  Future<bool> isTrafficEnabledForAuto();
+
+  /// Sets the Camera to follow the location of the user.
+  Future<void> followMyLocationForAuto(
+      {required CameraPerspective perspective, required double? zoomLevel});
+
+  /// Gets users current location.
+  Future<LatLng?> getMyLocationForAuto();
+
+  /// Gets the current position of the camera.
+  Future<CameraPosition> getCameraPositionForAuto();
+
+  /// Gets the current visible area / camera bounds.
+  Future<LatLngBounds> getVisibleRegionForAuto();
+
+  /// Animates the movement of the camera.
+  Future<void> animateCameraForAuto(
+      {required CameraUpdate cameraUpdate,
+      required int? duration,
+      AnimationFinishedCallback? onFinished});
+
+  /// Moves the camera.
+  Future<void> moveCameraForAuto({required CameraUpdate cameraUpdate});
+
+  /// Returns the minimum zoom level.
+  Future<double> getMinZoomPreferenceForAuto();
+
+  /// Returns the maximum zoom level for the current camera position.
+  Future<double> getMaxZoomPreferenceForAuto();
+
+  /// Removes any previously specified upper and lower zoom bounds.
+  Future<void> resetMinMaxZoomPreferenceForAuto();
+
+  /// Sets a preferred lower bound for the camera zoom.
+  Future<void> setMinZoomPreferenceForAuto({required double minZoomPreference});
+
+  /// Sets a preferred upper bound for the camera zoom.
+  Future<void> setMaxZoomPreferenceForAuto({required double maxZoomPreference});
+
+  /// Get map clicked event stream from the navigation view.
+  //Stream<MapClickEvent> getMapClickEventStream({required int viewId});
+
+  /// Get map long clicked event stream from the navigation view.
+  //Stream<MapLongClickEvent> getMapLongClickEventStream({required int viewId});
+
+  /// Get navigation recenter button clicked event stream from the navigation view.
+  //Stream<NavigationViewRecenterButtonClickedEvent>
+  //    getNavigationRecenterButtonClickedEventStream({required int viewId});
+
+  /// Get all markers from auto map view.
+  Future<List<Marker?>> getMarkersForAuto();
+
+  /// Add markers to auto map view.
+  Future<List<Marker?>> addMarkersForAuto(
+      {required List<MarkerOptions> markerOptions});
+
+  /// Update markers on the auto map view.
+  Future<List<Marker?>> updateMarkersForAuto({required List<Marker> markers});
+
+  /// Remove markers from auto map view.
+  Future<void> removeMarkersForAuto({required List<Marker> markers});
+
+  /// Remove all markers from auto map view.
+  Future<void> clearMarkersForAuto();
+
+  /// Removes all markers, polylines, polygons, overlays, etc from the map.
+  Future<void> clearForAuto();
+
+  /// Get all polygons from map auto view.
+  Future<List<Polygon?>> getPolygonsForAuto();
+
+  /// Add polygons to auto map view.
+  Future<List<Polygon?>> addPolygonsForAuto(
+      {required List<PolygonOptions> polygonOptions});
+
+  /// Update polygons on the auto map view.
+  Future<List<Polygon?>> updatePolygonsForAuto(
+      {required List<Polygon> polygons});
+
+  /// Remove polygons from auto map view.
+  Future<void> removePolygonsForAuto({required List<Polygon> polygons});
+
+  /// Remove all polygons from auto map view.
+  Future<void> clearPolygonsForAuto();
+
+  /// Get all polylines from auto map view.
+  Future<List<Polyline?>> getPolylinesForAuto();
+
+  /// Add polylines to auto map view.
+  Future<List<Polyline?>> addPolylinesForAuto(
+      {required List<PolylineOptions> polylineOptions});
+
+  /// Update polylines on the auto map view.
+  Future<List<Polyline?>> updatePolylinesForAuto(
+      {required List<Polyline> polylines});
+
+  /// Remove polylines from auto map view.
+  Future<void> removePolylinesForAuto({required List<Polyline> polylines});
+
+  /// Remove all polylines from auto map view.
+  Future<void> clearPolylinesForAuto();
+
+  /// Get all circles from auto map view.
+  Future<List<Circle?>> getCirclesForAuto();
+
+  /// Add circles to auto map view.
+  Future<List<Circle?>> addCirclesForAuto(
+      {required List<CircleOptions> options});
+
+  /// Update circles on the auto map view.
+  Future<List<Circle?>> updateCirclesForAuto({required List<Circle> circles});
+
+  /// Remove circles from auto map view.
+  Future<void> removeCirclesForAuto({required List<Circle> circles});
+
+  /// Remove all circles from auto map view.
+  Future<void> clearCirclesForAuto();
+
+  /// Register camera changed listeners.
+  Future<void> registerOnCameraChangedListenerForAuto();
 }
 
 /// API interface for actions of the image registry.
