@@ -20,13 +20,72 @@ import android.annotation.SuppressLint
 import androidx.car.app.CarContext
 import androidx.car.app.model.Action
 import androidx.car.app.model.ActionStrip
+import androidx.car.app.model.CarIcon
+import androidx.car.app.model.Distance
 import androidx.car.app.model.Template
+import androidx.car.app.navigation.model.Maneuver
 import androidx.car.app.navigation.model.NavigationTemplate
+import androidx.car.app.navigation.model.RoutingInfo
+import androidx.car.app.navigation.model.Step
+import androidx.core.graphics.drawable.IconCompat
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.libraries.mapsplatform.turnbyturn.model.NavInfo
+import com.google.android.libraries.mapsplatform.turnbyturn.model.StepInfo
 import com.google.maps.flutter.navigation.AndroidAutoBaseScreen
+import com.google.maps.flutter.navigation.GoogleMapsNavigationNavUpdatesService
 
 class SampleAndroidAutoScreen(carContext: CarContext): AndroidAutoBaseScreen(carContext) {
+
+    private var mNavInfo: RoutingInfo? = null
+    init {
+        // Connect to the Turn-by-Turn Navigation service to receive navigation data.
+        GoogleMapsNavigationNavUpdatesService.navInfoLiveData.observe(this) { navInfo: NavInfo? ->
+            this.buildNavInfo(
+                navInfo
+            )
+        }
+    }
+
+    private fun buildNavInfo(navInfo: NavInfo?) {
+        if (navInfo == null || navInfo.currentStep == null) {
+            return
+        }
+
+        /**
+         * Converts data received from the Navigation data feed into Android-Auto compatible data
+         * structures.
+         */
+        val currentStep: Step = buildStepFromStepInfo(navInfo.currentStep)
+        val distanceToStep =
+            Distance.create(
+                java.lang.Double.max(
+                    navInfo.distanceToCurrentStepMeters.toDouble(),
+                    0.0
+                ), Distance.UNIT_METERS
+            )
+
+        mNavInfo = RoutingInfo.Builder().setCurrentStep(currentStep, distanceToStep).build()
+
+        // Invalidate the current template which leads to another onGetTemplate call.
+        invalidate()
+    }
+
+    private fun buildStepFromStepInfo(stepInfo: StepInfo): Step {
+        val maneuver: Int = ManeuverConverter.getAndroidAutoManeuverType(stepInfo.maneuver)
+        val maneuverBuilder = Maneuver.Builder(maneuver)
+        if (stepInfo.maneuverBitmap != null) {
+            val maneuverIcon = IconCompat.createWithBitmap(stepInfo.maneuverBitmap)
+            val maneuverCarIcon = CarIcon.Builder(maneuverIcon).build()
+            maneuverBuilder.setIcon(maneuverCarIcon)
+        }
+        val stepBuilder =
+            Step.Builder()
+                .setRoad(stepInfo.fullRoadName)
+                .setCue(stepInfo.fullInstructionText)
+                .setManeuver(maneuverBuilder.build())
+        return stepBuilder.build()
+    }
+
     override fun onGetTemplate(): Template {
         // Suppresses the missing permission check for the followMyLocation method, which requires
         // "android.permission.ACCESS_COARSE_LOCATION" or "android.permission.ACCESS_FINE_LOCATION", as
@@ -54,9 +113,9 @@ class SampleAndroidAutoScreen(carContext: CarContext): AndroidAutoBaseScreen(car
 
 
         // Show turn-by-turn navigation information if available.
-        //if (mNavInfo != null) {
-        //    navigationTemplateBuilder.setNavigationInfo(mNavInfo)
-        //}
+        if (mNavInfo != null) {
+            navigationTemplateBuilder.setNavigationInfo(mNavInfo!!)
+        }
 
         return navigationTemplateBuilder.build()
     }

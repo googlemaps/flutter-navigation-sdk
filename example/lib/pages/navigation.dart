@@ -104,6 +104,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   bool _termsAndConditionsAccepted = false;
   bool _locationPermissionsAccepted = false;
+  bool _turnByTurnNavigationEventEnabled = false;
 
   bool _validRoute = false;
   bool _errorOnSetDestinations = false;
@@ -1465,6 +1466,22 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                 onPressed: () => _addMarkerForAuto(),
                 child: const Text('Add marker'),
               ),
+              ExampleSwitch(
+                  title: 'Turn by turn events',
+                  initialValue: _turnByTurnNavigationEventEnabled,
+                  onChanged: (bool newValue) async {
+                    if (newValue) {
+                      await GoogleMapsNavigator
+                          .enableTurnByTurnNavigationEvents(
+                              double.maxFinite.toInt());
+                    } else {
+                      await GoogleMapsNavigator
+                          .disableTurnByTurnNavigationEvents();
+                    }
+                    setState(() {
+                      _turnByTurnNavigationEventEnabled = newValue;
+                    });
+                  }),
             ]),
       ),
       IgnorePointer(
