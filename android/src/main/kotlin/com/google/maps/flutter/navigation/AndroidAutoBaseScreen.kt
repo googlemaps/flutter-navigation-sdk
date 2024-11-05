@@ -138,4 +138,11 @@ open class AndroidAutoBaseScreen(carContext: CarContext) : Screen(carContext), S
       .setMapActionStrip(ActionStrip.Builder().addAction(Action.PAN).build())
       .build()
   }
+
+  fun sendCustomNavigationAutoEvent(event: String, data: Any) {
+    GoogleMapsNavigationPlugin.getInstance()?.autoViewEventApi?.onCustomNavigationAutoEvent(
+      event,
+      data,
+    ) {}
+  }
 }

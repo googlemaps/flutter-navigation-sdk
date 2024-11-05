@@ -139,4 +139,8 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
 
     return scrollAmount
   }
+
+  open func sendCustomNavigationAutoEvent(event: String, data: Any) {
+    GoogleMapsNavigationPlugin.sendCustomNavigationAutoEvent(event: event, data: data)
+  }
 }

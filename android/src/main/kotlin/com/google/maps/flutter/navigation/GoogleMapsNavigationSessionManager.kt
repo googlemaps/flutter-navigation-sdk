@@ -19,7 +19,6 @@ package com.google.maps.flutter.navigation
 import android.app.Activity
 import android.location.Location
 import android.util.DisplayMetrics
-import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer

@@ -106,6 +106,7 @@ class SampleAndroidAutoScreen(carContext: CarContext): AndroidAutoBaseScreen(car
                             Action.Builder()
                                 .setTitle("Custom event")
                                 .setOnClickListener {
+                                    sendCustomNavigationAutoEvent("CustomAndroidAutoEvent", mapOf("sampleDataKey" to "sampleDataContent"))
                                 }
                                 .build())
                         .build())
@@ -119,5 +120,4 @@ class SampleAndroidAutoScreen(carContext: CarContext): AndroidAutoBaseScreen(car
 
         return navigationTemplateBuilder.build()
     }
-
 }

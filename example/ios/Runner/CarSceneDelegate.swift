@@ -21,7 +21,9 @@ class CarSceneDelegate: BaseCarSceneDelegate {
     let template = CPMapTemplate()
     template.showPanningInterface(animated: true)
 
-    let button = CPBarButton(title: "Custom Event") { _ in
+    let button = CPBarButton(title: "Custom Event") { [weak self] _ in
+      let data = ["sampleDataKey": "sampleDataContent"]
+      self?.sendCustomNavigationAutoEvent(event: "CustomCarPlayEvent", data: data)
     }
     template.leadingNavigationBarButtons = [button]
     return template

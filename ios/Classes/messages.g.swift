@@ -7213,6 +7213,269 @@ enum AutoMapViewApiSetup {
   }
 }
 
+private class AutoViewEventApiCodecReader: FlutterStandardReader {
+  override func readValue(ofType type: UInt8) -> Any? {
+    switch type {
+    case 128:
+      return CameraPositionDto.fromList(readValue() as! [Any?])
+    case 129:
+      return CircleDto.fromList(readValue() as! [Any?])
+    case 130:
+      return CircleOptionsDto.fromList(readValue() as! [Any?])
+    case 131:
+      return DestinationsDto.fromList(readValue() as! [Any?])
+    case 132:
+      return ImageDescriptorDto.fromList(readValue() as! [Any?])
+    case 133:
+      return InfoWindowDto.fromList(readValue() as! [Any?])
+    case 134:
+      return LaneDirectionDto.fromList(readValue() as! [Any?])
+    case 135:
+      return LaneDto.fromList(readValue() as! [Any?])
+    case 136:
+      return LatLngBoundsDto.fromList(readValue() as! [Any?])
+    case 137:
+      return LatLngDto.fromList(readValue() as! [Any?])
+    case 138:
+      return MapOptionsDto.fromList(readValue() as! [Any?])
+    case 139:
+      return MarkerAnchorDto.fromList(readValue() as! [Any?])
+    case 140:
+      return MarkerDto.fromList(readValue() as! [Any?])
+    case 141:
+      return MarkerOptionsDto.fromList(readValue() as! [Any?])
+    case 142:
+      return NavInfoDto.fromList(readValue() as! [Any?])
+    case 143:
+      return NavigationAudioGuidanceSettingsDto.fromList(readValue() as! [Any?])
+    case 144:
+      return NavigationDisplayOptionsDto.fromList(readValue() as! [Any?])
+    case 145:
+      return NavigationTimeAndDistanceDto.fromList(readValue() as! [Any?])
+    case 146:
+      return NavigationViewOptionsDto.fromList(readValue() as! [Any?])
+    case 147:
+      return NavigationWaypointDto.fromList(readValue() as! [Any?])
+    case 148:
+      return PatternItemDto.fromList(readValue() as! [Any?])
+    case 149:
+      return PolygonDto.fromList(readValue() as! [Any?])
+    case 150:
+      return PolygonHoleDto.fromList(readValue() as! [Any?])
+    case 151:
+      return PolygonOptionsDto.fromList(readValue() as! [Any?])
+    case 152:
+      return PolylineDto.fromList(readValue() as! [Any?])
+    case 153:
+      return PolylineOptionsDto.fromList(readValue() as! [Any?])
+    case 154:
+      return RouteSegmentDto.fromList(readValue() as! [Any?])
+    case 155:
+      return RouteSegmentTrafficDataDto.fromList(readValue() as! [Any?])
+    case 156:
+      return RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(readValue() as! [Any?])
+    case 157:
+      return RouteTokenOptionsDto.fromList(readValue() as! [Any?])
+    case 158:
+      return RoutingOptionsDto.fromList(readValue() as! [Any?])
+    case 159:
+      return SimulationOptionsDto.fromList(readValue() as! [Any?])
+    case 160:
+      return SpeedAlertOptionsDto.fromList(readValue() as! [Any?])
+    case 161:
+      return SpeedingUpdatedEventDto.fromList(readValue() as! [Any?])
+    case 162:
+      return StepInfoDto.fromList(readValue() as! [Any?])
+    case 163:
+      return StyleSpanDto.fromList(readValue() as! [Any?])
+    case 164:
+      return StyleSpanStrokeStyleDto.fromList(readValue() as! [Any?])
+    case 165:
+      return ViewCreationOptionsDto.fromList(readValue() as! [Any?])
+    default:
+      return super.readValue(ofType: type)
+    }
+  }
+}
+
+private class AutoViewEventApiCodecWriter: FlutterStandardWriter {
+  override func writeValue(_ value: Any) {
+    if let value = value as? CameraPositionDto {
+      super.writeByte(128)
+      super.writeValue(value.toList())
+    } else if let value = value as? CircleDto {
+      super.writeByte(129)
+      super.writeValue(value.toList())
+    } else if let value = value as? CircleOptionsDto {
+      super.writeByte(130)
+      super.writeValue(value.toList())
+    } else if let value = value as? DestinationsDto {
+      super.writeByte(131)
+      super.writeValue(value.toList())
+    } else if let value = value as? ImageDescriptorDto {
+      super.writeByte(132)
+      super.writeValue(value.toList())
+    } else if let value = value as? InfoWindowDto {
+      super.writeByte(133)
+      super.writeValue(value.toList())
+    } else if let value = value as? LaneDirectionDto {
+      super.writeByte(134)
+      super.writeValue(value.toList())
+    } else if let value = value as? LaneDto {
+      super.writeByte(135)
+      super.writeValue(value.toList())
+    } else if let value = value as? LatLngBoundsDto {
+      super.writeByte(136)
+      super.writeValue(value.toList())
+    } else if let value = value as? LatLngDto {
+      super.writeByte(137)
+      super.writeValue(value.toList())
+    } else if let value = value as? MapOptionsDto {
+      super.writeByte(138)
+      super.writeValue(value.toList())
+    } else if let value = value as? MarkerAnchorDto {
+      super.writeByte(139)
+      super.writeValue(value.toList())
+    } else if let value = value as? MarkerDto {
+      super.writeByte(140)
+      super.writeValue(value.toList())
+    } else if let value = value as? MarkerOptionsDto {
+      super.writeByte(141)
+      super.writeValue(value.toList())
+    } else if let value = value as? NavInfoDto {
+      super.writeByte(142)
+      super.writeValue(value.toList())
+    } else if let value = value as? NavigationAudioGuidanceSettingsDto {
+      super.writeByte(143)
+      super.writeValue(value.toList())
+    } else if let value = value as? NavigationDisplayOptionsDto {
+      super.writeByte(144)
+      super.writeValue(value.toList())
+    } else if let value = value as? NavigationTimeAndDistanceDto {
+      super.writeByte(145)
+      super.writeValue(value.toList())
+    } else if let value = value as? NavigationViewOptionsDto {
+      super.writeByte(146)
+      super.writeValue(value.toList())
+    } else if let value = value as? NavigationWaypointDto {
+      super.writeByte(147)
+      super.writeValue(value.toList())
+    } else if let value = value as? PatternItemDto {
+      super.writeByte(148)
+      super.writeValue(value.toList())
+    } else if let value = value as? PolygonDto {
+      super.writeByte(149)
+      super.writeValue(value.toList())
+    } else if let value = value as? PolygonHoleDto {
+      super.writeByte(150)
+      super.writeValue(value.toList())
+    } else if let value = value as? PolygonOptionsDto {
+      super.writeByte(151)
+      super.writeValue(value.toList())
+    } else if let value = value as? PolylineDto {
+      super.writeByte(152)
+      super.writeValue(value.toList())
+    } else if let value = value as? PolylineOptionsDto {
+      super.writeByte(153)
+      super.writeValue(value.toList())
+    } else if let value = value as? RouteSegmentDto {
+      super.writeByte(154)
+      super.writeValue(value.toList())
+    } else if let value = value as? RouteSegmentTrafficDataDto {
+      super.writeByte(155)
+      super.writeValue(value.toList())
+    } else if let value = value as? RouteSegmentTrafficDataRoadStretchRenderingDataDto {
+      super.writeByte(156)
+      super.writeValue(value.toList())
+    } else if let value = value as? RouteTokenOptionsDto {
+      super.writeByte(157)
+      super.writeValue(value.toList())
+    } else if let value = value as? RoutingOptionsDto {
+      super.writeByte(158)
+      super.writeValue(value.toList())
+    } else if let value = value as? SimulationOptionsDto {
+      super.writeByte(159)
+      super.writeValue(value.toList())
+    } else if let value = value as? SpeedAlertOptionsDto {
+      super.writeByte(160)
+      super.writeValue(value.toList())
+    } else if let value = value as? SpeedingUpdatedEventDto {
+      super.writeByte(161)
+      super.writeValue(value.toList())
+    } else if let value = value as? StepInfoDto {
+      super.writeByte(162)
+      super.writeValue(value.toList())
+    } else if let value = value as? StyleSpanDto {
+      super.writeByte(163)
+      super.writeValue(value.toList())
+    } else if let value = value as? StyleSpanStrokeStyleDto {
+      super.writeByte(164)
+      super.writeValue(value.toList())
+    } else if let value = value as? ViewCreationOptionsDto {
+      super.writeByte(165)
+      super.writeValue(value.toList())
+    } else {
+      super.writeValue(value)
+    }
+  }
+}
+
+private class AutoViewEventApiCodecReaderWriter: FlutterStandardReaderWriter {
+  override func reader(with data: Data) -> FlutterStandardReader {
+    AutoViewEventApiCodecReader(data: data)
+  }
+
+  override func writer(with data: NSMutableData) -> FlutterStandardWriter {
+    AutoViewEventApiCodecWriter(data: data)
+  }
+}
+
+class AutoViewEventApiCodec: FlutterStandardMessageCodec {
+  static let shared = AutoViewEventApiCodec(readerWriter: AutoViewEventApiCodecReaderWriter())
+}
+
+/// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
+protocol AutoViewEventApiProtocol {
+  func onCustomNavigationAutoEvent(event eventArg: String, data dataArg: Any,
+                                   completion: @escaping (Result<Void, FlutterError>) -> Void)
+}
+
+class AutoViewEventApi: AutoViewEventApiProtocol {
+  private let binaryMessenger: FlutterBinaryMessenger
+  init(binaryMessenger: FlutterBinaryMessenger) {
+    self.binaryMessenger = binaryMessenger
+  }
+
+  var codec: FlutterStandardMessageCodec {
+    AutoViewEventApiCodec.shared
+  }
+
+  func onCustomNavigationAutoEvent(event eventArg: String, data dataArg: Any,
+                                   completion: @escaping (Result<Void, FlutterError>) -> Void) {
+    let channelName =
+      "dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onCustomNavigationAutoEvent"
+    let channel = FlutterBasicMessageChannel(
+      name: channelName,
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    channel.sendMessage([eventArg, dataArg] as [Any?]) { response in
+      guard let listResponse = response as? [Any?] else {
+        completion(.failure(createConnectionError(withChannelName: channelName)))
+        return
+      }
+      if listResponse.count > 1 {
+        let code: String = listResponse[0] as! String
+        let message: String? = nilOrValue(listResponse[1])
+        let details: String? = nilOrValue(listResponse[2])
+        completion(.failure(FlutterError(code: code, message: message, details: details)))
+      } else {
+        completion(.success(()))
+      }
+    }
+  }
+}
+
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol NavigationInspector {
   func isViewAttachedToSession(viewId: Int64) throws -> Bool

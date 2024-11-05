@@ -8114,6 +8114,321 @@ interface AutoMapViewApi {
   }
 }
 
+@Suppress("UNCHECKED_CAST")
+private object AutoViewEventApiCodec : StandardMessageCodec() {
+  override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
+    return when (type) {
+      128.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { CameraPositionDto.fromList(it) }
+      }
+      129.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { CircleDto.fromList(it) }
+      }
+      130.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { CircleOptionsDto.fromList(it) }
+      }
+      131.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { DestinationsDto.fromList(it) }
+      }
+      132.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { ImageDescriptorDto.fromList(it) }
+      }
+      133.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { InfoWindowDto.fromList(it) }
+      }
+      134.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { LaneDirectionDto.fromList(it) }
+      }
+      135.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { LaneDto.fromList(it) }
+      }
+      136.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { LatLngBoundsDto.fromList(it) }
+      }
+      137.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { LatLngDto.fromList(it) }
+      }
+      138.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { MapOptionsDto.fromList(it) }
+      }
+      139.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerAnchorDto.fromList(it) }
+      }
+      140.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerDto.fromList(it) }
+      }
+      141.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerOptionsDto.fromList(it) }
+      }
+      142.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { NavInfoDto.fromList(it) }
+      }
+      143.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          NavigationAudioGuidanceSettingsDto.fromList(it)
+        }
+      }
+      144.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { NavigationDisplayOptionsDto.fromList(it) }
+      }
+      145.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { NavigationTimeAndDistanceDto.fromList(it) }
+      }
+      146.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { NavigationViewOptionsDto.fromList(it) }
+      }
+      147.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { NavigationWaypointDto.fromList(it) }
+      }
+      148.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { PatternItemDto.fromList(it) }
+      }
+      149.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonDto.fromList(it) }
+      }
+      150.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonHoleDto.fromList(it) }
+      }
+      151.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonOptionsDto.fromList(it) }
+      }
+      152.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { PolylineDto.fromList(it) }
+      }
+      153.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { PolylineOptionsDto.fromList(it) }
+      }
+      154.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentDto.fromList(it) }
+      }
+      155.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentTrafficDataDto.fromList(it) }
+      }
+      156.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(it)
+        }
+      }
+      157.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { RouteTokenOptionsDto.fromList(it) }
+      }
+      158.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { RoutingOptionsDto.fromList(it) }
+      }
+      159.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { SimulationOptionsDto.fromList(it) }
+      }
+      160.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { SpeedAlertOptionsDto.fromList(it) }
+      }
+      161.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { SpeedingUpdatedEventDto.fromList(it) }
+      }
+      162.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { StepInfoDto.fromList(it) }
+      }
+      163.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { StyleSpanDto.fromList(it) }
+      }
+      164.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { StyleSpanStrokeStyleDto.fromList(it) }
+      }
+      165.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { ViewCreationOptionsDto.fromList(it) }
+      }
+      else -> super.readValueOfType(type, buffer)
+    }
+  }
+
+  override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
+    when (value) {
+      is CameraPositionDto -> {
+        stream.write(128)
+        writeValue(stream, value.toList())
+      }
+      is CircleDto -> {
+        stream.write(129)
+        writeValue(stream, value.toList())
+      }
+      is CircleOptionsDto -> {
+        stream.write(130)
+        writeValue(stream, value.toList())
+      }
+      is DestinationsDto -> {
+        stream.write(131)
+        writeValue(stream, value.toList())
+      }
+      is ImageDescriptorDto -> {
+        stream.write(132)
+        writeValue(stream, value.toList())
+      }
+      is InfoWindowDto -> {
+        stream.write(133)
+        writeValue(stream, value.toList())
+      }
+      is LaneDirectionDto -> {
+        stream.write(134)
+        writeValue(stream, value.toList())
+      }
+      is LaneDto -> {
+        stream.write(135)
+        writeValue(stream, value.toList())
+      }
+      is LatLngBoundsDto -> {
+        stream.write(136)
+        writeValue(stream, value.toList())
+      }
+      is LatLngDto -> {
+        stream.write(137)
+        writeValue(stream, value.toList())
+      }
+      is MapOptionsDto -> {
+        stream.write(138)
+        writeValue(stream, value.toList())
+      }
+      is MarkerAnchorDto -> {
+        stream.write(139)
+        writeValue(stream, value.toList())
+      }
+      is MarkerDto -> {
+        stream.write(140)
+        writeValue(stream, value.toList())
+      }
+      is MarkerOptionsDto -> {
+        stream.write(141)
+        writeValue(stream, value.toList())
+      }
+      is NavInfoDto -> {
+        stream.write(142)
+        writeValue(stream, value.toList())
+      }
+      is NavigationAudioGuidanceSettingsDto -> {
+        stream.write(143)
+        writeValue(stream, value.toList())
+      }
+      is NavigationDisplayOptionsDto -> {
+        stream.write(144)
+        writeValue(stream, value.toList())
+      }
+      is NavigationTimeAndDistanceDto -> {
+        stream.write(145)
+        writeValue(stream, value.toList())
+      }
+      is NavigationViewOptionsDto -> {
+        stream.write(146)
+        writeValue(stream, value.toList())
+      }
+      is NavigationWaypointDto -> {
+        stream.write(147)
+        writeValue(stream, value.toList())
+      }
+      is PatternItemDto -> {
+        stream.write(148)
+        writeValue(stream, value.toList())
+      }
+      is PolygonDto -> {
+        stream.write(149)
+        writeValue(stream, value.toList())
+      }
+      is PolygonHoleDto -> {
+        stream.write(150)
+        writeValue(stream, value.toList())
+      }
+      is PolygonOptionsDto -> {
+        stream.write(151)
+        writeValue(stream, value.toList())
+      }
+      is PolylineDto -> {
+        stream.write(152)
+        writeValue(stream, value.toList())
+      }
+      is PolylineOptionsDto -> {
+        stream.write(153)
+        writeValue(stream, value.toList())
+      }
+      is RouteSegmentDto -> {
+        stream.write(154)
+        writeValue(stream, value.toList())
+      }
+      is RouteSegmentTrafficDataDto -> {
+        stream.write(155)
+        writeValue(stream, value.toList())
+      }
+      is RouteSegmentTrafficDataRoadStretchRenderingDataDto -> {
+        stream.write(156)
+        writeValue(stream, value.toList())
+      }
+      is RouteTokenOptionsDto -> {
+        stream.write(157)
+        writeValue(stream, value.toList())
+      }
+      is RoutingOptionsDto -> {
+        stream.write(158)
+        writeValue(stream, value.toList())
+      }
+      is SimulationOptionsDto -> {
+        stream.write(159)
+        writeValue(stream, value.toList())
+      }
+      is SpeedAlertOptionsDto -> {
+        stream.write(160)
+        writeValue(stream, value.toList())
+      }
+      is SpeedingUpdatedEventDto -> {
+        stream.write(161)
+        writeValue(stream, value.toList())
+      }
+      is StepInfoDto -> {
+        stream.write(162)
+        writeValue(stream, value.toList())
+      }
+      is StyleSpanDto -> {
+        stream.write(163)
+        writeValue(stream, value.toList())
+      }
+      is StyleSpanStrokeStyleDto -> {
+        stream.write(164)
+        writeValue(stream, value.toList())
+      }
+      is ViewCreationOptionsDto -> {
+        stream.write(165)
+        writeValue(stream, value.toList())
+      }
+      else -> super.writeValue(stream, value)
+    }
+  }
+}
+
+/** Generated class from Pigeon that represents Flutter messages that can be called from Kotlin. */
+@Suppress("UNCHECKED_CAST")
+class AutoViewEventApi(private val binaryMessenger: BinaryMessenger) {
+  companion object {
+    /** The codec used by AutoViewEventApi. */
+    val codec: MessageCodec<Any?> by lazy { AutoViewEventApiCodec }
+  }
+
+  fun onCustomNavigationAutoEvent(
+    eventArg: String,
+    dataArg: Any,
+    callback: (Result<Unit>) -> Unit,
+  ) {
+    val channelName =
+      "dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onCustomNavigationAutoEvent"
+    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
+    channel.send(listOf(eventArg, dataArg)) {
+      if (it is List<*>) {
+        if (it.size > 1) {
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+        } else {
+          callback(Result.success(Unit))
+        }
+      } else {
+        callback(Result.failure(createConnectionError(channelName)))
+      }
+    }
+  }
+}
+
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface NavigationInspector {
   fun isViewAttachedToSession(viewId: Long): Boolean

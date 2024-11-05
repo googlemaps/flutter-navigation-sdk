@@ -40,6 +40,7 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
   private lateinit var lifecycle: Lifecycle
   internal lateinit var imageRegistry: ImageRegistry
   private lateinit var autoViewMessageHandler: GoogleMapsAutoViewMessageHandler
+  internal lateinit var autoViewEventApi: AutoViewEventApi
 
   override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
     instance = this
@@ -54,6 +55,7 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
     binding.applicationContext.registerComponentCallbacks(viewRegistry)
     autoViewMessageHandler = GoogleMapsAutoViewMessageHandler(viewRegistry)
     AutoMapViewApi.setUp(binding.binaryMessenger, autoViewMessageHandler)
+    autoViewEventApi = AutoViewEventApi(binding.binaryMessenger)
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {

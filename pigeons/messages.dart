@@ -1355,6 +1355,11 @@ abstract class AutoMapViewApi {
   void registerOnCameraChangedListener();
 }
 
+@FlutterApi()
+abstract class AutoViewEventApi {
+  void onCustomNavigationAutoEvent(String event, Object data);
+}
+
 @HostApi()
 abstract class NavigationInspector {
   bool isViewAttachedToSession(int viewId);

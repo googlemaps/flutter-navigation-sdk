@@ -697,16 +697,6 @@ abstract mixin class AutoMapViewAPIInterface {
   /// Sets a preferred upper bound for the camera zoom.
   Future<void> setMaxZoomPreferenceForAuto({required double maxZoomPreference});
 
-  /// Get map clicked event stream from the navigation view.
-  //Stream<MapClickEvent> getMapClickEventStream({required int viewId});
-
-  /// Get map long clicked event stream from the navigation view.
-  //Stream<MapLongClickEvent> getMapLongClickEventStream({required int viewId});
-
-  /// Get navigation recenter button clicked event stream from the navigation view.
-  //Stream<NavigationViewRecenterButtonClickedEvent>
-  //    getNavigationRecenterButtonClickedEventStream({required int viewId});
-
   /// Get all markers from auto map view.
   Future<List<Marker?>> getMarkersForAuto();
 
@@ -778,6 +768,11 @@ abstract mixin class AutoMapViewAPIInterface {
 
   /// Register camera changed listeners.
   Future<void> registerOnCameraChangedListenerForAuto();
+
+  /// Get custom navigation auto event stream from the auto view.
+  Stream<CustomNavigationAutoEvent> getCustomNavigationAutoEventStream();
+
+  void initializeAutoViewEventAPI();
 }
 
 /// API interface for actions of the image registry.

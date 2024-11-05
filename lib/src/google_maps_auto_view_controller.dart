@@ -16,6 +16,10 @@ import '../google_navigation_flutter.dart';
 import 'google_navigation_flutter_platform_interface.dart';
 
 class GoogleMapsAutoViewController {
+  GoogleMapsAutoViewController() {
+    GoogleMapsNavigationPlatform.instance.initializeAutoViewEventAPI();
+  }
+
   /// Change status of my location enabled.
   ///
   Future<void> setMyLocationEnabled(bool enabled) {
@@ -319,5 +323,14 @@ class GoogleMapsAutoViewController {
   /// Remove all markers, polylines, polygons, overlays, etc from the map view.
   Future<void> clear() {
     return GoogleMapsNavigationPlatform.instance.clearForAuto();
+  }
+
+  void listenForCustomNavigationAutoEvents(
+      void Function(CustomNavigationAutoEvent event) func) {
+    GoogleMapsNavigationPlatform.instance
+        .getCustomNavigationAutoEventStream()
+        .listen((CustomNavigationAutoEvent event) {
+      func(event);
+    });
   }
 }

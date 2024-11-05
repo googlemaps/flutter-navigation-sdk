@@ -166,6 +166,10 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     if (_termsAndConditionsAccepted && _locationPermissionsAccepted) {
       await _initializeNavigator();
     }
+
+    _autoViewController.listenForCustomNavigationAutoEvents((event) {
+      showMessage("Received event: ${event.event}");
+    });
   }
 
   Future<void> _setRouteTokensEnabled(bool value) async {

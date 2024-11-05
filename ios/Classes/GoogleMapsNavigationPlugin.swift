@@ -28,6 +28,7 @@ public class GoogleMapsNavigationPlugin: NSObject, FlutterPlugin {
   private static var navigationSessionManager: GoogleMapsNavigationSessionManager?
   private static var navigationInspectorHandler: GoogleMapsNavigationInspectorHandler?
   private static var autoViewMessageHandler: GoogleMapsAutoViewMessageHandler?
+  private static var autoViewEventApi: AutoViewEventApi?
 
   private static var imageRegistryMessageHandler: GoogleMapsImageRegistryMessageHandler?
   static var imageRegistry: ImageRegistry?
@@ -93,6 +94,7 @@ public class GoogleMapsNavigationPlugin: NSObject, FlutterPlugin {
       binaryMessenger: registrar.messenger(),
       api: autoViewMessageHandler
     )
+    autoViewEventApi = AutoViewEventApi(binaryMessenger: registrar.messenger())
 
     navigationInspector = GoogleMapsNavigationInspectorHandler(
       viewRegistry: viewRegistry!
@@ -109,5 +111,9 @@ public class GoogleMapsNavigationPlugin: NSObject, FlutterPlugin {
       api: imageRegistryMessageHandler
     )
     isPluginInitialized = true
+  }
+
+  static func sendCustomNavigationAutoEvent(event: String, data: Any) {
+    autoViewEventApi?.onCustomNavigationAutoEvent(event: event, data: data) { _ in }
   }
 }

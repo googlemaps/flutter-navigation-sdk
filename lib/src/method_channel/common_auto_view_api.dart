@@ -25,6 +25,9 @@ import 'method_channel.dart';
 /// Class that handles map view and navigation view communications.
 mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
   final AutoMapViewApi _viewApi = AutoMapViewApi();
+  bool _viewApiHasBeenSetUp = false;
+  final StreamController<_AutoEventWrapper> _autoEventStreamController =
+      StreamController<_AutoEventWrapper>.broadcast();
 
   /// Keep track of marker count, used to generate marker ID's.
   int _markerCounter = 0;
@@ -56,6 +59,19 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     final String circleId = 'Circle_$_circleCounter';
     _circleCounter += 1;
     return circleId;
+  }
+
+  /// This function ensures that the event API has been setup. This should be
+  /// called when initializing auto view controller.
+  @override
+  void initializeAutoViewEventAPI() {
+    if (!_viewApiHasBeenSetUp) {
+      AutoViewEventApi.setup(
+        AutoViewEventApiImpl(
+            viewEventStreamController: _autoEventStreamController),
+      );
+      _viewApiHasBeenSetUp = true;
+    }
   }
 
   @override
@@ -399,16 +415,6 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     }
   }
 
-  // @override
-  //Stream<MapClickEvent> getMapClickEventStream({required int viewId});
-
-  // @override
-  //Stream<MapLongClickEvent> getMapLongClickEventStream({required int viewId});
-
-  // @override
-  //Stream<NavigationViewRecenterButtonClickedEvent>
-  //    getNavigationRecenterButtonClickedEventStream({required int viewId});
-
   @override
   Future<List<Marker?>> getMarkersForAuto() async {
     final List<MarkerDto?> markers = await _viewApi.getMarkers();
@@ -733,4 +739,37 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
   Future<void> registerOnCameraChangedListenerForAuto() {
     return _viewApi.registerOnCameraChangedListener();
   }
+
+  Stream<T> _unwrapEventStream<T>() {
+    // If event that does not
+    return _autoEventStreamController.stream
+        .where((_AutoEventWrapper wrapper) => (wrapper.event is T))
+        .map<T>((_AutoEventWrapper wrapper) => wrapper.event as T);
+  }
+
+  @override
+  Stream<CustomNavigationAutoEvent> getCustomNavigationAutoEventStream() {
+    return _unwrapEventStream<CustomNavigationAutoEvent>();
+  }
+}
+
+class AutoViewEventApiImpl implements AutoViewEventApi {
+  /// Initialize implementation for NavigationViewEventApi.
+  const AutoViewEventApiImpl({
+    required StreamController<Object> viewEventStreamController,
+  }) : _viewEventStreamController = viewEventStreamController;
+
+  final StreamController<Object> _viewEventStreamController;
+
+  @override
+  void onCustomNavigationAutoEvent(String event, Object data) {
+    _viewEventStreamController.add(
+        _AutoEventWrapper(CustomNavigationAutoEvent(event: event, data: data)));
+  }
+}
+
+class _AutoEventWrapper {
+  _AutoEventWrapper(this.event);
+
+  final CustomNavigationAutoEvent event;
 }
