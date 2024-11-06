@@ -36,7 +36,7 @@ private fun wrapError(exception: Throwable): List<Any?> {
     return listOf(
       exception.javaClass.simpleName,
       exception.toString(),
-      "Cause: " + exception.cause + ", Stacktrace: " + Log.getStackTraceString(exception)
+      "Cause: " + exception.cause + ", Stacktrace: " + Log.getStackTraceString(exception),
     )
   }
 }
@@ -45,7 +45,7 @@ private fun createConnectionError(channelName: String): FlutterError {
   return FlutterError(
     "channel-error",
     "Unable to establish connection on channel: '$channelName'.",
-    ""
+    "",
   )
 }
 
@@ -59,7 +59,7 @@ private fun createConnectionError(channelName: String): FlutterError {
 class FlutterError(
   val code: String,
   override val message: String? = null,
-  val details: Any? = null
+  val details: Any? = null,
 ) : Throwable()
 
 /** Describes the type of map to construct. */
@@ -541,7 +541,7 @@ data class MapOptionsDto(
    * Specifies a bounds to constrain the camera target, so that when users scroll and pan the map,
    * the camera target does not move outside these bounds.
    */
-  val cameraTargetBounds: LatLngBoundsDto? = null
+  val cameraTargetBounds: LatLngBoundsDto? = null,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -573,7 +573,7 @@ data class MapOptionsDto(
         minZoomPreference,
         maxZoomPreference,
         zoomControlsEnabled,
-        cameraTargetBounds
+        cameraTargetBounds,
       )
     }
   }
@@ -615,9 +615,7 @@ data class NavigationViewOptionsDto(
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      navigationUIEnabledPreference.raw,
-    )
+    return listOf<Any?>(navigationUIEnabledPreference.raw)
   }
 }
 
@@ -631,7 +629,7 @@ data class NavigationViewOptionsDto(
 data class ViewCreationOptionsDto(
   val mapViewType: MapViewTypeDto,
   val mapOptions: MapOptionsDto,
-  val navigationViewOptions: NavigationViewOptionsDto? = null
+  val navigationViewOptions: NavigationViewOptionsDto? = null,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -645,11 +643,7 @@ data class ViewCreationOptionsDto(
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      mapViewType.raw,
-      mapOptions.toList(),
-      navigationViewOptions?.toList(),
-    )
+    return listOf<Any?>(mapViewType.raw, mapOptions.toList(), navigationViewOptions?.toList())
   }
 }
 
@@ -658,7 +652,7 @@ data class CameraPositionDto(
   val bearing: Double,
   val target: LatLngDto,
   val tilt: Double,
-  val zoom: Double
+  val zoom: Double,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -672,12 +666,7 @@ data class CameraPositionDto(
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      bearing,
-      target.toList(),
-      tilt,
-      zoom,
-    )
+    return listOf<Any?>(bearing, target.toList(), tilt, zoom)
   }
 }
 
@@ -686,7 +675,7 @@ data class MarkerDto(
   /** Identifies marker */
   val markerId: String,
   /** Options for marker */
-  val options: MarkerOptionsDto
+  val options: MarkerOptionsDto,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -698,10 +687,7 @@ data class MarkerDto(
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      markerId,
-      options.toList(),
-    )
+    return listOf<Any?>(markerId, options.toList())
   }
 }
 
@@ -717,7 +703,7 @@ data class MarkerOptionsDto(
   val infoWindow: InfoWindowDto,
   val visible: Boolean,
   val zIndex: Double,
-  val icon: ImageDescriptorDto
+  val icon: ImageDescriptorDto,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -744,7 +730,7 @@ data class MarkerOptionsDto(
         infoWindow,
         visible,
         zIndex,
-        icon
+        icon,
       )
     }
   }
@@ -771,7 +757,7 @@ data class ImageDescriptorDto(
   val registeredImageId: String? = null,
   val imagePixelRatio: Double? = null,
   val width: Double? = null,
-  val height: Double? = null
+  val height: Double? = null,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -785,12 +771,7 @@ data class ImageDescriptorDto(
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      registeredImageId,
-      imagePixelRatio,
-      width,
-      height,
-    )
+    return listOf<Any?>(registeredImageId, imagePixelRatio, width, height)
   }
 }
 
@@ -798,7 +779,7 @@ data class ImageDescriptorDto(
 data class InfoWindowDto(
   val title: String? = null,
   val snippet: String? = null,
-  val anchor: MarkerAnchorDto
+  val anchor: MarkerAnchorDto,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -811,11 +792,7 @@ data class InfoWindowDto(
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      title,
-      snippet,
-      anchor.toList(),
-    )
+    return listOf<Any?>(title, snippet, anchor.toList())
   }
 }
 
@@ -832,10 +809,7 @@ data class MarkerAnchorDto(val u: Double, val v: Double) {
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      u,
-      v,
-    )
+    return listOf<Any?>(u, v)
   }
 }
 
@@ -852,10 +826,7 @@ data class PolygonDto(val polygonId: String, val options: PolygonOptionsDto) {
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      polygonId,
-      options.toList(),
-    )
+    return listOf<Any?>(polygonId, options.toList())
   }
 }
 
@@ -869,7 +840,7 @@ data class PolygonOptionsDto(
   val strokeColor: Long,
   val strokeWidth: Double,
   val visible: Boolean,
-  val zIndex: Double
+  val zIndex: Double,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -892,7 +863,7 @@ data class PolygonOptionsDto(
         strokeColor,
         strokeWidth,
         visible,
-        zIndex
+        zIndex,
       )
     }
   }
@@ -924,9 +895,7 @@ data class PolygonHoleDto(val points: List<LatLngDto?>) {
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      points,
-    )
+    return listOf<Any?>(points)
   }
 }
 
@@ -934,7 +903,7 @@ data class PolygonHoleDto(val points: List<LatLngDto?>) {
 data class StyleSpanStrokeStyleDto(
   val solidColor: Long? = null,
   val fromColor: Long? = null,
-  val toColor: Long? = null
+  val toColor: Long? = null,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -947,11 +916,7 @@ data class StyleSpanStrokeStyleDto(
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      solidColor,
-      fromColor,
-      toColor,
-    )
+    return listOf<Any?>(solidColor, fromColor, toColor)
   }
 }
 
@@ -968,10 +933,7 @@ data class StyleSpanDto(val length: Double, val style: StyleSpanStrokeStyleDto) 
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      length,
-      style.toList(),
-    )
+    return listOf<Any?>(length, style.toList())
   }
 }
 
@@ -988,10 +950,7 @@ data class PolylineDto(val polylineId: String, val options: PolylineOptionsDto) 
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      polylineId,
-      options.toList(),
-    )
+    return listOf<Any?>(polylineId, options.toList())
   }
 }
 
@@ -1008,10 +967,7 @@ data class PatternItemDto(val type: PatternTypeDto, val length: Double? = null) 
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      type.raw,
-      length,
-    )
+    return listOf<Any?>(type.raw, length)
   }
 }
 
@@ -1026,7 +982,7 @@ data class PolylineOptionsDto(
   val strokeWidth: Double? = null,
   val visible: Boolean? = null,
   val zIndex: Double? = null,
-  val spans: List<StyleSpanDto?>
+  val spans: List<StyleSpanDto?>,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -1052,7 +1008,7 @@ data class PolylineOptionsDto(
         strokeWidth,
         visible,
         zIndex,
-        spans
+        spans,
       )
     }
   }
@@ -1078,7 +1034,7 @@ data class CircleDto(
   /** Identifies circle. */
   val circleId: String,
   /** Options for circle. */
-  val options: CircleOptionsDto
+  val options: CircleOptionsDto,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -1090,10 +1046,7 @@ data class CircleDto(
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      circleId,
-      options.toList(),
-    )
+    return listOf<Any?>(circleId, options.toList())
   }
 }
 
@@ -1107,7 +1060,7 @@ data class CircleOptionsDto(
   val fillColor: Long,
   val zIndex: Double,
   val visible: Boolean,
-  val clickable: Boolean
+  val clickable: Boolean,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -1130,7 +1083,7 @@ data class CircleOptionsDto(
         fillColor,
         zIndex,
         visible,
-        clickable
+        clickable,
       )
     }
   }
@@ -1163,10 +1116,7 @@ data class RouteTokenOptionsDto(val routeToken: String, val travelMode: TravelMo
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      routeToken,
-      travelMode?.raw,
-    )
+    return listOf<Any?>(routeToken, travelMode?.raw)
   }
 }
 
@@ -1175,7 +1125,7 @@ data class DestinationsDto(
   val waypoints: List<NavigationWaypointDto?>,
   val displayOptions: NavigationDisplayOptionsDto,
   val routingOptions: RoutingOptionsDto? = null,
-  val routeTokenOptions: RouteTokenOptionsDto? = null
+  val routeTokenOptions: RouteTokenOptionsDto? = null,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -1209,7 +1159,7 @@ data class RoutingOptionsDto(
   val avoidTolls: Boolean? = null,
   val avoidFerries: Boolean? = null,
   val avoidHighways: Boolean? = null,
-  val locationTimeoutMs: Long? = null
+  val locationTimeoutMs: Long? = null,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -1232,7 +1182,7 @@ data class RoutingOptionsDto(
         avoidTolls,
         avoidFerries,
         avoidHighways,
-        locationTimeoutMs
+        locationTimeoutMs,
       )
     }
   }
@@ -1255,7 +1205,7 @@ data class RoutingOptionsDto(
 data class NavigationDisplayOptionsDto(
   val showDestinationMarkers: Boolean? = null,
   val showStopSigns: Boolean? = null,
-  val showTrafficLights: Boolean? = null
+  val showTrafficLights: Boolean? = null,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -1268,11 +1218,7 @@ data class NavigationDisplayOptionsDto(
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      showDestinationMarkers,
-      showStopSigns,
-      showTrafficLights,
-    )
+    return listOf<Any?>(showDestinationMarkers, showStopSigns, showTrafficLights)
   }
 }
 
@@ -1282,7 +1228,7 @@ data class NavigationWaypointDto(
   val target: LatLngDto? = null,
   val placeID: String? = null,
   val preferSameSideOfRoad: Boolean? = null,
-  val preferredSegmentHeading: Long? = null
+  val preferredSegmentHeading: Long? = null,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -1297,7 +1243,7 @@ data class NavigationWaypointDto(
         target,
         placeID,
         preferSameSideOfRoad,
-        preferredSegmentHeading
+        preferredSegmentHeading,
       )
     }
   }
@@ -1326,10 +1272,7 @@ data class NavigationTimeAndDistanceDto(val time: Double, val distance: Double) 
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      time,
-      distance,
-    )
+    return listOf<Any?>(time, distance)
   }
 }
 
@@ -1337,7 +1280,7 @@ data class NavigationTimeAndDistanceDto(val time: Double, val distance: Double) 
 data class NavigationAudioGuidanceSettingsDto(
   val isBluetoothAudioEnabled: Boolean? = null,
   val isVibrationEnabled: Boolean? = null,
-  val guidanceType: AudioGuidanceTypeDto? = null
+  val guidanceType: AudioGuidanceTypeDto? = null,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -1349,17 +1292,13 @@ data class NavigationAudioGuidanceSettingsDto(
       return NavigationAudioGuidanceSettingsDto(
         isBluetoothAudioEnabled,
         isVibrationEnabled,
-        guidanceType
+        guidanceType,
       )
     }
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      isBluetoothAudioEnabled,
-      isVibrationEnabled,
-      guidanceType?.raw,
-    )
+    return listOf<Any?>(isBluetoothAudioEnabled, isVibrationEnabled, guidanceType?.raw)
   }
 }
 
@@ -1375,9 +1314,7 @@ data class SimulationOptionsDto(val speedMultiplier: Double) {
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      speedMultiplier,
-    )
+    return listOf<Any?>(speedMultiplier)
   }
 }
 
@@ -1394,10 +1331,7 @@ data class LatLngDto(val latitude: Double, val longitude: Double) {
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      latitude,
-      longitude,
-    )
+    return listOf<Any?>(latitude, longitude)
   }
 }
 
@@ -1414,17 +1348,14 @@ data class LatLngBoundsDto(val southwest: LatLngDto, val northeast: LatLngDto) {
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      southwest.toList(),
-      northeast.toList(),
-    )
+    return listOf<Any?>(southwest.toList(), northeast.toList())
   }
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
 data class SpeedingUpdatedEventDto(
   val percentageAboveLimit: Double,
-  val severity: SpeedAlertSeverityDto
+  val severity: SpeedAlertSeverityDto,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -1436,10 +1367,7 @@ data class SpeedingUpdatedEventDto(
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      percentageAboveLimit,
-      severity.raw,
-    )
+    return listOf<Any?>(percentageAboveLimit, severity.raw)
   }
 }
 
@@ -1447,7 +1375,7 @@ data class SpeedingUpdatedEventDto(
 data class SpeedAlertOptionsDto(
   val severityUpgradeDurationSeconds: Double,
   val minorSpeedAlertThresholdPercentage: Double,
-  val majorSpeedAlertThresholdPercentage: Double
+  val majorSpeedAlertThresholdPercentage: Double,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -1458,7 +1386,7 @@ data class SpeedAlertOptionsDto(
       return SpeedAlertOptionsDto(
         severityUpgradeDurationSeconds,
         minorSpeedAlertThresholdPercentage,
-        majorSpeedAlertThresholdPercentage
+        majorSpeedAlertThresholdPercentage,
       )
     }
   }
@@ -1476,7 +1404,7 @@ data class SpeedAlertOptionsDto(
 data class RouteSegmentTrafficDataRoadStretchRenderingDataDto(
   val style: RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto,
   val lengthMeters: Long,
-  val offsetMeters: Long
+  val offsetMeters: Long,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -1489,18 +1417,14 @@ data class RouteSegmentTrafficDataRoadStretchRenderingDataDto(
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      style.raw,
-      lengthMeters,
-      offsetMeters,
-    )
+    return listOf<Any?>(style.raw, lengthMeters, offsetMeters)
   }
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
 data class RouteSegmentTrafficDataDto(
   val status: RouteSegmentTrafficDataStatusDto,
-  val roadStretchRenderingDataList: List<RouteSegmentTrafficDataRoadStretchRenderingDataDto?>
+  val roadStretchRenderingDataList: List<RouteSegmentTrafficDataRoadStretchRenderingDataDto?>,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -1513,10 +1437,7 @@ data class RouteSegmentTrafficDataDto(
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      status.raw,
-      roadStretchRenderingDataList,
-    )
+    return listOf<Any?>(status.raw, roadStretchRenderingDataList)
   }
 }
 
@@ -1525,7 +1446,7 @@ data class RouteSegmentDto(
   val trafficData: RouteSegmentTrafficDataDto? = null,
   val destinationLatLng: LatLngDto,
   val latLngs: List<LatLngDto?>? = null,
-  val destinationWaypoint: NavigationWaypointDto? = null
+  val destinationWaypoint: NavigationWaypointDto? = null,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -1560,7 +1481,7 @@ data class LaneDirectionDto(
   /** Shape for this lane direction. */
   val laneShape: LaneShapeDto,
   /** Whether this lane is recommended. */
-  val isRecommended: Boolean
+  val isRecommended: Boolean,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -1572,10 +1493,7 @@ data class LaneDirectionDto(
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      laneShape.raw,
-      isRecommended,
-    )
+    return listOf<Any?>(laneShape.raw, isRecommended)
   }
 }
 
@@ -1600,9 +1518,7 @@ data class LaneDto(
   }
 
   fun toList(): List<Any?> {
-    return listOf<Any?>(
-      laneDirections,
-    )
+    return listOf<Any?>(laneDirections)
   }
 }
 
@@ -1636,7 +1552,7 @@ data class StepInfoDto(
   /** The maneuver for this step. */
   val maneuver: ManeuverDto,
   /** The index of the step in the list of all steps in the route. */
-  val stepNumber: Long
+  val stepNumber: Long,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -1663,7 +1579,7 @@ data class StepInfoDto(
         roundaboutTurnNumber,
         lanes,
         maneuver,
-        stepNumber
+        stepNumber,
       )
     }
   }
@@ -1725,7 +1641,7 @@ data class NavInfoDto(
    *
    * Android only.
    */
-  val timeToNextDestinationSeconds: Long? = null
+  val timeToNextDestinationSeconds: Long? = null,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -1753,7 +1669,7 @@ data class NavInfoDto(
         distanceToNextDestinationMeters,
         timeToCurrentStepSeconds,
         timeToFinalDestinationSeconds,
-        timeToNextDestinationSeconds
+        timeToNextDestinationSeconds,
       )
     }
   }
@@ -1845,6 +1761,7 @@ interface NavigationViewCreationApi {
   companion object {
     /** The codec used by NavigationViewCreationApi. */
     val codec: MessageCodec<Any?> by lazy { NavigationViewCreationApiCodec }
+
     /**
      * Sets up an instance of `NavigationViewCreationApi` to handle messages through the
      * `binaryMessenger`.
@@ -1856,7 +1773,7 @@ interface NavigationViewCreationApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationViewCreationApi.create",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2085,14 +2002,14 @@ interface MapViewApi {
     viewId: Long,
     cameraPosition: CameraPositionDto,
     duration: Long?,
-    callback: (Result<Boolean>) -> Unit
+    callback: (Result<Boolean>) -> Unit,
   )
 
   fun animateCameraToLatLng(
     viewId: Long,
     point: LatLngDto,
     duration: Long?,
-    callback: (Result<Boolean>) -> Unit
+    callback: (Result<Boolean>) -> Unit,
   )
 
   fun animateCameraToLatLngBounds(
@@ -2100,7 +2017,7 @@ interface MapViewApi {
     bounds: LatLngBoundsDto,
     padding: Double,
     duration: Long?,
-    callback: (Result<Boolean>) -> Unit
+    callback: (Result<Boolean>) -> Unit,
   )
 
   fun animateCameraToLatLngZoom(
@@ -2108,7 +2025,7 @@ interface MapViewApi {
     point: LatLngDto,
     zoom: Double,
     duration: Long?,
-    callback: (Result<Boolean>) -> Unit
+    callback: (Result<Boolean>) -> Unit,
   )
 
   fun animateCameraByScroll(
@@ -2116,7 +2033,7 @@ interface MapViewApi {
     scrollByDx: Double,
     scrollByDy: Double,
     duration: Long?,
-    callback: (Result<Boolean>) -> Unit
+    callback: (Result<Boolean>) -> Unit,
   )
 
   fun animateCameraByZoom(
@@ -2125,14 +2042,14 @@ interface MapViewApi {
     focusDx: Double?,
     focusDy: Double?,
     duration: Long?,
-    callback: (Result<Boolean>) -> Unit
+    callback: (Result<Boolean>) -> Unit,
   )
 
   fun animateCameraToZoom(
     viewId: Long,
     zoom: Double,
     duration: Long?,
-    callback: (Result<Boolean>) -> Unit
+    callback: (Result<Boolean>) -> Unit,
   )
 
   fun moveCameraToCameraPosition(viewId: Long, cameraPosition: CameraPositionDto)
@@ -2252,6 +2169,7 @@ interface MapViewApi {
   companion object {
     /** The codec used by MapViewApi. */
     val codec: MessageCodec<Any?> by lazy { MapViewApiCodec }
+
     /** Sets up an instance of `MapViewApi` to handle messages through the `binaryMessenger`. */
     @Suppress("UNCHECKED_CAST")
     fun setUp(binaryMessenger: BinaryMessenger, api: MapViewApi?) {
@@ -2260,7 +2178,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.awaitMapReady",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2284,7 +2202,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2307,7 +2225,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2332,7 +2250,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMyLocation",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2355,7 +2273,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapType",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2378,7 +2296,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapType",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2403,7 +2321,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapStyle",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2428,7 +2346,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationTripProgressBarEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2451,7 +2369,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationTripProgressBarEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2476,7 +2394,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationHeaderEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2499,7 +2417,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationHeaderEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2524,7 +2442,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationFooterEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2547,7 +2465,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationFooterEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2572,7 +2490,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRecenterButtonEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2595,7 +2513,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRecenterButtonEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2620,7 +2538,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedLimitIconEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2643,7 +2561,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedLimitIconEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2668,7 +2586,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedometerEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2691,7 +2609,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedometerEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2716,7 +2634,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficIncidentCardsEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2739,7 +2657,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficIncidentCardsEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2764,7 +2682,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationUIEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2787,7 +2705,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationUIEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2812,7 +2730,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCameraPosition",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2835,7 +2753,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getVisibleRegion",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2858,7 +2776,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.followMyLocation",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2884,7 +2802,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToCameraPosition",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2912,7 +2830,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLng",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2939,7 +2857,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngBounds",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2968,7 +2886,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngZoom",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2997,7 +2915,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByScroll",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3026,7 +2944,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByZoom",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3056,7 +2974,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToZoom",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3083,7 +3001,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToCameraPosition",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3108,7 +3026,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLng",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3133,7 +3051,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngBounds",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3159,7 +3077,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngZoom",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3185,7 +3103,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByScroll",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3211,7 +3129,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByZoom",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3238,7 +3156,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToZoom",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3263,7 +3181,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showRouteOverview",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3287,7 +3205,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMinZoomPreference",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3310,7 +3228,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMaxZoomPreference",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3333,7 +3251,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.resetMinMaxZoomPreference",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3357,7 +3275,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMinZoomPreference",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3382,7 +3300,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMaxZoomPreference",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3407,7 +3325,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationButtonEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3432,7 +3350,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setConsumeMyLocationButtonClickEventsEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3457,7 +3375,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomGesturesEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3482,7 +3400,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomControlsEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3507,7 +3425,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setCompassEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3532,7 +3450,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRotateGesturesEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3557,7 +3475,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3582,7 +3500,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesDuringRotateOrZoomEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3607,7 +3525,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTiltGesturesEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3632,7 +3550,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapToolbarEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3657,7 +3575,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3682,7 +3600,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationButtonEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3705,7 +3623,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isConsumeMyLocationButtonClickEventsEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3728,7 +3646,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomGesturesEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3751,7 +3669,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomControlsEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3774,7 +3692,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isCompassEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3797,7 +3715,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRotateGesturesEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3820,7 +3738,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3843,7 +3761,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabledDuringRotateOrZoom",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3866,7 +3784,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTiltGesturesEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3889,7 +3807,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMapToolbarEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3912,7 +3830,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficEnabled",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3935,7 +3853,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMarkers",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3958,7 +3876,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addMarkers",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3982,7 +3900,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateMarkers",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -4006,7 +3924,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeMarkers",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -4031,7 +3949,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearMarkers",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -4055,7 +3973,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clear",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -4079,7 +3997,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolygons",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -4102,7 +4020,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolygons",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -4126,7 +4044,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolygons",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -4150,7 +4068,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolygons",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -4175,7 +4093,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolygons",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -4199,7 +4117,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolylines",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -4222,7 +4140,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolylines",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -4246,7 +4164,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolylines",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -4270,7 +4188,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolylines",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -4295,7 +4213,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolylines",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -4319,7 +4237,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCircles",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -4342,7 +4260,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addCircles",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -4366,7 +4284,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateCircles",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -4390,7 +4308,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeCircles",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -4415,7 +4333,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearCircles",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -4439,7 +4357,7 @@ interface MapViewApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.registerOnCameraChangedListener",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -4498,7 +4416,7 @@ interface ImageRegistryApi {
     bytes: ByteArray,
     imagePixelRatio: Double,
     width: Double?,
-    height: Double?
+    height: Double?,
   ): ImageDescriptorDto
 
   fun unregisterImage(imageDescriptor: ImageDescriptorDto)
@@ -4510,6 +4428,7 @@ interface ImageRegistryApi {
   companion object {
     /** The codec used by ImageRegistryApi. */
     val codec: MessageCodec<Any?> by lazy { ImageRegistryApiCodec }
+
     /**
      * Sets up an instance of `ImageRegistryApi` to handle messages through the `binaryMessenger`.
      */
@@ -4520,7 +4439,7 @@ interface ImageRegistryApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.registerBitmapImage",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -4539,7 +4458,7 @@ interface ImageRegistryApi {
                     bytesArg,
                     imagePixelRatioArg,
                     widthArg,
-                    heightArg
+                    heightArg,
                   )
                 )
             } catch (exception: Throwable) {
@@ -4556,7 +4475,7 @@ interface ImageRegistryApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.unregisterImage",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -4580,7 +4499,7 @@ interface ImageRegistryApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.getRegisteredImages",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -4601,7 +4520,7 @@ interface ImageRegistryApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.clearRegisteredImages",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -4713,7 +4632,7 @@ class ViewEventApi(private val binaryMessenger: BinaryMessenger) {
     viewIdArg: Long,
     markerIdArg: String,
     eventTypeArg: MarkerEventTypeDto,
-    callback: (Result<Unit>) -> Unit
+    callback: (Result<Unit>) -> Unit,
   ) {
     val channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerEvent"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
@@ -4735,7 +4654,7 @@ class ViewEventApi(private val binaryMessenger: BinaryMessenger) {
     markerIdArg: String,
     eventTypeArg: MarkerDragEventTypeDto,
     positionArg: LatLngDto,
-    callback: (Result<Unit>) -> Unit
+    callback: (Result<Unit>) -> Unit,
   ) {
     val channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerDragEvent"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
@@ -4803,7 +4722,7 @@ class ViewEventApi(private val binaryMessenger: BinaryMessenger) {
   fun onNavigationUIEnabledChanged(
     viewIdArg: Long,
     navigationUIEnabledArg: Boolean,
-    callback: (Result<Unit>) -> Unit
+    callback: (Result<Unit>) -> Unit,
   ) {
     val channelName =
       "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onNavigationUIEnabledChanged"
@@ -4859,7 +4778,7 @@ class ViewEventApi(private val binaryMessenger: BinaryMessenger) {
     viewIdArg: Long,
     eventTypeArg: CameraEventTypeDto,
     positionArg: CameraPositionDto,
-    callback: (Result<Unit>) -> Unit
+    callback: (Result<Unit>) -> Unit,
   ) {
     val channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCameraChanged"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
@@ -5013,7 +4932,7 @@ interface NavigationSessionApi {
   /** General. */
   fun createNavigationSession(
     abnormalTerminationReportingEnabled: Boolean,
-    callback: (Result<Unit>) -> Unit
+    callback: (Result<Unit>) -> Unit,
   )
 
   fun isInitialized(): Boolean
@@ -5024,7 +4943,7 @@ interface NavigationSessionApi {
     title: String,
     companyName: String,
     shouldOnlyShowDriverAwarenessDisclaimer: Boolean,
-    callback: (Result<Boolean>) -> Unit
+    callback: (Result<Boolean>) -> Unit,
   )
 
   fun areTermsAccepted(): Boolean
@@ -5032,6 +4951,7 @@ interface NavigationSessionApi {
   fun resetTermsAccepted()
 
   fun getNavSDKVersion(): String
+
   /** Navigation. */
   fun isGuidanceRunning(): Boolean
 
@@ -5056,6 +4976,7 @@ interface NavigationSessionApi {
   fun getTraveledRoute(): List<LatLngDto>
 
   fun getCurrentRouteSegment(): RouteSegmentDto?
+
   /** Simulation */
   fun setUserLocation(location: LatLngDto)
 
@@ -5067,31 +4988,34 @@ interface NavigationSessionApi {
 
   fun simulateLocationsAlongNewRoute(
     waypoints: List<NavigationWaypointDto>,
-    callback: (Result<RouteStatusDto>) -> Unit
+    callback: (Result<RouteStatusDto>) -> Unit,
   )
 
   fun simulateLocationsAlongNewRouteWithRoutingOptions(
     waypoints: List<NavigationWaypointDto>,
     routingOptions: RoutingOptionsDto,
-    callback: (Result<RouteStatusDto>) -> Unit
+    callback: (Result<RouteStatusDto>) -> Unit,
   )
 
   fun simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
     waypoints: List<NavigationWaypointDto>,
     routingOptions: RoutingOptionsDto,
     simulationOptions: SimulationOptionsDto,
-    callback: (Result<RouteStatusDto>) -> Unit
+    callback: (Result<RouteStatusDto>) -> Unit,
   )
 
   fun pauseSimulation()
 
   fun resumeSimulation()
+
   /** Simulation (iOS only) */
   fun allowBackgroundLocationUpdates(allow: Boolean)
+
   /** Road snapped location updates. */
   fun enableRoadSnappedLocationUpdates()
 
   fun disableRoadSnappedLocationUpdates()
+
   /** Enable Turn-by-Turn navigation events. */
   fun enableTurnByTurnNavigationEvents(numNextStepsToPreview: Long?)
 
@@ -5099,12 +5023,13 @@ interface NavigationSessionApi {
 
   fun registerRemainingTimeOrDistanceChangedListener(
     remainingTimeThresholdSeconds: Long,
-    remainingDistanceThresholdMeters: Long
+    remainingDistanceThresholdMeters: Long,
   )
 
   companion object {
     /** The codec used by NavigationSessionApi. */
     val codec: MessageCodec<Any?> by lazy { NavigationSessionApiCodec }
+
     /**
      * Sets up an instance of `NavigationSessionApi` to handle messages through the
      * `binaryMessenger`.
@@ -5116,7 +5041,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -5141,7 +5066,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.isInitialized",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -5162,7 +5087,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.cleanup",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -5184,7 +5109,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.showTermsAndConditionsDialog",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -5195,7 +5120,7 @@ interface NavigationSessionApi {
             api.showTermsAndConditionsDialog(
               titleArg,
               companyNameArg,
-              shouldOnlyShowDriverAwarenessDisclaimerArg
+              shouldOnlyShowDriverAwarenessDisclaimerArg,
             ) { result: Result<Boolean> ->
               val error = result.exceptionOrNull()
               if (error != null) {
@@ -5215,7 +5140,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.areTermsAccepted",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -5236,7 +5161,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.resetTermsAccepted",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -5258,7 +5183,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getNavSDKVersion",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -5279,7 +5204,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.isGuidanceRunning",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -5300,7 +5225,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.startGuidance",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -5322,7 +5247,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.stopGuidance",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -5344,7 +5269,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setDestinations",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -5369,7 +5294,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.clearDestinations",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -5391,7 +5316,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.continueToNextDestination",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -5412,7 +5337,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getCurrentTimeAndDistance",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -5433,7 +5358,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setAudioGuidance",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -5457,7 +5382,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setSpeedAlertOptions",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -5481,7 +5406,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getRouteSegments",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -5502,7 +5427,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getTraveledRoute",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -5523,7 +5448,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getCurrentRouteSegment",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -5544,7 +5469,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setUserLocation",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -5568,7 +5493,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.removeUserLocation",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -5590,7 +5515,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongExistingRoute",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -5612,7 +5537,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongExistingRouteWithOptions",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -5636,7 +5561,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRoute",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -5661,7 +5586,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingOptions",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -5688,7 +5613,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -5699,7 +5624,7 @@ interface NavigationSessionApi {
             api.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
               waypointsArg,
               routingOptionsArg,
-              simulationOptionsArg
+              simulationOptionsArg,
             ) { result: Result<RouteStatusDto> ->
               val error = result.exceptionOrNull()
               if (error != null) {
@@ -5719,7 +5644,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.pauseSimulation",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -5741,7 +5666,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.resumeSimulation",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -5763,7 +5688,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.allowBackgroundLocationUpdates",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -5787,7 +5712,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.enableRoadSnappedLocationUpdates",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -5809,7 +5734,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.disableRoadSnappedLocationUpdates",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -5831,7 +5756,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.enableTurnByTurnNavigationEvents",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -5856,7 +5781,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.disableTurnByTurnNavigationEvents",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
@@ -5878,7 +5803,7 @@ interface NavigationSessionApi {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.registerRemainingTimeOrDistanceChangedListener",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -5891,7 +5816,7 @@ interface NavigationSessionApi {
             try {
               api.registerRemainingTimeOrDistanceChangedListener(
                 remainingTimeThresholdSecondsArg,
-                remainingDistanceThresholdMetersArg
+                remainingDistanceThresholdMetersArg,
               )
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
@@ -6074,7 +5999,7 @@ class NavigationSessionEventApi(private val binaryMessenger: BinaryMessenger) {
   fun onRemainingTimeOrDistanceChanged(
     remainingTimeArg: Double,
     remainingDistanceArg: Double,
-    callback: (Result<Unit>) -> Unit
+    callback: (Result<Unit>) -> Unit,
   ) {
     val channelName =
       "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRemainingTimeOrDistanceChanged"
@@ -6091,6 +6016,7 @@ class NavigationSessionEventApi(private val binaryMessenger: BinaryMessenger) {
       }
     }
   }
+
   /** Android-only event. */
   fun onTrafficUpdated(callback: (Result<Unit>) -> Unit) {
     val channelName =
@@ -6108,6 +6034,7 @@ class NavigationSessionEventApi(private val binaryMessenger: BinaryMessenger) {
       }
     }
   }
+
   /** Android-only event. */
   fun onRerouting(callback: (Result<Unit>) -> Unit) {
     val channelName =
@@ -6125,6 +6052,7 @@ class NavigationSessionEventApi(private val binaryMessenger: BinaryMessenger) {
       }
     }
   }
+
   /** Android-only event. */
   fun onGpsAvailabilityUpdate(availableArg: Boolean, callback: (Result<Unit>) -> Unit) {
     val channelName =
@@ -6142,6 +6070,7 @@ class NavigationSessionEventApi(private val binaryMessenger: BinaryMessenger) {
       }
     }
   }
+
   /** Turn-by-Turn navigation events. */
   fun onNavInfo(navInfoArg: NavInfoDto, callback: (Result<Unit>) -> Unit) {
     val channelName =
@@ -6160,6 +6089,7 @@ class NavigationSessionEventApi(private val binaryMessenger: BinaryMessenger) {
     }
   }
 }
+
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface NavigationInspector {
   fun isViewAttachedToSession(viewId: Long): Boolean
@@ -6167,6 +6097,7 @@ interface NavigationInspector {
   companion object {
     /** The codec used by NavigationInspector. */
     val codec: MessageCodec<Any?> by lazy { StandardMessageCodec() }
+
     /**
      * Sets up an instance of `NavigationInspector` to handle messages through the
      * `binaryMessenger`.
@@ -6178,7 +6109,7 @@ interface NavigationInspector {
           BasicMessageChannel<Any?>(
             binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.NavigationInspector.isViewAttachedToSession",
-            codec
+            codec,
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->

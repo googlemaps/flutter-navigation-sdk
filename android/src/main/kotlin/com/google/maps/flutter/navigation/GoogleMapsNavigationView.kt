@@ -32,7 +32,7 @@ internal constructor(
   viewId: Int,
   private val viewRegistry: GoogleMapsViewRegistry,
   viewEventApi: ViewEventApi,
-  private val imageRegistry: ImageRegistry
+  private val imageRegistry: ImageRegistry,
 ) : PlatformView, GoogleMapsBaseMapView(viewId, mapOptions, viewEventApi, imageRegistry) {
   private val _navigationView: NavigationView = NavigationView(context, mapOptions)
 

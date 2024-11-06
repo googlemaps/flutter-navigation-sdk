@@ -41,7 +41,7 @@ abstract class GoogleMapsBaseMapView(
   protected val viewId: Int,
   mapOptions: GoogleMapOptions,
   protected val viewEventApi: ViewEventApi,
-  private val imageRegistry: ImageRegistry
+  private val imageRegistry: ImageRegistry,
 ) {
   companion object {
     const val INVALIDATION_FRAME_SKIP_AMOUNT = 4 // Amount of skip frames before invalidation
@@ -105,16 +105,10 @@ abstract class GoogleMapsBaseMapView(
 
   protected open fun initListeners() {
     getMap().setOnMapClickListener {
-      viewEventApi.onMapClickEvent(
-        viewId.toLong(),
-        LatLngDto(it.latitude, it.longitude),
-      ) {}
+      viewEventApi.onMapClickEvent(viewId.toLong(), LatLngDto(it.latitude, it.longitude)) {}
     }
     getMap().setOnMapLongClickListener {
-      viewEventApi.onMapLongClickEvent(
-        viewId.toLong(),
-        LatLngDto(it.latitude, it.longitude),
-      ) {}
+      viewEventApi.onMapLongClickEvent(viewId.toLong(), LatLngDto(it.latitude, it.longitude)) {}
     }
     getMap().setOnMarkerClickListener { marker ->
       val markerId = findMarkerId(marker)
@@ -189,7 +183,7 @@ abstract class GoogleMapsBaseMapView(
             viewEventApi.onCameraChanged(
               viewId.toLong(),
               CameraEventTypeDto.ONCAMERASTARTEDFOLLOWINGLOCATION,
-              Convert.convertCameraPositionToDto(getMap().cameraPosition)
+              Convert.convertCameraPositionToDto(getMap().cameraPosition),
             ) {}
           }
 
@@ -197,7 +191,7 @@ abstract class GoogleMapsBaseMapView(
             viewEventApi.onCameraChanged(
               viewId.toLong(),
               CameraEventTypeDto.ONCAMERASTOPPEDFOLLOWINGLOCATION,
-              Convert.convertCameraPositionToDto(getMap().cameraPosition)
+              Convert.convertCameraPositionToDto(getMap().cameraPosition),
             ) {}
           }
         }
@@ -284,7 +278,7 @@ abstract class GoogleMapsBaseMapView(
       viewId.toLong(),
       markerId,
       eventType,
-      LatLngDto(marker.position.latitude, marker.position.longitude)
+      LatLngDto(marker.position.latitude, marker.position.longitude),
     ) {}
   }
 
@@ -332,7 +326,7 @@ abstract class GoogleMapsBaseMapView(
     if (minZoomPreference > (_maxZoomLevelPreference ?: getMap().maxZoomLevel)) {
       throw FlutterError(
         "minZoomGreaterThanMaxZoom",
-        "Minimum zoom level cannot be greater than maximum zoom level"
+        "Minimum zoom level cannot be greater than maximum zoom level",
       )
     }
 
@@ -345,7 +339,7 @@ abstract class GoogleMapsBaseMapView(
     if (maxZoomPreference < (_minZoomLevelPreference ?: getMap().minZoomLevel)) {
       throw FlutterError(
         "maxZoomLessThanMinZoom",
-        "Maximum zoom level cannot be less than minimum zoom level"
+        "Maximum zoom level cannot be less than minimum zoom level",
       )
     }
 
@@ -427,7 +421,8 @@ abstract class GoogleMapsBaseMapView(
     // library for geolocation or implement separate method under
     // [GoogleMapsNavigationSessionManager] to fetch the location
     // using the [FusedLocationProviderApi].
-    @Suppress("DEPRECATION") return getMap().myLocation
+    @Suppress("DEPRECATION")
+    return getMap().myLocation
   }
 
   fun getCameraPosition(): CameraPosition {
@@ -453,7 +448,7 @@ abstract class GoogleMapsBaseMapView(
   private fun animateCamera(
     cameraUpdate: CameraUpdate,
     duration: Long?,
-    callback: (Result<Boolean>) -> Unit
+    callback: (Result<Boolean>) -> Unit,
   ) {
     // Native animateCamera() doesn't allow setting null duration so need to do two calls
     if (duration == null) {
@@ -466,7 +461,7 @@ abstract class GoogleMapsBaseMapView(
   fun animateCameraToCameraPosition(
     cameraPosition: CameraPosition,
     duration: Long?,
-    callback: (Result<Boolean>) -> Unit
+    callback: (Result<Boolean>) -> Unit,
   ) {
     animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), duration, callback)
   }
@@ -479,7 +474,7 @@ abstract class GoogleMapsBaseMapView(
     bounds: LatLngBounds,
     padding: Double,
     duration: Long?,
-    callback: (Result<Boolean>) -> Unit
+    callback: (Result<Boolean>) -> Unit,
   ) {
     animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding.toInt()), duration, callback)
   }
@@ -488,7 +483,7 @@ abstract class GoogleMapsBaseMapView(
     point: LatLng,
     zoom: Double,
     duration: Long?,
-    callback: (Result<Boolean>) -> Unit
+    callback: (Result<Boolean>) -> Unit,
   ) {
     animateCamera(CameraUpdateFactory.newLatLngZoom(point, zoom.toFloat()), duration, callback)
   }
@@ -497,12 +492,12 @@ abstract class GoogleMapsBaseMapView(
     scrollByDx: Double,
     scrollByDy: Double,
     duration: Long?,
-    callback: (Result<Boolean>) -> Unit
+    callback: (Result<Boolean>) -> Unit,
   ) {
     animateCamera(
       CameraUpdateFactory.scrollBy(scrollByDx.toFloat(), scrollByDy.toFloat()),
       duration,
-      callback
+      callback,
     )
   }
 
@@ -510,7 +505,7 @@ abstract class GoogleMapsBaseMapView(
     zoomBy: Double,
     focus: Point?,
     duration: Long?,
-    callback: (Result<Boolean>) -> Unit
+    callback: (Result<Boolean>) -> Unit,
   ) {
     // Native animateCamera() doesn't allow setting null duration or focus so need to split to
     // multiple calls
@@ -599,7 +594,7 @@ abstract class GoogleMapsBaseMapView(
         Result.failure(
           FlutterError(
             "mapReadyCallbackAlreadyPending",
-            "A callback is already pending and cannot be overridden."
+            "A callback is already pending and cannot be overridden.",
           )
         )
       )
@@ -640,7 +635,7 @@ abstract class GoogleMapsBaseMapView(
             it.options.anchor.v.toFloat(),
             it.options.infoWindow.anchor.u.toFloat(),
             it.options.infoWindow.anchor.v.toFloat(),
-            registeredImage
+            registeredImage,
           )
         _markers.add(controller)
         result.add(it)
@@ -709,9 +704,7 @@ abstract class GoogleMapsBaseMapView(
     }
   }
 
-  fun addPolygons(
-    polygons: List<PolygonDto>,
-  ): List<PolygonDto> {
+  fun addPolygons(polygons: List<PolygonDto>): List<PolygonDto> {
     val density = Resources.getSystem().displayMetrics.density
     invalidateViewAfterMapLoad()
     val result = mutableListOf<PolygonDto>()
@@ -778,9 +771,7 @@ abstract class GoogleMapsBaseMapView(
     }
   }
 
-  fun addPolylines(
-    polylines: List<PolylineDto>,
-  ): List<PolylineDto> {
+  fun addPolylines(polylines: List<PolylineDto>): List<PolylineDto> {
     val density = Resources.getSystem().displayMetrics.density
     invalidateViewAfterMapLoad()
     val result = mutableListOf<PolylineDto>()

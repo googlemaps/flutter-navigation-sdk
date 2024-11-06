@@ -25,11 +25,7 @@ internal class PolylineBuilderTest {
   fun polylineBuilder_returnsExpectedValue() {
     val optionsIn =
       PolylineOptionsDto(
-        points =
-          listOf(
-            LatLngDto(50.0, 60.0),
-            LatLngDto(80.0, 90.0),
-          ),
+        points = listOf(LatLngDto(50.0, 60.0), LatLngDto(80.0, 90.0)),
         clickable = true,
         geodesic = true,
         strokeColor = Color.RED.toLong(),
@@ -38,7 +34,7 @@ internal class PolylineBuilderTest {
         visible = true,
         strokePattern = emptyList(),
         zIndex = 5.0,
-        spans = emptyList()
+        spans = emptyList(),
       )
     val builder = PolylineBuilder()
     Convert.sinkPolylineOptions(optionsIn, builder, 1.0F)

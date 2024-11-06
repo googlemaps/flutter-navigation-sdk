@@ -23,7 +23,7 @@ class GoogleMapsImageRegistryMessageHandler(private val imageRegistry: ImageRegi
     bytes: ByteArray,
     imagePixelRatio: Double,
     width: Double?,
-    height: Double?
+    height: Double?,
   ): ImageDescriptorDto {
     return imageRegistry.registerBitmapImage(imageId, bytes, imagePixelRatio, width, height)
   }

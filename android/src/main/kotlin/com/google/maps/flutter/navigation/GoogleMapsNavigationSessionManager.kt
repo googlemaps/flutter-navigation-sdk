@@ -150,7 +150,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
     } else {
       throw FlutterError(
         "sessionNotInitialized",
-        "Cannot access navigation functionality before the navigation session has been initialized."
+        "Cannot access navigation functionality before the navigation session has been initialized.",
       )
     }
   }
@@ -164,7 +164,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   /** Creates Navigator instance. */
   fun createNavigationSession(
     abnormalTerminationReportingEnabled: Boolean,
-    callback: (Result<Unit>) -> Unit
+    callback: (Result<Unit>) -> Unit,
   ) {
     if (navigator != null) {
       // Navigator is already initialized, just re-register listeners.
@@ -181,7 +181,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
         Result.failure(
           FlutterError(
             "termsNotAccepted",
-            "The session initialization failed, because the user has not yet accepted the navigation terms and conditions."
+            "The session initialization failed, because the user has not yet accepted the navigation terms and conditions.",
           )
         )
       )
@@ -208,7 +208,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
                 Result.failure(
                   FlutterError(
                     "notAuthorized",
-                    "The session initialization failed, because the required Maps API key is empty or invalid."
+                    "The session initialization failed, because the required Maps API key is empty or invalid.",
                   )
                 )
               )
@@ -218,7 +218,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
                 Result.failure(
                   FlutterError(
                     "termsNotAccepted",
-                    "The session initialization failed, because the user has not yet accepted the navigation terms and conditions."
+                    "The session initialization failed, because the user has not yet accepted the navigation terms and conditions.",
                   )
                 )
               )
@@ -228,7 +228,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
                 Result.failure(
                   FlutterError(
                     "networkError",
-                    "The session initialization failed, because there is no working network connection."
+                    "The session initialization failed, because there is no working network connection.",
                   )
                 )
               )
@@ -238,7 +238,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
                 Result.failure(
                   FlutterError(
                     "locationPermissionMissing",
-                    "The session initialization failed, because the required location permission has not been granted."
+                    "The session initialization failed, because the required location permission has not been granted.",
                   )
                 )
               )
@@ -262,7 +262,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
       } else {
         throw FlutterError(
           "roadSnappedLocationProviderUnavailable",
-          "Could not get the road snapped location provider, activity not set."
+          "Could not get the road snapped location provider, activity not set.",
         )
       }
     }
@@ -317,7 +317,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
 
   fun registerRemainingTimeOrDistanceChangedListener(
     remainingTimeThresholdSeconds: Long,
-    remainingDistanceThresholdMeters: Long
+    remainingDistanceThresholdMeters: Long,
   ) {
     if (remainingTimeOrDistanceChangedListener != null) {
       // Remove previously created listener to prevent
@@ -330,7 +330,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
           val timeAndDistance = getNavigator().currentTimeAndDistance
           navigationSessionEventApi.onRemainingTimeOrDistanceChanged(
             timeAndDistance.seconds.toDouble(),
-            timeAndDistance.meters.toDouble()
+            timeAndDistance.meters.toDouble(),
           ) {}
         }
     }
@@ -339,7 +339,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
       .addRemainingTimeOrDistanceChangedListener(
         remainingTimeThresholdSeconds.toInt(),
         remainingDistanceThresholdMeters.toInt(),
-        remainingTimeOrDistanceChangedListener
+        remainingTimeOrDistanceChangedListener,
       )
   }
 
@@ -376,7 +376,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
           navigationSessionEventApi.onSpeedingUpdated(
             SpeedingUpdatedEventDto(
               percentageAboveLimit.toDouble(),
-              Convert.convertSpeedAlertSeverityFromDto(speedAlertSeverity)
+              Convert.convertSpeedAlertSeverityFromDto(speedAlertSeverity),
             )
           ) {}
         }
@@ -413,7 +413,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
     routingOptions: RoutingOptions,
     displayOptions: DisplayOptions,
     routeTokenOptions: RouteTokenOptionsDto?,
-    callback: (Result<Navigator.RouteStatus>) -> Unit
+    callback: (Result<Navigator.RouteStatus>) -> Unit,
   ) {
     try {
       // If route toke options are present set token and travel mode if given.
@@ -433,7 +433,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
           throw FlutterError(
             "routeTokenMalformed",
             "The route token passed is malformed",
-            e.message
+            e.message,
           )
         }
 
@@ -510,7 +510,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
     title: String,
     companyName: String,
     shouldOnlyShowDriverAwarenessDisclaimer: Boolean,
-    callback: (Result<Boolean>) -> Unit
+    callback: (Result<Boolean>) -> Unit,
   ) {
     // Align API behavior with iOS:
     // If the terms have already been accepted just return true straight away.
@@ -527,7 +527,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
         title,
         defaultParams,
         { accepted -> callback(Result.success(accepted)) },
-        TermsAndConditionsCheckOption.SKIPPED
+        TermsAndConditionsCheckOption.SKIPPED,
       )
     } else {
       NavigationApi.showTermsAndConditionsDialog(getActivity(), companyName, title) { accepted ->
@@ -565,7 +565,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
     } catch (error: IllegalStateException) {
       throw FlutterError(
         "termsResetNotAllowed",
-        "The terms acceptance cannot be reset while the navigation session is active."
+        "The terms acceptance cannot be reset while the navigation session is active.",
       )
     }
   }
@@ -612,7 +612,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
    */
   fun simulateLocationsAlongNewRoute(
     waypoints: List<Waypoint>,
-    callback: (Result<Navigator.RouteStatus>) -> Unit
+    callback: (Result<Navigator.RouteStatus>) -> Unit,
   ) {
     try {
       getNavigator().simulator.simulateLocationsAlongNewRoute(waypoints).setOnResultListener {
@@ -630,7 +630,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   fun simulateLocationsAlongNewRouteWithRoutingOptions(
     waypoints: List<Waypoint>,
     routingOptions: RoutingOptions,
-    callback: (Result<Navigator.RouteStatus>) -> Unit
+    callback: (Result<Navigator.RouteStatus>) -> Unit,
   ) {
     try {
       getNavigator()
@@ -650,7 +650,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
     waypoints: List<Waypoint>,
     routingOptions: RoutingOptions,
     simulationOptions: SimulationOptions,
-    callback: (Result<Navigator.RouteStatus>) -> Unit
+    callback: (Result<Navigator.RouteStatus>) -> Unit,
   ) {
     try {
       getNavigator()
@@ -679,9 +679,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   }
 
   @Throws(FlutterError::class)
-  fun enableTurnByTurnNavigationEvents(
-    numNextStepsToPreview: Int,
-  ) {
+  fun enableTurnByTurnNavigationEvents(numNextStepsToPreview: Int) {
     var lifeCycleOwner: LifecycleOwner? = weakLifecycleOwner?.get()
     if (!turnByTurnEventsEnabled && lifeCycleOwner != null) {
 
@@ -704,7 +702,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
           .registerServiceForNavUpdates(
             getActivity().packageName,
             GoogleMapsNavigationNavUpdatesService::class.java.name,
-            options
+            options,
           )
 
       if (success) {
@@ -713,13 +711,13 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
         }
         GoogleMapsNavigationNavUpdatesService.navInfoLiveData.observe(
           lifeCycleOwner,
-          navInfoObserver
+          navInfoObserver,
         )
         turnByTurnEventsEnabled = true
       } else {
         throw FlutterError(
           "turnByTurnServiceError",
-          "Error while registering turn-by-turn updates service."
+          "Error while registering turn-by-turn updates service.",
         )
       }
     }
@@ -736,7 +734,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
       } else {
         throw FlutterError(
           "turnByTurnServiceError",
-          "Error while unregistering turn-by-turn updates service."
+          "Error while unregistering turn-by-turn updates service.",
         )
       }
     }

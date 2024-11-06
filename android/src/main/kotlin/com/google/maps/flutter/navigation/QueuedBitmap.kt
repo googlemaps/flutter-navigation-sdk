@@ -23,5 +23,5 @@ data class QueuedBitmap(
   val bitmap: Bitmap,
   val imagePixelRatio: Double,
   val width: Double?,
-  val height: Double?
+  val height: Double?,
 )

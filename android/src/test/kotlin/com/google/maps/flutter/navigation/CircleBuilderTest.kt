@@ -33,7 +33,7 @@ internal class CircleBuilderTest {
         strokeWidth = 3.0,
         visible = true,
         strokePattern = emptyList(),
-        zIndex = 5.0
+        zIndex = 5.0,
       )
     val builder = CircleBuilder()
     Convert.sinkCircleOptions(optionsIn, builder, 1.0F)

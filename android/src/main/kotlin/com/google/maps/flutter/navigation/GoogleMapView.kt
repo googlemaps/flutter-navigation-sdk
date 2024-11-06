@@ -29,7 +29,7 @@ internal constructor(
   viewId: Int,
   viewEventApi: ViewEventApi,
   private val viewRegistry: GoogleMapsViewRegistry,
-  imageRegistry: ImageRegistry
+  imageRegistry: ImageRegistry,
 ) : PlatformView, GoogleMapsBaseMapView(viewId, mapOptions, viewEventApi, imageRegistry) {
   private val _mapView: MapView = MapView(context, mapOptions)
 

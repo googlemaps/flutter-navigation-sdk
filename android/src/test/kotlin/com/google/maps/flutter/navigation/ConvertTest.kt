@@ -89,9 +89,9 @@ internal class ConvertTest {
         NavigationAudioGuidanceSettingsDto(
           isBluetoothAudioEnabled = false,
           isVibrationEnabled = false,
-          guidanceType = AudioGuidanceTypeDto.ALERTSANDGUIDANCE
+          guidanceType = AudioGuidanceTypeDto.ALERTSANDGUIDANCE,
         )
-      )
+      ),
     )
     assertEquals(
       AudioGuidance.SILENT,
@@ -99,9 +99,9 @@ internal class ConvertTest {
         NavigationAudioGuidanceSettingsDto(
           isBluetoothAudioEnabled = false,
           isVibrationEnabled = false,
-          guidanceType = AudioGuidanceTypeDto.SILENT
+          guidanceType = AudioGuidanceTypeDto.SILENT,
         )
-      )
+      ),
     )
     assertEquals(
       AudioGuidance.VOICE_ALERTS_ONLY,
@@ -109,9 +109,9 @@ internal class ConvertTest {
         NavigationAudioGuidanceSettingsDto(
           isBluetoothAudioEnabled = false,
           isVibrationEnabled = false,
-          guidanceType = AudioGuidanceTypeDto.ALERTSONLY
+          guidanceType = AudioGuidanceTypeDto.ALERTSONLY,
         )
-      )
+      ),
     )
     assertEquals(
       AudioGuidance.VOICE_ALERTS_AND_GUIDANCE or AudioGuidance.VIBRATION,
@@ -119,9 +119,9 @@ internal class ConvertTest {
         NavigationAudioGuidanceSettingsDto(
           isBluetoothAudioEnabled = false,
           isVibrationEnabled = true,
-          guidanceType = AudioGuidanceTypeDto.ALERTSANDGUIDANCE
+          guidanceType = AudioGuidanceTypeDto.ALERTSANDGUIDANCE,
         )
-      )
+      ),
     )
     assertEquals(
       AudioGuidance.VOICE_ALERTS_AND_GUIDANCE or AudioGuidance.BLUETOOTH_AUDIO,
@@ -129,9 +129,9 @@ internal class ConvertTest {
         NavigationAudioGuidanceSettingsDto(
           isBluetoothAudioEnabled = true,
           isVibrationEnabled = false,
-          guidanceType = AudioGuidanceTypeDto.ALERTSANDGUIDANCE
+          guidanceType = AudioGuidanceTypeDto.ALERTSANDGUIDANCE,
         )
-      )
+      ),
     )
   }
 
@@ -142,13 +142,13 @@ internal class ConvertTest {
       NavigationDisplayOptionsDto(
         showDestinationMarkers = false,
         showStopSigns = false,
-        showTrafficLights = false
+        showTrafficLights = false,
       )
     val allTrue =
       NavigationDisplayOptionsDto(
         showDestinationMarkers = true,
         showStopSigns = true,
-        showTrafficLights = true
+        showTrafficLights = true,
       )
 
     val convertedNone = Convert.convertDisplayOptionsFromDto(none)
@@ -171,15 +171,15 @@ internal class ConvertTest {
   fun convertRoutingStrategy_returnsExpectedValue() {
     assertEquals(
       RoutingStrategy.DEFAULT_BEST,
-      Convert.convertRoutingStrategyFromDto(RoutingStrategyDto.DEFAULTBEST)
+      Convert.convertRoutingStrategyFromDto(RoutingStrategyDto.DEFAULTBEST),
     )
     assertEquals(
       RoutingStrategy.SHORTER,
-      Convert.convertRoutingStrategyFromDto(RoutingStrategyDto.SHORTER)
+      Convert.convertRoutingStrategyFromDto(RoutingStrategyDto.SHORTER),
     )
     assertEquals(
       RoutingStrategy.TARGET_DISTANCE,
-      Convert.convertRoutingStrategyFromDto(RoutingStrategyDto.DELTATOTARGETDISTANCE)
+      Convert.convertRoutingStrategyFromDto(RoutingStrategyDto.DELTATOTARGETDISTANCE),
     )
   }
 
@@ -187,15 +187,15 @@ internal class ConvertTest {
   fun convertAlternateRoutesStrategy_returnsExpectedValue() {
     assertEquals(
       AlternateRoutesStrategy.SHOW_ONE,
-      Convert.convertAlternateRoutesStrategyFromDto(AlternateRoutesStrategyDto.ONE)
+      Convert.convertAlternateRoutesStrategyFromDto(AlternateRoutesStrategyDto.ONE),
     )
     assertEquals(
       AlternateRoutesStrategy.SHOW_ALL,
-      Convert.convertAlternateRoutesStrategyFromDto(AlternateRoutesStrategyDto.ALL)
+      Convert.convertAlternateRoutesStrategyFromDto(AlternateRoutesStrategyDto.ALL),
     )
     assertEquals(
       AlternateRoutesStrategy.SHOW_NONE,
-      Convert.convertAlternateRoutesStrategyFromDto(AlternateRoutesStrategyDto.NONE)
+      Convert.convertAlternateRoutesStrategyFromDto(AlternateRoutesStrategyDto.NONE),
     )
   }
 
@@ -210,7 +210,7 @@ internal class ConvertTest {
         avoidTolls = true,
         avoidFerries = true,
         avoidHighways = true,
-        locationTimeoutMs = 5000
+        locationTimeoutMs = 5000,
       )
 
     val converted = Convert.convertRoutingOptionsFromDto(options)
@@ -226,7 +226,7 @@ internal class ConvertTest {
       RoutingOptionsDto(
         AlternateRoutesStrategyDto.ONE,
         RoutingStrategyDto.DEFAULTBEST,
-        listOf(10, 100)
+        listOf(10, 100),
       )
 
     val convertedWithTargetDistance =
@@ -234,7 +234,7 @@ internal class ConvertTest {
 
     assertEquals(
       AlternateRoutesStrategy.SHOW_ONE,
-      convertedWithTargetDistance.alternateRoutesStrategy
+      convertedWithTargetDistance.alternateRoutesStrategy,
     )
     assertEquals(RoutingStrategy.TARGET_DISTANCE, convertedWithTargetDistance.routingStrategy)
     assertEquals(listOf(10, 100), convertedWithTargetDistance.targetDistancesMeters)
@@ -244,15 +244,15 @@ internal class ConvertTest {
   fun convertSpeedAlertSeverityNativeToPigeon_returnsExpectedValue() {
     assertEquals(
       SpeedAlertSeverityDto.NOTSPEEDING,
-      Convert.convertSpeedAlertSeverityFromDto(SpeedAlertSeverity.NONE)
+      Convert.convertSpeedAlertSeverityFromDto(SpeedAlertSeverity.NONE),
     )
     assertEquals(
       SpeedAlertSeverityDto.MINOR,
-      Convert.convertSpeedAlertSeverityFromDto(SpeedAlertSeverity.MINOR)
+      Convert.convertSpeedAlertSeverityFromDto(SpeedAlertSeverity.MINOR),
     )
     assertEquals(
       SpeedAlertSeverityDto.MAJOR,
-      Convert.convertSpeedAlertSeverityFromDto(SpeedAlertSeverity.MAJOR)
+      Convert.convertSpeedAlertSeverityFromDto(SpeedAlertSeverity.MAJOR),
     )
   }
 
@@ -260,15 +260,15 @@ internal class ConvertTest {
   fun convertSpeedAlertSeverityPigeonToNative_returnsExpectedValue() {
     assertEquals(
       SpeedAlertSeverity.NONE,
-      Convert.convertSpeedAlertSeverityFromDto(SpeedAlertSeverityDto.NOTSPEEDING)
+      Convert.convertSpeedAlertSeverityFromDto(SpeedAlertSeverityDto.NOTSPEEDING),
     )
     assertEquals(
       SpeedAlertSeverity.MINOR,
-      Convert.convertSpeedAlertSeverityFromDto(SpeedAlertSeverityDto.MINOR)
+      Convert.convertSpeedAlertSeverityFromDto(SpeedAlertSeverityDto.MINOR),
     )
     assertEquals(
       SpeedAlertSeverity.MAJOR,
-      Convert.convertSpeedAlertSeverityFromDto(SpeedAlertSeverityDto.MAJOR)
+      Convert.convertSpeedAlertSeverityFromDto(SpeedAlertSeverityDto.MAJOR),
     )
   }
 
@@ -279,16 +279,16 @@ internal class ConvertTest {
     assertEquals(
       Convert.convertSpeedAlertOptionsFromDto(testOptions)
         .getSpeedAlertThresholdPercentage(SpeedAlertSeverity.MINOR),
-      40.0F
+      40.0F,
     )
     assertEquals(
       Convert.convertSpeedAlertOptionsFromDto(testOptions)
         .getSpeedAlertThresholdPercentage(SpeedAlertSeverity.MAJOR),
-      80.0F
+      80.0F,
     )
     assertEquals(
       Convert.convertSpeedAlertOptionsFromDto(testOptions).severityUpgradeDurationSeconds,
-      20.0
+      20.0,
     )
   }
 
@@ -331,7 +331,7 @@ internal class ConvertTest {
     val testLatLngBounds =
       LatLngBoundsDto(
         northeast = LatLngDto(latitude = 30.0, longitude = 20.0),
-        southwest = LatLngDto(latitude = 10.0, longitude = 40.0)
+        southwest = LatLngDto(latitude = 10.0, longitude = 40.0),
       )
 
     val latLngBounds = Convert.convertLatLngBoundsFromDto(testLatLngBounds)
@@ -367,11 +367,11 @@ internal class ConvertTest {
         cameraTargetBounds =
           LatLngBoundsDto(
             northeast = LatLngDto(latitude = 30.0, longitude = 20.0),
-            southwest = LatLngDto(latitude = 10.0, longitude = 40.0)
+            southwest = LatLngDto(latitude = 10.0, longitude = 40.0),
           ),
         minZoomPreference = 1.1,
         maxZoomPreference = 2.2,
-        zoomControlsEnabled = false
+        zoomControlsEnabled = false,
       )
 
     val mapOptions = Convert.convertMapOptionsFromDto(testOptions)
@@ -398,39 +398,36 @@ internal class ConvertTest {
 
     assertEquals(
       mapOptions.scrollGesturesEnabledDuringRotateOrZoom,
-      testOptions.scrollGesturesEnabledDuringRotateOrZoom
+      testOptions.scrollGesturesEnabledDuringRotateOrZoom,
     )
 
     assertEquals(mapOptions.mapToolbarEnabled, testOptions.mapToolbarEnabled)
 
     assertEquals(
       mapOptions.latLngBoundsForCameraTarget.northeast.latitude,
-      testOptions.cameraTargetBounds?.northeast?.latitude
+      testOptions.cameraTargetBounds?.northeast?.latitude,
     )
 
     assertEquals(
       mapOptions.latLngBoundsForCameraTarget.northeast.longitude,
-      testOptions.cameraTargetBounds?.northeast?.longitude
+      testOptions.cameraTargetBounds?.northeast?.longitude,
     )
 
     assertEquals(
       mapOptions.latLngBoundsForCameraTarget.southwest.latitude,
-      testOptions.cameraTargetBounds?.southwest?.latitude
+      testOptions.cameraTargetBounds?.southwest?.latitude,
     )
 
     assertEquals(
       mapOptions.latLngBoundsForCameraTarget.southwest.longitude,
-      testOptions.cameraTargetBounds?.southwest?.longitude
+      testOptions.cameraTargetBounds?.southwest?.longitude,
     )
 
     assertEquals(mapOptions.minZoomPreference, testOptions.minZoomPreference?.toFloat())
 
     assertEquals(mapOptions.maxZoomPreference, testOptions.maxZoomPreference?.toFloat())
 
-    assertEquals(
-      mapOptions.zoomControlsEnabled,
-      testOptions.zoomControlsEnabled,
-    )
+    assertEquals(mapOptions.zoomControlsEnabled, testOptions.zoomControlsEnabled)
 
     // Test nullable values
     val testOptions2 =
@@ -457,15 +454,15 @@ internal class ConvertTest {
 
     assertEquals(
       trafficData.roadStretchRenderingDataList[0]!!.lengthMeters,
-      googleRenderingData.lengthMeters.toLong()
+      googleRenderingData.lengthMeters.toLong(),
     )
     assertEquals(
       trafficData.roadStretchRenderingDataList[0]!!.offsetMeters,
-      googleRenderingData.offsetMeters.toLong()
+      googleRenderingData.offsetMeters.toLong(),
     )
     assertEquals(
       trafficData.roadStretchRenderingDataList[0]!!.style.toString(),
-      googleRenderingData.style.toString()
+      googleRenderingData.style.toString(),
     )
   }
 

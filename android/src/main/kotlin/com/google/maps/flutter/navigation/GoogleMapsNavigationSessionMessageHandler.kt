@@ -27,7 +27,7 @@ class GoogleMapsNavigationSessionMessageHandler : NavigationSessionApi {
 
   override fun createNavigationSession(
     abnormalTerminationReportingEnabled: Boolean,
-    callback: (Result<Unit>) -> Unit
+    callback: (Result<Unit>) -> Unit,
   ) {
     manager().createNavigationSession(abnormalTerminationReportingEnabled, callback)
   }
@@ -44,14 +44,14 @@ class GoogleMapsNavigationSessionMessageHandler : NavigationSessionApi {
     title: String,
     companyName: String,
     shouldOnlyShowDriverAwarenessDisclaimer: Boolean,
-    callback: (Result<Boolean>) -> Unit
+    callback: (Result<Boolean>) -> Unit,
   ) {
     manager()
       .showTermsAndConditionsDialog(
         title,
         companyName,
         shouldOnlyShowDriverAwarenessDisclaimer,
-        callback
+        callback,
       )
   }
 
@@ -81,7 +81,7 @@ class GoogleMapsNavigationSessionMessageHandler : NavigationSessionApi {
 
   override fun setDestinations(
     destinations: DestinationsDto,
-    callback: (Result<RouteStatusDto>) -> Unit
+    callback: (Result<RouteStatusDto>) -> Unit,
   ) {
     val waypoints =
       destinations.waypoints.filterNotNull().map { Convert.convertWaypointFromDto(it) }
@@ -96,7 +96,7 @@ class GoogleMapsNavigationSessionMessageHandler : NavigationSessionApi {
       waypoints,
       routingOptions,
       displayOptions,
-      destinations.routeTokenOptions
+      destinations.routeTokenOptions,
     ) {
       if (it.isSuccess) {
         callback(Result.success(Convert.convertRouteStatusToDto(it.getOrThrow())))
@@ -176,7 +176,7 @@ class GoogleMapsNavigationSessionMessageHandler : NavigationSessionApi {
 
   override fun simulateLocationsAlongNewRoute(
     waypoints: List<NavigationWaypointDto>,
-    callback: (Result<RouteStatusDto>) -> Unit
+    callback: (Result<RouteStatusDto>) -> Unit,
   ) {
     val convertedWaypoints = waypoints.map { Convert.convertWaypointFromDto(it) }
     manager().simulateLocationsAlongNewRoute(convertedWaypoints) {
@@ -194,12 +194,12 @@ class GoogleMapsNavigationSessionMessageHandler : NavigationSessionApi {
   override fun simulateLocationsAlongNewRouteWithRoutingOptions(
     waypoints: List<NavigationWaypointDto>,
     routingOptions: RoutingOptionsDto,
-    callback: (Result<RouteStatusDto>) -> Unit
+    callback: (Result<RouteStatusDto>) -> Unit,
   ) {
     val convertedWaypoints = waypoints.map { Convert.convertWaypointFromDto(it) }
     manager().simulateLocationsAlongNewRouteWithRoutingOptions(
       convertedWaypoints,
-      Convert.convertRoutingOptionsFromDto(routingOptions)
+      Convert.convertRoutingOptionsFromDto(routingOptions),
     ) {
       if (it.isSuccess) {
         callback(Result.success(Convert.convertRouteStatusToDto(it.getOrThrow())))
@@ -216,13 +216,13 @@ class GoogleMapsNavigationSessionMessageHandler : NavigationSessionApi {
     waypoints: List<NavigationWaypointDto>,
     routingOptions: RoutingOptionsDto,
     simulationOptions: SimulationOptionsDto,
-    callback: (Result<RouteStatusDto>) -> Unit
+    callback: (Result<RouteStatusDto>) -> Unit,
   ) {
     val convertedWaypoints = waypoints.map { Convert.convertWaypointFromDto(it) }
     manager().simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
       convertedWaypoints,
       Convert.convertRoutingOptionsFromDto(routingOptions),
-      SimulationOptions().speedMultiplier(simulationOptions.speedMultiplier.toFloat())
+      SimulationOptions().speedMultiplier(simulationOptions.speedMultiplier.toFloat()),
     ) {
       if (it.isSuccess) {
         callback(Result.success(Convert.convertRouteStatusToDto(it.getOrThrow())))
@@ -265,12 +265,12 @@ class GoogleMapsNavigationSessionMessageHandler : NavigationSessionApi {
 
   override fun registerRemainingTimeOrDistanceChangedListener(
     remainingTimeThresholdSeconds: Long,
-    remainingDistanceThresholdMeters: Long
+    remainingDistanceThresholdMeters: Long,
   ) {
     manager()
       .registerRemainingTimeOrDistanceChangedListener(
         remainingTimeThresholdSeconds,
-        remainingDistanceThresholdMeters
+        remainingDistanceThresholdMeters,
       )
   }
 }
