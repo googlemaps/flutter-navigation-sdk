@@ -25,14 +25,11 @@ import io.flutter.plugin.platform.PlatformView
 class GoogleMapsAutoMapView
 internal constructor(
   mapOptions: GoogleMapOptions,
-  viewId: Int,
-  viewEventApi: ViewEventApi,
   private val viewRegistry: GoogleMapsViewRegistry,
   imageRegistry: ImageRegistry,
   private val mapView: NavigationViewForAuto,
   private val map: GoogleMap,
-) : PlatformView, GoogleMapsBaseMapView(viewId, mapOptions, viewEventApi, imageRegistry) {
-
+) : PlatformView, GoogleMapsBaseMapView(null, mapOptions, null, imageRegistry) {
   override fun getView(): View {
     return mapView
   }

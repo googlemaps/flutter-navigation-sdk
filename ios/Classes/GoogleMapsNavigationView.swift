@@ -31,8 +31,8 @@ enum GoogleMapsNavigationViewError: Error {
 class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelegate {
   private var _mapView: ViewStateAwareGMSMapView!
   private var _viewRegistry: GoogleMapsNavigationViewRegistry
-  private var _viewEventApi: ViewEventApi
-  private var _viewId: Int64
+  private var _viewEventApi: ViewEventApi?
+  private var _viewId: Int64?
   private var _isNavigationView: Bool
   private var _myLocationButton: Bool = true
   private var _markerControllers: [MarkerController] = []
@@ -54,23 +54,26 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     _mapView
   }
 
+  // Getter that wont return viewEventApi if viewId is missing.
+  private func getViewEventApi() -> ViewEventApi? {
+    if let _viewId {
+      return _viewEventApi
+    }
+    return nil
+  }
+
+  // CarPlay initializer. This will ignore viewId and viewEventApi.
   init(frame: CGRect,
-       viewIdentifier viewId: Int64,
        isNavigationView: Bool,
        viewRegistry registry: GoogleMapsNavigationViewRegistry,
-       viewEventApi: ViewEventApi,
        navigationUIEnabledPreference: NavigationUIEnabledPreference,
        mapConfiguration: MapConfiguration,
-       imageRegistry: ImageRegistry,
-       // If isCarPlayView is set to true, viewId will be ignored.
-       isCarPlayView: Bool = false) {
-    _viewId = viewId
-    _isNavigationView = isNavigationView
+       imageRegistry: ImageRegistry) {
+    _isNavigationView = true
     _viewRegistry = registry
-    _viewEventApi = viewEventApi
     _mapConfiguration = mapConfiguration
     _imageRegistry = imageRegistry
-    _isCarPlayView = isCarPlayView
+    _isCarPlayView = true
 
     let mapViewOptions = GMSMapViewOptions()
     _mapConfiguration.apply(to: mapViewOptions, withFrame: frame)
@@ -82,11 +85,39 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     _navigationUIEnabledPreference = navigationUIEnabledPreference
     applyNavigationUIEnabledPreference()
 
-    if isCarPlayView {
-      registry.registerCarPlayView(view: self)
-    } else {
-      registry.registerView(viewId: viewId, view: self)
-    }
+    registry.registerCarPlayView(view: self)
+    _mapView.delegate = self
+    _mapView.viewSettledDelegate = self
+  }
+
+  // Regular NavigationView initializer.
+  init(frame: CGRect,
+       viewIdentifier viewId: Int64,
+       isNavigationView: Bool,
+       viewRegistry registry: GoogleMapsNavigationViewRegistry,
+       viewEventApi: ViewEventApi,
+       navigationUIEnabledPreference: NavigationUIEnabledPreference,
+       mapConfiguration: MapConfiguration,
+       imageRegistry: ImageRegistry) {
+    _viewId = viewId
+    _isNavigationView = isNavigationView
+    _viewRegistry = registry
+    _viewEventApi = viewEventApi
+    _mapConfiguration = mapConfiguration
+    _imageRegistry = imageRegistry
+    _isCarPlayView = false
+
+    let mapViewOptions = GMSMapViewOptions()
+    _mapConfiguration.apply(to: mapViewOptions, withFrame: frame)
+    _mapView = ViewStateAwareGMSMapView(options: mapViewOptions)
+    _mapConfiguration.apply(to: _mapView)
+
+    super.init()
+
+    _navigationUIEnabledPreference = navigationUIEnabledPreference
+    applyNavigationUIEnabledPreference()
+
+    registry.registerView(viewId: viewId, view: self)
     _mapView.delegate = self
     _mapView.viewSettledDelegate = self
   }
@@ -95,7 +126,9 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     if _isCarPlayView {
       _viewRegistry.unregisterCarPlayView()
     } else {
-      _viewRegistry.unregisterView(viewId: _viewId)
+      if let _viewId {
+        _viewRegistry.unregisterView(viewId: _viewId)
+      }
     }
     _mapView.delegate = nil
   }
@@ -411,9 +444,9 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
 
     if navigationWasEnabled != _mapView.isNavigationEnabled {
       // Navigation UI got enabled, send enabled change event.
-      _viewEventApi
+      getViewEventApi()?
         .onNavigationUIEnabledChanged(
-          viewId: _viewId,
+          viewId: _viewId!,
           navigationUIEnabled: _mapView.isNavigationEnabled
         ) { _ in }
     }
@@ -498,8 +531,8 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   func setNavigationUIEnabled(_ enabled: Bool) {
     if _mapView.isNavigationEnabled != enabled {
       _mapView.isNavigationEnabled = enabled
-      _viewEventApi
-        .onNavigationUIEnabledChanged(viewId: _viewId, navigationUIEnabled: enabled) { _ in }
+      getViewEventApi()?
+        .onNavigationUIEnabledChanged(viewId: _viewId!, navigationUIEnabled: enabled) { _ in }
 
       if !enabled {
         let camera = _mapView.camera
@@ -758,8 +791,8 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     do {
       let markerController = try findMarkerController(gmsMarker: marker)
 
-      _viewEventApi.onMarkerEvent(
-        viewId: _viewId,
+      getViewEventApi()?.onMarkerEvent(
+        viewId: _viewId!,
         markerId: markerController.markerId,
         eventType: eventType,
         completion: { _ in }
@@ -773,8 +806,8 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
                                    eventType: MarkerDragEventTypeDto) {
     do {
       let markerController = try findMarkerController(gmsMarker: marker)
-      _viewEventApi.onMarkerDragEvent(
-        viewId: _viewId,
+      getViewEventApi()?.onMarkerDragEvent(
+        viewId: _viewId!,
         markerId: markerController.markerId,
         eventType: eventType,
         position: .init(
@@ -806,14 +839,14 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
 
 extension GoogleMapsNavigationView: GMSMapViewNavigationUIDelegate {
   func mapViewDidTapRecenterButton(_ mapView: GMSMapView) {
-    _viewEventApi.onRecenterButtonClicked(viewId: _viewId) { _ in }
+    getViewEventApi()?.onRecenterButtonClicked(viewId: _viewId!) { _ in }
   }
 }
 
 extension GoogleMapsNavigationView: GMSMapViewDelegate {
   func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-    _viewEventApi.onMapClickEvent(
-      viewId: _viewId,
+    getViewEventApi()?.onMapClickEvent(
+      viewId: _viewId!,
       latLng: .init(
         latitude: coordinate.latitude,
         longitude: coordinate.longitude
@@ -823,8 +856,8 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
   }
 
   func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
-    _viewEventApi.onMapLongClickEvent(
-      viewId: _viewId,
+    getViewEventApi()?.onMapLongClickEvent(
+      viewId: _viewId!,
       latLng: .init(
         latitude: coordinate.latitude,
         longitude: coordinate.longitude
@@ -874,20 +907,20 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
 
   func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
     if let polygon = overlay as? GMSPolygon {
-      _viewEventApi.onPolygonClicked(
-        viewId: _viewId,
+      getViewEventApi()?.onPolygonClicked(
+        viewId: _viewId!,
         polygonId: polygon.getPolygonId(),
         completion: { _ in }
       )
     } else if let polyline = overlay as? GMSPolyline {
-      _viewEventApi.onPolylineClicked(
-        viewId: _viewId,
+      getViewEventApi()?.onPolylineClicked(
+        viewId: _viewId!,
         polylineId: polyline.getPolylineId(),
         completion: { _ in }
       )
     } else if let circle = overlay as? GMSCircle {
-      _viewEventApi.onCircleClicked(
-        viewId: _viewId,
+      getViewEventApi()?.onCircleClicked(
+        viewId: _viewId!,
         circleId: circle.getCircleId(),
         completion: { _ in }
       )
@@ -895,19 +928,19 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
   }
 
   func mapView(_ mapView: GMSMapView, didTapMyLocation location: CLLocationCoordinate2D) {
-    _viewEventApi.onMyLocationClicked(viewId: _viewId, completion: { _ in })
+    getViewEventApi()?.onMyLocationClicked(viewId: _viewId!, completion: { _ in })
   }
 
   func didTapMyLocationButton(for mapView: GMSMapView) -> Bool {
-    _viewEventApi.onMyLocationButtonClicked(viewId: _viewId, completion: { _ in })
+    getViewEventApi()?.onMyLocationButtonClicked(viewId: _viewId!, completion: { _ in })
     return _consumeMyLocationButtonClickEventsEnabled
   }
 
   func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
     if _listenCameraChanges {
       let position = Convert.convertCameraPosition(position: mapView.camera)
-      _viewEventApi.onCameraChanged(
-        viewId: _viewId,
+      getViewEventApi()?.onCameraChanged(
+        viewId: _viewId!,
         eventType: gesture ? .moveStartedByGesture : .moveStartedByApi,
         position: position,
         completion: { _ in }
@@ -917,8 +950,8 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
 
   func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
     if _listenCameraChanges {
-      _viewEventApi.onCameraChanged(
-        viewId: _viewId,
+      getViewEventApi()?.onCameraChanged(
+        viewId: _viewId!,
         eventType: .onCameraIdle,
         position: Convert.convertCameraPosition(position: position),
         completion: { _ in }
@@ -928,8 +961,8 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
 
   func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
     if _listenCameraChanges {
-      _viewEventApi.onCameraChanged(
-        viewId: _viewId,
+      getViewEventApi()?.onCameraChanged(
+        viewId: _viewId!,
         eventType: .onCameraMove,
         position: Convert.convertCameraPosition(position: position),
         completion: { _ in }

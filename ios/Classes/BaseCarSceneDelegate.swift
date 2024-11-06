@@ -68,15 +68,12 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
     else { return }
 
     GoogleMapsNavigationPlugin
-      .pluginInitializedCallback =
-      { [weak self] viewRegistry, navigationViewEventApi, imageRegistry in
+      .pluginInitializedCallback = { [weak self] viewRegistry, imageRegistry in
         guard let self else { return }
         self.navView = GoogleMapsNavigationView(
           frame: templateApplicationScene.carWindow.screen.bounds,
-          viewIdentifier: 9999,
           isNavigationView: true,
           viewRegistry: viewRegistry,
-          viewEventApi: navigationViewEventApi,
           navigationUIEnabledPreference: NavigationUIEnabledPreference.automatic,
           mapConfiguration: MapConfiguration(
             cameraPosition: GMSCameraPosition(latitude: 51.51, longitude: 0.12, zoom: 5),
@@ -88,8 +85,7 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
             zoomGesturesEnabled: true,
             scrollGesturesEnabledDuringRotateOrZoom: false
           ),
-          imageRegistry: imageRegistry,
-          isCarPlayView: true
+          imageRegistry: imageRegistry
         )
         self.navView?.setNavigationHeaderEnabled(false)
         self.navView?.setRecenterButtonEnabled(false)

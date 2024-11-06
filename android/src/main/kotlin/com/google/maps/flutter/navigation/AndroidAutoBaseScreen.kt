@@ -85,15 +85,12 @@ open class AndroidAutoBaseScreen(carContext: CarContext) : Screen(carContext), S
 
     mNavigationView!!.getMapAsync { googleMap: GoogleMap ->
       val viewRegistry = GoogleMapsNavigationPlugin.getInstance()?.viewRegistry
-      val viewEventApi = GoogleMapsNavigationPlugin.getInstance()?.viewEventApi
       val imageRegistry = GoogleMapsNavigationPlugin.getInstance()?.imageRegistry
-      if (viewRegistry != null && viewEventApi != null && imageRegistry != null) {
+      if (viewRegistry != null && imageRegistry != null) {
         mGoogleMap = googleMap
         mAutoMapView =
           GoogleMapsAutoMapView(
             GoogleMapOptions(),
-            9999,
-            viewEventApi,
             viewRegistry,
             imageRegistry,
             mNavigationView!!,

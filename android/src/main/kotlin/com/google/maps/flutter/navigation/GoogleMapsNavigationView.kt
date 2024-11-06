@@ -108,7 +108,7 @@ internal constructor(
 
     _navigationView.removeOnRecenterButtonClickedListener {}
 
-    viewRegistry.unregisterNavigationView(viewId)
+    viewRegistry.unregisterNavigationView(getViewId())
   }
 
   override fun onStart() {
@@ -137,10 +137,10 @@ internal constructor(
 
   override fun initListeners() {
     _navigationView.addOnRecenterButtonClickedListener {
-      viewEventApi.onRecenterButtonClicked(viewId.toLong()) {}
+      viewEventApi?.onRecenterButtonClicked(getViewId().toLong()) {}
     }
     _navigationView.addOnNavigationUiChangedListener {
-      viewEventApi.onNavigationUIEnabledChanged(viewId.toLong(), it) {}
+      viewEventApi?.onNavigationUIEnabledChanged(getViewId().toLong(), it) {}
     }
     super.initListeners()
   }
