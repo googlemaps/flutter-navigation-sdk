@@ -52,7 +52,7 @@ internal class MarkerControllerTest {
         rotation = 40.0,
         visible = true,
         zIndex = 2.0,
-        icon = ImageDescriptorDto("default", 1.0)
+        icon = ImageDescriptorDto("default", 1.0),
       )
     val controller = MarkerController(marker, "Marker_0", true, 0.1F, 0.2F, 0.3F, 0.4F, null)
     Convert.sinkMarkerOptions(optionsIn, controller, imageRegistry)

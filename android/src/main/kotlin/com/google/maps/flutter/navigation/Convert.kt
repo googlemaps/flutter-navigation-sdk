@@ -151,7 +151,7 @@ object Convert {
       position.bearing.toDouble(),
       LatLngDto(position.target.latitude, position.target.longitude),
       position.tilt.toDouble(),
-      position.zoom.toDouble()
+      position.zoom.toDouble(),
     )
   }
 
@@ -166,7 +166,7 @@ object Convert {
       convertLatLngFromDto(position.target),
       position.zoom.toFloat(),
       position.tilt.toFloat(),
-      position.bearing.toFloat()
+      position.bearing.toFloat(),
     )
   }
 
@@ -184,7 +184,7 @@ object Convert {
       focus =
         Point(
           convertLogicalToScreenPixel(dx, density).toInt(),
-          convertLogicalToScreenPixel(dy, density).toInt()
+          convertLogicalToScreenPixel(dy, density).toInt(),
         )
     }
     return focus
@@ -313,7 +313,7 @@ object Convert {
       convertLatLngToDto(waypoint.position),
       waypoint.placeId,
       waypoint.preferSameSideOfRoad,
-      waypoint.preferredHeading.takeIf { it != -1 }?.toLong()
+      waypoint.preferredHeading.takeIf { it != -1 }?.toLong(),
     )
   }
 
@@ -326,7 +326,7 @@ object Convert {
   fun convertTimeAndDistanceToDto(timeAndDistance: TimeAndDistance): NavigationTimeAndDistanceDto {
     return NavigationTimeAndDistanceDto(
       timeAndDistance.seconds.toDouble(),
-      timeAndDistance.meters.toDouble()
+      timeAndDistance.meters.toDouble(),
     )
   }
 
@@ -516,11 +516,11 @@ object Convert {
       .setSeverityUpgradeDurationSeconds(options.severityUpgradeDurationSeconds)
       .setSpeedAlertThresholdPercentage(
         SpeedAlertSeverity.MINOR,
-        options.minorSpeedAlertThresholdPercentage.toFloat()
+        options.minorSpeedAlertThresholdPercentage.toFloat(),
       )
       .setSpeedAlertThresholdPercentage(
         SpeedAlertSeverity.MAJOR,
-        options.majorSpeedAlertThresholdPercentage.toFloat()
+        options.majorSpeedAlertThresholdPercentage.toFloat(),
       )
       .build()
   }
@@ -533,7 +533,7 @@ object Convert {
   fun sinkMarkerOptions(
     markerOptions: MarkerOptionsDto,
     sink: MarkerOptionsSink,
-    imageRegistry: ImageRegistry
+    imageRegistry: ImageRegistry,
   ) {
     sink.setAlpha(markerOptions.alpha.toFloat())
     sink.setAnchor(markerOptions.anchor.u.toFloat(), markerOptions.anchor.v.toFloat())
@@ -542,7 +542,7 @@ object Convert {
     sink.setConsumeTapEvents(markerOptions.consumeTapEvents)
     sink.setInfoWindowAnchor(
       markerOptions.infoWindow.anchor.u.toFloat(),
-      markerOptions.infoWindow.anchor.v.toFloat()
+      markerOptions.infoWindow.anchor.v.toFloat(),
     )
     sink.setPosition(LatLng(markerOptions.position.latitude, markerOptions.position.longitude))
     sink.setRotation(markerOptions.rotation.toFloat())
@@ -584,16 +584,16 @@ object Convert {
               // Should never happen, added to suppress compiler warning.
               throw FlutterError(
                 "nullTrafficDataRoadStretchRenderingDataListStyle",
-                "Traffic data road stretch rendering data list style is null"
+                "Traffic data road stretch rendering data list style is null",
               )
             }
           }
         RouteSegmentTrafficDataRoadStretchRenderingDataDto(
           style,
           it.lengthMeters.toLong(),
-          it.offsetMeters.toLong()
+          it.offsetMeters.toLong(),
         )
-      }
+      },
     )
   }
 
@@ -602,7 +602,7 @@ object Convert {
       convertRouteSegmentTrafficDataToDto(segment.trafficData),
       LatLngDto(segment.destinationLatLng.latitude, segment.destinationLatLng.longitude),
       segment.latLngs.map { LatLngDto(it.latitude, it.longitude) },
-      convertWaypointToDto(segment.destinationWaypoint)
+      convertWaypointToDto(segment.destinationWaypoint),
     )
   }
 
@@ -614,7 +614,7 @@ object Convert {
   fun sinkPolygonOptions(
     polygonOptions: PolygonOptionsDto,
     sink: PolygonOptionsSink,
-    density: Float
+    density: Float,
   ) {
     sink.setPoints(polygonOptions.points.filterNotNull().map { LatLng(it.latitude, it.longitude) })
     sink.setHoles(
@@ -650,7 +650,7 @@ object Convert {
       strokeWidth = convertScreenToLogicalPixel(polygon.strokeWidth.toDouble(), density),
       strokeColor = polygon.strokeColor.toLong(),
       visible = polygon.isVisible,
-      zIndex = polygon.zIndex.toDouble()
+      zIndex = polygon.zIndex.toDouble(),
     )
   }
 
@@ -677,12 +677,12 @@ object Convert {
           marker.snippet,
           MarkerAnchorDto(
             markerController.infoWindowAnchorU.toDouble(),
-            markerController.infoWindowAnchorV.toDouble()
-          )
+            markerController.infoWindowAnchorV.toDouble(),
+          ),
         ),
       visible = marker.isVisible,
       zIndex = marker.zIndex.toDouble(),
-      icon = registeredImageToImageDescriptorDto(markerController.registeredImage)
+      icon = registeredImageToImageDescriptorDto(markerController.registeredImage),
     )
   }
 
@@ -700,7 +700,7 @@ object Convert {
       return StyleSpan(
         StrokeStyle.gradientBuilder(span.style.fromColor.toInt(), span.style.toColor.toInt())
           .build(),
-        span.length
+        span.length,
       )
     }
     return null
@@ -785,7 +785,7 @@ object Convert {
       timeToCurrentStepSeconds = navInfo.timeToCurrentStepSeconds?.toLong(),
       timeToNextDestinationSeconds = navInfo.timeToNextDestinationSeconds?.toLong(),
       timeToFinalDestinationSeconds = navInfo.timeToFinalDestinationSeconds?.toLong(),
-      navState = convertNavState(navInfo.navState)
+      navState = convertNavState(navInfo.navState),
     )
   }
 
@@ -936,7 +936,7 @@ object Convert {
   fun sinkPolylineOptions(
     polylineOptions: PolylineOptionsDto,
     sink: PolylineOptionsSink,
-    density: Float
+    density: Float,
   ) {
     if (polylineOptions.points != null) {
       sink.setPoints(
@@ -993,7 +993,7 @@ object Convert {
       strokePattern = polyline.pattern?.map { convertPatternItem(it) },
       visible = polyline.isVisible,
       zIndex = polyline.zIndex.toDouble(),
-      spans = polyline.spans.map { convertStyleSpan(it) }
+      spans = polyline.spans.map { convertStyleSpan(it) },
     )
   }
 
@@ -1031,7 +1031,7 @@ object Convert {
       fillColor = circle.fillColor.toLong(),
       zIndex = circle.zIndex.toDouble(),
       visible = circle.isVisible,
-      clickable = circle.isClickable
+      clickable = circle.isClickable,
     )
   }
 
@@ -1048,7 +1048,7 @@ object Convert {
         registeredImage.imageId,
         registeredImage.imagePixelRatio,
         registeredImage.width,
-        registeredImage.height
+        registeredImage.height,
       )
     } else {
       // For default marker icon

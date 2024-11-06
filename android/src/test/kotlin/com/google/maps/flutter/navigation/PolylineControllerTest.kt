@@ -35,11 +35,7 @@ internal class PolylineControllerTest {
   fun polylineController_callsExpectedFunctions() {
     val optionsIn =
       PolylineOptionsDto(
-        points =
-          listOf(
-            LatLngDto(50.0, 60.0),
-            LatLngDto(80.0, 90.0),
-          ),
+        points = listOf(LatLngDto(50.0, 60.0), LatLngDto(80.0, 90.0)),
         clickable = true,
         geodesic = true,
         strokeColor = Color.RED.toLong(),
@@ -48,7 +44,7 @@ internal class PolylineControllerTest {
         visible = true,
         strokePattern = emptyList(),
         zIndex = 5.0,
-        spans = emptyList()
+        spans = emptyList(),
       )
     val controller = PolylineController(polyline, "Polyline_0")
     Convert.sinkPolylineOptions(optionsIn, controller, 1.0F)

@@ -42,7 +42,7 @@ internal class CircleControllerTest {
         strokeColor = Color.RED.toLong(),
         strokeWidth = 3.0,
         visible = true,
-        zIndex = 5.0
+        zIndex = 5.0,
       )
     val controller = CircleController(circle, "Circle_0")
     Convert.sinkCircleOptions(optionsIn, controller, 1.0F)

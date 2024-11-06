@@ -23,5 +23,5 @@ data class RegisteredImage(
   val bitmapDescriptor: BitmapDescriptor,
   val imagePixelRatio: Double,
   val width: Double?,
-  val height: Double?
+  val height: Double?,
 )

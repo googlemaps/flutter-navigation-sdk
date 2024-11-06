@@ -48,7 +48,7 @@ internal class MarkerBuilderTest {
         rotation = 40.0,
         visible = true,
         zIndex = 2.0,
-        icon = ImageDescriptorDto("default", 1.0)
+        icon = ImageDescriptorDto("default", 1.0),
       )
     val builder = MarkerBuilder()
     Convert.sinkMarkerOptions(optionsIn, builder, imageRegistry)

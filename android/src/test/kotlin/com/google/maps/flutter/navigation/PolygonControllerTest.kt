@@ -42,7 +42,7 @@ internal class PolygonControllerTest {
         strokeColor = Color.RED.toLong(),
         strokeWidth = 3.0,
         visible = true,
-        zIndex = 5.0
+        zIndex = 5.0,
       )
     val controller = PolygonController(polygon, "Polygon_0")
     Convert.sinkPolygonOptions(optionsIn, controller, 1.0F)

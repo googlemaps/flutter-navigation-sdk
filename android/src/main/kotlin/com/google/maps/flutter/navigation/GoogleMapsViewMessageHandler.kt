@@ -172,13 +172,13 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
     viewId: Long,
     cameraPosition: CameraPositionDto,
     duration: Long?,
-    callback: (Result<Boolean>) -> Unit
+    callback: (Result<Boolean>) -> Unit,
   ) {
     return getView(viewId.toInt())
       .animateCameraToCameraPosition(
         Convert.convertCameraPositionFromDto(cameraPosition),
         duration,
-        callback
+        callback,
       )
   }
 
@@ -186,7 +186,7 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
     viewId: Long,
     point: LatLngDto,
     duration: Long?,
-    callback: (Result<Boolean>) -> Unit
+    callback: (Result<Boolean>) -> Unit,
   ) {
     return getView(viewId.toInt())
       .animateCameraToLatLng(Convert.convertLatLngFromDto(point), duration, callback)
@@ -197,7 +197,7 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
     bounds: LatLngBoundsDto,
     padding: Double,
     duration: Long?,
-    callback: (Result<Boolean>) -> Unit
+    callback: (Result<Boolean>) -> Unit,
   ) {
     val density = Resources.getSystem().displayMetrics.density
     return getView(viewId.toInt())
@@ -205,7 +205,7 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
         Convert.convertLatLngBoundsFromDto(bounds),
         Convert.convertLogicalToScreenPixel(padding, density),
         duration,
-        callback
+        callback,
       )
   }
 
@@ -214,7 +214,7 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
     point: LatLngDto,
     zoom: Double,
     duration: Long?,
-    callback: (Result<Boolean>) -> Unit
+    callback: (Result<Boolean>) -> Unit,
   ) {
     return getView(viewId.toInt())
       .animateCameraToLatLngZoom(Convert.convertLatLngFromDto(point), zoom, duration, callback)
@@ -225,7 +225,7 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
     scrollByDx: Double,
     scrollByDy: Double,
     duration: Long?,
-    callback: (Result<Boolean>) -> Unit
+    callback: (Result<Boolean>) -> Unit,
   ) {
     return getView(viewId.toInt()).animateCameraByScroll(scrollByDx, scrollByDy, duration, callback)
   }
@@ -236,14 +236,14 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
     focusDx: Double?,
     focusDy: Double?,
     duration: Long?,
-    callback: (Result<Boolean>) -> Unit
+    callback: (Result<Boolean>) -> Unit,
   ) {
     return getView(viewId.toInt())
       .animateCameraByZoom(
         zoomBy,
         Convert.convertDeltaToPoint(focusDx, focusDy),
         duration,
-        callback
+        callback,
       )
   }
 
@@ -251,7 +251,7 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
     viewId: Long,
     zoom: Double,
     duration: Long?,
-    callback: (Result<Boolean>) -> Unit
+    callback: (Result<Boolean>) -> Unit,
   ) {
     return getView(viewId.toInt()).animateCameraToZoom(zoom, duration, callback)
   }
@@ -270,7 +270,7 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
     return getView(viewId.toInt())
       .moveCameraToLatLngBounds(
         Convert.convertLatLngBoundsFromDto(bounds),
-        Convert.convertLogicalToScreenPixel(padding, density)
+        Convert.convertLogicalToScreenPixel(padding, density),
       )
   }
 
@@ -298,7 +298,7 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
   override fun followMyLocation(
     viewId: Long,
     perspective: CameraPerspectiveDto,
-    zoomLevel: Double?
+    zoomLevel: Double?,
   ) {
     val view = viewRegistry.getMapView(viewId.toInt())
     view?.followMyLocation(Convert.convertCameraPerspectiveFromDto(perspective), zoomLevel)

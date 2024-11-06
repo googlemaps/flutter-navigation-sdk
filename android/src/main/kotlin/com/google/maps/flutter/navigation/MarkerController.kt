@@ -28,7 +28,7 @@ class MarkerController(
   anchorV: Float,
   infoWindowAnchorU: Float,
   infoWindowAnchorV: Float,
-  registeredImage: RegisteredImage?
+  registeredImage: RegisteredImage?,
 ) : MarkerOptionsSink {
   var consumeTapEvents: Boolean = consumeTapEvents
     private set

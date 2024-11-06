@@ -41,7 +41,7 @@ class ImageRegistry {
     bytes: ByteArray,
     imagePixelRatio: Double,
     width: Double?,
-    height: Double?
+    height: Double?,
   ): ImageDescriptorDto {
     val density = Resources.getSystem().displayMetrics.density
     val bitmap = createBitmap(bytes, imagePixelRatio, density, width, height)
@@ -61,7 +61,7 @@ class ImageRegistry {
     bitmap: Bitmap,
     imagePixelRatio: Double,
     width: Double?,
-    height: Double?
+    height: Double?,
   ) {
     val bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap)
     val registeredImage = RegisteredImage(imageId, bitmapDescriptor, imagePixelRatio, width, height)
@@ -74,13 +74,13 @@ class ImageRegistry {
     imagePixelRatio: Double,
     density: Float,
     width: Double?,
-    height: Double?
+    height: Double?,
   ): Bitmap {
     val bitmap =
       BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
         ?: throw FlutterError(
           "imageDecodingFailed",
-          "Failed to decode bitmap, is the byte array valid image?"
+          "Failed to decode bitmap, is the byte array valid image?",
         )
     val scaledWidth: Double
     val scaledHeight: Double
