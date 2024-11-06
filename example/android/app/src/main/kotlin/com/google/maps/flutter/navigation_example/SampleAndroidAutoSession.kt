@@ -32,7 +32,7 @@ import androidx.lifecycle.LifecycleOwner
 
 class SampleAndroidAutoSession(sessionInfo: SessionInfo): Session() {
 
-    val TAG: String = SampleAndroidAutoSession::class.java.simpleName
+    private val TAG: String = SampleAndroidAutoSession::class.java.simpleName
 
     init {
         if (sessionInfo.displayType == SessionInfo.DISPLAY_TYPE_MAIN) {

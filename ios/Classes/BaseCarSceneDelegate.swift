@@ -47,7 +47,6 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
   open func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene,
                                      didDisconnect interfaceController: CPInterfaceController,
                                      from window: CPWindow) {
-    unRegisterViewController()
     self.interfaceController = nil
     carWindow = nil
     mapTemplate = nil
@@ -57,9 +56,7 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
     sessionAttached = false
   }
 
-  open func sceneDidBecomeActive(_ scene: UIScene) {
-    registerViewController()
-  }
+  open func sceneDidBecomeActive(_ scene: UIScene) {}
 
   func createVC() {
     guard
@@ -98,12 +95,7 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
       }
   }
 
-  func registerViewController() {}
-
-  func unRegisterViewController() {}
-
   // CPMapTemplateDelegate
-
   open func mapTemplate(_ mapTemplate: CPMapTemplate,
                         panWith direction: CPMapTemplate.PanDirection) {
     let scrollAmount = scrollAmount(for: direction)
