@@ -1775,7 +1775,7 @@ data class NavInfoDto(
 }
 
 @Suppress("UNCHECKED_CAST")
-private object _NavigationViewCreationApiCodec : StandardMessageCodec() {
+private object NavigationViewCreationApiCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
       128.toByte() -> {
@@ -1832,29 +1832,30 @@ private object _NavigationViewCreationApiCodec : StandardMessageCodec() {
 }
 
 /**
- * Pigeon only generates messages if the messages are used in API. [MapOptionsDto] is encoded and
- * decoded directly to generate a PlatformView creation message. This API should never be used
- * directly.
+ * Pigeon only generates messages if the messages are used in API. [ViewCreationOptionsDto] is
+ * encoded and decoded directly to generate a PlatformView creation message.
+ *
+ * This API should never be used directly.
  *
  * Generated interface from Pigeon that represents a handler of messages from Flutter.
  */
-interface _NavigationViewCreationApi {
-  fun _create(msg: ViewCreationOptionsDto)
+interface NavigationViewCreationApi {
+  fun create(msg: ViewCreationOptionsDto)
 
   companion object {
-    /** The codec used by _NavigationViewCreationApi. */
-    val codec: MessageCodec<Any?> by lazy { _NavigationViewCreationApiCodec }
+    /** The codec used by NavigationViewCreationApi. */
+    val codec: MessageCodec<Any?> by lazy { NavigationViewCreationApiCodec }
     /**
-     * Sets up an instance of `_NavigationViewCreationApi` to handle messages through the
+     * Sets up an instance of `NavigationViewCreationApi` to handle messages through the
      * `binaryMessenger`.
      */
     @Suppress("UNCHECKED_CAST")
-    fun setUp(binaryMessenger: BinaryMessenger, api: _NavigationViewCreationApi?) {
+    fun setUp(binaryMessenger: BinaryMessenger, api: NavigationViewCreationApi?) {
       run {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter._NavigationViewCreationApi._create",
+            "dev.flutter.pigeon.google_navigation_flutter.NavigationViewCreationApi.create",
             codec
           )
         if (api != null) {
@@ -1863,7 +1864,7 @@ interface _NavigationViewCreationApi {
             val msgArg = args[0] as ViewCreationOptionsDto
             var wrapped: List<Any?>
             try {
-              api._create(msgArg)
+              api.create(msgArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)

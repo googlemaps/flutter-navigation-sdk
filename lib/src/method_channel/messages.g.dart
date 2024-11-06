@@ -1908,8 +1908,8 @@ class NavInfoDto {
   }
 }
 
-class __NavigationViewCreationApiCodec extends StandardMessageCodec {
-  const __NavigationViewCreationApiCodec();
+class _NavigationViewCreationApiCodec extends StandardMessageCodec {
+  const _NavigationViewCreationApiCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is CameraPositionDto) {
@@ -1957,22 +1957,24 @@ class __NavigationViewCreationApiCodec extends StandardMessageCodec {
 }
 
 /// Pigeon only generates messages if the messages are used in API.
-/// [MapOptionsDto] is encoded and decoded directly to generate
-/// a PlatformView creation message. This API should never be used directly.
-class _NavigationViewCreationApi {
-  /// Constructor for [_NavigationViewCreationApi].  The [binaryMessenger] named argument is
+/// [ViewCreationOptionsDto] is encoded and decoded directly to generate a
+/// PlatformView creation message.
+///
+/// This API should never be used directly.
+class NavigationViewCreationApi {
+  /// Constructor for [NavigationViewCreationApi].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  _NavigationViewCreationApi({BinaryMessenger? binaryMessenger})
+  NavigationViewCreationApi({BinaryMessenger? binaryMessenger})
       : __pigeon_binaryMessenger = binaryMessenger;
   final BinaryMessenger? __pigeon_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
-      __NavigationViewCreationApiCodec();
+      _NavigationViewCreationApiCodec();
 
-  Future<void> _create(ViewCreationOptionsDto msg) async {
+  Future<void> create(ViewCreationOptionsDto msg) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.google_navigation_flutter._NavigationViewCreationApi._create';
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationViewCreationApi.create';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
