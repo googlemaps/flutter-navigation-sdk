@@ -204,7 +204,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     setState(() {});
   }
 
-  Future<void> _setMapTypeForAuto() async {
+  Future<void> _setMapTypeForAutoToSatellite() async {
     await _autoViewController.setMapType(mapType: MapType.satellite);
   }
 
@@ -1459,8 +1459,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                 !_navigatorInitialized || _navigationViewController == null),
             children: <Widget>[
               ElevatedButton(
-                onPressed: () => _setMapTypeForAuto(),
-                child: const Text('Set map type'),
+                onPressed: () => _setMapTypeForAutoToSatellite(),
+                child: const Text('Set map type to satellite'),
               ),
               ElevatedButton(
                 onPressed: () => _moveCameraForAuto(),
