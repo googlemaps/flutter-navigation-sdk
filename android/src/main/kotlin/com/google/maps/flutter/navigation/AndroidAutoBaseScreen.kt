@@ -145,6 +145,8 @@ open class AndroidAutoBaseScreen(carContext: CarContext) : Screen(carContext), S
   }
 
   fun sendAutoScreenAvailabilityChangedEvent(isAvailable: Boolean) {
-    GoogleMapsNavigationPlugin.getInstance()?.autoViewEventApi?.onAutoScreenAvailabilityChanged(isAvailable) {}
+    GoogleMapsNavigationPlugin.getInstance()?.autoViewEventApi?.onAutoScreenAvailabilityChanged(
+      isAvailable
+    ) {}
   }
 }

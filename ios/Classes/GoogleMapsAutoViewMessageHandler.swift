@@ -439,6 +439,6 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
   }
 
   func isAutoScreenAvailable() throws -> Bool {
-    return viewRegistry.getCarPlayView() != nil
+    viewRegistry.getCarPlayView() != nil
   }
 }

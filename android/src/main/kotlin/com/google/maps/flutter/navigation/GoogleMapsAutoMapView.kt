@@ -50,10 +50,13 @@ internal constructor(
 
   // Handled by AndroidAutoBaseScreen.
   override fun onStart() {}
+
   // Handled by AndroidAutoBaseScreen.
   override fun onResume() {}
+
   // Handled by AndroidAutoBaseScreen.
   override fun onStop() {}
+
   // Handled by AndroidAutoBaseScreen.
   override fun onPause() {}
 }
