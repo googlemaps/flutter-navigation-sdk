@@ -325,11 +325,24 @@ class GoogleMapsAutoViewController {
     return GoogleMapsNavigationPlatform.instance.clearForAuto();
   }
 
+  Future<bool> isAutoScreenAvailable() {
+    return GoogleMapsNavigationPlatform.instance.isAutoScreenAvailable();
+  }
+
   void listenForCustomNavigationAutoEvents(
       void Function(CustomNavigationAutoEvent event) func) {
     GoogleMapsNavigationPlatform.instance
         .getCustomNavigationAutoEventStream()
         .listen((CustomNavigationAutoEvent event) {
+      func(event);
+    });
+  }
+
+  void listenForAutoScreenAvailibilityChangedEvent(
+      void Function(AutoScreenAvailabilityChangedEvent event) func) {
+    GoogleMapsNavigationPlatform.instance
+        .getAutoScreenAvailabilityChangedEventStream()
+        .listen((AutoScreenAvailabilityChangedEvent event) {
       func(event);
     });
   }

@@ -769,8 +769,15 @@ abstract mixin class AutoMapViewAPIInterface {
   /// Register camera changed listeners.
   Future<void> registerOnCameraChangedListenerForAuto();
 
+  // Check whether auto screen is available;
+  Future<bool> isAutoScreenAvailable();
+
   /// Get custom navigation auto event stream from the auto view.
   Stream<CustomNavigationAutoEvent> getCustomNavigationAutoEventStream();
+
+  /// Get auto screen availibility changed event stream from the auto view.
+  Stream<AutoScreenAvailabilityChangedEvent>
+      getAutoScreenAvailabilityChangedEventStream();
 
   void initializeAutoViewEventAPI();
 }

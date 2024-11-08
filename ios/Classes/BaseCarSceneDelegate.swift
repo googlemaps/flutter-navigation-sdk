@@ -23,9 +23,9 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
   private var mapTemplate: CPMapTemplate?
   private var navView: GoogleMapsNavigationView?
   private var navViewController: UIViewController?
-  private var sessionAttached: Bool = false
-  private var viewControllerRegistered: Bool = false
   private var templateApplicationScene: CPTemplateApplicationScene?
+  private var autoViewEventApi: AutoViewEventApi?
+  private var viewRegistry: GoogleMapsNavigationViewRegistry?
 
   public func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene,
                                        didConnect interfaceController: CPInterfaceController,
@@ -48,12 +48,13 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
                                      didDisconnect interfaceController: CPInterfaceController,
                                      from window: CPWindow) {
     self.interfaceController = nil
+    carWindow?.rootViewController = nil
     carWindow = nil
     mapTemplate = nil
+    navView?.unregisterView()
     navView = nil
     navViewController = nil
-    viewControllerRegistered = false
-    sessionAttached = false
+    self.templateApplicationScene = nil
   }
 
   open func sceneDidBecomeActive(_ scene: UIScene) {}
@@ -65,8 +66,10 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
     else { return }
 
     GoogleMapsNavigationPlugin
-      .pluginInitializedCallback = { [weak self] viewRegistry, imageRegistry in
+      .pluginInitializedCallback = { [weak self] viewRegistry, autoViewEventApi, imageRegistry in
         guard let self else { return }
+        self.viewRegistry = viewRegistry
+        self.autoViewEventApi = autoViewEventApi
         self.navView = GoogleMapsNavigationView(
           frame: templateApplicationScene.carWindow.screen.bounds,
           isNavigationView: true,
@@ -92,6 +95,10 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
         self.navViewController?.view = self.navView?.view()
         self.carWindow?.rootViewController = self.navViewController
         self.interfaceController?.setRootTemplate(self.mapTemplate!, animated: true) { _, _ in }
+
+        self.viewRegistry?.onHasCarPlayViewChanged = { isAvalable in
+          self.sendAutoScreenAvailabilityChangedEvent(isAvailable: isAvalable)
+        }
       }
   }
 
@@ -129,6 +136,11 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
   }
 
   open func sendCustomNavigationAutoEvent(event: String, data: Any) {
-    GoogleMapsNavigationPlugin.sendCustomNavigationAutoEvent(event: event, data: data)
+    autoViewEventApi?.onCustomNavigationAutoEvent(event: event, data: data) { _ in }
+  }
+
+  func sendAutoScreenAvailabilityChangedEvent(isAvailable: Bool) {
+    print("lol: \(isAvailable)")
+    autoViewEventApi?.onAutoScreenAvailabilityChanged(isAvailable: isAvailable) { _ in }
   }
 }

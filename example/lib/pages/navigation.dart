@@ -106,6 +106,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   bool _locationPermissionsAccepted = false;
   bool _turnByTurnNavigationEventEnabled = false;
 
+  bool _isAutoScreenAvailable = false;
+
   bool _validRoute = false;
   bool _errorOnSetDestinations = false;
   bool _navigatorInitialized = false;
@@ -169,6 +171,16 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
     _autoViewController.listenForCustomNavigationAutoEvents((event) {
       showMessage("Received event: ${event.event}");
+    });
+
+    _isAutoScreenAvailable = await _autoViewController.isAutoScreenAvailable();
+    _autoViewController.listenForAutoScreenAvailibilityChangedEvent((event) {
+      debugPrint(event.isAvailable
+          ? "Auto screen is available"
+          : "Auto screen is not available");
+      setState(() {
+        _isAutoScreenAvailable = event.isAvailable;
+      });
     });
   }
 
@@ -1452,6 +1464,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
           )),
       Card(
         child: ExpansionTile(
+            enabled: _isAutoScreenAvailable,
             title: const Text('Auto view'),
             collapsedTextColor: getExpansionTileTextColor(
                 !_navigatorInitialized || _navigationViewController == null),

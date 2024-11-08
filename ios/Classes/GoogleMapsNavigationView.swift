@@ -56,7 +56,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
 
   // Getter that wont return viewEventApi if viewId is missing.
   private func getViewEventApi() -> ViewEventApi? {
-    if let _viewId {
+    if _viewId != nil {
       return _viewEventApi
     }
     return nil
@@ -123,6 +123,11 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   }
 
   deinit {
+    unregisterView()
+    _mapView.delegate = nil
+  }
+
+  func unregisterView() {
     if _isCarPlayView {
       _viewRegistry.unregisterCarPlayView()
     } else {
@@ -130,7 +135,6 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
         _viewRegistry.unregisterView(viewId: _viewId)
       }
     }
-    _mapView.delegate = nil
   }
 
   func isNavigationView() -> Bool {

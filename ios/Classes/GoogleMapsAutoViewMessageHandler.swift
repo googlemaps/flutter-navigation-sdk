@@ -437,4 +437,8 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
   func registerOnCameraChangedListener() throws {
     try getView().registerOnCameraChangedListener()
   }
+
+  func isAutoScreenAvailable() throws -> Bool {
+    return viewRegistry.getCarPlayView() != nil
+  }
 }

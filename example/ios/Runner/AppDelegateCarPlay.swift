@@ -23,7 +23,6 @@ import UIKit
                             didFinishLaunchingWithOptions launchOptions: [
                               UIApplication.LaunchOptionsKey: Any
                             ]?) -> Bool {
-    print("YES CARPLAY")
     // 1. Try to find the Maps API key from the environment variables.
     // 2. Try to find the Maps API key from the Dart defines.
     // 3. Use the default Maps API key "YOUR_API_KEY".

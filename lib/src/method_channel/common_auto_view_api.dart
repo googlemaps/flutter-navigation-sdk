@@ -740,6 +740,11 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     return _viewApi.registerOnCameraChangedListener();
   }
 
+  @override
+  Future<bool> isAutoScreenAvailable() {
+    return _viewApi.isAutoScreenAvailable();
+  }
+
   Stream<T> _unwrapEventStream<T>() {
     // If event that does not
     return _autoEventStreamController.stream
@@ -750,6 +755,12 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
   @override
   Stream<CustomNavigationAutoEvent> getCustomNavigationAutoEventStream() {
     return _unwrapEventStream<CustomNavigationAutoEvent>();
+  }
+
+  @override
+  Stream<AutoScreenAvailabilityChangedEvent>
+      getAutoScreenAvailabilityChangedEventStream() {
+    return _unwrapEventStream<AutoScreenAvailabilityChangedEvent>();
   }
 }
 
@@ -766,10 +777,17 @@ class AutoViewEventApiImpl implements AutoViewEventApi {
     _viewEventStreamController.add(
         _AutoEventWrapper(CustomNavigationAutoEvent(event: event, data: data)));
   }
+
+  @override
+  void onAutoScreenAvailabilityChanged(bool isAvailable) {
+    _viewEventStreamController.add(_AutoEventWrapper(
+      AutoScreenAvailabilityChangedEvent(isAvailable: isAvailable),
+    ));
+  }
 }
 
 class _AutoEventWrapper {
   _AutoEventWrapper(this.event);
 
-  final CustomNavigationAutoEvent event;
+  final Object event;
 }

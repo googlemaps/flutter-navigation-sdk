@@ -1353,11 +1353,13 @@ abstract class AutoMapViewApi {
   void clearCircles();
 
   void registerOnCameraChangedListener();
+  bool isAutoScreenAvailable();
 }
 
 @FlutterApi()
 abstract class AutoViewEventApi {
   void onCustomNavigationAutoEvent(String event, Object data);
+  void onAutoScreenAvailabilityChanged(bool isAvailable);
 }
 
 @HostApi()

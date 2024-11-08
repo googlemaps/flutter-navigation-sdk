@@ -385,4 +385,8 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
   override fun registerOnCameraChangedListener() {
     getView().registerOnCameraChangedListener()
   }
+
+  override fun isAutoScreenAvailable(): Boolean {
+    return viewRegistry.getAndroidAutoView() != null
+  }
 }

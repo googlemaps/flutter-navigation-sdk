@@ -48,19 +48,12 @@ internal constructor(
     viewRegistry.unregisterAndroidAutoView()
   }
 
-  override fun onStart() {
-    mapView.onStart()
-  }
-
-  override fun onResume() {
-    mapView.onResume()
-  }
-
-  override fun onStop() {
-    mapView.onStop()
-  }
-
-  override fun onPause() {
-    mapView.onPause()
-  }
+  // Handled by AndroidAutoBaseScreen.
+  override fun onStart() {}
+  // Handled by AndroidAutoBaseScreen.
+  override fun onResume() {}
+  // Handled by AndroidAutoBaseScreen.
+  override fun onStop() {}
+  // Handled by AndroidAutoBaseScreen.
+  override fun onPause() {}
 }

@@ -96,7 +96,7 @@ open class AndroidAutoBaseScreen(carContext: CarContext) : Screen(carContext), S
             mNavigationView!!,
             mGoogleMap!!,
           )
-        // registerControllersForAndroidAutoModule()
+        sendAutoScreenAvailabilityChangedEvent(true)
         invalidate()
       }
     }
@@ -104,7 +104,8 @@ open class AndroidAutoBaseScreen(carContext: CarContext) : Screen(carContext), S
 
   override fun onSurfaceDestroyed(surfaceContainer: SurfaceContainer) {
     super.onSurfaceDestroyed(surfaceContainer)
-    // unRegisterControllersForAndroidAutoModule()
+    sendAutoScreenAvailabilityChangedEvent(false)
+    mAutoMapView?.dispose()
     mNavigationView!!.onPause()
     mNavigationView!!.onStop()
     mNavigationView!!.onDestroy()
@@ -141,5 +142,9 @@ open class AndroidAutoBaseScreen(carContext: CarContext) : Screen(carContext), S
       event,
       data,
     ) {}
+  }
+
+  fun sendAutoScreenAvailabilityChangedEvent(isAvailable: Boolean) {
+    GoogleMapsNavigationPlugin.getInstance()?.autoViewEventApi?.onAutoScreenAvailabilityChanged(isAvailable) {}
   }
 }

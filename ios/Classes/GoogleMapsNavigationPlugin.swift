@@ -35,16 +35,16 @@ public class GoogleMapsNavigationPlugin: NSObject, FlutterPlugin {
   private static var isPluginInitialized: Bool = false {
     didSet {
       if isPluginInitialized {
-        pluginInitializedCallback?(viewRegistry!, imageRegistry!)
+        pluginInitializedCallback?(viewRegistry!, autoViewEventApi!, imageRegistry!)
       }
     }
   }
 
-  static var pluginInitializedCallback: ((GoogleMapsNavigationViewRegistry,
+  static var pluginInitializedCallback: ((GoogleMapsNavigationViewRegistry, AutoViewEventApi,
                                           ImageRegistry) -> Void)? {
     didSet {
       if isPluginInitialized {
-        pluginInitializedCallback?(viewRegistry!, imageRegistry!)
+        pluginInitializedCallback?(viewRegistry!, autoViewEventApi!, imageRegistry!)
       }
     }
   }
@@ -111,9 +111,5 @@ public class GoogleMapsNavigationPlugin: NSObject, FlutterPlugin {
       api: imageRegistryMessageHandler
     )
     isPluginInitialized = true
-  }
-
-  static func sendCustomNavigationAutoEvent(event: String, data: Any) {
-    autoViewEventApi?.onCustomNavigationAutoEvent(event: event, data: data) { _ in }
   }
 }

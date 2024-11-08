@@ -95,6 +95,12 @@ class CustomNavigationAutoEvent {
   CustomNavigationAutoEvent({required this.event, required this.data});
 }
 
+class AutoScreenAvailabilityChangedEvent {
+  final bool isAvailable;
+
+  AutoScreenAvailabilityChangedEvent({required this.isAvailable});
+}
+
 /// Represents the click position in a Google Maps view.
 /// {@category Navigation View}
 /// {@category Map View}

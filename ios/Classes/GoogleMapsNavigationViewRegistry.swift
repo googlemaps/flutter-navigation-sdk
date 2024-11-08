@@ -14,7 +14,12 @@
 
 class GoogleMapsNavigationViewRegistry {
   private var views: [Int64: GoogleMapsNavigationView] = [:]
-  private var carPlayView: GoogleMapsNavigationView?
+  private var carPlayView: GoogleMapsNavigationView? {
+    didSet {
+      onHasCarPlayViewChanged?(carPlayView != nil)
+    }
+  }
+  var onHasCarPlayViewChanged: ((Bool) -> Void)?
   // Using a concurrent queue with a barrier ensures that write operations are serialized,
   // meaning each write completes before another write can access the shared resource.
   // Multiple read operations can still proceed concurrently as long as no write is in progress.
