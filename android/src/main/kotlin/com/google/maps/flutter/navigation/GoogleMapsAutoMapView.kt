@@ -29,7 +29,7 @@ internal constructor(
   imageRegistry: ImageRegistry,
   private val mapView: NavigationViewForAuto,
   private val map: GoogleMap,
-) : PlatformView, GoogleMapsBaseMapView(null, mapOptions, null, imageRegistry) {
+) : GoogleMapsBaseMapView(null, mapOptions, null, imageRegistry) {
   override fun getView(): View {
     return mapView
   }
@@ -42,10 +42,6 @@ internal constructor(
     invalidateViewAfterMapLoad()
 
     viewRegistry.registerAndroidAutoView(this)
-  }
-
-  override fun dispose() {
-    viewRegistry.unregisterAndroidAutoView()
   }
 
   // Handled by AndroidAutoBaseScreen.

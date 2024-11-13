@@ -574,7 +574,7 @@ abstract mixin class MapViewAPIInterface {
 }
 
 abstract mixin class AutoMapViewAPIInterface {
-  /// Awaits the platform view to be ready for communication.
+  /// Awaits the auto view to be ready for communication.
   Future<void> awaitMapReadyForAuto();
 
   /// Get the preference for whether the my location should be enabled or disabled.

@@ -29,7 +29,8 @@ To customize the Android Auto experience, override the `onGetTemplate` method in
 ```kotlin
 override fun onGetTemplate(): Template {
     /** ... */
-    @SuppressLint("MissingPermission") val navigationTemplateBuilder =
+    @SuppressLint("MissingPermission")
+    val navigationTemplateBuilder =
         NavigationTemplate.Builder()
             .setActionStrip(
                 ActionStrip.Builder()

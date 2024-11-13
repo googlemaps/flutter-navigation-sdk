@@ -76,7 +76,7 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
           viewRegistry: viewRegistry,
           navigationUIEnabledPreference: NavigationUIEnabledPreference.automatic,
           mapConfiguration: MapConfiguration(
-            cameraPosition: GMSCameraPosition(latitude: 51.51, longitude: 0.12, zoom: 5),
+            cameraPosition: nil,
             mapType: .normal,
             compassEnabled: true,
             rotateGesturesEnabled: false,

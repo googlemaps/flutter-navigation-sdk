@@ -26,7 +26,7 @@ enum NavigationUIEnabledPreference {
 
 struct MapConfiguration {
   // MapView related configurations
-  var cameraPosition: GMSCameraPosition
+  var cameraPosition: GMSCameraPosition?
   var mapType: GMSMapViewType
   var compassEnabled: Bool
   var rotateGesturesEnabled: Bool
@@ -72,6 +72,7 @@ extension MapConfiguration {
   //
   // - Parameter to: The GMSMapView to configure.
   func applyCameraPosition(to mapView: GMSMapView) {
+    guard let cameraPosition else { return }
     mapView.camera = cameraPosition
   }
 }

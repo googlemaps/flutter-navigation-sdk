@@ -1333,6 +1333,22 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     ? null
                     : (bool value) => _setRouteTokensEnabled(value),
               ),
+              ExampleSwitch(
+                  title: 'Turn by turn events',
+                  initialValue: _turnByTurnNavigationEventEnabled,
+                  onChanged: (bool newValue) async {
+                    if (newValue) {
+                      await GoogleMapsNavigator
+                          .enableTurnByTurnNavigationEvents(
+                              double.maxFinite.toInt());
+                    } else {
+                      await GoogleMapsNavigator
+                          .disableTurnByTurnNavigationEvents();
+                    }
+                    setState(() {
+                      _turnByTurnNavigationEventEnabled = newValue;
+                    });
+                  }),
             ],
           ),
           const SizedBox(height: 10)
@@ -1466,10 +1482,10 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         child: ExpansionTile(
             enabled: _isAutoScreenAvailable,
             title: const Text('Auto view'),
-            collapsedTextColor: getExpansionTileTextColor(
-                !_navigatorInitialized || _navigationViewController == null),
-            collapsedIconColor: getExpansionTileTextColor(
-                !_navigatorInitialized || _navigationViewController == null),
+            collapsedTextColor:
+                getExpansionTileTextColor(!_isAutoScreenAvailable),
+            collapsedIconColor:
+                getExpansionTileTextColor(!_isAutoScreenAvailable),
             children: <Widget>[
               ElevatedButton(
                 onPressed: () => _setMapTypeForAutoToSatellite(),
@@ -1483,22 +1499,6 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                 onPressed: () => _addMarkerForAuto(),
                 child: const Text('Add marker'),
               ),
-              ExampleSwitch(
-                  title: 'Turn by turn events',
-                  initialValue: _turnByTurnNavigationEventEnabled,
-                  onChanged: (bool newValue) async {
-                    if (newValue) {
-                      await GoogleMapsNavigator
-                          .enableTurnByTurnNavigationEvents(
-                              double.maxFinite.toInt());
-                    } else {
-                      await GoogleMapsNavigator
-                          .disableTurnByTurnNavigationEvents();
-                    }
-                    setState(() {
-                      _turnByTurnNavigationEventEnabled = newValue;
-                    });
-                  }),
             ]),
       ),
       IgnorePointer(

@@ -90,7 +90,8 @@ class SampleAndroidAutoScreen(carContext: CarContext): AndroidAutoBaseScreen(car
         // Suppresses the missing permission check for the followMyLocation method, which requires
         // "android.permission.ACCESS_COARSE_LOCATION" or "android.permission.ACCESS_FINE_LOCATION", as
         // these permissions are already handled elsewhere.
-        @SuppressLint("MissingPermission") val navigationTemplateBuilder =
+        @SuppressLint("MissingPermission")
+        val navigationTemplateBuilder =
             NavigationTemplate.Builder()
                 .setActionStrip(
                     ActionStrip.Builder()

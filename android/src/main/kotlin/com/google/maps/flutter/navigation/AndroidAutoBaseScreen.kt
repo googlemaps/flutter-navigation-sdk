@@ -40,6 +40,7 @@ open class AndroidAutoBaseScreen(carContext: CarContext) : Screen(carContext), S
   private var mPresentation: Presentation? = null
   private var mNavigationView: NavigationViewForAuto? = null
   private var mAutoMapView: GoogleMapsAutoMapView? = null
+  private var mViewRegistry: GoogleMapsViewRegistry? = null
   var mGoogleMap: GoogleMap? = null
 
   init {
@@ -73,28 +74,33 @@ open class AndroidAutoBaseScreen(carContext: CarContext) : Screen(carContext), S
           surfaceContainer.surface,
           DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY,
         )
-    mPresentation = Presentation(carContext, mVirtualDisplay!!.display)
+    val virtualDisplay = mVirtualDisplay ?: return
+
+    mPresentation = Presentation(carContext, virtualDisplay.display)
+    val presentation = mPresentation ?: return
 
     mNavigationView = NavigationViewForAuto(carContext)
-    mNavigationView!!.onCreate(null)
-    mNavigationView!!.onStart()
-    mNavigationView!!.onResume()
+    val navigationView = mNavigationView ?: return
+    navigationView.onCreate(null)
+    navigationView.onStart()
+    navigationView.onResume()
 
-    mPresentation!!.setContentView(mNavigationView!!)
-    mPresentation!!.show()
+    presentation.setContentView(navigationView)
+    presentation.show()
 
-    mNavigationView!!.getMapAsync { googleMap: GoogleMap ->
+    navigationView.getMapAsync { googleMap: GoogleMap ->
       val viewRegistry = GoogleMapsNavigationPlugin.getInstance()?.viewRegistry
       val imageRegistry = GoogleMapsNavigationPlugin.getInstance()?.imageRegistry
       if (viewRegistry != null && imageRegistry != null) {
         mGoogleMap = googleMap
+        mViewRegistry = viewRegistry
         mAutoMapView =
           GoogleMapsAutoMapView(
             GoogleMapOptions(),
             viewRegistry,
             imageRegistry,
-            mNavigationView!!,
-            mGoogleMap!!,
+            navigationView,
+            googleMap,
           )
         sendAutoScreenAvailabilityChangedEvent(true)
         invalidate()
@@ -105,30 +111,24 @@ open class AndroidAutoBaseScreen(carContext: CarContext) : Screen(carContext), S
   override fun onSurfaceDestroyed(surfaceContainer: SurfaceContainer) {
     super.onSurfaceDestroyed(surfaceContainer)
     sendAutoScreenAvailabilityChangedEvent(false)
-    mAutoMapView?.dispose()
-    mNavigationView!!.onPause()
-    mNavigationView!!.onStop()
-    mNavigationView!!.onDestroy()
+    mViewRegistry?.unregisterAndroidAutoView()
+    mNavigationView?.onPause()
+    mNavigationView?.onStop()
+    mNavigationView?.onDestroy()
     mGoogleMap = null
 
-    mPresentation!!.dismiss()
-    mVirtualDisplay!!.release()
+    mPresentation?.dismiss()
+    mVirtualDisplay?.release()
   }
 
   override fun onScroll(distanceX: Float, distanceY: Float) {
-    if (mGoogleMap == null) {
-      return
-    }
-    mGoogleMap!!.moveCamera(CameraUpdateFactory.scrollBy(distanceX, distanceY))
+    mGoogleMap?.moveCamera(CameraUpdateFactory.scrollBy(distanceX, distanceY))
   }
 
   override fun onScale(focusX: Float, focusY: Float, scaleFactor: Float) {
-    if (mGoogleMap == null) {
-      return
-    }
     val update =
       CameraUpdateFactory.zoomBy((scaleFactor - 1), Point(focusX.toInt(), focusY.toInt()))
-    mGoogleMap!!.animateCamera(update) // map is set in onSurfaceAvailable.
+    mGoogleMap?.animateCamera(update) // map is set in onSurfaceAvailable.
   }
 
   override fun onGetTemplate(): Template {
