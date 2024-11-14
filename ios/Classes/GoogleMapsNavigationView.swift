@@ -71,8 +71,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
        mapConfiguration: MapConfiguration,
        imageRegistry: ImageRegistry,
        isCarPlayView: Bool) {
-
-    if (!isCarPlayView && (viewId == nil || viewEventApi == nil)) {
+    if !isCarPlayView, viewId == nil || viewEventApi == nil {
       fatalError("For non-carplay map view viewId and viewEventApi is required")
     }
 

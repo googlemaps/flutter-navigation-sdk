@@ -6240,8 +6240,6 @@ private object AutoMapViewApiCodec : StandardMessageCodec() {
 
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface AutoMapViewApi {
-  fun awaitMapReady(callback: (Result<Unit>) -> Unit)
-
   fun isMyLocationEnabled(): Boolean
 
   fun setMyLocationEnabled(enabled: Boolean)
@@ -6420,28 +6418,6 @@ interface AutoMapViewApi {
     /** Sets up an instance of `AutoMapViewApi` to handle messages through the `binaryMessenger`. */
     @Suppress("UNCHECKED_CAST")
     fun setUp(binaryMessenger: BinaryMessenger, api: AutoMapViewApi?) {
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.awaitMapReady",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            api.awaitMapReady() { result: Result<Unit> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                reply.reply(wrapResult(null))
-              }
-            }
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
       run {
         val channel =
           BasicMessageChannel<Any?>(

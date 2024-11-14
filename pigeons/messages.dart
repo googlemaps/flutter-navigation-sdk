@@ -1256,9 +1256,6 @@ abstract class NavigationSessionEventApi {
 
 @HostApi()
 abstract class AutoMapViewApi {
-  @async
-  void awaitMapReady();
-
   bool isMyLocationEnabled();
   void setMyLocationEnabled(bool enabled);
   LatLngDto? getMyLocation();

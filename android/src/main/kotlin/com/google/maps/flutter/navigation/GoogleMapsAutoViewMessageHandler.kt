@@ -31,10 +31,6 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
     }
   }
 
-  override fun awaitMapReady(callback: (Result<Unit>) -> Unit) {
-    return getView().awaitMapReady(callback)
-  }
-
   override fun isMyLocationEnabled(): Boolean {
     return getView().isMyLocationEnabled()
   }

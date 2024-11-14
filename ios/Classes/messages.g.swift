@@ -5737,7 +5737,6 @@ class AutoMapViewApiCodec: FlutterStandardMessageCodec {
 
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol AutoMapViewApi {
-  func awaitMapReady(completion: @escaping (Result<Void, Error>) -> Void)
   func isMyLocationEnabled() throws -> Bool
   func setMyLocationEnabled(enabled: Bool) throws
   func getMyLocation() throws -> LatLngDto?
@@ -5826,25 +5825,6 @@ enum AutoMapViewApiSetup {
   static var codec: FlutterStandardMessageCodec { AutoMapViewApiCodec.shared }
   /// Sets up an instance of `AutoMapViewApi` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: AutoMapViewApi?) {
-    let awaitMapReadyChannel = FlutterBasicMessageChannel(
-      name: "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.awaitMapReady",
-      binaryMessenger: binaryMessenger,
-      codec: codec
-    )
-    if let api {
-      awaitMapReadyChannel.setMessageHandler { _, reply in
-        api.awaitMapReady { result in
-          switch result {
-          case .success:
-            reply(wrapResult(nil))
-          case let .failure(error):
-            reply(wrapError(error))
-          }
-        }
-      }
-    } else {
-      awaitMapReadyChannel.setMessageHandler(nil)
-    }
     let isMyLocationEnabledChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMyLocationEnabled",
       binaryMessenger: binaryMessenger,

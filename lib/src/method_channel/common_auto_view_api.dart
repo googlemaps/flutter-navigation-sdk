@@ -75,11 +75,6 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
   }
 
   @override
-  Future<void> awaitMapReadyForAuto() {
-    return _viewApi.awaitMapReady();
-  }
-
-  @override
   Future<bool> isMyLocationEnabledForAuto() {
     return _viewApi.isMyLocationEnabled();
   }
