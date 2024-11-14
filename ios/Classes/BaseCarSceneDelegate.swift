@@ -72,8 +72,10 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
         self.autoViewEventApi = autoViewEventApi
         self.navView = GoogleMapsNavigationView(
           frame: templateApplicationScene.carWindow.screen.bounds,
+          viewIdentifier: nil,
           isNavigationView: true,
           viewRegistry: viewRegistry,
+          viewEventApi: nil,
           navigationUIEnabledPreference: NavigationUIEnabledPreference.automatic,
           mapConfiguration: MapConfiguration(
             cameraPosition: nil,
@@ -85,7 +87,8 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
             zoomGesturesEnabled: true,
             scrollGesturesEnabledDuringRotateOrZoom: false
           ),
-          imageRegistry: imageRegistry
+          imageRegistry: imageRegistry,
+          isCarPlayView: true
         )
         self.navView?.setNavigationHeaderEnabled(false)
         self.navView?.setRecenterButtonEnabled(false)
@@ -140,7 +143,6 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
   }
 
   func sendAutoScreenAvailabilityChangedEvent(isAvailable: Bool) {
-    print("lol: \(isAvailable)")
     autoViewEventApi?.onAutoScreenAvailabilityChanged(isAvailable: isAvailable) { _ in }
   }
 }

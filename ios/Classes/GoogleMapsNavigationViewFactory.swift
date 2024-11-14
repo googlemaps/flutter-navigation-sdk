@@ -54,7 +54,8 @@ class GoogleMapsNavigationViewFactory: NSObject, FlutterPlatformViewFactory {
         .convertNavigationUIEnabledPreference(preference: params.navigationViewOptions?
           .navigationUIEnabledPreference),
       mapConfiguration: mapConfiguration,
-      imageRegistry: imageRegistry
+      imageRegistry: imageRegistry,
+      isCarPlayView: false
     )
   }
 }

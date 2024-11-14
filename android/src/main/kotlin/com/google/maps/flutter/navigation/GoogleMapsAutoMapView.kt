@@ -20,7 +20,6 @@ import android.view.View
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.libraries.navigation.NavigationViewForAuto
-import io.flutter.plugin.platform.PlatformView
 
 class GoogleMapsAutoMapView
 internal constructor(

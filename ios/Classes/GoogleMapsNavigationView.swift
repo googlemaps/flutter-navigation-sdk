@@ -62,50 +62,27 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     return nil
   }
 
-  // CarPlay initializer. This will ignore viewId and viewEventApi.
   init(frame: CGRect,
+       viewIdentifier viewId: Int64?,
        isNavigationView: Bool,
        viewRegistry registry: GoogleMapsNavigationViewRegistry,
+       viewEventApi: ViewEventApi?,
        navigationUIEnabledPreference: NavigationUIEnabledPreference,
        mapConfiguration: MapConfiguration,
-       imageRegistry: ImageRegistry) {
-    _isNavigationView = true
-    _viewRegistry = registry
-    _mapConfiguration = mapConfiguration
-    _imageRegistry = imageRegistry
-    _isCarPlayView = true
+       imageRegistry: ImageRegistry,
+       isCarPlayView: Bool) {
 
-    let mapViewOptions = GMSMapViewOptions()
-    _mapConfiguration.apply(to: mapViewOptions, withFrame: frame)
-    _mapView = ViewStateAwareGMSMapView(options: mapViewOptions)
-    _mapConfiguration.apply(to: _mapView)
+    if (!isCarPlayView && (viewId == nil || viewEventApi == nil)) {
+      fatalError("For non-carplay map view viewId and viewEventApi is required")
+    }
 
-    super.init()
-
-    _navigationUIEnabledPreference = navigationUIEnabledPreference
-    applyNavigationUIEnabledPreference()
-
-    registry.registerCarPlayView(view: self)
-    _mapView.delegate = self
-    _mapView.viewSettledDelegate = self
-  }
-
-  // Regular NavigationView initializer.
-  init(frame: CGRect,
-       viewIdentifier viewId: Int64,
-       isNavigationView: Bool,
-       viewRegistry registry: GoogleMapsNavigationViewRegistry,
-       viewEventApi: ViewEventApi,
-       navigationUIEnabledPreference: NavigationUIEnabledPreference,
-       mapConfiguration: MapConfiguration,
-       imageRegistry: ImageRegistry) {
     _viewId = viewId
     _isNavigationView = isNavigationView
     _viewRegistry = registry
     _viewEventApi = viewEventApi
     _mapConfiguration = mapConfiguration
     _imageRegistry = imageRegistry
-    _isCarPlayView = false
+    _isCarPlayView = isCarPlayView
 
     let mapViewOptions = GMSMapViewOptions()
     _mapConfiguration.apply(to: mapViewOptions, withFrame: frame)
@@ -117,7 +94,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     _navigationUIEnabledPreference = navigationUIEnabledPreference
     applyNavigationUIEnabledPreference()
 
-    registry.registerView(viewId: viewId, view: self)
+    registerView()
     _mapView.delegate = self
     _mapView.viewSettledDelegate = self
   }
@@ -125,6 +102,16 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   deinit {
     unregisterView()
     _mapView.delegate = nil
+  }
+
+  func registerView() {
+    if _isCarPlayView {
+      _viewRegistry.registerCarPlayView(view: self)
+    } else {
+      if let _viewId {
+        _viewRegistry.registerView(viewId: _viewId, view: self)
+      }
+    }
   }
 
   func unregisterView() {
