@@ -551,17 +551,17 @@ class ConvertTests: XCTestCase {
     // Make sure these match because comparison between different enums is complicated.
     XCTAssert(mapOptions.mapType == .normal)
     XCTAssert(configuration.mapType == .normal)
-    XCTAssertEqual(mapOptions.cameraPosition.bearing, configuration.cameraPosition.bearing)
+    XCTAssertEqual(mapOptions.cameraPosition.bearing, configuration.cameraPosition!.bearing)
     XCTAssertEqual(
       mapOptions.cameraPosition.target.latitude,
-      configuration.cameraPosition.target.latitude
+      configuration.cameraPosition!.target.latitude
     )
     XCTAssertEqual(
       mapOptions.cameraPosition.target.longitude,
-      configuration.cameraPosition.target.longitude
+      configuration.cameraPosition!.target.longitude
     )
-    XCTAssertEqual(mapOptions.cameraPosition.tilt, configuration.cameraPosition.viewingAngle)
-    XCTAssertEqual(mapOptions.cameraPosition.zoom, Double(configuration.cameraPosition.zoom))
+    XCTAssertEqual(mapOptions.cameraPosition.tilt, configuration.cameraPosition!.viewingAngle)
+    XCTAssertEqual(mapOptions.cameraPosition.zoom, Double(configuration.cameraPosition!.zoom))
     XCTAssertEqual(mapOptions.compassEnabled, configuration.compassEnabled)
     XCTAssertEqual(mapOptions.rotateGesturesEnabled, configuration.rotateGesturesEnabled)
     XCTAssertEqual(mapOptions.scrollGesturesEnabled, configuration.scrollGesturesEnabled)
