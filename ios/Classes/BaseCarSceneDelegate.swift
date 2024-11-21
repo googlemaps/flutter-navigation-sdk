@@ -27,6 +27,10 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
   private var autoViewEventApi: AutoViewEventApi?
   private var viewRegistry: GoogleMapsNavigationViewRegistry?
 
+  public func getNavView() -> GoogleMapsNavigationView? {
+    navView
+  }
+
   public func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene,
                                        didConnect interfaceController: CPInterfaceController,
                                        to window: CPWindow) {

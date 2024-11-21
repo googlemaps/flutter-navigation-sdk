@@ -14,6 +14,7 @@
 
 import CarPlay
 import google_navigation_flutter
+import GoogleNavigation
 import UIKit
 
 class CarSceneDelegate: BaseCarSceneDelegate {
@@ -21,11 +22,17 @@ class CarSceneDelegate: BaseCarSceneDelegate {
     let template = CPMapTemplate()
     template.showPanningInterface(animated: true)
 
-    let button = CPBarButton(title: "Custom Event") { [weak self] _ in
+    let customEventButton = CPBarButton(title: "Custom Event") { [weak self] _ in
       let data = ["sampleDataKey": "sampleDataContent"]
       self?.sendCustomNavigationAutoEvent(event: "CustomCarPlayEvent", data: data)
     }
-    template.leadingNavigationBarButtons = [button]
+    let recenterButton = CPBarButton(title: "Re-center") { [weak self] _ in
+      self?.getNavView()?.followMyLocation(
+        perspective: GMSNavigationCameraPerspective.tilted,
+        zoomLevel: nil
+      )
+    }
+    template.leadingNavigationBarButtons = [customEventButton, recenterButton]
     return template
   }
 }
