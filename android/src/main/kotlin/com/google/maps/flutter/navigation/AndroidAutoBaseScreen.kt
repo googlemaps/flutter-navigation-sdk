@@ -29,10 +29,14 @@ import androidx.car.app.model.Action
 import androidx.car.app.model.ActionStrip
 import androidx.car.app.model.Template
 import androidx.car.app.navigation.model.NavigationTemplate
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.libraries.navigation.NavigationViewForAuto
+
 
 open class AndroidAutoBaseScreen(carContext: CarContext) : Screen(carContext), SurfaceCallback, NavigationReadyListener {
   private val VIRTUAL_DISPLAY_NAME = "AndroidAutoNavScreen"
@@ -46,12 +50,23 @@ open class AndroidAutoBaseScreen(carContext: CarContext) : Screen(carContext), S
 
   init {
     initializeSurfaceCallback()
+    initializeNavigationListener()
+  }
+
+  private fun initializeNavigationListener() {
     GoogleMapsNavigationSessionManager.navigationReadyListener = this
     mIsNavigationReady = GoogleMapsNavigationSessionManager.getInstance().isInitialized()
   }
 
   private fun initializeSurfaceCallback() {
     carContext.getCarService(AppManager::class.java).setSurfaceCallback(this)
+  }
+
+  private val mLifeCycleObserver: LifecycleObserver = object : DefaultLifecycleObserver {
+    override fun onDestroy(owner: LifecycleOwner) {
+      GoogleMapsNavigationSessionManager.navigationReadyListener = null
+      mIsNavigationReady = false
+    }
   }
 
   private fun isSurfaceReady(surfaceContainer: SurfaceContainer): Boolean {
@@ -63,6 +78,7 @@ open class AndroidAutoBaseScreen(carContext: CarContext) : Screen(carContext), S
 
   override fun onSurfaceAvailable(surfaceContainer: SurfaceContainer) {
     super.onSurfaceAvailable(surfaceContainer)
+    lifecycle.addObserver(mLifeCycleObserver)
     if (!isSurfaceReady(surfaceContainer)) {
       return
     }
