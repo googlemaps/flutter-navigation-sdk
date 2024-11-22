@@ -34,17 +34,20 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.libraries.navigation.NavigationViewForAuto
 
-open class AndroidAutoBaseScreen(carContext: CarContext) : Screen(carContext), SurfaceCallback {
+open class AndroidAutoBaseScreen(carContext: CarContext) : Screen(carContext), SurfaceCallback, NavigationReadyListener {
   private val VIRTUAL_DISPLAY_NAME = "AndroidAutoNavScreen"
   private var mVirtualDisplay: VirtualDisplay? = null
   private var mPresentation: Presentation? = null
   private var mNavigationView: NavigationViewForAuto? = null
   private var mAutoMapView: GoogleMapsAutoMapView? = null
   private var mViewRegistry: GoogleMapsViewRegistry? = null
+  protected var mIsNavigationReady: Boolean = false
   var mGoogleMap: GoogleMap? = null
 
   init {
     initializeSurfaceCallback()
+    GoogleMapsNavigationSessionManager.navigationReadyListener = this
+    mIsNavigationReady = GoogleMapsNavigationSessionManager.getInstance().isInitialized()
   }
 
   private fun initializeSurfaceCallback() {
@@ -148,5 +151,9 @@ open class AndroidAutoBaseScreen(carContext: CarContext) : Screen(carContext), S
     GoogleMapsNavigationPlugin.getInstance()?.autoViewEventApi?.onAutoScreenAvailabilityChanged(
       isAvailable
     ) {}
+  }
+
+  override fun onNavigationReady(ready: Boolean) {
+    mIsNavigationReady = ready
   }
 }

@@ -43,8 +43,13 @@ import com.google.android.libraries.navigation.TermsAndConditionsUIParams
 import com.google.android.libraries.navigation.TimeAndDistance
 import com.google.android.libraries.navigation.Waypoint
 import com.google.maps.flutter.navigation.Convert.convertTravelModeFromDto
+import com.google.maps.flutter.navigation.GoogleMapsNavigationSessionManager.Companion.navigationReadyListener
 import io.flutter.plugin.common.BinaryMessenger
 import java.lang.ref.WeakReference
+
+interface NavigationReadyListener {
+  fun onNavigationReady(ready: Boolean)
+}
 
 /** This class handles creation of navigation session and other navigation related tasks. */
 class GoogleMapsNavigationSessionManager
@@ -52,6 +57,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   DefaultLifecycleObserver {
   companion object {
     private var instance: GoogleMapsNavigationSessionManager? = null
+    var navigationReadyListener: NavigationReadyListener? = null
 
     /**
      * Create new GoogleMapsNavigationSessionManager instance. Does nothing if instance is already
@@ -93,7 +99,6 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
       return instance!!
     }
   }
-
   private var navigator: Navigator? = null
   private var isNavigationSessionInitialized = false
   private var arrivalListener: Navigator.ArrivalListener? = null
@@ -170,6 +175,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
       // Navigator is already initialized, just re-register listeners.
       registerNavigationListeners()
       isNavigationSessionInitialized = true
+      navigationReadyListener?.onNavigationReady(true)
       callback(Result.success(Unit))
       return
     }
@@ -197,6 +203,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
           navigator = newNavigator
           registerNavigationListeners()
           isNavigationSessionInitialized = true
+          navigationReadyListener?.onNavigationReady(true)
           callback(Result.success(Unit))
         }
 
@@ -279,6 +286,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
     // As unregisterListeners() is removing all listeners, we need to re-register them when
     // navigator is re-initialized. This is done in createNavigationSession() method.
     isNavigationSessionInitialized = false
+    navigationReadyListener?.onNavigationReady(false)
   }
 
   private fun unregisterListeners() {

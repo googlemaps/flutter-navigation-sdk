@@ -22,6 +22,9 @@ import androidx.car.app.model.Action
 import androidx.car.app.model.ActionStrip
 import androidx.car.app.model.CarIcon
 import androidx.car.app.model.Distance
+import androidx.car.app.model.Pane
+import androidx.car.app.model.PaneTemplate
+import androidx.car.app.model.Row
 import androidx.car.app.model.Template
 import androidx.car.app.navigation.model.Maneuver
 import androidx.car.app.navigation.model.NavigationTemplate
@@ -33,6 +36,7 @@ import com.google.android.libraries.mapsplatform.turnbyturn.model.NavInfo
 import com.google.android.libraries.mapsplatform.turnbyturn.model.StepInfo
 import com.google.maps.flutter.navigation.AndroidAutoBaseScreen
 import com.google.maps.flutter.navigation.GoogleMapsNavigationNavUpdatesService
+
 
 class SampleAndroidAutoScreen(carContext: CarContext): AndroidAutoBaseScreen(carContext) {
 
@@ -86,7 +90,30 @@ class SampleAndroidAutoScreen(carContext: CarContext): AndroidAutoBaseScreen(car
         return stepBuilder.build()
     }
 
+    override fun onNavigationReady(ready: Boolean) {
+        super.onNavigationReady(ready)
+        // Invalidate template layout because of conditional rendering in the
+        // onGetTemplate method.
+        invalidate()
+    }
+
     override fun onGetTemplate(): Template {
+        if (!mIsNavigationReady) {
+            return PaneTemplate.Builder(
+                Pane.Builder()
+                    .addRow(
+                        Row.Builder()
+                            .setTitle("Nav SampleApp")
+                            .addText(
+                                "Initialize navigation to see navigation view on the Android Auto"
+                                        + " screen"
+                            )
+                            .build()
+                    )
+                    .build()
+            )
+                .build()
+        }
         // Suppresses the missing permission check for the followMyLocation method, which requires
         // "android.permission.ACCESS_COARSE_LOCATION" or "android.permission.ACCESS_FINE_LOCATION", as
         // these permissions are already handled elsewhere.
