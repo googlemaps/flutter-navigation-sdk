@@ -39,16 +39,16 @@ class SampleAndroidAutoSession(sessionInfo: SessionInfo): Session() {
             lifecycle.addObserver(object: DefaultLifecycleObserver {
                 override fun onCreate(owner: LifecycleOwner) {
                     Log.i(TAG, "In onCreate()")
-                }
-
-                override fun onStart(owner: LifecycleOwner) {
-                    Log.i(TAG, "In onStart()")
                     carContext
                         .bindService(
                             Intent(carContext, SampleAndroidAutoService::class.java),
                             mServiceConnection,
                             Context.BIND_AUTO_CREATE
                         )
+                }
+
+                override fun onStart(owner: LifecycleOwner) {
+                    Log.i(TAG, "In onStart()")
                 }
 
                 override fun onResume(owner: LifecycleOwner) {
@@ -61,11 +61,11 @@ class SampleAndroidAutoSession(sessionInfo: SessionInfo): Session() {
 
                 override fun onStop(owner: LifecycleOwner) {
                     Log.i(TAG, "In onStop()")
-                    carContext.unbindService(mServiceConnection)
                 }
 
                 override fun onDestroy(owner: LifecycleOwner) {
                     Log.i(TAG, "In onDestroy()")
+                    carContext.unbindService(mServiceConnection)
                 }
             })
         }

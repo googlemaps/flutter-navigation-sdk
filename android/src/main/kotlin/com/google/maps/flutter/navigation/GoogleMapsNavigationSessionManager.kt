@@ -99,6 +99,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
       return instance!!
     }
   }
+
   private var navigator: Navigator? = null
   private var isNavigationSessionInitialized = false
   private var arrivalListener: Navigator.ArrivalListener? = null

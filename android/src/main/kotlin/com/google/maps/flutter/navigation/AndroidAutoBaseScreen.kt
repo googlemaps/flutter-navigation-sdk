@@ -37,8 +37,8 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.libraries.navigation.NavigationViewForAuto
 
-
-open class AndroidAutoBaseScreen(carContext: CarContext) : Screen(carContext), SurfaceCallback, NavigationReadyListener {
+open class AndroidAutoBaseScreen(carContext: CarContext) :
+  Screen(carContext), SurfaceCallback, NavigationReadyListener {
   private val VIRTUAL_DISPLAY_NAME = "AndroidAutoNavScreen"
   private var mVirtualDisplay: VirtualDisplay? = null
   private var mPresentation: Presentation? = null
@@ -55,19 +55,25 @@ open class AndroidAutoBaseScreen(carContext: CarContext) : Screen(carContext), S
 
   private fun initializeNavigationListener() {
     GoogleMapsNavigationSessionManager.navigationReadyListener = this
-    mIsNavigationReady = GoogleMapsNavigationSessionManager.getInstance().isInitialized()
+    try {
+      mIsNavigationReady = GoogleMapsNavigationSessionManager.getInstance().isInitialized()
+    } catch (exception: RuntimeException) {
+      // If GoogleMapsNavigationSessionManager is not initialized navigation is not ready.
+      mIsNavigationReady = false
+    }
   }
 
   private fun initializeSurfaceCallback() {
     carContext.getCarService(AppManager::class.java).setSurfaceCallback(this)
   }
 
-  private val mLifeCycleObserver: LifecycleObserver = object : DefaultLifecycleObserver {
-    override fun onDestroy(owner: LifecycleOwner) {
-      GoogleMapsNavigationSessionManager.navigationReadyListener = null
-      mIsNavigationReady = false
+  private val mLifeCycleObserver: LifecycleObserver =
+    object : DefaultLifecycleObserver {
+      override fun onDestroy(owner: LifecycleOwner) {
+        GoogleMapsNavigationSessionManager.navigationReadyListener = null
+        mIsNavigationReady = false
+      }
     }
-  }
 
   private fun isSurfaceReady(surfaceContainer: SurfaceContainer): Boolean {
     return surfaceContainer.surface != null &&
@@ -163,7 +169,7 @@ open class AndroidAutoBaseScreen(carContext: CarContext) : Screen(carContext), S
     ) {}
   }
 
-  fun sendAutoScreenAvailabilityChangedEvent(isAvailable: Boolean) {
+  private fun sendAutoScreenAvailabilityChangedEvent(isAvailable: Boolean) {
     GoogleMapsNavigationPlugin.getInstance()?.autoViewEventApi?.onAutoScreenAvailabilityChanged(
       isAvailable
     ) {}
