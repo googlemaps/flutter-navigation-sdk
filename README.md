@@ -9,8 +9,8 @@ This repository contains a Flutter plugin that provides a [Google Navigation](ht
 
 ## Requirements
 
-|                                 | Android | iOS       |
-| ------------------------------- | ------- | --------- |
+|                                 | Android       | iOS       |
+| ------------------------------- | ------------- | --------- |
 | **Minimum mobile OS supported** | API level 23+ | iOS 15.0+ |
 
 * A Flutter project
@@ -27,36 +27,52 @@ This repository contains a Flutter plugin that provides a [Google Navigation](ht
 
 ## Installation
 
-1. To add the Google Navigation for Flutter package to your project, use the command:
-  ```
-  flutter pub add google_navigation_flutter
-  ```
+To add the Google Navigation for Flutter package to your project, use the command:
+```
+flutter pub add google_navigation_flutter
+```
 
-2. Set the minimum platform version for the platform(s) targeted by your app.
+### Android
 
-    ### Android
+Set the `minSdkVersion` in `android/app/build.gradle`:
 
-    Set the `minSdkVersion` in `android/app/build.gradle`:
-
-    ```groovy
-    android {
-        defaultConfig {
-            minSdkVersion 23
-        }
+```groovy
+android {
+    defaultConfig {
+        minSdkVersion 23
     }
-    ```
+}
+```
 
-    ### iOS
+If `minSdkVersion` is set to less than 34 (API 34), you need to configure desugaring for your Android app.
+To enable desugaring, add the following configurations to `android/app/build.gradle` file:
+```groovy
+android {
+    ...
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        ...
+    }
+}
 
-    1. Open the ios/Podfile config file in your preferred IDE.
-    1. Add the following lines to the beginning of this Podfile:
+dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs_nio:2.0.4'
+}
+```
 
-    ```
-      # Set platform to 15.0 to enable latest Google Maps SDK
-      platform :ios, '15.0'
-    ```
+### iOS
 
-3. Add your API key to the Flutter project using [these instructions for the corresponding Android (build.gradle) and iOS (AppDelegate.swift) files](https://developers.google.com/maps/flutter-package/config#step_4_add_your_api_key_to_the_project). The instructions for this step in the google_maps_flutter package documentation apply to the google_navigation_flutter package as well.
+1. Open the ios/Podfile config file in your preferred IDE.
+2. Add the following lines to the beginning of this Podfile:
+
+```
+  # Set platform to 15.0 to enable latest Google Maps SDK
+  platform :ios, '15.0'
+```
+
+### Set Google Maps API Key
+
+Add your API key to the Flutter project using [these instructions for the corresponding Android (build.gradle) and iOS (AppDelegate.swift) files](https://developers.google.com/maps/flutter-package/config#step_4_add_your_api_key_to_the_project). The instructions for this step in the google_maps_flutter package documentation apply to the google_navigation_flutter package as well.
 
   See the example configuration for Secrets Gradle Plugin in the example app's [build.gradle](./example/android/app/build.gradle) file.
   To securely load your API key, use the [Secrets Gradle Plugin](https://developers.google.com/maps/documentation/android-sdk/secrets-gradle-plugin). This plugin helps manage API keys without exposing them in your app's source code.
@@ -200,6 +216,15 @@ Widget build(BuildContext context) {
   ...
 }
 ```
+
+## Known issues
+
+### Compatibility with other libraries
+
+This package uses the Google Maps [Navigation SDK](https://mapsplatform.google.com/maps-products/navigation-sdk/) for Android and iOS, which includes a dependency on the `Google Maps SDK`. If your project includes other flutter libraries with `Google Maps SDK` dependencies, you may encounter build errors due to version conflicts. To avoid this, it's recommended to avoid using multiple packages with Google Maps dependencies.
+
+> [!NOTE]
+> This package provides a `GoogleMapsMapView` widget, which can be used as a classic Google Maps view without navigation. See [Add a map view](#add-a-map-view) for details.
 
 ## Contributing
 
