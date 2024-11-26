@@ -14,7 +14,7 @@
 # limitations under the License.
 set -e
 
-DEVICE_NAME=${DEVICE:-'iPhone 14 Pro'} # Default to 'iPhone 14 Pro' if no argument is provided
+DEVICE_NAME=${DEVICE:-'iPhone 16 Pro'} # Default to 'iPhone 16 Pro' if no argument is provided
 
 # Navigate to the ios directory and run xcodebuild with the provided device name
 cd ios && xcodebuild test \
