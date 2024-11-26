@@ -117,7 +117,7 @@ jobs:
         working-directory: ${{ env.working_directory }}
         run: flutter build ios --config-only
       - name: "Run iOS native unit tests"
-        run: DEVICE='iPhone 14 Pro' melos run test:ios
+        run: DEVICE='iPhone 16 Pro' melos run test:ios
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
