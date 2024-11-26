@@ -217,6 +217,15 @@ Widget build(BuildContext context) {
 }
 ```
 
+## Known issues
+
+### Compatibility with other libraries
+
+This package uses the Google Maps [Navigation SDK](https://mapsplatform.google.com/maps-products/navigation-sdk/) for Android and iOS, which includes a dependency on the `Google Maps SDK`. If your project includes other flutter libraries with `Google Maps SDK` dependencies, you may encounter build errors due to version conflicts. To avoid this, it's recommended to avoid using multiple packages with Google Maps dependencies.
+
+> [!NOTE]
+> This package provides a `GoogleMapsMapView` widget, which can be used as a classic Google Maps view without navigation. See [Add a map view](#add-a-map-view) for details.
+
 ## Contributing
 
 See the [Contributing guide](https://github.com/googlemaps/flutter-navigation-sdk/blob/main/CONTRIBUTING.md).
