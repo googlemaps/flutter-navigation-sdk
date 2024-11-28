@@ -222,11 +222,11 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     try updateMyLocationButton()
   }
 
-  func getMapType() -> GMSMapViewType {
+  public func getMapType() -> GMSMapViewType {
     _mapView.mapType
   }
 
-  func setMapType(mapType: GMSMapViewType) throws {
+  public func setMapType(mapType: GMSMapViewType) throws {
     _mapView.mapType = mapType
   }
 
@@ -330,7 +330,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     _mapView.cameraMode = .overview
   }
 
-  func getMyLocation() -> CLLocationCoordinate2D? {
+  public func getMyLocation() -> CLLocationCoordinate2D? {
     if let location = _mapView.myLocation {
       return location.coordinate
     } else {
@@ -338,35 +338,35 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     }
   }
 
-  func getCameraPosition() -> GMSCameraPosition {
+  public func getCameraPosition() -> GMSCameraPosition {
     _mapView.camera
   }
 
-  func getVisibleRegion() -> GMSCoordinateBounds {
+  public func getVisibleRegion() -> GMSCoordinateBounds {
     GMSCoordinateBounds(region: _mapView.projection.visibleRegion())
   }
 
-  func animateCameraToCameraPosition(cameraPosition: GMSCameraPosition) {
+  public func animateCameraToCameraPosition(cameraPosition: GMSCameraPosition) {
     _mapView.animate(with: GMSCameraUpdate.setCamera(cameraPosition))
   }
 
-  func animateCameraToLatLng(point: CLLocationCoordinate2D) {
+  public func animateCameraToLatLng(point: CLLocationCoordinate2D) {
     _mapView.animate(with: GMSCameraUpdate.setTarget(point))
   }
 
-  func animateCameraToLatLngBounds(bounds: GMSCoordinateBounds, padding: Double) {
+  public func animateCameraToLatLngBounds(bounds: GMSCoordinateBounds, padding: Double) {
     _mapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: padding))
   }
 
-  func animateCameraToLatLngZoom(point: CLLocationCoordinate2D, zoom: Double) {
+  public func animateCameraToLatLngZoom(point: CLLocationCoordinate2D, zoom: Double) {
     _mapView.animate(with: GMSCameraUpdate.setTarget(point, zoom: Float(zoom)))
   }
 
-  func animateCameraByScroll(dx: Double, dy: Double) {
+  public func animateCameraByScroll(dx: Double, dy: Double) {
     _mapView.animate(with: GMSCameraUpdate.scrollBy(x: CGFloat(dx), y: CGFloat(dy)))
   }
 
-  func animateCameraByZoom(zoomBy: Double, focus: CGPoint?) {
+  public func animateCameraByZoom(zoomBy: Double, focus: CGPoint?) {
     if focus != nil {
       _mapView.animate(with: GMSCameraUpdate.zoom(by: Float(zoomBy), at: focus!))
     } else {
@@ -374,31 +374,31 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     }
   }
 
-  func animateCameraToZoom(zoom: Double) {
+  public func animateCameraToZoom(zoom: Double) {
     _mapView.animate(with: GMSCameraUpdate.zoom(to: Float(zoom)))
   }
 
-  func moveCameraToCameraPosition(cameraPosition: GMSCameraPosition) {
+  public func moveCameraToCameraPosition(cameraPosition: GMSCameraPosition) {
     _mapView.moveCamera(GMSCameraUpdate.setCamera(cameraPosition))
   }
 
-  func moveCameraToLatLng(point: CLLocationCoordinate2D) {
+  public func moveCameraToLatLng(point: CLLocationCoordinate2D) {
     _mapView.moveCamera(GMSCameraUpdate.setTarget(point))
   }
 
-  func moveCameraToLatLngBounds(bounds: GMSCoordinateBounds, padding: Double) {
+  public func moveCameraToLatLngBounds(bounds: GMSCoordinateBounds, padding: Double) {
     _mapView.moveCamera(GMSCameraUpdate.fit(bounds, withPadding: padding))
   }
 
-  func moveCameraToLatLngZoom(point: CLLocationCoordinate2D, zoom: Double) {
+  public func moveCameraToLatLngZoom(point: CLLocationCoordinate2D, zoom: Double) {
     _mapView.moveCamera(GMSCameraUpdate.setTarget(point, zoom: Float(zoom)))
   }
 
-  func moveCameraByScroll(dx: Double, dy: Double) {
+  public func moveCameraByScroll(dx: Double, dy: Double) {
     _mapView.moveCamera(GMSCameraUpdate.scrollBy(x: CGFloat(dx), y: CGFloat(dy)))
   }
 
-  func moveCameraByZoom(zoomBy: Double, focus: CGPoint?) {
+  public func moveCameraByZoom(zoomBy: Double, focus: CGPoint?) {
     if focus != nil {
       _mapView.moveCamera(GMSCameraUpdate.zoom(by: Float(zoomBy), at: focus!))
     } else {
@@ -406,7 +406,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     }
   }
 
-  func moveCameraToZoom(zoom: Double) {
+  public func moveCameraToZoom(zoom: Double) {
     _mapView.moveCamera(GMSCameraUpdate.zoom(to: Float(zoom)))
   }
 
@@ -536,19 +536,19 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     }
   }
 
-  func getMinZoomPreference() -> Float {
+  public func getMinZoomPreference() -> Float {
     _mapView.minZoom
   }
 
-  func getMaxZoomPreference() -> Float {
+  public func getMaxZoomPreference() -> Float {
     _mapView.maxZoom
   }
 
-  func resetMinMaxZoomPreference() {
+  public func resetMinMaxZoomPreference() {
     _mapView.setMinZoom(kGMSMinZoomLevel, maxZoom: kGMSMaxZoomLevel)
   }
 
-  func setMinZoomPreference(minZoomPreference: Float) throws {
+  public func setMinZoomPreference(minZoomPreference: Float) throws {
     if minZoomPreference > _mapView.maxZoom {
       throw GoogleMapsNavigationViewError.minZoomGreaterThanMaxZoom
     }
@@ -556,7 +556,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     _mapView.setMinZoom(minZoomPreference, maxZoom: _mapView.maxZoom)
   }
 
-  func setMaxZoomPreference(maxZoomPreference: Float) throws {
+  public func setMaxZoomPreference(maxZoomPreference: Float) throws {
     if maxZoomPreference < _mapView.minZoom {
       throw GoogleMapsNavigationViewError.maxZoomLessThanMinZoom
     }
