@@ -1770,7 +1770,7 @@ protocol NavigationViewCreationApi {
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-enum NavigationViewCreationApiSetup {
+class NavigationViewCreationApiSetup {
   /// The codec used by NavigationViewCreationApi.
   static var codec: FlutterStandardMessageCodec { NavigationViewCreationApiCodec.shared }
   /// Sets up an instance of `NavigationViewCreationApi` to handle messages through the
@@ -2028,7 +2028,7 @@ protocol MapViewApi {
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-enum MapViewApiSetup {
+class MapViewApiSetup {
   /// The codec used by MapViewApi.
   static var codec: FlutterStandardMessageCodec { MapViewApiCodec.shared }
   /// Sets up an instance of `MapViewApi` to handle messages through the `binaryMessenger`.
@@ -3937,7 +3937,7 @@ protocol ImageRegistryApi {
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-enum ImageRegistryApiSetup {
+class ImageRegistryApiSetup {
   /// The codec used by ImageRegistryApi.
   static var codec: FlutterStandardMessageCodec { ImageRegistryApiCodec.shared }
   /// Sets up an instance of `ImageRegistryApi` to handle messages through the `binaryMessenger`.
@@ -4588,7 +4588,7 @@ protocol NavigationSessionApi {
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-enum NavigationSessionApiSetup {
+class NavigationSessionApiSetup {
   /// The codec used by NavigationSessionApi.
   static var codec: FlutterStandardMessageCodec { NavigationSessionApiCodec.shared }
   /// Sets up an instance of `NavigationSessionApi` to handle messages through the
@@ -5820,7 +5820,7 @@ protocol AutoMapViewApi {
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-enum AutoMapViewApiSetup {
+class AutoMapViewApiSetup {
   /// The codec used by AutoMapViewApi.
   static var codec: FlutterStandardMessageCodec { AutoMapViewApiCodec.shared }
   /// Sets up an instance of `AutoMapViewApi` to handle messages through the `binaryMessenger`.
@@ -7507,7 +7507,7 @@ protocol NavigationInspector {
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-enum NavigationInspectorSetup {
+class NavigationInspectorSetup {
   /// The codec used by NavigationInspector.
   /// Sets up an instance of `NavigationInspector` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: NavigationInspector?) {
