@@ -177,6 +177,7 @@ scripts:
         --ignore "build/**" \
         --ignore "**/GeneratedPluginRegistrant.*" \
         --ignore "**/flutter_export_environment.sh" \
+        --ignore "**/FlutterGeneratedPluginSwiftPackage/**" \
         .
     description: Add a license header to all necessary files.
 
@@ -193,5 +194,6 @@ scripts:
         --ignore "build/**" \
         --ignore "**/GeneratedPluginRegistrant.*" \
         --ignore "**/flutter_export_environment.sh" \
+        --ignore "**/FlutterGeneratedPluginSwiftPackage/**" \
         .
     description: Add a license header to all necessary files.

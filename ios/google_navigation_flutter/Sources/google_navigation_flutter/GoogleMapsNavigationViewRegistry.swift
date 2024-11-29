@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import Dispatch
+import Foundation
+
 class GoogleMapsNavigationViewRegistry {
   private var views: [Int64: GoogleMapsNavigationView] = [:]
   private var carPlayView: GoogleMapsNavigationView? {

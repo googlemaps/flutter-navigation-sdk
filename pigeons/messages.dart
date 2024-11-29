@@ -17,7 +17,8 @@ import 'package:pigeon/pigeon.dart';
 @ConfigurePigeon(
   PigeonOptions(
     input: 's/messages.dart',
-    swiftOut: 'ios/Classes/messages.g.swift',
+    swiftOut:
+        'ios/google_navigation_flutter/Sources/google_navigation_flutter/messages.g.swift',
     kotlinOut:
         'android/src/main/kotlin/com/google/maps/flutter/navigation/messages.g.kt',
     kotlinOptions: KotlinOptions(package: 'com.google.maps.flutter.navigation'),
