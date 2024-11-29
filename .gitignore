@@ -45,6 +45,7 @@ Pods/
 **/Flutter/flutter_assets/
 ServiceDefinitions.json
 xcuserdata/
+.swiftpm/
 .last_build_id
 
 # Android
