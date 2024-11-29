@@ -89,13 +89,13 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     _mapConfiguration.apply(to: _mapView)
 
     super.init()
+    registerView()
+
+    _mapView.delegate = self
+    _mapView.viewSettledDelegate = self
 
     _navigationUIEnabledPreference = navigationUIEnabledPreference
     applyNavigationUIEnabledPreference()
-
-    registerView()
-    _mapView.delegate = self
-    _mapView.viewSettledDelegate = self
   }
 
   deinit {
