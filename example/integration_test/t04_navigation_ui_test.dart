@@ -63,12 +63,22 @@ void main() {
         await viewControllerCompleter.future;
 
     expect(await viewController.isNavigationUIEnabled(), false);
+    waitForValueMatchingPredicate<bool>(
+      $,
+      () async => navigationUIisEnabled,
+      (bool value) => value == false,
+    );
     expect(navigationUIisEnabled, false);
 
     /// Initialize navigation.
     await GoogleMapsNavigator.initializeNavigationSession();
 
     expect(await viewController.isNavigationUIEnabled(), true);
+    waitForValueMatchingPredicate<bool>(
+      $,
+      () async => navigationUIisEnabled,
+      (bool value) => value == true,
+    );
     expect(navigationUIisEnabled, true);
 
     await $.pumpAndSettle();
@@ -114,6 +124,11 @@ void main() {
       expect(isEnabled, result);
 
       /// Test that NavigationUIEnabledChanged event works.
+      waitForValueMatchingPredicate<bool>(
+        $,
+        () async => navigationUIisEnabled,
+        (bool value) => value == result,
+      );
       expect(navigationUIisEnabled, result);
     }
 

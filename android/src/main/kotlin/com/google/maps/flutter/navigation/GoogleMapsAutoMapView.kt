@@ -37,10 +37,9 @@ internal constructor(
     setMap(map)
     initListeners()
     imageRegistry.mapViewInitializationComplete()
+    viewRegistry.registerAndroidAutoView(this)
     mapReady()
     invalidateViewAfterMapLoad()
-
-    viewRegistry.registerAndroidAutoView(this)
   }
 
   // Handled by AndroidAutoBaseScreen.
