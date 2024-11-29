@@ -12,14 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'src/google_maps_image_registry.dart';
-export 'src/google_navigation_flutter.dart';
-export 'src/google_navigation_flutter_android.dart';
-export 'src/google_navigation_flutter_ios.dart';
-export 'src/navigator/google_navigation_flutter_navigator.dart';
-export 'src/types/types.dart';
-export 'src/google_maps_navigation_view.dart';
-export 'src/google_maps_map_view.dart';
-export 'src/google_maps_map_view_controller.dart';
-export 'src/google_maps_navigation_view_controller.dart';
-export 'src/google_maps_auto_view_controller.dart';
+#if CARPLAY
+  UIApplicationMain(
+    CommandLine.argc,
+    CommandLine.unsafeArgv,
+    nil,
+    NSStringFromClass(AppDelegateCarPlay.self)
+  )
+#else
+  UIApplicationMain(
+    CommandLine.argc,
+    CommandLine.unsafeArgv,
+    nil,
+    NSStringFromClass(AppDelegate.self)
+  )
+#endif

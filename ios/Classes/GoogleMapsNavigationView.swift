@@ -28,11 +28,11 @@ enum GoogleMapsNavigationViewError: Error {
   case maxZoomLessThanMinZoom
 }
 
-class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelegate {
+public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelegate {
   private var _mapView: ViewStateAwareGMSMapView!
   private var _viewRegistry: GoogleMapsNavigationViewRegistry
-  private var _viewEventApi: ViewEventApi
-  private var _viewId: Int64
+  private var _viewEventApi: ViewEventApi?
+  private var _viewId: Int64?
   private var _isNavigationView: Bool
   private var _myLocationButton: Bool = true
   private var _markerControllers: [MarkerController] = []
@@ -48,24 +48,40 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   private var _consumeMyLocationButtonClickEventsEnabled: Bool = false
   private var _listenCameraChanges = false
   var isAttachedToSession: Bool = false
+  private let _isCarPlayView: Bool
 
-  func view() -> UIView {
+  public func view() -> UIView {
     _mapView
   }
 
+  // Getter that wont return viewEventApi if viewId is missing.
+  private func getViewEventApi() -> ViewEventApi? {
+    if _viewId != nil {
+      return _viewEventApi
+    }
+    return nil
+  }
+
   init(frame: CGRect,
-       viewIdentifier viewId: Int64,
+       viewIdentifier viewId: Int64?,
        isNavigationView: Bool,
        viewRegistry registry: GoogleMapsNavigationViewRegistry,
-       viewEventApi: ViewEventApi,
+       viewEventApi: ViewEventApi?,
        navigationUIEnabledPreference: NavigationUIEnabledPreference,
-       mapConfiguration: MapConfiguration, imageRegistry: ImageRegistry) {
+       mapConfiguration: MapConfiguration,
+       imageRegistry: ImageRegistry,
+       isCarPlayView: Bool) {
+    if !isCarPlayView, viewId == nil || viewEventApi == nil {
+      fatalError("For non-carplay map view viewId and viewEventApi is required")
+    }
+
     _viewId = viewId
     _isNavigationView = isNavigationView
     _viewRegistry = registry
     _viewEventApi = viewEventApi
     _mapConfiguration = mapConfiguration
     _imageRegistry = imageRegistry
+    _isCarPlayView = isCarPlayView
 
     let mapViewOptions = GMSMapViewOptions()
     _mapConfiguration.apply(to: mapViewOptions, withFrame: frame)
@@ -77,14 +93,34 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     _navigationUIEnabledPreference = navigationUIEnabledPreference
     applyNavigationUIEnabledPreference()
 
-    registry.registerView(viewId: viewId, view: self)
+    registerView()
     _mapView.delegate = self
     _mapView.viewSettledDelegate = self
   }
 
   deinit {
-    _viewRegistry.unregisterView(viewId: _viewId)
+    unregisterView()
     _mapView.delegate = nil
+  }
+
+  func registerView() {
+    if _isCarPlayView {
+      _viewRegistry.registerCarPlayView(view: self)
+    } else {
+      if let _viewId {
+        _viewRegistry.registerView(viewId: _viewId, view: self)
+      }
+    }
+  }
+
+  func unregisterView() {
+    if _isCarPlayView {
+      _viewRegistry.unregisterCarPlayView()
+    } else {
+      if let _viewId {
+        _viewRegistry.unregisterView(viewId: _viewId)
+      }
+    }
   }
 
   func isNavigationView() -> Bool {
@@ -186,11 +222,11 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     try updateMyLocationButton()
   }
 
-  func getMapType() -> GMSMapViewType {
+  public func getMapType() -> GMSMapViewType {
     _mapView.mapType
   }
 
-  func setMapType(mapType: GMSMapViewType) throws {
+  public func setMapType(mapType: GMSMapViewType) throws {
     _mapView.mapType = mapType
   }
 
@@ -294,7 +330,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     _mapView.cameraMode = .overview
   }
 
-  func getMyLocation() -> CLLocationCoordinate2D? {
+  public func getMyLocation() -> CLLocationCoordinate2D? {
     if let location = _mapView.myLocation {
       return location.coordinate
     } else {
@@ -302,35 +338,35 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     }
   }
 
-  func getCameraPosition() -> GMSCameraPosition {
+  public func getCameraPosition() -> GMSCameraPosition {
     _mapView.camera
   }
 
-  func getVisibleRegion() -> GMSCoordinateBounds {
+  public func getVisibleRegion() -> GMSCoordinateBounds {
     GMSCoordinateBounds(region: _mapView.projection.visibleRegion())
   }
 
-  func animateCameraToCameraPosition(cameraPosition: GMSCameraPosition) {
+  public func animateCameraToCameraPosition(cameraPosition: GMSCameraPosition) {
     _mapView.animate(with: GMSCameraUpdate.setCamera(cameraPosition))
   }
 
-  func animateCameraToLatLng(point: CLLocationCoordinate2D) {
+  public func animateCameraToLatLng(point: CLLocationCoordinate2D) {
     _mapView.animate(with: GMSCameraUpdate.setTarget(point))
   }
 
-  func animateCameraToLatLngBounds(bounds: GMSCoordinateBounds, padding: Double) {
+  public func animateCameraToLatLngBounds(bounds: GMSCoordinateBounds, padding: Double) {
     _mapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: padding))
   }
 
-  func animateCameraToLatLngZoom(point: CLLocationCoordinate2D, zoom: Double) {
+  public func animateCameraToLatLngZoom(point: CLLocationCoordinate2D, zoom: Double) {
     _mapView.animate(with: GMSCameraUpdate.setTarget(point, zoom: Float(zoom)))
   }
 
-  func animateCameraByScroll(dx: Double, dy: Double) {
+  public func animateCameraByScroll(dx: Double, dy: Double) {
     _mapView.animate(with: GMSCameraUpdate.scrollBy(x: CGFloat(dx), y: CGFloat(dy)))
   }
 
-  func animateCameraByZoom(zoomBy: Double, focus: CGPoint?) {
+  public func animateCameraByZoom(zoomBy: Double, focus: CGPoint?) {
     if focus != nil {
       _mapView.animate(with: GMSCameraUpdate.zoom(by: Float(zoomBy), at: focus!))
     } else {
@@ -338,31 +374,31 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     }
   }
 
-  func animateCameraToZoom(zoom: Double) {
+  public func animateCameraToZoom(zoom: Double) {
     _mapView.animate(with: GMSCameraUpdate.zoom(to: Float(zoom)))
   }
 
-  func moveCameraToCameraPosition(cameraPosition: GMSCameraPosition) {
+  public func moveCameraToCameraPosition(cameraPosition: GMSCameraPosition) {
     _mapView.moveCamera(GMSCameraUpdate.setCamera(cameraPosition))
   }
 
-  func moveCameraToLatLng(point: CLLocationCoordinate2D) {
+  public func moveCameraToLatLng(point: CLLocationCoordinate2D) {
     _mapView.moveCamera(GMSCameraUpdate.setTarget(point))
   }
 
-  func moveCameraToLatLngBounds(bounds: GMSCoordinateBounds, padding: Double) {
+  public func moveCameraToLatLngBounds(bounds: GMSCoordinateBounds, padding: Double) {
     _mapView.moveCamera(GMSCameraUpdate.fit(bounds, withPadding: padding))
   }
 
-  func moveCameraToLatLngZoom(point: CLLocationCoordinate2D, zoom: Double) {
+  public func moveCameraToLatLngZoom(point: CLLocationCoordinate2D, zoom: Double) {
     _mapView.moveCamera(GMSCameraUpdate.setTarget(point, zoom: Float(zoom)))
   }
 
-  func moveCameraByScroll(dx: Double, dy: Double) {
+  public func moveCameraByScroll(dx: Double, dy: Double) {
     _mapView.moveCamera(GMSCameraUpdate.scrollBy(x: CGFloat(dx), y: CGFloat(dy)))
   }
 
-  func moveCameraByZoom(zoomBy: Double, focus: CGPoint?) {
+  public func moveCameraByZoom(zoomBy: Double, focus: CGPoint?) {
     if focus != nil {
       _mapView.moveCamera(GMSCameraUpdate.zoom(by: Float(zoomBy), at: focus!))
     } else {
@@ -370,11 +406,11 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     }
   }
 
-  func moveCameraToZoom(zoom: Double) {
+  public func moveCameraToZoom(zoom: Double) {
     _mapView.moveCamera(GMSCameraUpdate.zoom(to: Float(zoom)))
   }
 
-  func followMyLocation(perspective: GMSNavigationCameraPerspective, zoomLevel: Double?) {
+  public func followMyLocation(perspective: GMSNavigationCameraPerspective, zoomLevel: Double?) {
     _mapView.followingPerspective = perspective
     _mapView.cameraMode = .following
     if zoomLevel != nil {
@@ -398,9 +434,9 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
 
     if navigationWasEnabled != _mapView.isNavigationEnabled {
       // Navigation UI got enabled, send enabled change event.
-      _viewEventApi
+      getViewEventApi()?
         .onNavigationUIEnabledChanged(
-          viewId: _viewId,
+          viewId: _viewId!,
           navigationUIEnabled: _mapView.isNavigationEnabled
         ) { _ in }
     }
@@ -485,8 +521,8 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
   func setNavigationUIEnabled(_ enabled: Bool) {
     if _mapView.isNavigationEnabled != enabled {
       _mapView.isNavigationEnabled = enabled
-      _viewEventApi
-        .onNavigationUIEnabledChanged(viewId: _viewId, navigationUIEnabled: enabled) { _ in }
+      getViewEventApi()?
+        .onNavigationUIEnabledChanged(viewId: _viewId!, navigationUIEnabled: enabled) { _ in }
 
       if !enabled {
         let camera = _mapView.camera
@@ -500,19 +536,19 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     }
   }
 
-  func getMinZoomPreference() -> Float {
+  public func getMinZoomPreference() -> Float {
     _mapView.minZoom
   }
 
-  func getMaxZoomPreference() -> Float {
+  public func getMaxZoomPreference() -> Float {
     _mapView.maxZoom
   }
 
-  func resetMinMaxZoomPreference() {
+  public func resetMinMaxZoomPreference() {
     _mapView.setMinZoom(kGMSMinZoomLevel, maxZoom: kGMSMaxZoomLevel)
   }
 
-  func setMinZoomPreference(minZoomPreference: Float) throws {
+  public func setMinZoomPreference(minZoomPreference: Float) throws {
     if minZoomPreference > _mapView.maxZoom {
       throw GoogleMapsNavigationViewError.minZoomGreaterThanMaxZoom
     }
@@ -520,7 +556,7 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     _mapView.setMinZoom(minZoomPreference, maxZoom: _mapView.maxZoom)
   }
 
-  func setMaxZoomPreference(maxZoomPreference: Float) throws {
+  public func setMaxZoomPreference(maxZoomPreference: Float) throws {
     if maxZoomPreference < _mapView.minZoom {
       throw GoogleMapsNavigationViewError.maxZoomLessThanMinZoom
     }
@@ -745,8 +781,8 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
     do {
       let markerController = try findMarkerController(gmsMarker: marker)
 
-      _viewEventApi.onMarkerEvent(
-        viewId: _viewId,
+      getViewEventApi()?.onMarkerEvent(
+        viewId: _viewId!,
         markerId: markerController.markerId,
         eventType: eventType,
         completion: { _ in }
@@ -760,8 +796,8 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
                                    eventType: MarkerDragEventTypeDto) {
     do {
       let markerController = try findMarkerController(gmsMarker: marker)
-      _viewEventApi.onMarkerDragEvent(
-        viewId: _viewId,
+      getViewEventApi()?.onMarkerDragEvent(
+        viewId: _viewId!,
         markerId: markerController.markerId,
         eventType: eventType,
         position: .init(
@@ -792,15 +828,15 @@ class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettledDelega
 }
 
 extension GoogleMapsNavigationView: GMSMapViewNavigationUIDelegate {
-  func mapViewDidTapRecenterButton(_ mapView: GMSMapView) {
-    _viewEventApi.onRecenterButtonClicked(viewId: _viewId) { _ in }
+  public func mapViewDidTapRecenterButton(_ mapView: GMSMapView) {
+    getViewEventApi()?.onRecenterButtonClicked(viewId: _viewId!) { _ in }
   }
 }
 
 extension GoogleMapsNavigationView: GMSMapViewDelegate {
-  func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-    _viewEventApi.onMapClickEvent(
-      viewId: _viewId,
+  public func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
+    getViewEventApi()?.onMapClickEvent(
+      viewId: _viewId!,
       latLng: .init(
         latitude: coordinate.latitude,
         longitude: coordinate.longitude
@@ -809,9 +845,9 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
     )
   }
 
-  func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
-    _viewEventApi.onMapLongClickEvent(
-      viewId: _viewId,
+  public func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
+    getViewEventApi()?.onMapLongClickEvent(
+      viewId: _viewId!,
       latLng: .init(
         latitude: coordinate.latitude,
         longitude: coordinate.longitude
@@ -820,7 +856,7 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
     )
   }
 
-  func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+  public func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
     do {
       let markerController = try findMarkerController(gmsMarker: marker)
       sendMarkerEvent(marker: markerController.gmsMarker, eventType: .clicked)
@@ -835,66 +871,66 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
     }
   }
 
-  func mapView(_ mapView: GMSMapView, didBeginDragging marker: GMSMarker) {
+  public func mapView(_ mapView: GMSMapView, didBeginDragging marker: GMSMarker) {
     sendMarkerDragEvent(marker: marker, eventType: .dragStart)
   }
 
-  func mapView(_ mapView: GMSMapView, didEndDragging marker: GMSMarker) {
+  public func mapView(_ mapView: GMSMapView, didEndDragging marker: GMSMarker) {
     sendMarkerDragEvent(marker: marker, eventType: .dragEnd)
   }
 
-  func mapView(_ mapView: GMSMapView, didDrag marker: GMSMarker) {
+  public func mapView(_ mapView: GMSMapView, didDrag marker: GMSMarker) {
     sendMarkerDragEvent(marker: marker, eventType: .drag)
   }
 
-  func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
+  public func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
     sendMarkerEvent(marker: marker, eventType: .infoWindowClicked)
   }
 
-  func mapView(_ mapView: GMSMapView, didCloseInfoWindowOf marker: GMSMarker) {
+  public func mapView(_ mapView: GMSMapView, didCloseInfoWindowOf marker: GMSMarker) {
     sendMarkerEvent(marker: marker, eventType: .infoWindowClosed)
   }
 
-  func mapView(_ mapView: GMSMapView, didLongPressInfoWindowOf marker: GMSMarker) {
+  public func mapView(_ mapView: GMSMapView, didLongPressInfoWindowOf marker: GMSMarker) {
     sendMarkerEvent(marker: marker, eventType: .infoWindowLongClicked)
   }
 
-  func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
+  public func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
     if let polygon = overlay as? GMSPolygon {
-      _viewEventApi.onPolygonClicked(
-        viewId: _viewId,
+      getViewEventApi()?.onPolygonClicked(
+        viewId: _viewId!,
         polygonId: polygon.getPolygonId(),
         completion: { _ in }
       )
     } else if let polyline = overlay as? GMSPolyline {
-      _viewEventApi.onPolylineClicked(
-        viewId: _viewId,
+      getViewEventApi()?.onPolylineClicked(
+        viewId: _viewId!,
         polylineId: polyline.getPolylineId(),
         completion: { _ in }
       )
     } else if let circle = overlay as? GMSCircle {
-      _viewEventApi.onCircleClicked(
-        viewId: _viewId,
+      getViewEventApi()?.onCircleClicked(
+        viewId: _viewId!,
         circleId: circle.getCircleId(),
         completion: { _ in }
       )
     }
   }
 
-  func mapView(_ mapView: GMSMapView, didTapMyLocation location: CLLocationCoordinate2D) {
-    _viewEventApi.onMyLocationClicked(viewId: _viewId, completion: { _ in })
+  public func mapView(_ mapView: GMSMapView, didTapMyLocation location: CLLocationCoordinate2D) {
+    getViewEventApi()?.onMyLocationClicked(viewId: _viewId!, completion: { _ in })
   }
 
-  func didTapMyLocationButton(for mapView: GMSMapView) -> Bool {
-    _viewEventApi.onMyLocationButtonClicked(viewId: _viewId, completion: { _ in })
+  public func didTapMyLocationButton(for mapView: GMSMapView) -> Bool {
+    getViewEventApi()?.onMyLocationButtonClicked(viewId: _viewId!, completion: { _ in })
     return _consumeMyLocationButtonClickEventsEnabled
   }
 
-  func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
+  public func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
     if _listenCameraChanges {
       let position = Convert.convertCameraPosition(position: mapView.camera)
-      _viewEventApi.onCameraChanged(
-        viewId: _viewId,
+      getViewEventApi()?.onCameraChanged(
+        viewId: _viewId!,
         eventType: gesture ? .moveStartedByGesture : .moveStartedByApi,
         position: position,
         completion: { _ in }
@@ -902,10 +938,10 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
     }
   }
 
-  func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
+  public func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
     if _listenCameraChanges {
-      _viewEventApi.onCameraChanged(
-        viewId: _viewId,
+      getViewEventApi()?.onCameraChanged(
+        viewId: _viewId!,
         eventType: .onCameraIdle,
         position: Convert.convertCameraPosition(position: position),
         completion: { _ in }
@@ -913,10 +949,10 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
     }
   }
 
-  func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
+  public func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
     if _listenCameraChanges {
-      _viewEventApi.onCameraChanged(
-        viewId: _viewId,
+      getViewEventApi()?.onCameraChanged(
+        viewId: _viewId!,
         eventType: .onCameraMove,
         position: Convert.convertCameraPosition(position: position),
         completion: { _ in }

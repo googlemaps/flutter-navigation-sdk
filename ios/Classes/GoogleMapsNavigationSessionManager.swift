@@ -139,6 +139,9 @@ class GoogleMapsNavigationSessionManager: NSObject {
     try _viewRegistry?.getAllRegisteredNavigationViewIds().forEach { id in
       try attachNavigationSessionToMapView(mapId: id)
     }
+    if let carPlayMapView = _viewRegistry?.getCarPlayView() {
+      attachNavigationSessionToMapView(mapView: carPlayMapView)
+    }
   }
 
   func isInitialized() -> Bool {

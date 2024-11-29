@@ -6090,6 +6090,2361 @@ class NavigationSessionEventApi(private val binaryMessenger: BinaryMessenger) {
   }
 }
 
+@Suppress("UNCHECKED_CAST")
+private object AutoMapViewApiCodec : StandardMessageCodec() {
+  override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
+    return when (type) {
+      128.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { CameraPositionDto.fromList(it) }
+      }
+      129.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { CircleDto.fromList(it) }
+      }
+      130.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { CircleOptionsDto.fromList(it) }
+      }
+      131.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { ImageDescriptorDto.fromList(it) }
+      }
+      132.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { InfoWindowDto.fromList(it) }
+      }
+      133.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { LatLngBoundsDto.fromList(it) }
+      }
+      134.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { LatLngDto.fromList(it) }
+      }
+      135.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { LatLngDto.fromList(it) }
+      }
+      136.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerAnchorDto.fromList(it) }
+      }
+      137.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerDto.fromList(it) }
+      }
+      138.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerOptionsDto.fromList(it) }
+      }
+      139.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { PatternItemDto.fromList(it) }
+      }
+      140.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonDto.fromList(it) }
+      }
+      141.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonHoleDto.fromList(it) }
+      }
+      142.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonOptionsDto.fromList(it) }
+      }
+      143.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { PolylineDto.fromList(it) }
+      }
+      144.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { PolylineOptionsDto.fromList(it) }
+      }
+      145.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { StyleSpanDto.fromList(it) }
+      }
+      146.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { StyleSpanStrokeStyleDto.fromList(it) }
+      }
+      else -> super.readValueOfType(type, buffer)
+    }
+  }
+
+  override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
+    when (value) {
+      is CameraPositionDto -> {
+        stream.write(128)
+        writeValue(stream, value.toList())
+      }
+      is CircleDto -> {
+        stream.write(129)
+        writeValue(stream, value.toList())
+      }
+      is CircleOptionsDto -> {
+        stream.write(130)
+        writeValue(stream, value.toList())
+      }
+      is ImageDescriptorDto -> {
+        stream.write(131)
+        writeValue(stream, value.toList())
+      }
+      is InfoWindowDto -> {
+        stream.write(132)
+        writeValue(stream, value.toList())
+      }
+      is LatLngBoundsDto -> {
+        stream.write(133)
+        writeValue(stream, value.toList())
+      }
+      is LatLngDto -> {
+        stream.write(134)
+        writeValue(stream, value.toList())
+      }
+      is LatLngDto -> {
+        stream.write(135)
+        writeValue(stream, value.toList())
+      }
+      is MarkerAnchorDto -> {
+        stream.write(136)
+        writeValue(stream, value.toList())
+      }
+      is MarkerDto -> {
+        stream.write(137)
+        writeValue(stream, value.toList())
+      }
+      is MarkerOptionsDto -> {
+        stream.write(138)
+        writeValue(stream, value.toList())
+      }
+      is PatternItemDto -> {
+        stream.write(139)
+        writeValue(stream, value.toList())
+      }
+      is PolygonDto -> {
+        stream.write(140)
+        writeValue(stream, value.toList())
+      }
+      is PolygonHoleDto -> {
+        stream.write(141)
+        writeValue(stream, value.toList())
+      }
+      is PolygonOptionsDto -> {
+        stream.write(142)
+        writeValue(stream, value.toList())
+      }
+      is PolylineDto -> {
+        stream.write(143)
+        writeValue(stream, value.toList())
+      }
+      is PolylineOptionsDto -> {
+        stream.write(144)
+        writeValue(stream, value.toList())
+      }
+      is StyleSpanDto -> {
+        stream.write(145)
+        writeValue(stream, value.toList())
+      }
+      is StyleSpanStrokeStyleDto -> {
+        stream.write(146)
+        writeValue(stream, value.toList())
+      }
+      else -> super.writeValue(stream, value)
+    }
+  }
+}
+
+/** Generated interface from Pigeon that represents a handler of messages from Flutter. */
+interface AutoMapViewApi {
+  fun isMyLocationEnabled(): Boolean
+
+  fun setMyLocationEnabled(enabled: Boolean)
+
+  fun getMyLocation(): LatLngDto?
+
+  fun getMapType(): MapTypeDto
+
+  fun setMapType(mapType: MapTypeDto)
+
+  fun setMapStyle(styleJson: String)
+
+  fun getCameraPosition(): CameraPositionDto
+
+  fun getVisibleRegion(): LatLngBoundsDto
+
+  fun followMyLocation(perspective: CameraPerspectiveDto, zoomLevel: Double?)
+
+  fun animateCameraToCameraPosition(
+    cameraPosition: CameraPositionDto,
+    duration: Long?,
+    callback: (Result<Boolean>) -> Unit,
+  )
+
+  fun animateCameraToLatLng(point: LatLngDto, duration: Long?, callback: (Result<Boolean>) -> Unit)
+
+  fun animateCameraToLatLngBounds(
+    bounds: LatLngBoundsDto,
+    padding: Double,
+    duration: Long?,
+    callback: (Result<Boolean>) -> Unit,
+  )
+
+  fun animateCameraToLatLngZoom(
+    point: LatLngDto,
+    zoom: Double,
+    duration: Long?,
+    callback: (Result<Boolean>) -> Unit,
+  )
+
+  fun animateCameraByScroll(
+    scrollByDx: Double,
+    scrollByDy: Double,
+    duration: Long?,
+    callback: (Result<Boolean>) -> Unit,
+  )
+
+  fun animateCameraByZoom(
+    zoomBy: Double,
+    focusDx: Double?,
+    focusDy: Double?,
+    duration: Long?,
+    callback: (Result<Boolean>) -> Unit,
+  )
+
+  fun animateCameraToZoom(zoom: Double, duration: Long?, callback: (Result<Boolean>) -> Unit)
+
+  fun moveCameraToCameraPosition(cameraPosition: CameraPositionDto)
+
+  fun moveCameraToLatLng(point: LatLngDto)
+
+  fun moveCameraToLatLngBounds(bounds: LatLngBoundsDto, padding: Double)
+
+  fun moveCameraToLatLngZoom(point: LatLngDto, zoom: Double)
+
+  fun moveCameraByScroll(scrollByDx: Double, scrollByDy: Double)
+
+  fun moveCameraByZoom(zoomBy: Double, focusDx: Double?, focusDy: Double?)
+
+  fun moveCameraToZoom(zoom: Double)
+
+  fun getMinZoomPreference(): Double
+
+  fun getMaxZoomPreference(): Double
+
+  fun resetMinMaxZoomPreference()
+
+  fun setMinZoomPreference(minZoomPreference: Double)
+
+  fun setMaxZoomPreference(maxZoomPreference: Double)
+
+  fun setMyLocationButtonEnabled(enabled: Boolean)
+
+  fun setConsumeMyLocationButtonClickEventsEnabled(enabled: Boolean)
+
+  fun setZoomGesturesEnabled(enabled: Boolean)
+
+  fun setZoomControlsEnabled(enabled: Boolean)
+
+  fun setCompassEnabled(enabled: Boolean)
+
+  fun setRotateGesturesEnabled(enabled: Boolean)
+
+  fun setScrollGesturesEnabled(enabled: Boolean)
+
+  fun setScrollGesturesDuringRotateOrZoomEnabled(enabled: Boolean)
+
+  fun setTiltGesturesEnabled(enabled: Boolean)
+
+  fun setMapToolbarEnabled(enabled: Boolean)
+
+  fun setTrafficEnabled(enabled: Boolean)
+
+  fun isMyLocationButtonEnabled(): Boolean
+
+  fun isConsumeMyLocationButtonClickEventsEnabled(): Boolean
+
+  fun isZoomGesturesEnabled(): Boolean
+
+  fun isZoomControlsEnabled(): Boolean
+
+  fun isCompassEnabled(): Boolean
+
+  fun isRotateGesturesEnabled(): Boolean
+
+  fun isScrollGesturesEnabled(): Boolean
+
+  fun isScrollGesturesEnabledDuringRotateOrZoom(): Boolean
+
+  fun isTiltGesturesEnabled(): Boolean
+
+  fun isMapToolbarEnabled(): Boolean
+
+  fun isTrafficEnabled(): Boolean
+
+  fun getMarkers(): List<MarkerDto>
+
+  fun addMarkers(markers: List<MarkerDto>): List<MarkerDto>
+
+  fun updateMarkers(markers: List<MarkerDto>): List<MarkerDto>
+
+  fun removeMarkers(markers: List<MarkerDto>)
+
+  fun clearMarkers()
+
+  fun clear()
+
+  fun getPolygons(): List<PolygonDto>
+
+  fun addPolygons(polygons: List<PolygonDto>): List<PolygonDto>
+
+  fun updatePolygons(polygons: List<PolygonDto>): List<PolygonDto>
+
+  fun removePolygons(polygons: List<PolygonDto>)
+
+  fun clearPolygons()
+
+  fun getPolylines(): List<PolylineDto>
+
+  fun addPolylines(polylines: List<PolylineDto>): List<PolylineDto>
+
+  fun updatePolylines(polylines: List<PolylineDto>): List<PolylineDto>
+
+  fun removePolylines(polylines: List<PolylineDto>)
+
+  fun clearPolylines()
+
+  fun getCircles(): List<CircleDto>
+
+  fun addCircles(circles: List<CircleDto>): List<CircleDto>
+
+  fun updateCircles(circles: List<CircleDto>): List<CircleDto>
+
+  fun removeCircles(circles: List<CircleDto>)
+
+  fun clearCircles()
+
+  fun registerOnCameraChangedListener()
+
+  fun isAutoScreenAvailable(): Boolean
+
+  companion object {
+    /** The codec used by AutoMapViewApi. */
+    val codec: MessageCodec<Any?> by lazy { AutoMapViewApiCodec }
+
+    /** Sets up an instance of `AutoMapViewApi` to handle messages through the `binaryMessenger`. */
+    @Suppress("UNCHECKED_CAST")
+    fun setUp(binaryMessenger: BinaryMessenger, api: AutoMapViewApi?) {
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMyLocationEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isMyLocationEnabled())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMyLocationEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setMyLocationEnabled(enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMyLocation",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.getMyLocation())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMapType",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.getMapType().raw)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapType",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val mapTypeArg = MapTypeDto.ofRaw(args[0] as Int)!!
+            var wrapped: List<Any?>
+            try {
+              api.setMapType(mapTypeArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapStyle",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val styleJsonArg = args[0] as String
+            var wrapped: List<Any?>
+            try {
+              api.setMapStyle(styleJsonArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getCameraPosition",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.getCameraPosition())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getVisibleRegion",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.getVisibleRegion())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.followMyLocation",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val perspectiveArg = CameraPerspectiveDto.ofRaw(args[0] as Int)!!
+            val zoomLevelArg = args[1] as Double?
+            var wrapped: List<Any?>
+            try {
+              api.followMyLocation(perspectiveArg, zoomLevelArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToCameraPosition",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val cameraPositionArg = args[0] as CameraPositionDto
+            val durationArg = args[1].let { if (it is Int) it.toLong() else it as Long? }
+            api.animateCameraToCameraPosition(cameraPositionArg, durationArg) {
+              result: Result<Boolean> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLng",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val pointArg = args[0] as LatLngDto
+            val durationArg = args[1].let { if (it is Int) it.toLong() else it as Long? }
+            api.animateCameraToLatLng(pointArg, durationArg) { result: Result<Boolean> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngBounds",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val boundsArg = args[0] as LatLngBoundsDto
+            val paddingArg = args[1] as Double
+            val durationArg = args[2].let { if (it is Int) it.toLong() else it as Long? }
+            api.animateCameraToLatLngBounds(boundsArg, paddingArg, durationArg) {
+              result: Result<Boolean> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngZoom",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val pointArg = args[0] as LatLngDto
+            val zoomArg = args[1] as Double
+            val durationArg = args[2].let { if (it is Int) it.toLong() else it as Long? }
+            api.animateCameraToLatLngZoom(pointArg, zoomArg, durationArg) { result: Result<Boolean>
+              ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByScroll",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val scrollByDxArg = args[0] as Double
+            val scrollByDyArg = args[1] as Double
+            val durationArg = args[2].let { if (it is Int) it.toLong() else it as Long? }
+            api.animateCameraByScroll(scrollByDxArg, scrollByDyArg, durationArg) {
+              result: Result<Boolean> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByZoom",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val zoomByArg = args[0] as Double
+            val focusDxArg = args[1] as Double?
+            val focusDyArg = args[2] as Double?
+            val durationArg = args[3].let { if (it is Int) it.toLong() else it as Long? }
+            api.animateCameraByZoom(zoomByArg, focusDxArg, focusDyArg, durationArg) {
+              result: Result<Boolean> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToZoom",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val zoomArg = args[0] as Double
+            val durationArg = args[1].let { if (it is Int) it.toLong() else it as Long? }
+            api.animateCameraToZoom(zoomArg, durationArg) { result: Result<Boolean> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToCameraPosition",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val cameraPositionArg = args[0] as CameraPositionDto
+            var wrapped: List<Any?>
+            try {
+              api.moveCameraToCameraPosition(cameraPositionArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLng",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val pointArg = args[0] as LatLngDto
+            var wrapped: List<Any?>
+            try {
+              api.moveCameraToLatLng(pointArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngBounds",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val boundsArg = args[0] as LatLngBoundsDto
+            val paddingArg = args[1] as Double
+            var wrapped: List<Any?>
+            try {
+              api.moveCameraToLatLngBounds(boundsArg, paddingArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngZoom",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val pointArg = args[0] as LatLngDto
+            val zoomArg = args[1] as Double
+            var wrapped: List<Any?>
+            try {
+              api.moveCameraToLatLngZoom(pointArg, zoomArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByScroll",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val scrollByDxArg = args[0] as Double
+            val scrollByDyArg = args[1] as Double
+            var wrapped: List<Any?>
+            try {
+              api.moveCameraByScroll(scrollByDxArg, scrollByDyArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByZoom",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val zoomByArg = args[0] as Double
+            val focusDxArg = args[1] as Double?
+            val focusDyArg = args[2] as Double?
+            var wrapped: List<Any?>
+            try {
+              api.moveCameraByZoom(zoomByArg, focusDxArg, focusDyArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToZoom",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val zoomArg = args[0] as Double
+            var wrapped: List<Any?>
+            try {
+              api.moveCameraToZoom(zoomArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMinZoomPreference",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.getMinZoomPreference())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMaxZoomPreference",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.getMaxZoomPreference())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.resetMinMaxZoomPreference",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              api.resetMinMaxZoomPreference()
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMinZoomPreference",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val minZoomPreferenceArg = args[0] as Double
+            var wrapped: List<Any?>
+            try {
+              api.setMinZoomPreference(minZoomPreferenceArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMaxZoomPreference",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val maxZoomPreferenceArg = args[0] as Double
+            var wrapped: List<Any?>
+            try {
+              api.setMaxZoomPreference(maxZoomPreferenceArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMyLocationButtonEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setMyLocationButtonEnabled(enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setConsumeMyLocationButtonClickEventsEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setConsumeMyLocationButtonClickEventsEnabled(enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setZoomGesturesEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setZoomGesturesEnabled(enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setZoomControlsEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setZoomControlsEnabled(enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setCompassEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setCompassEnabled(enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setRotateGesturesEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setRotateGesturesEnabled(enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setScrollGesturesEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setScrollGesturesEnabled(enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setScrollGesturesDuringRotateOrZoomEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setScrollGesturesDuringRotateOrZoomEnabled(enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTiltGesturesEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setTiltGesturesEnabled(enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapToolbarEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setMapToolbarEnabled(enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setTrafficEnabled(enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMyLocationButtonEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isMyLocationButtonEnabled())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isConsumeMyLocationButtonClickEventsEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isConsumeMyLocationButtonClickEventsEnabled())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isZoomGesturesEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isZoomGesturesEnabled())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isZoomControlsEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isZoomControlsEnabled())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isCompassEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isCompassEnabled())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isRotateGesturesEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isRotateGesturesEnabled())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isScrollGesturesEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isScrollGesturesEnabled())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isScrollGesturesEnabledDuringRotateOrZoom",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isScrollGesturesEnabledDuringRotateOrZoom())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isTiltGesturesEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isTiltGesturesEnabled())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMapToolbarEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isMapToolbarEnabled())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isTrafficEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isTrafficEnabled())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMarkers",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.getMarkers())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addMarkers",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val markersArg = args[0] as List<MarkerDto>
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.addMarkers(markersArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updateMarkers",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val markersArg = args[0] as List<MarkerDto>
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.updateMarkers(markersArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removeMarkers",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val markersArg = args[0] as List<MarkerDto>
+            var wrapped: List<Any?>
+            try {
+              api.removeMarkers(markersArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearMarkers",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              api.clearMarkers()
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clear",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              api.clear()
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPolygons",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.getPolygons())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addPolygons",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val polygonsArg = args[0] as List<PolygonDto>
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.addPolygons(polygonsArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updatePolygons",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val polygonsArg = args[0] as List<PolygonDto>
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.updatePolygons(polygonsArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removePolygons",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val polygonsArg = args[0] as List<PolygonDto>
+            var wrapped: List<Any?>
+            try {
+              api.removePolygons(polygonsArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearPolygons",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              api.clearPolygons()
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPolylines",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.getPolylines())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addPolylines",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val polylinesArg = args[0] as List<PolylineDto>
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.addPolylines(polylinesArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updatePolylines",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val polylinesArg = args[0] as List<PolylineDto>
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.updatePolylines(polylinesArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removePolylines",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val polylinesArg = args[0] as List<PolylineDto>
+            var wrapped: List<Any?>
+            try {
+              api.removePolylines(polylinesArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearPolylines",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              api.clearPolylines()
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getCircles",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.getCircles())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addCircles",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val circlesArg = args[0] as List<CircleDto>
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.addCircles(circlesArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updateCircles",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val circlesArg = args[0] as List<CircleDto>
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.updateCircles(circlesArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removeCircles",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val circlesArg = args[0] as List<CircleDto>
+            var wrapped: List<Any?>
+            try {
+              api.removeCircles(circlesArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearCircles",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              api.clearCircles()
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.registerOnCameraChangedListener",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              api.registerOnCameraChangedListener()
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isAutoScreenAvailable",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isAutoScreenAvailable())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+    }
+  }
+}
+
+@Suppress("UNCHECKED_CAST")
+private object AutoViewEventApiCodec : StandardMessageCodec() {
+  override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
+    return when (type) {
+      128.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { CameraPositionDto.fromList(it) }
+      }
+      129.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { CircleDto.fromList(it) }
+      }
+      130.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { CircleOptionsDto.fromList(it) }
+      }
+      131.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { DestinationsDto.fromList(it) }
+      }
+      132.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { ImageDescriptorDto.fromList(it) }
+      }
+      133.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { InfoWindowDto.fromList(it) }
+      }
+      134.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { LaneDirectionDto.fromList(it) }
+      }
+      135.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { LaneDto.fromList(it) }
+      }
+      136.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { LatLngBoundsDto.fromList(it) }
+      }
+      137.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { LatLngDto.fromList(it) }
+      }
+      138.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { MapOptionsDto.fromList(it) }
+      }
+      139.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerAnchorDto.fromList(it) }
+      }
+      140.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerDto.fromList(it) }
+      }
+      141.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerOptionsDto.fromList(it) }
+      }
+      142.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { NavInfoDto.fromList(it) }
+      }
+      143.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          NavigationAudioGuidanceSettingsDto.fromList(it)
+        }
+      }
+      144.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { NavigationDisplayOptionsDto.fromList(it) }
+      }
+      145.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { NavigationTimeAndDistanceDto.fromList(it) }
+      }
+      146.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { NavigationViewOptionsDto.fromList(it) }
+      }
+      147.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { NavigationWaypointDto.fromList(it) }
+      }
+      148.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { PatternItemDto.fromList(it) }
+      }
+      149.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonDto.fromList(it) }
+      }
+      150.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonHoleDto.fromList(it) }
+      }
+      151.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonOptionsDto.fromList(it) }
+      }
+      152.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { PolylineDto.fromList(it) }
+      }
+      153.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { PolylineOptionsDto.fromList(it) }
+      }
+      154.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentDto.fromList(it) }
+      }
+      155.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentTrafficDataDto.fromList(it) }
+      }
+      156.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(it)
+        }
+      }
+      157.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { RouteTokenOptionsDto.fromList(it) }
+      }
+      158.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { RoutingOptionsDto.fromList(it) }
+      }
+      159.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { SimulationOptionsDto.fromList(it) }
+      }
+      160.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { SpeedAlertOptionsDto.fromList(it) }
+      }
+      161.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { SpeedingUpdatedEventDto.fromList(it) }
+      }
+      162.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { StepInfoDto.fromList(it) }
+      }
+      163.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { StyleSpanDto.fromList(it) }
+      }
+      164.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { StyleSpanStrokeStyleDto.fromList(it) }
+      }
+      165.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { ViewCreationOptionsDto.fromList(it) }
+      }
+      else -> super.readValueOfType(type, buffer)
+    }
+  }
+
+  override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
+    when (value) {
+      is CameraPositionDto -> {
+        stream.write(128)
+        writeValue(stream, value.toList())
+      }
+      is CircleDto -> {
+        stream.write(129)
+        writeValue(stream, value.toList())
+      }
+      is CircleOptionsDto -> {
+        stream.write(130)
+        writeValue(stream, value.toList())
+      }
+      is DestinationsDto -> {
+        stream.write(131)
+        writeValue(stream, value.toList())
+      }
+      is ImageDescriptorDto -> {
+        stream.write(132)
+        writeValue(stream, value.toList())
+      }
+      is InfoWindowDto -> {
+        stream.write(133)
+        writeValue(stream, value.toList())
+      }
+      is LaneDirectionDto -> {
+        stream.write(134)
+        writeValue(stream, value.toList())
+      }
+      is LaneDto -> {
+        stream.write(135)
+        writeValue(stream, value.toList())
+      }
+      is LatLngBoundsDto -> {
+        stream.write(136)
+        writeValue(stream, value.toList())
+      }
+      is LatLngDto -> {
+        stream.write(137)
+        writeValue(stream, value.toList())
+      }
+      is MapOptionsDto -> {
+        stream.write(138)
+        writeValue(stream, value.toList())
+      }
+      is MarkerAnchorDto -> {
+        stream.write(139)
+        writeValue(stream, value.toList())
+      }
+      is MarkerDto -> {
+        stream.write(140)
+        writeValue(stream, value.toList())
+      }
+      is MarkerOptionsDto -> {
+        stream.write(141)
+        writeValue(stream, value.toList())
+      }
+      is NavInfoDto -> {
+        stream.write(142)
+        writeValue(stream, value.toList())
+      }
+      is NavigationAudioGuidanceSettingsDto -> {
+        stream.write(143)
+        writeValue(stream, value.toList())
+      }
+      is NavigationDisplayOptionsDto -> {
+        stream.write(144)
+        writeValue(stream, value.toList())
+      }
+      is NavigationTimeAndDistanceDto -> {
+        stream.write(145)
+        writeValue(stream, value.toList())
+      }
+      is NavigationViewOptionsDto -> {
+        stream.write(146)
+        writeValue(stream, value.toList())
+      }
+      is NavigationWaypointDto -> {
+        stream.write(147)
+        writeValue(stream, value.toList())
+      }
+      is PatternItemDto -> {
+        stream.write(148)
+        writeValue(stream, value.toList())
+      }
+      is PolygonDto -> {
+        stream.write(149)
+        writeValue(stream, value.toList())
+      }
+      is PolygonHoleDto -> {
+        stream.write(150)
+        writeValue(stream, value.toList())
+      }
+      is PolygonOptionsDto -> {
+        stream.write(151)
+        writeValue(stream, value.toList())
+      }
+      is PolylineDto -> {
+        stream.write(152)
+        writeValue(stream, value.toList())
+      }
+      is PolylineOptionsDto -> {
+        stream.write(153)
+        writeValue(stream, value.toList())
+      }
+      is RouteSegmentDto -> {
+        stream.write(154)
+        writeValue(stream, value.toList())
+      }
+      is RouteSegmentTrafficDataDto -> {
+        stream.write(155)
+        writeValue(stream, value.toList())
+      }
+      is RouteSegmentTrafficDataRoadStretchRenderingDataDto -> {
+        stream.write(156)
+        writeValue(stream, value.toList())
+      }
+      is RouteTokenOptionsDto -> {
+        stream.write(157)
+        writeValue(stream, value.toList())
+      }
+      is RoutingOptionsDto -> {
+        stream.write(158)
+        writeValue(stream, value.toList())
+      }
+      is SimulationOptionsDto -> {
+        stream.write(159)
+        writeValue(stream, value.toList())
+      }
+      is SpeedAlertOptionsDto -> {
+        stream.write(160)
+        writeValue(stream, value.toList())
+      }
+      is SpeedingUpdatedEventDto -> {
+        stream.write(161)
+        writeValue(stream, value.toList())
+      }
+      is StepInfoDto -> {
+        stream.write(162)
+        writeValue(stream, value.toList())
+      }
+      is StyleSpanDto -> {
+        stream.write(163)
+        writeValue(stream, value.toList())
+      }
+      is StyleSpanStrokeStyleDto -> {
+        stream.write(164)
+        writeValue(stream, value.toList())
+      }
+      is ViewCreationOptionsDto -> {
+        stream.write(165)
+        writeValue(stream, value.toList())
+      }
+      else -> super.writeValue(stream, value)
+    }
+  }
+}
+
+/** Generated class from Pigeon that represents Flutter messages that can be called from Kotlin. */
+@Suppress("UNCHECKED_CAST")
+class AutoViewEventApi(private val binaryMessenger: BinaryMessenger) {
+  companion object {
+    /** The codec used by AutoViewEventApi. */
+    val codec: MessageCodec<Any?> by lazy { AutoViewEventApiCodec }
+  }
+
+  fun onCustomNavigationAutoEvent(
+    eventArg: String,
+    dataArg: Any,
+    callback: (Result<Unit>) -> Unit,
+  ) {
+    val channelName =
+      "dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onCustomNavigationAutoEvent"
+    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
+    channel.send(listOf(eventArg, dataArg)) {
+      if (it is List<*>) {
+        if (it.size > 1) {
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+        } else {
+          callback(Result.success(Unit))
+        }
+      } else {
+        callback(Result.failure(createConnectionError(channelName)))
+      }
+    }
+  }
+
+  fun onAutoScreenAvailabilityChanged(isAvailableArg: Boolean, callback: (Result<Unit>) -> Unit) {
+    val channelName =
+      "dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onAutoScreenAvailabilityChanged"
+    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
+    channel.send(listOf(isAvailableArg)) {
+      if (it is List<*>) {
+        if (it.size > 1) {
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+        } else {
+          callback(Result.success(Unit))
+        }
+      } else {
+        callback(Result.failure(createConnectionError(channelName)))
+      }
+    }
+  }
+}
+
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface NavigationInspector {
   fun isViewAttachedToSession(viewId: Long): Boolean

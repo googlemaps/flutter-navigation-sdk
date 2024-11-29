@@ -38,9 +38,9 @@ import com.google.android.gms.maps.model.Polyline
 import com.google.android.libraries.navigation.NavigationView
 
 abstract class GoogleMapsBaseMapView(
-  protected val viewId: Int,
+  protected val viewId: Int?,
   mapOptions: GoogleMapOptions,
-  protected val viewEventApi: ViewEventApi,
+  protected val viewEventApi: ViewEventApi?,
   private val imageRegistry: ImageRegistry,
 ) {
   companion object {
@@ -90,6 +90,15 @@ abstract class GoogleMapsBaseMapView(
     }
   }
 
+  @Throws(FlutterError::class)
+  protected fun getViewId(): Int {
+    if (viewId != null) {
+      return viewId
+    } else {
+      throw FlutterError("viewIdNotFound", "viewId is not available")
+    }
+  }
+
   init {
     _minZoomLevelPreference = mapOptions.minZoomPreference
     _maxZoomLevelPreference = mapOptions.maxZoomPreference
@@ -105,10 +114,13 @@ abstract class GoogleMapsBaseMapView(
 
   protected open fun initListeners() {
     getMap().setOnMapClickListener {
-      viewEventApi.onMapClickEvent(viewId.toLong(), LatLngDto(it.latitude, it.longitude)) {}
+      viewEventApi?.onMapClickEvent(getViewId().toLong(), LatLngDto(it.latitude, it.longitude)) {}
     }
     getMap().setOnMapLongClickListener {
-      viewEventApi.onMapLongClickEvent(viewId.toLong(), LatLngDto(it.latitude, it.longitude)) {}
+      viewEventApi?.onMapLongClickEvent(
+        getViewId().toLong(),
+        LatLngDto(it.latitude, it.longitude),
+      ) {}
     }
     getMap().setOnMarkerClickListener { marker ->
       val markerId = findMarkerId(marker)
@@ -156,23 +168,25 @@ abstract class GoogleMapsBaseMapView(
 
     getMap().setOnPolygonClickListener { polygon ->
       val polygonId = findPolygonId(polygon)
-      viewEventApi.onPolygonClicked(viewId.toLong(), polygonId) {}
+      viewEventApi?.onPolygonClicked(getViewId().toLong(), polygonId) {}
     }
 
     getMap().setOnPolylineClickListener { polyline ->
       val polylineId = findPolylineId(polyline)
-      viewEventApi.onPolylineClicked(viewId.toLong(), polylineId) {}
+      viewEventApi?.onPolylineClicked(getViewId().toLong(), polylineId) {}
     }
 
     getMap().setOnCircleClickListener { circle ->
       val circleId = findCircleId(circle)
-      viewEventApi.onCircleClicked(viewId.toLong(), circleId) {}
+      viewEventApi?.onCircleClicked(getViewId().toLong(), circleId) {}
     }
 
-    getMap().setOnMyLocationClickListener { viewEventApi.onMyLocationClicked(viewId.toLong()) {} }
+    getMap().setOnMyLocationClickListener {
+      viewEventApi?.onMyLocationClicked(getViewId().toLong()) {}
+    }
 
     getMap().setOnMyLocationButtonClickListener {
-      viewEventApi.onMyLocationButtonClicked(viewId.toLong()) {}
+      viewEventApi?.onMyLocationButtonClicked(getViewId().toLong()) {}
       _consumeMyLocationButtonClickEventsEnabled
     }
 
@@ -180,16 +194,16 @@ abstract class GoogleMapsBaseMapView(
       .setOnFollowMyLocationCallback(
         object : GoogleMap.OnCameraFollowLocationCallback {
           override fun onCameraStartedFollowingLocation() {
-            viewEventApi.onCameraChanged(
-              viewId.toLong(),
+            viewEventApi?.onCameraChanged(
+              getViewId().toLong(),
               CameraEventTypeDto.ONCAMERASTARTEDFOLLOWINGLOCATION,
               Convert.convertCameraPositionToDto(getMap().cameraPosition),
             ) {}
           }
 
           override fun onCameraStoppedFollowingLocation() {
-            viewEventApi.onCameraChanged(
-              viewId.toLong(),
+            viewEventApi?.onCameraChanged(
+              getViewId().toLong(),
               CameraEventTypeDto.ONCAMERASTOPPEDFOLLOWINGLOCATION,
               Convert.convertCameraPositionToDto(getMap().cameraPosition),
             ) {}
@@ -268,14 +282,14 @@ abstract class GoogleMapsBaseMapView(
   @Throws(FlutterError::class)
   private fun sendMarkerEvent(marker: Marker, eventType: MarkerEventTypeDto) {
     val markerId = findMarkerId(marker)
-    viewEventApi.onMarkerEvent(viewId.toLong(), markerId, eventType) {}
+    viewEventApi?.onMarkerEvent(getViewId().toLong(), markerId, eventType) {}
   }
 
   @Throws(FlutterError::class)
   private fun sendMarkerDragEvent(marker: Marker, eventType: MarkerDragEventTypeDto) {
     val markerId = findMarkerId(marker)
-    viewEventApi.onMarkerDragEvent(
-      viewId.toLong(),
+    viewEventApi?.onMarkerDragEvent(
+      getViewId().toLong(),
       markerId,
       eventType,
       LatLngDto(marker.position.latitude, marker.position.longitude),
@@ -909,15 +923,23 @@ abstract class GoogleMapsBaseMapView(
           }
         }
       val position = Convert.convertCameraPositionToDto(getMap().cameraPosition)
-      viewEventApi.onCameraChanged(viewId.toLong(), event, position) {}
+      viewEventApi?.onCameraChanged(getViewId().toLong(), event, position) {}
     }
     getMap().setOnCameraMoveListener {
       val position = Convert.convertCameraPositionToDto(getMap().cameraPosition)
-      viewEventApi.onCameraChanged(viewId.toLong(), CameraEventTypeDto.ONCAMERAMOVE, position) {}
+      viewEventApi?.onCameraChanged(
+        getViewId().toLong(),
+        CameraEventTypeDto.ONCAMERAMOVE,
+        position,
+      ) {}
     }
     getMap().setOnCameraIdleListener {
       val position = Convert.convertCameraPositionToDto(getMap().cameraPosition)
-      viewEventApi.onCameraChanged(viewId.toLong(), CameraEventTypeDto.ONCAMERAIDLE, position) {}
+      viewEventApi?.onCameraChanged(
+        getViewId().toLong(),
+        CameraEventTypeDto.ONCAMERAIDLE,
+        position,
+      ) {}
     }
   }
 }

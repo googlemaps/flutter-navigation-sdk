@@ -534,6 +534,17 @@ class GoogleMapsNavigator {
   static Future<RouteSegment?> getCurrentRouteSegment() {
     return GoogleMapsNavigationPlatform.instance.getCurrentRouteSegment();
   }
+
+  static Future<void> enableTurnByTurnNavigationEvents(
+      int? numNextStepsToPreview) {
+    return GoogleMapsNavigationPlatform.instance
+        .enableTurnByTurnNavigationEvents(numNextStepsToPreview);
+  }
+
+  static Future<void> disableTurnByTurnNavigationEvents() {
+    return GoogleMapsNavigationPlatform.instance
+        .disableTurnByTurnNavigationEvents();
+  }
 }
 
 /// Possible errors that [GoogleMapsNavigator.initializeNavigationSession] can throw.

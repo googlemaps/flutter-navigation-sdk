@@ -73,6 +73,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   /// Navigation view controller used to interact with the navigation view.
   GoogleNavigationViewController? _navigationViewController;
 
+  final GoogleMapsAutoViewController _autoViewController =
+      GoogleMapsAutoViewController();
+
   /// Latest user location received from the navigator.
   LatLng? _userLocation;
 
@@ -101,6 +104,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   bool _termsAndConditionsAccepted = false;
   bool _locationPermissionsAccepted = false;
+  bool _turnByTurnNavigationEventEnabled = false;
+
+  bool _isAutoScreenAvailable = false;
 
   bool _validRoute = false;
   bool _errorOnSetDestinations = false;
@@ -162,6 +168,20 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     if (_termsAndConditionsAccepted && _locationPermissionsAccepted) {
       await _initializeNavigator();
     }
+
+    _autoViewController.listenForCustomNavigationAutoEvents((event) {
+      showMessage("Received event: ${event.event}");
+    });
+
+    _isAutoScreenAvailable = await _autoViewController.isAutoScreenAvailable();
+    _autoViewController.listenForAutoScreenAvailibilityChangedEvent((event) {
+      debugPrint(event.isAvailable
+          ? "Auto screen is available"
+          : "Auto screen is not available");
+      setState(() {
+        _isAutoScreenAvailable = event.isAvailable;
+      });
+    });
   }
 
   Future<void> _setRouteTokensEnabled(bool value) async {
@@ -194,6 +214,29 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       debugPrint('Navigator has been initialized: $_navigatorInitialized');
     }
     setState(() {});
+  }
+
+  Future<void> _setMapTypeForAutoToSatellite() async {
+    await _autoViewController.setMapType(mapType: MapType.satellite);
+  }
+
+  Future<void> _moveCameraForAuto() async {
+    final CameraUpdate positionUpdate = CameraUpdate.newLatLng(const LatLng(
+        latitude: 60.34856639667419, longitude: 25.03459821831162));
+    await _autoViewController.moveCamera(positionUpdate);
+  }
+
+  Future<void> _addMarkerForAuto() async {
+    LatLng myLocation = (await _autoViewController.getCameraPosition()).target;
+    // markerOne options.
+    MarkerOptions markerOptions = MarkerOptions(
+      position: myLocation,
+      infoWindow: const InfoWindow(
+        title: 'Auto marker',
+        snippet: 'autoMarkerOne',
+      ),
+    );
+    await _autoViewController.addMarkers([markerOptions]);
   }
 
   /// iOS emulator does not update location and does not fire roadsnapping
@@ -1290,6 +1333,22 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     ? null
                     : (bool value) => _setRouteTokensEnabled(value),
               ),
+              ExampleSwitch(
+                  title: 'Turn by turn events',
+                  initialValue: _turnByTurnNavigationEventEnabled,
+                  onChanged: (bool newValue) async {
+                    if (newValue) {
+                      await GoogleMapsNavigator
+                          .enableTurnByTurnNavigationEvents(
+                              double.maxFinite.toInt());
+                    } else {
+                      await GoogleMapsNavigator
+                          .disableTurnByTurnNavigationEvents();
+                    }
+                    setState(() {
+                      _turnByTurnNavigationEventEnabled = newValue;
+                    });
+                  }),
             ],
           ),
           const SizedBox(height: 10)
@@ -1419,6 +1478,29 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                       }),
                 ]),
           )),
+      Card(
+        child: ExpansionTile(
+            enabled: _isAutoScreenAvailable,
+            title: const Text('Auto view'),
+            collapsedTextColor:
+                getExpansionTileTextColor(!_isAutoScreenAvailable),
+            collapsedIconColor:
+                getExpansionTileTextColor(!_isAutoScreenAvailable),
+            children: <Widget>[
+              ElevatedButton(
+                onPressed: () => _setMapTypeForAutoToSatellite(),
+                child: const Text('Set map type to satellite'),
+              ),
+              ElevatedButton(
+                onPressed: () => _moveCameraForAuto(),
+                child: const Text('Move camera'),
+              ),
+              ElevatedButton(
+                onPressed: () => _addMarkerForAuto(),
+                child: const Text('Add marker'),
+              ),
+            ]),
+      ),
       IgnorePointer(
           ignoring: !_navigatorInitialized || _navigationViewController == null,
           child: Card(

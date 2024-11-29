@@ -27,9 +27,27 @@ public class GoogleMapsNavigationPlugin: NSObject, FlutterPlugin {
   private static var navigationSessionEventApi: NavigationSessionEventApi?
   private static var navigationSessionManager: GoogleMapsNavigationSessionManager?
   private static var navigationInspectorHandler: GoogleMapsNavigationInspectorHandler?
+  private static var autoViewMessageHandler: GoogleMapsAutoViewMessageHandler?
+  private static var autoViewEventApi: AutoViewEventApi?
 
   private static var imageRegistryMessageHandler: GoogleMapsImageRegistryMessageHandler?
-  private static var imageRegistry: ImageRegistry?
+  static var imageRegistry: ImageRegistry?
+  private static var isPluginInitialized: Bool = false {
+    didSet {
+      if isPluginInitialized {
+        pluginInitializedCallback?(viewRegistry!, autoViewEventApi!, imageRegistry!)
+      }
+    }
+  }
+
+  static var pluginInitializedCallback: ((GoogleMapsNavigationViewRegistry, AutoViewEventApi,
+                                          ImageRegistry) -> Void)? {
+    didSet {
+      if isPluginInitialized {
+        pluginInitializedCallback?(viewRegistry!, autoViewEventApi!, imageRegistry!)
+      }
+    }
+  }
 
   public static func register(with registrar: FlutterPluginRegistrar) {
     // Navigation View handling
@@ -70,6 +88,14 @@ public class GoogleMapsNavigationPlugin: NSObject, FlutterPlugin {
       api: sessionMessageHandler
     )
 
+    // CarPlay map view message handling
+    autoViewMessageHandler = GoogleMapsAutoViewMessageHandler(viewRegistry: viewRegistry!)
+    AutoMapViewApiSetup.setUp(
+      binaryMessenger: registrar.messenger(),
+      api: autoViewMessageHandler
+    )
+    autoViewEventApi = AutoViewEventApi(binaryMessenger: registrar.messenger())
+
     navigationInspector = GoogleMapsNavigationInspectorHandler(
       viewRegistry: viewRegistry!
     )
@@ -84,5 +110,6 @@ public class GoogleMapsNavigationPlugin: NSObject, FlutterPlugin {
       binaryMessenger: registrar.messenger(),
       api: imageRegistryMessageHandler
     )
+    isPluginInitialized = true
   }
 }

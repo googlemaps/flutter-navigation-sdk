@@ -62,7 +62,7 @@ internal constructor(
     _mapView.onStop()
     _mapView.onDestroy()
 
-    viewRegistry.unregisterMapView(viewId)
+    viewRegistry.unregisterMapView(getViewId())
   }
 
   override fun onStart() {
