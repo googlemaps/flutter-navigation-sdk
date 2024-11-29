@@ -68,6 +68,8 @@ internal constructor(
     }
     _navigationView.isNavigationUiEnabled = navigationViewEnabled
 
+    viewRegistry.registerNavigationView(viewId, this)
+
     _navigationView.getMapAsync { map ->
       setMap(map)
       initListeners()
@@ -84,8 +86,6 @@ internal constructor(
       mapReady()
       invalidateViewAfterMapLoad()
     }
-
-    viewRegistry.registerNavigationView(viewId, this)
   }
 
   override fun dispose() {

@@ -44,6 +44,8 @@ internal constructor(
     _mapView.onStart()
     _mapView.onResume()
 
+    viewRegistry.registerMapView(viewId, this)
+
     _mapView.getMapAsync { map ->
       setMap(map)
       initListeners()
@@ -51,8 +53,6 @@ internal constructor(
       mapReady()
       invalidateViewAfterMapLoad()
     }
-
-    viewRegistry.registerMapView(viewId, this)
   }
 
   override fun dispose() {
