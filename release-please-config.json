@@ -1,0 +1,13 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "release-type": "dart",
+  "include-component-in-tag": false,
+  "bump-minor-pre-major": true,
+  "packages": {
+    ".": {
+      "bootstrap-sha": "19d2491ea1a03add016b31b94562da03ccefaa74",
+      "package-name": "google_navigation_flutter",
+      "changelog-path": "CHANGELOG.md"
+    }
+  }
+}

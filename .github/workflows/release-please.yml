@@ -31,9 +31,7 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      - uses: google-github-actions/release-please-action@v4
+      - uses: googleapis/release-please-action@v4
         with:
           token: ${{ secrets.SYNCED_GITHUB_TOKEN_REPO }}
           release-type: dart
-          package-name: "@googlemaps/flutter-navigation-sdk"
-          bump-minor-pre-major: true
