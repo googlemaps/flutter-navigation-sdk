@@ -35,9 +35,3 @@ jobs:
         with:
           token: ${{ secrets.SYNCED_GITHUB_TOKEN_REPO }}
           release-type: dart
-
-  publish:
-    needs: release-please
-    if: ${{ needs.release-please.outputs.release_ready }}
-    uses: ./.github/workflows/publish.yml
-    secrets: inherit
