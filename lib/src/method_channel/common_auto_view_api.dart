@@ -736,6 +736,15 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
   }
 
   @override
+  Future<void> setPaddingForAuto({required MapPadding padding}) {
+    return _viewApi.setPadding(MapPaddingDto(
+        top: padding.top,
+        left: padding.left,
+        bottom: padding.bottom,
+        right: padding.right));
+  }
+
+  @override
   Future<bool> isAutoScreenAvailable() {
     return _viewApi.isAutoScreenAvailable();
   }

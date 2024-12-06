@@ -942,4 +942,14 @@ abstract class GoogleMapsBaseMapView(
       ) {}
     }
   }
+
+  fun setPadding(padding: MapPaddingDto) {
+    getMap()
+      .setPadding(
+        padding.left.toInt(),
+        padding.top.toInt(),
+        padding.right.toInt(),
+        padding.bottom.toInt(),
+      )
+  }
 }
