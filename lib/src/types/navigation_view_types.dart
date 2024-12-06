@@ -439,3 +439,19 @@ class CameraChangedEvent {
   /// Current position of the camera.
   final CameraPosition position;
 }
+
+/// Represent map padding for the Google Maps view.
+/// {@category Navigation View}
+/// {@category Map View}
+class MapPadding {
+  MapPadding(
+      {required this.top,
+      required this.left,
+      required this.bottom,
+      required this.right});
+
+  final int top;
+  final int left;
+  final int bottom;
+  final int right;
+}

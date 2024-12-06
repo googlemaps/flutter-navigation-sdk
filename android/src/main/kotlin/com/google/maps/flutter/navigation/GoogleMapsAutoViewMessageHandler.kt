@@ -385,4 +385,8 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
   override fun isAutoScreenAvailable(): Boolean {
     return viewRegistry.getAndroidAutoView() != null
   }
+
+  override fun setPadding(padding: MapPaddingDto) {
+    getView().setPadding(padding)
+  }
 }

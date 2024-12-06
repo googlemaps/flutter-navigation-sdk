@@ -378,6 +378,19 @@ enum CameraEventTypeDto {
   onCameraStoppedFollowingLocation
 }
 
+class MapPaddingDto {
+  MapPaddingDto(
+      {required this.top,
+      required this.left,
+      required this.bottom,
+      required this.right});
+
+  final int top;
+  final int left;
+  final int bottom;
+  final int right;
+}
+
 @HostApi(dartHostTestHandler: 'TestMapViewApi')
 abstract class MapViewApi {
   @async
@@ -498,6 +511,7 @@ abstract class MapViewApi {
   void clearCircles(int viewId);
 
   void registerOnCameraChangedListener(int viewId);
+  void setPadding(int viewId, MapPaddingDto padding);
 }
 
 @HostApi(dartHostTestHandler: 'TestImageRegistryApi')
@@ -1352,6 +1366,7 @@ abstract class AutoMapViewApi {
 
   void registerOnCameraChangedListener();
   bool isAutoScreenAvailable();
+  void setPadding(MapPaddingDto padding);
 }
 
 @FlutterApi()

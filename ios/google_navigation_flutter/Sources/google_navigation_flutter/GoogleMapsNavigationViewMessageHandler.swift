@@ -505,4 +505,8 @@ class GoogleMapsNavigationViewMessageHandler: MapViewApi {
   func registerOnCameraChangedListener(viewId: Int64) throws {
     try getView(viewId).registerOnCameraChangedListener()
   }
+
+  func setPadding(viewId: Int64, padding: MapPaddingDto) throws {
+    try getView(viewId).setPadding(padding: padding)
+  }
 }
