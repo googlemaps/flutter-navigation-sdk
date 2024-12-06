@@ -363,4 +363,10 @@ class GoogleMapViewController {
   Future<void> clear() {
     return GoogleMapsNavigationPlatform.instance.clear(viewId: _viewId);
   }
+
+  /// Set padding for the map view.
+  Future<void> setPadding(MapPadding padding) {
+    return GoogleMapsNavigationPlatform.instance
+        .setPadding(viewId: _viewId, padding: padding);
+  }
 }

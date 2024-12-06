@@ -936,6 +936,17 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
   }
 
   @override
+  Future<void> setPadding({required int viewId, required MapPadding padding}) {
+    return _viewApi.setPadding(
+        viewId,
+        MapPaddingDto(
+            top: padding.top,
+            left: padding.left,
+            bottom: padding.bottom,
+            right: padding.right));
+  }
+
+  @override
   Stream<MapClickEvent> getMapClickEventStream({required int viewId}) {
     return _unwrapEventStream<MapClickEvent>(viewId: viewId);
   }

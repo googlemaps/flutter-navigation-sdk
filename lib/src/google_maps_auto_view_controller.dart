@@ -325,6 +325,11 @@ class GoogleMapsAutoViewController {
     return GoogleMapsNavigationPlatform.instance.clearForAuto();
   }
 
+  Future<void> setPadding(MapPadding padding) {
+    return GoogleMapsNavigationPlatform.instance
+        .setPaddingForAuto(padding: padding);
+  }
+
   Future<bool> isAutoScreenAvailable() {
     return GoogleMapsNavigationPlatform.instance.isAutoScreenAvailable();
   }

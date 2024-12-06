@@ -475,4 +475,8 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
   override fun registerOnCameraChangedListener(viewId: Long) {
     getView(viewId.toInt()).registerOnCameraChangedListener()
   }
+
+  override fun setPadding(viewId: Long, padding: MapPaddingDto) {
+    getView(viewId.toInt()).setPadding(padding)
+  }
 }
