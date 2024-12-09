@@ -403,6 +403,8 @@ struct MapOptionsDto {
   /// Specifies a bounds to constrain the camera target, so that when users scroll and pan the map,
   /// the camera target does not move outside these bounds.
   var cameraTargetBounds: LatLngBoundsDto?
+  /// Specifies the padding for the map.
+  var padding: MapPaddingDto?
 
   static func fromList(_ list: [Any?]) -> MapOptionsDto? {
     let cameraPosition = CameraPositionDto.fromList(list[0] as! [Any?])!
@@ -421,6 +423,10 @@ struct MapOptionsDto {
     if let cameraTargetBoundsList: [Any?] = nilOrValue(list[12]) {
       cameraTargetBounds = LatLngBoundsDto.fromList(cameraTargetBoundsList)
     }
+    var padding: MapPaddingDto?
+    if let paddingList: [Any?] = nilOrValue(list[13]) {
+      padding = MapPaddingDto.fromList(paddingList)
+    }
 
     return MapOptionsDto(
       cameraPosition: cameraPosition,
@@ -435,7 +441,8 @@ struct MapOptionsDto {
       minZoomPreference: minZoomPreference,
       maxZoomPreference: maxZoomPreference,
       zoomControlsEnabled: zoomControlsEnabled,
-      cameraTargetBounds: cameraTargetBounds
+      cameraTargetBounds: cameraTargetBounds,
+      padding: padding
     )
   }
 
@@ -454,6 +461,7 @@ struct MapOptionsDto {
       maxZoomPreference,
       zoomControlsEnabled,
       cameraTargetBounds?.toList(),
+      padding?.toList(),
     ]
   }
 }
@@ -1739,8 +1747,10 @@ private class NavigationViewCreationApiCodecReader: FlutterStandardReader {
     case 131:
       return MapOptionsDto.fromList(readValue() as! [Any?])
     case 132:
-      return NavigationViewOptionsDto.fromList(readValue() as! [Any?])
+      return MapPaddingDto.fromList(readValue() as! [Any?])
     case 133:
+      return NavigationViewOptionsDto.fromList(readValue() as! [Any?])
+    case 134:
       return ViewCreationOptionsDto.fromList(readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -1762,11 +1772,14 @@ private class NavigationViewCreationApiCodecWriter: FlutterStandardWriter {
     } else if let value = value as? MapOptionsDto {
       super.writeByte(131)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationViewOptionsDto {
+    } else if let value = value as? MapPaddingDto {
       super.writeByte(132)
       super.writeValue(value.toList())
-    } else if let value = value as? ViewCreationOptionsDto {
+    } else if let value = value as? NavigationViewOptionsDto {
       super.writeByte(133)
+      super.writeValue(value.toList())
+    } else if let value = value as? ViewCreationOptionsDto {
+      super.writeByte(134)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)

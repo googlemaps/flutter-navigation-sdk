@@ -48,7 +48,13 @@ extension Convert {
       scrollGesturesEnabledDuringRotateOrZoom: mapOptions.scrollGesturesEnabledDuringRotateOrZoom,
       cameraTargetBounds: cameraTargetBounds,
       minZoomPreference: mapOptions.minZoomPreference.map { Float($0) },
-      maxZoomPreference: mapOptions.maxZoomPreference.map { Float($0) }
+      maxZoomPreference: mapOptions.maxZoomPreference.map { Float($0) },
+      padding: UIEdgeInsets(
+        top: CGFloat(mapOptions.padding?.top ?? 0),
+        left: CGFloat(mapOptions.padding?.left ?? 0),
+        bottom: CGFloat(mapOptions.padding?.bottom ?? 0),
+        right: CGFloat(mapOptions.padding?.right ?? 0)
+      )
     )
   }
 }

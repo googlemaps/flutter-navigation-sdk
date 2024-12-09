@@ -49,6 +49,7 @@ class _ViewInitializationPageState
   double? _initialMaxZoomPreference;
   bool _initialZoomControlsEnabled = true;
   LatLngBounds? _initialCameraTargetBounds;
+  MapPadding? _initialPadding;
   NavigationUIEnabledPreference _initialNavigationUIEnabledPreference =
       NavigationUIEnabledPreference.automatic;
   TextDirection? _layoutDirection;
@@ -107,6 +108,7 @@ class _ViewInitializationPageState
           initialMaxZoomPreference: _initialMaxZoomPreference,
           initialZoomControlsEnabled: _initialZoomControlsEnabled,
           initialCameraTargetBounds: _initialCameraTargetBounds,
+          initialPadding: _initialPadding,
           initialNavigationUIEnabledPreference:
               _initialNavigationUIEnabledPreference,
           layoutDirection: _layoutDirection,
@@ -404,6 +406,7 @@ class _InitializedViewPage extends StatelessWidget {
     required this.initialMaxZoomPreference,
     required this.initialZoomControlsEnabled,
     required this.initialCameraTargetBounds,
+    required this.initialPadding,
     required this.initialNavigationUIEnabledPreference,
     required this.layoutDirection,
   });
@@ -422,6 +425,7 @@ class _InitializedViewPage extends StatelessWidget {
   final double? initialMaxZoomPreference;
   final bool initialZoomControlsEnabled;
   final LatLngBounds? initialCameraTargetBounds;
+  final MapPadding? initialPadding;
   final NavigationUIEnabledPreference initialNavigationUIEnabledPreference;
 
   @override
@@ -453,6 +457,7 @@ class _InitializedViewPage extends StatelessWidget {
         initialMaxZoomPreference: initialMaxZoomPreference,
         initialZoomControlsEnabled: initialZoomControlsEnabled,
         initialCameraTargetBounds: initialCameraTargetBounds,
+        initialPadding: initialPadding,
         initialNavigationUIEnabledPreference:
             initialNavigationUIEnabledPreference,
       ),

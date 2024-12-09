@@ -37,6 +37,7 @@ struct MapConfiguration {
   var cameraTargetBounds: GMSCoordinateBounds?
   var minZoomPreference: Float?
   var maxZoomPreference: Float?
+  var padding: UIEdgeInsets?
 }
 
 extension MapConfiguration {
@@ -57,6 +58,7 @@ extension MapConfiguration {
       minZoomPreference ?? kGMSMinZoomLevel,
       maxZoom: maxZoomPreference ?? kGMSMaxZoomLevel
     )
+    mapView.padding = padding ?? UIEdgeInsets.zero
   }
 
   // Applies the configuration to the given

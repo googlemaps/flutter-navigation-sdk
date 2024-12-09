@@ -18,20 +18,19 @@ package com.google.maps.flutter.navigation
 
 import android.content.Context
 import android.view.View
-import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.MapView
 import io.flutter.plugin.platform.PlatformView
 
 class GoogleMapView
 internal constructor(
   context: Context,
-  mapOptions: GoogleMapOptions,
+  mapOptions: MapOptions,
   viewId: Int,
   viewEventApi: ViewEventApi,
   private val viewRegistry: GoogleMapsViewRegistry,
   imageRegistry: ImageRegistry,
 ) : PlatformView, GoogleMapsBaseMapView(viewId, mapOptions, viewEventApi, imageRegistry) {
-  private val _mapView: MapView = MapView(context, mapOptions)
+  private val _mapView: MapView = MapView(context, mapOptions.googleMapOptions)
 
   override fun getView(): View {
     return _mapView
@@ -52,6 +51,7 @@ internal constructor(
       imageRegistry.mapViewInitializationComplete()
       mapReady()
       invalidateViewAfterMapLoad()
+      mapOptions.padding?.let { setPadding(it) }
     }
   }
 

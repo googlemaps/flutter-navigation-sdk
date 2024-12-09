@@ -100,6 +100,7 @@ class MapOptions {
     this.maxZoomPreference,
     this.zoomControlsEnabled = true,
     this.cameraTargetBounds,
+    this.padding,
   }) : assert(
             minZoomPreference == null ||
                 maxZoomPreference == null ||
@@ -183,6 +184,11 @@ class MapOptions {
   ///
   /// Null by default (unbounded).
   final LatLngBounds? cameraTargetBounds;
+
+  /// Specifies the initial padding for the map view.
+  ///
+  /// Null by default (no padding).
+  final MapPadding? padding;
 }
 
 /// Determines the initial visibility of the navigation UI on map initialization.

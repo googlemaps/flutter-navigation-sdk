@@ -446,6 +446,7 @@ class MapOptionsDto {
     this.maxZoomPreference,
     required this.zoomControlsEnabled,
     this.cameraTargetBounds,
+    this.padding,
   });
 
   /// The initial positioning of the camera in the map view.
@@ -488,6 +489,9 @@ class MapOptionsDto {
   /// the camera target does not move outside these bounds.
   LatLngBoundsDto? cameraTargetBounds;
 
+  /// Specifies the padding for the map.
+  MapPaddingDto? padding;
+
   Object encode() {
     return <Object?>[
       cameraPosition.encode(),
@@ -503,6 +507,7 @@ class MapOptionsDto {
       maxZoomPreference,
       zoomControlsEnabled,
       cameraTargetBounds?.encode(),
+      padding?.encode(),
     ];
   }
 
@@ -523,6 +528,9 @@ class MapOptionsDto {
       zoomControlsEnabled: result[11]! as bool,
       cameraTargetBounds: result[12] != null
           ? LatLngBoundsDto.decode(result[12]! as List<Object?>)
+          : null,
+      padding: result[13] != null
+          ? MapPaddingDto.decode(result[13]! as List<Object?>)
           : null,
     );
   }
@@ -1960,11 +1968,14 @@ class _NavigationViewCreationApiCodec extends StandardMessageCodec {
     } else if (value is MapOptionsDto) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationViewOptionsDto) {
+    } else if (value is MapPaddingDto) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
-    } else if (value is ViewCreationOptionsDto) {
+    } else if (value is NavigationViewOptionsDto) {
       buffer.putUint8(133);
+      writeValue(buffer, value.encode());
+    } else if (value is ViewCreationOptionsDto) {
+      buffer.putUint8(134);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -1983,8 +1994,10 @@ class _NavigationViewCreationApiCodec extends StandardMessageCodec {
       case 131:
         return MapOptionsDto.decode(readValue(buffer)!);
       case 132:
-        return NavigationViewOptionsDto.decode(readValue(buffer)!);
+        return MapPaddingDto.decode(readValue(buffer)!);
       case 133:
+        return NavigationViewOptionsDto.decode(readValue(buffer)!);
+      case 134:
         return ViewCreationOptionsDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
