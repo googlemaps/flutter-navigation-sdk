@@ -106,7 +106,8 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
         minZoomPreference: mapOptions.minZoomPreference,
         maxZoomPreference: mapOptions.maxZoomPreference,
         zoomControlsEnabled: mapOptions.zoomControlsEnabled,
-        cameraTargetBounds: mapOptions.cameraTargetBounds?.toDto());
+        cameraTargetBounds: mapOptions.cameraTargetBounds?.toDto(),
+        padding: mapOptions.padding?.toDto());
 
     // Initialize navigation view options if given
     NavigationViewOptionsDto? navigationOptionsMessage;

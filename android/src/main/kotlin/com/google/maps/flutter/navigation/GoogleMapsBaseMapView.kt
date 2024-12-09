@@ -25,7 +25,6 @@ import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener
-import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.Circle
 import com.google.android.gms.maps.model.FollowMyLocationOptions
@@ -39,7 +38,7 @@ import com.google.android.libraries.navigation.NavigationView
 
 abstract class GoogleMapsBaseMapView(
   protected val viewId: Int?,
-  mapOptions: GoogleMapOptions,
+  mapOptions: MapOptions,
   protected val viewEventApi: ViewEventApi?,
   private val imageRegistry: ImageRegistry,
 ) {
@@ -100,8 +99,8 @@ abstract class GoogleMapsBaseMapView(
   }
 
   init {
-    _minZoomLevelPreference = mapOptions.minZoomPreference
-    _maxZoomLevelPreference = mapOptions.maxZoomPreference
+    _minZoomLevelPreference = mapOptions.googleMapOptions.minZoomPreference
+    _maxZoomLevelPreference = mapOptions.googleMapOptions.maxZoomPreference
   }
 
   protected fun mapReady() {

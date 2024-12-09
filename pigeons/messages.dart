@@ -53,6 +53,7 @@ class MapOptionsDto {
     required this.maxZoomPreference,
     required this.zoomControlsEnabled,
     required this.cameraTargetBounds,
+    required this.padding,
   });
 
   /// The initial positioning of the camera in the map view.
@@ -94,6 +95,9 @@ class MapOptionsDto {
   /// Specifies a bounds to constrain the camera target, so that when users scroll and pan the map,
   /// the camera target does not move outside these bounds.
   final LatLngBoundsDto? cameraTargetBounds;
+
+  /// Specifies the padding for the map.
+  final MapPaddingDto? padding;
 }
 
 /// Determines the initial visibility of the navigation UI on map initialization.
