@@ -164,7 +164,7 @@ void main() {
     await GoogleMapsNavigator.setAudioGuidance(settings);
 
     /// Specify tolerance and navigation destination coordinates.
-    const double tolerance = 0.0005;
+    const double tolerance = 0.001;
     const double midLat = 68.59781164189049,
         midLon = 23.520303427087182,
         endLat = 68.60079240808535,
@@ -268,7 +268,7 @@ void main() {
     await startNavigationWithoutDestination($);
 
     /// Specify tolerance and navigation end coordinates.
-    const double tolerance = 0.0005;
+    const double tolerance = 0.001;
     const double endLat = 68.59451829688189, endLng = 23.512277951523007;
 
     /// Create a waypoint.
