@@ -168,7 +168,7 @@ class NavigationViewUISettings {
   /// By default, the my location button is visible
   /// when the my location indicator is shown.
   Future<void> setMyLocationButtonEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .setMyLocationButtonEnabled(viewId: _viewId, enabled: enabled);
   }
 
@@ -181,7 +181,7 @@ class NavigationViewUISettings {
   /// Note: By default, the button click events are not consumed, and the map
   /// follows its native default behavior. This method can be used to override this behavior.
   Future<void> setConsumeMyLocationButtonClickEventsEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .setConsumeMyLocationButtonClickEventsEnabled(
             viewId: _viewId, enabled: enabled);
   }
@@ -190,7 +190,7 @@ class NavigationViewUISettings {
   ///
   /// Initial value can be set with [GoogleMapsNavigationView.initialZoomGesturesEnabled].
   Future<void> setZoomGesturesEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .setZoomGesturesEnabled(viewId: _viewId, enabled: enabled);
   }
 
@@ -200,7 +200,7 @@ class NavigationViewUISettings {
   ///
   /// The zoom controls are only available on Android. Throws [UnsupportedError] on iOS.
   Future<void> setZoomControlsEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .setZoomControlsEnabled(viewId: _viewId, enabled: enabled);
   }
 
@@ -211,7 +211,7 @@ class NavigationViewUISettings {
   ///
   /// Initial value can be set with [GoogleMapsNavigationView.initialCompassEnabled].
   Future<void> setCompassEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .setCompassEnabled(viewId: _viewId, enabled: enabled);
   }
 
@@ -219,7 +219,7 @@ class NavigationViewUISettings {
   ///
   /// Initial value can be set with [GoogleMapsNavigationView.initialRotateGesturesEnabled].
   Future<void> setRotateGesturesEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .setRotateGesturesEnabled(viewId: _viewId, enabled: enabled);
   }
 
@@ -227,7 +227,7 @@ class NavigationViewUISettings {
   ///
   /// Initial value can be set with [GoogleMapsNavigationView.initialScrollGesturesEnabled].
   Future<void> setScrollGesturesEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .setScrollGesturesEnabled(viewId: _viewId, enabled: enabled);
   }
 
@@ -236,7 +236,7 @@ class NavigationViewUISettings {
   ///
   /// Initial value can be set with [GoogleMapsNavigationView.initialScrollGesturesEnabledDuringRotateOrZoom].
   Future<void> setScrollGesturesDuringRotateOrZoomEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .setScrollGesturesDuringRotateOrZoomEnabled(
             viewId: _viewId, enabled: enabled);
   }
@@ -245,7 +245,7 @@ class NavigationViewUISettings {
   ///
   /// Initial value can be set with [GoogleMapsNavigationView.initialTiltGesturesEnabled].
   Future<void> setTiltGesturesEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .setTiltGesturesEnabled(viewId: _viewId, enabled: enabled);
   }
 
@@ -253,7 +253,7 @@ class NavigationViewUISettings {
   ///
   /// By default, the traffic layer is off.
   Future<void> setTrafficEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .setTrafficEnabled(viewId: _viewId, enabled: enabled);
   }
 
@@ -263,25 +263,25 @@ class NavigationViewUISettings {
   ///
   /// The map toolbar is only available on Android. Throws [UnsupportedError] on iOS.
   Future<void> setMapToolbarEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .setMapToolbarEnabled(viewId: _viewId, enabled: enabled);
   }
 
   /// Checks if the my location button is enabled.
   Future<bool> isMyLocationButtonEnabled() async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .isMyLocationButtonEnabled(viewId: _viewId);
   }
 
   /// Checks if the my location button consumes click events.
   Future<bool> isConsumeMyLocationButtonClickEventsEnabled() async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .isConsumeMyLocationButtonClickEventsEnabled(viewId: _viewId);
   }
 
   /// Checks if the zoom gestures are enabled.
   Future<bool> isZoomGesturesEnabled() async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .isZoomGesturesEnabled(viewId: _viewId);
   }
 
@@ -289,38 +289,38 @@ class NavigationViewUISettings {
   ///
   /// The zoom controls are only available on Android. Throws [UnsupportedError] on iOS.
   Future<bool> isZoomControlsEnabled() async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .isZoomControlsEnabled(viewId: _viewId);
   }
 
   /// Checks if the compass is enabled.
   Future<bool> isCompassEnabled() async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .isCompassEnabled(viewId: _viewId);
   }
 
   /// Checks if the rotate gestures are enabled.
   Future<bool> isRotateGesturesEnabled() async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .isRotateGesturesEnabled(viewId: _viewId);
   }
 
   /// Checks if the scroll gestures are enabled.
   Future<bool> isScrollGesturesEnabled() async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .isScrollGesturesEnabled(viewId: _viewId);
   }
 
   /// Checks if the scroll gestures are enabled during the rotation and
   /// zoom gestures.
   Future<bool> isScrollGesturesEnabledDuringRotateOrZoom() async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .isScrollGesturesEnabledDuringRotateOrZoom(viewId: _viewId);
   }
 
   /// Checks if the scroll gestures are enabled.
   Future<bool> isTiltGesturesEnabled() async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .isTiltGesturesEnabled(viewId: _viewId);
   }
 
@@ -328,13 +328,13 @@ class NavigationViewUISettings {
   ///
   /// The map toolbar is only available on Android. Throws [UnsupportedError] on iOS.
   Future<bool> isMapToolbarEnabled() async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .isMapToolbarEnabled(viewId: _viewId);
   }
 
   /// Checks if the map is displaying traffic data.
   Future<bool> isTrafficEnabled() async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .isTrafficEnabled(viewId: _viewId);
   }
 }

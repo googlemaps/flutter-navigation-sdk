@@ -23,7 +23,7 @@ import 'method_channel.dart';
 
 /// @nodoc
 /// Class that handles map view and navigation view communications.
-mixin CommonMapViewAPI on MapViewAPIInterface {
+class MapViewAPIImpl {
   final MapViewApi _viewApi = MapViewApi();
   bool _viewApiHasBeenSetUp = false;
   final StreamController<_ViewIdEventWrapper> _viewEventStreamController =
@@ -59,6 +59,14 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
     final String circleId = 'Circle_$_circleCounter';
     _circleCounter += 1;
     return circleId;
+  }
+
+  Stream<T> _unwrapEventStream<T>({required int viewId}) {
+    // If event that does not
+    return _viewEventStreamController.stream
+        .where((_ViewIdEventWrapper wrapper) =>
+            (wrapper.event is T) && wrapper.viewId == viewId)
+        .map<T>((_ViewIdEventWrapper wrapper) => wrapper.event as T);
   }
 
   /// This function ensures that the event API has been setup. This should be
@@ -134,35 +142,35 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
         navigationViewOptions: navigationOptionsMessage);
   }
 
-  @override
+  /// Awaits the platform view to be ready for communication.
   Future<void> awaitMapReady({required int viewId}) {
     return _viewApi.awaitMapReady(viewId);
   }
 
-  @override
+  /// Get the preference for whether the my location should be enabled or disabled.
   Future<bool> isMyLocationEnabled({required int viewId}) {
     return _viewApi.isMyLocationEnabled(viewId);
   }
 
-  @override
+  /// Enabled location in the navigation view.
   Future<void> setMyLocationEnabled(
       {required int viewId, required bool enabled}) {
     return _viewApi.setMyLocationEnabled(viewId, enabled);
   }
 
-  @override
+  /// Get the map type.
   Future<MapType> getMapType({required int viewId}) async {
     final MapTypeDto mapType = await _viewApi.getMapType(viewId);
     return mapType.toMapType();
   }
 
-  @override
+  /// Modified visible map type.
   Future<void> setMapType(
       {required int viewId, required MapType mapType}) async {
     return _viewApi.setMapType(viewId, mapType.toDto());
   }
 
-  @override
+  /// Set map style by json string.
   Future<void> setMapStyle(int viewId, String? styleJson) async {
     try {
       // Set the given json to the viewApi or reset the map style if
@@ -177,26 +185,26 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
     }
   }
 
-  @override
+  /// Enables or disables the my-location button.
   Future<void> setMyLocationButtonEnabled(
       {required int viewId, required bool enabled}) {
     return _viewApi.setMyLocationButtonEnabled(viewId, enabled);
   }
 
-  @override
+  /// Enables or disables if the my location button consumes click events.
   Future<void> setConsumeMyLocationButtonClickEventsEnabled(
       {required int viewId, required bool enabled}) async {
     return _viewApi.setConsumeMyLocationButtonClickEventsEnabled(
         viewId, enabled);
   }
 
-  @override
+  /// Enables or disables the zoom gestures.
   Future<void> setZoomGesturesEnabled(
       {required int viewId, required bool enabled}) {
     return _viewApi.setZoomGesturesEnabled(viewId, enabled);
   }
 
-  @override
+  /// Enables or disables the zoom controls.
   Future<void> setZoomControlsEnabled(
       {required int viewId, required bool enabled}) async {
     try {
@@ -210,36 +218,36 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
     }
   }
 
-  @override
+  /// Enables or disables the compass.
   Future<void> setCompassEnabled({required int viewId, required bool enabled}) {
     return _viewApi.setCompassEnabled(viewId, enabled);
   }
 
-  @override
+  /// Sets the preference for whether rotate gestures should be enabled or disabled.
   Future<void> setRotateGesturesEnabled(
       {required int viewId, required bool enabled}) {
     return _viewApi.setRotateGesturesEnabled(viewId, enabled);
   }
 
-  @override
+  /// Sets the preference for whether scroll gestures should be enabled or disabled.
   Future<void> setScrollGesturesEnabled(
       {required int viewId, required bool enabled}) {
     return _viewApi.setScrollGesturesEnabled(viewId, enabled);
   }
 
-  @override
+  /// Sets the preference for whether scroll gestures can take place at the same time as a zoom or rotate gesture.
   Future<void> setScrollGesturesDuringRotateOrZoomEnabled(
       {required int viewId, required bool enabled}) {
     return _viewApi.setScrollGesturesDuringRotateOrZoomEnabled(viewId, enabled);
   }
 
-  @override
+  /// Sets the preference for whether tilt gestures should be enabled or disabled.
   Future<void> setTiltGesturesEnabled(
       {required int viewId, required bool enabled}) {
     return _viewApi.setTiltGesturesEnabled(viewId, enabled);
   }
 
-  @override
+  /// Sets the preference for whether the Map Toolbar should be enabled or disabled.
   Future<void> setMapToolbarEnabled(
       {required int viewId, required bool enabled}) async {
     try {
@@ -253,33 +261,28 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
     }
   }
 
-  @override
+  /// Turns the traffic layer on or off.
   Future<void> setTrafficEnabled({required int viewId, required bool enabled}) {
     return _viewApi.setTrafficEnabled(viewId, enabled);
   }
 
-  @override
+  /// Get the preference for whether the my location button should be enabled or disabled.
   Future<bool> isMyLocationButtonEnabled({required int viewId}) {
     return _viewApi.isMyLocationButtonEnabled(viewId);
   }
 
-  @override
+  /// Get the preference for whether the my location button consumes click events.
   Future<bool> isConsumeMyLocationButtonClickEventsEnabled(
       {required int viewId}) {
     return _viewApi.isConsumeMyLocationButtonClickEventsEnabled(viewId);
   }
 
-  @override
-  Future<bool> isNavigationTripProgressBarEnabled({required int viewId}) {
-    return _viewApi.isNavigationTripProgressBarEnabled(viewId);
-  }
-
-  @override
+  /// Gets the preference for whether zoom gestures should be enabled or disabled.
   Future<bool> isZoomGesturesEnabled({required int viewId}) {
     return _viewApi.isZoomGesturesEnabled(viewId);
   }
 
-  @override
+  /// Gets the preference for whether zoom controls should be enabled or disabled.
   Future<bool> isZoomControlsEnabled({required int viewId}) async {
     try {
       return await _viewApi.isZoomControlsEnabled(viewId);
@@ -292,33 +295,33 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
     }
   }
 
-  @override
+  /// Gets the preference for whether compass should be enabled or disabled.
   Future<bool> isCompassEnabled({required int viewId}) {
     return _viewApi.isCompassEnabled(viewId);
   }
 
-  @override
+  /// Gets the preference for whether rotate gestures should be enabled or disabled.
   Future<bool> isRotateGesturesEnabled({required int viewId}) {
     return _viewApi.isRotateGesturesEnabled(viewId);
   }
 
-  @override
+  /// Gets the preference for whether scroll gestures should be enabled or disabled.
   Future<bool> isScrollGesturesEnabled({required int viewId}) {
     return _viewApi.isScrollGesturesEnabled(viewId);
   }
 
-  @override
+  /// Gets the preference for whether scroll gestures can take place at the same time as a zoom or rotate gesture.
   Future<bool> isScrollGesturesEnabledDuringRotateOrZoom(
       {required int viewId}) {
     return _viewApi.isScrollGesturesEnabledDuringRotateOrZoom(viewId);
   }
 
-  @override
+  /// Gets the preference for whether tilt gestures should be enabled or disabled.
   Future<bool> isTiltGesturesEnabled({required int viewId}) {
     return _viewApi.isTiltGesturesEnabled(viewId);
   }
 
-  @override
+  /// Gets whether the Map Toolbar is enabled/disabled.
   Future<bool> isMapToolbarEnabled({required int viewId}) async {
     try {
       return await _viewApi.isMapToolbarEnabled(viewId);
@@ -331,12 +334,12 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
     }
   }
 
-  @override
+  /// Checks whether the map is drawing traffic data.
   Future<bool> isTrafficEnabled({required int viewId}) {
     return _viewApi.isTrafficEnabled(viewId);
   }
 
-  @override
+  /// Gets users current location.
   Future<LatLng?> getMyLocation({required int viewId}) async {
     final LatLngDto? myLocation = await _viewApi.getMyLocation(viewId);
     if (myLocation == null) {
@@ -345,7 +348,7 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
     return myLocation.toLatLng();
   }
 
-  @override
+  /// Gets the current position of the camera.
   Future<CameraPosition> getCameraPosition({required int viewId}) async {
     final CameraPositionDto position = await _viewApi.getCameraPosition(
       viewId,
@@ -353,7 +356,7 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
     return position.toCameraPosition();
   }
 
-  @override
+  /// Gets the current visible area / camera bounds.
   Future<LatLngBounds> getVisibleRegion({required int viewId}) async {
     final LatLngBoundsDto bounds = await _viewApi.getVisibleRegion(
       viewId,
@@ -364,7 +367,7 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
     );
   }
 
-  @override
+  /// Animates the movement of the camera.
   Future<void> animateCamera(
       {required int viewId,
       required CameraUpdate cameraUpdate,
@@ -422,7 +425,7 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
     }
   }
 
-  @override
+  /// Moves the camera.
   Future<void> moveCamera(
       {required int viewId, required CameraUpdate cameraUpdate}) async {
     switch (cameraUpdate.type) {
@@ -451,7 +454,7 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
     }
   }
 
-  @override
+  /// Sets the Camera to follow the location of the user.
   Future<void> followMyLocation(
       {required int viewId,
       required CameraPerspective perspective,
@@ -459,110 +462,115 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
     return _viewApi.followMyLocation(viewId, perspective.toDto(), zoomLevel);
   }
 
-  @override
+  /// Is the navigation trip progress bar enabled.
+  Future<bool> isNavigationTripProgressBarEnabled({required int viewId}) {
+    return _viewApi.isNavigationTripProgressBarEnabled(viewId);
+  }
+
+  /// Enable navigation trip progress bar.
   Future<void> setNavigationTripProgressBarEnabled(
       {required int viewId, required bool enabled}) {
     return _viewApi.setNavigationTripProgressBarEnabled(viewId, enabled);
   }
 
-  @override
+  /// Is the navigation header enabled.
   Future<bool> isNavigationHeaderEnabled({required int viewId}) {
     return _viewApi.isNavigationHeaderEnabled(viewId);
   }
 
-  @override
+  /// Enable navigation header.
   Future<void> setNavigationHeaderEnabled(
       {required int viewId, required bool enabled}) {
     return _viewApi.setNavigationHeaderEnabled(viewId, enabled);
   }
 
-  @override
+  /// Is the navigation footer enabled.
   Future<bool> isNavigationFooterEnabled({required int viewId}) {
     return _viewApi.isNavigationFooterEnabled(viewId);
   }
 
-  @override
+  /// Enable the navigation footer.
   Future<void> setNavigationFooterEnabled(
       {required int viewId, required bool enabled}) {
     return _viewApi.setNavigationFooterEnabled(viewId, enabled);
   }
 
-  @override
+  /// Is the recenter button enabled.
   Future<bool> isRecenterButtonEnabled({required int viewId}) {
     return _viewApi.isRecenterButtonEnabled(viewId);
   }
 
-  @override
+  /// Enable the recenter button.
   Future<void> setRecenterButtonEnabled(
       {required int viewId, required bool enabled}) {
     return _viewApi.setRecenterButtonEnabled(viewId, enabled);
   }
 
-  @override
+  /// Is the speed limit displayed.
   Future<bool> isSpeedLimitIconEnabled({required int viewId}) {
     return _viewApi.isSpeedLimitIconEnabled(viewId);
   }
 
-  @override
+  /// Should display speed limit.
   Future<void> setSpeedLimitIconEnabled(
       {required int viewId, required bool enabled}) {
     return _viewApi.setSpeedLimitIconEnabled(viewId, enabled);
   }
 
-  @override
+  /// Is speedometer displayed.
   Future<bool> isSpeedometerEnabled({required int viewId}) {
     return _viewApi.isSpeedometerEnabled(viewId);
   }
 
-  @override
+  /// Should display speedometer.
   Future<void> setSpeedometerEnabled(
       {required int viewId, required bool enabled}) {
     return _viewApi.setSpeedometerEnabled(viewId, enabled);
   }
 
-  @override
+  /// Is incident cards displayed.
   Future<bool> isTrafficIncidentCardsEnabled({required int viewId}) {
     return _viewApi.isTrafficIncidentCardsEnabled(viewId);
   }
 
-  @override
+  /// Should display incident cards.
   Future<void> setTrafficIncidentCardsEnabled(
       {required int viewId, required bool enabled}) {
     return _viewApi.setTrafficIncidentCardsEnabled(viewId, enabled);
   }
 
-  @override
+  /// Is navigation UI enabled.
   Future<bool> isNavigationUIEnabled({required int viewId}) {
     return _viewApi.isNavigationUIEnabled(viewId);
   }
 
-  @override
+  /// Enable navigation UI.
   Future<void> setNavigationUIEnabled(
       {required int viewId, required bool enabled}) {
     return _viewApi.setNavigationUIEnabled(viewId, enabled);
   }
 
-  @override
+  /// Show route overview.
   Future<void> showRouteOverview({required int viewId}) {
     return _viewApi.showRouteOverview(viewId);
   }
 
-  @override
+  /// Returns the minimum zoom level.
   Future<double> getMinZoomPreference({required int viewId}) {
     return _viewApi.getMinZoomPreference(viewId);
   }
 
-  @override
+  /// Returns the maximum zoom level for the current camera position.
   Future<double> getMaxZoomPreference({required int viewId}) {
     return _viewApi.getMaxZoomPreference(viewId);
   }
 
-  @override
+  /// Removes any previously specified upper and lower zoom bounds.
   Future<void> resetMinMaxZoomPreference({required int viewId}) {
     return _viewApi.resetMinMaxZoomPreference(viewId);
   }
 
-  @override
+  /// Sets a preferred lower bound for the camera zoom.
   Future<void> setMinZoomPreference(
       {required int viewId, required double minZoomPreference}) async {
     try {
@@ -576,7 +584,7 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
     }
   }
 
-  @override
+  /// Sets a preferred upper bound for the camera zoom.
   Future<void> setMaxZoomPreference(
       {required int viewId, required double maxZoomPreference}) async {
     try {
@@ -590,22 +598,14 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
     }
   }
 
-  Stream<T> _unwrapEventStream<T>({required int viewId}) {
-    // If event that does not
-    return _viewEventStreamController.stream
-        .where((_ViewIdEventWrapper wrapper) =>
-            (wrapper.event is T) && wrapper.viewId == viewId)
-        .map<T>((_ViewIdEventWrapper wrapper) => wrapper.event as T);
-  }
-
-  @override
+  /// Get navigation recenter button clicked event stream from the navigation view.
   Stream<NavigationViewRecenterButtonClickedEvent>
       getNavigationRecenterButtonClickedEventStream({required int viewId}) {
     return _unwrapEventStream<NavigationViewRecenterButtonClickedEvent>(
         viewId: viewId);
   }
 
-  @override
+  /// Get all markers from map view.
   Future<List<Marker?>> getMarkers({required int viewId}) async {
     final List<MarkerDto?> markers = await _viewApi.getMarkers(viewId);
     return markers
@@ -614,7 +614,7 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
         .toList();
   }
 
-  @override
+  /// Add markers to map view.
   Future<List<Marker>> addMarkers(
       {required int viewId, required List<MarkerOptions> markerOptions}) async {
     // Convert options to pigeon format
@@ -641,7 +641,7 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
         .toList();
   }
 
-  @override
+  /// Update markers on the map view.
   Future<List<Marker>> updateMarkers(
       {required int viewId, required List<Marker> markers}) async {
     try {
@@ -662,7 +662,7 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
     }
   }
 
-  @override
+  /// Remove markers from map view.
   Future<void> removeMarkers(
       {required int viewId, required List<Marker> markers}) async {
     try {
@@ -678,17 +678,17 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
     }
   }
 
-  @override
+  /// Remove all markers from map view.
   Future<void> clearMarkers({required int viewId}) {
     return _viewApi.clearMarkers(viewId);
   }
 
-  @override
+  /// Removes all markers, polylines, polygons, overlays, etc from the map.
   Future<void> clear({required int viewId}) {
     return _viewApi.clear(viewId);
   }
 
-  @override
+  /// Get all polygons from map view.
   Future<List<Polygon?>> getPolygons({required int viewId}) async {
     final List<PolygonDto?> polygons = await _viewApi.getPolygons(viewId);
 
@@ -698,7 +698,7 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
         .toList();
   }
 
-  @override
+  /// Add polygons to map view.
   Future<List<Polygon?>> addPolygons(
       {required int viewId,
       required List<PolygonOptions> polygonOptions}) async {
@@ -726,7 +726,7 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
         .toList();
   }
 
-  @override
+  /// Update polygons on the map view.
   Future<List<Polygon?>> updatePolygons(
       {required int viewId, required List<Polygon> polygons}) async {
     try {
@@ -747,7 +747,7 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
     }
   }
 
-  @override
+  /// Remove polygons from map view.
   Future<void> removePolygons(
       {required int viewId, required List<Polygon> polygons}) async {
     try {
@@ -763,12 +763,12 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
     }
   }
 
-  @override
+  /// Remove all polygons from map view.
   Future<void> clearPolygons({required int viewId}) {
     return _viewApi.clearPolygons(viewId);
   }
 
-  @override
+  /// Get all polylines from map view.
   Future<List<Polyline?>> getPolylines({required int viewId}) async {
     final List<PolylineDto?> polylines = await _viewApi.getPolylines(viewId);
 
@@ -778,7 +778,7 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
         .toList();
   }
 
-  @override
+  /// Add polylines to map view.
   Future<List<Polyline?>> addPolylines(
       {required int viewId,
       required List<PolylineOptions> polylineOptions}) async {
@@ -806,7 +806,7 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
         .toList();
   }
 
-  @override
+  /// Update polylines on the map view.
   Future<List<Polyline?>> updatePolylines(
       {required int viewId, required List<Polyline> polylines}) async {
     try {
@@ -828,7 +828,7 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
     }
   }
 
-  @override
+  /// Remove polylines from map view.
   Future<void> removePolylines(
       {required int viewId, required List<Polyline> polylines}) async {
     try {
@@ -845,12 +845,12 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
     }
   }
 
-  @override
+  /// Remove all polylines from map view.
   Future<void> clearPolylines({required int viewId}) {
     return _viewApi.clearPolylines(viewId);
   }
 
-  @override
+  /// Get all circles from map view.
   Future<List<Circle?>> getCircles({required int viewId}) async {
     final List<CircleDto?> circles = await _viewApi.getCircles(viewId);
 
@@ -860,7 +860,7 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
         .toList();
   }
 
-  @override
+  /// Add circles to map view.
   Future<List<Circle?>> addCircles(
       {required int viewId, required List<CircleOptions> options}) async {
     // Convert options to pigeon format
@@ -887,7 +887,7 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
         .toList();
   }
 
-  @override
+  /// Update circles on the map view.
   Future<List<Circle?>> updateCircles(
       {required int viewId, required List<Circle> circles}) async {
     try {
@@ -909,7 +909,7 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
     }
   }
 
-  @override
+  /// Remove circles from map view.
   Future<void> removeCircles(
       {required int viewId, required List<Circle> circles}) async {
     try {
@@ -925,73 +925,73 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
     }
   }
 
-  @override
+  /// Remove all circles from map view.
   Future<void> clearCircles({required int viewId}) {
     return _viewApi.clearCircles(viewId);
   }
 
-  @override
+  /// Register camera changed listeners.
   Future<void> registerOnCameraChangedListener({required int viewId}) {
     return _viewApi.registerOnCameraChangedListener(viewId);
   }
 
-  @override
+  /// Get map clicked event stream from the navigation view.
   Stream<MapClickEvent> getMapClickEventStream({required int viewId}) {
     return _unwrapEventStream<MapClickEvent>(viewId: viewId);
   }
 
-  @override
+  /// Get map long clicked event stream from the navigation view.
   Stream<MapLongClickEvent> getMapLongClickEventStream({required int viewId}) {
     return _unwrapEventStream<MapLongClickEvent>(viewId: viewId);
   }
 
-  @override
+  /// Get navigation view marker event stream from the navigation view.
   Stream<MarkerEvent> getMarkerEventStream({required int viewId}) {
     return _unwrapEventStream<MarkerEvent>(viewId: viewId);
   }
 
-  @override
+  /// Get navigation view marker drag event stream from the navigation view.
   Stream<MarkerDragEvent> getMarkerDragEventStream({required int viewId}) {
     return _unwrapEventStream<MarkerDragEvent>(viewId: viewId);
   }
 
-  @override
+  /// Get navigation view polygon clicked event stream from the navigation view.
   Stream<PolygonClickedEvent> getPolygonClickedEventStream(
       {required int viewId}) {
     return _unwrapEventStream<PolygonClickedEvent>(viewId: viewId);
   }
 
-  @override
+  /// Get navigation view polyline clicked event stream from the navigation view.
   Stream<PolylineClickedEvent> getPolylineClickedEventStream(
       {required int viewId}) {
     return _unwrapEventStream<PolylineClickedEvent>(viewId: viewId);
   }
 
-  @override
+  /// Get navigation view circle clicked event stream from the navigation view.
   Stream<CircleClickedEvent> getCircleClickedEventStream(
       {required int viewId}) {
     return _unwrapEventStream<CircleClickedEvent>(viewId: viewId);
   }
 
-  @override
+  /// Get navigation UI changed event stream from the navigation view.
   Stream<NavigationUIEnabledChangedEvent>
       getNavigationUIEnabledChangedEventStream({required int viewId}) {
     return _unwrapEventStream<NavigationUIEnabledChangedEvent>(viewId: viewId);
   }
 
-  @override
+  /// Get navigation view my location clicked event stream from the navigation view.
   Stream<MyLocationClickedEvent> getMyLocationClickedEventStream(
       {required int viewId}) {
     return _unwrapEventStream<MyLocationClickedEvent>(viewId: viewId);
   }
 
-  @override
+  /// Get navigation view my location button clicked event stream from the navigation view.
   Stream<MyLocationButtonClickedEvent> getMyLocationButtonClickedEventStream(
       {required int viewId}) {
     return _unwrapEventStream<MyLocationButtonClickedEvent>(viewId: viewId);
   }
 
-  @override
+  /// Get navigation view camera changed event stream from the navigation view.
   Stream<CameraChangedEvent> getCameraChangedEventStream(
       {required int viewId}) {
     return _unwrapEventStream<CameraChangedEvent>(viewId: viewId);
