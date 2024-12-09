@@ -106,7 +106,8 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
         minZoomPreference: mapOptions.minZoomPreference,
         maxZoomPreference: mapOptions.maxZoomPreference,
         zoomControlsEnabled: mapOptions.zoomControlsEnabled,
-        cameraTargetBounds: mapOptions.cameraTargetBounds?.toDto());
+        cameraTargetBounds: mapOptions.cameraTargetBounds?.toDto(),
+        padding: mapOptions.padding?.toDto());
 
     // Initialize navigation view options if given
     NavigationViewOptionsDto? navigationOptionsMessage;
@@ -933,6 +934,17 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
   @override
   Future<void> registerOnCameraChangedListener({required int viewId}) {
     return _viewApi.registerOnCameraChangedListener(viewId);
+  }
+
+  @override
+  Future<void> setPadding({required int viewId, required MapPadding padding}) {
+    return _viewApi.setPadding(
+        viewId,
+        MapPaddingDto(
+            top: padding.top,
+            left: padding.left,
+            bottom: padding.bottom,
+            right: padding.right));
   }
 
   @override

@@ -825,6 +825,15 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     // boolean to control if camera changes are sent over the event channel.
     _listenCameraChanges = true
   }
+
+  func setPadding(padding: MapPaddingDto) throws {
+    _mapView.padding = UIEdgeInsets(
+      top: CGFloat(padding.top),
+      left: CGFloat(padding.left),
+      bottom: CGFloat(padding.bottom),
+      right: CGFloat(padding.right)
+    )
+  }
 }
 
 extension GoogleMapsNavigationView: GMSMapViewNavigationUIDelegate {

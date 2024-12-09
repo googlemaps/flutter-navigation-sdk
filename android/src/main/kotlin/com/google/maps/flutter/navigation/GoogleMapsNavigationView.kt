@@ -20,21 +20,20 @@ import android.content.Context
 import android.content.res.Configuration
 import android.view.View
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.libraries.navigation.NavigationView
 import io.flutter.plugin.platform.PlatformView
 
 class GoogleMapsNavigationView
 internal constructor(
   context: Context,
-  mapOptions: GoogleMapOptions,
+  mapOptions: MapOptions,
   navigationOptions: NavigationViewOptions?,
   viewId: Int,
   private val viewRegistry: GoogleMapsViewRegistry,
   viewEventApi: ViewEventApi,
   private val imageRegistry: ImageRegistry,
 ) : PlatformView, GoogleMapsBaseMapView(viewId, mapOptions, viewEventApi, imageRegistry) {
-  private val _navigationView: NavigationView = NavigationView(context, mapOptions)
+  private val _navigationView: NavigationView = NavigationView(context, mapOptions.googleMapOptions)
 
   /// Default values for UI features.
   private var _isNavigationTripProgressBarEnabled: Boolean = false
@@ -79,12 +78,13 @@ internal constructor(
       // respected.
       _navigationView.isNavigationUiEnabled = navigationViewEnabled
       if (!navigationViewEnabled) {
-        map.moveCamera(CameraUpdateFactory.newCameraPosition(mapOptions.camera))
+        map.moveCamera(CameraUpdateFactory.newCameraPosition(mapOptions.googleMapOptions.camera))
       }
 
       // Call and clear view ready callback if available.
       mapReady()
       invalidateViewAfterMapLoad()
+      mapOptions.padding?.let { setPadding(it) }
     }
   }
 
