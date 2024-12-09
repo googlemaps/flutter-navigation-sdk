@@ -20,19 +20,21 @@ import '../google_navigation_flutter_platform_interface.dart';
 class Simulator {
   /// Sets user location.
   Future<void> setUserLocation(LatLng location) {
-    return GoogleMapsNavigationPlatform.instance.setUserLocation(
+    return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
+        .setUserLocation(
       location,
     );
   }
 
   /// Stops simulation by unsetting user location simulation.
   Future<void> removeUserLocation() {
-    return GoogleMapsNavigationPlatform.instance.removeUserLocation();
+    return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
+        .removeUserLocation();
   }
 
   /// Simulates locations along existing route.
   Future<void> simulateLocationsAlongExistingRoute() {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .simulateLocationsAlongExistingRoute();
   }
 
@@ -40,7 +42,7 @@ class Simulator {
   Future<void> simulateLocationsAlongExistingRouteWithOptions(
     SimulationOptions options,
   ) {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .simulateLocationsAlongExistingRouteWithOptions(
       options,
     );
@@ -50,7 +52,8 @@ class Simulator {
   Future<NavigationRouteStatus> simulateLocationsAlongNewRoute(
     List<NavigationWaypoint> waypoints,
   ) {
-    return GoogleMapsNavigationPlatform.instance.simulateLocationsAlongNewRoute(
+    return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
+        .simulateLocationsAlongNewRoute(
       waypoints,
     );
   }
@@ -61,7 +64,7 @@ class Simulator {
     List<NavigationWaypoint> waypoints,
     RoutingOptions routingOptions,
   ) {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .simulateLocationsAlongNewRouteWithRoutingOptions(
       waypoints,
       routingOptions,
@@ -75,7 +78,7 @@ class Simulator {
     RoutingOptions routingOptions,
     SimulationOptions simulationOptions,
   ) {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
       waypoints,
       routingOptions,
@@ -85,11 +88,13 @@ class Simulator {
 
   /// Pauses simulation.
   Future<void> pauseSimulation() {
-    return GoogleMapsNavigationPlatform.instance.pauseSimulation();
+    return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
+        .pauseSimulation();
   }
 
   /// Resumes simulation.
   Future<void> resumeSimulation() {
-    return GoogleMapsNavigationPlatform.instance.resumeSimulation();
+    return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
+        .resumeSimulation();
   }
 }
