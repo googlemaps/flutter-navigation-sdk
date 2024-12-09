@@ -12,19 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'camera.dart';
-export 'circle.dart';
-export 'destinations.dart';
-export 'latlng.dart';
-export 'latlng_bounds.dart';
-export 'map_type.dart';
-export 'marker.dart';
-export 'map_padding.dart';
-export 'navigation.dart';
-export 'navigation_display_options.dart';
-export 'navigation_routing_options.dart';
-export 'navinfo.dart';
-export 'pattern.dart';
-export 'polygon.dart';
-export 'polyline.dart';
-export 'simulation.dart';
+import '../../types/types.dart';
+import '../method_channel.dart';
+
+/// [MapPadding] convert extension.
+/// @nodoc
+extension ConvertMapPadding on MapPadding {
+  /// Convert [LatLngBounds] to [LatLngBoundsDto].
+  MapPaddingDto toDto() {
+    return MapPaddingDto(top: top, left: left, bottom: bottom, right: right);
+  }
+}

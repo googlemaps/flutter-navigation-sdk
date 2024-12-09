@@ -542,6 +542,8 @@ data class MapOptionsDto(
    * the camera target does not move outside these bounds.
    */
   val cameraTargetBounds: LatLngBoundsDto? = null,
+  /** Specifies the padding for the map. */
+  val padding: MapPaddingDto? = null,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -560,6 +562,7 @@ data class MapOptionsDto(
       val zoomControlsEnabled = list[11] as Boolean
       val cameraTargetBounds: LatLngBoundsDto? =
         (list[12] as List<Any?>?)?.let { LatLngBoundsDto.fromList(it) }
+      val padding: MapPaddingDto? = (list[13] as List<Any?>?)?.let { MapPaddingDto.fromList(it) }
       return MapOptionsDto(
         cameraPosition,
         mapType,
@@ -574,6 +577,7 @@ data class MapOptionsDto(
         maxZoomPreference,
         zoomControlsEnabled,
         cameraTargetBounds,
+        padding,
       )
     }
   }
@@ -593,6 +597,7 @@ data class MapOptionsDto(
       maxZoomPreference,
       zoomControlsEnabled,
       cameraTargetBounds?.toList(),
+      padding?.toList(),
     )
   }
 }
@@ -1726,9 +1731,12 @@ private object NavigationViewCreationApiCodec : StandardMessageCodec() {
         return (readValue(buffer) as? List<Any?>)?.let { MapOptionsDto.fromList(it) }
       }
       132.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { NavigationViewOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { MapPaddingDto.fromList(it) }
       }
       133.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { NavigationViewOptionsDto.fromList(it) }
+      }
+      134.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { ViewCreationOptionsDto.fromList(it) }
       }
       else -> super.readValueOfType(type, buffer)
@@ -1753,12 +1761,16 @@ private object NavigationViewCreationApiCodec : StandardMessageCodec() {
         stream.write(131)
         writeValue(stream, value.toList())
       }
-      is NavigationViewOptionsDto -> {
+      is MapPaddingDto -> {
         stream.write(132)
         writeValue(stream, value.toList())
       }
-      is ViewCreationOptionsDto -> {
+      is NavigationViewOptionsDto -> {
         stream.write(133)
+        writeValue(stream, value.toList())
+      }
+      is ViewCreationOptionsDto -> {
+        stream.write(134)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
