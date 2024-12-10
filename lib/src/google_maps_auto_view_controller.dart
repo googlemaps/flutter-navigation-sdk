@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:flutter/widgets.dart';
+
 import '../google_navigation_flutter.dart';
 import 'google_navigation_flutter_platform_interface.dart';
 
@@ -325,7 +327,8 @@ class GoogleMapsAutoViewController {
     return GoogleMapsNavigationPlatform.instance.clearForAuto();
   }
 
-  Future<void> setPadding(MapPadding padding) {
+  /// Set padding for the map view.
+  Future<void> setPadding(EdgeInsets padding) {
     return GoogleMapsNavigationPlatform.instance
         .setPaddingForAuto(padding: padding);
   }

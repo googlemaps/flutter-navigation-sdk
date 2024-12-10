@@ -151,7 +151,7 @@ abstract class GoogleMapsBaseMapView extends StatefulWidget {
   /// Specifies the initial padding for the map view.
   ///
   /// Null by default (no padding).
-  final MapPadding? initialPadding;
+  final EdgeInsets? initialPadding;
 
   /// Which gestures should be forwarded to the PlatformView.
   ///

@@ -376,20 +376,11 @@ internal class ConvertTest {
 
     val mapOptions = Convert.convertMapOptionsFromDto(testOptions)
 
-    assertEquals(
-      mapOptions.googleMapOptions.camera.target.latitude,
-      testOptions.cameraPosition.target.latitude,
-    )
+    assertEquals(mapOptions.googleMapOptions.camera.target.latitude, testOptions.cameraPosition.target.latitude)
 
-    assertEquals(
-      mapOptions.googleMapOptions.camera.target.longitude,
-      testOptions.cameraPosition.target.longitude,
-    )
+    assertEquals(mapOptions.googleMapOptions.camera.target.longitude, testOptions.cameraPosition.target.longitude)
 
-    assertEquals(
-      mapOptions.googleMapOptions.camera.bearing,
-      testOptions.cameraPosition.bearing.toFloat(),
-    )
+    assertEquals(mapOptions.googleMapOptions.camera.bearing, testOptions.cameraPosition.bearing.toFloat())
 
     assertEquals(mapOptions.googleMapOptions.camera.tilt, testOptions.cameraPosition.tilt.toFloat())
 
@@ -399,10 +390,7 @@ internal class ConvertTest {
 
     assertEquals(mapOptions.googleMapOptions.compassEnabled, testOptions.compassEnabled)
 
-    assertEquals(
-      mapOptions.googleMapOptions.scrollGesturesEnabled,
-      testOptions.scrollGesturesEnabled,
-    )
+    assertEquals(mapOptions.googleMapOptions.scrollGesturesEnabled, testOptions.scrollGesturesEnabled)
 
     assertEquals(mapOptions.googleMapOptions.tiltGesturesEnabled, testOptions.tiltGesturesEnabled)
 
@@ -435,15 +423,9 @@ internal class ConvertTest {
       testOptions.cameraTargetBounds?.southwest?.longitude,
     )
 
-    assertEquals(
-      mapOptions.googleMapOptions.minZoomPreference,
-      testOptions.minZoomPreference?.toFloat(),
-    )
+    assertEquals(mapOptions.googleMapOptions.minZoomPreference, testOptions.minZoomPreference?.toFloat())
 
-    assertEquals(
-      mapOptions.googleMapOptions.maxZoomPreference,
-      testOptions.maxZoomPreference?.toFloat(),
-    )
+    assertEquals(mapOptions.googleMapOptions.maxZoomPreference, testOptions.maxZoomPreference?.toFloat())
 
     assertEquals(mapOptions.googleMapOptions.zoomControlsEnabled, testOptions.zoomControlsEnabled)
 

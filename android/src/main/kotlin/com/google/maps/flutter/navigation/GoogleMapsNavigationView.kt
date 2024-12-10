@@ -83,8 +83,8 @@ internal constructor(
 
       // Call and clear view ready callback if available.
       mapReady()
-      invalidateViewAfterMapLoad()
       mapOptions.padding?.let { setPadding(it) }
+      invalidateViewAfterMapLoad()
     }
   }
 

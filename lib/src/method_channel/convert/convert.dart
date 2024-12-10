@@ -19,7 +19,6 @@ export 'latlng.dart';
 export 'latlng_bounds.dart';
 export 'map_type.dart';
 export 'marker.dart';
-export 'map_padding.dart';
 export 'navigation.dart';
 export 'navigation_display_options.dart';
 export 'navigation_routing_options.dart';
