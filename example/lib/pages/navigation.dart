@@ -1501,13 +1501,14 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                           _trafficIndicentCardsEnabled = newValue;
                         });
                       }),
-                  Text('Map left padding: ${_mapPadding.left}'),
+                  Text(
+                      'Map left padding: ${_mapPadding.left.toStringAsFixed(0)}'),
                   Slider(
                       value: _mapPadding.left.toDouble(),
                       min: 0,
                       max: 200,
                       divisions: 20,
-                      label: _mapPadding.left.toString(),
+                      label: _mapPadding.left.toStringAsFixed(0),
                       onChanged: (double value) {
                         _setPadding(EdgeInsets.only(
                             top: _mapPadding.top,
@@ -1515,13 +1516,14 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                             bottom: _mapPadding.bottom,
                             right: _mapPadding.right));
                       }),
-                  Text('Map right padding: ${_mapPadding.right}'),
+                  Text(
+                      'Map right padding: ${_mapPadding.right.toStringAsFixed(0)}'),
                   Slider(
                       value: _mapPadding.right.toDouble(),
                       min: 0,
                       max: 200,
                       divisions: 20,
-                      label: _mapPadding.right.toString(),
+                      label: _mapPadding.right.toStringAsFixed(0),
                       onChanged: (double value) {
                         _setPadding(EdgeInsets.only(
                             top: _mapPadding.top,
@@ -1529,13 +1531,14 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                             bottom: _mapPadding.bottom,
                             right: value));
                       }),
-                  Text('Map top padding: ${_mapPadding.top}'),
+                  Text(
+                      'Map top padding: ${_mapPadding.top.toStringAsFixed(0)}'),
                   Slider(
                       value: _mapPadding.top.toDouble(),
                       min: 0,
                       max: 200,
                       divisions: 20,
-                      label: _mapPadding.top.toString(),
+                      label: _mapPadding.top.toStringAsFixed(0),
                       onChanged: (double value) {
                         _setPadding(EdgeInsets.only(
                             top: value,
@@ -1543,13 +1546,14 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                             bottom: _mapPadding.bottom,
                             right: _mapPadding.right));
                       }),
-                  Text('Map bottom padding: ${_mapPadding.bottom}'),
+                  Text(
+                      'Map bottom padding: ${_mapPadding.bottom.toStringAsFixed(0)}'),
                   Slider(
                       value: _mapPadding.bottom.toDouble(),
                       min: 0,
                       max: 200,
                       divisions: 20,
-                      label: _mapPadding.bottom.toString(),
+                      label: _mapPadding.bottom.toStringAsFixed(0),
                       onChanged: (double value) {
                         _setPadding(EdgeInsets.only(
                             top: _mapPadding.top,
