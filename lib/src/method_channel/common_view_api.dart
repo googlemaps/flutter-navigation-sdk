@@ -16,6 +16,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../google_navigation_flutter.dart';
 import '../google_navigation_flutter_platform_interface.dart';
@@ -106,7 +107,14 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
         minZoomPreference: mapOptions.minZoomPreference,
         maxZoomPreference: mapOptions.maxZoomPreference,
         zoomControlsEnabled: mapOptions.zoomControlsEnabled,
-        cameraTargetBounds: mapOptions.cameraTargetBounds?.toDto());
+        cameraTargetBounds: mapOptions.cameraTargetBounds?.toDto(),
+        padding: mapOptions.padding != null
+            ? MapPaddingDto(
+                top: mapOptions.padding!.top.toInt(),
+                left: mapOptions.padding!.left.toInt(),
+                bottom: mapOptions.padding!.bottom.toInt(),
+                right: mapOptions.padding!.right.toInt())
+            : null);
 
     // Initialize navigation view options if given
     NavigationViewOptionsDto? navigationOptionsMessage;
@@ -933,6 +941,17 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
   @override
   Future<void> registerOnCameraChangedListener({required int viewId}) {
     return _viewApi.registerOnCameraChangedListener(viewId);
+  }
+
+  @override
+  Future<void> setPadding({required int viewId, required EdgeInsets padding}) {
+    return _viewApi.setPadding(
+        viewId,
+        MapPaddingDto(
+            top: padding.top.toInt(),
+            left: padding.left.toInt(),
+            bottom: padding.bottom.toInt(),
+            right: padding.right.toInt()));
   }
 
   @override

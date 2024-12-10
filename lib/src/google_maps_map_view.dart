@@ -44,6 +44,7 @@ abstract class GoogleMapsBaseMapView extends StatefulWidget {
       this.initialMaxZoomPreference,
       this.initialZoomControlsEnabled = true,
       this.initialCameraTargetBounds,
+      this.initialPadding,
       this.layoutDirection,
       this.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
       this.onRecenterButtonClicked,
@@ -146,6 +147,11 @@ abstract class GoogleMapsBaseMapView extends StatefulWidget {
   ///
   /// Null by default (unbounded).
   final LatLngBounds? initialCameraTargetBounds;
+
+  /// Specifies the initial padding for the map view.
+  ///
+  /// Null by default (no padding).
+  final EdgeInsets? initialPadding;
 
   /// Which gestures should be forwarded to the PlatformView.
   ///
@@ -252,6 +258,7 @@ class GoogleMapsMapView extends GoogleMapsBaseMapView {
       super.initialMaxZoomPreference,
       super.initialZoomControlsEnabled = true,
       super.initialCameraTargetBounds,
+      super.initialPadding,
       super.layoutDirection,
       super.gestureRecognizers =
           const <Factory<OneSequenceGestureRecognizer>>{},
@@ -377,6 +384,7 @@ class GoogleMapsMapViewState extends MapViewState<GoogleMapsMapView> {
             maxZoomPreference: widget.initialMaxZoomPreference,
             zoomControlsEnabled: widget.initialZoomControlsEnabled,
             cameraTargetBounds: widget.initialCameraTargetBounds,
+            padding: widget.initialPadding,
           ),
         ),
         onMapReady: _onPlatformViewCreated);

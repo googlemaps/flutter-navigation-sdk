@@ -142,6 +142,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   int _nextWaypointIndex = 0;
 
+  EdgeInsets _mapPadding = const EdgeInsets.all(0);
+  EdgeInsets _autoViewMapPadding = const EdgeInsets.all(0);
+
   @override
   void initState() {
     super.initState();
@@ -975,6 +978,28 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         'Current route segment destination: ${segment?.destinationWaypoint?.title ?? 'unknown'}');
   }
 
+  Future<void> _setPadding(EdgeInsets padding) async {
+    try {
+      await _navigationViewController!.setPadding(padding);
+      setState(() {
+        _mapPadding = padding;
+      });
+    } catch (e) {
+      showMessage(e.toString());
+    }
+  }
+
+  Future<void> _setAutoViewPadding(EdgeInsets padding) async {
+    try {
+      await _autoViewController.setPadding(padding);
+      setState(() {
+        _autoViewMapPadding = padding;
+      });
+    } catch (e) {
+      showMessage(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) => buildPage(
       context,
@@ -1003,7 +1028,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                           initialNavigationUIEnabledPreference: _guidanceRunning
                               ? NavigationUIEnabledPreference.automatic
                               : NavigationUIEnabledPreference.disabled,
-                        )
+                          initialPadding: const EdgeInsets.all(0))
                       : const Center(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -1476,6 +1501,66 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                           _trafficIndicentCardsEnabled = newValue;
                         });
                       }),
+                  Text(
+                      'Map left padding: ${_mapPadding.left.toStringAsFixed(0)}'),
+                  Slider(
+                      value: _mapPadding.left.toDouble(),
+                      min: 0,
+                      max: 200,
+                      divisions: 20,
+                      label: _mapPadding.left.toStringAsFixed(0),
+                      onChanged: (double value) {
+                        _setPadding(EdgeInsets.only(
+                            top: _mapPadding.top,
+                            left: value,
+                            bottom: _mapPadding.bottom,
+                            right: _mapPadding.right));
+                      }),
+                  Text(
+                      'Map right padding: ${_mapPadding.right.toStringAsFixed(0)}'),
+                  Slider(
+                      value: _mapPadding.right.toDouble(),
+                      min: 0,
+                      max: 200,
+                      divisions: 20,
+                      label: _mapPadding.right.toStringAsFixed(0),
+                      onChanged: (double value) {
+                        _setPadding(EdgeInsets.only(
+                            top: _mapPadding.top,
+                            left: _mapPadding.left,
+                            bottom: _mapPadding.bottom,
+                            right: value));
+                      }),
+                  Text(
+                      'Map top padding: ${_mapPadding.top.toStringAsFixed(0)}'),
+                  Slider(
+                      value: _mapPadding.top.toDouble(),
+                      min: 0,
+                      max: 200,
+                      divisions: 20,
+                      label: _mapPadding.top.toStringAsFixed(0),
+                      onChanged: (double value) {
+                        _setPadding(EdgeInsets.only(
+                            top: value,
+                            left: _mapPadding.left,
+                            bottom: _mapPadding.bottom,
+                            right: _mapPadding.right));
+                      }),
+                  Text(
+                      'Map bottom padding: ${_mapPadding.bottom.toStringAsFixed(0)}'),
+                  Slider(
+                      value: _mapPadding.bottom.toDouble(),
+                      min: 0,
+                      max: 200,
+                      divisions: 20,
+                      label: _mapPadding.bottom.toStringAsFixed(0),
+                      onChanged: (double value) {
+                        _setPadding(EdgeInsets.only(
+                            top: _mapPadding.top,
+                            left: _mapPadding.left,
+                            bottom: value,
+                            right: _mapPadding.right));
+                      }),
                 ]),
           )),
       Card(
@@ -1499,6 +1584,62 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                 onPressed: () => _addMarkerForAuto(),
                 child: const Text('Add marker'),
               ),
+              Text('Map left padding: ${_autoViewMapPadding.left}'),
+              Slider(
+                  value: _autoViewMapPadding.left.toDouble(),
+                  min: 0,
+                  max: 200,
+                  divisions: 20,
+                  label: _autoViewMapPadding.left.toString(),
+                  onChanged: (double value) {
+                    _setAutoViewPadding(EdgeInsets.only(
+                        top: _autoViewMapPadding.top,
+                        left: value,
+                        bottom: _autoViewMapPadding.bottom,
+                        right: _autoViewMapPadding.right));
+                  }),
+              Text('Map right padding: ${_autoViewMapPadding.right}'),
+              Slider(
+                  value: _autoViewMapPadding.right.toDouble(),
+                  min: 0,
+                  max: 200,
+                  divisions: 20,
+                  label: _autoViewMapPadding.right.toString(),
+                  onChanged: (double value) {
+                    _setAutoViewPadding(EdgeInsets.only(
+                        top: _autoViewMapPadding.top,
+                        left: _autoViewMapPadding.left,
+                        bottom: _autoViewMapPadding.bottom,
+                        right: value));
+                  }),
+              Text('Map top padding: ${_autoViewMapPadding.top}'),
+              Slider(
+                  value: _autoViewMapPadding.top.toDouble(),
+                  min: 0,
+                  max: 200,
+                  divisions: 20,
+                  label: _autoViewMapPadding.top.toString(),
+                  onChanged: (double value) {
+                    _setAutoViewPadding(EdgeInsets.only(
+                        top: value,
+                        left: _autoViewMapPadding.left,
+                        bottom: _autoViewMapPadding.bottom,
+                        right: _autoViewMapPadding.right));
+                  }),
+              Text('Map bottom padding: ${_autoViewMapPadding.bottom}'),
+              Slider(
+                  value: _autoViewMapPadding.bottom.toDouble(),
+                  min: 0,
+                  max: 200,
+                  divisions: 20,
+                  label: _autoViewMapPadding.bottom.toString(),
+                  onChanged: (double value) {
+                    _setAutoViewPadding(EdgeInsets.only(
+                        top: _autoViewMapPadding.top,
+                        left: _autoViewMapPadding.left,
+                        bottom: value,
+                        right: _autoViewMapPadding.right));
+                  }),
             ]),
       ),
       IgnorePointer(

@@ -61,28 +61,28 @@ object Convert {
    * @param options pigeon message [NavigationViewCreationOptionsDto].
    * @return Google Map Options [GoogleMapOptions].
    */
-  fun convertMapOptionsFromDto(options: MapOptionsDto): GoogleMapOptions {
-    val mapOptions = GoogleMapOptions()
+  fun convertMapOptionsFromDto(options: MapOptionsDto): MapOptions {
+    val googleMapOptions = GoogleMapOptions()
 
-    mapOptions.camera(convertCameraPositionFromDto(options.cameraPosition))
-    mapOptions.mapType(convertMapTypeFromDto(options.mapType))
-    mapOptions.compassEnabled(options.compassEnabled)
-    mapOptions.rotateGesturesEnabled(options.rotateGesturesEnabled)
-    mapOptions.scrollGesturesEnabled(options.scrollGesturesEnabled)
-    mapOptions.tiltGesturesEnabled(options.tiltGesturesEnabled)
-    mapOptions.zoomGesturesEnabled(options.zoomGesturesEnabled)
-    mapOptions.scrollGesturesEnabledDuringRotateOrZoom(
+    googleMapOptions.camera(convertCameraPositionFromDto(options.cameraPosition))
+    googleMapOptions.mapType(convertMapTypeFromDto(options.mapType))
+    googleMapOptions.compassEnabled(options.compassEnabled)
+    googleMapOptions.rotateGesturesEnabled(options.rotateGesturesEnabled)
+    googleMapOptions.scrollGesturesEnabled(options.scrollGesturesEnabled)
+    googleMapOptions.tiltGesturesEnabled(options.tiltGesturesEnabled)
+    googleMapOptions.zoomGesturesEnabled(options.zoomGesturesEnabled)
+    googleMapOptions.scrollGesturesEnabledDuringRotateOrZoom(
       options.scrollGesturesEnabledDuringRotateOrZoom
     )
-    mapOptions.mapToolbarEnabled(options.mapToolbarEnabled)
+    googleMapOptions.mapToolbarEnabled(options.mapToolbarEnabled)
     options.cameraTargetBounds?.let {
-      mapOptions.latLngBoundsForCameraTarget(convertLatLngBoundsFromDto(it))
+      googleMapOptions.latLngBoundsForCameraTarget(convertLatLngBoundsFromDto(it))
     }
-    options.minZoomPreference?.let { mapOptions.minZoomPreference(it.toFloat()) }
-    options.maxZoomPreference?.let { mapOptions.maxZoomPreference(it.toFloat()) }
-    mapOptions.zoomControlsEnabled(options.zoomControlsEnabled)
+    options.minZoomPreference?.let { googleMapOptions.minZoomPreference(it.toFloat()) }
+    options.maxZoomPreference?.let { googleMapOptions.maxZoomPreference(it.toFloat()) }
+    googleMapOptions.zoomControlsEnabled(options.zoomControlsEnabled)
 
-    return mapOptions
+    return MapOptions(googleMapOptions, options.padding)
   }
 
   /**
