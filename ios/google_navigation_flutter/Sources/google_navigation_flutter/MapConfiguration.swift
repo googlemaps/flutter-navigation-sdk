@@ -58,7 +58,9 @@ extension MapConfiguration {
       minZoomPreference ?? kGMSMinZoomLevel,
       maxZoom: maxZoomPreference ?? kGMSMaxZoomLevel
     )
-    mapView.padding = padding ?? UIEdgeInsets.zero
+    if let padding {
+      mapView.padding = padding
+    }
   }
 
   // Applies the configuration to the given

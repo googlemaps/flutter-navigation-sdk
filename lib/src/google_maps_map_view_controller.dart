@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:flutter/widgets.dart';
+
 import '../google_navigation_flutter.dart';
 import 'google_navigation_flutter_platform_interface.dart';
 
@@ -365,7 +367,7 @@ class GoogleMapViewController {
   }
 
   /// Set padding for the map view.
-  Future<void> setPadding(MapPadding padding) {
+  Future<void> setPadding(EdgeInsets padding) {
     return GoogleMapsNavigationPlatform.instance
         .setPadding(viewId: _viewId, padding: padding);
   }

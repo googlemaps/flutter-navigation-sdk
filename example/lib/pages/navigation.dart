@@ -142,9 +142,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   int _nextWaypointIndex = 0;
 
-  MapPadding _mapPadding = MapPadding(top: 0, left: 0, bottom: 0, right: 0);
-  MapPadding _autoViewMapPadding =
-      MapPadding(top: 0, left: 0, bottom: 0, right: 0);
+  EdgeInsets _mapPadding = const EdgeInsets.all(0);
+  EdgeInsets _autoViewMapPadding = const EdgeInsets.all(0);
 
   @override
   void initState() {
@@ -979,7 +978,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         'Current route segment destination: ${segment?.destinationWaypoint?.title ?? 'unknown'}');
   }
 
-  Future<void> _setPadding(MapPadding padding) async {
+  Future<void> _setPadding(EdgeInsets padding) async {
     try {
       await _navigationViewController!.setPadding(padding);
       setState(() {
@@ -990,7 +989,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     }
   }
 
-  Future<void> _setAutoViewPadding(MapPadding padding) async {
+  Future<void> _setAutoViewPadding(EdgeInsets padding) async {
     try {
       await _autoViewController.setPadding(padding);
       setState(() {
@@ -1029,8 +1028,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                           initialNavigationUIEnabledPreference: _guidanceRunning
                               ? NavigationUIEnabledPreference.automatic
                               : NavigationUIEnabledPreference.disabled,
-                          initialPadding:
-                              MapPadding(top: 0, left: 0, bottom: 0, right: 0))
+                          initialPadding: const EdgeInsets.all(0))
                       : const Center(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -1511,9 +1509,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                       divisions: 20,
                       label: _mapPadding.left.toString(),
                       onChanged: (double value) {
-                        _setPadding(MapPadding(
+                        _setPadding(EdgeInsets.only(
                             top: _mapPadding.top,
-                            left: value.round(),
+                            left: value,
                             bottom: _mapPadding.bottom,
                             right: _mapPadding.right));
                       }),
@@ -1525,11 +1523,11 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                       divisions: 20,
                       label: _mapPadding.right.toString(),
                       onChanged: (double value) {
-                        _setPadding(MapPadding(
+                        _setPadding(EdgeInsets.only(
                             top: _mapPadding.top,
                             left: _mapPadding.left,
                             bottom: _mapPadding.bottom,
-                            right: value.round()));
+                            right: value));
                       }),
                   Text('Map top padding: ${_mapPadding.top}'),
                   Slider(
@@ -1539,8 +1537,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                       divisions: 20,
                       label: _mapPadding.top.toString(),
                       onChanged: (double value) {
-                        _setPadding(MapPadding(
-                            top: value.round(),
+                        _setPadding(EdgeInsets.only(
+                            top: value,
                             left: _mapPadding.left,
                             bottom: _mapPadding.bottom,
                             right: _mapPadding.right));
@@ -1553,10 +1551,10 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                       divisions: 20,
                       label: _mapPadding.bottom.toString(),
                       onChanged: (double value) {
-                        _setPadding(MapPadding(
+                        _setPadding(EdgeInsets.only(
                             top: _mapPadding.top,
                             left: _mapPadding.left,
-                            bottom: value.round(),
+                            bottom: value,
                             right: _mapPadding.right));
                       }),
                 ]),
@@ -1590,9 +1588,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   divisions: 20,
                   label: _autoViewMapPadding.left.toString(),
                   onChanged: (double value) {
-                    _setAutoViewPadding(MapPadding(
+                    _setAutoViewPadding(EdgeInsets.only(
                         top: _autoViewMapPadding.top,
-                        left: value.round(),
+                        left: value,
                         bottom: _autoViewMapPadding.bottom,
                         right: _autoViewMapPadding.right));
                   }),
@@ -1604,11 +1602,11 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   divisions: 20,
                   label: _autoViewMapPadding.right.toString(),
                   onChanged: (double value) {
-                    _setAutoViewPadding(MapPadding(
+                    _setAutoViewPadding(EdgeInsets.only(
                         top: _autoViewMapPadding.top,
                         left: _autoViewMapPadding.left,
                         bottom: _autoViewMapPadding.bottom,
-                        right: value.round()));
+                        right: value));
                   }),
               Text('Map top padding: ${_autoViewMapPadding.top}'),
               Slider(
@@ -1618,8 +1616,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   divisions: 20,
                   label: _autoViewMapPadding.top.toString(),
                   onChanged: (double value) {
-                    _setAutoViewPadding(MapPadding(
-                        top: value.round(),
+                    _setAutoViewPadding(EdgeInsets.only(
+                        top: value,
                         left: _autoViewMapPadding.left,
                         bottom: _autoViewMapPadding.bottom,
                         right: _autoViewMapPadding.right));
@@ -1632,10 +1630,10 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   divisions: 20,
                   label: _autoViewMapPadding.bottom.toString(),
                   onChanged: (double value) {
-                    _setAutoViewPadding(MapPadding(
+                    _setAutoViewPadding(EdgeInsets.only(
                         top: _autoViewMapPadding.top,
                         left: _autoViewMapPadding.left,
-                        bottom: value.round(),
+                        bottom: value,
                         right: _autoViewMapPadding.right));
                   }),
             ]),

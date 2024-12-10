@@ -11,10 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../google_navigation_flutter.dart';
 
@@ -188,7 +188,7 @@ class MapOptions {
   /// Specifies the initial padding for the map view.
   ///
   /// Null by default (no padding).
-  final MapPadding? padding;
+  final EdgeInsets? padding;
 }
 
 /// Determines the initial visibility of the navigation UI on map initialization.
