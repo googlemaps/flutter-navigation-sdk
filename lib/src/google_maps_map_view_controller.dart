@@ -38,13 +38,14 @@ class GoogleMapViewController {
   /// Change status of my location enabled.
   ///
   Future<void> setMyLocationEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .setMyLocationEnabled(viewId: _viewId, enabled: enabled);
   }
 
   /// This method returns the current map type of the Google Maps view instance.
   Future<MapType> getMapType() {
-    return GoogleMapsNavigationPlatform.instance.getMapType(viewId: _viewId);
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .getMapType(viewId: _viewId);
   }
 
   /// Changes the type of the map being displayed on the Google Maps view.
@@ -59,7 +60,7 @@ class GoogleMapViewController {
   /// _mapViewController.changeMapType(MapType.satellite);
   /// ```
   Future<void> setMapType({required MapType mapType}) async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .setMapType(viewId: _viewId, mapType: mapType);
   }
 
@@ -71,14 +72,14 @@ class GoogleMapViewController {
   /// https://developers.google.com/maps/documentation/ios-sdk/styling
   /// https://developers.google.com/maps/documentation/android-sdk/styling
   Future<void> setMapStyle(String? styleJson) async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .setMapStyle(_viewId, styleJson);
   }
 
   /// Gets whether the my location is enabled or disabled.
   ///
   Future<bool> isMyLocationEnabled() async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .isMyLocationEnabled(viewId: _viewId);
   }
 
@@ -88,24 +89,25 @@ class GoogleMapViewController {
   /// and optional [zoomLevel] to control the map zoom.
   Future<void> followMyLocation(CameraPerspective perspective,
       {double? zoomLevel}) async {
-    return GoogleMapsNavigationPlatform.instance.followMyLocation(
+    return GoogleMapsNavigationPlatform.instance.viewAPI.followMyLocation(
         viewId: _viewId, perspective: perspective, zoomLevel: zoomLevel);
   }
 
   /// Gets user's current location.
   Future<LatLng?> getMyLocation() async {
-    return GoogleMapsNavigationPlatform.instance.getMyLocation(viewId: _viewId);
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .getMyLocation(viewId: _viewId);
   }
 
   /// Gets the current visible map region or camera bounds.
   Future<LatLngBounds> getVisibleRegion() async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .getVisibleRegion(viewId: _viewId);
   }
 
   /// Gets the current position of the camera.
   Future<CameraPosition> getCameraPosition() async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .getCameraPosition(viewId: _viewId);
   }
 
@@ -131,7 +133,7 @@ class GoogleMapViewController {
   /// See also [moveCamera], [followMyLocation].
   Future<void> animateCamera(CameraUpdate cameraUpdate,
       {Duration? duration, AnimationFinishedCallback? onFinished}) {
-    return GoogleMapsNavigationPlatform.instance.animateCamera(
+    return GoogleMapsNavigationPlatform.instance.viewAPI.animateCamera(
         viewId: _viewId,
         cameraUpdate: cameraUpdate,
         duration: duration?.inMilliseconds,
@@ -144,13 +146,13 @@ class GoogleMapViewController {
   /// See [CameraUpdate] for more information
   /// on how to create different camera movements.
   Future<void> moveCamera(CameraUpdate cameraUpdate) {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .moveCamera(viewId: _viewId, cameraUpdate: cameraUpdate);
   }
 
   /// Is the recenter button enabled.
   Future<bool> isRecenterButtonEnabled() {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .isRecenterButtonEnabled(viewId: _viewId);
   }
 
@@ -158,7 +160,8 @@ class GoogleMapViewController {
   ///
   /// By default, the recenter button is enabled.
   Future<void> setRecenterButtonEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance.setRecenterButtonEnabled(
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .setRecenterButtonEnabled(
       viewId: _viewId,
       enabled: enabled,
     );
@@ -168,7 +171,7 @@ class GoogleMapViewController {
   /// If minimum zoom preference is not set previously, returns minimum possible
   /// zoom level for the current map type.
   Future<double> getMinZoomPreference() {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .getMinZoomPreference(viewId: _viewId);
   }
 
@@ -176,13 +179,13 @@ class GoogleMapViewController {
   /// If maximum zoom preference is not set previously, returns maximum possible
   /// zoom level for the current map type.
   Future<double> getMaxZoomPreference() {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .getMaxZoomPreference(viewId: _viewId);
   }
 
   /// Removes any previously specified upper and lower zoom bounds.
   Future<void> resetMinMaxZoomPreference() {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .resetMinMaxZoomPreference(viewId: _viewId);
   }
 
@@ -195,7 +198,7 @@ class GoogleMapViewController {
   /// Throws [MinZoomRangeException] if [minZoomPreference] is
   /// greater than maximum zoom lavel.
   Future<void> setMinZoomPreference(double minZoomPreference) {
-    return GoogleMapsNavigationPlatform.instance.setMinZoomPreference(
+    return GoogleMapsNavigationPlatform.instance.viewAPI.setMinZoomPreference(
         viewId: _viewId, minZoomPreference: minZoomPreference);
   }
 
@@ -210,18 +213,19 @@ class GoogleMapViewController {
   /// Throws [MaxZoomRangeException] if [maxZoomPreference] is
   /// less than minimum zoom lavel.
   Future<void> setMaxZoomPreference(double maxZoomPreference) {
-    return GoogleMapsNavigationPlatform.instance.setMaxZoomPreference(
+    return GoogleMapsNavigationPlatform.instance.viewAPI.setMaxZoomPreference(
         viewId: _viewId, maxZoomPreference: maxZoomPreference);
   }
 
   /// Retrieves all markers that have been added to the map view.
   Future<List<Marker?>> getMarkers() {
-    return GoogleMapsNavigationPlatform.instance.getMarkers(viewId: _viewId);
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .getMarkers(viewId: _viewId);
   }
 
   /// Add markers to the map view.
   Future<List<Marker?>> addMarkers(List<MarkerOptions> markerOptions) {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .addMarkers(viewId: _viewId, markerOptions: markerOptions);
   }
 
@@ -231,7 +235,7 @@ class GoogleMapViewController {
   /// more markers that have not been added to the map view via [addMarkers] or
   /// contains markers that have already been removed from the map view.
   Future<List<Marker?>> updateMarkers(List<Marker> markers) async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .updateMarkers(viewId: _viewId, markers: markers);
   }
 
@@ -241,23 +245,25 @@ class GoogleMapViewController {
   /// more markers that have not been added to the map view via [addMarkers] or
   /// contains markers that have already been removed from the map view.
   Future<void> removeMarkers(List<Marker> markers) async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .removeMarkers(viewId: _viewId, markers: markers);
   }
 
   /// Remove all markers from the map view.
   Future<void> clearMarkers() {
-    return GoogleMapsNavigationPlatform.instance.clearMarkers(viewId: _viewId);
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .clearMarkers(viewId: _viewId);
   }
 
   /// Retrieves all polygons that have been added to the map view.
   Future<List<Polygon?>> getPolygons() {
-    return GoogleMapsNavigationPlatform.instance.getPolygons(viewId: _viewId);
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .getPolygons(viewId: _viewId);
   }
 
   /// Add polygons to the map view.
   Future<List<Polygon?>> addPolygons(List<PolygonOptions> polygonOptions) {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .addPolygons(viewId: _viewId, polygonOptions: polygonOptions);
   }
 
@@ -267,7 +273,7 @@ class GoogleMapViewController {
   /// polygon that has not beed added to the map view via [addPolygons] or
   /// contains polygon that has already been removed from the map view.
   Future<List<Polygon?>> updatePolygons(List<Polygon> polygons) async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .updatePolygons(viewId: _viewId, polygons: polygons);
   }
 
@@ -277,23 +283,25 @@ class GoogleMapViewController {
   /// polygon that has not beed added to the map view via [addPolygons] or
   /// contains polygon that has already been removed from the map view.
   Future<void> removePolygons(List<Polygon> polygons) async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .removePolygons(viewId: _viewId, polygons: polygons);
   }
 
   /// Remove all polygons from the map view.
   Future<void> clearPolygons() {
-    return GoogleMapsNavigationPlatform.instance.clearPolygons(viewId: _viewId);
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .clearPolygons(viewId: _viewId);
   }
 
   /// Retrieves all polylines that have been added to the map view.
   Future<List<Polyline?>> getPolylines() {
-    return GoogleMapsNavigationPlatform.instance.getPolylines(viewId: _viewId);
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .getPolylines(viewId: _viewId);
   }
 
   /// Add polylines to the map view.
   Future<List<Polyline?>> addPolylines(List<PolylineOptions> polylineOptions) {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .addPolylines(viewId: _viewId, polylineOptions: polylineOptions);
   }
 
@@ -303,7 +311,7 @@ class GoogleMapViewController {
   /// polyline that has not beed added to the map view via [addPolylines] or
   /// contains polyline that has already been removed from the map view.
   Future<List<Polyline?>> updatePolylines(List<Polyline> polylines) async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .updatePolylines(viewId: _viewId, polylines: polylines);
   }
 
@@ -313,24 +321,25 @@ class GoogleMapViewController {
   /// polyline that has not beed added to the map view via [addPolylines] or
   /// contains polyline that has already been removed from the map view.
   Future<void> removePolylines(List<Polyline> polylines) async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .removePolylines(viewId: _viewId, polylines: polylines);
   }
 
   /// Remove all polylines from the map view.
   Future<void> clearPolylines() {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .clearPolylines(viewId: _viewId);
   }
 
   /// Gets all circles from the map view.
   Future<List<Circle?>> getCircles() {
-    return GoogleMapsNavigationPlatform.instance.getCircles(viewId: _viewId);
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .getCircles(viewId: _viewId);
   }
 
   /// Add circles to the map view.
   Future<List<Circle?>> addCircles(List<CircleOptions> options) {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .addCircles(viewId: _viewId, options: options);
   }
 
@@ -340,7 +349,7 @@ class GoogleMapViewController {
   /// more circles that have not been added to the map view via [addCircles] or
   /// contains circles that have already been removed from the map view.
   Future<List<Circle?>> updateCircles(List<Circle> circles) async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .updateCircles(viewId: _viewId, circles: circles);
   }
 
@@ -350,17 +359,18 @@ class GoogleMapViewController {
   /// more circles that have not been added to the map view via [addCircles] or
   /// contains circles that have already been removed from the map view.
   Future<void> removeCircles(List<Circle> circles) async {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .removeCircles(viewId: _viewId, circles: circles);
   }
 
   /// Remove all circles from the map view.
   Future<void> clearCircles() {
-    return GoogleMapsNavigationPlatform.instance.clearCircles(viewId: _viewId);
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .clearCircles(viewId: _viewId);
   }
 
   /// Remove all markers, polylines, polygons, overlays, etc from the map view.
   Future<void> clear() {
-    return GoogleMapsNavigationPlatform.instance.clear(viewId: _viewId);
+    return GoogleMapsNavigationPlatform.instance.viewAPI.clear(viewId: _viewId);
   }
 }

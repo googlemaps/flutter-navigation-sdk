@@ -18,12 +18,11 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 
 import '../../google_navigation_flutter.dart';
-import '../google_navigation_flutter_platform_interface.dart';
 import 'method_channel.dart';
 
 /// @nodoc
 /// Class that handles map view and navigation view communications.
-mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
+class AutoMapViewAPIImpl {
   final AutoMapViewApi _viewApi = AutoMapViewApi();
   bool _viewApiHasBeenSetUp = false;
   final StreamController<_AutoEventWrapper> _autoEventStreamController =
@@ -61,10 +60,16 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     return circleId;
   }
 
+  Stream<T> _unwrapEventStream<T>() {
+    // If event that does not
+    return _autoEventStreamController.stream
+        .where((_AutoEventWrapper wrapper) => (wrapper.event is T))
+        .map<T>((_AutoEventWrapper wrapper) => wrapper.event as T);
+  }
+
   /// This function ensures that the event API has been setup. This should be
   /// called when initializing auto view controller.
-  @override
-  void initializeAutoViewEventAPI() {
+  void ensureAutoViewApiSetUp() {
     if (!_viewApiHasBeenSetUp) {
       AutoViewEventApi.setup(
         AutoViewEventApiImpl(
@@ -74,29 +79,29 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     }
   }
 
-  @override
-  Future<bool> isMyLocationEnabledForAuto() {
+  /// Get the preference for whether the my location should be enabled or disabled.
+  Future<bool> isMyLocationEnabled() {
     return _viewApi.isMyLocationEnabled();
   }
 
-  @override
-  Future<void> setMyLocationEnabledForAuto({required bool enabled}) {
+  /// Enabled location in the navigation view.
+  Future<void> setMyLocationEnabled({required bool enabled}) {
     return _viewApi.setMyLocationEnabled(enabled);
   }
 
-  @override
-  Future<MapType> getMapTypeForAuto() async {
+  /// Get the map type.
+  Future<MapType> getMapType() async {
     final MapTypeDto mapType = await _viewApi.getMapType();
     return mapType.toMapType();
   }
 
-  @override
-  Future<void> setMapTypeForAuto({required MapType mapType}) async {
+  /// Modified visible map type.
+  Future<void> setMapType({required MapType mapType}) async {
     return _viewApi.setMapType(mapType.toDto());
   }
 
-  @override
-  Future<void> setMapStyleForAuto(String? styleJson) async {
+  /// Set map style by json string.
+  Future<void> setMapStyle(String? styleJson) async {
     try {
       // Set the given json to the viewApi or reset the map style if
       // the styleJson is null.
@@ -110,24 +115,24 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     }
   }
 
-  @override
-  Future<void> setMyLocationButtonEnabledForAuto({required bool enabled}) {
+  /// Enables or disables the my-location button.
+  Future<void> setMyLocationButtonEnabled({required bool enabled}) {
     return _viewApi.setMyLocationButtonEnabled(enabled);
   }
 
-  @override
-  Future<void> setConsumeMyLocationButtonClickEventsEnabledForAuto(
+  /// Enables or disables if the my location button consumes click events.
+  Future<void> setConsumeMyLocationButtonClickEventsEnabled(
       {required bool enabled}) async {
     return _viewApi.setConsumeMyLocationButtonClickEventsEnabled(enabled);
   }
 
-  @override
-  Future<void> setZoomGesturesEnabledForAuto({required bool enabled}) {
+  /// Enables or disables the zoom gestures.
+  Future<void> setZoomGesturesEnabled({required bool enabled}) {
     return _viewApi.setZoomGesturesEnabled(enabled);
   }
 
-  @override
-  Future<void> setZoomControlsEnabledForAuto({required bool enabled}) async {
+  /// Enables or disables the zoom controls.
+  Future<void> setZoomControlsEnabled({required bool enabled}) async {
     try {
       return await _viewApi.setZoomControlsEnabled(enabled);
     } on PlatformException catch (error) {
@@ -139,34 +144,34 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     }
   }
 
-  @override
-  Future<void> setCompassEnabledForAuto({required bool enabled}) {
+  /// Enables or disables the compass.
+  Future<void> setCompassEnabled({required bool enabled}) {
     return _viewApi.setCompassEnabled(enabled);
   }
 
-  @override
-  Future<void> setRotateGesturesEnabledForAuto({required bool enabled}) {
+  /// Sets the preference for whether rotate gestures should be enabled or disabled.
+  Future<void> setRotateGesturesEnabled({required bool enabled}) {
     return _viewApi.setRotateGesturesEnabled(enabled);
   }
 
-  @override
-  Future<void> setScrollGesturesEnabledForAuto({required bool enabled}) {
+  /// Sets the preference for whether scroll gestures should be enabled or disabled.
+  Future<void> setScrollGesturesEnabled({required bool enabled}) {
     return _viewApi.setScrollGesturesEnabled(enabled);
   }
 
-  @override
-  Future<void> setScrollGesturesDuringRotateOrZoomEnabledForAuto(
+  /// Sets the preference for whether scroll gestures can take place at the same time as a zoom or rotate gesture.
+  Future<void> setScrollGesturesDuringRotateOrZoomEnabled(
       {required bool enabled}) {
     return _viewApi.setScrollGesturesDuringRotateOrZoomEnabled(enabled);
   }
 
-  @override
-  Future<void> setTiltGesturesEnabledForAuto({required bool enabled}) {
+  /// Sets the preference for whether tilt gestures should be enabled or disabled.
+  Future<void> setTiltGesturesEnabled({required bool enabled}) {
     return _viewApi.setTiltGesturesEnabled(enabled);
   }
 
-  @override
-  Future<void> setMapToolbarEnabledForAuto({required bool enabled}) async {
+  /// Sets the preference for whether the Map Toolbar should be enabled or disabled.
+  Future<void> setMapToolbarEnabled({required bool enabled}) async {
     try {
       return await _viewApi.setMapToolbarEnabled(enabled);
     } on PlatformException catch (error) {
@@ -178,28 +183,28 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     }
   }
 
-  @override
-  Future<void> setTrafficEnabledForAuto({required bool enabled}) {
+  /// Turns the traffic layer on or off.
+  Future<void> setTrafficEnabled({required bool enabled}) {
     return _viewApi.setTrafficEnabled(enabled);
   }
 
-  @override
-  Future<bool> isMyLocationButtonEnabledForAuto() {
+  /// Get the preference for whether the my location button should be enabled or disabled.
+  Future<bool> isMyLocationButtonEnabled() {
     return _viewApi.isMyLocationButtonEnabled();
   }
 
-  @override
-  Future<bool> isConsumeMyLocationButtonClickEventsEnabledForAuto() {
+  /// Get the preference for whether the my location button consumes click events.
+  Future<bool> isConsumeMyLocationButtonClickEventsEnabled() {
     return _viewApi.isConsumeMyLocationButtonClickEventsEnabled();
   }
 
-  @override
-  Future<bool> isZoomGesturesEnabledForAuto() {
+  /// Gets the preference for whether zoom gestures should be enabled or disabled.
+  Future<bool> isZoomGesturesEnabled() {
     return _viewApi.isZoomGesturesEnabled();
   }
 
-  @override
-  Future<bool> isZoomControlsEnabledForAuto() async {
+  /// Gets the preference for whether zoom controls should be enabled or disabled.
+  Future<bool> isZoomControlsEnabled() async {
     try {
       return await _viewApi.isZoomControlsEnabled();
     } on PlatformException catch (error) {
@@ -211,33 +216,33 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     }
   }
 
-  @override
-  Future<bool> isCompassEnabledForAuto() {
+  /// Gets the preference for whether compass should be enabled or disabled.
+  Future<bool> isCompassEnabled() {
     return _viewApi.isCompassEnabled();
   }
 
-  @override
-  Future<bool> isRotateGesturesEnabledForAuto() {
+  /// Gets the preference for whether rotate gestures should be enabled or disabled.
+  Future<bool> isRotateGesturesEnabled() {
     return _viewApi.isRotateGesturesEnabled();
   }
 
-  @override
-  Future<bool> isScrollGesturesEnabledForAuto() {
+  /// Gets the preference for whether scroll gestures should be enabled or disabled.
+  Future<bool> isScrollGesturesEnabled() {
     return _viewApi.isScrollGesturesEnabled();
   }
 
-  @override
-  Future<bool> isScrollGesturesEnabledDuringRotateOrZoomForAuto() {
+  /// Gets the preference for whether scroll gestures can take place at the same time as a zoom or rotate gesture.
+  Future<bool> isScrollGesturesEnabledDuringRotateOrZoom() {
     return _viewApi.isScrollGesturesEnabledDuringRotateOrZoom();
   }
 
-  @override
-  Future<bool> isTiltGesturesEnabledForAuto() {
+  /// Gets the preference for whether tilt gestures should be enabled or disabled.
+  Future<bool> isTiltGesturesEnabled() {
     return _viewApi.isTiltGesturesEnabled();
   }
 
-  @override
-  Future<bool> isMapToolbarEnabledForAuto() async {
+  /// Gets whether the Map Toolbar is enabled/disabled.
+  Future<bool> isMapToolbarEnabled() async {
     try {
       return await _viewApi.isMapToolbarEnabled();
     } on PlatformException catch (error) {
@@ -249,19 +254,19 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     }
   }
 
-  @override
-  Future<bool> isTrafficEnabledForAuto() {
+  /// Checks whether the map is drawing traffic data.
+  Future<bool> isTrafficEnabled() {
     return _viewApi.isTrafficEnabled();
   }
 
-  @override
-  Future<void> followMyLocationForAuto(
+  /// Sets the Camera to follow the location of the user.
+  Future<void> followMyLocation(
       {required CameraPerspective perspective, required double? zoomLevel}) {
     return _viewApi.followMyLocation(perspective.toDto(), zoomLevel);
   }
 
-  @override
-  Future<LatLng?> getMyLocationForAuto() async {
+  /// Gets users current location.
+  Future<LatLng?> getMyLocation() async {
     final LatLngDto? myLocation = await _viewApi.getMyLocation();
     if (myLocation == null) {
       return null;
@@ -269,14 +274,14 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     return myLocation.toLatLng();
   }
 
-  @override
-  Future<CameraPosition> getCameraPositionForAuto() async {
+  /// Gets the current position of the camera.
+  Future<CameraPosition> getCameraPosition() async {
     final CameraPositionDto position = await _viewApi.getCameraPosition();
     return position.toCameraPosition();
   }
 
-  @override
-  Future<LatLngBounds> getVisibleRegionForAuto() async {
+  /// Gets the current visible area / camera bounds.
+  Future<LatLngBounds> getVisibleRegion() async {
     final LatLngBoundsDto bounds = await _viewApi.getVisibleRegion();
     return LatLngBounds(
       southwest: bounds.southwest.toLatLng(),
@@ -284,8 +289,8 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     );
   }
 
-  @override
-  Future<void> animateCameraForAuto(
+  /// Animates the movement of the camera.
+  Future<void> animateCamera(
       {required CameraUpdate cameraUpdate,
       required int? duration,
       AnimationFinishedCallback? onFinished}) async {
@@ -340,8 +345,8 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     }
   }
 
-  @override
-  Future<void> moveCameraForAuto({required CameraUpdate cameraUpdate}) async {
+  /// Moves the camera.
+  Future<void> moveCamera({required CameraUpdate cameraUpdate}) async {
     switch (cameraUpdate.type) {
       case CameraUpdateType.cameraPosition:
         assert(cameraUpdate.cameraPosition != null, 'Camera position is null');
@@ -367,24 +372,23 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     }
   }
 
-  @override
-  Future<double> getMinZoomPreferenceForAuto() {
+  /// Returns the minimum zoom level.
+  Future<double> getMinZoomPreference() {
     return _viewApi.getMinZoomPreference();
   }
 
-  @override
-  Future<double> getMaxZoomPreferenceForAuto() {
+  /// Returns the maximum zoom level for the current camera position.
+  Future<double> getMaxZoomPreference() {
     return _viewApi.getMaxZoomPreference();
   }
 
-  @override
-  Future<void> resetMinMaxZoomPreferenceForAuto() {
+  /// Removes any previously specified upper and lower zoom bounds.
+  Future<void> resetMinMaxZoomPreference() {
     return _viewApi.resetMinMaxZoomPreference();
   }
 
-  @override
-  Future<void> setMinZoomPreferenceForAuto(
-      {required double minZoomPreference}) async {
+  /// Sets a preferred lower bound for the camera zoom.
+  Future<void> setMinZoomPreference({required double minZoomPreference}) async {
     try {
       return await _viewApi.setMinZoomPreference(minZoomPreference);
     } on PlatformException catch (error) {
@@ -396,9 +400,8 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     }
   }
 
-  @override
-  Future<void> setMaxZoomPreferenceForAuto(
-      {required double maxZoomPreference}) async {
+  /// Sets a preferred upper bound for the camera zoom.
+  Future<void> setMaxZoomPreference({required double maxZoomPreference}) async {
     try {
       return await _viewApi.setMaxZoomPreference(maxZoomPreference);
     } on PlatformException catch (error) {
@@ -410,8 +413,8 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     }
   }
 
-  @override
-  Future<List<Marker?>> getMarkersForAuto() async {
+  /// Get all markers from map view.
+  Future<List<Marker?>> getMarkers() async {
     final List<MarkerDto?> markers = await _viewApi.getMarkers();
     return markers
         .whereType<MarkerDto>()
@@ -419,8 +422,8 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
         .toList();
   }
 
-  @override
-  Future<List<Marker>> addMarkersForAuto(
+  /// Add markers to map view.
+  Future<List<Marker>> addMarkers(
       {required List<MarkerOptions> markerOptions}) async {
     // Convert options to pigeon format
     final List<MarkerOptionsDto> options =
@@ -446,9 +449,8 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
         .toList();
   }
 
-  @override
-  Future<List<Marker>> updateMarkersForAuto(
-      {required List<Marker> markers}) async {
+  /// Update markers on the map view.
+  Future<List<Marker>> updateMarkers({required List<Marker> markers}) async {
     try {
       final List<MarkerDto> markerDtos =
           markers.map((Marker marker) => marker.toDto()).toList();
@@ -467,8 +469,8 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     }
   }
 
-  @override
-  Future<void> removeMarkersForAuto({required List<Marker> markers}) async {
+  /// Remove markers from map view.
+  Future<void> removeMarkers({required List<Marker> markers}) async {
     try {
       final List<MarkerDto> markerDtos =
           markers.map((Marker marker) => marker.toDto()).toList();
@@ -482,18 +484,18 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     }
   }
 
-  @override
-  Future<void> clearMarkersForAuto() {
+  /// Remove all markers from map view.
+  Future<void> clearMarkers() {
     return _viewApi.clearMarkers();
   }
 
-  @override
-  Future<void> clearForAuto() {
+  /// Removes all markers, polylines, polygons, overlays, etc from the map.
+  Future<void> clear() {
     return _viewApi.clear();
   }
 
-  @override
-  Future<List<Polygon?>> getPolygonsForAuto() async {
+  /// Get all polygons from map view.
+  Future<List<Polygon?>> getPolygons() async {
     final List<PolygonDto?> polygons = await _viewApi.getPolygons();
 
     return polygons
@@ -502,8 +504,8 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
         .toList();
   }
 
-  @override
-  Future<List<Polygon?>> addPolygonsForAuto(
+  /// Add polygons to map view.
+  Future<List<Polygon?>> addPolygons(
       {required List<PolygonOptions> polygonOptions}) async {
     // Convert options to pigeon format
     final List<PolygonOptionsDto> options =
@@ -529,8 +531,8 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
         .toList();
   }
 
-  @override
-  Future<List<Polygon?>> updatePolygonsForAuto(
+  /// Update polygons on the map view.
+  Future<List<Polygon?>> updatePolygons(
       {required List<Polygon> polygons}) async {
     try {
       final List<PolygonDto> navigationViewPolygons =
@@ -550,8 +552,8 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     }
   }
 
-  @override
-  Future<void> removePolygonsForAuto({required List<Polygon> polygons}) async {
+  /// Remove polygons from map view.
+  Future<void> removePolygons({required List<Polygon> polygons}) async {
     try {
       final List<PolygonDto> navigationViewPolygons =
           polygons.map((Polygon polygon) => polygon.toDto()).toList();
@@ -565,13 +567,13 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     }
   }
 
-  @override
-  Future<void> clearPolygonsForAuto() {
+  /// Remove all polygons from map view.
+  Future<void> clearPolygons() {
     return _viewApi.clearPolygons();
   }
 
-  @override
-  Future<List<Polyline?>> getPolylinesForAuto() async {
+  /// Get all polylines from map view.
+  Future<List<Polyline?>> getPolylines() async {
     final List<PolylineDto?> polylines = await _viewApi.getPolylines();
 
     return polylines
@@ -580,8 +582,8 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
         .toList();
   }
 
-  @override
-  Future<List<Polyline?>> addPolylinesForAuto(
+  /// Add polylines to map view.
+  Future<List<Polyline?>> addPolylines(
       {required List<PolylineOptions> polylineOptions}) async {
     // Convert options to pigeon format
     final List<PolylineOptionsDto> options =
@@ -607,8 +609,8 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
         .toList();
   }
 
-  @override
-  Future<List<Polyline?>> updatePolylinesForAuto(
+  /// Update polylines on the map view.
+  Future<List<Polyline?>> updatePolylines(
       {required List<Polyline> polylines}) async {
     try {
       final List<PolylineDto> navigationViewPolylines = polylines
@@ -629,9 +631,8 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     }
   }
 
-  @override
-  Future<void> removePolylinesForAuto(
-      {required List<Polyline> polylines}) async {
+  /// Remove polylines from map view.
+  Future<void> removePolylines({required List<Polyline> polylines}) async {
     try {
       final List<PolylineDto> navigationViewPolylines = polylines
           .map((Polyline polyline) => polyline.toNavigationViewPolyline())
@@ -646,13 +647,13 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     }
   }
 
-  @override
-  Future<void> clearPolylinesForAuto() {
+  /// Remove all polylines from map view.
+  Future<void> clearPolylines() {
     return _viewApi.clearPolylines();
   }
 
-  @override
-  Future<List<Circle?>> getCirclesForAuto() async {
+  /// Get all circles from map view.
+  Future<List<Circle?>> getCircles() async {
     final List<CircleDto?> circles = await _viewApi.getCircles();
 
     return circles
@@ -661,8 +662,8 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
         .toList();
   }
 
-  @override
-  Future<List<Circle?>> addCirclesForAuto(
+  /// Add circles to map view.
+  Future<List<Circle?>> addCircles(
       {required List<CircleOptions> options}) async {
     // Convert options to pigeon format
     final List<CircleOptionsDto> optionsDto =
@@ -688,9 +689,8 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
         .toList();
   }
 
-  @override
-  Future<List<Circle?>> updateCirclesForAuto(
-      {required List<Circle> circles}) async {
+  /// Update circles on the map view.
+  Future<List<Circle?>> updateCircles({required List<Circle> circles}) async {
     try {
       final List<CircleDto> navigationViewCircles =
           circles.map((Circle circle) => circle.toDto()).toList();
@@ -710,8 +710,8 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     }
   }
 
-  @override
-  Future<void> removeCirclesForAuto({required List<Circle> circles}) async {
+  /// Remove circles from map view.
+  Future<void> removeCircles({required List<Circle> circles}) async {
     try {
       final List<CircleDto> navigationViewCircles =
           circles.map((Circle circle) => circle.toDto()).toList();
@@ -725,34 +725,27 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
     }
   }
 
-  @override
-  Future<void> clearCirclesForAuto() {
+  /// Remove all circles from map view.
+  Future<void> clearCircles() {
     return _viewApi.clearCircles();
   }
 
-  @override
-  Future<void> registerOnCameraChangedListenerForAuto() {
+  /// Register camera changed listeners.
+  Future<void> registerOnCameraChangedListener() {
     return _viewApi.registerOnCameraChangedListener();
   }
 
-  @override
+  // Check whether auto screen is available.
   Future<bool> isAutoScreenAvailable() {
     return _viewApi.isAutoScreenAvailable();
   }
 
-  Stream<T> _unwrapEventStream<T>() {
-    // If event that does not
-    return _autoEventStreamController.stream
-        .where((_AutoEventWrapper wrapper) => (wrapper.event is T))
-        .map<T>((_AutoEventWrapper wrapper) => wrapper.event as T);
-  }
-
-  @override
+  /// Get custom navigation auto event stream from the auto view.
   Stream<CustomNavigationAutoEvent> getCustomNavigationAutoEventStream() {
     return _unwrapEventStream<CustomNavigationAutoEvent>();
   }
 
-  @override
+  /// Get auto screen availibility changed event stream from the auto view.
   Stream<AutoScreenAvailabilityChangedEvent>
       getAutoScreenAvailabilityChangedEventStream() {
     return _unwrapEventStream<AutoScreenAvailabilityChangedEvent>();

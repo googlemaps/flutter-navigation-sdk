@@ -17,19 +17,19 @@ import 'google_navigation_flutter_platform_interface.dart';
 
 class GoogleMapsAutoViewController {
   GoogleMapsAutoViewController() {
-    GoogleMapsNavigationPlatform.instance.initializeAutoViewEventAPI();
+    GoogleMapsNavigationPlatform.instance.autoAPI.ensureAutoViewApiSetUp();
   }
 
   /// Change status of my location enabled.
   ///
   Future<void> setMyLocationEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance
-        .setMyLocationEnabledForAuto(enabled: enabled);
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .setMyLocationEnabled(enabled: enabled);
   }
 
   /// This method returns the current map type of the Google Maps view instance.
   Future<MapType> getMapType() {
-    return GoogleMapsNavigationPlatform.instance.getMapTypeForAuto();
+    return GoogleMapsNavigationPlatform.instance.autoAPI.getMapType();
   }
 
   /// Changes the type of the map being displayed on the Google Maps view.
@@ -44,8 +44,8 @@ class GoogleMapsAutoViewController {
   /// _mapViewController.changeMapType(MapType.satellite);
   /// ```
   Future<void> setMapType({required MapType mapType}) async {
-    return GoogleMapsNavigationPlatform.instance
-        .setMapTypeForAuto(mapType: mapType);
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .setMapType(mapType: mapType);
   }
 
   /// Sets the styling of the base map using a string containing JSON.
@@ -56,13 +56,13 @@ class GoogleMapsAutoViewController {
   /// https://developers.google.com/maps/documentation/ios-sdk/styling
   /// https://developers.google.com/maps/documentation/android-sdk/styling
   Future<void> setMapStyle(String? styleJson) async {
-    return GoogleMapsNavigationPlatform.instance.setMapStyleForAuto(styleJson);
+    return GoogleMapsNavigationPlatform.instance.autoAPI.setMapStyle(styleJson);
   }
 
   /// Gets whether the my location is enabled or disabled.
   ///
   Future<bool> isMyLocationEnabled() async {
-    return GoogleMapsNavigationPlatform.instance.isMyLocationEnabledForAuto();
+    return GoogleMapsNavigationPlatform.instance.autoAPI.isMyLocationEnabled();
   }
 
   /// Ask the camera to follow the user's location.
@@ -71,23 +71,23 @@ class GoogleMapsAutoViewController {
   /// and optional [zoomLevel] to control the map zoom.
   Future<void> followMyLocation(CameraPerspective perspective,
       {double? zoomLevel}) async {
-    return GoogleMapsNavigationPlatform.instance.followMyLocationForAuto(
-        perspective: perspective, zoomLevel: zoomLevel);
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .followMyLocation(perspective: perspective, zoomLevel: zoomLevel);
   }
 
   /// Gets user's current location.
   Future<LatLng?> getMyLocation() async {
-    return GoogleMapsNavigationPlatform.instance.getMyLocationForAuto();
+    return GoogleMapsNavigationPlatform.instance.autoAPI.getMyLocation();
   }
 
   /// Gets the current visible map region or camera bounds.
   Future<LatLngBounds> getVisibleRegion() async {
-    return GoogleMapsNavigationPlatform.instance.getVisibleRegionForAuto();
+    return GoogleMapsNavigationPlatform.instance.autoAPI.getVisibleRegion();
   }
 
   /// Gets the current position of the camera.
   Future<CameraPosition> getCameraPosition() async {
-    return GoogleMapsNavigationPlatform.instance.getCameraPositionForAuto();
+    return GoogleMapsNavigationPlatform.instance.autoAPI.getCameraPosition();
   }
 
   /// Animates the movement of the camera from the current position
@@ -112,7 +112,7 @@ class GoogleMapsAutoViewController {
   /// See also [moveCamera], [followMyLocation].
   Future<void> animateCamera(CameraUpdate cameraUpdate,
       {Duration? duration, AnimationFinishedCallback? onFinished}) {
-    return GoogleMapsNavigationPlatform.instance.animateCameraForAuto(
+    return GoogleMapsNavigationPlatform.instance.autoAPI.animateCamera(
         cameraUpdate: cameraUpdate,
         duration: duration?.inMilliseconds,
         onFinished: onFinished);
@@ -124,28 +124,28 @@ class GoogleMapsAutoViewController {
   /// See [CameraUpdate] for more information
   /// on how to create different camera movements.
   Future<void> moveCamera(CameraUpdate cameraUpdate) {
-    return GoogleMapsNavigationPlatform.instance
-        .moveCameraForAuto(cameraUpdate: cameraUpdate);
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .moveCamera(cameraUpdate: cameraUpdate);
   }
 
   /// Returns the minimum zoom level preference from the map view.
   /// If minimum zoom preference is not set previously, returns minimum possible
   /// zoom level for the current map type.
   Future<double> getMinZoomPreference() {
-    return GoogleMapsNavigationPlatform.instance.getMinZoomPreferenceForAuto();
+    return GoogleMapsNavigationPlatform.instance.autoAPI.getMinZoomPreference();
   }
 
   /// Returns the maximum zoom level preference from the map view.
   /// If maximum zoom preference is not set previously, returns maximum possible
   /// zoom level for the current map type.
   Future<double> getMaxZoomPreference() {
-    return GoogleMapsNavigationPlatform.instance.getMaxZoomPreferenceForAuto();
+    return GoogleMapsNavigationPlatform.instance.autoAPI.getMaxZoomPreference();
   }
 
   /// Removes any previously specified upper and lower zoom bounds.
   Future<void> resetMinMaxZoomPreference() {
-    return GoogleMapsNavigationPlatform.instance
-        .resetMinMaxZoomPreferenceForAuto();
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .resetMinMaxZoomPreference();
   }
 
   /// Sets a preferred lower bound for the camera zoom.
@@ -157,8 +157,8 @@ class GoogleMapsAutoViewController {
   /// Throws [MinZoomRangeException] if [minZoomPreference] is
   /// greater than maximum zoom lavel.
   Future<void> setMinZoomPreference(double minZoomPreference) {
-    return GoogleMapsNavigationPlatform.instance
-        .setMinZoomPreferenceForAuto(minZoomPreference: minZoomPreference);
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .setMinZoomPreference(minZoomPreference: minZoomPreference);
   }
 
   /// Sets a preferred upper bound for the camera zoom.
@@ -172,19 +172,19 @@ class GoogleMapsAutoViewController {
   /// Throws [MaxZoomRangeException] if [maxZoomPreference] is
   /// less than minimum zoom lavel.
   Future<void> setMaxZoomPreference(double maxZoomPreference) {
-    return GoogleMapsNavigationPlatform.instance
-        .setMaxZoomPreferenceForAuto(maxZoomPreference: maxZoomPreference);
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .setMaxZoomPreference(maxZoomPreference: maxZoomPreference);
   }
 
   /// Retrieves all markers that have been added to the map view.
   Future<List<Marker?>> getMarkers() {
-    return GoogleMapsNavigationPlatform.instance.getMarkersForAuto();
+    return GoogleMapsNavigationPlatform.instance.autoAPI.getMarkers();
   }
 
   /// Add markers to the map view.
   Future<List<Marker?>> addMarkers(List<MarkerOptions> markerOptions) {
-    return GoogleMapsNavigationPlatform.instance
-        .addMarkersForAuto(markerOptions: markerOptions);
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .addMarkers(markerOptions: markerOptions);
   }
 
   /// Update markers to the map view.
@@ -193,8 +193,8 @@ class GoogleMapsAutoViewController {
   /// more markers that have not been added to the map view via [addMarkers] or
   /// contains markers that have already been removed from the map view.
   Future<List<Marker?>> updateMarkers(List<Marker> markers) async {
-    return GoogleMapsNavigationPlatform.instance
-        .updateMarkersForAuto(markers: markers);
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .updateMarkers(markers: markers);
   }
 
   /// Remove markers from the map view.
@@ -203,24 +203,24 @@ class GoogleMapsAutoViewController {
   /// more markers that have not been added to the map view via [addMarkers] or
   /// contains markers that have already been removed from the map view.
   Future<void> removeMarkers(List<Marker> markers) async {
-    return GoogleMapsNavigationPlatform.instance
-        .removeMarkersForAuto(markers: markers);
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .removeMarkers(markers: markers);
   }
 
   /// Remove all markers from the map view.
   Future<void> clearMarkers() {
-    return GoogleMapsNavigationPlatform.instance.clearMarkersForAuto();
+    return GoogleMapsNavigationPlatform.instance.autoAPI.clearMarkers();
   }
 
   /// Retrieves all polygons that have been added to the map view.
   Future<List<Polygon?>> getPolygons() {
-    return GoogleMapsNavigationPlatform.instance.getPolygonsForAuto();
+    return GoogleMapsNavigationPlatform.instance.autoAPI.getPolygons();
   }
 
   /// Add polygons to the map view.
   Future<List<Polygon?>> addPolygons(List<PolygonOptions> polygonOptions) {
-    return GoogleMapsNavigationPlatform.instance
-        .addPolygonsForAuto(polygonOptions: polygonOptions);
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .addPolygons(polygonOptions: polygonOptions);
   }
 
   /// Update polygons to the map view.
@@ -229,8 +229,8 @@ class GoogleMapsAutoViewController {
   /// polygon that has not beed added to the map view via [addPolygons] or
   /// contains polygon that has already been removed from the map view.
   Future<List<Polygon?>> updatePolygons(List<Polygon> polygons) async {
-    return GoogleMapsNavigationPlatform.instance
-        .updatePolygonsForAuto(polygons: polygons);
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .updatePolygons(polygons: polygons);
   }
 
   /// Remove polygons from the map view.
@@ -239,24 +239,24 @@ class GoogleMapsAutoViewController {
   /// polygon that has not beed added to the map view via [addPolygons] or
   /// contains polygon that has already been removed from the map view.
   Future<void> removePolygons(List<Polygon> polygons) async {
-    return GoogleMapsNavigationPlatform.instance
-        .removePolygonsForAuto(polygons: polygons);
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .removePolygons(polygons: polygons);
   }
 
   /// Remove all polygons from the map view.
   Future<void> clearPolygons() {
-    return GoogleMapsNavigationPlatform.instance.clearPolygonsForAuto();
+    return GoogleMapsNavigationPlatform.instance.autoAPI.clearPolygons();
   }
 
   /// Retrieves all polylines that have been added to the map view.
   Future<List<Polyline?>> getPolylines() {
-    return GoogleMapsNavigationPlatform.instance.getPolylinesForAuto();
+    return GoogleMapsNavigationPlatform.instance.autoAPI.getPolylines();
   }
 
   /// Add polylines to the map view.
   Future<List<Polyline?>> addPolylines(List<PolylineOptions> polylineOptions) {
-    return GoogleMapsNavigationPlatform.instance
-        .addPolylinesForAuto(polylineOptions: polylineOptions);
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .addPolylines(polylineOptions: polylineOptions);
   }
 
   /// Update polylines to the map view.
@@ -265,8 +265,8 @@ class GoogleMapsAutoViewController {
   /// polyline that has not beed added to the map view via [addPolylines] or
   /// contains polyline that has already been removed from the map view.
   Future<List<Polyline?>> updatePolylines(List<Polyline> polylines) async {
-    return GoogleMapsNavigationPlatform.instance
-        .updatePolylinesForAuto(polylines: polylines);
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .updatePolylines(polylines: polylines);
   }
 
   /// Remove polylines from the map view.
@@ -275,24 +275,24 @@ class GoogleMapsAutoViewController {
   /// polyline that has not beed added to the map view via [addPolylines] or
   /// contains polyline that has already been removed from the map view.
   Future<void> removePolylines(List<Polyline> polylines) async {
-    return GoogleMapsNavigationPlatform.instance
-        .removePolylinesForAuto(polylines: polylines);
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .removePolylines(polylines: polylines);
   }
 
   /// Remove all polylines from the map view.
   Future<void> clearPolylines() {
-    return GoogleMapsNavigationPlatform.instance.clearPolylinesForAuto();
+    return GoogleMapsNavigationPlatform.instance.autoAPI.clearPolylines();
   }
 
   /// Gets all circles from the map view.
   Future<List<Circle?>> getCircles() {
-    return GoogleMapsNavigationPlatform.instance.getCirclesForAuto();
+    return GoogleMapsNavigationPlatform.instance.autoAPI.getCircles();
   }
 
   /// Add circles to the map view.
   Future<List<Circle?>> addCircles(List<CircleOptions> options) {
-    return GoogleMapsNavigationPlatform.instance
-        .addCirclesForAuto(options: options);
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .addCircles(options: options);
   }
 
   /// Update circles to the map view.
@@ -301,8 +301,8 @@ class GoogleMapsAutoViewController {
   /// more circles that have not been added to the map view via [addCircles] or
   /// contains circles that have already been removed from the map view.
   Future<List<Circle?>> updateCircles(List<Circle> circles) async {
-    return GoogleMapsNavigationPlatform.instance
-        .updateCirclesForAuto(circles: circles);
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .updateCircles(circles: circles);
   }
 
   /// Remove circles from the map view.
@@ -311,27 +311,28 @@ class GoogleMapsAutoViewController {
   /// more circles that have not been added to the map view via [addCircles] or
   /// contains circles that have already been removed from the map view.
   Future<void> removeCircles(List<Circle> circles) async {
-    return GoogleMapsNavigationPlatform.instance
-        .removeCirclesForAuto(circles: circles);
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .removeCircles(circles: circles);
   }
 
   /// Remove all circles from the map view.
   Future<void> clearCircles() {
-    return GoogleMapsNavigationPlatform.instance.clearCirclesForAuto();
+    return GoogleMapsNavigationPlatform.instance.autoAPI.clearCircles();
   }
 
   /// Remove all markers, polylines, polygons, overlays, etc from the map view.
   Future<void> clear() {
-    return GoogleMapsNavigationPlatform.instance.clearForAuto();
+    return GoogleMapsNavigationPlatform.instance.autoAPI.clear();
   }
 
   Future<bool> isAutoScreenAvailable() {
-    return GoogleMapsNavigationPlatform.instance.isAutoScreenAvailable();
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .isAutoScreenAvailable();
   }
 
   void listenForCustomNavigationAutoEvents(
       void Function(CustomNavigationAutoEvent event) func) {
-    GoogleMapsNavigationPlatform.instance
+    GoogleMapsNavigationPlatform.instance.autoAPI
         .getCustomNavigationAutoEventStream()
         .listen((CustomNavigationAutoEvent event) {
       func(event);
@@ -340,7 +341,7 @@ class GoogleMapsAutoViewController {
 
   void listenForAutoScreenAvailibilityChangedEvent(
       void Function(AutoScreenAvailabilityChangedEvent event) func) {
-    GoogleMapsNavigationPlatform.instance
+    GoogleMapsNavigationPlatform.instance.autoAPI
         .getAutoScreenAvailabilityChangedEventStream()
         .listen((AutoScreenAvailabilityChangedEvent event) {
       func(event);
