@@ -373,4 +373,70 @@ void main() {
     },
     variant: mapTypeVariants,
   );
+
+  patrol(
+    'Test map padding',
+    (PatrolIntegrationTester $) async {
+      /// For some reason the functionality works on Android example app, but it doesn't work
+      /// during the testing. Will skip Android testing for now.
+      final Completer<GoogleMapViewController> viewControllerCompleter =
+          Completer<GoogleMapViewController>();
+
+      await checkLocationDialogAcceptance($);
+
+      switch (mapTypeVariants.currentValue!) {
+        case TestMapType.mapView:
+
+          /// Display map view.
+          final Key key = GlobalKey();
+          await pumpMapView(
+            $,
+            GoogleMapsMapView(
+              key: key,
+              onViewCreated: (GoogleMapViewController controller) {
+                viewControllerCompleter.complete(controller);
+              },
+            ),
+          );
+          break;
+        case TestMapType.navigationView:
+
+          /// Display navigation view.
+          final Key key = GlobalKey();
+          await pumpNavigationView(
+            $,
+            GoogleMapsNavigationView(
+              key: key,
+              onViewCreated: (GoogleNavigationViewController controller) {
+                viewControllerCompleter.complete(controller);
+              },
+            ),
+          );
+          break;
+      }
+
+      final GoogleMapViewController viewController =
+          await viewControllerCompleter.future;
+
+      // Test initial values
+      EdgeInsets initialPadding = await viewController.getPadding();
+
+      expect(initialPadding.left, 0.0);
+      expect(initialPadding.top, 0.0);
+      expect(initialPadding.right, 0.0);
+      expect(initialPadding.bottom, 0.0);
+
+      await viewController.setPadding(
+          const EdgeInsets.only(left: 50, top: 60, right: 70, bottom: 80));
+
+      // Test that the padding values were changed.
+      EdgeInsets newPadding = await viewController.getPadding();
+
+      expect(newPadding.left, 50.0);
+      expect(newPadding.top, 60.0);
+      expect(newPadding.right, 70.0);
+      expect(newPadding.bottom, 80.0);
+    },
+    variant: mapTypeVariants,
+  );
 }
