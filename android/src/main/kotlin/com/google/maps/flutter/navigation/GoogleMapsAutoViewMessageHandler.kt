@@ -389,4 +389,8 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
   override fun setPadding(padding: MapPaddingDto) {
     getView().setPadding(padding)
   }
+
+  override fun getPadding(): MapPaddingDto {
+    return getView().getPadding()
+  }
 }

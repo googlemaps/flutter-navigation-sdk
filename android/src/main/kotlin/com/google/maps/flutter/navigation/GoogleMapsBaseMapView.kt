@@ -58,6 +58,8 @@ abstract class GoogleMapsBaseMapView(
   private var _minZoomLevelPreference: Float? = null
   private var _maxZoomLevelPreference: Float? = null
 
+  private var _mapOptions: MapOptions? = null
+
   // Nullable variable to hold the callback function
   private var _mapReadyCallback: ((Result<Unit>) -> Unit)? = null
   private var _loadedCallbackPending = false
@@ -101,6 +103,7 @@ abstract class GoogleMapsBaseMapView(
   init {
     _minZoomLevelPreference = mapOptions.googleMapOptions.minZoomPreference
     _maxZoomLevelPreference = mapOptions.googleMapOptions.maxZoomPreference
+    _mapOptions = mapOptions
   }
 
   protected fun mapReady() {
@@ -943,6 +946,7 @@ abstract class GoogleMapsBaseMapView(
   }
 
   fun setPadding(padding: MapPaddingDto) {
+    _mapOptions?.padding = padding
     getMap()
       .setPadding(
         padding.left.toInt(),
@@ -950,5 +954,9 @@ abstract class GoogleMapsBaseMapView(
         padding.right.toInt(),
         padding.bottom.toInt(),
       )
+  }
+
+  fun getPadding(): MapPaddingDto {
+    return _mapOptions?.padding ?: MapPaddingDto(0, 0, 0, 0)
   }
 }

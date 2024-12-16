@@ -2075,6 +2075,7 @@ protocol MapViewApi {
   func clearCircles(viewId: Int64) throws
   func registerOnCameraChangedListener(viewId: Int64) throws
   func setPadding(viewId: Int64, padding: MapPaddingDto) throws
+  func getPadding(viewId: Int64) throws -> MapPaddingDto
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -3951,6 +3952,25 @@ enum MapViewApiSetup {
       }
     } else {
       setPaddingChannel.setMessageHandler(nil)
+    }
+    let getPaddingChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPadding",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      getPaddingChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
+        do {
+          let result = try api.getPadding(viewId: viewIdArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getPaddingChannel.setMessageHandler(nil)
     }
   }
 }
@@ -5893,6 +5913,7 @@ protocol AutoMapViewApi {
   func registerOnCameraChangedListener() throws
   func isAutoScreenAvailable() throws -> Bool
   func setPadding(padding: MapPaddingDto) throws
+  func getPadding() throws -> MapPaddingDto
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -7302,6 +7323,23 @@ enum AutoMapViewApiSetup {
       }
     } else {
       setPaddingChannel.setMessageHandler(nil)
+    }
+    let getPaddingChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPadding",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      getPaddingChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.getPadding()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getPaddingChannel.setMessageHandler(nil)
     }
   }
 }

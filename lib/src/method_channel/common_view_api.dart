@@ -954,6 +954,17 @@ mixin CommonMapViewAPI on MapViewAPIInterface {
             right: padding.right.toInt()));
   }
 
+  // Gets the map padding from the map view.
+  @override
+  Future<EdgeInsets> getPadding({required int viewId}) async {
+    final MapPaddingDto padding = await _viewApi.getPadding(viewId);
+    return EdgeInsets.only(
+        top: padding.top.toDouble(),
+        left: padding.left.toDouble(),
+        bottom: padding.bottom.toDouble(),
+        right: padding.right.toDouble());
+  }
+
   @override
   Stream<MapClickEvent> getMapClickEventStream({required int viewId}) {
     return _unwrapEventStream<MapClickEvent>(viewId: viewId);

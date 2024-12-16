@@ -509,4 +509,8 @@ class GoogleMapsNavigationViewMessageHandler: MapViewApi {
   func setPadding(viewId: Int64, padding: MapPaddingDto) throws {
     try getView(viewId).setPadding(padding: padding)
   }
+
+  func getPadding(viewId: Int64) throws -> MapPaddingDto {
+    try getView(viewId).getPadding()
+  }
 }

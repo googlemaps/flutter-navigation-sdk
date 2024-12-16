@@ -333,6 +333,11 @@ class GoogleMapsAutoViewController {
         .setPaddingForAuto(padding: padding);
   }
 
+  // Gets the map padding from the map view.
+  Future<EdgeInsets> getPadding({required int viewId}) async {
+    return GoogleMapsNavigationPlatform.instance.getPaddingForAuto();
+  }
+
   Future<bool> isAutoScreenAvailable() {
     return GoogleMapsNavigationPlatform.instance.isAutoScreenAvailable();
   }

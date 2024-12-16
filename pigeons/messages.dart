@@ -516,6 +516,7 @@ abstract class MapViewApi {
 
   void registerOnCameraChangedListener(int viewId);
   void setPadding(int viewId, MapPaddingDto padding);
+  MapPaddingDto getPadding(int viewId);
 }
 
 @HostApi(dartHostTestHandler: 'TestImageRegistryApi')
@@ -1371,6 +1372,7 @@ abstract class AutoMapViewApi {
   void registerOnCameraChangedListener();
   bool isAutoScreenAvailable();
   void setPadding(MapPaddingDto padding);
+  MapPaddingDto getPadding();
 }
 
 @FlutterApi()

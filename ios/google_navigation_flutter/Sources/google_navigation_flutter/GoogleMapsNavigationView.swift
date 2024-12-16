@@ -834,6 +834,15 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
       right: CGFloat(padding.right)
     )
   }
+
+  func getPadding() throws -> MapPaddingDto {
+    MapPaddingDto(
+      top: Int64(_mapView.padding.top),
+      left: Int64(_mapView.padding.left),
+      bottom: Int64(_mapView.padding.bottom),
+      right: Int64(_mapView.padding.right)
+    )
+  }
 }
 
 extension GoogleMapsNavigationView: GMSMapViewNavigationUIDelegate {

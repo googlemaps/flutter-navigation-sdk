@@ -745,6 +745,17 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
         right: padding.right.toInt()));
   }
 
+  // Gets the map padding from the map view.
+  @override
+  Future<EdgeInsets> getPaddingForAuto() async {
+    final MapPaddingDto padding = await _viewApi.getPadding();
+    return EdgeInsets.only(
+        top: padding.top.toDouble(),
+        left: padding.left.toDouble(),
+        bottom: padding.bottom.toDouble(),
+        right: padding.right.toDouble());
+  }
+
   @override
   Future<bool> isAutoScreenAvailable() {
     return _viewApi.isAutoScreenAvailable();

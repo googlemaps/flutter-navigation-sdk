@@ -2206,6 +2206,8 @@ interface MapViewApi {
 
   fun setPadding(viewId: Long, padding: MapPaddingDto)
 
+  fun getPadding(viewId: Long): MapPaddingDto
+
   companion object {
     /** The codec used by MapViewApi. */
     val codec: MessageCodec<Any?> by lazy { MapViewApiCodec }
@@ -4441,6 +4443,29 @@ interface MapViewApi {
           channel.setMessageHandler(null)
         }
       }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPadding",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.getPadding(viewIdArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
     }
   }
 }
@@ -6485,6 +6510,8 @@ interface AutoMapViewApi {
 
   fun setPadding(padding: MapPaddingDto)
 
+  fun getPadding(): MapPaddingDto
+
   companion object {
     /** The codec used by AutoMapViewApi. */
     val codec: MessageCodec<Any?> by lazy { AutoMapViewApiCodec }
@@ -8198,6 +8225,27 @@ interface AutoMapViewApi {
             try {
               api.setPadding(paddingArg)
               wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPadding",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.getPadding())
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
             }
