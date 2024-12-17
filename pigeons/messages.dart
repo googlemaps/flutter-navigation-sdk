@@ -53,6 +53,7 @@ class MapOptionsDto {
     required this.maxZoomPreference,
     required this.zoomControlsEnabled,
     required this.cameraTargetBounds,
+    required this.padding,
   });
 
   /// The initial positioning of the camera in the map view.
@@ -94,6 +95,9 @@ class MapOptionsDto {
   /// Specifies a bounds to constrain the camera target, so that when users scroll and pan the map,
   /// the camera target does not move outside these bounds.
   final LatLngBoundsDto? cameraTargetBounds;
+
+  /// Specifies the padding for the map.
+  final MapPaddingDto? padding;
 }
 
 /// Determines the initial visibility of the navigation UI on map initialization.
@@ -378,6 +382,19 @@ enum CameraEventTypeDto {
   onCameraStoppedFollowingLocation
 }
 
+class MapPaddingDto {
+  MapPaddingDto(
+      {required this.top,
+      required this.left,
+      required this.bottom,
+      required this.right});
+
+  final int top;
+  final int left;
+  final int bottom;
+  final int right;
+}
+
 @HostApi(dartHostTestHandler: 'TestMapViewApi')
 abstract class MapViewApi {
   @async
@@ -498,6 +515,8 @@ abstract class MapViewApi {
   void clearCircles(int viewId);
 
   void registerOnCameraChangedListener(int viewId);
+  void setPadding(int viewId, MapPaddingDto padding);
+  MapPaddingDto getPadding(int viewId);
 }
 
 @HostApi(dartHostTestHandler: 'TestImageRegistryApi')
@@ -1352,6 +1371,8 @@ abstract class AutoMapViewApi {
 
   void registerOnCameraChangedListener();
   bool isAutoScreenAvailable();
+  void setPadding(MapPaddingDto padding);
+  MapPaddingDto getPadding();
 }
 
 @FlutterApi()

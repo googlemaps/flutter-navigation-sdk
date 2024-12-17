@@ -542,6 +542,8 @@ data class MapOptionsDto(
    * the camera target does not move outside these bounds.
    */
   val cameraTargetBounds: LatLngBoundsDto? = null,
+  /** Specifies the padding for the map. */
+  val padding: MapPaddingDto? = null,
 ) {
   companion object {
     @Suppress("UNCHECKED_CAST")
@@ -560,6 +562,7 @@ data class MapOptionsDto(
       val zoomControlsEnabled = list[11] as Boolean
       val cameraTargetBounds: LatLngBoundsDto? =
         (list[12] as List<Any?>?)?.let { LatLngBoundsDto.fromList(it) }
+      val padding: MapPaddingDto? = (list[13] as List<Any?>?)?.let { MapPaddingDto.fromList(it) }
       return MapOptionsDto(
         cameraPosition,
         mapType,
@@ -574,6 +577,7 @@ data class MapOptionsDto(
         maxZoomPreference,
         zoomControlsEnabled,
         cameraTargetBounds,
+        padding,
       )
     }
   }
@@ -593,6 +597,7 @@ data class MapOptionsDto(
       maxZoomPreference,
       zoomControlsEnabled,
       cameraTargetBounds?.toList(),
+      padding?.toList(),
     )
   }
 }
@@ -1100,6 +1105,25 @@ data class CircleOptionsDto(
       visible,
       clickable,
     )
+  }
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class MapPaddingDto(val top: Long, val left: Long, val bottom: Long, val right: Long) {
+
+  companion object {
+    @Suppress("UNCHECKED_CAST")
+    fun fromList(list: List<Any?>): MapPaddingDto {
+      val top = list[0].let { if (it is Int) it.toLong() else it as Long }
+      val left = list[1].let { if (it is Int) it.toLong() else it as Long }
+      val bottom = list[2].let { if (it is Int) it.toLong() else it as Long }
+      val right = list[3].let { if (it is Int) it.toLong() else it as Long }
+      return MapPaddingDto(top, left, bottom, right)
+    }
+  }
+
+  fun toList(): List<Any?> {
+    return listOf<Any?>(top, left, bottom, right)
   }
 }
 
@@ -1707,9 +1731,12 @@ private object NavigationViewCreationApiCodec : StandardMessageCodec() {
         return (readValue(buffer) as? List<Any?>)?.let { MapOptionsDto.fromList(it) }
       }
       132.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { NavigationViewOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { MapPaddingDto.fromList(it) }
       }
       133.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { NavigationViewOptionsDto.fromList(it) }
+      }
+      134.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { ViewCreationOptionsDto.fromList(it) }
       }
       else -> super.readValueOfType(type, buffer)
@@ -1734,12 +1761,16 @@ private object NavigationViewCreationApiCodec : StandardMessageCodec() {
         stream.write(131)
         writeValue(stream, value.toList())
       }
-      is NavigationViewOptionsDto -> {
+      is MapPaddingDto -> {
         stream.write(132)
         writeValue(stream, value.toList())
       }
-      is ViewCreationOptionsDto -> {
+      is NavigationViewOptionsDto -> {
         stream.write(133)
+        writeValue(stream, value.toList())
+      }
+      is ViewCreationOptionsDto -> {
+        stream.write(134)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -1825,36 +1856,39 @@ private object MapViewApiCodec : StandardMessageCodec() {
         return (readValue(buffer) as? List<Any?>)?.let { LatLngDto.fromList(it) }
       }
       136.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MarkerAnchorDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { MapPaddingDto.fromList(it) }
       }
       137.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MarkerDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerAnchorDto.fromList(it) }
       }
       138.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MarkerOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerDto.fromList(it) }
       }
       139.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PatternItemDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerOptionsDto.fromList(it) }
       }
       140.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolygonDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PatternItemDto.fromList(it) }
       }
       141.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolygonHoleDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonDto.fromList(it) }
       }
       142.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolygonOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonHoleDto.fromList(it) }
       }
       143.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolylineDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonOptionsDto.fromList(it) }
       }
       144.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolylineOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolylineDto.fromList(it) }
       }
       145.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { StyleSpanDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolylineOptionsDto.fromList(it) }
       }
       146.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { StyleSpanDto.fromList(it) }
+      }
+      147.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { StyleSpanStrokeStyleDto.fromList(it) }
       }
       else -> super.readValueOfType(type, buffer)
@@ -1895,48 +1929,52 @@ private object MapViewApiCodec : StandardMessageCodec() {
         stream.write(135)
         writeValue(stream, value.toList())
       }
-      is MarkerAnchorDto -> {
+      is MapPaddingDto -> {
         stream.write(136)
         writeValue(stream, value.toList())
       }
-      is MarkerDto -> {
+      is MarkerAnchorDto -> {
         stream.write(137)
         writeValue(stream, value.toList())
       }
-      is MarkerOptionsDto -> {
+      is MarkerDto -> {
         stream.write(138)
         writeValue(stream, value.toList())
       }
-      is PatternItemDto -> {
+      is MarkerOptionsDto -> {
         stream.write(139)
         writeValue(stream, value.toList())
       }
-      is PolygonDto -> {
+      is PatternItemDto -> {
         stream.write(140)
         writeValue(stream, value.toList())
       }
-      is PolygonHoleDto -> {
+      is PolygonDto -> {
         stream.write(141)
         writeValue(stream, value.toList())
       }
-      is PolygonOptionsDto -> {
+      is PolygonHoleDto -> {
         stream.write(142)
         writeValue(stream, value.toList())
       }
-      is PolylineDto -> {
+      is PolygonOptionsDto -> {
         stream.write(143)
         writeValue(stream, value.toList())
       }
-      is PolylineOptionsDto -> {
+      is PolylineDto -> {
         stream.write(144)
         writeValue(stream, value.toList())
       }
-      is StyleSpanDto -> {
+      is PolylineOptionsDto -> {
         stream.write(145)
         writeValue(stream, value.toList())
       }
-      is StyleSpanStrokeStyleDto -> {
+      is StyleSpanDto -> {
         stream.write(146)
+        writeValue(stream, value.toList())
+      }
+      is StyleSpanStrokeStyleDto -> {
+        stream.write(147)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -2165,6 +2203,10 @@ interface MapViewApi {
   fun clearCircles(viewId: Long)
 
   fun registerOnCameraChangedListener(viewId: Long)
+
+  fun setPadding(viewId: Long, padding: MapPaddingDto)
+
+  fun getPadding(viewId: Long): MapPaddingDto
 
   companion object {
     /** The codec used by MapViewApi. */
@@ -4376,6 +4418,54 @@ interface MapViewApi {
           channel.setMessageHandler(null)
         }
       }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setPadding",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            val paddingArg = args[1] as MapPaddingDto
+            var wrapped: List<Any?>
+            try {
+              api.setPadding(viewIdArg, paddingArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPadding",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.getPadding(viewIdArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
     }
   }
 }
@@ -6119,36 +6209,39 @@ private object AutoMapViewApiCodec : StandardMessageCodec() {
         return (readValue(buffer) as? List<Any?>)?.let { LatLngDto.fromList(it) }
       }
       136.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MarkerAnchorDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { MapPaddingDto.fromList(it) }
       }
       137.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MarkerDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerAnchorDto.fromList(it) }
       }
       138.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MarkerOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerDto.fromList(it) }
       }
       139.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PatternItemDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerOptionsDto.fromList(it) }
       }
       140.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolygonDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PatternItemDto.fromList(it) }
       }
       141.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolygonHoleDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonDto.fromList(it) }
       }
       142.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolygonOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonHoleDto.fromList(it) }
       }
       143.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolylineDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonOptionsDto.fromList(it) }
       }
       144.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolylineOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolylineDto.fromList(it) }
       }
       145.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { StyleSpanDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolylineOptionsDto.fromList(it) }
       }
       146.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { StyleSpanDto.fromList(it) }
+      }
+      147.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { StyleSpanStrokeStyleDto.fromList(it) }
       }
       else -> super.readValueOfType(type, buffer)
@@ -6189,48 +6282,52 @@ private object AutoMapViewApiCodec : StandardMessageCodec() {
         stream.write(135)
         writeValue(stream, value.toList())
       }
-      is MarkerAnchorDto -> {
+      is MapPaddingDto -> {
         stream.write(136)
         writeValue(stream, value.toList())
       }
-      is MarkerDto -> {
+      is MarkerAnchorDto -> {
         stream.write(137)
         writeValue(stream, value.toList())
       }
-      is MarkerOptionsDto -> {
+      is MarkerDto -> {
         stream.write(138)
         writeValue(stream, value.toList())
       }
-      is PatternItemDto -> {
+      is MarkerOptionsDto -> {
         stream.write(139)
         writeValue(stream, value.toList())
       }
-      is PolygonDto -> {
+      is PatternItemDto -> {
         stream.write(140)
         writeValue(stream, value.toList())
       }
-      is PolygonHoleDto -> {
+      is PolygonDto -> {
         stream.write(141)
         writeValue(stream, value.toList())
       }
-      is PolygonOptionsDto -> {
+      is PolygonHoleDto -> {
         stream.write(142)
         writeValue(stream, value.toList())
       }
-      is PolylineDto -> {
+      is PolygonOptionsDto -> {
         stream.write(143)
         writeValue(stream, value.toList())
       }
-      is PolylineOptionsDto -> {
+      is PolylineDto -> {
         stream.write(144)
         writeValue(stream, value.toList())
       }
-      is StyleSpanDto -> {
+      is PolylineOptionsDto -> {
         stream.write(145)
         writeValue(stream, value.toList())
       }
-      is StyleSpanStrokeStyleDto -> {
+      is StyleSpanDto -> {
         stream.write(146)
+        writeValue(stream, value.toList())
+      }
+      is StyleSpanStrokeStyleDto -> {
+        stream.write(147)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -6410,6 +6507,10 @@ interface AutoMapViewApi {
   fun registerOnCameraChangedListener()
 
   fun isAutoScreenAvailable(): Boolean
+
+  fun setPadding(padding: MapPaddingDto)
+
+  fun getPadding(): MapPaddingDto
 
   companion object {
     /** The codec used by AutoMapViewApi. */
@@ -8109,6 +8210,51 @@ interface AutoMapViewApi {
           channel.setMessageHandler(null)
         }
       }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setPadding",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val paddingArg = args[0] as MapPaddingDto
+            var wrapped: List<Any?>
+            try {
+              api.setPadding(paddingArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPadding",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.getPadding())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
     }
   }
 }
@@ -8151,88 +8297,91 @@ private object AutoViewEventApiCodec : StandardMessageCodec() {
         return (readValue(buffer) as? List<Any?>)?.let { MapOptionsDto.fromList(it) }
       }
       139.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MarkerAnchorDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { MapPaddingDto.fromList(it) }
       }
       140.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MarkerDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerAnchorDto.fromList(it) }
       }
       141.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MarkerOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerDto.fromList(it) }
       }
       142.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { NavInfoDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerOptionsDto.fromList(it) }
       }
       143.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { NavInfoDto.fromList(it) }
+      }
+      144.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           NavigationAudioGuidanceSettingsDto.fromList(it)
         }
       }
-      144.toByte() -> {
+      145.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavigationDisplayOptionsDto.fromList(it) }
       }
-      145.toByte() -> {
+      146.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavigationTimeAndDistanceDto.fromList(it) }
       }
-      146.toByte() -> {
+      147.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavigationViewOptionsDto.fromList(it) }
       }
-      147.toByte() -> {
+      148.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavigationWaypointDto.fromList(it) }
       }
-      148.toByte() -> {
+      149.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { PatternItemDto.fromList(it) }
       }
-      149.toByte() -> {
+      150.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { PolygonDto.fromList(it) }
       }
-      150.toByte() -> {
+      151.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { PolygonHoleDto.fromList(it) }
       }
-      151.toByte() -> {
+      152.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { PolygonOptionsDto.fromList(it) }
       }
-      152.toByte() -> {
+      153.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { PolylineDto.fromList(it) }
       }
-      153.toByte() -> {
+      154.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { PolylineOptionsDto.fromList(it) }
       }
-      154.toByte() -> {
+      155.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentDto.fromList(it) }
       }
-      155.toByte() -> {
+      156.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentTrafficDataDto.fromList(it) }
       }
-      156.toByte() -> {
+      157.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(it)
         }
       }
-      157.toByte() -> {
+      158.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteTokenOptionsDto.fromList(it) }
       }
-      158.toByte() -> {
+      159.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RoutingOptionsDto.fromList(it) }
       }
-      159.toByte() -> {
+      160.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SimulationOptionsDto.fromList(it) }
       }
-      160.toByte() -> {
+      161.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SpeedAlertOptionsDto.fromList(it) }
       }
-      161.toByte() -> {
+      162.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SpeedingUpdatedEventDto.fromList(it) }
       }
-      162.toByte() -> {
+      163.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { StepInfoDto.fromList(it) }
       }
-      163.toByte() -> {
+      164.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { StyleSpanDto.fromList(it) }
       }
-      164.toByte() -> {
+      165.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { StyleSpanStrokeStyleDto.fromList(it) }
       }
-      165.toByte() -> {
+      166.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { ViewCreationOptionsDto.fromList(it) }
       }
       else -> super.readValueOfType(type, buffer)
@@ -8285,112 +8434,116 @@ private object AutoViewEventApiCodec : StandardMessageCodec() {
         stream.write(138)
         writeValue(stream, value.toList())
       }
-      is MarkerAnchorDto -> {
+      is MapPaddingDto -> {
         stream.write(139)
         writeValue(stream, value.toList())
       }
-      is MarkerDto -> {
+      is MarkerAnchorDto -> {
         stream.write(140)
         writeValue(stream, value.toList())
       }
-      is MarkerOptionsDto -> {
+      is MarkerDto -> {
         stream.write(141)
         writeValue(stream, value.toList())
       }
-      is NavInfoDto -> {
+      is MarkerOptionsDto -> {
         stream.write(142)
         writeValue(stream, value.toList())
       }
-      is NavigationAudioGuidanceSettingsDto -> {
+      is NavInfoDto -> {
         stream.write(143)
         writeValue(stream, value.toList())
       }
-      is NavigationDisplayOptionsDto -> {
+      is NavigationAudioGuidanceSettingsDto -> {
         stream.write(144)
         writeValue(stream, value.toList())
       }
-      is NavigationTimeAndDistanceDto -> {
+      is NavigationDisplayOptionsDto -> {
         stream.write(145)
         writeValue(stream, value.toList())
       }
-      is NavigationViewOptionsDto -> {
+      is NavigationTimeAndDistanceDto -> {
         stream.write(146)
         writeValue(stream, value.toList())
       }
-      is NavigationWaypointDto -> {
+      is NavigationViewOptionsDto -> {
         stream.write(147)
         writeValue(stream, value.toList())
       }
-      is PatternItemDto -> {
+      is NavigationWaypointDto -> {
         stream.write(148)
         writeValue(stream, value.toList())
       }
-      is PolygonDto -> {
+      is PatternItemDto -> {
         stream.write(149)
         writeValue(stream, value.toList())
       }
-      is PolygonHoleDto -> {
+      is PolygonDto -> {
         stream.write(150)
         writeValue(stream, value.toList())
       }
-      is PolygonOptionsDto -> {
+      is PolygonHoleDto -> {
         stream.write(151)
         writeValue(stream, value.toList())
       }
-      is PolylineDto -> {
+      is PolygonOptionsDto -> {
         stream.write(152)
         writeValue(stream, value.toList())
       }
-      is PolylineOptionsDto -> {
+      is PolylineDto -> {
         stream.write(153)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentDto -> {
+      is PolylineOptionsDto -> {
         stream.write(154)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentTrafficDataDto -> {
+      is RouteSegmentDto -> {
         stream.write(155)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentTrafficDataRoadStretchRenderingDataDto -> {
+      is RouteSegmentTrafficDataDto -> {
         stream.write(156)
         writeValue(stream, value.toList())
       }
-      is RouteTokenOptionsDto -> {
+      is RouteSegmentTrafficDataRoadStretchRenderingDataDto -> {
         stream.write(157)
         writeValue(stream, value.toList())
       }
-      is RoutingOptionsDto -> {
+      is RouteTokenOptionsDto -> {
         stream.write(158)
         writeValue(stream, value.toList())
       }
-      is SimulationOptionsDto -> {
+      is RoutingOptionsDto -> {
         stream.write(159)
         writeValue(stream, value.toList())
       }
-      is SpeedAlertOptionsDto -> {
+      is SimulationOptionsDto -> {
         stream.write(160)
         writeValue(stream, value.toList())
       }
-      is SpeedingUpdatedEventDto -> {
+      is SpeedAlertOptionsDto -> {
         stream.write(161)
         writeValue(stream, value.toList())
       }
-      is StepInfoDto -> {
+      is SpeedingUpdatedEventDto -> {
         stream.write(162)
         writeValue(stream, value.toList())
       }
-      is StyleSpanDto -> {
+      is StepInfoDto -> {
         stream.write(163)
         writeValue(stream, value.toList())
       }
-      is StyleSpanStrokeStyleDto -> {
+      is StyleSpanDto -> {
         stream.write(164)
         writeValue(stream, value.toList())
       }
-      is ViewCreationOptionsDto -> {
+      is StyleSpanStrokeStyleDto -> {
         stream.write(165)
+        writeValue(stream, value.toList())
+      }
+      is ViewCreationOptionsDto -> {
+        stream.write(166)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)

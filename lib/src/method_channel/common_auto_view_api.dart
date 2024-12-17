@@ -16,6 +16,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../google_navigation_flutter.dart';
 import '../google_navigation_flutter_platform_interface.dart';
@@ -733,6 +734,26 @@ mixin CommonAutoMapViewAPI on AutoMapViewAPIInterface {
   @override
   Future<void> registerOnCameraChangedListenerForAuto() {
     return _viewApi.registerOnCameraChangedListener();
+  }
+
+  @override
+  Future<void> setPaddingForAuto({required EdgeInsets padding}) {
+    return _viewApi.setPadding(MapPaddingDto(
+        top: padding.top.toInt(),
+        left: padding.left.toInt(),
+        bottom: padding.bottom.toInt(),
+        right: padding.right.toInt()));
+  }
+
+  // Gets the map padding from the map view.
+  @override
+  Future<EdgeInsets> getPaddingForAuto() async {
+    final MapPaddingDto padding = await _viewApi.getPadding();
+    return EdgeInsets.only(
+        top: padding.top.toDouble(),
+        left: padding.left.toDouble(),
+        bottom: padding.bottom.toDouble(),
+        right: padding.right.toDouble());
   }
 
   @override

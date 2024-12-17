@@ -376,58 +376,76 @@ internal class ConvertTest {
 
     val mapOptions = Convert.convertMapOptionsFromDto(testOptions)
 
-    assertEquals(mapOptions.camera.target.latitude, testOptions.cameraPosition.target.latitude)
-
-    assertEquals(mapOptions.camera.target.longitude, testOptions.cameraPosition.target.longitude)
-
-    assertEquals(mapOptions.camera.bearing, testOptions.cameraPosition.bearing.toFloat())
-
-    assertEquals(mapOptions.camera.tilt, testOptions.cameraPosition.tilt.toFloat())
-
-    assertEquals(mapOptions.camera.zoom, testOptions.cameraPosition.zoom.toFloat())
-
-    assertEquals(mapOptions.mapType, GoogleMap.MAP_TYPE_HYBRID)
-
-    assertEquals(mapOptions.compassEnabled, testOptions.compassEnabled)
-
-    assertEquals(mapOptions.scrollGesturesEnabled, testOptions.scrollGesturesEnabled)
-
-    assertEquals(mapOptions.tiltGesturesEnabled, testOptions.tiltGesturesEnabled)
-
-    assertEquals(mapOptions.zoomGesturesEnabled, testOptions.zoomGesturesEnabled)
+    assertEquals(
+      mapOptions.googleMapOptions.camera.target.latitude,
+      testOptions.cameraPosition.target.latitude,
+    )
 
     assertEquals(
-      mapOptions.scrollGesturesEnabledDuringRotateOrZoom,
+      mapOptions.googleMapOptions.camera.target.longitude,
+      testOptions.cameraPosition.target.longitude,
+    )
+
+    assertEquals(
+      mapOptions.googleMapOptions.camera.bearing,
+      testOptions.cameraPosition.bearing.toFloat(),
+    )
+
+    assertEquals(mapOptions.googleMapOptions.camera.tilt, testOptions.cameraPosition.tilt.toFloat())
+
+    assertEquals(mapOptions.googleMapOptions.camera.zoom, testOptions.cameraPosition.zoom.toFloat())
+
+    assertEquals(mapOptions.googleMapOptions.mapType, GoogleMap.MAP_TYPE_HYBRID)
+
+    assertEquals(mapOptions.googleMapOptions.compassEnabled, testOptions.compassEnabled)
+
+    assertEquals(
+      mapOptions.googleMapOptions.scrollGesturesEnabled,
+      testOptions.scrollGesturesEnabled,
+    )
+
+    assertEquals(mapOptions.googleMapOptions.tiltGesturesEnabled, testOptions.tiltGesturesEnabled)
+
+    assertEquals(mapOptions.googleMapOptions.zoomGesturesEnabled, testOptions.zoomGesturesEnabled)
+
+    assertEquals(
+      mapOptions.googleMapOptions.scrollGesturesEnabledDuringRotateOrZoom,
       testOptions.scrollGesturesEnabledDuringRotateOrZoom,
     )
 
-    assertEquals(mapOptions.mapToolbarEnabled, testOptions.mapToolbarEnabled)
+    assertEquals(mapOptions.googleMapOptions.mapToolbarEnabled, testOptions.mapToolbarEnabled)
 
     assertEquals(
-      mapOptions.latLngBoundsForCameraTarget.northeast.latitude,
+      mapOptions.googleMapOptions.latLngBoundsForCameraTarget.northeast.latitude,
       testOptions.cameraTargetBounds?.northeast?.latitude,
     )
 
     assertEquals(
-      mapOptions.latLngBoundsForCameraTarget.northeast.longitude,
+      mapOptions.googleMapOptions.latLngBoundsForCameraTarget.northeast.longitude,
       testOptions.cameraTargetBounds?.northeast?.longitude,
     )
 
     assertEquals(
-      mapOptions.latLngBoundsForCameraTarget.southwest.latitude,
+      mapOptions.googleMapOptions.latLngBoundsForCameraTarget.southwest.latitude,
       testOptions.cameraTargetBounds?.southwest?.latitude,
     )
 
     assertEquals(
-      mapOptions.latLngBoundsForCameraTarget.southwest.longitude,
+      mapOptions.googleMapOptions.latLngBoundsForCameraTarget.southwest.longitude,
       testOptions.cameraTargetBounds?.southwest?.longitude,
     )
 
-    assertEquals(mapOptions.minZoomPreference, testOptions.minZoomPreference?.toFloat())
+    assertEquals(
+      mapOptions.googleMapOptions.minZoomPreference,
+      testOptions.minZoomPreference?.toFloat(),
+    )
 
-    assertEquals(mapOptions.maxZoomPreference, testOptions.maxZoomPreference?.toFloat())
+    assertEquals(
+      mapOptions.googleMapOptions.maxZoomPreference,
+      testOptions.maxZoomPreference?.toFloat(),
+    )
 
-    assertEquals(mapOptions.zoomControlsEnabled, testOptions.zoomControlsEnabled)
+    assertEquals(mapOptions.googleMapOptions.zoomControlsEnabled, testOptions.zoomControlsEnabled)
 
     // Test nullable values
     val testOptions2 =
@@ -438,11 +456,11 @@ internal class ConvertTest {
       )
     val mapOptions2 = Convert.convertMapOptionsFromDto(testOptions2)
 
-    assertEquals(mapOptions2.minZoomPreference, null)
+    assertEquals(mapOptions2.googleMapOptions.minZoomPreference, null)
 
-    assertEquals(mapOptions2.maxZoomPreference, null)
+    assertEquals(mapOptions2.googleMapOptions.maxZoomPreference, null)
 
-    assertEquals(mapOptions2.latLngBoundsForCameraTarget, null)
+    assertEquals(mapOptions2.googleMapOptions.latLngBoundsForCameraTarget, null)
   }
 
   @Test

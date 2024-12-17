@@ -403,6 +403,8 @@ struct MapOptionsDto {
   /// Specifies a bounds to constrain the camera target, so that when users scroll and pan the map,
   /// the camera target does not move outside these bounds.
   var cameraTargetBounds: LatLngBoundsDto?
+  /// Specifies the padding for the map.
+  var padding: MapPaddingDto?
 
   static func fromList(_ list: [Any?]) -> MapOptionsDto? {
     let cameraPosition = CameraPositionDto.fromList(list[0] as! [Any?])!
@@ -421,6 +423,10 @@ struct MapOptionsDto {
     if let cameraTargetBoundsList: [Any?] = nilOrValue(list[12]) {
       cameraTargetBounds = LatLngBoundsDto.fromList(cameraTargetBoundsList)
     }
+    var padding: MapPaddingDto?
+    if let paddingList: [Any?] = nilOrValue(list[13]) {
+      padding = MapPaddingDto.fromList(paddingList)
+    }
 
     return MapOptionsDto(
       cameraPosition: cameraPosition,
@@ -435,7 +441,8 @@ struct MapOptionsDto {
       minZoomPreference: minZoomPreference,
       maxZoomPreference: maxZoomPreference,
       zoomControlsEnabled: zoomControlsEnabled,
-      cameraTargetBounds: cameraTargetBounds
+      cameraTargetBounds: cameraTargetBounds,
+      padding: padding
     )
   }
 
@@ -454,6 +461,7 @@ struct MapOptionsDto {
       maxZoomPreference,
       zoomControlsEnabled,
       cameraTargetBounds?.toList(),
+      padding?.toList(),
     ]
   }
 }
@@ -1035,6 +1043,37 @@ struct CircleOptionsDto {
       zIndex,
       visible,
       clickable,
+    ]
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct MapPaddingDto {
+  var top: Int64
+  var left: Int64
+  var bottom: Int64
+  var right: Int64
+
+  static func fromList(_ list: [Any?]) -> MapPaddingDto? {
+    let top = list[0] is Int64 ? list[0] as! Int64 : Int64(list[0] as! Int32)
+    let left = list[1] is Int64 ? list[1] as! Int64 : Int64(list[1] as! Int32)
+    let bottom = list[2] is Int64 ? list[2] as! Int64 : Int64(list[2] as! Int32)
+    let right = list[3] is Int64 ? list[3] as! Int64 : Int64(list[3] as! Int32)
+
+    return MapPaddingDto(
+      top: top,
+      left: left,
+      bottom: bottom,
+      right: right
+    )
+  }
+
+  func toList() -> [Any?] {
+    [
+      top,
+      left,
+      bottom,
+      right,
     ]
   }
 }
@@ -1708,8 +1747,10 @@ private class NavigationViewCreationApiCodecReader: FlutterStandardReader {
     case 131:
       return MapOptionsDto.fromList(readValue() as! [Any?])
     case 132:
-      return NavigationViewOptionsDto.fromList(readValue() as! [Any?])
+      return MapPaddingDto.fromList(readValue() as! [Any?])
     case 133:
+      return NavigationViewOptionsDto.fromList(readValue() as! [Any?])
+    case 134:
       return ViewCreationOptionsDto.fromList(readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -1731,11 +1772,14 @@ private class NavigationViewCreationApiCodecWriter: FlutterStandardWriter {
     } else if let value = value as? MapOptionsDto {
       super.writeByte(131)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationViewOptionsDto {
+    } else if let value = value as? MapPaddingDto {
       super.writeByte(132)
       super.writeValue(value.toList())
-    } else if let value = value as? ViewCreationOptionsDto {
+    } else if let value = value as? NavigationViewOptionsDto {
       super.writeByte(133)
+      super.writeValue(value.toList())
+    } else if let value = value as? ViewCreationOptionsDto {
+      super.writeByte(134)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -1770,7 +1814,7 @@ protocol NavigationViewCreationApi {
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-class NavigationViewCreationApiSetup {
+enum NavigationViewCreationApiSetup {
   /// The codec used by NavigationViewCreationApi.
   static var codec: FlutterStandardMessageCodec { NavigationViewCreationApiCodec.shared }
   /// Sets up an instance of `NavigationViewCreationApi` to handle messages through the
@@ -1818,26 +1862,28 @@ private class MapViewApiCodecReader: FlutterStandardReader {
     case 135:
       return LatLngDto.fromList(readValue() as! [Any?])
     case 136:
-      return MarkerAnchorDto.fromList(readValue() as! [Any?])
+      return MapPaddingDto.fromList(readValue() as! [Any?])
     case 137:
-      return MarkerDto.fromList(readValue() as! [Any?])
+      return MarkerAnchorDto.fromList(readValue() as! [Any?])
     case 138:
-      return MarkerOptionsDto.fromList(readValue() as! [Any?])
+      return MarkerDto.fromList(readValue() as! [Any?])
     case 139:
-      return PatternItemDto.fromList(readValue() as! [Any?])
+      return MarkerOptionsDto.fromList(readValue() as! [Any?])
     case 140:
-      return PolygonDto.fromList(readValue() as! [Any?])
+      return PatternItemDto.fromList(readValue() as! [Any?])
     case 141:
-      return PolygonHoleDto.fromList(readValue() as! [Any?])
+      return PolygonDto.fromList(readValue() as! [Any?])
     case 142:
-      return PolygonOptionsDto.fromList(readValue() as! [Any?])
+      return PolygonHoleDto.fromList(readValue() as! [Any?])
     case 143:
-      return PolylineDto.fromList(readValue() as! [Any?])
+      return PolygonOptionsDto.fromList(readValue() as! [Any?])
     case 144:
-      return PolylineOptionsDto.fromList(readValue() as! [Any?])
+      return PolylineDto.fromList(readValue() as! [Any?])
     case 145:
-      return StyleSpanDto.fromList(readValue() as! [Any?])
+      return PolylineOptionsDto.fromList(readValue() as! [Any?])
     case 146:
+      return StyleSpanDto.fromList(readValue() as! [Any?])
+    case 147:
       return StyleSpanStrokeStyleDto.fromList(readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -1871,38 +1917,41 @@ private class MapViewApiCodecWriter: FlutterStandardWriter {
     } else if let value = value as? LatLngDto {
       super.writeByte(135)
       super.writeValue(value.toList())
-    } else if let value = value as? MarkerAnchorDto {
+    } else if let value = value as? MapPaddingDto {
       super.writeByte(136)
       super.writeValue(value.toList())
-    } else if let value = value as? MarkerDto {
+    } else if let value = value as? MarkerAnchorDto {
       super.writeByte(137)
       super.writeValue(value.toList())
-    } else if let value = value as? MarkerOptionsDto {
+    } else if let value = value as? MarkerDto {
       super.writeByte(138)
       super.writeValue(value.toList())
-    } else if let value = value as? PatternItemDto {
+    } else if let value = value as? MarkerOptionsDto {
       super.writeByte(139)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonDto {
+    } else if let value = value as? PatternItemDto {
       super.writeByte(140)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonHoleDto {
+    } else if let value = value as? PolygonDto {
       super.writeByte(141)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonOptionsDto {
+    } else if let value = value as? PolygonHoleDto {
       super.writeByte(142)
       super.writeValue(value.toList())
-    } else if let value = value as? PolylineDto {
+    } else if let value = value as? PolygonOptionsDto {
       super.writeByte(143)
       super.writeValue(value.toList())
-    } else if let value = value as? PolylineOptionsDto {
+    } else if let value = value as? PolylineDto {
       super.writeByte(144)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleSpanDto {
+    } else if let value = value as? PolylineOptionsDto {
       super.writeByte(145)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleSpanStrokeStyleDto {
+    } else if let value = value as? StyleSpanDto {
       super.writeByte(146)
+      super.writeValue(value.toList())
+    } else if let value = value as? StyleSpanStrokeStyleDto {
+      super.writeByte(147)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -2025,10 +2074,12 @@ protocol MapViewApi {
   func removeCircles(viewId: Int64, circles: [CircleDto]) throws
   func clearCircles(viewId: Int64) throws
   func registerOnCameraChangedListener(viewId: Int64) throws
+  func setPadding(viewId: Int64, padding: MapPaddingDto) throws
+  func getPadding(viewId: Int64) throws -> MapPaddingDto
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-class MapViewApiSetup {
+enum MapViewApiSetup {
   /// The codec used by MapViewApi.
   static var codec: FlutterStandardMessageCodec { MapViewApiCodec.shared }
   /// Sets up an instance of `MapViewApi` to handle messages through the `binaryMessenger`.
@@ -3882,6 +3933,45 @@ class MapViewApiSetup {
     } else {
       registerOnCameraChangedListenerChannel.setMessageHandler(nil)
     }
+    let setPaddingChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setPadding",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      setPaddingChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
+        let paddingArg = args[1] as! MapPaddingDto
+        do {
+          try api.setPadding(viewId: viewIdArg, padding: paddingArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setPaddingChannel.setMessageHandler(nil)
+    }
+    let getPaddingChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPadding",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      getPaddingChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
+        do {
+          let result = try api.getPadding(viewId: viewIdArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getPaddingChannel.setMessageHandler(nil)
+    }
   }
 }
 
@@ -3937,7 +4027,7 @@ protocol ImageRegistryApi {
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-class ImageRegistryApiSetup {
+enum ImageRegistryApiSetup {
   /// The codec used by ImageRegistryApi.
   static var codec: FlutterStandardMessageCodec { ImageRegistryApiCodec.shared }
   /// Sets up an instance of `ImageRegistryApi` to handle messages through the `binaryMessenger`.
@@ -4588,7 +4678,7 @@ protocol NavigationSessionApi {
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-class NavigationSessionApiSetup {
+enum NavigationSessionApiSetup {
   /// The codec used by NavigationSessionApi.
   static var codec: FlutterStandardMessageCodec { NavigationSessionApiCodec.shared }
   /// Sets up an instance of `NavigationSessionApi` to handle messages through the
@@ -5629,26 +5719,28 @@ private class AutoMapViewApiCodecReader: FlutterStandardReader {
     case 135:
       return LatLngDto.fromList(readValue() as! [Any?])
     case 136:
-      return MarkerAnchorDto.fromList(readValue() as! [Any?])
+      return MapPaddingDto.fromList(readValue() as! [Any?])
     case 137:
-      return MarkerDto.fromList(readValue() as! [Any?])
+      return MarkerAnchorDto.fromList(readValue() as! [Any?])
     case 138:
-      return MarkerOptionsDto.fromList(readValue() as! [Any?])
+      return MarkerDto.fromList(readValue() as! [Any?])
     case 139:
-      return PatternItemDto.fromList(readValue() as! [Any?])
+      return MarkerOptionsDto.fromList(readValue() as! [Any?])
     case 140:
-      return PolygonDto.fromList(readValue() as! [Any?])
+      return PatternItemDto.fromList(readValue() as! [Any?])
     case 141:
-      return PolygonHoleDto.fromList(readValue() as! [Any?])
+      return PolygonDto.fromList(readValue() as! [Any?])
     case 142:
-      return PolygonOptionsDto.fromList(readValue() as! [Any?])
+      return PolygonHoleDto.fromList(readValue() as! [Any?])
     case 143:
-      return PolylineDto.fromList(readValue() as! [Any?])
+      return PolygonOptionsDto.fromList(readValue() as! [Any?])
     case 144:
-      return PolylineOptionsDto.fromList(readValue() as! [Any?])
+      return PolylineDto.fromList(readValue() as! [Any?])
     case 145:
-      return StyleSpanDto.fromList(readValue() as! [Any?])
+      return PolylineOptionsDto.fromList(readValue() as! [Any?])
     case 146:
+      return StyleSpanDto.fromList(readValue() as! [Any?])
+    case 147:
       return StyleSpanStrokeStyleDto.fromList(readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -5682,38 +5774,41 @@ private class AutoMapViewApiCodecWriter: FlutterStandardWriter {
     } else if let value = value as? LatLngDto {
       super.writeByte(135)
       super.writeValue(value.toList())
-    } else if let value = value as? MarkerAnchorDto {
+    } else if let value = value as? MapPaddingDto {
       super.writeByte(136)
       super.writeValue(value.toList())
-    } else if let value = value as? MarkerDto {
+    } else if let value = value as? MarkerAnchorDto {
       super.writeByte(137)
       super.writeValue(value.toList())
-    } else if let value = value as? MarkerOptionsDto {
+    } else if let value = value as? MarkerDto {
       super.writeByte(138)
       super.writeValue(value.toList())
-    } else if let value = value as? PatternItemDto {
+    } else if let value = value as? MarkerOptionsDto {
       super.writeByte(139)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonDto {
+    } else if let value = value as? PatternItemDto {
       super.writeByte(140)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonHoleDto {
+    } else if let value = value as? PolygonDto {
       super.writeByte(141)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonOptionsDto {
+    } else if let value = value as? PolygonHoleDto {
       super.writeByte(142)
       super.writeValue(value.toList())
-    } else if let value = value as? PolylineDto {
+    } else if let value = value as? PolygonOptionsDto {
       super.writeByte(143)
       super.writeValue(value.toList())
-    } else if let value = value as? PolylineOptionsDto {
+    } else if let value = value as? PolylineDto {
       super.writeByte(144)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleSpanDto {
+    } else if let value = value as? PolylineOptionsDto {
       super.writeByte(145)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleSpanStrokeStyleDto {
+    } else if let value = value as? StyleSpanDto {
       super.writeByte(146)
+      super.writeValue(value.toList())
+    } else if let value = value as? StyleSpanStrokeStyleDto {
+      super.writeByte(147)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -5817,10 +5912,12 @@ protocol AutoMapViewApi {
   func clearCircles() throws
   func registerOnCameraChangedListener() throws
   func isAutoScreenAvailable() throws -> Bool
+  func setPadding(padding: MapPaddingDto) throws
+  func getPadding() throws -> MapPaddingDto
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-class AutoMapViewApiSetup {
+enum AutoMapViewApiSetup {
   /// The codec used by AutoMapViewApi.
   static var codec: FlutterStandardMessageCodec { AutoMapViewApiCodec.shared }
   /// Sets up an instance of `AutoMapViewApi` to handle messages through the `binaryMessenger`.
@@ -7208,6 +7305,42 @@ class AutoMapViewApiSetup {
     } else {
       isAutoScreenAvailableChannel.setMessageHandler(nil)
     }
+    let setPaddingChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setPadding",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      setPaddingChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let paddingArg = args[0] as! MapPaddingDto
+        do {
+          try api.setPadding(padding: paddingArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setPaddingChannel.setMessageHandler(nil)
+    }
+    let getPaddingChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPadding",
+      binaryMessenger: binaryMessenger,
+      codec: codec
+    )
+    if let api {
+      getPaddingChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.getPadding()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getPaddingChannel.setMessageHandler(nil)
+    }
   }
 }
 
@@ -7237,58 +7370,60 @@ private class AutoViewEventApiCodecReader: FlutterStandardReader {
     case 138:
       return MapOptionsDto.fromList(readValue() as! [Any?])
     case 139:
-      return MarkerAnchorDto.fromList(readValue() as! [Any?])
+      return MapPaddingDto.fromList(readValue() as! [Any?])
     case 140:
-      return MarkerDto.fromList(readValue() as! [Any?])
+      return MarkerAnchorDto.fromList(readValue() as! [Any?])
     case 141:
-      return MarkerOptionsDto.fromList(readValue() as! [Any?])
+      return MarkerDto.fromList(readValue() as! [Any?])
     case 142:
-      return NavInfoDto.fromList(readValue() as! [Any?])
+      return MarkerOptionsDto.fromList(readValue() as! [Any?])
     case 143:
-      return NavigationAudioGuidanceSettingsDto.fromList(readValue() as! [Any?])
+      return NavInfoDto.fromList(readValue() as! [Any?])
     case 144:
-      return NavigationDisplayOptionsDto.fromList(readValue() as! [Any?])
+      return NavigationAudioGuidanceSettingsDto.fromList(readValue() as! [Any?])
     case 145:
-      return NavigationTimeAndDistanceDto.fromList(readValue() as! [Any?])
+      return NavigationDisplayOptionsDto.fromList(readValue() as! [Any?])
     case 146:
-      return NavigationViewOptionsDto.fromList(readValue() as! [Any?])
+      return NavigationTimeAndDistanceDto.fromList(readValue() as! [Any?])
     case 147:
-      return NavigationWaypointDto.fromList(readValue() as! [Any?])
+      return NavigationViewOptionsDto.fromList(readValue() as! [Any?])
     case 148:
-      return PatternItemDto.fromList(readValue() as! [Any?])
+      return NavigationWaypointDto.fromList(readValue() as! [Any?])
     case 149:
-      return PolygonDto.fromList(readValue() as! [Any?])
+      return PatternItemDto.fromList(readValue() as! [Any?])
     case 150:
-      return PolygonHoleDto.fromList(readValue() as! [Any?])
+      return PolygonDto.fromList(readValue() as! [Any?])
     case 151:
-      return PolygonOptionsDto.fromList(readValue() as! [Any?])
+      return PolygonHoleDto.fromList(readValue() as! [Any?])
     case 152:
-      return PolylineDto.fromList(readValue() as! [Any?])
+      return PolygonOptionsDto.fromList(readValue() as! [Any?])
     case 153:
-      return PolylineOptionsDto.fromList(readValue() as! [Any?])
+      return PolylineDto.fromList(readValue() as! [Any?])
     case 154:
-      return RouteSegmentDto.fromList(readValue() as! [Any?])
+      return PolylineOptionsDto.fromList(readValue() as! [Any?])
     case 155:
-      return RouteSegmentTrafficDataDto.fromList(readValue() as! [Any?])
+      return RouteSegmentDto.fromList(readValue() as! [Any?])
     case 156:
-      return RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(readValue() as! [Any?])
+      return RouteSegmentTrafficDataDto.fromList(readValue() as! [Any?])
     case 157:
-      return RouteTokenOptionsDto.fromList(readValue() as! [Any?])
+      return RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(readValue() as! [Any?])
     case 158:
-      return RoutingOptionsDto.fromList(readValue() as! [Any?])
+      return RouteTokenOptionsDto.fromList(readValue() as! [Any?])
     case 159:
-      return SimulationOptionsDto.fromList(readValue() as! [Any?])
+      return RoutingOptionsDto.fromList(readValue() as! [Any?])
     case 160:
-      return SpeedAlertOptionsDto.fromList(readValue() as! [Any?])
+      return SimulationOptionsDto.fromList(readValue() as! [Any?])
     case 161:
-      return SpeedingUpdatedEventDto.fromList(readValue() as! [Any?])
+      return SpeedAlertOptionsDto.fromList(readValue() as! [Any?])
     case 162:
-      return StepInfoDto.fromList(readValue() as! [Any?])
+      return SpeedingUpdatedEventDto.fromList(readValue() as! [Any?])
     case 163:
-      return StyleSpanDto.fromList(readValue() as! [Any?])
+      return StepInfoDto.fromList(readValue() as! [Any?])
     case 164:
-      return StyleSpanStrokeStyleDto.fromList(readValue() as! [Any?])
+      return StyleSpanDto.fromList(readValue() as! [Any?])
     case 165:
+      return StyleSpanStrokeStyleDto.fromList(readValue() as! [Any?])
+    case 166:
       return ViewCreationOptionsDto.fromList(readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -7331,86 +7466,89 @@ private class AutoViewEventApiCodecWriter: FlutterStandardWriter {
     } else if let value = value as? MapOptionsDto {
       super.writeByte(138)
       super.writeValue(value.toList())
-    } else if let value = value as? MarkerAnchorDto {
+    } else if let value = value as? MapPaddingDto {
       super.writeByte(139)
       super.writeValue(value.toList())
-    } else if let value = value as? MarkerDto {
+    } else if let value = value as? MarkerAnchorDto {
       super.writeByte(140)
       super.writeValue(value.toList())
-    } else if let value = value as? MarkerOptionsDto {
+    } else if let value = value as? MarkerDto {
       super.writeByte(141)
       super.writeValue(value.toList())
-    } else if let value = value as? NavInfoDto {
+    } else if let value = value as? MarkerOptionsDto {
       super.writeByte(142)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationAudioGuidanceSettingsDto {
+    } else if let value = value as? NavInfoDto {
       super.writeByte(143)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationDisplayOptionsDto {
+    } else if let value = value as? NavigationAudioGuidanceSettingsDto {
       super.writeByte(144)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationTimeAndDistanceDto {
+    } else if let value = value as? NavigationDisplayOptionsDto {
       super.writeByte(145)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationViewOptionsDto {
+    } else if let value = value as? NavigationTimeAndDistanceDto {
       super.writeByte(146)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationWaypointDto {
+    } else if let value = value as? NavigationViewOptionsDto {
       super.writeByte(147)
       super.writeValue(value.toList())
-    } else if let value = value as? PatternItemDto {
+    } else if let value = value as? NavigationWaypointDto {
       super.writeByte(148)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonDto {
+    } else if let value = value as? PatternItemDto {
       super.writeByte(149)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonHoleDto {
+    } else if let value = value as? PolygonDto {
       super.writeByte(150)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonOptionsDto {
+    } else if let value = value as? PolygonHoleDto {
       super.writeByte(151)
       super.writeValue(value.toList())
-    } else if let value = value as? PolylineDto {
+    } else if let value = value as? PolygonOptionsDto {
       super.writeByte(152)
       super.writeValue(value.toList())
-    } else if let value = value as? PolylineOptionsDto {
+    } else if let value = value as? PolylineDto {
       super.writeByte(153)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteSegmentDto {
+    } else if let value = value as? PolylineOptionsDto {
       super.writeByte(154)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteSegmentTrafficDataDto {
+    } else if let value = value as? RouteSegmentDto {
       super.writeByte(155)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteSegmentTrafficDataRoadStretchRenderingDataDto {
+    } else if let value = value as? RouteSegmentTrafficDataDto {
       super.writeByte(156)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteTokenOptionsDto {
+    } else if let value = value as? RouteSegmentTrafficDataRoadStretchRenderingDataDto {
       super.writeByte(157)
       super.writeValue(value.toList())
-    } else if let value = value as? RoutingOptionsDto {
+    } else if let value = value as? RouteTokenOptionsDto {
       super.writeByte(158)
       super.writeValue(value.toList())
-    } else if let value = value as? SimulationOptionsDto {
+    } else if let value = value as? RoutingOptionsDto {
       super.writeByte(159)
       super.writeValue(value.toList())
-    } else if let value = value as? SpeedAlertOptionsDto {
+    } else if let value = value as? SimulationOptionsDto {
       super.writeByte(160)
       super.writeValue(value.toList())
-    } else if let value = value as? SpeedingUpdatedEventDto {
+    } else if let value = value as? SpeedAlertOptionsDto {
       super.writeByte(161)
       super.writeValue(value.toList())
-    } else if let value = value as? StepInfoDto {
+    } else if let value = value as? SpeedingUpdatedEventDto {
       super.writeByte(162)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleSpanDto {
+    } else if let value = value as? StepInfoDto {
       super.writeByte(163)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleSpanStrokeStyleDto {
+    } else if let value = value as? StyleSpanDto {
       super.writeByte(164)
       super.writeValue(value.toList())
-    } else if let value = value as? ViewCreationOptionsDto {
+    } else if let value = value as? StyleSpanStrokeStyleDto {
       super.writeByte(165)
+      super.writeValue(value.toList())
+    } else if let value = value as? ViewCreationOptionsDto {
+      super.writeByte(166)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -7507,7 +7645,7 @@ protocol NavigationInspector {
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-class NavigationInspectorSetup {
+enum NavigationInspectorSetup {
   /// The codec used by NavigationInspector.
   /// Sets up an instance of `NavigationInspector` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: NavigationInspector?) {

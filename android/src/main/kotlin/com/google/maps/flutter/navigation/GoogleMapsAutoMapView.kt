@@ -18,12 +18,11 @@ package com.google.maps.flutter.navigation
 
 import android.view.View
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.libraries.navigation.NavigationViewForAuto
 
 class GoogleMapsAutoMapView
 internal constructor(
-  mapOptions: GoogleMapOptions,
+  mapOptions: MapOptions,
   private val viewRegistry: GoogleMapsViewRegistry,
   imageRegistry: ImageRegistry,
   private val mapView: NavigationViewForAuto,

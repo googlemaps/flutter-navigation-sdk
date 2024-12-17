@@ -532,6 +532,12 @@ abstract mixin class MapViewAPIInterface {
   /// Register camera changed listeners.
   Future<void> registerOnCameraChangedListener({required int viewId});
 
+  // Sets the map padding for the map view.
+  Future<void> setPadding({required int viewId, required EdgeInsets padding});
+
+  // Gets the map padding from the map view.
+  Future<EdgeInsets> getPadding({required int viewId});
+
   /// Get navigation view marker event stream from the navigation view.
   Stream<MarkerEvent> getMarkerEventStream({required int viewId});
 
@@ -768,6 +774,12 @@ abstract mixin class AutoMapViewAPIInterface {
 
   // Check whether auto screen is available;
   Future<bool> isAutoScreenAvailable();
+
+  // Sets the map padding for the auto map view.
+  Future<void> setPaddingForAuto({required EdgeInsets padding});
+
+  // Gets the map padding from the auto map view.
+  Future<EdgeInsets> getPaddingForAuto();
 
   /// Get custom navigation auto event stream from the auto view.
   Stream<CustomNavigationAutoEvent> getCustomNavigationAutoEventStream();

@@ -441,4 +441,12 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
   func isAutoScreenAvailable() throws -> Bool {
     viewRegistry.getCarPlayView() != nil
   }
+
+  func setPadding(padding: MapPaddingDto) throws {
+    try getView().setPadding(padding: padding)
+  }
+
+  func getPadding() throws -> MapPaddingDto {
+    try getView().getPadding()
+  }
 }

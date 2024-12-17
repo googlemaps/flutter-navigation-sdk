@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:flutter/widgets.dart';
+
 import '../google_navigation_flutter.dart';
 import 'google_navigation_flutter_platform_interface.dart';
 
@@ -323,6 +325,17 @@ class GoogleMapsAutoViewController {
   /// Remove all markers, polylines, polygons, overlays, etc from the map view.
   Future<void> clear() {
     return GoogleMapsNavigationPlatform.instance.clearForAuto();
+  }
+
+  /// Set padding for the map view.
+  Future<void> setPadding(EdgeInsets padding) {
+    return GoogleMapsNavigationPlatform.instance
+        .setPaddingForAuto(padding: padding);
+  }
+
+  // Gets the map padding from the map view.
+  Future<EdgeInsets> getPadding() async {
+    return GoogleMapsNavigationPlatform.instance.getPaddingForAuto();
   }
 
   Future<bool> isAutoScreenAvailable() {

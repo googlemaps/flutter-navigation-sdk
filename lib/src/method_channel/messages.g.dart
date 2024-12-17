@@ -446,6 +446,7 @@ class MapOptionsDto {
     this.maxZoomPreference,
     required this.zoomControlsEnabled,
     this.cameraTargetBounds,
+    this.padding,
   });
 
   /// The initial positioning of the camera in the map view.
@@ -488,6 +489,9 @@ class MapOptionsDto {
   /// the camera target does not move outside these bounds.
   LatLngBoundsDto? cameraTargetBounds;
 
+  /// Specifies the padding for the map.
+  MapPaddingDto? padding;
+
   Object encode() {
     return <Object?>[
       cameraPosition.encode(),
@@ -503,6 +507,7 @@ class MapOptionsDto {
       maxZoomPreference,
       zoomControlsEnabled,
       cameraTargetBounds?.encode(),
+      padding?.encode(),
     ];
   }
 
@@ -523,6 +528,9 @@ class MapOptionsDto {
       zoomControlsEnabled: result[11]! as bool,
       cameraTargetBounds: result[12] != null
           ? LatLngBoundsDto.decode(result[12]! as List<Object?>)
+          : null,
+      padding: result[13] != null
+          ? MapPaddingDto.decode(result[13]! as List<Object?>)
           : null,
     );
   }
@@ -1187,6 +1195,42 @@ class CircleOptionsDto {
       zIndex: result[6]! as double,
       visible: result[7]! as bool,
       clickable: result[8]! as bool,
+    );
+  }
+}
+
+class MapPaddingDto {
+  MapPaddingDto({
+    required this.top,
+    required this.left,
+    required this.bottom,
+    required this.right,
+  });
+
+  int top;
+
+  int left;
+
+  int bottom;
+
+  int right;
+
+  Object encode() {
+    return <Object?>[
+      top,
+      left,
+      bottom,
+      right,
+    ];
+  }
+
+  static MapPaddingDto decode(Object result) {
+    result as List<Object?>;
+    return MapPaddingDto(
+      top: result[0]! as int,
+      left: result[1]! as int,
+      bottom: result[2]! as int,
+      right: result[3]! as int,
     );
   }
 }
@@ -1924,11 +1968,14 @@ class _NavigationViewCreationApiCodec extends StandardMessageCodec {
     } else if (value is MapOptionsDto) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationViewOptionsDto) {
+    } else if (value is MapPaddingDto) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
-    } else if (value is ViewCreationOptionsDto) {
+    } else if (value is NavigationViewOptionsDto) {
       buffer.putUint8(133);
+      writeValue(buffer, value.encode());
+    } else if (value is ViewCreationOptionsDto) {
+      buffer.putUint8(134);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -1947,8 +1994,10 @@ class _NavigationViewCreationApiCodec extends StandardMessageCodec {
       case 131:
         return MapOptionsDto.decode(readValue(buffer)!);
       case 132:
-        return NavigationViewOptionsDto.decode(readValue(buffer)!);
+        return MapPaddingDto.decode(readValue(buffer)!);
       case 133:
+        return NavigationViewOptionsDto.decode(readValue(buffer)!);
+      case 134:
         return ViewCreationOptionsDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -2025,38 +2074,41 @@ class _MapViewApiCodec extends StandardMessageCodec {
     } else if (value is LatLngDto) {
       buffer.putUint8(135);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerAnchorDto) {
+    } else if (value is MapPaddingDto) {
       buffer.putUint8(136);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerDto) {
+    } else if (value is MarkerAnchorDto) {
       buffer.putUint8(137);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerOptionsDto) {
+    } else if (value is MarkerDto) {
       buffer.putUint8(138);
       writeValue(buffer, value.encode());
-    } else if (value is PatternItemDto) {
+    } else if (value is MarkerOptionsDto) {
       buffer.putUint8(139);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonDto) {
+    } else if (value is PatternItemDto) {
       buffer.putUint8(140);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonHoleDto) {
+    } else if (value is PolygonDto) {
       buffer.putUint8(141);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonOptionsDto) {
+    } else if (value is PolygonHoleDto) {
       buffer.putUint8(142);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineDto) {
+    } else if (value is PolygonOptionsDto) {
       buffer.putUint8(143);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineOptionsDto) {
+    } else if (value is PolylineDto) {
       buffer.putUint8(144);
       writeValue(buffer, value.encode());
-    } else if (value is StyleSpanDto) {
+    } else if (value is PolylineOptionsDto) {
       buffer.putUint8(145);
       writeValue(buffer, value.encode());
-    } else if (value is StyleSpanStrokeStyleDto) {
+    } else if (value is StyleSpanDto) {
       buffer.putUint8(146);
+      writeValue(buffer, value.encode());
+    } else if (value is StyleSpanStrokeStyleDto) {
+      buffer.putUint8(147);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -2083,26 +2135,28 @@ class _MapViewApiCodec extends StandardMessageCodec {
       case 135:
         return LatLngDto.decode(readValue(buffer)!);
       case 136:
-        return MarkerAnchorDto.decode(readValue(buffer)!);
+        return MapPaddingDto.decode(readValue(buffer)!);
       case 137:
-        return MarkerDto.decode(readValue(buffer)!);
+        return MarkerAnchorDto.decode(readValue(buffer)!);
       case 138:
-        return MarkerOptionsDto.decode(readValue(buffer)!);
+        return MarkerDto.decode(readValue(buffer)!);
       case 139:
-        return PatternItemDto.decode(readValue(buffer)!);
+        return MarkerOptionsDto.decode(readValue(buffer)!);
       case 140:
-        return PolygonDto.decode(readValue(buffer)!);
+        return PatternItemDto.decode(readValue(buffer)!);
       case 141:
-        return PolygonHoleDto.decode(readValue(buffer)!);
+        return PolygonDto.decode(readValue(buffer)!);
       case 142:
-        return PolygonOptionsDto.decode(readValue(buffer)!);
+        return PolygonHoleDto.decode(readValue(buffer)!);
       case 143:
-        return PolylineDto.decode(readValue(buffer)!);
+        return PolygonOptionsDto.decode(readValue(buffer)!);
       case 144:
-        return PolylineOptionsDto.decode(readValue(buffer)!);
+        return PolylineDto.decode(readValue(buffer)!);
       case 145:
-        return StyleSpanDto.decode(readValue(buffer)!);
+        return PolylineOptionsDto.decode(readValue(buffer)!);
       case 146:
+        return StyleSpanDto.decode(readValue(buffer)!);
+      case 147:
         return StyleSpanStrokeStyleDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -4528,6 +4582,59 @@ class MapViewApi {
       return;
     }
   }
+
+  Future<void> setPadding(int viewId, MapPaddingDto padding) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setPadding';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[viewId, padding]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<MapPaddingDto> getPadding(int viewId) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPadding';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[viewId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else if (__pigeon_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (__pigeon_replyList[0] as MapPaddingDto?)!;
+    }
+  }
 }
 
 class _ImageRegistryApiCodec extends StandardMessageCodec {
@@ -6532,38 +6639,41 @@ class _AutoMapViewApiCodec extends StandardMessageCodec {
     } else if (value is LatLngDto) {
       buffer.putUint8(135);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerAnchorDto) {
+    } else if (value is MapPaddingDto) {
       buffer.putUint8(136);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerDto) {
+    } else if (value is MarkerAnchorDto) {
       buffer.putUint8(137);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerOptionsDto) {
+    } else if (value is MarkerDto) {
       buffer.putUint8(138);
       writeValue(buffer, value.encode());
-    } else if (value is PatternItemDto) {
+    } else if (value is MarkerOptionsDto) {
       buffer.putUint8(139);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonDto) {
+    } else if (value is PatternItemDto) {
       buffer.putUint8(140);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonHoleDto) {
+    } else if (value is PolygonDto) {
       buffer.putUint8(141);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonOptionsDto) {
+    } else if (value is PolygonHoleDto) {
       buffer.putUint8(142);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineDto) {
+    } else if (value is PolygonOptionsDto) {
       buffer.putUint8(143);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineOptionsDto) {
+    } else if (value is PolylineDto) {
       buffer.putUint8(144);
       writeValue(buffer, value.encode());
-    } else if (value is StyleSpanDto) {
+    } else if (value is PolylineOptionsDto) {
       buffer.putUint8(145);
       writeValue(buffer, value.encode());
-    } else if (value is StyleSpanStrokeStyleDto) {
+    } else if (value is StyleSpanDto) {
       buffer.putUint8(146);
+      writeValue(buffer, value.encode());
+    } else if (value is StyleSpanStrokeStyleDto) {
+      buffer.putUint8(147);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -6590,26 +6700,28 @@ class _AutoMapViewApiCodec extends StandardMessageCodec {
       case 135:
         return LatLngDto.decode(readValue(buffer)!);
       case 136:
-        return MarkerAnchorDto.decode(readValue(buffer)!);
+        return MapPaddingDto.decode(readValue(buffer)!);
       case 137:
-        return MarkerDto.decode(readValue(buffer)!);
+        return MarkerAnchorDto.decode(readValue(buffer)!);
       case 138:
-        return MarkerOptionsDto.decode(readValue(buffer)!);
+        return MarkerDto.decode(readValue(buffer)!);
       case 139:
-        return PatternItemDto.decode(readValue(buffer)!);
+        return MarkerOptionsDto.decode(readValue(buffer)!);
       case 140:
-        return PolygonDto.decode(readValue(buffer)!);
+        return PatternItemDto.decode(readValue(buffer)!);
       case 141:
-        return PolygonHoleDto.decode(readValue(buffer)!);
+        return PolygonDto.decode(readValue(buffer)!);
       case 142:
-        return PolygonOptionsDto.decode(readValue(buffer)!);
+        return PolygonHoleDto.decode(readValue(buffer)!);
       case 143:
-        return PolylineDto.decode(readValue(buffer)!);
+        return PolygonOptionsDto.decode(readValue(buffer)!);
       case 144:
-        return PolylineOptionsDto.decode(readValue(buffer)!);
+        return PolylineDto.decode(readValue(buffer)!);
       case 145:
-        return StyleSpanDto.decode(readValue(buffer)!);
+        return PolylineOptionsDto.decode(readValue(buffer)!);
       case 146:
+        return StyleSpanDto.decode(readValue(buffer)!);
+      case 147:
         return StyleSpanStrokeStyleDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -8575,6 +8687,59 @@ class AutoMapViewApi {
       return (__pigeon_replyList[0] as bool?)!;
     }
   }
+
+  Future<void> setPadding(MapPaddingDto padding) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setPadding';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[padding]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<MapPaddingDto> getPadding() async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPadding';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(null) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else if (__pigeon_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (__pigeon_replyList[0] as MapPaddingDto?)!;
+    }
+  }
 }
 
 class _AutoViewEventApiCodec extends StandardMessageCodec {
@@ -8614,86 +8779,89 @@ class _AutoViewEventApiCodec extends StandardMessageCodec {
     } else if (value is MapOptionsDto) {
       buffer.putUint8(138);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerAnchorDto) {
+    } else if (value is MapPaddingDto) {
       buffer.putUint8(139);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerDto) {
+    } else if (value is MarkerAnchorDto) {
       buffer.putUint8(140);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerOptionsDto) {
+    } else if (value is MarkerDto) {
       buffer.putUint8(141);
       writeValue(buffer, value.encode());
-    } else if (value is NavInfoDto) {
+    } else if (value is MarkerOptionsDto) {
       buffer.putUint8(142);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationAudioGuidanceSettingsDto) {
+    } else if (value is NavInfoDto) {
       buffer.putUint8(143);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationDisplayOptionsDto) {
+    } else if (value is NavigationAudioGuidanceSettingsDto) {
       buffer.putUint8(144);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationTimeAndDistanceDto) {
+    } else if (value is NavigationDisplayOptionsDto) {
       buffer.putUint8(145);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationViewOptionsDto) {
+    } else if (value is NavigationTimeAndDistanceDto) {
       buffer.putUint8(146);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationWaypointDto) {
+    } else if (value is NavigationViewOptionsDto) {
       buffer.putUint8(147);
       writeValue(buffer, value.encode());
-    } else if (value is PatternItemDto) {
+    } else if (value is NavigationWaypointDto) {
       buffer.putUint8(148);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonDto) {
+    } else if (value is PatternItemDto) {
       buffer.putUint8(149);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonHoleDto) {
+    } else if (value is PolygonDto) {
       buffer.putUint8(150);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonOptionsDto) {
+    } else if (value is PolygonHoleDto) {
       buffer.putUint8(151);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineDto) {
+    } else if (value is PolygonOptionsDto) {
       buffer.putUint8(152);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineOptionsDto) {
+    } else if (value is PolylineDto) {
       buffer.putUint8(153);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentDto) {
+    } else if (value is PolylineOptionsDto) {
       buffer.putUint8(154);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataDto) {
+    } else if (value is RouteSegmentDto) {
       buffer.putUint8(155);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
+    } else if (value is RouteSegmentTrafficDataDto) {
       buffer.putUint8(156);
       writeValue(buffer, value.encode());
-    } else if (value is RouteTokenOptionsDto) {
+    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
       buffer.putUint8(157);
       writeValue(buffer, value.encode());
-    } else if (value is RoutingOptionsDto) {
+    } else if (value is RouteTokenOptionsDto) {
       buffer.putUint8(158);
       writeValue(buffer, value.encode());
-    } else if (value is SimulationOptionsDto) {
+    } else if (value is RoutingOptionsDto) {
       buffer.putUint8(159);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsDto) {
+    } else if (value is SimulationOptionsDto) {
       buffer.putUint8(160);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedingUpdatedEventDto) {
+    } else if (value is SpeedAlertOptionsDto) {
       buffer.putUint8(161);
       writeValue(buffer, value.encode());
-    } else if (value is StepInfoDto) {
+    } else if (value is SpeedingUpdatedEventDto) {
       buffer.putUint8(162);
       writeValue(buffer, value.encode());
-    } else if (value is StyleSpanDto) {
+    } else if (value is StepInfoDto) {
       buffer.putUint8(163);
       writeValue(buffer, value.encode());
-    } else if (value is StyleSpanStrokeStyleDto) {
+    } else if (value is StyleSpanDto) {
       buffer.putUint8(164);
       writeValue(buffer, value.encode());
-    } else if (value is ViewCreationOptionsDto) {
+    } else if (value is StyleSpanStrokeStyleDto) {
       buffer.putUint8(165);
+      writeValue(buffer, value.encode());
+    } else if (value is ViewCreationOptionsDto) {
+      buffer.putUint8(166);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -8726,59 +8894,61 @@ class _AutoViewEventApiCodec extends StandardMessageCodec {
       case 138:
         return MapOptionsDto.decode(readValue(buffer)!);
       case 139:
-        return MarkerAnchorDto.decode(readValue(buffer)!);
+        return MapPaddingDto.decode(readValue(buffer)!);
       case 140:
-        return MarkerDto.decode(readValue(buffer)!);
+        return MarkerAnchorDto.decode(readValue(buffer)!);
       case 141:
-        return MarkerOptionsDto.decode(readValue(buffer)!);
+        return MarkerDto.decode(readValue(buffer)!);
       case 142:
-        return NavInfoDto.decode(readValue(buffer)!);
+        return MarkerOptionsDto.decode(readValue(buffer)!);
       case 143:
-        return NavigationAudioGuidanceSettingsDto.decode(readValue(buffer)!);
+        return NavInfoDto.decode(readValue(buffer)!);
       case 144:
-        return NavigationDisplayOptionsDto.decode(readValue(buffer)!);
+        return NavigationAudioGuidanceSettingsDto.decode(readValue(buffer)!);
       case 145:
-        return NavigationTimeAndDistanceDto.decode(readValue(buffer)!);
+        return NavigationDisplayOptionsDto.decode(readValue(buffer)!);
       case 146:
-        return NavigationViewOptionsDto.decode(readValue(buffer)!);
+        return NavigationTimeAndDistanceDto.decode(readValue(buffer)!);
       case 147:
-        return NavigationWaypointDto.decode(readValue(buffer)!);
+        return NavigationViewOptionsDto.decode(readValue(buffer)!);
       case 148:
-        return PatternItemDto.decode(readValue(buffer)!);
+        return NavigationWaypointDto.decode(readValue(buffer)!);
       case 149:
-        return PolygonDto.decode(readValue(buffer)!);
+        return PatternItemDto.decode(readValue(buffer)!);
       case 150:
-        return PolygonHoleDto.decode(readValue(buffer)!);
+        return PolygonDto.decode(readValue(buffer)!);
       case 151:
-        return PolygonOptionsDto.decode(readValue(buffer)!);
+        return PolygonHoleDto.decode(readValue(buffer)!);
       case 152:
-        return PolylineDto.decode(readValue(buffer)!);
+        return PolygonOptionsDto.decode(readValue(buffer)!);
       case 153:
-        return PolylineOptionsDto.decode(readValue(buffer)!);
+        return PolylineDto.decode(readValue(buffer)!);
       case 154:
-        return RouteSegmentDto.decode(readValue(buffer)!);
+        return PolylineOptionsDto.decode(readValue(buffer)!);
       case 155:
-        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
+        return RouteSegmentDto.decode(readValue(buffer)!);
       case 156:
+        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
+      case 157:
         return RouteSegmentTrafficDataRoadStretchRenderingDataDto.decode(
             readValue(buffer)!);
-      case 157:
-        return RouteTokenOptionsDto.decode(readValue(buffer)!);
       case 158:
-        return RoutingOptionsDto.decode(readValue(buffer)!);
+        return RouteTokenOptionsDto.decode(readValue(buffer)!);
       case 159:
-        return SimulationOptionsDto.decode(readValue(buffer)!);
+        return RoutingOptionsDto.decode(readValue(buffer)!);
       case 160:
-        return SpeedAlertOptionsDto.decode(readValue(buffer)!);
+        return SimulationOptionsDto.decode(readValue(buffer)!);
       case 161:
-        return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
+        return SpeedAlertOptionsDto.decode(readValue(buffer)!);
       case 162:
-        return StepInfoDto.decode(readValue(buffer)!);
+        return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
       case 163:
-        return StyleSpanDto.decode(readValue(buffer)!);
+        return StepInfoDto.decode(readValue(buffer)!);
       case 164:
-        return StyleSpanStrokeStyleDto.decode(readValue(buffer)!);
+        return StyleSpanDto.decode(readValue(buffer)!);
       case 165:
+        return StyleSpanStrokeStyleDto.decode(readValue(buffer)!);
+      case 166:
         return ViewCreationOptionsDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
