@@ -21,7 +21,7 @@ environment:
 
 dependencies:
   cupertino_icons: ^1.0.2
-  device_info_plus: ^9.1.0
+  device_info_plus: ^11.2.2
   flutter:
     sdk: flutter
   google_navigation_flutter:
