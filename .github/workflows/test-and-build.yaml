@@ -225,7 +225,7 @@ jobs:
       labels: ubuntu-latest
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
-      patrol_cli_version: "3.2.0"
+      patrol_cli_version: "3.5.0"
       working_directory: "example"
     steps:
       - name: Fail if workflow has no access to API key
@@ -312,7 +312,7 @@ jobs:
       labels: macos-latest-xlarge
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
-      patrol_cli_version: "3.2.0"
+      patrol_cli_version: "3.5.0"
       working_directory: "example"
     steps:
       - name: Fail if workflow has no access to API key
