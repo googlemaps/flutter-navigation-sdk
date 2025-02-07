@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 import 'package:google_navigation_flutter/src/method_channel/method_channel.dart';
+import 'package:google_navigation_flutter/src/utils/color.dart';
 
 void main() {
   late Polygon polygon;
@@ -66,9 +67,9 @@ void main() {
               ])
             ],
             clickable: true,
-            fillColor: Colors.amber.value,
+            fillColor: colorToInt(Colors.amber)!,
             geodesic: true,
-            strokeColor: Colors.blue.value,
+            strokeColor: colorToInt(Colors.blue)!,
             strokeWidth: 4,
             visible: true,
             zIndex: 3));
@@ -101,9 +102,9 @@ void main() {
 
       // Other parameters
       expect(converted.options.clickable, true);
-      expect(converted.options.fillColor, 0xFFFFC107);
+      expect(converted.options.fillColor, colorToInt(Colors.amber));
       expect(converted.options.geodesic, true);
-      expect(converted.options.strokeColor, 0xFF2196F3);
+      expect(converted.options.strokeColor, colorToInt(Colors.blue));
       expect(converted.options.strokeWidth, 4);
       expect(converted.options.visible, true);
       expect(converted.options.zIndex, 3);
@@ -135,9 +136,10 @@ void main() {
 
       // Other parameters
       expect(converted.options.clickable, true);
-      expect(converted.options.fillColor.value, 0xFFFFC107);
+      expect(colorToInt(converted.options.fillColor), colorToInt(Colors.amber));
       expect(converted.options.geodesic, true);
-      expect(converted.options.strokeColor.value, 0xFF2196F3);
+      expect(
+          colorToInt(converted.options.strokeColor), colorToInt(Colors.blue));
       expect(converted.options.strokeWidth, 4);
       expect(converted.options.visible, true);
       expect(converted.options.zIndex, 3);

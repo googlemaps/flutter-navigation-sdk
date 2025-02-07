@@ -308,7 +308,7 @@ void main() {
         polylines[0]!.options.points![1].longitude, closeTo(25.929471, 0.01));
     expect(polylines[0]!.options.clickable, true);
     expect(polylines[0]!.options.geodesic, true);
-    expect(polylines[0]!.options.strokeColor!.value, Colors.red.value);
+    expect(polylines[0]!.options.strokeColor!, Colors.red);
     expect(polylines[0]!.options.strokeWidth, 5.0);
 
     /// iOS doesn't have strokeJointTypes
@@ -343,8 +343,7 @@ void main() {
     expect(receivedPolylines.length, 1);
     expect(receivedPolylines[0]!.options.geodesic, false);
     expect(receivedPolylines[0]!.options.clickable, false);
-    expect(
-        receivedPolylines[0]!.options.strokeColor!.value, Colors.black.value);
+    expect(receivedPolylines[0]!.options.strokeColor!, Colors.black);
     expect(receivedPolylines[0]!.options.strokeWidth, 10.0);
 
     /// iOS doesn't have strokeJointTypes

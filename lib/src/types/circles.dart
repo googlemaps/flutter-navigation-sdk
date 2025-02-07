@@ -16,6 +16,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../google_navigation_flutter.dart';
+import '../utils/color.dart';
 
 /// Circle that has beed added to map.
 /// {@category Navigation View}
@@ -136,9 +137,9 @@ class CircleOptions {
         position == other.position &&
         radius == other.radius &&
         strokeWidth == other.strokeWidth &&
-        strokeColor.value == other.strokeColor.value &&
+        colorToInt(strokeColor) == colorToInt(other.strokeColor) &&
         listEquals(strokePattern, other.strokePattern) &&
-        fillColor.value == other.fillColor.value &&
+        colorToInt(fillColor) == colorToInt(other.fillColor) &&
         clickable == other.clickable &&
         visible == other.visible &&
         zIndex == other.zIndex;
@@ -149,9 +150,9 @@ class CircleOptions {
       position.hashCode,
       radius.hashCode,
       strokeWidth.hashCode,
-      strokeColor.hashCode,
+      colorToInt(strokeColor),
       strokePattern.hashCode,
-      fillColor.hashCode,
+      colorToInt(fillColor),
       clickable.hashCode,
       visible.hashCode,
       zIndex.hashCode);

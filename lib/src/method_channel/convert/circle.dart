@@ -14,6 +14,7 @@
 import 'dart:ui';
 
 import '../../../google_navigation_flutter.dart';
+import '../../utils/color.dart';
 import '../method_channel.dart';
 
 /// [CircleDto] convert extension.
@@ -66,8 +67,8 @@ extension ConvertCircleOptions on CircleOptions {
         strokePattern:
             strokePattern.map((PatternItem pi) => pi.toDto()).toList(),
         clickable: clickable,
-        fillColor: fillColor.value,
-        strokeColor: strokeColor.value,
+        fillColor: colorToInt(fillColor)!,
+        strokeColor: colorToInt(strokeColor)!,
         strokeWidth: strokeWidth,
         visible: visible,
         zIndex: zIndex);

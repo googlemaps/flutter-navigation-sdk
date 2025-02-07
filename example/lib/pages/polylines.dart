@@ -143,7 +143,7 @@ class _PolylinesPageState extends ExamplePageState<PolylinesPage> {
   Future<void> _setStrokeColor() async {
     final Color oldColor = _selectedPolyline!.options.strokeColor!;
     final Color newColor = _colors.elementAtOrNull(
-            _colors.indexWhere((Color e) => e.value == oldColor.value) + 1) ??
+            _colors.indexWhere((Color e) => e == oldColor) + 1) ??
         _colors[0];
 
     await _updateSelectedPolylineWithOptions(
@@ -159,13 +159,13 @@ class _PolylinesPageState extends ExamplePageState<PolylinesPage> {
   }
 
   String _colorName(Color? color) {
-    if (color?.value == Colors.black.value) {
+    if (color == Colors.black) {
       return 'Black';
-    } else if (color?.value == Colors.red.value) {
+    } else if (color == Colors.red) {
       return 'Red';
-    } else if (color?.value == Colors.green.value) {
+    } else if (color == Colors.green) {
       return 'Green';
-    } else if (color?.value == Colors.blue.value) {
+    } else if (color == Colors.blue) {
       return 'Blue';
     } else {
       return 'null';

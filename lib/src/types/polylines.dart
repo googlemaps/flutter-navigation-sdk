@@ -16,6 +16,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../google_navigation_flutter.dart';
+import '../utils/color.dart';
 
 /// Polyline that has beed added to map.
 /// {@category Navigation View}
@@ -141,7 +142,7 @@ class PolylineOptions {
         listEquals(points, other.points) &&
         clickable == other.clickable &&
         geodesic == other.geodesic &&
-        strokeColor?.value == other.strokeColor?.value &&
+        colorToInt(strokeColor) == colorToInt(other.strokeColor) &&
         strokeJointType == other.strokeJointType &&
         listEquals(strokePattern, other.strokePattern) &&
         strokeWidth == other.strokeWidth &&
@@ -155,7 +156,7 @@ class PolylineOptions {
         points.hashCode,
         clickable.hashCode,
         geodesic.hashCode,
-        strokeColor?.value.hashCode,
+        colorToInt(strokeColor),
         strokeJointType.hashCode,
         strokePattern.hashCode,
         strokeWidth.hashCode,

@@ -15,6 +15,7 @@
 import 'dart:ui';
 
 import '../../../google_navigation_flutter.dart';
+import '../../utils/color.dart';
 import '../method_channel.dart';
 
 /// [Polyline] convert extension.
@@ -35,7 +36,7 @@ extension ConvertPolylineOptions on PolylineOptions {
       points: points?.map((LatLng point) => point.toDto()).toList(),
       clickable: clickable,
       geodesic: geodesic,
-      strokeColor: strokeColor?.value,
+      strokeColor: colorToInt(strokeColor),
       strokeJointType: strokeJointType?.toStrokeJointTypeDto(),
       strokePattern:
           strokePattern?.map((PatternItem pi) => pi.toDto()).toList(),
