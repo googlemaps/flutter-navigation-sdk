@@ -17,6 +17,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../google_navigation_flutter.dart';
+import '../utils/color.dart';
 
 /// Polygon that has beed added to map.
 /// {@category Navigation View}
@@ -151,9 +152,9 @@ class PolygonOptions {
         listEquals(points, other.points) &&
         const DeepCollectionEquality().equals(holes, other.holes) &&
         clickable == other.clickable &&
-        fillColor.value == other.fillColor.value &&
+        colorToInt(fillColor) == colorToInt(other.fillColor) &&
         geodesic == other.geodesic &&
-        strokeColor.value == other.strokeColor.value &&
+        colorToInt(strokeColor) == colorToInt(other.strokeColor) &&
         strokeWidth == other.strokeWidth &&
         visible == other.visible &&
         zIndex == other.zIndex;
@@ -164,9 +165,9 @@ class PolygonOptions {
       points.hashCode,
       holes.hashCode,
       clickable.hashCode,
-      fillColor.value.hashCode,
+      colorToInt(fillColor),
       geodesic.hashCode,
-      strokeColor.value.hashCode,
+      colorToInt(strokeColor),
       strokeWidth.hashCode,
       visible.hashCode,
       zIndex.hashCode);
