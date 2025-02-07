@@ -277,11 +277,11 @@ jobs:
         run: flutter pub get
       - name: Create and start emulator
         run: |
-          echo "List installed packages"
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --list_installed
-
           echo "Installing system image"
           echo "y" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "system-images;android-35;google_apis;x86_64"
+
+          echo "List installed packages"
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --list_installed
 
           echo "Creating AVD"
           echo "no" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/avdmanager create avd -n test_emulator -k "system-images;android-35;google_apis;x86_64" --force
