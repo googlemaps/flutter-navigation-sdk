@@ -480,3 +480,17 @@ Future<Value?> waitForValueMatchingPredicate<Value>(PatrolIntegrationTester $,
   }
   return null;
 }
+
+// Convert a Color to an integer.
+int? colorToInt(Color? color) {
+  if (color == null) {
+    return null;
+  }
+
+  int floatToInt8(double x) => (x * 255.0).round() & 0xff;
+
+  return (floatToInt8(color.a) << 24) |
+      (floatToInt8(color.r) << 16) |
+      (floatToInt8(color.g) << 8) |
+      (floatToInt8(color.b));
+}

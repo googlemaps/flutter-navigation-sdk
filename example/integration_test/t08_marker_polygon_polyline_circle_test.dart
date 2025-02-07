@@ -308,7 +308,8 @@ void main() {
         polylines[0]!.options.points![1].longitude, closeTo(25.929471, 0.01));
     expect(polylines[0]!.options.clickable, true);
     expect(polylines[0]!.options.geodesic, true);
-    expect(polylines[0]!.options.strokeColor!, Colors.red);
+    expect(
+        colorToInt(polylines[0]!.options.strokeColor!), colorToInt(Colors.red));
     expect(polylines[0]!.options.strokeWidth, 5.0);
 
     /// iOS doesn't have strokeJointTypes
@@ -343,7 +344,8 @@ void main() {
     expect(receivedPolylines.length, 1);
     expect(receivedPolylines[0]!.options.geodesic, false);
     expect(receivedPolylines[0]!.options.clickable, false);
-    expect(receivedPolylines[0]!.options.strokeColor!, Colors.black);
+    expect(colorToInt(receivedPolylines[0]!.options.strokeColor!),
+        colorToInt(Colors.black));
     expect(receivedPolylines[0]!.options.strokeWidth, 10.0);
 
     /// iOS doesn't have strokeJointTypes
@@ -578,9 +580,9 @@ void main() {
 
       // Default values.
       expect(polygon.options.clickable, false);
-      expect(polygon.options.fillColor, Colors.black);
+      expect(colorToInt(polygon.options.fillColor), colorToInt(Colors.black));
       expect(polygon.options.geodesic, false);
-      expect(polygon.options.strokeColor, Colors.black);
+      expect(colorToInt(polygon.options.strokeColor), colorToInt(Colors.black));
       expect(polygon.options.strokeWidth, 10);
       expect(polygon.options.visible, true);
       expect(polygon.options.zIndex, 0);
@@ -660,9 +662,11 @@ void main() {
       expect(updatedPolygon.options.points, updatedOptions.points);
       expect(updatedPolygon.options.holes, updatedOptions.holes);
       expect(updatedPolygon.options.clickable, updatedOptions.clickable);
-      expect(updatedPolygon.options.fillColor, updatedOptions.fillColor);
+      expect(colorToInt(updatedPolygon.options.fillColor),
+          colorToInt(updatedOptions.fillColor));
       expect(updatedPolygon.options.geodesic, updatedOptions.geodesic);
-      expect(updatedPolygon.options.strokeColor, updatedOptions.strokeColor);
+      expect(colorToInt(updatedPolygon.options.strokeColor),
+          colorToInt(updatedOptions.strokeColor));
       expect(updatedPolygon.options.strokeWidth, updatedOptions.strokeWidth);
       expect(updatedPolygon.options.visible, updatedOptions.visible);
       expect(updatedPolygon.options.zIndex, updatedOptions.zIndex);
@@ -687,9 +691,11 @@ void main() {
 
     for (final Polygon polygon in polygonList2) {
       expect(polygon.options.clickable, updatedOptions.clickable);
-      expect(polygon.options.fillColor, updatedOptions.fillColor);
+      expect(colorToInt(polygon.options.fillColor),
+          colorToInt(updatedOptions.fillColor));
       expect(polygon.options.geodesic, updatedOptions.geodesic);
-      expect(polygon.options.strokeColor, updatedOptions.strokeColor);
+      expect(colorToInt(polygon.options.strokeColor),
+          colorToInt(updatedOptions.strokeColor));
       expect(polygon.options.strokeWidth, updatedOptions.strokeWidth);
       expect(polygon.options.visible, updatedOptions.visible);
       expect(polygon.options.zIndex, updatedOptions.zIndex);
@@ -814,8 +820,8 @@ void main() {
 
       // Default values.
       expect(circle.options.clickable, false);
-      expect(circle.options.fillColor, Colors.black);
-      expect(circle.options.strokeColor, Colors.black);
+      expect(colorToInt(circle.options.fillColor), colorToInt(Colors.black));
+      expect(colorToInt(circle.options.strokeColor), colorToInt(Colors.black));
       expect(circle.options.strokeWidth, 10);
       expect(circle.options.strokePattern, circle.options.strokePattern);
       expect(circle.options.visible, true);
@@ -862,8 +868,10 @@ void main() {
       expect(updatedCircle.options.position, updatedOptions.position);
       expect(updatedCircle.options.radius, updatedOptions.radius);
       expect(updatedCircle.options.clickable, updatedOptions.clickable);
-      expect(updatedCircle.options.fillColor, updatedOptions.fillColor);
-      expect(updatedCircle.options.strokeColor, updatedOptions.strokeColor);
+      expect(colorToInt(updatedCircle.options.fillColor),
+          colorToInt(updatedOptions.fillColor));
+      expect(colorToInt(updatedCircle.options.strokeColor),
+          colorToInt(updatedOptions.strokeColor));
       expect(updatedCircle.options.strokeWidth, updatedOptions.strokeWidth);
       expect(updatedCircle.options.strokePattern, updatedOptions.strokePattern);
       expect(updatedCircle.options.visible, updatedOptions.visible);
@@ -891,9 +899,11 @@ void main() {
       expect(circle.options.position, updatedOptions.position);
       expect(circle.options.radius, updatedOptions.radius);
       expect(circle.options.clickable, updatedOptions.clickable);
-      expect(circle.options.fillColor, updatedOptions.fillColor);
+      expect(colorToInt(circle.options.fillColor),
+          colorToInt(updatedOptions.fillColor));
       expect(circle.options.strokePattern, updatedOptions.strokePattern);
-      expect(circle.options.strokeColor, updatedOptions.strokeColor);
+      expect(colorToInt(circle.options.strokeColor),
+          colorToInt(updatedOptions.strokeColor));
       expect(circle.options.strokeWidth, updatedOptions.strokeWidth);
       expect(circle.options.visible, updatedOptions.visible);
       expect(circle.options.zIndex, updatedOptions.zIndex);
