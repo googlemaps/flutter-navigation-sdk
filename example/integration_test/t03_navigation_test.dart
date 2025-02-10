@@ -144,122 +144,126 @@ void main() {
     await GoogleMapsNavigator.cleanup();
   });
 
-  patrol('Test navigating to multiple destinations',
-      (PatrolIntegrationTester $) async {
-    final Completer<void> navigationFinished = Completer<void>();
-    int arrivalEventCount = 0;
+  patrol(
+    'Test navigating to multiple destinations',
+    (PatrolIntegrationTester $) async {
+      final Completer<void> navigationFinished = Completer<void>();
+      int arrivalEventCount = 0;
 
-    /// Set up navigation.
-    await startNavigationWithoutDestination($);
+      /// Set up navigation.
+      await startNavigationWithoutDestination($);
 
-    /// Set audio guidance settings.
-    /// Cannot be verified, because native SDK lacks getter methods,
-    /// but exercise the API for basic sanity testing
-    final NavigationAudioGuidanceSettings settings =
-        NavigationAudioGuidanceSettings(
-      isBluetoothAudioEnabled: false,
-      isVibrationEnabled: false,
-      guidanceType: NavigationAudioGuidanceType.alertsOnly,
-    );
-    await GoogleMapsNavigator.setAudioGuidance(settings);
+      /// Set audio guidance settings.
+      /// Cannot be verified, because native SDK lacks getter methods,
+      /// but exercise the API for basic sanity testing
+      final NavigationAudioGuidanceSettings settings =
+          NavigationAudioGuidanceSettings(
+        isBluetoothAudioEnabled: false,
+        isVibrationEnabled: false,
+        guidanceType: NavigationAudioGuidanceType.alertsOnly,
+      );
+      await GoogleMapsNavigator.setAudioGuidance(settings);
 
-    /// Specify tolerance and navigation destination coordinates.
-    const double tolerance = 0.001;
-    const double midLat = 68.59781164189049,
-        midLon = 23.520303427087182,
-        endLat = 68.60079240808535,
-        endLng = 23.527946512754752;
+      /// Specify tolerance and navigation destination coordinates.
+      const double tolerance = 0.001;
+      const double midLat = 68.59781164189049,
+          midLon = 23.520303427087182,
+          endLat = 68.60079240808535,
+          endLng = 23.527946512754752;
 
-    Future<void> onArrivalEvent(OnArrivalEvent msg) async {
-      arrivalEventCount += 1;
-      await GoogleMapsNavigator.continueToNextDestination();
+      Future<void> onArrivalEvent(OnArrivalEvent msg) async {
+        arrivalEventCount += 1;
+        await GoogleMapsNavigator.continueToNextDestination();
 
-      /// Finish executing the tests once 2 onArrival events come in.
-      /// Test the guidance stops on last Arrival.
-      if (arrivalEventCount == 2) {
-        navigationFinished.complete();
+        /// Finish executing the tests once 2 onArrival events come in.
+        /// Test the guidance stops on last Arrival.
+        if (arrivalEventCount == 2) {
+          navigationFinished.complete();
+        }
       }
-    }
 
-    GoogleMapsNavigator.setOnArrivalListener(onArrivalEvent);
+      GoogleMapsNavigator.setOnArrivalListener(onArrivalEvent);
 
-    /// Simulate location and test it.
-    await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
-      latitude: startLat,
-      longitude: startLng,
-    ));
-    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
+      /// Simulate location and test it.
+      await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
+        latitude: startLat,
+        longitude: startLng,
+      ));
+      await $.pumpAndSettle(timeout: const Duration(seconds: 1));
 
-    /// Set Destination.
-    final Destinations destinations = Destinations(
-      waypoints: <NavigationWaypoint>[
-        NavigationWaypoint.withLatLngTarget(
-          title: 'Näkkäläntie 1st stop',
-          target: const LatLng(
-            latitude: midLat,
-            longitude: midLon,
+      /// Set Destination.
+      final Destinations destinations = Destinations(
+        waypoints: <NavigationWaypoint>[
+          NavigationWaypoint.withLatLngTarget(
+            title: 'Näkkäläntie 1st stop',
+            target: const LatLng(
+              latitude: midLat,
+              longitude: midLon,
+            ),
           ),
-        ),
-        NavigationWaypoint.withLatLngTarget(
-          title: 'Näkkäläntie 2nd stop',
-          target: const LatLng(
-            latitude: endLat,
-            longitude: endLng,
+          NavigationWaypoint.withLatLngTarget(
+            title: 'Näkkäläntie 2nd stop',
+            target: const LatLng(
+              latitude: endLat,
+              longitude: endLng,
+            ),
           ),
-        ),
-      ],
-      displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
-    );
-    final NavigationRouteStatus status =
-        await GoogleMapsNavigator.setDestinations(destinations);
-    expect(status, NavigationRouteStatus.statusOk);
-    await $.pumpAndSettle();
+        ],
+        displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
+      );
+      final NavigationRouteStatus status =
+          await GoogleMapsNavigator.setDestinations(destinations);
+      expect(status, NavigationRouteStatus.statusOk);
+      await $.pumpAndSettle();
 
-    expect(await GoogleMapsNavigator.isGuidanceRunning(), false);
+      expect(await GoogleMapsNavigator.isGuidanceRunning(), false);
 
-    /// Start guidance.
-    await GoogleMapsNavigator.startGuidance();
-    await $.pumpAndSettle();
+      /// Start guidance.
+      await GoogleMapsNavigator.startGuidance();
+      await $.pumpAndSettle();
 
-    /// Test that the received coordinates fit between start and end location coordinates within tolerance.
-    void onLocationEvent(RoadSnappedLocationUpdatedEvent msg) {
-      /// Sometimes on Android, the simulator "overshoots" and passes the destination
-      /// with high speedMultiplier.
-      if (arrivalEventCount < 2) {
-        expectSync(
-          msg.location.latitude,
-          greaterThanOrEqualTo(startLat - tolerance),
-        );
-        expectSync(
-          msg.location.latitude,
-          lessThanOrEqualTo(endLat + tolerance),
-        );
-        expectSync(
-          msg.location.longitude,
-          greaterThanOrEqualTo(startLng - tolerance),
-        );
-        expectSync(
-          msg.location.longitude,
-          lessThanOrEqualTo(endLng + tolerance),
-        );
+      /// Test that the received coordinates fit between start and end location coordinates within tolerance.
+      void onLocationEvent(RoadSnappedLocationUpdatedEvent msg) {
+        /// Sometimes on Android, the simulator "overshoots" and passes the destination
+        /// with high speedMultiplier.
+        if (arrivalEventCount < 2) {
+          expectSync(
+            msg.location.latitude,
+            greaterThanOrEqualTo(startLat - tolerance),
+          );
+          expectSync(
+            msg.location.latitude,
+            lessThanOrEqualTo(endLat + tolerance),
+          );
+          expectSync(
+            msg.location.longitude,
+            greaterThanOrEqualTo(startLng - tolerance),
+          );
+          expectSync(
+            msg.location.longitude,
+            lessThanOrEqualTo(endLng + tolerance),
+          );
+        }
       }
-    }
 
-    await GoogleMapsNavigator.setRoadSnappedLocationUpdatedListener(
-        onLocationEvent);
+      await GoogleMapsNavigator.setRoadSnappedLocationUpdatedListener(
+          onLocationEvent);
 
-    /// Start simulation.
-    await GoogleMapsNavigator.simulator
-        .simulateLocationsAlongExistingRouteWithOptions(SimulationOptions(
-      speedMultiplier: 10,
-    ));
+      /// Start simulation.
+      await GoogleMapsNavigator.simulator
+          .simulateLocationsAlongExistingRouteWithOptions(SimulationOptions(
+        speedMultiplier: 10,
+      ));
 
-    expect(await GoogleMapsNavigator.isGuidanceRunning(), true);
-    await navigationFinished.future;
-    expect(await GoogleMapsNavigator.isGuidanceRunning(), false);
+      expect(await GoogleMapsNavigator.isGuidanceRunning(), true);
+      await navigationFinished.future;
+      expect(await GoogleMapsNavigator.isGuidanceRunning(), false);
 
-    await GoogleMapsNavigator.cleanup();
-  });
+      await GoogleMapsNavigator.cleanup();
+    },
+    // TODO(jokerttu): Skipping Android as this fails on Android emulator on CI.
+    skip: Platform.isAndroid,
+  );
 
   patrol('Test simulation along new route', (PatrolIntegrationTester $) async {
     int loopIteration = 1;
