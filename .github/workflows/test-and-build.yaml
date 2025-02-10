@@ -128,7 +128,7 @@ jobs:
 
   build-android:
     name: Build Android
-    needs: [test-dart, test-android, test-ios]
+    needs: [test-dart, test-android]
     if: contains(github.base_ref, 'main')
     timeout-minutes: 45
     runs-on:
@@ -171,7 +171,7 @@ jobs:
 
   build-ios:
     name: Build iOS
-    needs: [test-dart, test-android, test-ios]
+    needs: [test-dart, test-ios]
     if: contains(github.base_ref, 'main')
     timeout-minutes: 90
     runs-on:
@@ -277,11 +277,11 @@ jobs:
         run: flutter pub get
       - name: Create and start emulator
         run: |
-          echo "List installed packages"
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --list_installed
-
           echo "Installing system image"
           echo "y" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "system-images;android-35;google_apis;x86_64"
+
+          echo "Setting ANDROID_AVD_HOME"
+          export ANDROID_AVD_HOME=$HOME/.config/.android/avd
 
           echo "Creating AVD"
           echo "no" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/avdmanager create avd -n test_emulator -k "system-images;android-35;google_apis;x86_64" --force
