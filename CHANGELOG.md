@@ -12,6 +12,15 @@
 * make ios map view array thread safe ([#180](https://github.com/googlemaps/flutter-navigation-sdk/issues/180)) ([8f0283f](https://github.com/googlemaps/flutter-navigation-sdk/commit/8f0283ffc8885fa085b8c47edeeb2b6c44693e14))
 * showStopLights and showDestinationMarkers functionality on iOS ([#178](https://github.com/googlemaps/flutter-navigation-sdk/issues/178)) ([d882837](https://github.com/googlemaps/flutter-navigation-sdk/commit/d882837589b380b29fbdb6c4d823ef2844394f11))
 
+## [0.5.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/v0.4.0...v0.5.0) (2025-02-10)
+
+
+### Features
+
+* add carplay and android auto support ([#209](https://github.com/googlemaps/flutter-navigation-sdk/issues/209)) ([1b6c72e](https://github.com/googlemaps/flutter-navigation-sdk/commit/1b6c72e9660f9ed9300212dbd48d2318be07598b))
+* add map padding ([#232](https://github.com/googlemaps/flutter-navigation-sdk/issues/232)) ([bf991ee](https://github.com/googlemaps/flutter-navigation-sdk/commit/bf991ee8138ffb0e11b4738d45f43866810f2444))
+* update navigation SDKs ([#261](https://github.com/googlemaps/flutter-navigation-sdk/issues/261)) ([acfa42e](https://github.com/googlemaps/flutter-navigation-sdk/commit/acfa42e2ae8efb6e5c4c8c1e0615dfd701303894))
+
 ## [0.3.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.2.3-beta...v0.3.0) (2024-06-05)
 
 ### Features
