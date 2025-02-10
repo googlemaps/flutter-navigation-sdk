@@ -14,7 +14,8 @@
 # limitations under the License.
 set -e
 
-DEVICE_NAME=${DEVICE:-'iPhone 16 Pro'} # Default to 'iPhone 16 Pro' if no argument is provided
+DEVICE_NAME=${TEST_DEVICE:-'iPhone 16 Pro'} # Default to 'iPhone 16 Pro' if no argument is provided
+OS_VERSION=${TEST_OS:-'18.1'} # Default to 'iPhone 16 Pro' if no argument is provided
 
 # Navigate to the ios directory and run xcodebuild with the provided device name
 cd ios && xcodebuild test \
@@ -22,5 +23,5 @@ cd ios && xcodebuild test \
             -scheme Runner \
             -only-testing RunnerTests \
             -configuration Debug \
-            -sdk iphoneos -destination "platform=iOS Simulator,name=$DEVICE_NAME" \
+            -sdk iphoneos -destination "platform=iOS Simulator,name=$DEVICE_NAME,OS=$OS_VERSION" \
             -derivedDataPath ../build/ios_unit

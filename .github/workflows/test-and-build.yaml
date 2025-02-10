@@ -38,10 +38,10 @@ jobs:
           distribution: "temurin"
           java-version: "17"
           cache: "gradle"
-      - uses: subosito/flutter-action@44ac965b96f18d999802d4b807e3256d5a3f9fa1
+      - uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         name: Setup flutter
         with:
-          flutter-version: "3.22.x"
+          flutter-version: "3.27.x"
           channel: "stable"
           cache: true
       - uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
@@ -65,9 +65,9 @@ jobs:
           java-version: "17"
           cache: "gradle"
       - name: Setup flutter
-        uses: subosito/flutter-action@44ac965b96f18d999802d4b807e3256d5a3f9fa1
+        uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
-          flutter-version: "3.22.x"
+          flutter-version: "3.27.x"
           channel: "stable"
           cache: true
       - name: Setup melos
@@ -95,9 +95,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - name: Setup flutter
-        uses: subosito/flutter-action@44ac965b96f18d999802d4b807e3256d5a3f9fa1
+        uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
-          flutter-version: "3.22.x"
+          flutter-version: "3.27.x"
           channel: "stable"
           cache: true
       - name: Setup melos
@@ -111,13 +111,13 @@ jobs:
           key: ${{ runner.os }}-pods-${{ hashFiles('**/*.podspec') }}
           restore-keys: |
             ${{ runner.os }}-pods-
-      - name: Select XCode 16.0
-        run: sudo xcode-select -s '/Applications/Xcode_16.app/Contents/Developer'
+      - name: Select XCode 16.1
+        run: sudo xcode-select -s '/Applications/Xcode_16.1.0.app/Contents/Developer'
       - name: Generate necessary files with flutter build
         working-directory: ${{ env.working_directory }}
         run: flutter build ios --config-only
       - name: "Run iOS native unit tests"
-        run: DEVICE='iPhone 16 Pro' melos run test:ios
+        run: TEST_DEVICE='iPhone 16 Pro' TEST_OS='18.1' melos run test:ios
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
@@ -145,9 +145,9 @@ jobs:
           java-version: "17"
           cache: "gradle"
       - name: Setup flutter
-        uses: subosito/flutter-action@44ac965b96f18d999802d4b807e3256d5a3f9fa1
+        uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
-          flutter-version: "3.22.x"
+          flutter-version: "3.27.x"
           channel: "stable"
           cache: true
       - name: Setup melos
@@ -182,9 +182,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - name: Setup flutter
-        uses: subosito/flutter-action@44ac965b96f18d999802d4b807e3256d5a3f9fa1
+        uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
-          flutter-version: "3.22.x"
+          flutter-version: "3.27.x"
           channel: "stable"
           cache: true
           architecture: x64
@@ -203,8 +203,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ runner.os }}-build-artifact
-      - name: Select XCode 16.0
-        run: sudo xcode-select -s '/Applications/Xcode_16.app/Contents/Developer'
+      - name: Select XCode 16.1
+        run: sudo xcode-select -s '/Applications/Xcode_16.1.0.app/Contents/Developer'
       - name: "Run build for iOS"
         run: melos run flutter-build-ios
       - name: Upload build artifact
@@ -225,7 +225,7 @@ jobs:
       labels: ubuntu-latest
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
-      patrol_cli_version: "3.2.0"
+      patrol_cli_version: "3.5.0"
       working_directory: "example"
     steps:
       - name: Fail if workflow has no access to API key
@@ -257,9 +257,9 @@ jobs:
             ~/.android/adb*
           key: avd
       - name: Setup flutter
-        uses: subosito/flutter-action@44ac965b96f18d999802d4b807e3256d5a3f9fa1
+        uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
-          flutter-version: "3.22.x"
+          flutter-version: "3.27.x"
           channel: "stable"
           cache: true
       - name: Download Build Artifact
@@ -312,7 +312,7 @@ jobs:
       labels: macos-latest-xlarge
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
-      patrol_cli_version: "3.2.0"
+      patrol_cli_version: "3.5.0"
       working_directory: "example"
     steps:
       - name: Fail if workflow has no access to API key
@@ -323,13 +323,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - name: Setup flutter
-        uses: subosito/flutter-action@44ac965b96f18d999802d4b807e3256d5a3f9fa1
+        uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
-          flutter-version: "3.22.x"
+          flutter-version: "3.27.x"
           channel: "stable"
           cache: true
-      - name: Select XCode 16.0
-        run: sudo xcode-select -s '/Applications/Xcode_16.app/Contents/Developer'
+      - name: Select XCode 16.1
+        run: sudo xcode-select -s '/Applications/Xcode_16.1.0.app/Contents/Developer'
       - name: Start iOS simulator
         run: |
           SIMULATOR_NAME="iPhone 16 Pro"

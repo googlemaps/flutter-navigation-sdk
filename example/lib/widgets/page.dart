@@ -118,7 +118,8 @@ abstract class ExamplePageState<T extends ExamplePage> extends State<T>
             child: AnimatedBuilder(
                 animation: _controller,
                 builder: (BuildContext context, Widget? child) => Container(
-                    color: Colors.black.withOpacity(_controller.value * 0.5)))),
+                    color: Colors.black.withAlpha(
+                        (255.0 * _controller.value * 0.5).round())))),
         // Overlay content
         SlideTransition(
           position: _overlayOffsetAnimation,

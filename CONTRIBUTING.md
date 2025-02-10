@@ -122,7 +122,7 @@ To run unit tests on iOS, follow these steps:
 Or to run the iOS unit tests from command line, call
 
 ```bash
-DEVICE='iPhone 15' melos run ios:test
+TEST_DEVICE='iPhone 16 Pro' TEST_OS="18.1" melos run test:ios
 ```
 
 Specify the device you want to run the tests on with the DEVICE env variable. 
@@ -132,7 +132,7 @@ Specify the device you want to run the tests on with the DEVICE env variable.
 Integration tests are responsible for ensuring that the plugin works against the native Navigation SDK for both Android and iOS platforms. Patrol is used for the integration tests to simplify interactions with native elements. To use patrol, you first need to activate the patrol_cli.  
 
 ```bash
-flutter pub global activate patrol_cli 3.2.0
+flutter pub global activate patrol_cli 3.5.0
 ```
 
 To ensure that all necessary dependencies for patrol are properly set up, run the following command:

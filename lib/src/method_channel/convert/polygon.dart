@@ -15,6 +15,7 @@
 import 'dart:ui';
 
 import '../../../google_navigation_flutter.dart';
+import '../../utils/color.dart';
 import '../method_channel.dart';
 
 /// [Polygon] convert extension.
@@ -38,9 +39,9 @@ extension ConvertPolygonOptions on PolygonOptions {
                 PolygonHoleDto(points: e.map((LatLng e) => e.toDto()).toList()))
             .toList(),
         clickable: clickable,
-        fillColor: fillColor.value,
+        fillColor: colorToInt(fillColor)!,
         geodesic: geodesic,
-        strokeColor: strokeColor.value,
+        strokeColor: colorToInt(strokeColor)!,
         strokeWidth: strokeWidth,
         visible: visible,
         zIndex: zIndex);
