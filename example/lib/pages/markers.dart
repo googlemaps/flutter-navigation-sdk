@@ -48,140 +48,206 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
   }
 
   Future<void> addMarkerToMap() async {
-    // Add a marker to the current camera position.
-    final CameraPosition position =
-        await _navigationViewController.getCameraPosition();
+    try {
+      final CameraPosition position =
+          await _navigationViewController.getCameraPosition();
 
-    final MarkerOptions options = MarkerOptions(
+      final MarkerOptions options = MarkerOptions(
         position: position.target,
-        infoWindow: const InfoWindow(title: 'Name', snippet: 'Snippet here'));
+        infoWindow: const InfoWindow(title: 'Name', snippet: 'Snippet here'),
+      );
 
-    final List<Marker?> addedMarkers =
-        await _navigationViewController.addMarkers(<MarkerOptions>[options]);
-    if (addedMarkers.isNotEmpty) {
-      final Marker marker = addedMarkers.first!;
+      final List<Marker?> addedMarkers =
+          await _navigationViewController.addMarkers(<MarkerOptions>[options]);
+
+      if (addedMarkers.isEmpty || addedMarkers.first == null) {
+        showMessage('Failed to add marker');
+        return;
+      }
+
       setState(() {
+        final Marker marker = addedMarkers.first!;
         _markers.add(marker);
-        _markers = _markers + <Marker>[marker];
         _selectedMarker = marker;
       });
+    } catch (e) {
+      showMessage('Error adding marker: ${e.toString()}');
     }
   }
 
   Future<void> _removeMarker() async {
-    await _navigationViewController.removeMarkers(<Marker>[_selectedMarker!]);
-    setState(() {
-      _markers.remove(_selectedMarker);
-      _selectedMarker = null;
-    });
-  }
+    if (_selectedMarker == null) return;
 
-  Future<void> clearMarkers() async {
-    await _navigationViewController.clearMarkers();
-    setState(() {
-      _markers.clear();
-    });
-  }
-
-  Future<void> _updateSelectedMarkerWithOptions(MarkerOptions options) async {
-    final Marker newMarker = _selectedMarker!.copyWith(options: options);
-
-    final List<Marker?> markers =
-        await _navigationViewController.updateMarkers(<Marker>[newMarker]);
-    final Marker? marker = markers.firstOrNull;
-    if (marker != null) {
+    try {
+      await _navigationViewController.removeMarkers(<Marker>[_selectedMarker!]);
       setState(() {
-        _markers = _markers
-            .where((Marker element) => element != _selectedMarker)
-            .toList();
-        _selectedMarker = marker;
-        _markers = _markers + <Marker>[marker];
+        _markers.remove(_selectedMarker);
+        _selectedMarker = null;
       });
+    } catch (e) {
+      showMessage('Error removing marker: ${e.toString()}');
     }
   }
 
-  Future<void> _toggleVisibility() async {
-    final bool oldVisibility = _selectedMarker!.options.visible;
+  Future<void> clearMarkers() async {
+    try {
+      await _navigationViewController.clearMarkers();
+      setState(() {
+        _markers.clear();
+        _selectedMarker = null;
+      });
+    } catch (e) {
+      showMessage('Error clearing markers: ${e.toString()}');
+    }
+  }
 
-    await _updateSelectedMarkerWithOptions(
-        _selectedMarker!.options.copyWith(visible: !oldVisibility));
+  Future<void> _updateSelectedMarkerWithOptions(MarkerOptions options) async {
+    if (_selectedMarker == null) return;
+
+    try {
+      final Marker newMarker = _selectedMarker!.copyWith(options: options);
+      final List<Marker?> markers =
+          await _navigationViewController.updateMarkers(<Marker>[newMarker]);
+
+      final Marker? updatedMarker = markers.firstOrNull;
+      if (updatedMarker == null) {
+        showMessage('Failed to update marker');
+        return;
+      }
+
+      setState(() {
+        _markers = _markers
+            .where((Marker element) => element != _selectedMarker)
+            .toList()
+          ..add(updatedMarker);
+        _selectedMarker = updatedMarker;
+      });
+    } catch (e) {
+      showMessage('Error updating marker: ${e.toString()}');
+    }
+  }
+
+  // Helper methods for marker property updates
+  Future<void> _updateMarkerProperty({
+    bool? visible,
+    bool? draggable,
+    bool? flat,
+    double? alpha,
+    double? zIndex,
+  }) async {
+    if (_selectedMarker == null) return;
+
+    final MarkerOptions currentOptions = _selectedMarker!.options;
+    final MarkerOptions newOptions = currentOptions.copyWith(
+      visible: visible,
+      draggable: draggable,
+      flat: flat,
+      alpha: alpha,
+      zIndex: zIndex,
+    );
+
+    await _updateSelectedMarkerWithOptions(newOptions);
+  }
+
+  Future<void> _toggleVisibility() async {
+    await _updateMarkerProperty(
+      visible: !_selectedMarker!.options.visible,
+    );
   }
 
   Future<void> _toggleDraggable() async {
-    final bool oldDraggable = _selectedMarker!.options.draggable;
-    await _updateSelectedMarkerWithOptions(
-        _selectedMarker!.options.copyWith(draggable: !oldDraggable));
+    await _updateMarkerProperty(
+      draggable: !_selectedMarker!.options.draggable,
+    );
   }
 
   Future<void> _toggleFlat() async {
-    final bool oldFlat = _selectedMarker!.options.flat;
-    await _updateSelectedMarkerWithOptions(
-        _selectedMarker!.options.copyWith(flat: !oldFlat));
+    await _updateMarkerProperty(
+      flat: !_selectedMarker!.options.flat,
+    );
   }
 
   Future<void> _setAlpha() async {
     final double oldAlpha = _selectedMarker!.options.alpha;
-    final double newAlpha = _alphas.elementAtOrNull(
-            _alphas.indexWhere((double e) => e == oldAlpha) + 1) ??
-        _alphas[0];
-
-    await _updateSelectedMarkerWithOptions(
-        _selectedMarker!.options.copyWith(alpha: newAlpha));
+    final double newAlpha = _getNextValue(_alphas, oldAlpha);
+    await _updateMarkerProperty(alpha: newAlpha);
   }
 
   Future<void> _setZIndex() async {
     final double oldZIndex = _selectedMarker!.options.zIndex;
-    final double newZIndex = _zIndexes.elementAtOrNull(
-            _zIndexes.indexWhere((double e) => e == oldZIndex) + 1) ??
-        _zIndexes[0];
+    final double newZIndex = _getNextValue(_zIndexes, oldZIndex);
+    await _updateMarkerProperty(zIndex: newZIndex);
+  }
 
-    await _updateSelectedMarkerWithOptions(
-        _selectedMarker!.options.copyWith(zIndex: newZIndex));
+  T _getNextValue<T>(List<T> values, T currentValue) {
+    final int currentIndex = values.indexOf(currentValue);
+    return values.elementAtOrNull(currentIndex + 1) ?? values.first;
   }
 
   Future<ImageDescriptor> _getOrCreateCustomImageFromAsset() async {
-    if (_registeredCustomIcon != null) {
-      // Custom image already registered.
-      return _registeredCustomIcon!;
-    }
+    try {
+      if (_registeredCustomIcon != null) {
+        return _registeredCustomIcon!;
+      }
 
-    // Example how to load mipmapped bitmap for asset.
-    const AssetImage assetImage = AssetImage('assets/marker1.png');
-    final ImageConfiguration configuration =
-        createLocalImageConfiguration(context);
-    final AssetBundleImageKey assetBundleImageKey =
-        await assetImage.obtainKey(configuration);
-    final double imagePixelRatio = assetBundleImageKey.scale;
-    final ByteData imageBytes = await rootBundle.load(assetBundleImageKey.name);
-    _registeredCustomIcon = await registerBitmapImage(
-        bitmap: imageBytes, imagePixelRatio: imagePixelRatio);
-    return _registeredCustomIcon!;
+      const AssetImage assetImage = AssetImage('assets/marker1.png');
+      final ImageConfiguration configuration =
+          createLocalImageConfiguration(context);
+
+      final AssetBundleImageKey assetBundleImageKey =
+          await assetImage.obtainKey(configuration);
+
+      final ByteData imageBytes =
+          await rootBundle.load(assetBundleImageKey.name);
+
+      _registeredCustomIcon = await registerBitmapImage(
+        bitmap: imageBytes,
+        imagePixelRatio: assetBundleImageKey.scale,
+      );
+
+      return _registeredCustomIcon!;
+    } catch (e) {
+      showMessage('Error loading custom marker icon: ${e.toString()}');
+      rethrow;
+    }
   }
 
   Future<void> _unRegisterUnusedCustomImage() async {
-    if (_registeredCustomIcon != null) {
-      // Do not unregister marker image if it is still used by some marker.
-      if (_markers.any((Marker marker) =>
+    try {
+      if (_registeredCustomIcon == null) return;
+
+      // Check if image is still in use
+      final bool isImageInUse = _markers.any((Marker marker) =>
           marker.options.icon.registeredImageId ==
-          _registeredCustomIcon!.registeredImageId)) {
-        return;
+          _registeredCustomIcon!.registeredImageId);
+
+      if (!isImageInUse) {
+        await unregisterImage(_registeredCustomIcon!);
+        _registeredCustomIcon = null;
       }
-      await unregisterImage(_registeredCustomIcon!);
-      _registeredCustomIcon = null;
+    } catch (e) {
+      showMessage('Error unregistering custom icon: ${e.toString()}');
     }
   }
 
   Future<void> _toggleCustomIcon() async {
-    assert(_selectedMarker != null, 'No marker selected');
-    if (_selectedMarker!.options.icon.registeredImageId == null) {
-      final ImageDescriptor customMarkerIcon =
-          await _getOrCreateCustomImageFromAsset();
-      await _updateSelectedMarkerWithOptions(
-          _selectedMarker!.options.copyWith(icon: customMarkerIcon));
-    } else {
-      await _updateSelectedMarkerWithOptions(_selectedMarker!.options
-          .copyWith(icon: ImageDescriptor.defaultImage));
-      await _unRegisterUnusedCustomImage();
+    if (_selectedMarker == null) return;
+
+    try {
+      if (_selectedMarker!.options.icon.registeredImageId == null) {
+        final ImageDescriptor customMarkerIcon =
+            await _getOrCreateCustomImageFromAsset();
+        await _updateSelectedMarkerWithOptions(
+          _selectedMarker!.options.copyWith(icon: customMarkerIcon),
+        );
+      } else {
+        await _updateSelectedMarkerWithOptions(
+          _selectedMarker!.options.copyWith(icon: ImageDescriptor.defaultImage),
+        );
+        await _unRegisterUnusedCustomImage();
+      }
+    } catch (e) {
+      showMessage('Error toggling custom icon: ${e.toString()}');
     }
   }
 
@@ -363,5 +429,15 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
       final SnackBar snackBar = SnackBar(content: Text(message));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
+  }
+
+  @override
+  void dispose() {
+    try {
+      _unRegisterUnusedCustomImage();
+    } catch (e) {
+      debugPrint('Error during disposal: ${e.toString()}');
+    }
+    super.dispose();
   }
 }
