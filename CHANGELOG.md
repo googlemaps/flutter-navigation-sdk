@@ -1,3 +1,14 @@
+## [0.5.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/v0.4.0...v0.5.0) (2025-02-10)
+
+
+### Features
+
+* add carplay and android auto support ([#209](https://github.com/googlemaps/flutter-navigation-sdk/issues/209)) ([1b6c72e](https://github.com/googlemaps/flutter-navigation-sdk/commit/1b6c72e9660f9ed9300212dbd48d2318be07598b))
+* add map padding ([#232](https://github.com/googlemaps/flutter-navigation-sdk/issues/232)) ([bf991ee](https://github.com/googlemaps/flutter-navigation-sdk/commit/bf991ee8138ffb0e11b4738d45f43866810f2444))
+* update navigation SDKs ([#261](https://github.com/googlemaps/flutter-navigation-sdk/issues/261)) ([acfa42e](https://github.com/googlemaps/flutter-navigation-sdk/commit/acfa42e2ae8efb6e5c4c8c1e0615dfd701303894))
+  * Updates navigation SDK for android to 6.0.2
+  * Updates navigation SDK for iOS to 9.3.0
+
 ## [0.4.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.3.0...v0.4.0) (2024-10-30)
 
 
