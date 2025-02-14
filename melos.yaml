@@ -178,6 +178,8 @@ scripts:
         --ignore "**/GeneratedPluginRegistrant.*" \
         --ignore "**/flutter_export_environment.sh" \
         --ignore "**/FlutterGeneratedPluginSwiftPackage/**" \
+        --ignore ".github/PULL_REQUEST_TEMPLATE.md" \
+        --ignore ".github/ISSUE_TEMPLATE/**" \
         .
     description: Add a license header to all necessary files.
 
@@ -195,5 +197,7 @@ scripts:
         --ignore "**/GeneratedPluginRegistrant.*" \
         --ignore "**/flutter_export_environment.sh" \
         --ignore "**/FlutterGeneratedPluginSwiftPackage/**" \
+        --ignore ".github/PULL_REQUEST_TEMPLATE.md" \
+        --ignore ".github/ISSUE_TEMPLATE/**" \
         .
     description: Add a license header to all necessary files.
