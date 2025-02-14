@@ -35,8 +35,18 @@ void main() {
 
   final List<GoogleMapsNavigationPlatform> platforms =
       <GoogleMapsNavigationPlatform>[
-    GoogleMapsNavigationAndroid(),
-    GoogleMapsNavigationIOS(),
+    GoogleMapsNavigationAndroid(
+      AndroidNavigationSessionAPIImpl(),
+      MapViewAPIImpl(),
+      AutoMapViewAPIImpl(),
+      ImageRegistryAPIImpl(),
+    ),
+    GoogleMapsNavigationIOS(
+      NavigationSessionAPIImpl(),
+      MapViewAPIImpl(),
+      AutoMapViewAPIImpl(),
+      ImageRegistryAPIImpl(),
+    ),
   ];
 
   setUp(() {
@@ -89,7 +99,8 @@ void main() {
               .thenAnswer((Invocation _) async => ());
 
           // Await map ready
-          await GoogleMapsNavigationPlatform.instance.awaitMapReady(viewId: 0);
+          await GoogleMapsNavigationPlatform.instance.viewAPI
+              .awaitMapReady(viewId: 0);
 
           // Verify correct message sent from view api
           final VerificationResult result =
@@ -998,8 +1009,9 @@ void main() {
               .thenAnswer((Invocation _) => <MarkerDto>[messageMarker]);
 
           // Get markers
-          final List<Marker?> markersOut =
-              await GoogleMapsNavigationPlatform.instance.getMarkers(viewId: 0);
+          final List<Marker?> markersOut = await GoogleMapsNavigationPlatform
+              .instance.viewAPI
+              .getMarkers(viewId: 0);
 
           // Verify correct message sent from view api
           final VerificationResult result =
@@ -1032,7 +1044,7 @@ void main() {
 
           // Add marker
           final List<Marker?> markersOut = await GoogleMapsNavigationPlatform
-              .instance
+              .instance.viewAPI
               .addMarkers(viewId: 0, markerOptions: <MarkerOptions>[optionsIn]);
 
           // Verify correct message sent from view api
@@ -1060,7 +1072,7 @@ void main() {
 
           // Edit marker
           final List<Marker?> markersOut = await GoogleMapsNavigationPlatform
-              .instance
+              .instance.viewAPI
               .updateMarkers(viewId: 0, markers: <Marker>[marker]);
 
           // Verify correct message sent from view api
@@ -1086,7 +1098,7 @@ void main() {
               .thenAnswer((Invocation _) => ());
 
           // Remove marker
-          await GoogleMapsNavigationPlatform.instance
+          await GoogleMapsNavigationPlatform.instance.viewAPI
               .removeMarkers(viewId: 0, markers: <Marker>[marker]);
 
           // Verify correct message sent from view api
@@ -1105,7 +1117,8 @@ void main() {
               .thenAnswer((Invocation _) async => ());
 
           // Clear map
-          await GoogleMapsNavigationPlatform.instance.clearMarkers(viewId: 0);
+          await GoogleMapsNavigationPlatform.instance.viewAPI
+              .clearMarkers(viewId: 0);
 
           // Verify correct message sent from view api
           final VerificationResult result =
@@ -1121,7 +1134,7 @@ void main() {
           when(viewMockApi.clear(any)).thenAnswer((Invocation _) async => ());
 
           // Clear map
-          await GoogleMapsNavigationPlatform.instance.clear(viewId: 0);
+          await GoogleMapsNavigationPlatform.instance.viewAPI.clear(viewId: 0);
 
           // Verify correct message sent from view api
           final VerificationResult result =
@@ -1147,7 +1160,7 @@ void main() {
 
           // Get polygons
           final List<Polygon?> polygonsOut = await GoogleMapsNavigationPlatform
-              .instance
+              .instance.viewAPI
               .getPolygons(viewId: 0);
 
           // Verify correct message sent from view api
@@ -1184,7 +1197,7 @@ void main() {
 
           // Add polygon
           final List<Polygon?> polygonsOut =
-              await GoogleMapsNavigationPlatform.instance.addPolygons(
+              await GoogleMapsNavigationPlatform.instance.viewAPI.addPolygons(
                   viewId: 0, polygonOptions: <PolygonOptions>[optionsIn]);
 
           // Verify correct message sent from view api
@@ -1212,7 +1225,7 @@ void main() {
 
           // Edit polygon
           final List<Polygon?> polygonsOut = await GoogleMapsNavigationPlatform
-              .instance
+              .instance.viewAPI
               .updatePolygons(viewId: 0, polygons: <Polygon>[polygon]);
 
           // Verify correct message sent from view api
@@ -1238,7 +1251,7 @@ void main() {
               .thenAnswer((Invocation _) async => ());
 
           // Remove polygon
-          await GoogleMapsNavigationPlatform.instance
+          await GoogleMapsNavigationPlatform.instance.viewAPI
               .removePolygons(viewId: 0, polygons: <Polygon>[polygon]);
 
           // Verify correct message sent from view api
@@ -1257,7 +1270,8 @@ void main() {
               .thenAnswer((Invocation _) async => ());
 
           // Clear map
-          await GoogleMapsNavigationPlatform.instance.clearPolygons(viewId: 0);
+          await GoogleMapsNavigationPlatform.instance.viewAPI
+              .clearPolygons(viewId: 0);
 
           // Verify correct message sent from view api
           final VerificationResult result =

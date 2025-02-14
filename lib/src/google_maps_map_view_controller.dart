@@ -384,6 +384,7 @@ class GoogleMapViewController {
 
   // Gets the map padding from the map view.
   Future<EdgeInsets> getPadding() async {
-    return GoogleMapsNavigationPlatform.instance.viewAPI.getPadding(viewId: _viewId);
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .getPadding(viewId: _viewId);
   }
 }
