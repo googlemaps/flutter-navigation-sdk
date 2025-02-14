@@ -44,7 +44,7 @@ jobs:
           flutter-version: "3.27.x"
           channel: "stable"
           cache: true
-      - uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
+      - uses: bluefireteam/melos-action@ec2c512a52c2f359186ca19bac0be977c44913e6
         with:
           melos-version: "6.0.0"
       - name: "Run flutter test"
@@ -71,7 +71,7 @@ jobs:
           channel: "stable"
           cache: true
       - name: Setup melos
-        uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
+        uses: bluefireteam/melos-action@ec2c512a52c2f359186ca19bac0be977c44913e6
         with:
           melos-version: "6.0.0"
       - name: "Run Android native unit tests"
@@ -101,7 +101,7 @@ jobs:
           channel: "stable"
           cache: true
       - name: Setup melos
-        uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
+        uses: bluefireteam/melos-action@ec2c512a52c2f359186ca19bac0be977c44913e6
         with:
           melos-version: "6.0.0"
       - name: Cache podfiles
@@ -151,7 +151,7 @@ jobs:
           channel: "stable"
           cache: true
       - name: Setup melos
-        uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
+        uses: bluefireteam/melos-action@ec2c512a52c2f359186ca19bac0be977c44913e6
         with:
           melos-version: "6.0.0"
       - name: Download Build Artifact
@@ -189,7 +189,7 @@ jobs:
           cache: true
           architecture: x64
       - name: Setup melos
-        uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
+        uses: bluefireteam/melos-action@ec2c512a52c2f359186ca19bac0be977c44913e6
         with:
           melos-version: "6.0.0"
       - name: Cache podfiles
