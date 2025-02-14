@@ -595,6 +595,57 @@ void main() {
               verify(viewMockApi.setMapToolbarEnabled(captureAny, captureAny)),
               true);
         });
+
+        test('set padding for map', () async {
+          // Create padding
+          EdgeInsets insets =
+              const EdgeInsets.only(left: 5, right: 10, top: 15, bottom: 20);
+
+          // Mock api response
+          when(viewMockApi.setPadding(any, any))
+              .thenAnswer((Invocation _) async => ());
+
+          // Set padding
+          await GoogleMapsNavigationPlatform.instance
+              .setPadding(viewId: 0, padding: insets);
+
+          // Verify correct message sent from view api
+          final VerificationResult result =
+              verify(viewMockApi.setPadding(captureAny, captureAny));
+          final MapPaddingDto paddingMessage =
+              result.captured[1] as MapPaddingDto;
+
+          // Verify message
+          expect(insets.left, paddingMessage.left);
+          expect(insets.right, paddingMessage.right);
+          expect(insets.top, paddingMessage.top);
+          expect(insets.bottom, paddingMessage.bottom);
+        });
+
+        test('get padding from map', () async {
+          // Create padding
+          EdgeInsets insets =
+              const EdgeInsets.only(top: 5, left: 10, bottom: 15, right: 20);
+
+          // Mock api response
+          final MapPaddingDto messagePadding =
+              MapPaddingDto(top: 5, left: 10, bottom: 15, right: 20);
+          when(viewMockApi.getPadding(any))
+              .thenAnswer((Invocation _) => messagePadding);
+
+          // Get padding
+          final EdgeInsets paddingOut =
+              await GoogleMapsNavigationPlatform.instance.getPadding(viewId: 0);
+
+          // Verify correct message sent from view api
+          final VerificationResult result =
+              verify(viewMockApi.getPadding(captureAny));
+          final int viewId = result.captured[0] as int;
+
+          // Verify response padding
+          expect(viewId, 0);
+          expect(insets, paddingOut);
+        });
       });
 
       group('Navigation session API', () {
@@ -1215,57 +1266,6 @@ void main() {
 
           // Verify message
           expect(viewId, 0);
-        });
-
-        test('set padding', () async {
-          // Create padding
-          EdgeInsets insets =
-              const EdgeInsets.only(left: 5, right: 10, top: 15, bottom: 20);
-
-          // Mock api response
-          when(viewMockApi.setPadding(any, any))
-              .thenAnswer((Invocation _) async => ());
-
-          // Set padding
-          await GoogleMapsNavigationPlatform.instance
-              .setPadding(viewId: 0, padding: insets);
-
-          // Verify correct message sent from view api
-          final VerificationResult result =
-              verify(viewMockApi.setPadding(captureAny, captureAny));
-          final MapPaddingDto paddingMessage =
-              result.captured[1] as MapPaddingDto;
-
-          // Verify message
-          expect(insets.left, paddingMessage.left);
-          expect(insets.right, paddingMessage.right);
-          expect(insets.top, paddingMessage.top);
-          expect(insets.bottom, paddingMessage.bottom);
-        });
-
-        test('get padding', () async {
-          // Create padding
-          EdgeInsets insets =
-              const EdgeInsets.only(top: 5, left: 10, bottom: 15, right: 20);
-
-          // Mock api response
-          final MapPaddingDto messagePadding =
-              MapPaddingDto(top: 5, left: 10, bottom: 15, right: 20);
-          when(viewMockApi.getPadding(any))
-              .thenAnswer((Invocation _) => messagePadding);
-
-          // Get padding
-          final EdgeInsets paddingOut =
-              await GoogleMapsNavigationPlatform.instance.getPadding(viewId: 0);
-
-          // Verify correct message sent from view api
-          final VerificationResult result =
-              verify(viewMockApi.getPadding(captureAny));
-          final int viewId = result.captured[0] as int;
-
-          // Verify response padding
-          expect(viewId, 0);
-          expect(insets, paddingOut);
         });
       });
     });
