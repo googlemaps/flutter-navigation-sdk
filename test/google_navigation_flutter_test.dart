@@ -617,7 +617,7 @@ void main() {
               .thenAnswer((Invocation _) async => ());
 
           // Set padding
-          await GoogleMapsNavigationPlatform.instance
+          await GoogleMapsNavigationPlatform.instance.viewAPI
               .setPadding(viewId: 0, padding: insets);
 
           // Verify correct message sent from view api
@@ -645,8 +645,9 @@ void main() {
               .thenAnswer((Invocation _) => messagePadding);
 
           // Get padding
-          final EdgeInsets paddingOut =
-              await GoogleMapsNavigationPlatform.instance.getPadding(viewId: 0);
+          final EdgeInsets paddingOut = await GoogleMapsNavigationPlatform
+              .instance.viewAPI
+              .getPadding(viewId: 0);
 
           // Verify correct message sent from view api
           final VerificationResult result =
