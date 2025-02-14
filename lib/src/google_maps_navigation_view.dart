@@ -160,35 +160,35 @@ class GoogleMapsNavigationViewState
 
   void _initNavigationViewListeners(int viewId) {
     if (widget.onRecenterButtonClicked != null) {
-      GoogleMapsNavigationPlatform.instance
+      GoogleMapsNavigationPlatform.instance.viewAPI
           .getNavigationRecenterButtonClickedEventStream(viewId: viewId)
           .listen(widget.onRecenterButtonClicked);
     }
     if (widget.onMyLocationClicked != null) {
-      GoogleMapsNavigationPlatform.instance
+      GoogleMapsNavigationPlatform.instance.viewAPI
           .getMyLocationClickedEventStream(viewId: viewId)
           .listen(widget.onMyLocationClicked);
     }
     if (widget.onNavigationUIEnabledChanged != null) {
-      GoogleMapsNavigationPlatform.instance
+      GoogleMapsNavigationPlatform.instance.viewAPI
           .getNavigationUIEnabledChangedEventStream(viewId: viewId)
           .listen((NavigationUIEnabledChangedEvent event) {
         widget.onNavigationUIEnabledChanged?.call(event.navigationUIEnabled);
       });
     }
     if (widget.onMyLocationButtonClicked != null) {
-      GoogleMapsNavigationPlatform.instance
+      GoogleMapsNavigationPlatform.instance.viewAPI
           .getMyLocationButtonClickedEventStream(viewId: viewId)
           .listen(widget.onMyLocationButtonClicked);
     }
     if (widget.onCameraMoveStarted != null ||
         widget.onCameraMove != null ||
         widget.onCameraIdle != null) {
-      GoogleMapsNavigationPlatform.instance
+      GoogleMapsNavigationPlatform.instance.viewAPI
           .registerOnCameraChangedListener(viewId: viewId);
     }
 
-    GoogleMapsNavigationPlatform.instance
+    GoogleMapsNavigationPlatform.instance.viewAPI
         .getCameraChangedEventStream(viewId: viewId)
         .listen((CameraChangedEvent event) {
       switch (event.eventType) {

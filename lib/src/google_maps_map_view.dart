@@ -295,7 +295,7 @@ abstract class MapViewState<T extends GoogleMapsBaseMapView> extends State<T> {
   @protected
   void initMapViewListeners(int viewId) {
     if (widget.onMapClicked != null) {
-      GoogleMapsNavigationPlatform.instance
+      GoogleMapsNavigationPlatform.instance.viewAPI
           .getMapClickEventStream(viewId: viewId)
           .listen((MapClickEvent event) {
         widget.onMapClicked!(event.target);
@@ -303,14 +303,14 @@ abstract class MapViewState<T extends GoogleMapsBaseMapView> extends State<T> {
     }
 
     if (widget.onMapLongClicked != null) {
-      GoogleMapsNavigationPlatform.instance
+      GoogleMapsNavigationPlatform.instance.viewAPI
           .getMapLongClickEventStream(viewId: viewId)
           .listen((MapLongClickEvent event) {
         widget.onMapLongClicked!(event.target);
       });
     }
 
-    GoogleMapsNavigationPlatform.instance
+    GoogleMapsNavigationPlatform.instance.viewAPI
         .getMarkerEventStream(viewId: viewId)
         .listen((MarkerEvent event) {
       switch (event.eventType) {
@@ -325,7 +325,7 @@ abstract class MapViewState<T extends GoogleMapsBaseMapView> extends State<T> {
       }
     });
 
-    GoogleMapsNavigationPlatform.instance
+    GoogleMapsNavigationPlatform.instance.viewAPI
         .getMarkerDragEventStream(viewId: viewId)
         .listen((MarkerDragEvent event) {
       switch (event.eventType) {
@@ -337,19 +337,19 @@ abstract class MapViewState<T extends GoogleMapsBaseMapView> extends State<T> {
           widget.onMarkerDragStart?.call(event.markerId, event.position);
       }
 
-      GoogleMapsNavigationPlatform.instance
+      GoogleMapsNavigationPlatform.instance.viewAPI
           .getPolygonClickedEventStream(viewId: viewId)
           .listen((PolygonClickedEvent event) {
         widget.onPolygonClicked?.call(event.polygonId);
       });
 
-      GoogleMapsNavigationPlatform.instance
+      GoogleMapsNavigationPlatform.instance.viewAPI
           .getPolylineClickedEventStream(viewId: viewId)
           .listen((PolylineClickedEvent event) {
         widget.onPolylineClicked?.call(event.polylineId);
       });
 
-      GoogleMapsNavigationPlatform.instance
+      GoogleMapsNavigationPlatform.instance.viewAPI
           .getCircleClickedEventStream(viewId: viewId)
           .listen((CircleClickedEvent event) {
         widget.onCircleClicked?.call(event.circleId);

@@ -35,30 +35,33 @@ Future<ImageDescriptor> registerBitmapImage(
     double imagePixelRatio = 1.0,
     double? width,
     double? height}) {
-  return GoogleMapsNavigationPlatform.instance.registerBitmapImage(
-      bitmap: bitmap.buffer.asUint8List(),
-      imagePixelRatio: imagePixelRatio,
-      width: width,
-      height: height);
+  return GoogleMapsNavigationPlatform.instance.imageRegistryAPI
+      .registerBitmapImage(
+          bitmap: bitmap.buffer.asUint8List(),
+          imagePixelRatio: imagePixelRatio,
+          width: width,
+          height: height);
 }
 
 /// Delete previously registered bitmap from image registry.
 /// {@category Image Registry}
 Future<void> unregisterImage(ImageDescriptor imageDescriptor) {
-  return GoogleMapsNavigationPlatform.instance
+  return GoogleMapsNavigationPlatform.instance.imageRegistryAPI
       .unregisterImage(imageDescriptor: imageDescriptor);
 }
 
 /// Get all registered bitmaps from image registry.
 /// {@category Image Registry}
 Future<List<ImageDescriptor>> getRegisteredImages() {
-  return GoogleMapsNavigationPlatform.instance.getRegisteredImages();
+  return GoogleMapsNavigationPlatform.instance.imageRegistryAPI
+      .getRegisteredImages();
 }
 
 /// Remove all registered bitmaps from image registry.
 /// {@category Image Registry}
 Future<void> clearRegisteredImages() {
-  return GoogleMapsNavigationPlatform.instance.clearRegisteredImages();
+  return GoogleMapsNavigationPlatform.instance.imageRegistryAPI
+      .clearRegisteredImages();
 }
 
 /// [registerBitmapImage] failed to decode bitmap from byte array.

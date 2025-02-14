@@ -15,13 +15,12 @@
 import 'package:flutter/services.dart';
 
 import '../../google_navigation_flutter.dart';
-import '../google_navigation_flutter_platform_interface.dart';
 import 'method_channel.dart';
 
 /// @nodoc
 /// CommonImageRegistryAPI handles image registry API
 /// actions that are common to both iOS and Android.
-mixin CommonImageRegistryAPI on ImageRegistryAPIInterface {
+class ImageRegistryAPIImpl {
   final ImageRegistryApi _imageApi = ImageRegistryApi();
 
   /// Keep track of image count, used to generate image ID's.
@@ -32,7 +31,7 @@ mixin CommonImageRegistryAPI on ImageRegistryAPIInterface {
     return imageId;
   }
 
-  @override
+  /// Register bitmap to image registry.
   Future<ImageDescriptor> registerBitmapImage(
       {required Uint8List bitmap,
       required double imagePixelRatio,
@@ -52,12 +51,12 @@ mixin CommonImageRegistryAPI on ImageRegistryAPIInterface {
     }
   }
 
-  @override
+  /// Delete bitmap from image registry.
   Future<void> unregisterImage({required ImageDescriptor imageDescriptor}) {
     return _imageApi.unregisterImage(imageDescriptor.toDto());
   }
 
-  @override
+  /// Get all registered bitmaps from image registry.
   Future<List<ImageDescriptor>> getRegisteredImages() async {
     final List<ImageDescriptorDto?> registeredImages =
         await _imageApi.getRegisteredImages();
@@ -67,7 +66,7 @@ mixin CommonImageRegistryAPI on ImageRegistryAPIInterface {
         .toList();
   }
 
-  @override
+  /// Remove all registered bitmaps from image registry.
   Future<void> clearRegisteredImages() {
     return _imageApi.clearRegisteredImages();
   }
