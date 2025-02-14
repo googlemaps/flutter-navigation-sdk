@@ -48,6 +48,8 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
   }
 
   Future<void> addMarkerToMap() async {
+    // Add a marker to the current camera position.
+
     try {
       final CameraPosition position =
           await _navigationViewController.getCameraPosition();

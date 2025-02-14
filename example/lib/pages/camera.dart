@@ -131,8 +131,6 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
       if (_navigationRunning) {
         GoogleMapsNavigator.cleanup();
       }
-      // Clean up any other resources
-      hideMessage();
     } catch (e) {
       debugPrint('Error during disposal: ${e.toString()}');
     }
