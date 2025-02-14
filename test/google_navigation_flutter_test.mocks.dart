@@ -1,4 +1,4 @@
-// Copyright 2024 Google LLC
+// Copyright 2025 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -73,9 +73,19 @@ class _FakeLatLngBoundsDto_2 extends _i1.SmartFake
         );
 }
 
-class _FakeImageDescriptorDto_3 extends _i1.SmartFake
+class _FakeMapPaddingDto_3 extends _i1.SmartFake implements _i2.MapPaddingDto {
+  _FakeMapPaddingDto_3(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeImageDescriptorDto_4 extends _i1.SmartFake
     implements _i2.ImageDescriptorDto {
-  _FakeImageDescriptorDto_3(
+  _FakeImageDescriptorDto_4(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -1668,6 +1678,37 @@ class MockTestMapViewApi extends _i1.Mock implements _i3.TestMapViewApi {
         ),
         returnValueForMissingStub: null,
       );
+
+  @override
+  void setPadding(
+    int? viewId,
+    _i2.MapPaddingDto? padding,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #setPadding,
+          [
+            viewId,
+            padding,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i2.MapPaddingDto getPadding(int? viewId) => (super.noSuchMethod(
+        Invocation.method(
+          #getPadding,
+          [viewId],
+        ),
+        returnValue: _FakeMapPaddingDto_3(
+          this,
+          Invocation.method(
+            #getPadding,
+            [viewId],
+          ),
+        ),
+      ) as _i2.MapPaddingDto);
 }
 
 /// A class which mocks [TestImageRegistryApi].
@@ -1698,7 +1739,7 @@ class MockTestImageRegistryApi extends _i1.Mock
             height,
           ],
         ),
-        returnValue: _FakeImageDescriptorDto_3(
+        returnValue: _FakeImageDescriptorDto_4(
           this,
           Invocation.method(
             #registerBitmapImage,
