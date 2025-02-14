@@ -1219,7 +1219,8 @@ void main() {
 
         test('set padding', () async {
           // Create padding
-          EdgeInsets insets = const EdgeInsets.all(10.0);
+          EdgeInsets insets =
+              const EdgeInsets.only(left: 5, right: 10, top: 15, bottom: 20);
 
           // Mock api response
           when(viewMockApi.setPadding(any, any))
@@ -1244,11 +1245,12 @@ void main() {
 
         test('get padding', () async {
           // Create padding
-          EdgeInsets insets = const EdgeInsets.all(10.0);
+          EdgeInsets insets =
+              const EdgeInsets.only(top: 5, left: 10, bottom: 15, right: 20);
 
           // Mock api response
           final MapPaddingDto messagePadding =
-              MapPaddingDto(top: 10, left: 10, bottom: 10, right: 10);
+              MapPaddingDto(top: 5, left: 10, bottom: 15, right: 20);
           when(viewMockApi.getPadding(any))
               .thenAnswer((Invocation _) => messagePadding);
 
