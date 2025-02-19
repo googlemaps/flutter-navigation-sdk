@@ -35,8 +35,18 @@ void main() {
 
   final List<GoogleMapsNavigationPlatform> platforms =
       <GoogleMapsNavigationPlatform>[
-    GoogleMapsNavigationAndroid(),
-    GoogleMapsNavigationIOS(),
+    GoogleMapsNavigationAndroid(
+      AndroidNavigationSessionAPIImpl(),
+      MapViewAPIImpl(),
+      AutoMapViewAPIImpl(),
+      ImageRegistryAPIImpl(),
+    ),
+    GoogleMapsNavigationIOS(
+      NavigationSessionAPIImpl(),
+      MapViewAPIImpl(),
+      AutoMapViewAPIImpl(),
+      ImageRegistryAPIImpl(),
+    ),
   ];
 
   setUp(() {
@@ -89,7 +99,8 @@ void main() {
               .thenAnswer((Invocation _) async => ());
 
           // Await map ready
-          await GoogleMapsNavigationPlatform.instance.awaitMapReady(viewId: 0);
+          await GoogleMapsNavigationPlatform.instance.viewAPI
+              .awaitMapReady(viewId: 0);
 
           // Verify correct message sent from view api
           final VerificationResult result =
@@ -595,6 +606,58 @@ void main() {
               verify(viewMockApi.setMapToolbarEnabled(captureAny, captureAny)),
               true);
         });
+
+        test('set padding for map', () async {
+          // Create padding
+          EdgeInsets insets =
+              const EdgeInsets.only(left: 5, right: 10, top: 15, bottom: 20);
+
+          // Mock api response
+          when(viewMockApi.setPadding(any, any))
+              .thenAnswer((Invocation _) async => ());
+
+          // Set padding
+          await GoogleMapsNavigationPlatform.instance.viewAPI
+              .setPadding(viewId: 0, padding: insets);
+
+          // Verify correct message sent from view api
+          final VerificationResult result =
+              verify(viewMockApi.setPadding(captureAny, captureAny));
+          final MapPaddingDto paddingMessage =
+              result.captured[1] as MapPaddingDto;
+
+          // Verify message
+          expect(insets.left, paddingMessage.left);
+          expect(insets.right, paddingMessage.right);
+          expect(insets.top, paddingMessage.top);
+          expect(insets.bottom, paddingMessage.bottom);
+        });
+
+        test('get padding from map', () async {
+          // Create padding
+          EdgeInsets insets =
+              const EdgeInsets.only(top: 5, left: 10, bottom: 15, right: 20);
+
+          // Mock api response
+          final MapPaddingDto messagePadding =
+              MapPaddingDto(top: 5, left: 10, bottom: 15, right: 20);
+          when(viewMockApi.getPadding(any))
+              .thenAnswer((Invocation _) => messagePadding);
+
+          // Get padding
+          final EdgeInsets paddingOut = await GoogleMapsNavigationPlatform
+              .instance.viewAPI
+              .getPadding(viewId: 0);
+
+          // Verify correct message sent from view api
+          final VerificationResult result =
+              verify(viewMockApi.getPadding(captureAny));
+          final int viewId = result.captured[0] as int;
+
+          // Verify response padding
+          expect(viewId, 0);
+          expect(insets, paddingOut);
+        });
       });
 
       group('Navigation session API', () {
@@ -947,8 +1010,9 @@ void main() {
               .thenAnswer((Invocation _) => <MarkerDto>[messageMarker]);
 
           // Get markers
-          final List<Marker?> markersOut =
-              await GoogleMapsNavigationPlatform.instance.getMarkers(viewId: 0);
+          final List<Marker?> markersOut = await GoogleMapsNavigationPlatform
+              .instance.viewAPI
+              .getMarkers(viewId: 0);
 
           // Verify correct message sent from view api
           final VerificationResult result =
@@ -981,7 +1045,7 @@ void main() {
 
           // Add marker
           final List<Marker?> markersOut = await GoogleMapsNavigationPlatform
-              .instance
+              .instance.viewAPI
               .addMarkers(viewId: 0, markerOptions: <MarkerOptions>[optionsIn]);
 
           // Verify correct message sent from view api
@@ -1009,7 +1073,7 @@ void main() {
 
           // Edit marker
           final List<Marker?> markersOut = await GoogleMapsNavigationPlatform
-              .instance
+              .instance.viewAPI
               .updateMarkers(viewId: 0, markers: <Marker>[marker]);
 
           // Verify correct message sent from view api
@@ -1035,7 +1099,7 @@ void main() {
               .thenAnswer((Invocation _) => ());
 
           // Remove marker
-          await GoogleMapsNavigationPlatform.instance
+          await GoogleMapsNavigationPlatform.instance.viewAPI
               .removeMarkers(viewId: 0, markers: <Marker>[marker]);
 
           // Verify correct message sent from view api
@@ -1054,7 +1118,8 @@ void main() {
               .thenAnswer((Invocation _) async => ());
 
           // Clear map
-          await GoogleMapsNavigationPlatform.instance.clearMarkers(viewId: 0);
+          await GoogleMapsNavigationPlatform.instance.viewAPI
+              .clearMarkers(viewId: 0);
 
           // Verify correct message sent from view api
           final VerificationResult result =
@@ -1070,7 +1135,7 @@ void main() {
           when(viewMockApi.clear(any)).thenAnswer((Invocation _) async => ());
 
           // Clear map
-          await GoogleMapsNavigationPlatform.instance.clear(viewId: 0);
+          await GoogleMapsNavigationPlatform.instance.viewAPI.clear(viewId: 0);
 
           // Verify correct message sent from view api
           final VerificationResult result =
@@ -1096,7 +1161,7 @@ void main() {
 
           // Get polygons
           final List<Polygon?> polygonsOut = await GoogleMapsNavigationPlatform
-              .instance
+              .instance.viewAPI
               .getPolygons(viewId: 0);
 
           // Verify correct message sent from view api
@@ -1133,7 +1198,7 @@ void main() {
 
           // Add polygon
           final List<Polygon?> polygonsOut =
-              await GoogleMapsNavigationPlatform.instance.addPolygons(
+              await GoogleMapsNavigationPlatform.instance.viewAPI.addPolygons(
                   viewId: 0, polygonOptions: <PolygonOptions>[optionsIn]);
 
           // Verify correct message sent from view api
@@ -1161,7 +1226,7 @@ void main() {
 
           // Edit polygon
           final List<Polygon?> polygonsOut = await GoogleMapsNavigationPlatform
-              .instance
+              .instance.viewAPI
               .updatePolygons(viewId: 0, polygons: <Polygon>[polygon]);
 
           // Verify correct message sent from view api
@@ -1187,7 +1252,7 @@ void main() {
               .thenAnswer((Invocation _) async => ());
 
           // Remove polygon
-          await GoogleMapsNavigationPlatform.instance
+          await GoogleMapsNavigationPlatform.instance.viewAPI
               .removePolygons(viewId: 0, polygons: <Polygon>[polygon]);
 
           // Verify correct message sent from view api
@@ -1206,7 +1271,8 @@ void main() {
               .thenAnswer((Invocation _) async => ());
 
           // Clear map
-          await GoogleMapsNavigationPlatform.instance.clearPolygons(viewId: 0);
+          await GoogleMapsNavigationPlatform.instance.viewAPI
+              .clearPolygons(viewId: 0);
 
           // Verify correct message sent from view api
           final VerificationResult result =

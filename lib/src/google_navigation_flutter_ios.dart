@@ -14,7 +14,6 @@
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:google_navigation_flutter/src/method_channel/common_auto_view_api.dart';
 
 import '../google_navigation_flutter.dart';
 import 'google_navigation_flutter_platform_interface.dart';
@@ -24,15 +23,28 @@ import 'method_channel/method_channel.dart';
 
 /// Google Maps Navigation Platform iOS specific functionalities.
 /// @nodoc
-class GoogleMapsNavigationIOS extends GoogleMapsNavigationPlatform
-    with
-        CommonNavigationSessionAPI,
-        CommonMapViewAPI,
-        CommonAutoMapViewAPI,
-        CommonImageRegistryAPI {
+class GoogleMapsNavigationIOS extends GoogleMapsNavigationPlatform {
+  /// Creates a GoogleMapsNavigationIOS.
+  GoogleMapsNavigationIOS(
+    NavigationSessionAPIImpl navigationSessionAPI,
+    MapViewAPIImpl viewAPI,
+    AutoMapViewAPIImpl autoAPI,
+    ImageRegistryAPIImpl imageRegistryAPI,
+  ) : super(
+          navigationSessionAPI,
+          viewAPI,
+          imageRegistryAPI,
+          autoAPI,
+        );
+
   /// Registers the iOS implementation of GoogleMapsNavigationPlatform.
   static void registerWith() {
-    GoogleMapsNavigationPlatform.instance = GoogleMapsNavigationIOS();
+    GoogleMapsNavigationPlatform.instance = GoogleMapsNavigationIOS(
+      NavigationSessionAPIImpl(),
+      MapViewAPIImpl(),
+      AutoMapViewAPIImpl(),
+      ImageRegistryAPIImpl(),
+    );
   }
 
   @override
@@ -60,14 +72,17 @@ class GoogleMapsNavigationIOS extends GoogleMapsNavigationPlatform
       required MapViewInitializationOptions initializationOptions,
       required MapReadyCallback onMapReady}) {
     // Initialize method channel for view communication if needed.
-    ensureViewAPISetUp();
+    viewAPI.ensureViewAPISetUp();
 
     // This is used in the platform side to register the platform view.
     const String viewType = 'google_navigation_flutter';
 
     // Build creation params used to initialize navigation view with initial parameters
     final ViewCreationOptionsDto creationParams =
-        buildNavigationViewCreationOptions(mapViewType, initializationOptions);
+        viewAPI.buildNavigationViewCreationOptions(
+      mapViewType,
+      initializationOptions,
+    );
 
     return UiKitView(
       viewType: viewType,
@@ -75,7 +90,7 @@ class GoogleMapsNavigationIOS extends GoogleMapsNavigationPlatform
       creationParamsCodec: const StandardMessageCodec(),
       onPlatformViewCreated: (int viewId) async {
         // Wait map to be ready before calling [onMapReady] callback
-        await awaitMapReady(viewId: viewId);
+        await viewAPI.awaitMapReady(viewId: viewId);
         onMapReady(viewId);
       },
       gestureRecognizers: initializationOptions.gestureRecognizers,

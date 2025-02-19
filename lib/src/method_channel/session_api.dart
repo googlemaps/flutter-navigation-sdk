@@ -18,14 +18,13 @@ import 'package:flutter/services.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import '../../google_navigation_flutter.dart';
-import '../google_navigation_flutter_platform_interface.dart';
 import 'convert/navigation_waypoint.dart';
 import 'method_channel.dart';
 
 /// @nodoc
 /// CommonNavigationSessionAPI handles navigation session API
 /// actions that are common to both iOS and Android.
-mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
+class NavigationSessionAPIImpl {
   bool _sessionApiHasBeenSetUp = false;
 
   /// Navigation session pigeon API.
@@ -49,7 +48,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Creates navigation session in the native platform and returns navigation session controller.
-  @override
   Future<void> createNavigationSession(
       bool abnormalTerminationReportingEnabled) async {
     // Setup session API streams.
@@ -75,12 +73,12 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
     }
   }
 
-  @override
+  /// Check whether navigator has been initialized.
   Future<bool> isInitialized() async {
     return _sessionApi.isInitialized();
   }
 
-  @override
+  /// Cleanup navigation session.
   Future<void> cleanup() async {
     try {
       return await _sessionApi.cleanup();
@@ -95,7 +93,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Show terms and conditions dialog.
-  @override
   Future<bool> showTermsAndConditionsDialog(String title, String companyName,
       bool shouldOnlyShowDriverAwarenessDisclaimer) async {
     try {
@@ -117,13 +114,11 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Check if terms of service has been accepted.
-  @override
   Future<bool> areTermsAccepted() {
     return _sessionApi.areTermsAccepted();
   }
 
   /// Resets terms of service acceptance state.
-  @override
   Future<void> resetTermsAccepted() async {
     try {
       return await _sessionApi.resetTermsAccepted();
@@ -137,7 +132,7 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
     }
   }
 
-  @override
+  /// Gets the native navigation SDK version as string.
   Future<String> getNavSDKVersion() {
     try {
       return _sessionApi.getNavSDKVersion();
@@ -151,7 +146,7 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
     }
   }
 
-  @override
+  /// Has guidance been started.
   Future<bool> isGuidanceRunning() async {
     try {
       return await _sessionApi.isGuidanceRunning();
@@ -166,7 +161,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Starts navigation guidance.
-  @override
   Future<void> startGuidance() async {
     try {
       return await _sessionApi.startGuidance();
@@ -181,7 +175,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Stops navigation guidance.
-  @override
   Future<void> stopGuidance() async {
     try {
       return await _sessionApi.stopGuidance();
@@ -196,7 +189,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Sets destination waypoints and other settings.
-  @override
   Future<NavigationRouteStatus> setDestinations(Destinations msg) async {
     try {
       final RouteStatusDto status =
@@ -216,7 +208,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Clears destinations.
-  @override
   Future<void> clearDestinations() async {
     try {
       return await _sessionApi.clearDestinations();
@@ -231,7 +222,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Continues to next waypoint.
-  @override
   Future<NavigationWaypoint?> continueToNextDestination() async {
     try {
       final NavigationWaypointDto? waypointDto =
@@ -251,7 +241,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Gets current time and distance left.
-  @override
   Future<NavigationTimeAndDistance> getCurrentTimeAndDistance() async {
     try {
       final NavigationTimeAndDistanceDto timeAndDistance =
@@ -268,7 +257,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Sets audio guidance settings.
-  @override
   Future<void> setAudioGuidance(
       NavigationAudioGuidanceSettings settings) async {
     try {
@@ -283,8 +271,7 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
     }
   }
 
-  /// Sets user location for simulation.
-  @override
+  /// Sets user location.
   Future<void> setUserLocation(LatLng location) async {
     try {
       return await _sessionApi.setUserLocation(location.toDto());
@@ -298,8 +285,7 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
     }
   }
 
-  /// Unsets previously set user location for the simulation.
-  @override
+  /// Unsets user location.
   Future<void> removeUserLocation() async {
     try {
       return await _sessionApi.removeUserLocation();
@@ -314,7 +300,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Simulates locations along existing route.
-  @override
   Future<void> simulateLocationsAlongExistingRoute() async {
     try {
       return await _sessionApi.simulateLocationsAlongExistingRoute();
@@ -329,7 +314,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Simulates locations along existing route with simulation options.
-  @override
   Future<void> simulateLocationsAlongExistingRouteWithOptions(
       SimulationOptions options) async {
     try {
@@ -346,7 +330,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Simulates locations along new route.
-  @override
   Future<NavigationRouteStatus> simulateLocationsAlongNewRoute(
       List<NavigationWaypoint> waypoints) async {
     try {
@@ -368,7 +351,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Simulates locations along new route with routing and simulation options.
-  @override
   Future<NavigationRouteStatus>
       simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
           List<NavigationWaypoint> waypoints,
@@ -397,7 +379,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Simulates locations along new route with routing options.
-  @override
   Future<NavigationRouteStatus>
       simulateLocationsAlongNewRouteWithRoutingOptions(
           List<NavigationWaypoint> waypoints,
@@ -424,7 +405,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Pauses simulation.
-  @override
   Future<void> pauseSimulation() async {
     try {
       return await _sessionApi.pauseSimulation();
@@ -439,7 +419,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Resumes simulation.
-  @override
   Future<void> resumeSimulation() async {
     try {
       return await _sessionApi.resumeSimulation();
@@ -454,7 +433,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Sets state of allow background location updates. (iOS only)
-  @override
   Future<void> allowBackgroundLocationUpdates(bool allow) async {
     try {
       return await _sessionApi.allowBackgroundLocationUpdates(allow);
@@ -469,7 +447,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Enables road snapped location updates.
-  @override
   Future<void> enableRoadSnappedLocationUpdates() async {
     try {
       return await _sessionApi.enableRoadSnappedLocationUpdates();
@@ -484,7 +461,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Disables road snapped location updates.
-  @override
   Future<void> disableRoadSnappedLocationUpdates() async {
     try {
       return await _sessionApi.disableRoadSnappedLocationUpdates();
@@ -499,7 +475,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Enables navigation info updates.
-  @override
   Future<void> enableTurnByTurnNavigationEvents(
       int? numNextStepsToPreview) async {
     try {
@@ -516,7 +491,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Disables navigation info updates.
-  @override
   Future<void> disableTurnByTurnNavigationEvents() async {
     try {
       return await _sessionApi.disableTurnByTurnNavigationEvents();
@@ -531,7 +505,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Get route segments.
-  @override
   Future<List<RouteSegment>> getRouteSegments() async {
     try {
       final List<RouteSegmentDto?> routeSegments =
@@ -552,7 +525,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Get traveled route.
-  @override
   Future<List<LatLng>> getTraveledRoute() async {
     try {
       final List<LatLngDto?> traveledRoute =
@@ -574,7 +546,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Get current route segment.
-  @override
   Future<RouteSegment?> getCurrentRouteSegment() async {
     try {
       final RouteSegmentDto? currentRouteSegment =
@@ -590,24 +561,22 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
     }
   }
 
-  /// Get event stream for speeding.
-  @override
+  /// Get navigation speeding event stream from the navigation session.
   Stream<SpeedingUpdatedEvent> getNavigationSpeedingEventStream() {
     return _sessionEventStreamController.stream
         .whereType<SpeedingUpdatedEventDto>()
         .map((SpeedingUpdatedEventDto event) => event.toSpeedingUpdatedEvent());
   }
 
-  /// Get event stream for road snapped location updates.
-  @override
+  /// Get navigation road snapped location event stream from the navigation session.
   Stream<RoadSnappedLocationUpdatedEvent>
       getNavigationRoadSnappedLocationEventStream() {
     return _sessionEventStreamController.stream
         .whereType<RoadSnappedLocationUpdatedEvent>();
   }
 
-  /// Get event stream for road snapped location updates.
-  @override
+  /// Get navigation road snapped raw location event stream from the navigation session.
+  /// Android only.
   Stream<RoadSnappedRawLocationUpdatedEvent>
       getNavigationRoadSnappedRawLocationEventStream() {
     return _sessionEventStreamController.stream
@@ -615,13 +584,11 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Get navigation on arrival event stream from the navigation session.
-  @override
   Stream<OnArrivalEvent> getNavigationOnArrivalEventStream() {
     return _sessionEventStreamController.stream.whereType<OnArrivalEvent>();
   }
 
   /// Get navigation on rerouting event stream from the navigation session.
-  @override
   Stream<void> getNavigationOnReroutingEventStream() {
     return _sessionEventStreamController.stream
         .whereType<_ReroutingEvent>()
@@ -629,7 +596,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Get navigation on GPS availability update event stream from the navigation session.
-  @override
   Stream<GpsAvailabilityUpdatedEvent>
       getNavigationOnGpsAvailabilityUpdateEventStream() {
     return _sessionEventStreamController.stream
@@ -637,7 +603,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Get navigation traffic updated event stream from the navigation session.
-  @override
   Stream<void> getNavigationTrafficUpdatedEventStream() {
     return _sessionEventStreamController.stream
         .whereType<_TrafficUpdatedEvent>()
@@ -645,7 +610,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Get navigation on route changed event stream from the navigation session.
-  @override
   Stream<void> getNavigationOnRouteChangedEventStream() {
     return _sessionEventStreamController.stream
         .whereType<_RouteChangedEvent>()
@@ -653,14 +617,13 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Get navigation remaining time or distance event stream from the navigation session.
-  @override
   Stream<RemainingTimeOrDistanceChangedEvent>
       getNavigationRemainingTimeOrDistanceChangedEventStream() {
     return _sessionEventStreamController.stream
         .whereType<RemainingTimeOrDistanceChangedEvent>();
   }
 
-  @override
+  /// Register remaining time or distance change listener with thresholds.
   Future<void> registerRemainingTimeOrDistanceChangedListener(
       int remainingTimeThresholdSeconds, int remainingDistanceThresholdMeters) {
     return _sessionApi.registerRemainingTimeOrDistanceChangedListener(
@@ -668,7 +631,6 @@ mixin CommonNavigationSessionAPI implements NavigationSessionAPIInterface {
   }
 
   /// Get navigation info event stream from the navigation session.
-  @override
   Stream<NavInfoEvent> getNavInfoStream() {
     return _sessionEventStreamController.stream.whereType<NavInfoEvent>();
   }

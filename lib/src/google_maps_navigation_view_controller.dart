@@ -26,7 +26,7 @@ class GoogleNavigationViewController extends GoogleMapViewController {
 
   /// Is the navigation trip progress bar enabled.
   Future<bool> isNavigationTripProgressBarEnabled() {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .isNavigationTripProgressBarEnabled(viewId: getViewId());
   }
 
@@ -34,7 +34,7 @@ class GoogleNavigationViewController extends GoogleMapViewController {
   ///
   /// By default, the navigation trip progress bar is disabled.
   Future<void> setNavigationTripProgressBarEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .setNavigationTripProgressBarEnabled(
       viewId: getViewId(),
       enabled: enabled,
@@ -43,7 +43,7 @@ class GoogleNavigationViewController extends GoogleMapViewController {
 
   /// Is the navigation header enabled.
   Future<bool> isNavigationHeaderEnabled() {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .isNavigationHeaderEnabled(viewId: getViewId());
   }
 
@@ -51,7 +51,8 @@ class GoogleNavigationViewController extends GoogleMapViewController {
   ///
   /// By default, the navigation header is enabled.
   Future<void> setNavigationHeaderEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance.setNavigationHeaderEnabled(
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .setNavigationHeaderEnabled(
       viewId: getViewId(),
       enabled: enabled,
     );
@@ -59,7 +60,7 @@ class GoogleNavigationViewController extends GoogleMapViewController {
 
   /// Is the navigation footer enabled.
   Future<bool> isNavigationFooterEnabled() {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .isNavigationFooterEnabled(viewId: getViewId());
   }
 
@@ -70,7 +71,8 @@ class GoogleNavigationViewController extends GoogleMapViewController {
   /// Also known as ETA card, for example in Android
   /// calls [setEtaCardEnabled().](https://developers.google.com/maps/documentation/navigation/android-sdk/v1/reference/com/google/android/libraries/navigation/NavigationView#setEtaCardEnabled(boolean))
   Future<void> setNavigationFooterEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance.setNavigationFooterEnabled(
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .setNavigationFooterEnabled(
       viewId: getViewId(),
       enabled: enabled,
     );
@@ -78,7 +80,7 @@ class GoogleNavigationViewController extends GoogleMapViewController {
 
   /// Can the speed limit indication be displayed.
   Future<bool> isSpeedLimitIconEnabled() {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .isSpeedLimitIconEnabled(viewId: getViewId());
   }
 
@@ -86,7 +88,8 @@ class GoogleNavigationViewController extends GoogleMapViewController {
   ///
   /// By default, the speed limit is not displayed.
   Future<void> setSpeedLimitIconEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance.setSpeedLimitIconEnabled(
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .setSpeedLimitIconEnabled(
       viewId: getViewId(),
       enabled: enabled,
     );
@@ -94,7 +97,7 @@ class GoogleNavigationViewController extends GoogleMapViewController {
 
   /// Can the speedometer be displayed.
   Future<bool> isSpeedometerEnabled() {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .isSpeedometerEnabled(viewId: getViewId());
   }
 
@@ -102,7 +105,7 @@ class GoogleNavigationViewController extends GoogleMapViewController {
   ///
   /// By default, the speedometer is not displayed.
   Future<void> setSpeedometerEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance.setSpeedometerEnabled(
+    return GoogleMapsNavigationPlatform.instance.viewAPI.setSpeedometerEnabled(
       viewId: getViewId(),
       enabled: enabled,
     );
@@ -110,7 +113,7 @@ class GoogleNavigationViewController extends GoogleMapViewController {
 
   /// Are the incident cards displayed.
   Future<bool> isTrafficIncidentCardsEnabled() {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .isTrafficIncidentCardsEnabled(viewId: getViewId());
   }
 
@@ -118,7 +121,8 @@ class GoogleNavigationViewController extends GoogleMapViewController {
   ///
   /// By default, the incident cards are shown.
   Future<void> setTrafficIncidentCardsEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance.setTrafficIncidentCardsEnabled(
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .setTrafficIncidentCardsEnabled(
       viewId: getViewId(),
       enabled: enabled,
     );
@@ -126,7 +130,7 @@ class GoogleNavigationViewController extends GoogleMapViewController {
 
   /// Check if the navigation user interface is shown.
   Future<bool> isNavigationUIEnabled() {
-    return GoogleMapsNavigationPlatform.instance
+    return GoogleMapsNavigationPlatform.instance.viewAPI
         .isNavigationUIEnabled(viewId: getViewId());
   }
 
@@ -142,7 +146,7 @@ class GoogleNavigationViewController extends GoogleMapViewController {
   /// Fails on Android if the navigation session has not been initialized,
   /// and on iOS if the terms and conditions have not been accepted.
   Future<void> setNavigationUIEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance.setNavigationUIEnabled(
+    return GoogleMapsNavigationPlatform.instance.viewAPI.setNavigationUIEnabled(
       viewId: getViewId(),
       enabled: enabled,
     );
@@ -152,7 +156,7 @@ class GoogleNavigationViewController extends GoogleMapViewController {
   ///
   /// See also [followMyLocation] and [animateCamera].
   Future<void> showRouteOverview() {
-    return GoogleMapsNavigationPlatform.instance.showRouteOverview(
+    return GoogleMapsNavigationPlatform.instance.viewAPI.showRouteOverview(
       viewId: getViewId(),
     );
   }

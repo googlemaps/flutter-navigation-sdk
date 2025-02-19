@@ -6,7 +6,7 @@
   "bump-minor-pre-major": true,
   "packages": {
     ".": {
-      "bootstrap-sha": "19d2491ea1a03add016b31b94562da03ccefaa74",
+      "last-release-sha": "13e7f1c97dbe724ec2b86686a56489dd980b2f20",
       "package-name": "google_navigation_flutter",
       "changelog-path": "CHANGELOG.md"
     }
