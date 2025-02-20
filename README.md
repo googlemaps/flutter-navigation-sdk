@@ -69,6 +69,7 @@ dependencies {
   # Set platform to 15.0 to enable latest Google Maps SDK
   platform :ios, '15.0'
 ```
+3. In Xcode open Info.plist file and add `App registers for location updates` to the list of `Required background modes`
 
 ### Set Google Maps API Key
 
