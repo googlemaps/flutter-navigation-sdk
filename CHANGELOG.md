@@ -9,6 +9,13 @@
   * Updates navigation SDK for android to 6.0.2
   * Updates navigation SDK for iOS to 9.3.0
 
+## [0.6.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.5.0...v0.6.0) (2025-02-21)
+
+
+### Features
+
+* improve platform interface by removing unnecessary abstraction ([#233](https://github.com/googlemaps/flutter-navigation-sdk/issues/233)) ([da716a7](https://github.com/googlemaps/flutter-navigation-sdk/commit/da716a73215b32ed645ecaaf2e35a685f954c99e))
+
 ## [0.4.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.3.0...v0.4.0) (2024-10-30)
 
 
