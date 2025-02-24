@@ -265,8 +265,6 @@ Once you have received an LGTM (Looks Good To Me) from a project maintainer and 
 Before contributing, please ensure that you have completed the
 [Contributor License Agreement](https://cla.developers.google.com/clas).
 This can be done online and only takes a few moments.
-If you are submitting code for the first time, please add your (or your
-organization's) name and contact information to the [AUTHORS](AUTHORS) file.
 
 This project uses Google's `addlicense` [here](https://github.com/google/addlicense) tool to add the license header to all necessary files. Running `addlicense` is a required step before committing any new files.
 
