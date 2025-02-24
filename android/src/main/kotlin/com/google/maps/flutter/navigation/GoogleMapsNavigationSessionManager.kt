@@ -291,30 +291,32 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   }
 
   private fun unregisterListeners() {
-    val navigator = getNavigator()
-    if (remainingTimeOrDistanceChangedListener != null) {
-      navigator.removeRemainingTimeOrDistanceChangedListener(remainingTimeOrDistanceChangedListener)
-      remainingTimeOrDistanceChangedListener = null
-    }
-    if (arrivalListener != null) {
-      navigator.removeArrivalListener(arrivalListener)
-      arrivalListener = null
-    }
-    if (routeChangedListener != null) {
-      navigator.removeRouteChangedListener(routeChangedListener)
-      routeChangedListener = null
-    }
-    if (reroutingListener != null) {
-      navigator.removeReroutingListener(reroutingListener)
-      reroutingListener = null
-    }
-    if (trafficUpdatedListener != null) {
-      navigator.removeTrafficUpdatedListener(trafficUpdatedListener)
-      trafficUpdatedListener = null
-    }
-    if (speedingListener != null) {
-      navigator.setSpeedingListener(null)
-      speedingListener = null
+    if (isInitialized()) {
+      val navigator = getNavigator()
+      if (remainingTimeOrDistanceChangedListener != null) {
+        navigator.removeRemainingTimeOrDistanceChangedListener(remainingTimeOrDistanceChangedListener)
+        remainingTimeOrDistanceChangedListener = null
+      }
+      if (arrivalListener != null) {
+        navigator.removeArrivalListener(arrivalListener)
+        arrivalListener = null
+      }
+      if (routeChangedListener != null) {
+        navigator.removeRouteChangedListener(routeChangedListener)
+        routeChangedListener = null
+      }
+      if (reroutingListener != null) {
+        navigator.removeReroutingListener(reroutingListener)
+        reroutingListener = null
+      }
+      if (trafficUpdatedListener != null) {
+        navigator.removeTrafficUpdatedListener(trafficUpdatedListener)
+        trafficUpdatedListener = null
+      }
+      if (speedingListener != null) {
+        navigator.setSpeedingListener(null)
+        speedingListener = null
+      }
     }
     if (roadSnappedLocationListener != null) {
       disableRoadSnappedLocationUpdates()
