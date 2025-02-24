@@ -294,7 +294,9 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
     if (isInitialized()) {
       val navigator = getNavigator()
       if (remainingTimeOrDistanceChangedListener != null) {
-        navigator.removeRemainingTimeOrDistanceChangedListener(remainingTimeOrDistanceChangedListener)
+        navigator.removeRemainingTimeOrDistanceChangedListener(
+          remainingTimeOrDistanceChangedListener
+        )
         remainingTimeOrDistanceChangedListener = null
       }
       if (arrivalListener != null) {
