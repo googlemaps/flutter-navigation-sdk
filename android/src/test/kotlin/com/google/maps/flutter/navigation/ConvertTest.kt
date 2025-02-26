@@ -29,6 +29,7 @@ import com.google.android.libraries.navigation.AlternateRoutesStrategy
 import com.google.android.libraries.navigation.NavigationRoadStretchRenderingData
 import com.google.android.libraries.navigation.NavigationTrafficData
 import com.google.android.libraries.navigation.Navigator.AudioGuidance
+import com.google.android.libraries.navigation.Navigator.TaskRemovedBehavior
 import com.google.android.libraries.navigation.RoutingOptions.RoutingStrategy
 import com.google.android.libraries.navigation.SpeedAlertSeverity
 import com.google.android.libraries.navigation.TimeAndDistance
@@ -604,5 +605,12 @@ internal class ConvertTest {
     assertEquals(1.0, imageDescriptor.imagePixelRatio)
     assertEquals(10.0, imageDescriptor.width)
     assertEquals(20.0, imageDescriptor.height)
+  }
+
+  @Test
+  fun taskRemovedBehaviorDtoToTaskRemovedBehavior_returnsExpectedValue() {
+    assertEquals(TaskRemovedBehavior.QUIT_SERVICE, Convert.taskRemovedBehaviorDtoToTaskRemovedBehavior(TaskRemovedBehaviorDto.QUITSERVICE))
+    assertEquals(TaskRemovedBehavior.CONTINUE_SERVICE, Convert.taskRemovedBehaviorDtoToTaskRemovedBehavior(TaskRemovedBehaviorDto.CONTINUESERVICE))
+    assertEquals(TaskRemovedBehavior.CONTINUE_SERVICE, Convert.taskRemovedBehaviorDtoToTaskRemovedBehavior(null))
   }
 }

@@ -50,9 +50,12 @@ class GoogleMapsNavigator {
   /// reporting abnormal SDK terminations such as the app crashes while the SDK is still running.
   ///
   static Future<void> initializeNavigationSession(
-      {bool abnormalTerminationReportingEnabled = true}) async {
+      {bool abnormalTerminationReportingEnabled = true,
+      TaskRemovedBehavior taskRemovedBehavior =
+          TaskRemovedBehavior.quitService}) async {
     await GoogleMapsNavigationPlatform.instance.navigationSessionAPI
-        .createNavigationSession(abnormalTerminationReportingEnabled);
+        .createNavigationSession(
+            abnormalTerminationReportingEnabled, taskRemovedBehavior);
 
     // Enable road-snapped location updates if there are subscriptions to them.
     if ((_roadSnappedLocationUpdatedController?.hasListener ?? false) ||

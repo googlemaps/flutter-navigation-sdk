@@ -48,14 +48,14 @@ class NavigationSessionAPIImpl {
   }
 
   /// Creates navigation session in the native platform and returns navigation session controller.
-  Future<void> createNavigationSession(
-      bool abnormalTerminationReportingEnabled) async {
+  Future<void> createNavigationSession(bool abnormalTerminationReportingEnabled,
+      TaskRemovedBehavior taskRemovedBehavior) async {
     // Setup session API streams.
     ensureSessionAPISetUp();
     try {
       // Create native navigation session manager.
-      await _sessionApi
-          .createNavigationSession(abnormalTerminationReportingEnabled);
+      await _sessionApi.createNavigationSession(
+          abnormalTerminationReportingEnabled, taskRemovedBehavior.toDto());
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'notAuthorized':
