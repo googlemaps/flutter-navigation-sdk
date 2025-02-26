@@ -1184,7 +1184,7 @@ class NavInfoDto {
 
 /// Determines how application should behave when a application task is removed.
 enum TaskRemovedBehaviorDto {
-  /// The default state, indicating that navigation guidance, 
+  /// The default state, indicating that navigation guidance,
   /// location updates, and notification should persist after user removes the application task.
   continueService,
 
@@ -1196,7 +1196,8 @@ enum TaskRemovedBehaviorDto {
 abstract class NavigationSessionApi {
   /// General.
   @async
-  void createNavigationSession(bool abnormalTerminationReportingEnabled, TaskRemovedBehaviorDto behavior);
+  void createNavigationSession(bool abnormalTerminationReportingEnabled,
+      TaskRemovedBehaviorDto behavior);
   bool isInitialized();
   void cleanup();
   @async

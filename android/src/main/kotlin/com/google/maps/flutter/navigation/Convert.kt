@@ -1057,11 +1057,13 @@ object Convert {
     }
   }
 
-  fun taskRemovedBehaviorDtoToTaskRemovedBehavior(behavior: TaskRemovedBehaviorDto?): @TaskRemovedBehavior Int {
+  fun taskRemovedBehaviorDtoToTaskRemovedBehavior(
+    behavior: TaskRemovedBehaviorDto?
+  ): @TaskRemovedBehavior Int {
     return when (behavior) {
-      TaskRemovedBehaviorDto.CONTINUESERVICE -> TaskRemovedBehavior.CONTINUE_SERVICE;
-      TaskRemovedBehaviorDto.QUITSERVICE -> TaskRemovedBehavior.QUIT_SERVICE;
-      else -> TaskRemovedBehavior.CONTINUE_SERVICE;
-    };
+      TaskRemovedBehaviorDto.CONTINUESERVICE -> TaskRemovedBehavior.CONTINUE_SERVICE
+      TaskRemovedBehaviorDto.QUITSERVICE -> TaskRemovedBehavior.QUIT_SERVICE
+      else -> TaskRemovedBehavior.CONTINUE_SERVICE
+    }
   }
 }

@@ -609,8 +609,17 @@ internal class ConvertTest {
 
   @Test
   fun taskRemovedBehaviorDtoToTaskRemovedBehavior_returnsExpectedValue() {
-    assertEquals(TaskRemovedBehavior.QUIT_SERVICE, Convert.taskRemovedBehaviorDtoToTaskRemovedBehavior(TaskRemovedBehaviorDto.QUITSERVICE))
-    assertEquals(TaskRemovedBehavior.CONTINUE_SERVICE, Convert.taskRemovedBehaviorDtoToTaskRemovedBehavior(TaskRemovedBehaviorDto.CONTINUESERVICE))
-    assertEquals(TaskRemovedBehavior.CONTINUE_SERVICE, Convert.taskRemovedBehaviorDtoToTaskRemovedBehavior(null))
+    assertEquals(
+      TaskRemovedBehavior.QUIT_SERVICE,
+      Convert.taskRemovedBehaviorDtoToTaskRemovedBehavior(TaskRemovedBehaviorDto.QUITSERVICE),
+    )
+    assertEquals(
+      TaskRemovedBehavior.CONTINUE_SERVICE,
+      Convert.taskRemovedBehaviorDtoToTaskRemovedBehavior(TaskRemovedBehaviorDto.CONTINUESERVICE),
+    )
+    assertEquals(
+      TaskRemovedBehavior.CONTINUE_SERVICE,
+      Convert.taskRemovedBehaviorDtoToTaskRemovedBehavior(null),
+    )
   }
 }

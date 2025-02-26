@@ -15,7 +15,7 @@
 /// Determines how application should behave when a application task is removed.
 /// {@category Navigation}
 enum TaskRemovedBehavior {
-  /// The default state, indicating that navigation guidance, 
+  /// The default state, indicating that navigation guidance,
   /// location updates, and notification should persist after user removes the application task.
   continueService,
 

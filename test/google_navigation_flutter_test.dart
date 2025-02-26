@@ -695,8 +695,8 @@ void main() {
           // Initialize session and session controller.
           await GoogleMapsNavigator.initializeNavigationSession(
               abnormalTerminationReportingEnabled: false);
-          VerificationResult result =
-              verify(sessionMockApi.createNavigationSession(captureAny));
+          VerificationResult result = verify(
+              sessionMockApi.createNavigationSession(captureAny, captureAny));
           expect(result.captured[0] as bool, false);
 
           // Start/stop guidance.

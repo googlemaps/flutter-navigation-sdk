@@ -57,7 +57,8 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
   }
 
   func createNavigationSession(abnormalTerminationReportingEnabled: Bool,
-                               // taskRemovedBehaviourValue is Android only value and not used on iOS.
+                               // taskRemovedBehaviourValue is Android only value and not used on
+                               // iOS.
                                behavior: TaskRemovedBehaviorDto,
                                completion: @escaping (Result<Void, Error>) -> Void) {
     do {
