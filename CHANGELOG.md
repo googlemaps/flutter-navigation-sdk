@@ -9,6 +9,25 @@
   * Updates navigation SDK for android to 6.0.2
   * Updates navigation SDK for iOS to 9.3.0
 
+## [0.5.1](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.5.0...0.5.1) (2025-02-27)
+
+
+### Features
+
+* improve platform interface by removing unnecessary abstraction ([#233](https://github.com/googlemaps/flutter-navigation-sdk/issues/233)) ([da716a7](https://github.com/googlemaps/flutter-navigation-sdk/commit/da716a73215b32ed645ecaaf2e35a685f954c99e))
+* support navigation disposal on app exit on android ([#289](https://github.com/googlemaps/flutter-navigation-sdk/issues/289)) ([8bc03c1](https://github.com/googlemaps/flutter-navigation-sdk/commit/8bc03c1604a4074101758c48d99c4fa4b3763335))
+
+
+### Bug Fixes
+
+* android unregisterListeners crash on app disposal ([#283](https://github.com/googlemaps/flutter-navigation-sdk/issues/283)) ([fa71176](https://github.com/googlemaps/flutter-navigation-sdk/commit/fa7117606551f30ca79c07fa98be40914ccfddc0))
+* camera events on mapview ([#292](https://github.com/googlemaps/flutter-navigation-sdk/issues/292)) ([d6aaa0d](https://github.com/googlemaps/flutter-navigation-sdk/commit/d6aaa0d13efbe3b365b95b49b6b5ffd715f343cd))
+
+
+### Miscellaneous Chores
+
+* updates navigation SDK for android to 6.1.0 ([#282](https://github.com/googlemaps/flutter-navigation-sdk/issues/282)) ([af21548](https://github.com/googlemaps/flutter-navigation-sdk/commit/af215480049edfaee56d40978e814d0b8efdc08c))
+
 ## [0.4.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.3.0...v0.4.0) (2024-10-30)
 
 
