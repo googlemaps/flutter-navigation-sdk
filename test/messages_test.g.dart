@@ -3703,8 +3703,8 @@ abstract class TestNavigationSessionApi {
       _TestNavigationSessionApiCodec();
 
   /// General.
-  Future<void> createNavigationSession(
-      bool abnormalTerminationReportingEnabled);
+  Future<void> createNavigationSession(bool abnormalTerminationReportingEnabled,
+      TaskRemovedBehaviorDto behavior);
 
   bool isInitialized();
 
@@ -3808,9 +3808,14 @@ abstract class TestNavigationSessionApi {
               (args[0] as bool?);
           assert(arg_abnormalTerminationReportingEnabled != null,
               'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession was null, expected non-null bool.');
+          final TaskRemovedBehaviorDto? arg_behavior = args[1] == null
+              ? null
+              : TaskRemovedBehaviorDto.values[args[1]! as int];
+          assert(arg_behavior != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession was null, expected non-null TaskRemovedBehaviorDto.');
           try {
             await api.createNavigationSession(
-                arg_abnormalTerminationReportingEnabled!);
+                arg_abnormalTerminationReportingEnabled!, arg_behavior!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

@@ -105,11 +105,16 @@ class MockTestNavigationSessionApi extends _i1.Mock
 
   @override
   _i4.Future<void> createNavigationSession(
-          bool? abnormalTerminationReportingEnabled) =>
+    bool? abnormalTerminationReportingEnabled,
+    _i2.TaskRemovedBehaviorDto? behavior,
+  ) =>
       (super.noSuchMethod(
         Invocation.method(
           #createNavigationSession,
-          [abnormalTerminationReportingEnabled],
+          [
+            abnormalTerminationReportingEnabled,
+            behavior,
+          ],
         ),
         returnValue: _i4.Future<void>.value(),
         returnValueForMissingStub: _i4.Future<void>.value(),

@@ -507,6 +507,26 @@ enum class LaneShapeDto(val raw: Int) {
   }
 }
 
+/** Determines how application should behave when a application task is removed. */
+enum class TaskRemovedBehaviorDto(val raw: Int) {
+  /**
+   * The default state, indicating that navigation guidance, location updates, and notification
+   * should persist after user removes the application task.
+   */
+  CONTINUESERVICE(0),
+  /**
+   * Indicates that navigation guidance, location updates, and notification should shut down
+   * immediately when the user removes the application task.
+   */
+  QUITSERVICE(1);
+
+  companion object {
+    fun ofRaw(raw: Int): TaskRemovedBehaviorDto? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
 /**
  * Object containing map options used to initialize Google Map view.
  *
@@ -5022,6 +5042,7 @@ interface NavigationSessionApi {
   /** General. */
   fun createNavigationSession(
     abnormalTerminationReportingEnabled: Boolean,
+    behavior: TaskRemovedBehaviorDto,
     callback: (Result<Unit>) -> Unit,
   )
 
@@ -5137,7 +5158,8 @@ interface NavigationSessionApi {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val abnormalTerminationReportingEnabledArg = args[0] as Boolean
-            api.createNavigationSession(abnormalTerminationReportingEnabledArg) {
+            val behaviorArg = TaskRemovedBehaviorDto.ofRaw(args[1] as Int)!!
+            api.createNavigationSession(abnormalTerminationReportingEnabledArg, behaviorArg) {
               result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {

@@ -372,6 +372,16 @@ enum LaneShapeDto: Int {
   case uTurnRight = 9
 }
 
+/// Determines how application should behave when a application task is removed.
+enum TaskRemovedBehaviorDto: Int {
+  /// The default state, indicating that navigation guidance,
+  /// location updates, and notification should persist after user removes the application task.
+  case continueService = 0
+  /// Indicates that navigation guidance, location updates, and notification should shut down
+  /// immediately when the user removes the application task.
+  case quitService = 1
+}
+
 /// Object containing map options used to initialize Google Map view.
 ///
 /// Generated class from Pigeon that represents data sent in messages.
@@ -4618,6 +4628,7 @@ class NavigationSessionApiCodec: FlutterStandardMessageCodec {
 protocol NavigationSessionApi {
   /// General.
   func createNavigationSession(abnormalTerminationReportingEnabled: Bool,
+                               behavior: TaskRemovedBehaviorDto,
                                completion: @escaping (Result<Void, Error>) -> Void)
   func isInitialized() throws -> Bool
   func cleanup() throws
@@ -4694,17 +4705,18 @@ enum NavigationSessionApiSetup {
       createNavigationSessionChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let abnormalTerminationReportingEnabledArg = args[0] as! Bool
-        api
-          .createNavigationSession(
-            abnormalTerminationReportingEnabled: abnormalTerminationReportingEnabledArg
-          ) { result in
-            switch result {
-            case .success:
-              reply(wrapResult(nil))
-            case let .failure(error):
-              reply(wrapError(error))
-            }
+        let behaviorArg = TaskRemovedBehaviorDto(rawValue: args[1] as! Int)!
+        api.createNavigationSession(
+          abnormalTerminationReportingEnabled: abnormalTerminationReportingEnabledArg,
+          behavior: behaviorArg
+        ) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case let .failure(error):
+            reply(wrapError(error))
           }
+        }
       }
     } else {
       createNavigationSessionChannel.setMessageHandler(nil)

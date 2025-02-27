@@ -206,3 +206,14 @@ extension ConvertNavigationViewOptions on NavigationViewOptions {
     return NavigationViewOptionsDto(navigationUIEnabledPreference: preference);
   }
 }
+
+extension ConvertTaskRemovedBehavior on TaskRemovedBehavior {
+  TaskRemovedBehaviorDto toDto() {
+    switch (this) {
+      case TaskRemovedBehavior.continueService:
+        return TaskRemovedBehaviorDto.continueService;
+      case TaskRemovedBehavior.quitService:
+        return TaskRemovedBehaviorDto.quitService;
+    }
+  }
+}

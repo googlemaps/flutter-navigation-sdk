@@ -1182,11 +1182,22 @@ class NavInfoDto {
   final int? timeToNextDestinationSeconds;
 }
 
+/// Determines how application should behave when a application task is removed.
+enum TaskRemovedBehaviorDto {
+  /// The default state, indicating that navigation guidance,
+  /// location updates, and notification should persist after user removes the application task.
+  continueService,
+
+  /// Indicates that navigation guidance, location updates, and notification should shut down immediately when the user removes the application task.
+  quitService,
+}
+
 @HostApi(dartHostTestHandler: 'TestNavigationSessionApi')
 abstract class NavigationSessionApi {
   /// General.
   @async
-  void createNavigationSession(bool abnormalTerminationReportingEnabled);
+  void createNavigationSession(bool abnormalTerminationReportingEnabled,
+      TaskRemovedBehaviorDto behavior);
   bool isInitialized();
   void cleanup();
   @async

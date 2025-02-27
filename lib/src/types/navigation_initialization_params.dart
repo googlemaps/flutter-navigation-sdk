@@ -1,4 +1,4 @@
-// Copyright 2023 Google LLC
+// Copyright 2025 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,17 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'circles.dart';
-export 'images.dart';
-export 'lat_lng.dart';
-export 'lat_lng_bounds.dart';
-export 'markers.dart';
-export 'navigation_destinations.dart';
-export 'navigation_initialization_params.dart';
-export 'navigation_view_types.dart';
-export 'navinfo.dart';
-export 'polygons.dart';
-export 'polylines.dart';
-export 'simulation.dart';
-export 'stroke_patterns.dart';
-export 'view_initialization_options.dart';
+/// Determines how application should behave when a application task is removed.
+///
+/// Android only.
+/// {@category Navigation}
+enum TaskRemovedBehavior {
+  /// The default state, indicating that navigation guidance,
+  /// location updates, and notification should persist after user removes the application task.
+  continueService,
+
+  /// Indicates that navigation guidance, location updates, and notification should shut down immediately when the user removes the application task.
+  quitService,
+}

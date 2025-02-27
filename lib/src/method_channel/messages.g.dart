@@ -430,6 +430,16 @@ enum LaneShapeDto {
   uTurnRight,
 }
 
+/// Determines how application should behave when a application task is removed.
+enum TaskRemovedBehaviorDto {
+  /// The default state, indicating that navigation guidance,
+  /// location updates, and notification should persist after user removes the application task.
+  continueService,
+
+  /// Indicates that navigation guidance, location updates, and notification should shut down immediately when the user removes the application task.
+  quitService,
+}
+
 /// Object containing map options used to initialize Google Map view.
 class MapOptionsDto {
   MapOptionsDto({
@@ -5346,8 +5356,8 @@ class NavigationSessionApi {
       _NavigationSessionApiCodec();
 
   /// General.
-  Future<void> createNavigationSession(
-      bool abnormalTerminationReportingEnabled) async {
+  Future<void> createNavigationSession(bool abnormalTerminationReportingEnabled,
+      TaskRemovedBehaviorDto behavior) async {
     const String __pigeon_channelName =
         'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession';
     final BasicMessageChannel<Object?> __pigeon_channel =
@@ -5356,8 +5366,9 @@ class NavigationSessionApi {
       pigeonChannelCodec,
       binaryMessenger: __pigeon_binaryMessenger,
     );
-    final List<Object?>? __pigeon_replyList = await __pigeon_channel
-        .send(<Object?>[abnormalTerminationReportingEnabled]) as List<Object?>?;
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel.send(
+            <Object?>[abnormalTerminationReportingEnabled, behavior.index])
+        as List<Object?>?;
     if (__pigeon_replyList == null) {
       throw _createConnectionError(__pigeon_channelName);
     } else if (__pigeon_replyList.length > 1) {

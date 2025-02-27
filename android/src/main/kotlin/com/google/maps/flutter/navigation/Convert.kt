@@ -45,6 +45,7 @@ import com.google.android.libraries.navigation.NavigationRoadStretchRenderingDat
 import com.google.android.libraries.navigation.NavigationTrafficData
 import com.google.android.libraries.navigation.Navigator
 import com.google.android.libraries.navigation.Navigator.AudioGuidance
+import com.google.android.libraries.navigation.Navigator.TaskRemovedBehavior
 import com.google.android.libraries.navigation.RouteSegment
 import com.google.android.libraries.navigation.RoutingOptions
 import com.google.android.libraries.navigation.RoutingOptions.RoutingStrategy
@@ -1053,6 +1054,16 @@ object Convert {
     } else {
       // For default marker icon
       ImageDescriptorDto()
+    }
+  }
+
+  fun taskRemovedBehaviorDtoToTaskRemovedBehavior(
+    behavior: TaskRemovedBehaviorDto?
+  ): @TaskRemovedBehavior Int {
+    return when (behavior) {
+      TaskRemovedBehaviorDto.CONTINUESERVICE -> TaskRemovedBehavior.CONTINUE_SERVICE
+      TaskRemovedBehaviorDto.QUITSERVICE -> TaskRemovedBehavior.QUIT_SERVICE
+      else -> TaskRemovedBehavior.CONTINUE_SERVICE
     }
   }
 }

@@ -31,6 +31,7 @@ import com.google.android.libraries.navigation.NavigationApi.NavigatorListener
 import com.google.android.libraries.navigation.NavigationUpdatesOptions
 import com.google.android.libraries.navigation.NavigationUpdatesOptions.GeneratedStepImagesType
 import com.google.android.libraries.navigation.Navigator
+import com.google.android.libraries.navigation.Navigator.TaskRemovedBehavior
 import com.google.android.libraries.navigation.RoadSnappedLocationProvider
 import com.google.android.libraries.navigation.RouteSegment
 import com.google.android.libraries.navigation.RoutingOptions
@@ -43,7 +44,6 @@ import com.google.android.libraries.navigation.TermsAndConditionsUIParams
 import com.google.android.libraries.navigation.TimeAndDistance
 import com.google.android.libraries.navigation.Waypoint
 import com.google.maps.flutter.navigation.Convert.convertTravelModeFromDto
-import com.google.maps.flutter.navigation.GoogleMapsNavigationSessionManager.Companion.navigationReadyListener
 import io.flutter.plugin.common.BinaryMessenger
 import java.lang.ref.WeakReference
 
@@ -117,6 +117,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   private var weakActivity: WeakReference<Activity>? = null
   private var turnByTurnEventsEnabled: Boolean = false
   private var weakLifecycleOwner: WeakReference<LifecycleOwner>? = null
+  private var taskRemovedBehavior: @TaskRemovedBehavior Int = 0
 
   override fun onCreate(owner: LifecycleOwner) {
     weakLifecycleOwner = WeakReference(owner)
@@ -170,6 +171,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   /** Creates Navigator instance. */
   fun createNavigationSession(
     abnormalTerminationReportingEnabled: Boolean,
+    behavior: TaskRemovedBehaviorDto,
     callback: (Result<Unit>) -> Unit,
   ) {
     if (navigator != null) {
@@ -180,6 +182,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
       callback(Result.success(Unit))
       return
     }
+    taskRemovedBehavior = Convert.taskRemovedBehaviorDtoToTaskRemovedBehavior(behavior)
 
     // Align API behavior with iOS:
     // If the terms haven't yet been accepted throw an error.
@@ -202,6 +205,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
       object : NavigatorListener {
         override fun onNavigatorReady(newNavigator: Navigator) {
           navigator = newNavigator
+          navigator?.setTaskRemovedBehavior(taskRemovedBehavior)
           registerNavigationListeners()
           isNavigationSessionInitialized = true
           navigationReadyListener?.onNavigationReady(true)
