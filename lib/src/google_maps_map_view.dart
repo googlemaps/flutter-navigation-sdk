@@ -355,6 +355,31 @@ abstract class MapViewState<T extends GoogleMapsBaseMapView> extends State<T> {
         widget.onCircleClicked?.call(event.circleId);
       });
     });
+
+    if (widget.onCameraMoveStarted != null ||
+        widget.onCameraMove != null ||
+        widget.onCameraIdle != null) {
+      GoogleMapsNavigationPlatform.instance.viewAPI
+          .registerOnCameraChangedListener(viewId: viewId);
+    }
+    GoogleMapsNavigationPlatform.instance.viewAPI
+        .getCameraChangedEventStream(viewId: viewId)
+        .listen((CameraChangedEvent event) {
+      switch (event.eventType) {
+        case CameraEventType.moveStartedByApi:
+          widget.onCameraMoveStarted?.call(event.position, false);
+        case CameraEventType.moveStartedByGesture:
+          widget.onCameraMoveStarted?.call(event.position, true);
+        case CameraEventType.onCameraMove:
+          widget.onCameraMove?.call(event.position);
+        case CameraEventType.onCameraIdle:
+          widget.onCameraIdle?.call(event.position);
+        case CameraEventType.onCameraStartedFollowingLocation:
+          widget.onCameraStartedFollowingLocation?.call(event.position);
+        case CameraEventType.onCameraStoppedFollowingLocation:
+          widget.onCameraStoppedFollowingLocation?.call(event.position);
+      }
+    });
   }
 }
 

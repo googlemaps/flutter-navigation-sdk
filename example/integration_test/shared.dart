@@ -292,31 +292,35 @@ Future<GoogleMapViewController> getMapViewControllerForTestMapType(
         onMyLocationButtonClicked: onMyLocationButtonClicked,
         onMyLocationClicked: onMyLocationClicked,
         onPolygonClicked: onPolygonClicked,
-        onPolylineClicked: onPolygonClicked,
+        onPolylineClicked: onPolylineClicked,
+        onCameraIdle: onCameraIdle,
       ); // Instantiate a regular map.
       break;
 
     /// Set up navigation map.
     case TestMapType.navigationView:
-      viewController = await startNavigationWithoutDestination($,
-          initializeNavigation: initializeNavigation,
-          simulateLocation: simulateLocation,
-          onMarkerClicked: onMarkerClicked,
-          onCircleClicked: onCircleClicked,
-          onMapClicked: onMapClicked,
-          onMapLongClicked: onMapLongClicked,
-          onMarkerDrag: onMarkerDrag,
-          onMarkerDragEnd: onMarkerDragEnd,
-          onMarkerDragStart: onMarkerDragStart,
-          onMarkerInfoWindowClicked: onMarkerInfoWindowClicked,
-          onMarkerInfoWindowClosed: onMarkerInfoWindowClosed,
-          onMarkerInfoWindowLongClicked: onMarkerInfoWindowLongClicked,
-          onMyLocationButtonClicked: onMyLocationButtonClicked,
-          onMyLocationClicked: onMyLocationClicked,
-          onPolygonClicked: onPolygonClicked,
-          onPolylineClicked: onPolygonClicked,
-          onRecenterButtonClicked:
-              onRecenterButtonClicked); // Instantiate a navigation map.
+      viewController = await startNavigationWithoutDestination(
+        $,
+        initializeNavigation: initializeNavigation,
+        simulateLocation: simulateLocation,
+        onMarkerClicked: onMarkerClicked,
+        onCircleClicked: onCircleClicked,
+        onMapClicked: onMapClicked,
+        onMapLongClicked: onMapLongClicked,
+        onMarkerDrag: onMarkerDrag,
+        onMarkerDragEnd: onMarkerDragEnd,
+        onMarkerDragStart: onMarkerDragStart,
+        onMarkerInfoWindowClicked: onMarkerInfoWindowClicked,
+        onMarkerInfoWindowClosed: onMarkerInfoWindowClosed,
+        onMarkerInfoWindowLongClicked: onMarkerInfoWindowLongClicked,
+        onMyLocationButtonClicked: onMyLocationButtonClicked,
+        onMyLocationClicked: onMyLocationClicked,
+        onNavigationUIEnabledChanged: onNavigationUIEnabledChanged,
+        onPolygonClicked: onPolygonClicked,
+        onPolylineClicked: onPolylineClicked,
+        onRecenterButtonClicked: onRecenterButtonClicked,
+        onCameraIdle: onCameraIdle,
+      ); // Instantiate a navigation map.
       break;
   }
   return viewController;
@@ -377,8 +381,9 @@ Future<GoogleNavigationViewController> startNavigationWithoutDestination(
       onMyLocationClicked: onMyLocationClicked,
       onNavigationUIEnabledChanged: onNavigationUIEnabledChanged,
       onPolygonClicked: onPolygonClicked,
-      onPolylineClicked: onPolygonClicked,
+      onPolylineClicked: onPolylineClicked,
       onRecenterButtonClicked: onRecenterButtonClicked,
+      onCameraIdle: onCameraIdle,
     ),
   );
 
@@ -451,8 +456,9 @@ Future<GoogleMapViewController> startMapView(
       onMyLocationButtonClicked: onMyLocationButtonClicked,
       onMyLocationClicked: onMyLocationClicked,
       onPolygonClicked: onPolygonClicked,
-      onPolylineClicked: onPolygonClicked,
+      onPolylineClicked: onPolylineClicked,
       onRecenterButtonClicked: onRecenterButtonClicked,
+      onCameraIdle: onCameraIdle,
     ),
   );
 
