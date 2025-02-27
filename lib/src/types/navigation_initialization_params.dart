@@ -13,6 +13,7 @@
 // limitations under the License.
 
 /// Determines how application should behave when a application task is removed.
+/// Android only.
 /// {@category Navigation}
 enum TaskRemovedBehavior {
   /// The default state, indicating that navigation guidance,

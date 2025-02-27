@@ -52,7 +52,7 @@ class GoogleMapsNavigator {
   static Future<void> initializeNavigationSession(
       {bool abnormalTerminationReportingEnabled = true,
       TaskRemovedBehavior taskRemovedBehavior =
-          TaskRemovedBehavior.quitService}) async {
+          TaskRemovedBehavior.continueService}) async {
     await GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .createNavigationSession(
             abnormalTerminationReportingEnabled, taskRemovedBehavior);
