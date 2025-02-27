@@ -34,4 +34,3 @@ jobs:
       - uses: googleapis/release-please-action@d1a8f221d7723166f48a584aebba00ef3f6febec
         with:
           token: ${{ secrets.SYNCED_GITHUB_TOKEN_REPO }}
-          release-type: dart
