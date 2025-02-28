@@ -1,3 +1,5 @@
+# Changelog
+
 ## [0.5.1](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.5.0...0.5.1) (2025-02-27)
 
 
