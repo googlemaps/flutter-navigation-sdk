@@ -1374,6 +1374,364 @@ void main() {
           expect(viewId, 0);
         });
       });
+
+      group('Polylines', () {
+        test('get polylines', () async {
+          // Create polyline
+          const Polyline polyline =
+              Polyline(polylineId: 'Polyline_0', options: PolylineOptions());
+
+          // Mock api response
+          final PolylineDto messagePolyline = PolylineDto(
+              polylineId: 'Polyline_0', options: polyline.options.toDto());
+          when(viewMockApi.getPolylines(any))
+              .thenAnswer((Invocation _) => <PolylineDto>[messagePolyline]);
+
+          // Get polylines
+          final List<Polyline?> polylinesOut =
+              await GoogleMapsNavigationPlatform.instance.viewAPI
+                  .getPolylines(viewId: 0);
+
+          // Verify correct message sent from view api
+          final VerificationResult result =
+              verify(viewMockApi.getPolylines(captureAny));
+          final int viewId = result.captured[0] as int;
+
+          // Verify response polyline options
+          expect(viewId, 0);
+          expect(polyline.options, polylinesOut[0]!.options);
+        });
+
+        test('add polyline', () async {
+          // Create options
+          const PolylineOptions optionsIn = PolylineOptions(
+              points: <LatLng>[
+                LatLng(latitude: 40.0, longitude: 50.0),
+                LatLng(latitude: 41.0, longitude: 51.0)
+              ],
+              clickable: true,
+              strokeColor: Colors.blue,
+              strokeJointType: StrokeJointType.round,
+              geodesic: true,
+              strokeWidth: 5,
+              visible: true,
+              zIndex: 3);
+
+          // Mock api response
+          final PolylineDto polylineIn =
+              PolylineDto(polylineId: 'Polyline_0', options: optionsIn.toDto());
+          when(viewMockApi.addPolylines(any, any))
+              .thenAnswer((Invocation _) => <PolylineDto>[polylineIn]);
+
+          // Add polyline
+          final List<Polyline?> polylinesOut =
+              await GoogleMapsNavigationPlatform.instance.viewAPI.addPolylines(
+                  viewId: 0, polylineOptions: <({
+            PolylineOptions options,
+            String? polylineId
+          })>[(options: optionsIn, polylineId: null)]);
+
+          // Verify correct message sent from view api
+          final VerificationResult result =
+              verify(viewMockApi.addPolylines(captureAny, captureAny));
+          final List<PolylineDto?> polylinesInMessage =
+              result.captured[1] as List<PolylineDto?>;
+
+          // Verify message and response polyline options
+          expect(polylineIn.polylineId, polylinesInMessage[0]?.polylineId);
+          expect(optionsIn, polylinesInMessage[0]?.options.toPolylineOptions());
+          expect(optionsIn, polylinesOut[0]!.options);
+        });
+
+        test('add polyline with custom id', () async {
+          // Create options
+          const PolylineOptions optionsIn = PolylineOptions(
+              points: <LatLng>[
+                LatLng(latitude: 40.0, longitude: 50.0),
+                LatLng(latitude: 41.0, longitude: 51.0)
+              ],
+              clickable: true,
+              strokeColor: Colors.blue,
+              strokeJointType: StrokeJointType.round,
+              geodesic: true,
+              strokeWidth: 5,
+              visible: true,
+              zIndex: 3);
+
+          // Mock api response
+          final PolylineDto polylineIn = PolylineDto(
+            polylineId: 'CustomPolylineID_0',
+            options: optionsIn.toDto(),
+          );
+          when(viewMockApi.addPolylines(any, any))
+              .thenAnswer((Invocation _) => <PolylineDto>[polylineIn]);
+
+          // Add polyline
+          final List<Polyline?> polylinesOut =
+              await GoogleMapsNavigationPlatform.instance.viewAPI.addPolylines(
+                  viewId: 0, polylineOptions: <({
+            PolylineOptions options,
+            String? polylineId
+          })>[(options: optionsIn, polylineId: 'CustomPolylineID_0')]);
+
+          // Verify correct message sent from view api
+          final VerificationResult result =
+              verify(viewMockApi.addPolylines(captureAny, captureAny));
+          final List<PolylineDto?> polylinesInMessage =
+              result.captured[1] as List<PolylineDto?>;
+
+          // Verify message and response polyline options
+          expect(polylineIn.polylineId, polylinesInMessage[0]?.polylineId);
+          expect(optionsIn, polylinesInMessage[0]?.options.toPolylineOptions());
+          expect(optionsIn, polylinesOut[0]!.options);
+        });
+
+        test('update polyline', () async {
+          // Create polyline
+          const Polyline polyline =
+              Polyline(polylineId: 'Polyline_0', options: PolylineOptions());
+
+          // Mock api response
+          final PolylineDto messagePolyline = PolylineDto(
+              polylineId: 'Polyline_0', options: polyline.options.toDto());
+          when(viewMockApi.updatePolylines(any, any))
+              .thenAnswer((Invocation _) => <PolylineDto>[messagePolyline]);
+
+          // Edit polyline
+          final List<Polyline?> polylinesOut =
+              await GoogleMapsNavigationPlatform.instance.viewAPI
+                  .updatePolylines(viewId: 0, polylines: <Polyline>[polyline]);
+
+          // Verify correct message sent from view api
+          final VerificationResult result =
+              verify(viewMockApi.updatePolylines(captureAny, captureAny));
+          final List<PolylineDto?> polylinesInMessage =
+              result.captured[1] as List<PolylineDto?>;
+
+          // Verify message and response polyline options
+          expect(polyline.polylineId, polylinesInMessage[0]?.polylineId);
+          expect(polyline.options,
+              polylinesInMessage[0]?.options.toPolylineOptions());
+          expect(polyline.options, polylinesOut[0]!.options);
+        });
+
+        test('remove polyline', () async {
+          // Create polyline
+          const Polyline polyline =
+              Polyline(polylineId: 'Polyline_0', options: PolylineOptions());
+
+          // Mock api response
+          when(viewMockApi.removePolylines(any, any))
+              .thenAnswer((Invocation _) async => ());
+
+          // Remove polyline
+          await GoogleMapsNavigationPlatform.instance.viewAPI
+              .removePolylines(viewId: 0, polylines: <Polyline>[polyline]);
+
+          // Verify correct message sent from view api
+          final VerificationResult result =
+              verify(viewMockApi.removePolylines(captureAny, captureAny));
+          final List<PolylineDto?> polylinesInMessage =
+              result.captured[1] as List<PolylineDto?>;
+
+          // Verify message
+          expect(polyline.polylineId, polylinesInMessage[0]?.polylineId);
+        });
+
+        test('clear polylines', () async {
+          // Mock api response
+          when(viewMockApi.clearPolylines(any))
+              .thenAnswer((Invocation _) async => ());
+
+          // Clear polylines
+          await GoogleMapsNavigationPlatform.instance.viewAPI
+              .clearPolylines(viewId: 0);
+
+          // Verify correct message sent from view api
+          final VerificationResult result =
+              verify(viewMockApi.clearPolylines(captureAny));
+          final int viewId = result.captured[0] as int;
+
+          // Verify message
+          expect(viewId, 0);
+        });
+      });
+
+      group('Circles', () {
+        test('get circles', () async {
+          // Create circle
+          const Circle circle =
+              Circle(circleId: 'Circle_0', options: CircleOptions());
+
+          // Mock api response
+          final CircleDto messageCircle =
+              CircleDto(circleId: 'Circle_0', options: circle.options.toDto());
+          when(viewMockApi.getCircles(any))
+              .thenAnswer((Invocation _) => <CircleDto>[messageCircle]);
+
+          // Get circles
+          final List<Circle?> circlesOut = await GoogleMapsNavigationPlatform
+              .instance.viewAPI
+              .getCircles(viewId: 0);
+
+          // Verify correct message sent from view api
+          final VerificationResult result =
+              verify(viewMockApi.getCircles(captureAny));
+          final int viewId = result.captured[0] as int;
+
+          // Verify response circle options
+          expect(viewId, 0);
+          expect(circle.options, circlesOut[0]!.options);
+        });
+
+        test('add circle', () async {
+          // Create options
+          const CircleOptions optionsIn = CircleOptions(
+              position: LatLng(latitude: 40.0, longitude: 50.0),
+              clickable: true,
+              fillColor: Colors.green,
+              radius: 1000.0,
+              strokeColor: Colors.red,
+              strokeWidth: 3,
+              visible: true,
+              zIndex: 2);
+
+          // Mock api response
+          final CircleDto circleIn =
+              CircleDto(circleId: 'Circle_0', options: optionsIn.toDto());
+          when(viewMockApi.addCircles(any, any))
+              .thenAnswer((Invocation _) => <CircleDto>[circleIn]);
+
+          // Add circle
+          final List<Circle?> circlesOut = await GoogleMapsNavigationPlatform
+              .instance.viewAPI
+              .addCircles(viewId: 0, circleOptions: <({
+            CircleOptions options,
+            String? circleId
+          })>[(options: optionsIn, circleId: null)]);
+
+          // Verify correct message sent from view api
+          final VerificationResult result =
+              verify(viewMockApi.addCircles(captureAny, captureAny));
+          final List<CircleDto?> circlesInMessage =
+              result.captured[1] as List<CircleDto?>;
+
+          // Verify message and response circle options
+          expect(circleIn.circleId, circlesInMessage[0]?.circleId);
+          expect(optionsIn, circlesInMessage[0]?.options.toCircleOptions());
+          expect(optionsIn, circlesOut[0]!.options);
+        });
+
+        test('add circle with custom id', () async {
+          // Create options
+          const CircleOptions optionsIn = CircleOptions(
+              position: LatLng(latitude: 40.0, longitude: 50.0),
+              clickable: true,
+              fillColor: Colors.green,
+              radius: 1000.0,
+              strokeColor: Colors.red,
+              strokeWidth: 3,
+              visible: true,
+              zIndex: 2);
+
+          // Mock api response
+          final CircleDto circleIn = CircleDto(
+            circleId: 'CustomCircleID_0',
+            options: optionsIn.toDto(),
+          );
+          when(viewMockApi.addCircles(any, any))
+              .thenAnswer((Invocation _) => <CircleDto>[circleIn]);
+
+          // Add circle
+          final List<Circle?> circlesOut = await GoogleMapsNavigationPlatform
+              .instance.viewAPI
+              .addCircles(viewId: 0, circleOptions: <({
+            CircleOptions options,
+            String? circleId
+          })>[(options: optionsIn, circleId: 'CustomCircleID_0')]);
+
+          // Verify correct message sent from view api
+          final VerificationResult result =
+              verify(viewMockApi.addCircles(captureAny, captureAny));
+          final List<CircleDto?> circlesInMessage =
+              result.captured[1] as List<CircleDto?>;
+
+          // Verify message and response circle options
+          expect(circleIn.circleId, circlesInMessage[0]?.circleId);
+          expect(optionsIn, circlesInMessage[0]?.options.toCircleOptions());
+          expect(optionsIn, circlesOut[0]!.options);
+        });
+
+        test('update circle', () async {
+          // Create circle
+          const Circle circle =
+              Circle(circleId: 'Circle_0', options: CircleOptions());
+
+          // Mock api response
+          final CircleDto messageCircle =
+              CircleDto(circleId: 'Circle_0', options: circle.options.toDto());
+          when(viewMockApi.updateCircles(any, any))
+              .thenAnswer((Invocation _) => <CircleDto>[messageCircle]);
+
+          // Edit circle
+          final List<Circle?> circlesOut = await GoogleMapsNavigationPlatform
+              .instance.viewAPI
+              .updateCircles(viewId: 0, circles: <Circle>[circle]);
+
+          // Verify correct message sent from view api
+          final VerificationResult result =
+              verify(viewMockApi.updateCircles(captureAny, captureAny));
+          final List<CircleDto?> circlesInMessage =
+              result.captured[1] as List<CircleDto?>;
+
+          // Verify message and response circle options
+          expect(circle.circleId, circlesInMessage[0]?.circleId);
+          expect(
+              circle.options, circlesInMessage[0]?.options.toCircleOptions());
+          expect(circle.options, circlesOut[0]!.options);
+        });
+
+        test('remove circle', () async {
+          // Create circle
+          const Circle circle =
+              Circle(circleId: 'Circle_0', options: CircleOptions());
+
+          // Mock api response
+          when(viewMockApi.removeCircles(any, any))
+              .thenAnswer((Invocation _) async => ());
+
+          // Remove circle
+          await GoogleMapsNavigationPlatform.instance.viewAPI
+              .removeCircles(viewId: 0, circles: <Circle>[circle]);
+
+          // Verify correct message sent from view api
+          final VerificationResult result =
+              verify(viewMockApi.removeCircles(captureAny, captureAny));
+          final List<CircleDto?> circlesInMessage =
+              result.captured[1] as List<CircleDto?>;
+
+          // Verify message
+          expect(circle.circleId, circlesInMessage[0]?.circleId);
+        });
+
+        test('clear circles', () async {
+          // Mock api response
+          when(viewMockApi.clearCircles(any))
+              .thenAnswer((Invocation _) async => ());
+
+          // Clear circles
+          await GoogleMapsNavigationPlatform.instance.viewAPI
+              .clearCircles(viewId: 0);
+
+          // Verify correct message sent from view api
+          final VerificationResult result =
+              verify(viewMockApi.clearCircles(captureAny));
+          final int viewId = result.captured[0] as int;
+
+          // Verify message
+          expect(viewId, 0);
+        });
+      });
     });
   }
 }
