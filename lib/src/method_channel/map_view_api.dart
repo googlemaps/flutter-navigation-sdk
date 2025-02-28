@@ -31,33 +31,37 @@ class MapViewAPIImpl {
       StreamController<_ViewIdEventWrapper>.broadcast();
 
   /// Keep track of marker count, used to generate marker ID's.
+  /// if markerId is provided, it will be used as the ID.
   int _markerCounter = 0;
-  String _createMarkerId() {
-    final String markerId = 'Marker_$_markerCounter';
+  String _createMarkerIdIfNeeded({required String? markerId}) {
+    markerId ??= 'Marker_$_markerCounter';
     _markerCounter += 1;
     return markerId;
   }
 
   /// Keep track of polygon count, used to generate polygon ID's.
+  /// if polygonId is provided, it will be used as the ID.
   int _polygonCounter = 0;
-  String _createPolygonId() {
-    final String polygonId = 'Polygon_$_polygonCounter';
+  String _createPolygonIdIfNeeded({required String? polygonId}) {
+    polygonId ??= 'Polygon_$_polygonCounter';
     _polygonCounter += 1;
     return polygonId;
   }
 
   /// Keep track of polyline count, used to generate polyline ID's.
+  /// if polylineId is provided, it will be used as the ID.
   int _polylineCounter = 0;
-  String _createPolylineId() {
-    final String polylineId = 'Polyline_$_polylineCounter';
+  String _createPolylineIdIfNeeded({required String? polylineId}) {
+    polylineId ??= 'Polyline_$_polylineCounter';
     _polylineCounter += 1;
     return polylineId;
   }
 
   /// Keep track of circle count, used to generate circle ID's.
+  /// if circleId is provided, it will be used as the ID.
   int _circleCounter = 0;
-  String _createCircleId() {
-    final String circleId = 'Circle_$_circleCounter';
+  String _createCircleIdIfNeeded({required String? circleId}) {
+    circleId ??= 'Circle_$_circleCounter';
     _circleCounter += 1;
     return circleId;
   }
@@ -624,15 +628,22 @@ class MapViewAPIImpl {
 
   /// Add markers to map view.
   Future<List<Marker>> addMarkers(
-      {required int viewId, required List<MarkerOptions> markerOptions}) async {
+      {required int viewId,
+      required List<({MarkerOptions options, String? markerId})>
+          markerOptions}) async {
     // Convert options to pigeon format
-    final List<MarkerOptionsDto> options =
-        markerOptions.map((MarkerOptions opt) => opt.toDto()).toList();
-
-    // Create marker objects with new ID's
+    final List<({MarkerOptionsDto options, String? markerId})> options =
+        markerOptions
+            .map((e) => (options: e.options.toDto(), markerId: e.markerId))
+            .toList();
+    // Create marker objects
+    // Create new ID's for markers if not provided
     final List<MarkerDto> markersToAdd = options
-        .map((MarkerOptionsDto options) =>
-            MarkerDto(markerId: _createMarkerId(), options: options))
+        .map(
+          (e) => MarkerDto(
+              markerId: _createMarkerIdIfNeeded(markerId: e.markerId),
+              options: e.options),
+        )
         .toList();
 
     // Add markers to map
@@ -709,15 +720,20 @@ class MapViewAPIImpl {
   /// Add polygons to map view.
   Future<List<Polygon?>> addPolygons(
       {required int viewId,
-      required List<PolygonOptions> polygonOptions}) async {
+      required List<({PolygonOptions options, String? polygonId})>
+          polygonOptions}) async {
     // Convert options to pigeon format
-    final List<PolygonOptionsDto> options =
-        polygonOptions.map((PolygonOptions opt) => opt.toDto()).toList();
+    final List<({PolygonOptionsDto options, String? polygonId})> options =
+        polygonOptions
+            .map((e) => (options: e.options.toDto(), polygonId: e.polygonId))
+            .toList();
 
-    // Create polygon objects with new ID's
+    // Create polygon objects
+    // Create new ID's for polygons if not provided
     final List<PolygonDto> polygonsToAdd = options
-        .map((PolygonOptionsDto options) =>
-            PolygonDto(polygonId: _createPolygonId(), options: options))
+        .map((e) => PolygonDto(
+            polygonId: _createPolygonIdIfNeeded(polygonId: e.polygonId),
+            options: e.options))
         .toList();
 
     // Add polygons to map
@@ -789,15 +805,20 @@ class MapViewAPIImpl {
   /// Add polylines to map view.
   Future<List<Polyline?>> addPolylines(
       {required int viewId,
-      required List<PolylineOptions> polylineOptions}) async {
+      required List<({PolylineOptions options, String? polylineId})>
+          polylineOptions}) async {
     // Convert options to pigeon format
-    final List<PolylineOptionsDto> options =
-        polylineOptions.map((PolylineOptions opt) => opt.toDto()).toList();
+    final List<({PolylineOptionsDto options, String? polylineId})> options =
+        polylineOptions
+            .map((e) => (options: e.options.toDto(), polylineId: e.polylineId))
+            .toList();
 
-    // Create polyline objects with new ID's
+    // Create polyline objects
+    // Create new ID's for polylines if not provided
     final List<PolylineDto> polylinesToAdd = options
-        .map((PolylineOptionsDto options) =>
-            PolylineDto(polylineId: _createPolylineId(), options: options))
+        .map((e) => PolylineDto(
+            polylineId: _createPolylineIdIfNeeded(polylineId: e.polylineId),
+            options: e.options))
         .toList();
 
     // Add polylines to map
@@ -870,15 +891,21 @@ class MapViewAPIImpl {
 
   /// Add circles to map view.
   Future<List<Circle?>> addCircles(
-      {required int viewId, required List<CircleOptions> options}) async {
+      {required int viewId,
+      required List<({CircleOptions options, String? circleId})>
+          circleOptions}) async {
     // Convert options to pigeon format
-    final List<CircleOptionsDto> optionsDto =
-        options.map((CircleOptions opt) => opt.toDto()).toList();
+    final List<({CircleOptionsDto options, String? circleId})> options =
+        circleOptions
+            .map((e) => (options: e.options.toDto(), circleId: e.circleId))
+            .toList();
 
-    // Create circle objects with new ID's
-    final List<CircleDto> circlesToAdd = optionsDto
-        .map((CircleOptionsDto options) =>
-            CircleDto(circleId: _createCircleId(), options: options))
+    // Create circle objects
+    // Create new ID's for circles if not provided
+    final List<CircleDto> circlesToAdd = options
+        .map((e) => CircleDto(
+            circleId: _createCircleIdIfNeeded(circleId: e.circleId),
+            options: e.options))
         .toList();
 
     // Add circles to map

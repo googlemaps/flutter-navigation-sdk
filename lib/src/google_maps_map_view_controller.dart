@@ -227,6 +227,15 @@ class GoogleMapViewController {
 
   /// Add markers to the map view.
   Future<List<Marker?>> addMarkers(List<MarkerOptions> markerOptions) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI.addMarkers(
+        viewId: _viewId,
+        markerOptions:
+            markerOptions.map((e) => (options: e, markerId: null)).toList());
+  }
+
+  // Add markers to the map view with custom id
+  Future<List<Marker?>> addMarkersWithCustomId(
+      List<({MarkerOptions options, String? markerId})> markerOptions) {
     return GoogleMapsNavigationPlatform.instance.viewAPI
         .addMarkers(viewId: _viewId, markerOptions: markerOptions);
   }
@@ -265,6 +274,15 @@ class GoogleMapViewController {
 
   /// Add polygons to the map view.
   Future<List<Polygon?>> addPolygons(List<PolygonOptions> polygonOptions) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI.addPolygons(
+        viewId: _viewId,
+        polygonOptions:
+            polygonOptions.map((e) => (options: e, polygonId: null)).toList());
+  }
+
+  // Add polygons to the map view with custom id
+  Future<List<Polygon?>> addPolygonsWithCustomId(
+      List<({PolygonOptions options, String? polygonId})> polygonOptions) {
     return GoogleMapsNavigationPlatform.instance.viewAPI
         .addPolygons(viewId: _viewId, polygonOptions: polygonOptions);
   }
@@ -303,6 +321,16 @@ class GoogleMapViewController {
 
   /// Add polylines to the map view.
   Future<List<Polyline?>> addPolylines(List<PolylineOptions> polylineOptions) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI.addPolylines(
+        viewId: _viewId,
+        polylineOptions: (polylineOptions
+            .map((e) => (options: e, polylineId: null))
+            .toList()));
+  }
+
+  // Add polylines to the map view with custom id
+  Future<List<Polyline?>> addPolylinesWithCustomId(
+      List<({PolylineOptions options, String? polylineId})> polylineOptions) {
     return GoogleMapsNavigationPlatform.instance.viewAPI
         .addPolylines(viewId: _viewId, polylineOptions: polylineOptions);
   }
@@ -341,8 +369,17 @@ class GoogleMapViewController {
 
   /// Add circles to the map view.
   Future<List<Circle?>> addCircles(List<CircleOptions> options) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI.addCircles(
+        viewId: _viewId,
+        circleOptions:
+            options.map((e) => (options: e, circleId: null)).toList());
+  }
+
+  // Add circles to the map view with custom id
+  Future<List<Circle?>> addCirclesWithCustomId(
+      List<({CircleOptions options, String? circleId})> circleOptions) {
     return GoogleMapsNavigationPlatform.instance.viewAPI
-        .addCircles(viewId: _viewId, options: options);
+        .addCircles(viewId: _viewId, circleOptions: circleOptions);
   }
 
   /// Update circles to the map view.
