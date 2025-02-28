@@ -1046,7 +1046,10 @@ void main() {
           // Add marker
           final List<Marker?> markersOut = await GoogleMapsNavigationPlatform
               .instance.viewAPI
-              .addMarkers(viewId: 0, markerOptions: <MarkerOptions>[optionsIn]);
+              .addMarkers(viewId: 0, markerOptions: <({
+            MarkerOptions options,
+            String? markerId
+          })>[(options: optionsIn, markerId: null)]);
 
           // Verify correct message sent from view api
           final VerificationResult result =
@@ -1197,9 +1200,12 @@ void main() {
               .thenAnswer((Invocation _) => <PolygonDto>[polygonIn]);
 
           // Add polygon
-          final List<Polygon?> polygonsOut =
-              await GoogleMapsNavigationPlatform.instance.viewAPI.addPolygons(
-                  viewId: 0, polygonOptions: <PolygonOptions>[optionsIn]);
+          final List<Polygon?> polygonsOut = await GoogleMapsNavigationPlatform
+              .instance.viewAPI
+              .addPolygons(viewId: 0, polygonOptions: <({
+            PolygonOptions options,
+            String? polygonId
+          })>[(options: optionsIn, polygonId: null)]);
 
           // Verify correct message sent from view api
           final VerificationResult result =
