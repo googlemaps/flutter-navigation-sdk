@@ -1063,6 +1063,47 @@ void main() {
           expect(optionsIn, markersOut[0]!.options);
         });
 
+        test('add marker with custom id', () async {
+          // Create options
+          const MarkerOptions optionsIn = MarkerOptions(
+              alpha: 0.5,
+              anchor: MarkerAnchor(u: 0.1, v: 0.2),
+              draggable: true,
+              flat: true,
+              consumeTapEvents: true,
+              position: LatLng(latitude: 50, longitude: 60),
+              rotation: 70,
+              infoWindow: InfoWindow(title: 'Title', snippet: 'Snippet'),
+              zIndex: 2);
+
+          // Mock api response
+          final MarkerDto markerIn = MarkerDto(
+            markerId: 'CustomMarkerID_0',
+            options: optionsIn.toDto(),
+          );
+          when(viewMockApi.addMarkers(any, any))
+              .thenAnswer((Invocation _) => <MarkerDto>[markerIn]);
+
+          // Add marker
+          final List<Marker?> markersOut = await GoogleMapsNavigationPlatform
+              .instance.viewAPI
+              .addMarkers(viewId: 0, markerOptions: <({
+            MarkerOptions options,
+            String? markerId
+          })>[(options: optionsIn, markerId: 'CustomMarkerID_0')]);
+
+          // Verify correct message sent from view api
+          final VerificationResult result =
+              verify(viewMockApi.addMarkers(captureAny, captureAny));
+          final List<MarkerDto?> markersInMessage =
+              result.captured[1] as List<MarkerDto?>;
+
+          // Verify message and response marker options
+          expect(markerIn.markerId, markersInMessage[0]?.markerId);
+          expect(optionsIn, markersInMessage[0]?.options.toMarkerOptions());
+          expect(optionsIn, markersOut[0]!.options);
+        });
+
         test('update marker', () async {
           // Create marker
           const Marker marker =
@@ -1206,6 +1247,50 @@ void main() {
             PolygonOptions options,
             String? polygonId
           })>[(options: optionsIn, polygonId: null)]);
+
+          // Verify correct message sent from view api
+          final VerificationResult result =
+              verify(viewMockApi.addPolygons(captureAny, captureAny));
+          final List<PolygonDto?> polygonsInMessage =
+              result.captured[1] as List<PolygonDto?>;
+
+          // Verify message and response polygon options
+          expect(polygonIn.polygonId, polygonsInMessage[0]?.polygonId);
+          expect(optionsIn, polygonsInMessage[0]?.options.toPolygonOptions());
+          expect(optionsIn, polygonsOut[0]!.options);
+        });
+
+        test('add polygon with custom id', () async {
+          // Create options
+          const PolygonOptions optionsIn = PolygonOptions(
+              points: <LatLng>[
+                LatLng(latitude: 40.0, longitude: 50.0)
+              ],
+              holes: <List<LatLng>>[
+                <LatLng>[LatLng(latitude: 60.0, longitude: 70.0)]
+              ],
+              clickable: true,
+              fillColor: Colors.amber,
+              geodesic: true,
+              strokeColor: Colors.cyan,
+              strokeWidth: 4,
+              zIndex: 3);
+
+          // Mock api response
+          final PolygonDto polygonIn = PolygonDto(
+            polygonId: 'CustomPolygonID_0',
+            options: optionsIn.toDto(),
+          );
+          when(viewMockApi.addPolygons(any, any))
+              .thenAnswer((Invocation _) => <PolygonDto>[polygonIn]);
+
+          // Add polygon
+          final List<Polygon?> polygonsOut = await GoogleMapsNavigationPlatform
+              .instance.viewAPI
+              .addPolygons(viewId: 0, polygonOptions: <({
+            PolygonOptions options,
+            String? polygonId
+          })>[(options: optionsIn, polygonId: 'CustomPolygonID_0')]);
 
           // Verify correct message sent from view api
           final VerificationResult result =
