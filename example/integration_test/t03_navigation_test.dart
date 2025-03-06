@@ -62,12 +62,26 @@ void main() {
       latitude: startLat,
       longitude: startLng,
     ));
-    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
+    await $.pumpAndSettle(timeout: const Duration(milliseconds: 500));
 
-    // Test the location simulation
-    LatLng? currentLocation = await viewController.getMyLocation();
-    expect(currentLocation!.latitude, closeTo(startLat, tolerance));
-    expect(currentLocation.longitude, closeTo(startLng, tolerance));
+    final LatLng? currentLocation =
+        await waitForValueMatchingPredicate<LatLng?>(
+            $, viewController.getMyLocation, (LatLng? location) {
+      if (location == null) return false;
+
+      bool isCloseTo(double a, double b) {
+        var diff = a - b;
+        if (diff < 0) diff = -diff;
+        return diff <= tolerance;
+      }
+
+      return isCloseTo(location.latitude, startLat) &&
+          isCloseTo(location.longitude, startLng);
+    });
+
+    expect(currentLocation, isNotNull);
+    expect(currentLocation?.latitude, closeTo(startLat, tolerance));
+    expect(currentLocation?.longitude, closeTo(startLng, tolerance));
   }
 
   patrol('Test navigating to a single destination',
