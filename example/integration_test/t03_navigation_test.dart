@@ -38,21 +38,59 @@ void main() {
   const double startLat = startLocationLat;
   const double startLng = startLocationLng;
 
-  bool isPhysicalDevice = false;
-  final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-  if (Platform.isIOS) {
-    deviceInfo.iosInfo.then((IosDeviceInfo info) {
-      isPhysicalDevice = info.isPhysicalDevice;
-      debugPrint('isPhysicalDevice: $isPhysicalDevice');
+  /// Contains info if the test is running on a physical device.
+  /// This value is set on setUpAll method.
+  late bool isPhysicalDevice;
+
+  setUpAll(() async {
+    final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    isPhysicalDevice = (Platform.isAndroid
+        ? (await deviceInfo.androidInfo).isPhysicalDevice
+        : (await deviceInfo.iosInfo).isPhysicalDevice);
+    debugPrint('isPhysicalDevice: $isPhysicalDevice');
+  });
+
+  Future<void> setSimulatedUserLocationWithCheck(
+    PatrolIntegrationTester $,
+    GoogleNavigationViewController viewController,
+    double startLat,
+    double startLng,
+    double tolerance,
+  ) async {
+    // Simulate location
+    await GoogleMapsNavigator.simulator.setUserLocation(LatLng(
+      latitude: startLat,
+      longitude: startLng,
+    ));
+    await $.pumpAndSettle(timeout: const Duration(milliseconds: 500));
+
+    final LatLng? currentLocation =
+        await waitForValueMatchingPredicate<LatLng?>(
+            $, viewController.getMyLocation, (LatLng? location) {
+      if (location == null) return false;
+
+      bool isCloseTo(double a, double b) {
+        var diff = a - b;
+        if (diff < 0) diff = -diff;
+        return diff <= tolerance;
+      }
+
+      return isCloseTo(location.latitude, startLat) &&
+          isCloseTo(location.longitude, startLng);
     });
+
+    expect(currentLocation, isNotNull);
+    expect(currentLocation?.latitude, closeTo(startLat, tolerance));
+    expect(currentLocation?.longitude, closeTo(startLng, tolerance));
   }
 
   patrol('Test navigating to a single destination',
       (PatrolIntegrationTester $) async {
     final Completer<void> hasArrived = Completer<void>();
 
-    /// Set up navigation.
-    await startNavigationWithoutDestination($);
+    /// Set up navigation view and controller.
+    final GoogleNavigationViewController viewController =
+        await startNavigationWithoutDestination($);
 
     /// Set audio guidance settings.
     /// Cannot be verified, because native SDK lacks getter methods,
@@ -79,11 +117,8 @@ void main() {
     GoogleMapsNavigator.setOnArrivalListener(onArrivalEvent);
 
     /// Simulate location and test it.
-    await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
-      latitude: startLat,
-      longitude: startLng,
-    ));
-    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
+    await setSimulatedUserLocationWithCheck(
+        $, viewController, startLat, startLng, tolerance);
 
     /// Set Destination.
     final Destinations destinations = Destinations(
@@ -150,8 +185,9 @@ void main() {
       final Completer<void> navigationFinished = Completer<void>();
       int arrivalEventCount = 0;
 
-      /// Set up navigation.
-      await startNavigationWithoutDestination($);
+      /// Set up navigation view and controller.
+      final GoogleNavigationViewController viewController =
+          await startNavigationWithoutDestination($);
 
       /// Set audio guidance settings.
       /// Cannot be verified, because native SDK lacks getter methods,
@@ -185,11 +221,8 @@ void main() {
       GoogleMapsNavigator.setOnArrivalListener(onArrivalEvent);
 
       /// Simulate location and test it.
-      await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
-        latitude: startLat,
-        longitude: startLng,
-      ));
-      await $.pumpAndSettle(timeout: const Duration(seconds: 1));
+      await setSimulatedUserLocationWithCheck(
+          $, viewController, startLat, startLng, tolerance);
 
       /// Set Destination.
       final Destinations destinations = Destinations(
@@ -268,8 +301,9 @@ void main() {
   patrol('Test simulation along new route', (PatrolIntegrationTester $) async {
     int loopIteration = 1;
 
-    /// Set up navigation.
-    await startNavigationWithoutDestination($);
+    /// Set up navigation view and controller.
+    final GoogleNavigationViewController viewController =
+        await startNavigationWithoutDestination($);
 
     /// Specify tolerance and navigation end coordinates.
     const double tolerance = 0.001;
@@ -375,12 +409,9 @@ void main() {
         await $.pumpAndSettle();
       }
 
-      /// Simulate location.
-      await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
-        latitude: startLat,
-        longitude: startLng,
-      ));
-      await $.pumpAndSettle(timeout: const Duration(seconds: 1));
+      /// Simulate location and test it.
+      await setSimulatedUserLocationWithCheck(
+          $, viewController, startLat, startLng, tolerance);
 
       /// Test that the received coordinates fit between start and end location coordinates within tolerance.
       /// End the test when user arrives to the end location coordinates within tolerance.
@@ -431,44 +462,17 @@ void main() {
   });
 
   patrol('Test simulating the location', (PatrolIntegrationTester $) async {
-    /// Set up navigation.
+    /// Set up navigation view and controller.
     final GoogleNavigationViewController viewController =
         await startNavigationWithoutDestination($);
 
     /// Specify tolerance and navigation end coordinates.
-    const double tolerance = 0.005;
     const double endLat = 68.60338455021943, endLng = 23.548804200724454;
 
-    /// Simulate location.
-    await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
-      latitude: startLat,
-      longitude: startLng,
-    ));
-    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
-
-    /// Test the location simulation.
-    LatLng? currentLocation = await viewController.getMyLocation();
-    expect(currentLocation!.latitude, closeTo(startLat, tolerance));
-    expect(currentLocation.longitude, closeTo(startLng, tolerance));
-
-    /// Test the simulated location was removed when using Android.
-    /// iOS Xcode simulators location is flaky making the test fail sometimes
-    /// so the test is skipped on iOS.
-    if (Platform.isAndroid) {
-      await GoogleMapsNavigator.simulator.removeUserLocation();
-      await $.pumpAndSettle(duration: const Duration(seconds: 5));
-
-      currentLocation = await viewController.getMyLocation();
-      expect(currentLocation!.latitude, isNot(closeTo(startLat, tolerance)));
-      expect(currentLocation.longitude, isNot(closeTo(startLng, tolerance)));
-    }
-
-    /// Simulate location.
-    await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
-      latitude: startLat,
-      longitude: startLng,
-    ));
-    await $.pumpAndSettle(duration: const Duration(seconds: 1));
+    /// Use the helper function to simulate and test location
+    const double tolerance = 0.001;
+    await setSimulatedUserLocationWithCheck(
+        $, viewController, startLat, startLng, tolerance);
 
     /// Set Destination.
     final Destinations destinations = Destinations(
@@ -513,9 +517,39 @@ void main() {
         isNot(closeTo(location3.longitude, movedTolerance)));
   });
 
+  patrol(
+    'Test removing user the simulated location',
+    (PatrolIntegrationTester $) async {
+      if (!isPhysicalDevice) {
+        // Skipping test on emulated devices as these do not properly get real
+        // location updates, causing flaky tests on CI.
+        debugPrint('Skipping test on emulated device.');
+        return;
+      }
+
+      /// Set up navigation view and controller.
+      final GoogleNavigationViewController viewController =
+          await startNavigationWithoutDestination($);
+
+      /// Use the helper function to simulate and test location
+      const double tolerance = 0.001;
+      await setSimulatedUserLocationWithCheck(
+          $, viewController, startLat, startLng, tolerance);
+
+      await GoogleMapsNavigator.simulator.removeUserLocation();
+
+      // Wait for a while to let the map to update to not simulated location.
+      await $.pumpAndSettle(duration: const Duration(seconds: 5));
+
+      LatLng? currentLocation = await viewController.getMyLocation();
+      expect(currentLocation!.latitude, isNot(closeTo(startLat, tolerance)));
+      expect(currentLocation.longitude, isNot(closeTo(startLng, tolerance)));
+    },
+  );
+
   patrol('Test that the navigation and updates stop onArrival',
       (PatrolIntegrationTester $) async {
-    /// Set up navigation.
+    /// Set up navigation view and controller.
     await startNavigationWithoutDestination($);
 
     /// Set audio guidance settings.
@@ -575,7 +609,14 @@ void main() {
 
   patrol('Test network error during navigation',
       (PatrolIntegrationTester $) async {
-    /// Set up navigation.
+    if (Platform.isIOS && !isPhysicalDevice) {
+      // Skipping test on emulated devices as these do not properly get real
+      // location updates, causing flaky tests on CI.
+      debugPrint('Skipping test on emulated device on iOS.');
+      return;
+    }
+
+    /// Set up navigation view and controller.
     await startNavigationWithoutDestination($);
 
     /// Simulate location (1298 California St)
@@ -626,10 +667,10 @@ void main() {
       await $.native.enableCellular();
       await $.native.enableWifi();
     }
-  }, skip: Platform.isIOS && !isPhysicalDevice);
+  });
 
   patrol('Test route not found errors', (PatrolIntegrationTester $) async {
-    /// Set up navigation.
+    /// Set up navigation view and controller.
     await startNavigationWithoutDestination($);
 
     /// Simulate location (1298 California St)
@@ -670,8 +711,9 @@ void main() {
   patrol('Test route structures', (PatrolIntegrationTester $) async {
     final Completer<void> hasArrived = Completer<void>();
 
-    /// Set up navigation.
-    await startNavigationWithoutDestination($);
+    /// Set up navigation view and controller.
+    final GoogleNavigationViewController viewController =
+        await startNavigationWithoutDestination($);
 
     /// Finish executing the tests once onArrival event comes in.
     void onArrivalEvent(OnArrivalEvent msg) {
@@ -681,11 +723,9 @@ void main() {
     GoogleMapsNavigator.setOnArrivalListener(onArrivalEvent);
 
     /// Simulate location (1298 California St)
-    await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
-      latitude: 37.79136614772824,
-      longitude: -122.41565900473043,
-    ));
-    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
+    const double tolerance = 0.001;
+    await setSimulatedUserLocationWithCheck(
+        $, viewController, 37.79136614772824, -122.41565900473043, tolerance);
 
     /// Set Destination.
     final Destinations destinations = Destinations(
@@ -703,7 +743,7 @@ void main() {
     final NavigationRouteStatus status =
         await GoogleMapsNavigator.setDestinations(destinations);
     expect(status, NavigationRouteStatus.statusOk);
-    await $.pumpAndSettle();
+    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
 
     /// Start guidance.
     await GoogleMapsNavigator.startGuidance();
@@ -748,7 +788,7 @@ void main() {
       (PatrolIntegrationTester $) async {
     bool isSessionAttached;
 
-    /// Set up navigation without initialization.
+    /// Set up navigation view and controller without initializing navigation.
     final GoogleNavigationViewController viewController =
         await startNavigationWithoutDestination($, initializeNavigation: false);
 
@@ -767,7 +807,7 @@ void main() {
 
   patrol('Test that the map attaches existing navigation session to itself',
       (PatrolIntegrationTester $) async {
-    /// Set up navigation.
+    /// Set up navigation view and controller.
     final GoogleNavigationViewController viewController =
         await startNavigationWithoutDestination($);
 
@@ -780,7 +820,7 @@ void main() {
 
   patrol('Test routing options and display options',
       (PatrolIntegrationTester $) async {
-    /// Set up navigation.
+    /// Set up navigation view and controller.
     await startNavigationWithoutDestination($, simulateLocation: true);
 
     /// Specify navigation end coordinates.
