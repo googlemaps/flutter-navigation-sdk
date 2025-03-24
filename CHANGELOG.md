@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.2](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.5.1...0.5.2) (2025-03-24)
+
+
+### Bug Fixes
+
+* update minimum supported SDK version to Flutter 3.27/Dart 3.6. ([#301](https://github.com/googlemaps/flutter-navigation-sdk/issues/301)) ([32e5b9f](https://github.com/googlemaps/flutter-navigation-sdk/commit/32e5b9f9fa7df408480d38413801cd5a2a0cf6c4))
+
 ## [0.5.1](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.5.0...0.5.1) (2025-02-27)
 
 
