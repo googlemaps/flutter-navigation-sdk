@@ -13,9 +13,9 @@
 // limitations under the License.
 
 import CarPlay
-import google_navigation_flutter
 import GoogleNavigation
 import UIKit
+import google_navigation_flutter
 
 class CarSceneDelegate: BaseCarSceneDelegate {
   override func getTemplate() -> CPMapTemplate {

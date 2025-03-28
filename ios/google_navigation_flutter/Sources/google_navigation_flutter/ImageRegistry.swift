@@ -21,8 +21,10 @@ enum GoogleMapsImageRegistryError: Error {
 class ImageRegistry {
   var registeredImages: [RegisteredImage] = []
 
-  func registerBitmapImage(imageId: String, bytes: Data, imagePixelRatio: Double, width: Double?,
-                           height: Double?) throws -> ImageDescriptorDto {
+  func registerBitmapImage(
+    imageId: String, bytes: Data, imagePixelRatio: Double, width: Double?,
+    height: Double?
+  ) throws -> ImageDescriptorDto {
     guard var image = UIImage(data: bytes, scale: imagePixelRatio) else {
       throw GoogleMapsImageRegistryError.imageDecodingFailed
     }
@@ -38,13 +40,14 @@ class ImageRegistry {
       image = ImageResizer.resize(image: image, height: CGFloat(height!))
     }
 
-    registeredImages.append(RegisteredImage(
-      imageId: imageId,
-      image: image,
-      imagePixelRatio: imagePixelRatio,
-      width: width,
-      height: height
-    ))
+    registeredImages.append(
+      RegisteredImage(
+        imageId: imageId,
+        image: image,
+        imagePixelRatio: imagePixelRatio,
+        width: width,
+        height: height
+      ))
     return ImageDescriptorDto(
       registeredImageId: imageId,
       imagePixelRatio: imagePixelRatio,

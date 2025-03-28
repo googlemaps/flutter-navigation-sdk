@@ -29,10 +29,11 @@ extension UIColor {
     let red = (rgb >> 16) & 0xFF
     let alpha = (rgb >> 24) & 0xFF
 
-    self.init(red: CGFloat(red) / 255,
-              green: CGFloat(green) / 255,
-              blue: CGFloat(blue) / 255,
-              alpha: CGFloat(alpha) / 255)
+    self.init(
+      red: CGFloat(red) / 255,
+      green: CGFloat(green) / 255,
+      blue: CGFloat(blue) / 255,
+      alpha: CGFloat(alpha) / 255)
   }
 
   func toRgb() -> Int64? {

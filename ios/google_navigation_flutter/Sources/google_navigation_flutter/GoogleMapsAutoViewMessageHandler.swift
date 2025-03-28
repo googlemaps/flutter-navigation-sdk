@@ -171,13 +171,17 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
     try Convert.convertLatLngBounds(bounds: getView().getVisibleRegion())
   }
 
-  func animateCameraToCameraPosition(cameraPosition: CameraPositionDto,
-                                     duration: Int64?,
-                                     completion: @escaping (Result<Bool, Error>) -> Void) {
+  func animateCameraToCameraPosition(
+    cameraPosition: CameraPositionDto,
+    duration: Int64?,
+    completion: @escaping (Result<Bool, Error>) -> Void
+  ) {
     do {
       try getView()
-        .animateCameraToCameraPosition(cameraPosition: Convert
-          .convertCameraPosition(position: cameraPosition))
+        .animateCameraToCameraPosition(
+          cameraPosition:
+            Convert
+            .convertCameraPosition(position: cameraPosition))
 
       // No callback supported, just return immediately
       completion(.success(true))
@@ -186,8 +190,10 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
     }
   }
 
-  func animateCameraToLatLng(point: LatLngDto, duration: Int64?,
-                             completion: @escaping (Result<Bool, Error>) -> Void) {
+  func animateCameraToLatLng(
+    point: LatLngDto, duration: Int64?,
+    completion: @escaping (Result<Bool, Error>) -> Void
+  ) {
     do {
       try getView().animateCameraToLatLng(point: Convert.convertLatLngFromDto(point: point))
 
@@ -198,12 +204,17 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
     }
   }
 
-  func animateCameraToLatLngBounds(bounds: LatLngBoundsDto,
-                                   padding: Double, duration: Int64?, completion: @escaping (Result<
-                                     Bool,
-                                     Error
-                                   >)
-                                     -> Void) {
+  func animateCameraToLatLngBounds(
+    bounds: LatLngBoundsDto,
+    padding: Double, duration: Int64?,
+    completion: @escaping (
+      Result<
+        Bool,
+        Error
+      >
+    )
+      -> Void
+  ) {
     do {
       try getView().animateCameraToLatLngBounds(
         bounds: Convert.convertLatLngBounds(bounds: bounds),
@@ -217,9 +228,11 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
     }
   }
 
-  func animateCameraToLatLngZoom(point: LatLngDto, zoom: Double,
-                                 duration: Int64?,
-                                 completion: @escaping (Result<Bool, Error>) -> Void) {
+  func animateCameraToLatLngZoom(
+    point: LatLngDto, zoom: Double,
+    duration: Int64?,
+    completion: @escaping (Result<Bool, Error>) -> Void
+  ) {
     do {
       try getView().animateCameraToLatLngZoom(
         point: Convert.convertLatLngFromDto(point: point),
@@ -233,9 +246,11 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
     }
   }
 
-  func animateCameraByScroll(scrollByDx: Double, scrollByDy: Double,
-                             duration: Int64?,
-                             completion: @escaping (Result<Bool, Error>) -> Void) {
+  func animateCameraByScroll(
+    scrollByDx: Double, scrollByDy: Double,
+    duration: Int64?,
+    completion: @escaping (Result<Bool, Error>) -> Void
+  ) {
     do {
       try getView().animateCameraByScroll(dx: scrollByDx, dy: scrollByDy)
 
@@ -246,11 +261,16 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
     }
   }
 
-  func animateCameraByZoom(zoomBy: Double, focusDx: Double?,
-                           focusDy: Double?, duration: Int64?, completion: @escaping (Result<
-                             Bool,
-                             Error
-                           >) -> Void) {
+  func animateCameraByZoom(
+    zoomBy: Double, focusDx: Double?,
+    focusDy: Double?, duration: Int64?,
+    completion: @escaping (
+      Result<
+        Bool,
+        Error
+      >
+    ) -> Void
+  ) {
     do {
       let focus = Convert.convertDeltaToPoint(dx: focusDx, dy: focusDy)
       try getView().animateCameraByZoom(zoomBy: zoomBy, focus: focus)
@@ -262,8 +282,10 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
     }
   }
 
-  func animateCameraToZoom(zoom: Double, duration: Int64?,
-                           completion: @escaping (Result<Bool, Error>) -> Void) {
+  func animateCameraToZoom(
+    zoom: Double, duration: Int64?,
+    completion: @escaping (Result<Bool, Error>) -> Void
+  ) {
     do {
       try getView().animateCameraToZoom(zoom: zoom)
 
@@ -276,16 +298,20 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
 
   func moveCameraToCameraPosition(cameraPosition: CameraPositionDto) throws {
     try getView()
-      .moveCameraToCameraPosition(cameraPosition: Convert
-        .convertCameraPosition(position: cameraPosition))
+      .moveCameraToCameraPosition(
+        cameraPosition:
+          Convert
+          .convertCameraPosition(position: cameraPosition))
   }
 
   func moveCameraToLatLng(point: LatLngDto) throws {
     try getView().moveCameraToLatLng(point: Convert.convertLatLngFromDto(point: point))
   }
 
-  func moveCameraToLatLngBounds(bounds: LatLngBoundsDto,
-                                padding: Double) throws {
+  func moveCameraToLatLngBounds(
+    bounds: LatLngBoundsDto,
+    padding: Double
+  ) throws {
     try getView().moveCameraToLatLngBounds(
       bounds: Convert.convertLatLngBounds(bounds: bounds),
       padding: padding
@@ -303,8 +329,10 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
     try getView().moveCameraByScroll(dx: scrollByDx, dy: scrollByDy)
   }
 
-  func moveCameraByZoom(zoomBy: Double, focusDx: Double?,
-                        focusDy: Double?) throws {
+  func moveCameraByZoom(
+    zoomBy: Double, focusDx: Double?,
+    focusDy: Double?
+  ) throws {
     let focus = Convert.convertDeltaToPoint(dx: focusDx, dy: focusDy)
     return try getView().moveCameraByZoom(zoomBy: zoomBy, focus: focus)
   }
@@ -313,8 +341,10 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
     try getView().moveCameraToZoom(zoom: zoom)
   }
 
-  func followMyLocation(perspective: CameraPerspectiveDto,
-                        zoomLevel: Double?) throws {
+  func followMyLocation(
+    perspective: CameraPerspectiveDto,
+    zoomLevel: Double?
+  ) throws {
     try getView()
       .followMyLocation(
         perspective: Convert.convertCameraPerspective(perspective: perspective),
