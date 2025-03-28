@@ -64,10 +64,10 @@ scripts:
 
   format:ios:
     run: |
-      swiftformat --quiet .
+      swift-format -r -i --parallel .
     description: |
-      Formats the code of iOS package with swiftformat.
-       - Requires `swiftformat` (can be installed via Brew on macOS).
+      Formats the code of iOS package with swift-format.
+       - Requires `swift-format` (can be installed via Brew).
 
   format:android:
     run: |
