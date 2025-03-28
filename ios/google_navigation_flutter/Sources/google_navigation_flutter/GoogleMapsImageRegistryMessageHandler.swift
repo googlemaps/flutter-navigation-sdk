@@ -22,10 +22,12 @@ class GoogleMapsImageRegistryMessageHandler: ImageRegistryApi {
     self.imageRegistry = imageRegistry
   }
 
-  func registerBitmapImage(imageId: String, bytes: FlutterStandardTypedData,
-                           imagePixelRatio: Double,
-                           width: Double?,
-                           height: Double?) throws -> ImageDescriptorDto {
+  func registerBitmapImage(
+    imageId: String, bytes: FlutterStandardTypedData,
+    imagePixelRatio: Double,
+    width: Double?,
+    height: Double?
+  ) throws -> ImageDescriptorDto {
     try imageRegistry.registerBitmapImage(
       imageId: imageId,
       bytes: bytes.data,

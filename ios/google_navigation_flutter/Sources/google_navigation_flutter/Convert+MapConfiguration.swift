@@ -17,7 +17,8 @@ import GoogleMaps
 
 extension Convert {
   static func convertNavigationUIEnabledPreference(preference: NavigationUIEnabledPreferenceDto?)
-    -> NavigationUIEnabledPreference {
+    -> NavigationUIEnabledPreference
+  {
     switch preference {
     case .automatic:
       return .automatic
@@ -29,7 +30,8 @@ extension Convert {
   }
 
   static func convertMapOptions(_ mapOptions: MapOptionsDto)
-    -> MapConfiguration {
+    -> MapConfiguration
+  {
     let cameraTargetBounds: GMSCoordinateBounds?
     if let bounds = mapOptions.cameraTargetBounds {
       cameraTargetBounds = convertLatLngBounds(bounds: bounds)

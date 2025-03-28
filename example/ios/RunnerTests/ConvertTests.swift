@@ -114,7 +114,7 @@ class ConvertTests: XCTestCase {
             latitude: 55.0,
             longitude: 44.0
           )
-        ),
+        )
       ],
       displayOptions: NavigationDisplayOptionsDto()
     )
@@ -129,7 +129,7 @@ class ConvertTests: XCTestCase {
         .init(
           title: "test",
           placeID: "id"
-        ),
+        )
       ],
       displayOptions: NavigationDisplayOptionsDto()
     )
@@ -173,8 +173,9 @@ class ConvertTests: XCTestCase {
     XCTAssertTrue(Convert.convertRouteStatus(.waypointError) == .waypointError)
     XCTAssertTrue(Convert.convertRouteStatus(.apiKeyNotAuthorized) == .apiKeyNotAuthorized)
     XCTAssertTrue(Convert.convertRouteStatus(.canceled) == .statusCanceled)
-    XCTAssertTrue(Convert
-      .convertRouteStatus(.duplicateWaypointsError) == .duplicateWaypointsError)
+    XCTAssertTrue(
+      Convert
+        .convertRouteStatus(.duplicateWaypointsError) == .duplicateWaypointsError)
     XCTAssertTrue(Convert.convertRouteStatus(.internalError) == .internalError)
     XCTAssertTrue(Convert.convertRouteStatus(.locationUnavailable) == .locationUnavailable)
     XCTAssertTrue(Convert.convertRouteStatus(.OK) == .statusOk)
@@ -197,16 +198,18 @@ class ConvertTests: XCTestCase {
 
   func testConvertGMSSpeedAlertSeverity() {
     XCTAssertTrue(Convert.convertSpeedAlertSeverity(gmsSpeedAlertSeverity: .unknown) == .unknown)
-    XCTAssertTrue(Convert
-      .convertSpeedAlertSeverity(gmsSpeedAlertSeverity: .notSpeeding) == .notSpeeding)
+    XCTAssertTrue(
+      Convert
+        .convertSpeedAlertSeverity(gmsSpeedAlertSeverity: .notSpeeding) == .notSpeeding)
     XCTAssertTrue(Convert.convertSpeedAlertSeverity(gmsSpeedAlertSeverity: .minor) == .minor)
     XCTAssertTrue(Convert.convertSpeedAlertSeverity(gmsSpeedAlertSeverity: .major) == .major)
   }
 
   func testConvertSpeedAlertSeverity() {
     XCTAssertTrue(Convert.convertSpeedAlertSeverity(speedAlertSeverity: .unknown) == .unknown)
-    XCTAssertTrue(Convert
-      .convertSpeedAlertSeverity(speedAlertSeverity: .notSpeeding) == .notSpeeding)
+    XCTAssertTrue(
+      Convert
+        .convertSpeedAlertSeverity(speedAlertSeverity: .notSpeeding) == .notSpeeding)
     XCTAssertTrue(Convert.convertSpeedAlertSeverity(speedAlertSeverity: .minor) == .minor)
     XCTAssertTrue(Convert.convertSpeedAlertSeverity(speedAlertSeverity: .major) == .major)
   }
@@ -214,8 +217,9 @@ class ConvertTests: XCTestCase {
   func testConvertNavigationAudioGuidanceType() {
     XCTAssertTrue(Convert.convertNavigationAudioGuidanceType(.silent) == .silent)
     XCTAssertTrue(Convert.convertNavigationAudioGuidanceType(.alertsOnly) == .alertsOnly)
-    XCTAssertTrue(Convert
-      .convertNavigationAudioGuidanceType(.alertsAndGuidance) == .alertsAndGuidance)
+    XCTAssertTrue(
+      Convert
+        .convertNavigationAudioGuidanceType(.alertsAndGuidance) == .alertsAndGuidance)
   }
 
   func testMarkerDtoToGMSMarkerAndBack() {
@@ -365,12 +369,16 @@ class ConvertTests: XCTestCase {
     let polygon = PolygonDto(
       polygonId: "Polygon_0",
       options: .init(
-        points: [LatLngDto(latitude: 10.0, longitude: 20.0),
-                 LatLngDto(latitude: 30.0, longitude: 40.0)],
-        holes: [PolygonHoleDto(points: [
-          LatLngDto(latitude: 50.0, longitude: 60.0),
-          LatLngDto(latitude: 70.0, longitude: 80.0),
-        ])],
+        points: [
+          LatLngDto(latitude: 10.0, longitude: 20.0),
+          LatLngDto(latitude: 30.0, longitude: 40.0),
+        ],
+        holes: [
+          PolygonHoleDto(points: [
+            LatLngDto(latitude: 50.0, longitude: 60.0),
+            LatLngDto(latitude: 70.0, longitude: 80.0),
+          ])
+        ],
         clickable: true,
         fillColor: UIColor.red.toRgb()!,
         geodesic: true,
@@ -404,12 +412,16 @@ class ConvertTests: XCTestCase {
     let polygon = PolygonDto(
       polygonId: "Polygon_0",
       options: .init(
-        points: [LatLngDto(latitude: 10.0, longitude: 20.0),
-                 LatLngDto(latitude: 30.0, longitude: 40.0)],
-        holes: [PolygonHoleDto(points: [
-          LatLngDto(latitude: 50.0, longitude: 60.0),
-          LatLngDto(latitude: 70.0, longitude: 80.0),
-        ])],
+        points: [
+          LatLngDto(latitude: 10.0, longitude: 20.0),
+          LatLngDto(latitude: 30.0, longitude: 40.0),
+        ],
+        holes: [
+          PolygonHoleDto(points: [
+            LatLngDto(latitude: 50.0, longitude: 60.0),
+            LatLngDto(latitude: 70.0, longitude: 80.0),
+          ])
+        ],
         clickable: true,
         fillColor: UIColor.red.toRgb()!,
         geodesic: true,
@@ -543,8 +555,9 @@ class ConvertTests: XCTestCase {
     )
 
     let navigationViewOptions =
-      NavigationViewOptionsDto(navigationUIEnabledPreference: NavigationUIEnabledPreferenceDto
-        .automatic)
+      NavigationViewOptionsDto(
+        navigationUIEnabledPreference: NavigationUIEnabledPreferenceDto
+          .automatic)
 
     let configuration = Convert.convertMapOptions(mapOptions)
 

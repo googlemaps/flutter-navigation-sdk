@@ -17,7 +17,8 @@ import Foundation
 import GoogleMaps
 
 open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate,
-  CPMapTemplateDelegate {
+  CPMapTemplateDelegate
+{
   private var interfaceController: CPInterfaceController?
   private var carWindow: CPWindow?
   private var mapTemplate: CPMapTemplate?
@@ -31,9 +32,11 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
     navView
   }
 
-  public func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene,
-                                       didConnect interfaceController: CPInterfaceController,
-                                       to window: CPWindow) {
+  public func templateApplicationScene(
+    _ templateApplicationScene: CPTemplateApplicationScene,
+    didConnect interfaceController: CPInterfaceController,
+    to window: CPWindow
+  ) {
     self.interfaceController = interfaceController
     carWindow = window
     mapTemplate = getTemplate()
@@ -48,9 +51,11 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
     return template
   }
 
-  open func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene,
-                                     didDisconnect interfaceController: CPInterfaceController,
-                                     from window: CPWindow) {
+  open func templateApplicationScene(
+    _ templateApplicationScene: CPTemplateApplicationScene,
+    didDisconnect interfaceController: CPInterfaceController,
+    from window: CPWindow
+  ) {
     self.interfaceController = nil
     carWindow?.rootViewController = nil
     carWindow = nil
@@ -110,8 +115,10 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
   }
 
   // CPMapTemplateDelegate
-  open func mapTemplate(_ mapTemplate: CPMapTemplate,
-                        panWith direction: CPMapTemplate.PanDirection) {
+  open func mapTemplate(
+    _ mapTemplate: CPMapTemplate,
+    panWith direction: CPMapTemplate.PanDirection
+  ) {
     let scrollAmount = scrollAmount(for: direction)
     navView?.animateCameraByScroll(dx: scrollAmount.x, dy: scrollAmount.y)
   }
