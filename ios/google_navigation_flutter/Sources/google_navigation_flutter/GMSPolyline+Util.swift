@@ -51,9 +51,9 @@ extension GMSPolyline {
             style: .solidColor(UIColor(from: solidColor)),
             segments: $0?.length ?? 1
           )
-        } else if
-          let fromColor = $0?.style.fromColor,
-          let toColor = $0?.style.toColor {
+        } else if let fromColor = $0?.style.fromColor,
+          let toColor = $0?.style.toColor
+        {
           return GMSStyleSpan(
             style: .gradient(
               from: UIColor(from: fromColor),
@@ -82,11 +82,11 @@ extension GMSPolyline {
   }
 }
 
-private extension GMSStyleSpan {
-  func toPigeonStyleSpan() -> StyleSpanDto {
+extension GMSStyleSpan {
+  fileprivate func toPigeonStyleSpan() -> StyleSpanDto {
     StyleSpanDto(
       length: segments,
-      style: .init() // Maybe hold the color values locally. For now ignored.
+      style: .init()  // Maybe hold the color values locally. For now ignored.
     )
   }
 }

@@ -19,14 +19,15 @@ import GoogleNavigation
 import UIKit
 
 @objc class AppDelegateCarPlay: FlutterAppDelegate {
-  override func application(_ application: UIApplication,
-                            didFinishLaunchingWithOptions launchOptions: [
-                              UIApplication.LaunchOptionsKey: Any
-                            ]?) -> Bool {
+  override func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+  ) -> Bool {
     // 1. Try to find the Maps API key from the environment variables.
     // 2. Try to find the Maps API key from the Dart defines.
     // 3. Use the default Maps API key "YOUR_API_KEY".
-    var mapsApiKey = ProcessInfo.processInfo
+    var mapsApiKey =
+      ProcessInfo.processInfo
       .environment["MAPS_API_KEY"] ?? findMapApiKeyFromDartDefines("MAPS_API_KEY") ?? ""
     if mapsApiKey.isEmpty {
       mapsApiKey = "YOUR_API_KEY"
@@ -35,9 +36,11 @@ import UIKit
     return true
   }
 
-  override func application(_ application: UIApplication,
-                            configurationForConnecting connectingSceneSession: UISceneSession,
-                            options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+  override func application(
+    _ application: UIApplication,
+    configurationForConnecting connectingSceneSession: UISceneSession,
+    options: UIScene.ConnectionOptions
+  ) -> UISceneConfiguration {
     if connectingSceneSession.role == .carTemplateApplication {
       let scene = UISceneConfiguration(name: "CarPlay", sessionRole: connectingSceneSession.role)
       scene.delegateClass = CarSceneDelegate.self

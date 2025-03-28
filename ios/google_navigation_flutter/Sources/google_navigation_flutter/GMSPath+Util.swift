@@ -17,7 +17,7 @@ import GoogleMaps
 
 extension GMSPath {
   func toLatLngDtos() -> [LatLngDto] {
-    (0 ..< count()).map { index in
+    (0..<count()).map { index in
       let point = self.coordinate(at: index)
       return LatLngDto(latitude: point.latitude, longitude: point.longitude)
     }
