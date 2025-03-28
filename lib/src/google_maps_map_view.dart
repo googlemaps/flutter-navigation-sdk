@@ -336,24 +336,24 @@ abstract class MapViewState<T extends GoogleMapsBaseMapView> extends State<T> {
         case MarkerDragEventType.dragStart:
           widget.onMarkerDragStart?.call(event.markerId, event.position);
       }
+    });
 
-      GoogleMapsNavigationPlatform.instance.viewAPI
-          .getPolygonClickedEventStream(viewId: viewId)
-          .listen((PolygonClickedEvent event) {
-        widget.onPolygonClicked?.call(event.polygonId);
-      });
+    GoogleMapsNavigationPlatform.instance.viewAPI
+        .getPolygonClickedEventStream(viewId: viewId)
+        .listen((PolygonClickedEvent event) {
+      widget.onPolygonClicked?.call(event.polygonId);
+    });
 
-      GoogleMapsNavigationPlatform.instance.viewAPI
-          .getPolylineClickedEventStream(viewId: viewId)
-          .listen((PolylineClickedEvent event) {
-        widget.onPolylineClicked?.call(event.polylineId);
-      });
+    GoogleMapsNavigationPlatform.instance.viewAPI
+        .getPolylineClickedEventStream(viewId: viewId)
+        .listen((PolylineClickedEvent event) {
+      widget.onPolylineClicked?.call(event.polylineId);
+    });
 
-      GoogleMapsNavigationPlatform.instance.viewAPI
-          .getCircleClickedEventStream(viewId: viewId)
-          .listen((CircleClickedEvent event) {
-        widget.onCircleClicked?.call(event.circleId);
-      });
+    GoogleMapsNavigationPlatform.instance.viewAPI
+        .getCircleClickedEventStream(viewId: viewId)
+        .listen((CircleClickedEvent event) {
+      widget.onCircleClicked?.call(event.circleId);
     });
 
     if (widget.onCameraMoveStarted != null ||
