@@ -15,8 +15,10 @@
 import Foundation
 
 class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
-  init(navigationSessionEventApi: NavigationSessionEventApi,
-       viewRegistry: GoogleMapsNavigationViewRegistry) {
+  init(
+    navigationSessionEventApi: NavigationSessionEventApi,
+    viewRegistry: GoogleMapsNavigationViewRegistry
+  ) {
     GoogleMapsNavigationSessionManager.shared.setSessionEventApi(
       navigationSessionEventApi: navigationSessionEventApi
     )
@@ -26,9 +28,11 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
   }
 
   /// General SDK functionality
-  func showTermsAndConditionsDialog(title: String, companyName: String,
-                                    shouldOnlyShowDriverAwarenessDisclaimer: Bool,
-                                    completion: @escaping (Result<Bool, Error>) -> Void) {
+  func showTermsAndConditionsDialog(
+    title: String, companyName: String,
+    shouldOnlyShowDriverAwarenessDisclaimer: Bool,
+    completion: @escaping (Result<Bool, Error>) -> Void
+  ) {
     if shouldOnlyShowDriverAwarenessDisclaimer {
       // TODO: Disable driver awareness disclaimer on iOS due to the bug in the native side SDK
       completion(Result.failure(GoogleMapsNavigationSessionManagerError.notSupported))
@@ -56,11 +60,13 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
     GoogleMapsNavigationSessionManager.shared.getNavSDKVersion()
   }
 
-  func createNavigationSession(abnormalTerminationReportingEnabled: Bool,
-                               // taskRemovedBehaviourValue is Android only value and not used on
-                               // iOS.
-                               behavior: TaskRemovedBehaviorDto,
-                               completion: @escaping (Result<Void, Error>) -> Void) {
+  func createNavigationSession(
+    abnormalTerminationReportingEnabled: Bool,
+    // taskRemovedBehaviourValue is Android only value and not used on
+    // iOS.
+    behavior: TaskRemovedBehaviorDto,
+    completion: @escaping (Result<Void, Error>) -> Void
+  ) {
     do {
       try GoogleMapsNavigationSessionManager.shared
         .createNavigationSession(abnormalTerminationReportingEnabled)
@@ -91,8 +97,10 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
     try GoogleMapsNavigationSessionManager.shared.stopGuidance()
   }
 
-  func setDestinations(destinations: DestinationsDto,
-                       completion: @escaping (Result<RouteStatusDto, Error>) -> Void) {
+  func setDestinations(
+    destinations: DestinationsDto,
+    completion: @escaping (Result<RouteStatusDto, Error>) -> Void
+  ) {
     GoogleMapsNavigationSessionManager.shared.setDestinations(
       destinations: destinations,
       completion: completion
@@ -133,12 +141,16 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
       .simulateLocationsAlongExistingRouteWithOptions(options: options)
   }
 
-  func simulateLocationsAlongNewRoute(waypoints: [NavigationWaypointDto],
-                                      completion: @escaping (Result<
-                                        RouteStatusDto,
-                                        Error
-                                      >)
-                                        -> Void) {
+  func simulateLocationsAlongNewRoute(
+    waypoints: [NavigationWaypointDto],
+    completion: @escaping (
+      Result<
+        RouteStatusDto,
+        Error
+      >
+    )
+      -> Void
+  ) {
     do {
       try GoogleMapsNavigationSessionManager.shared.simulateLocationsAlongNewRoute(
         waypoints: waypoints,
@@ -149,12 +161,16 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
     }
   }
 
-  func simulateLocationsAlongNewRouteWithRoutingOptions(waypoints: [NavigationWaypointDto],
-                                                        routingOptions: RoutingOptionsDto,
-                                                        completion: @escaping (Result<
-                                                          RouteStatusDto,
-                                                          Error
-                                                        >) -> Void) {
+  func simulateLocationsAlongNewRouteWithRoutingOptions(
+    waypoints: [NavigationWaypointDto],
+    routingOptions: RoutingOptionsDto,
+    completion: @escaping (
+      Result<
+        RouteStatusDto,
+        Error
+      >
+    ) -> Void
+  ) {
     do {
       try GoogleMapsNavigationSessionManager.shared
         .simulateLocationsAlongNewRouteWithRoutingOptions(
@@ -167,15 +183,17 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
     }
   }
 
-  func simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(waypoints: [
-    NavigationWaypointDto
-  ],
-  routingOptions: RoutingOptionsDto,
-  simulationOptions: SimulationOptionsDto,
-  completion: @escaping (Result<
-    RouteStatusDto,
-    Error
-  >) -> Void) {
+  func simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
+    waypoints: [NavigationWaypointDto],
+    routingOptions: RoutingOptionsDto,
+    simulationOptions: SimulationOptionsDto,
+    completion: @escaping (
+      Result<
+        RouteStatusDto,
+        Error
+      >
+    ) -> Void
+  ) {
     do {
       try GoogleMapsNavigationSessionManager.shared
         .simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
@@ -235,8 +253,10 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
     GoogleMapsNavigationSessionManager.shared.disableTurnByTurnNavigationEvents()
   }
 
-  func registerRemainingTimeOrDistanceChangedListener(remainingTimeThresholdSeconds: Int64,
-                                                      remainingDistanceThresholdMeters: Int64) throws {
+  func registerRemainingTimeOrDistanceChangedListener(
+    remainingTimeThresholdSeconds: Int64,
+    remainingDistanceThresholdMeters: Int64
+  ) throws {
     GoogleMapsNavigationSessionManager.shared.registerRemainingTimeOrDistanceChangedListener(
       remainingTimeThresholdSeconds: remainingTimeThresholdSeconds,
       remainingDistanceThresholdMeters: remainingDistanceThresholdMeters

@@ -7,13 +7,13 @@ _See also: [Flutter's code of conduct](https://flutter.io/design-principles/#cod
 - **Operating System:** Linux, macOS, or Windows.
 - **Version Control:** [git](https://git-scm.com).
 - **Development Environment:** An IDE such as [Android Studio](https://developer.android.com/studio) or [Visual Studio Code](https://code.visualstudio.com/).
-- **Code Formatting:** [`swiftformat`](https://github.com/nicklockwood/SwiftFormat) (available via brew on macOS, on Windows install Swift toolchain and build SwiftFormat from git sources). 
+- **Code Formatting:** [`swift-format`](https://formulae.brew.sh/formula/swift-formatt). 
 
-### 1.1. Installing swiftformat
-The CI is locked to swiftformat 0.54.6 version which you can install with the command below:
+### 1.1. Installing swift-format
+The CI is locked to swift-format 600.0.0 version which you can install with the command below:
 ```bash
-curl -O https://raw.githubusercontent.com/Homebrew/homebrew-core/4564fbc21a326c4eb349327ce327cbe983bf302a/Formula/s/swiftformat.rb
-brew install swiftformat.rb
+curl -O https://raw.githubusercontent.com/Homebrew/homebrew-core/402e262f48947bad849ea7793752ff16b7038406/Formula/s/swift-format.rb
+brew install swift-format.rb
 ```
 
 ## 2. Setting Up Your Local Repository

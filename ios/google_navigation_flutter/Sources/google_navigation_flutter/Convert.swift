@@ -101,7 +101,8 @@ enum Convert {
       southwest: LatLngDto(
         latitude: bounds.southWest.latitude,
         longitude: bounds.southWest.longitude
-      ), northeast: LatLngDto(
+      ),
+      northeast: LatLngDto(
         latitude: bounds.northEast.latitude,
         longitude: bounds.northEast.longitude
       )
@@ -109,7 +110,8 @@ enum Convert {
   }
 
   static func convertCameraPerspective(perspective: CameraPerspectiveDto)
-    -> GMSNavigationCameraPerspective {
+    -> GMSNavigationCameraPerspective
+  {
     switch perspective {
     case .tilted:
       return .tilted
@@ -128,8 +130,7 @@ enum Convert {
     return point
   }
 
-  static func convertStepInfo(_ stepInfo: GMSNavigationStepInfo) ->
-    StepInfoDto {
+  static func convertStepInfo(_ stepInfo: GMSNavigationStepInfo) -> StepInfoDto {
     .init(
       distanceFromPrevStepMeters: Int64(stepInfo.distanceFromPrevStepMeters),
       timeFromPrevStepSeconds: Int64(stepInfo.timeFromPrevStepSeconds),
@@ -147,9 +148,11 @@ enum Convert {
   }
 
   static func convertNavInfo(_ gmsNavInfo: GMSNavigationNavInfo, maxAmountOfRemainingSteps: Int64)
-    -> NavInfoDto {
-    let currentStepDto = gmsNavInfo
-      .currentStep != nil ? convertStepInfo(gmsNavInfo.currentStep!) : nil
+    -> NavInfoDto
+  {
+    let currentStepDto =
+      gmsNavInfo
+        .currentStep != nil ? convertStepInfo(gmsNavInfo.currentStep!) : nil
     let remainingStepsDto = gmsNavInfo.remainingSteps.prefix(Int(maxAmountOfRemainingSteps))
       .map { convertStepInfo($0) }
 
@@ -158,21 +161,26 @@ enum Convert {
       currentStep: currentStepDto,
       remainingSteps: remainingStepsDto,
       routeChanged: gmsNavInfo.routeChanged,
-      distanceToCurrentStepMeters: Int64(gmsNavInfo.distanceToCurrentStepMeters
-        .isFinite ? round(gmsNavInfo.distanceToCurrentStepMeters) : 0),
-      distanceToFinalDestinationMeters: Int64(gmsNavInfo.distanceToFinalDestinationMeters
-        .isFinite ? round(gmsNavInfo.distanceToFinalDestinationMeters) : 0),
+      distanceToCurrentStepMeters: Int64(
+        gmsNavInfo.distanceToCurrentStepMeters
+          .isFinite ? round(gmsNavInfo.distanceToCurrentStepMeters) : 0),
+      distanceToFinalDestinationMeters: Int64(
+        gmsNavInfo.distanceToFinalDestinationMeters
+          .isFinite ? round(gmsNavInfo.distanceToFinalDestinationMeters) : 0),
       distanceToNextDestinationMeters: nil,
-      timeToCurrentStepSeconds: Int64(gmsNavInfo.timeToCurrentStepSeconds
-        .isFinite ? round(gmsNavInfo.timeToCurrentStepSeconds) : 0),
-      timeToFinalDestinationSeconds: Int64(gmsNavInfo.timeToFinalDestinationSeconds
-        .isFinite ? round(gmsNavInfo.timeToFinalDestinationSeconds) : 0),
+      timeToCurrentStepSeconds: Int64(
+        gmsNavInfo.timeToCurrentStepSeconds
+          .isFinite ? round(gmsNavInfo.timeToCurrentStepSeconds) : 0),
+      timeToFinalDestinationSeconds: Int64(
+        gmsNavInfo.timeToFinalDestinationSeconds
+          .isFinite ? round(gmsNavInfo.timeToFinalDestinationSeconds) : 0),
       timeToNextDestinationSeconds: nil
     )
   }
 
   static func convertNavState(state: GMSNavigationNavState)
-    -> NavStateDto {
+    -> NavStateDto
+  {
     switch state {
     case .enroute:
       return .enroute
@@ -188,7 +196,8 @@ enum Convert {
   }
 
   static func convertDrivingSide(side: GMSNavigationDrivingSide)
-    -> DrivingSideDto {
+    -> DrivingSideDto
+  {
     switch side {
     case .none:
       return .none
@@ -275,7 +284,8 @@ enum Convert {
   }
 
   static func convertNavigationWayPoint(_ gmsNavigationWaypoint: GMSNavigationWaypoint)
-    -> NavigationWaypointDto {
+    -> NavigationWaypointDto
+  {
     .init(
       title: gmsNavigationWaypoint.title,
       target: .init(
@@ -289,7 +299,8 @@ enum Convert {
   }
 
   static func convertWaypoints(_ waypoints: [NavigationWaypointDto?])
-    -> [GMSNavigationWaypoint] {
+    -> [GMSNavigationWaypoint]
+  {
     waypoints
       .map { waypoint -> GMSNavigationWaypoint? in
         guard let waypoint else { return nil }
@@ -327,7 +338,8 @@ enum Convert {
   }
 
   static func convertRoutingOptions(_ routingOptions: RoutingOptionsDto?)
-    -> GMSNavigationRoutingOptions {
+    -> GMSNavigationRoutingOptions
+  {
     let options = GMSNavigationMutableRoutingOptions()
 
     if let routingStraregy = routingOptions?.routingStrategy {
@@ -342,7 +354,8 @@ enum Convert {
     }
 
     if let alternateRoutesStrategy = routingOptions?
-      .alternateRoutesStrategy {
+      .alternateRoutesStrategy
+    {
       switch alternateRoutesStrategy {
       case .all:
         options.alternateRoutesStrategy = .all
@@ -354,8 +367,10 @@ enum Convert {
     }
 
     if let targetDistanceMeters = routingOptions?
-      .targetDistanceMeters {
-      options.targetDistancesMeters = targetDistanceMeters
+      .targetDistanceMeters
+    {
+      options.targetDistancesMeters =
+        targetDistanceMeters
         .compactMap { $0 }
         .map { NSNumber(value: $0) }
     }
@@ -364,7 +379,8 @@ enum Convert {
   }
 
   static func convertRouteStatus(_ gmsRouteStatus: GMSRouteStatus)
-    -> RouteStatusDto {
+    -> RouteStatusDto
+  {
     switch gmsRouteStatus {
     case .apiKeyNotAuthorized: return .apiKeyNotAuthorized
     case .OK: return .statusOk
@@ -384,9 +400,10 @@ enum Convert {
   }
 
   static func convertTravelMode(_ travelMode: TravelModeDto?)
-    -> GMSNavigationTravelMode {
+    -> GMSNavigationTravelMode
+  {
     guard let travelMode else {
-      return .driving // defaults to driving
+      return .driving  // defaults to driving
     }
 
     switch travelMode {
@@ -399,7 +416,8 @@ enum Convert {
   }
 
   static func convertSpeedAlertSeverity(gmsSpeedAlertSeverity: GMSNavigationSpeedAlertSeverity)
-    -> SpeedAlertSeverityDto {
+    -> SpeedAlertSeverityDto
+  {
     switch gmsSpeedAlertSeverity {
     case .unknown: return .unknown
     case .notSpeeding: return .notSpeeding
@@ -411,7 +429,8 @@ enum Convert {
   }
 
   static func convertSpeedAlertSeverity(speedAlertSeverity: SpeedAlertSeverityDto)
-    -> GMSNavigationSpeedAlertSeverity {
+    -> GMSNavigationSpeedAlertSeverity
+  {
     switch speedAlertSeverity {
     case .unknown: return .unknown
     case .notSpeeding: return .notSpeeding
@@ -420,8 +439,11 @@ enum Convert {
     }
   }
 
-  static func convertNavigationAudioGuidanceType(_ navigationAudioGuidanceType: AudioGuidanceTypeDto)
-    -> GMSNavigationVoiceGuidance {
+  static func convertNavigationAudioGuidanceType(
+    _ navigationAudioGuidanceType: AudioGuidanceTypeDto
+  )
+    -> GMSNavigationVoiceGuidance
+  {
     switch navigationAudioGuidanceType {
     case .alertsAndGuidance: return .alertsAndGuidance
     case .alertsOnly: return .alertsOnly
@@ -432,7 +454,7 @@ enum Convert {
   static func convertPath(_ path: GMSPath) -> [LatLngDto] {
     var coordinates = [LatLngDto]()
     guard path.count() != 0 else { return coordinates }
-    for i in 0 ... (path.count() - 1) {
+    for i in 0...(path.count() - 1) {
       coordinates.append(
         LatLngDto(
           latitude: path.coordinate(at: i).latitude,

@@ -27,8 +27,10 @@ enum ImageResizer {
 
   static func resize(image: UIImage, size: CGSize) -> UIImage {
     // Check if scaling is needed
-    guard abs((image.size.width * image.scale) - size.width) > 0 ||
-      abs((image.size.height * image.scale) - size.height) > 0 else {
+    guard
+      abs((image.size.width * image.scale) - size.width) > 0
+        || abs((image.size.height * image.scale) - size.height) > 0
+    else {
       return image
     }
 

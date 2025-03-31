@@ -180,9 +180,11 @@ class GoogleMapsNavigationSessionManager: NSObject {
     mapView.setSession(_session)
   }
 
-  func showTermsAndConditionsDialog(title: String, companyName: String,
-                                    shouldOnlyShowDriverAwarenessDisclaimer: Bool,
-                                    completion: @escaping (Bool) -> Void) {
+  func showTermsAndConditionsDialog(
+    title: String, companyName: String,
+    shouldOnlyShowDriverAwarenessDisclaimer: Bool,
+    completion: @escaping (Bool) -> Void
+  ) {
     GMSNavigationServices
       .shouldOnlyShowDriverAwarenesssDisclaimer = shouldOnlyShowDriverAwarenessDisclaimer
     GMSNavigationServices.showTermsAndConditionsDialogIfNeeded(
@@ -236,8 +238,10 @@ class GoogleMapsNavigationSessionManager: NSObject {
     }
   }
 
-  func setDestinations(destinations: DestinationsDto,
-                       completion: @escaping (Result<RouteStatusDto, Error>) -> Void) {
+  func setDestinations(
+    destinations: DestinationsDto,
+    completion: @escaping (Result<RouteStatusDto, Error>) -> Void
+  ) {
     do {
       // If the session has view attached, enable given display options.
       handleDisplayOptionsIfNeeded(options: destinations.displayOptions)
@@ -318,10 +322,11 @@ class GoogleMapsNavigationSessionManager: NSObject {
 
   /// Simulation
   func setUserLocation(location: LatLngDto) throws {
-    try getSimulator().simulateLocation(at:
-      .init(
-        latitude: location.latitude, longitude: location.longitude
-      ))
+    try getSimulator().simulateLocation(
+      at:
+        .init(
+          latitude: location.latitude, longitude: location.longitude
+        ))
   }
 
   func removeUserLocation() throws {
@@ -342,12 +347,16 @@ class GoogleMapsNavigationSessionManager: NSObject {
     try getSimulator().simulateLocationsAlongExistingRoute()
   }
 
-  func simulateLocationsAlongNewRoute(waypoints: [NavigationWaypointDto],
-                                      completion: @escaping (Result<
-                                        RouteStatusDto,
-                                        Error
-                                      >)
-                                        -> Void) throws {
+  func simulateLocationsAlongNewRoute(
+    waypoints: [NavigationWaypointDto],
+    completion: @escaping (
+      Result<
+        RouteStatusDto,
+        Error
+      >
+    )
+      -> Void
+  ) throws {
     /// Speedmultiplier is set to default value here because the functions using
     /// SimulationOptionsDto will set it globally to a custom value. This
     /// is because we want to use unified API across Android and iOS in the
@@ -364,8 +373,10 @@ class GoogleMapsNavigationSessionManager: NSObject {
 
   /// Set routing options globally for simulator or navigator depending on the use case
   /// or fallback to system default values.
-  private func setRoutingOptionsGlobals(_ routingOptions: RoutingOptionsDto?,
-                                        for routingOptionsTarget: RoutingOptionsTarget) throws {
+  private func setRoutingOptionsGlobals(
+    _ routingOptions: RoutingOptionsDto?,
+    for routingOptionsTarget: RoutingOptionsTarget
+  ) throws {
     switch routingOptionsTarget {
     case .navigator:
       try getNavigator().avoidsFerries = routingOptions?.avoidFerries ?? true
@@ -380,12 +391,16 @@ class GoogleMapsNavigationSessionManager: NSObject {
     _session?.travelMode = Convert.convertTravelMode(routingOptions?.travelMode)
   }
 
-  func simulateLocationsAlongNewRouteWithRoutingOptions(waypoints: [NavigationWaypointDto],
-                                                        routingOptions: RoutingOptionsDto,
-                                                        completion: @escaping (Result<
-                                                          RouteStatusDto,
-                                                          Error
-                                                        >) -> Void) throws {
+  func simulateLocationsAlongNewRouteWithRoutingOptions(
+    waypoints: [NavigationWaypointDto],
+    routingOptions: RoutingOptionsDto,
+    completion: @escaping (
+      Result<
+        RouteStatusDto,
+        Error
+      >
+    ) -> Void
+  ) throws {
     /// Speedmultiplier is set to default value here because the functions using
     /// SimulationOptionsDto will set it globally to a custom value. This
     /// is because we want to use unified API across Android and iOS in the
@@ -402,15 +417,17 @@ class GoogleMapsNavigationSessionManager: NSObject {
       )
   }
 
-  func simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(waypoints: [
-    NavigationWaypointDto
-  ],
-  routingOptions: RoutingOptionsDto,
-  simulationOptions: SimulationOptionsDto,
-  completion: @escaping (Result<
-    RouteStatusDto,
-    Error
-  >) -> Void) throws {
+  func simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
+    waypoints: [NavigationWaypointDto],
+    routingOptions: RoutingOptionsDto,
+    simulationOptions: SimulationOptionsDto,
+    completion: @escaping (
+      Result<
+        RouteStatusDto,
+        Error
+      >
+    ) -> Void
+  ) throws {
     try getSimulator().speedMultiplier = Float(simulationOptions.speedMultiplier)
     try setRoutingOptionsGlobals(routingOptions, for: .simulator)
     try getSimulator()
@@ -484,8 +501,10 @@ class GoogleMapsNavigationSessionManager: NSObject {
     _sendTurnByTurnNavigationEvents = false
   }
 
-  func registerRemainingTimeOrDistanceChangedListener(remainingTimeThresholdSeconds: Int64,
-                                                      remainingDistanceThresholdMeters: Int64) {
+  func registerRemainingTimeOrDistanceChangedListener(
+    remainingTimeThresholdSeconds: Int64,
+    remainingDistanceThresholdMeters: Int64
+  ) {
     // Setting these will also enable listener.
     _session?.navigator?.timeUpdateThreshold = TimeInterval(remainingTimeThresholdSeconds)
     _session?.navigator?
@@ -495,14 +514,16 @@ class GoogleMapsNavigationSessionManager: NSObject {
 
 extension GoogleMapsNavigationSessionManager: GMSRoadSnappedLocationProviderListener {
   /// Send road snapped location update back to flutter code.
-  func locationProvider(_ locationProvider: GMSRoadSnappedLocationProvider,
-                        didUpdate location: CLLocation) {
+  func locationProvider(
+    _ locationProvider: GMSRoadSnappedLocationProvider,
+    didUpdate location: CLLocation
+  ) {
     _navigationSessionEventApi?.onRoadSnappedLocationUpdated(
       location:
-      .init(
-        latitude: location.coordinate.latitude,
-        longitude: location.coordinate.longitude
-      ),
+        .init(
+          latitude: location.coordinate.latitude,
+          longitude: location.coordinate.longitude
+        ),
       completion: { _ in }
     )
   }
@@ -510,9 +531,11 @@ extension GoogleMapsNavigationSessionManager: GMSRoadSnappedLocationProviderList
 
 extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
   /// Send speeding information update back to flutter code.
-  func navigator(_ navigator: GMSNavigator,
-                 didUpdate speedAlertSeverity: GMSNavigationSpeedAlertSeverity,
-                 speedingPercentage percentageAboveLimit: CGFloat) {
+  func navigator(
+    _ navigator: GMSNavigator,
+    didUpdate speedAlertSeverity: GMSNavigationSpeedAlertSeverity,
+    speedingPercentage percentageAboveLimit: CGFloat
+  ) {
     _navigationSessionEventApi?.onSpeedingUpdated(
       msg: .init(
         percentageAboveLimit: percentageAboveLimit,
@@ -543,8 +566,10 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
     )
   }
 
-  func navigator(_ navigator: GMSNavigator,
-                 didUpdateRemainingDistance distance: CLLocationDistance) {
+  func navigator(
+    _ navigator: GMSNavigator,
+    didUpdateRemainingDistance distance: CLLocationDistance
+  ) {
     _navigationSessionEventApi?.onRemainingTimeOrDistanceChanged(
       remainingTime: navigator.timeToNextDestination,
       remainingDistance: distance,
@@ -552,8 +577,10 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
     )
   }
 
-  func navigator(_ navigator: GMSNavigator,
-                 didUpdate navInfo: GMSNavigationNavInfo) {
+  func navigator(
+    _ navigator: GMSNavigator,
+    didUpdate navInfo: GMSNavigationNavInfo
+  ) {
     if _sendTurnByTurnNavigationEvents {
       _navigationSessionEventApi?.onNavInfo(
         navInfo: Convert.convertNavInfo(

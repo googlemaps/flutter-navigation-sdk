@@ -20,10 +20,10 @@ import PackageDescription
 let package = Package(
   name: "google_navigation_flutter",
   platforms: [
-    .iOS("15.0"),
+    .iOS("15.0")
   ],
   products: [
-    .library(name: "google-navigation-flutter", targets: ["google_navigation_flutter"]),
+    .library(name: "google-navigation-flutter", targets: ["google_navigation_flutter"])
   ],
   dependencies: [
     .package(
@@ -49,8 +49,8 @@ let package = Package(
         ),
       ],
       resources: [
-        .process("PrivacyInfo.xcprivacy"),
+        .process("PrivacyInfo.xcprivacy")
       ]
-    ),
+    )
   ]
 )
