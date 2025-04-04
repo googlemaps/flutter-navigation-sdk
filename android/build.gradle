@@ -16,7 +16,7 @@ group 'com.google.maps.flutter.navigation'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '2.0.0'
+    ext.kotlin_version = '2.1.0'
     repositories {
         google()
         mavenCentral()
@@ -79,7 +79,7 @@ android {
     dependencies {
         implementation "androidx.car.app:app:1.4.0"
         implementation "androidx.car.app:app-projected:1.4.0"
-        implementation "com.google.android.libraries.navigation:navigation:6.1.0"
+        implementation "com.google.android.libraries.navigation:navigation:6.2.0"
         testImplementation 'org.jetbrains.kotlin:kotlin-test'
         testImplementation 'io.mockk:mockk:1.13.8'
         testImplementation 'junit:junit:4.13.2'

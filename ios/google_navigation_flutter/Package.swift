@@ -28,11 +28,11 @@ let package = Package(
   dependencies: [
     .package(
       url: "https://github.com/googlemaps/ios-navigation-sdk",
-      exact: "9.3.0"
+      exact: "9.4.0"
     ),
     .package(
       url: "https://github.com/googlemaps/ios-maps-sdk",
-      exact: "9.3.0"
+      exact: "9.4.0"
     ),
   ],
   targets: [
