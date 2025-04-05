@@ -493,10 +493,8 @@ int? colorToInt(Color? color) {
     return null;
   }
 
-  int floatToInt8(double x) => (x * 255.0).round() & 0xff;
-
-  return (floatToInt8(color.a) << 24) |
-      (floatToInt8(color.r) << 16) |
-      (floatToInt8(color.g) << 8) |
-      (floatToInt8(color.b));
+  return (color.alpha << 24) |
+  (color.red << 16) |
+  (color.green << 8) |
+  (color.blue);
 }
