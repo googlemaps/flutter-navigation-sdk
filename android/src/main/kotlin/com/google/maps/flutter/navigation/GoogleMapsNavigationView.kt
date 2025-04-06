@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.view.View
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.libraries.navigation.ForceNightMode.FORCE_DAY
 import com.google.android.libraries.navigation.NavigationView
 import io.flutter.plugin.platform.PlatformView
 
@@ -66,6 +67,7 @@ internal constructor(
       }
     }
     _navigationView.isNavigationUiEnabled = navigationViewEnabled
+    _navigationView.setForceNightMode(FORCE_DAY)
 
     viewRegistry.registerNavigationView(viewId, this)
 

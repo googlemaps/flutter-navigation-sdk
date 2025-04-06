@@ -88,6 +88,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     let mapViewOptions = GMSMapViewOptions()
     _mapConfiguration.apply(to: mapViewOptions, withFrame: frame)
     _mapView = ViewStateAwareGMSMapView(options: mapViewOptions)
+    _mapView.overrideUserInterfaceStyle = .light
     _mapConfiguration.apply(to: _mapView)
 
     super.init()
