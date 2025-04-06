@@ -19,8 +19,7 @@ issue_tracker: https://github.com/googlemaps/flutter-navigation-sdk/issues
 version: 0.5.2
 
 environment:
-  sdk: ^3.4.0
-  flutter: ">=3.22.1"
+  sdk: ^3.2.0
 
 dependencies:
   collection: ^1.17.2
