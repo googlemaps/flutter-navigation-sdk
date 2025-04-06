@@ -272,12 +272,7 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
 
   @override
   Widget buildOverlayContent(BuildContext context) {
-    final ButtonStyle threeButtonRowStyle = Theme.of(context)
-        .elevatedButtonTheme
-        .style!
-        .copyWith(
-            minimumSize: WidgetStateProperty.all<Size>(const Size(107, 36)));
-
+    
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -493,7 +488,6 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
           spacing: 10,
           children: <Widget>[
             ElevatedButton(
-              style: threeButtonRowStyle,
               onPressed: () {
                 final CameraUpdate cameraUpdate = CameraUpdate.zoomIn();
                 if (_animationsEnabled) {
@@ -510,7 +504,6 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
               child: const Text('zoomIn'),
             ),
             ElevatedButton(
-              style: threeButtonRowStyle,
               onPressed: () {
                 final CameraUpdate cameraUpdate = CameraUpdate.zoomOut();
                 if (_animationsEnabled) {
@@ -527,7 +520,6 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
               child: const Text('zoomOut'),
             ),
             ElevatedButton(
-              style: threeButtonRowStyle,
               onPressed: () {
                 final CameraUpdate cameraUpdate = CameraUpdate.zoomTo(16.0);
 
@@ -565,7 +557,6 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
           spacing: 10,
           children: <Widget>[
             ElevatedButton(
-                style: threeButtonRowStyle,
                 onPressed: _navigationRunning
                     ? () {
                         _navigationViewController
@@ -576,7 +567,6 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
                     : null,
                 child: const Text('Tilted')),
             ElevatedButton(
-                style: threeButtonRowStyle,
                 onPressed: _navigationRunning
                     ? () {
                         _navigationViewController.followMyLocation(
@@ -586,7 +576,6 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
                     : null,
                 child: const Text('Heading up')),
             ElevatedButton(
-                style: threeButtonRowStyle,
                 onPressed: _navigationRunning
                     ? () {
                         _navigationViewController
@@ -596,7 +585,6 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
                     : null,
                 child: const Text('North up')),
             ElevatedButton(
-                style: threeButtonRowStyle,
                 onPressed: _navigationRunning
                     ? () {
                         _navigationViewController.followMyLocation(

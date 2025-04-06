@@ -44,6 +44,11 @@ class GoogleMapViewController {
         .setMyLocationEnabled(viewId: _viewId, enabled: enabled);
   }
 
+  Future<void> setMyLocationButtonEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .setMyLocationButtonEnabled(viewId: _viewId, enabled: enabled);
+  }
+
   /// This method returns the current map type of the Google Maps view instance.
   Future<MapType> getMapType() {
     return GoogleMapsNavigationPlatform.instance.viewAPI
