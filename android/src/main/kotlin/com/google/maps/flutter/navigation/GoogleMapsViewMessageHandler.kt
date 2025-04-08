@@ -356,6 +356,22 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
     getNavigationView(viewId.toInt()).setTrafficIncidentCardsEnabled(enabled)
   }
 
+  override fun isReportIncidentButtonEnabled(viewId: Long): Boolean {
+    return getNavigationView(viewId.toInt()).isReportIncidentButtonEnabled()
+  }
+
+  override fun setReportIncidentButtonEnabled(viewId: Long, enabled: Boolean) {
+    getNavigationView(viewId.toInt()).setReportIncidentButtonEnabled(enabled)
+  }
+
+  override fun isTrafficPromptsEnabled(viewId: Long): Boolean {
+    return getNavigationView(viewId.toInt()).isTrafficPromptsEnabled()
+  }
+
+  override fun setTrafficPromptsEnabled(viewId: Long, enabled: Boolean) {
+    getNavigationView(viewId.toInt()).setTrafficPromptsEnabled(enabled)
+  }
+
   override fun isNavigationUIEnabled(viewId: Long): Boolean {
     return getNavigationView(viewId.toInt()).isNavigationUIEnabled()
   }
