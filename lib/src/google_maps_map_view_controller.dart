@@ -44,6 +44,15 @@ class GoogleMapViewController {
         .setMyLocationEnabled(viewId: _viewId, enabled: enabled);
   }
 
+  /// Enable or disable the my location button on the map.
+  ///
+  /// The my location button allows users to center the map on their current location
+  /// when tapped. By default, the button is enabled.
+  Future<void> setMyLocationButtonEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .setMyLocationButtonEnabled(viewId: _viewId, enabled: enabled);
+  }
+
   /// This method returns the current map type of the Google Maps view instance.
   Future<MapType> getMapType() {
     return GoogleMapsNavigationPlatform.instance.viewAPI
@@ -85,6 +94,187 @@ class GoogleMapViewController {
         .isMyLocationEnabled(viewId: _viewId);
   }
 
+  
+  /// Gets whether the my location button is enabled or disabled.
+  ///
+  /// Returns true if the my location button is currently enabled on the map,
+  /// false otherwise.
+  Future<bool> isMyLocationButtonEnabled() async {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .isMyLocationButtonEnabled(viewId: _viewId);
+  }
+
+  /// Sets the preference for whether zoom gestures should be enabled or disabled.
+  Future<void> setZoomGesturesEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .setZoomGesturesEnabled(viewId: _viewId, enabled: enabled);
+  }
+
+  /// Gets the preference for whether zoom gestures should be enabled or disabled.
+  Future<bool> isZoomGesturesEnabled() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .isZoomGesturesEnabled(viewId: _viewId);
+  }
+
+  /// Sets the preference for whether zoom controls should be enabled or disabled.
+  ///
+  /// Note: This feature is not supported on iOS and will throw [UnsupportedError].
+  Future<void> setZoomControlsEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .setZoomControlsEnabled(viewId: _viewId, enabled: enabled);
+  }
+
+  /// Gets the preference for whether zoom controls should be enabled or disabled.
+  ///
+  /// Note: This feature is not supported on iOS and will throw [UnsupportedError].
+  Future<bool> isZoomControlsEnabled() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .isZoomControlsEnabled(viewId: _viewId);
+  }
+
+  /// Sets the preference for whether the compass should be enabled or disabled.
+  Future<void> setCompassEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .setCompassEnabled(viewId: _viewId, enabled: enabled);
+  }
+
+  /// Gets the preference for whether compass should be enabled or disabled.
+  Future<bool> isCompassEnabled() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .isCompassEnabled(viewId: _viewId);
+  }
+
+  /// Sets the preference for whether rotate gestures should be enabled or disabled.
+  Future<void> setRotateGesturesEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .setRotateGesturesEnabled(viewId: _viewId, enabled: enabled);
+  }
+
+  /// Gets the preference for whether rotate gestures should be enabled or disabled.
+  Future<bool> isRotateGesturesEnabled() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .isRotateGesturesEnabled(viewId: _viewId);
+  }
+
+  /// Sets the preference for whether scroll gestures should be enabled or disabled.
+  Future<void> setScrollGesturesEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .setScrollGesturesEnabled(viewId: _viewId, enabled: enabled);
+  }
+
+  /// Gets the preference for whether scroll gestures should be enabled or disabled.
+  Future<bool> isScrollGesturesEnabled() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .isScrollGesturesEnabled(viewId: _viewId);
+  }
+
+  /// Sets the preference for whether scroll gestures can take place at the same time as a zoom or rotate gesture.
+  Future<void> setScrollGesturesDuringRotateOrZoomEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .setScrollGesturesDuringRotateOrZoomEnabled(viewId: _viewId, enabled: enabled);
+  }
+
+  /// Gets the preference for whether scroll gestures can take place at the same time as a zoom or rotate gesture.
+  Future<bool> isScrollGesturesEnabledDuringRotateOrZoom() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .isScrollGesturesEnabledDuringRotateOrZoom(viewId: _viewId);
+  }
+
+  /// Sets the preference for whether tilt gestures should be enabled or disabled.
+  Future<void> setTiltGesturesEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .setTiltGesturesEnabled(viewId: _viewId, enabled: enabled);
+  }
+
+  /// Gets the preference for whether tilt gestures should be enabled or disabled.
+  Future<bool> isTiltGesturesEnabled() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .isTiltGesturesEnabled(viewId: _viewId);
+  }
+
+  /// Sets the preference for whether the Map Toolbar should be enabled or disabled.
+  ///
+  /// Note: This feature is not supported on iOS and will throw [UnsupportedError].
+  Future<void> setMapToolbarEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .setMapToolbarEnabled(viewId: _viewId, enabled: enabled);
+  }
+
+  /// Gets whether the Map Toolbar is enabled/disabled.
+  ///
+  /// Note: This feature is not supported on iOS and will throw [UnsupportedError].
+  Future<bool> isMapToolbarEnabled() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .isMapToolbarEnabled(viewId: _viewId);
+  }
+
+  /// Turns the traffic layer on or off.
+  Future<void> setTrafficEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .setTrafficEnabled(viewId: _viewId, enabled: enabled);
+  }
+
+  /// Checks whether the map is drawing traffic data.
+  Future<bool> isTrafficEnabled() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .isTrafficEnabled(viewId: _viewId);
+  }
+
+  /// Register camera changed listeners.
+  Future<void> registerOnCameraChangedListener() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .registerOnCameraChangedListener(viewId: _viewId);
+  }
+
+  /// Get map click event stream.
+  Stream<MapClickEvent> getMapClickEventStream() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .getMapClickEventStream(viewId: _viewId);
+  }
+
+  /// Get map long click event stream.
+  Stream<MapLongClickEvent> getMapLongClickEventStream() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .getMapLongClickEventStream(viewId: _viewId);
+  }
+
+  /// Get marker event stream.
+  Stream<MarkerEvent> getMarkerEventStream() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .getMarkerEventStream(viewId: _viewId);
+  }
+
+  /// Get marker drag event stream.
+  Stream<MarkerDragEvent> getMarkerDragEventStream() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .getMarkerDragEventStream(viewId: _viewId);
+  }
+
+  /// Get polygon clicked event stream.
+  Stream<PolygonClickedEvent> getPolygonClickedEventStream() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .getPolygonClickedEventStream(viewId: _viewId);
+  }
+
+  /// Get polyline clicked event stream.
+  Stream<PolylineClickedEvent> getPolylineClickedEventStream() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .getPolylineClickedEventStream(viewId: _viewId);
+  }
+
+  /// Get circle clicked event stream.
+  Stream<CircleClickedEvent> getCircleClickedEventStream() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .getCircleClickedEventStream(viewId: _viewId);
+  }
+
+  /// Get my location clicked event stream.
+  Stream<MyLocationClickedEvent> getMyLocationClickedEventStream() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .getMyLocationClickedEventStream(viewId: _viewId);
+  }
+
+  
   /// Ask the camera to follow the user's location.
   ///
   /// Use [perspective] to specify the orientation of the camera
