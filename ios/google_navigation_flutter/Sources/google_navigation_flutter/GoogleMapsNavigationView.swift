@@ -49,7 +49,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   private var _listenCameraChanges = false
   var isAttachedToSession: Bool = false
   private let _isCarPlayView: Bool
-    
+
   // As prompt visibility settings is handled by the navigator, value is
   // stored here to handle the session attach. On android prompts visibility
   // is handled by the view.
@@ -455,7 +455,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
 
     // Update traffic prompts enabled state
     session.navigator?.shouldDisplayPrompts = _isTrafficPromptsEnabled
-      
+
     _mapView.navigationUIDelegate = self
     isAttachedToSession = true
 
@@ -543,7 +543,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   }
 
   func setTrafficPromptsEnabled(_ enabled: Bool) {
-    _isTrafficPromptsEnabled = enabled;
+    _isTrafficPromptsEnabled = enabled
 
     // If navigation session is available, set the value.
     if let navigator = try? GoogleMapsNavigationSessionManager.shared.getNavigator() {
