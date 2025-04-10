@@ -407,22 +407,69 @@ abstract class MapViewApi {
   MapTypeDto getMapType(int viewId);
   void setMapType(int viewId, MapTypeDto mapType);
   void setMapStyle(int viewId, String styleJson);
+
   bool isNavigationTripProgressBarEnabled(int viewId);
   void setNavigationTripProgressBarEnabled(int viewId, bool enabled);
+
   bool isNavigationHeaderEnabled(int viewId);
   void setNavigationHeaderEnabled(int viewId, bool enabled);
+
   bool isNavigationFooterEnabled(int viewId);
   void setNavigationFooterEnabled(int viewId, bool enabled);
+
   bool isRecenterButtonEnabled(int viewId);
   void setRecenterButtonEnabled(int viewId, bool enabled);
+
   bool isSpeedLimitIconEnabled(int viewId);
   void setSpeedLimitIconEnabled(int viewId, bool enabled);
+
   bool isSpeedometerEnabled(int viewId);
   void setSpeedometerEnabled(int viewId, bool enabled);
-  bool isTrafficIncidentCardsEnabled(int viewId);
-  void setTrafficIncidentCardsEnabled(int viewId, bool enabled);
+
   bool isNavigationUIEnabled(int viewId);
   void setNavigationUIEnabled(int viewId, bool enabled);
+
+  bool isMyLocationButtonEnabled(int viewId);
+  void setMyLocationButtonEnabled(int viewId, bool enabled);
+
+  bool isConsumeMyLocationButtonClickEventsEnabled(int viewId);
+  void setConsumeMyLocationButtonClickEventsEnabled(int viewId, bool enabled);
+
+  bool isZoomGesturesEnabled(int viewId);
+  void setZoomGesturesEnabled(int viewId, bool enabled);
+
+  bool isZoomControlsEnabled(int viewId);
+  void setZoomControlsEnabled(int viewId, bool enabled);
+
+  bool isCompassEnabled(int viewId);
+  void setCompassEnabled(int viewId, bool enabled);
+
+  bool isRotateGesturesEnabled(int viewId);
+  void setRotateGesturesEnabled(int viewId, bool enabled);
+
+  bool isScrollGesturesEnabled(int viewId);
+  void setScrollGesturesEnabled(int viewId, bool enabled);
+
+  bool isScrollGesturesEnabledDuringRotateOrZoom(int viewId);
+  void setScrollGesturesDuringRotateOrZoomEnabled(int viewId, bool enabled);
+
+  bool isTiltGesturesEnabled(int viewId);
+  void setTiltGesturesEnabled(int viewId, bool enabled);
+
+  bool isMapToolbarEnabled(int viewId);
+  void setMapToolbarEnabled(int viewId, bool enabled);
+
+  bool isTrafficEnabled(int viewId);
+  void setTrafficEnabled(int viewId, bool enabled);
+
+  bool isTrafficIncidentCardsEnabled(int viewId);
+  void setTrafficIncidentCardsEnabled(int viewId, bool enabled);
+
+  bool isTrafficPromptsEnabled(int viewId);
+  void setTrafficPromptsEnabled(int viewId, bool enabled);
+
+  bool isReportIncidentButtonEnabled(int viewId);
+  void setReportIncidentButtonEnabled(int viewId, bool enabled);
 
   CameraPositionDto getCameraPosition(int viewId);
   LatLngBoundsDto getVisibleRegion(int viewId);
@@ -464,30 +511,6 @@ abstract class MapViewApi {
   void resetMinMaxZoomPreference(int viewId);
   void setMinZoomPreference(int viewId, double minZoomPreference);
   void setMaxZoomPreference(int viewId, double maxZoomPreference);
-
-  void setMyLocationButtonEnabled(int viewId, bool enabled);
-  void setConsumeMyLocationButtonClickEventsEnabled(int viewId, bool enabled);
-  void setZoomGesturesEnabled(int viewId, bool enabled);
-  void setZoomControlsEnabled(int viewId, bool enabled);
-  void setCompassEnabled(int viewId, bool enabled);
-  void setRotateGesturesEnabled(int viewId, bool enabled);
-  void setScrollGesturesEnabled(int viewId, bool enabled);
-  void setScrollGesturesDuringRotateOrZoomEnabled(int viewId, bool enabled);
-  void setTiltGesturesEnabled(int viewId, bool enabled);
-  void setMapToolbarEnabled(int viewId, bool enabled);
-  void setTrafficEnabled(int viewId, bool enabled);
-
-  bool isMyLocationButtonEnabled(int viewId);
-  bool isConsumeMyLocationButtonClickEventsEnabled(int viewId);
-  bool isZoomGesturesEnabled(int viewId);
-  bool isZoomControlsEnabled(int viewId);
-  bool isCompassEnabled(int viewId);
-  bool isRotateGesturesEnabled(int viewId);
-  bool isScrollGesturesEnabled(int viewId);
-  bool isScrollGesturesEnabledDuringRotateOrZoom(int viewId);
-  bool isTiltGesturesEnabled(int viewId);
-  bool isMapToolbarEnabled(int viewId);
-  bool isTrafficEnabled(int viewId);
 
   List<MarkerDto> getMarkers(int viewId);
   List<MarkerDto> addMarkers(int viewId, List<MarkerDto> markers);

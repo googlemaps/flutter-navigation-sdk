@@ -44,6 +44,8 @@ internal constructor(
   private var _isSpeedLimitIconEnabled: Boolean = false
   private var _isSpeedometerEnabled: Boolean = false
   private var _isTrafficIncidentCardsEnabled: Boolean = true
+  private var _isReportIncidentButtonEnabled: Boolean = true
+  private var _isTrafficPromptsEnabled: Boolean = true
 
   override fun getView(): View {
     return _navigationView
@@ -215,6 +217,26 @@ internal constructor(
     invalidateViewAfterMapLoad()
     _navigationView.setTrafficIncidentCardsEnabled(enabled)
     _isTrafficIncidentCardsEnabled = enabled
+  }
+
+  fun isReportIncidentButtonEnabled(): Boolean {
+    return _isReportIncidentButtonEnabled
+  }
+
+  fun setReportIncidentButtonEnabled(enabled: Boolean) {
+    invalidateViewAfterMapLoad()
+    _navigationView.setReportIncidentButtonEnabled(enabled)
+    _isReportIncidentButtonEnabled = enabled
+  }
+
+  fun isTrafficPromptsEnabled(): Boolean {
+    return _isTrafficPromptsEnabled
+  }
+
+  fun setTrafficPromptsEnabled(enabled: Boolean) {
+    invalidateViewAfterMapLoad()
+    _navigationView.setTrafficPromptsEnabled(enabled)
+    _isTrafficPromptsEnabled = enabled
   }
 
   fun isNavigationUIEnabled(): Boolean {

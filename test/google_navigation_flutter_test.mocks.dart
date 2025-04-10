@@ -702,6 +702,308 @@ class MockTestMapViewApi extends _i1.Mock implements _i3.TestMapViewApi {
       );
 
   @override
+  bool isNavigationUIEnabled(int? viewId) => (super.noSuchMethod(
+        Invocation.method(
+          #isNavigationUIEnabled,
+          [viewId],
+        ),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  void setNavigationUIEnabled(
+    int? viewId,
+    bool? enabled,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #setNavigationUIEnabled,
+          [
+            viewId,
+            enabled,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  bool isMyLocationButtonEnabled(int? viewId) => (super.noSuchMethod(
+        Invocation.method(
+          #isMyLocationButtonEnabled,
+          [viewId],
+        ),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  void setMyLocationButtonEnabled(
+    int? viewId,
+    bool? enabled,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #setMyLocationButtonEnabled,
+          [
+            viewId,
+            enabled,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  bool isConsumeMyLocationButtonClickEventsEnabled(int? viewId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #isConsumeMyLocationButtonClickEventsEnabled,
+          [viewId],
+        ),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  void setConsumeMyLocationButtonClickEventsEnabled(
+    int? viewId,
+    bool? enabled,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #setConsumeMyLocationButtonClickEventsEnabled,
+          [
+            viewId,
+            enabled,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  bool isZoomGesturesEnabled(int? viewId) => (super.noSuchMethod(
+        Invocation.method(
+          #isZoomGesturesEnabled,
+          [viewId],
+        ),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  void setZoomGesturesEnabled(
+    int? viewId,
+    bool? enabled,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #setZoomGesturesEnabled,
+          [
+            viewId,
+            enabled,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  bool isZoomControlsEnabled(int? viewId) => (super.noSuchMethod(
+        Invocation.method(
+          #isZoomControlsEnabled,
+          [viewId],
+        ),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  void setZoomControlsEnabled(
+    int? viewId,
+    bool? enabled,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #setZoomControlsEnabled,
+          [
+            viewId,
+            enabled,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  bool isCompassEnabled(int? viewId) => (super.noSuchMethod(
+        Invocation.method(
+          #isCompassEnabled,
+          [viewId],
+        ),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  void setCompassEnabled(
+    int? viewId,
+    bool? enabled,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #setCompassEnabled,
+          [
+            viewId,
+            enabled,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  bool isRotateGesturesEnabled(int? viewId) => (super.noSuchMethod(
+        Invocation.method(
+          #isRotateGesturesEnabled,
+          [viewId],
+        ),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  void setRotateGesturesEnabled(
+    int? viewId,
+    bool? enabled,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #setRotateGesturesEnabled,
+          [
+            viewId,
+            enabled,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  bool isScrollGesturesEnabled(int? viewId) => (super.noSuchMethod(
+        Invocation.method(
+          #isScrollGesturesEnabled,
+          [viewId],
+        ),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  void setScrollGesturesEnabled(
+    int? viewId,
+    bool? enabled,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #setScrollGesturesEnabled,
+          [
+            viewId,
+            enabled,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  bool isScrollGesturesEnabledDuringRotateOrZoom(int? viewId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #isScrollGesturesEnabledDuringRotateOrZoom,
+          [viewId],
+        ),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  void setScrollGesturesDuringRotateOrZoomEnabled(
+    int? viewId,
+    bool? enabled,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #setScrollGesturesDuringRotateOrZoomEnabled,
+          [
+            viewId,
+            enabled,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  bool isTiltGesturesEnabled(int? viewId) => (super.noSuchMethod(
+        Invocation.method(
+          #isTiltGesturesEnabled,
+          [viewId],
+        ),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  void setTiltGesturesEnabled(
+    int? viewId,
+    bool? enabled,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #setTiltGesturesEnabled,
+          [
+            viewId,
+            enabled,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  bool isMapToolbarEnabled(int? viewId) => (super.noSuchMethod(
+        Invocation.method(
+          #isMapToolbarEnabled,
+          [viewId],
+        ),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  void setMapToolbarEnabled(
+    int? viewId,
+    bool? enabled,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #setMapToolbarEnabled,
+          [
+            viewId,
+            enabled,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  bool isTrafficEnabled(int? viewId) => (super.noSuchMethod(
+        Invocation.method(
+          #isTrafficEnabled,
+          [viewId],
+        ),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  void setTrafficEnabled(
+    int? viewId,
+    bool? enabled,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #setTrafficEnabled,
+          [
+            viewId,
+            enabled,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
   bool isTrafficIncidentCardsEnabled(int? viewId) => (super.noSuchMethod(
         Invocation.method(
           #isTrafficIncidentCardsEnabled,
@@ -727,22 +1029,47 @@ class MockTestMapViewApi extends _i1.Mock implements _i3.TestMapViewApi {
       );
 
   @override
-  bool isNavigationUIEnabled(int? viewId) => (super.noSuchMethod(
+  bool isTrafficPromptsEnabled(int? viewId) => (super.noSuchMethod(
         Invocation.method(
-          #isNavigationUIEnabled,
+          #isTrafficPromptsEnabled,
           [viewId],
         ),
         returnValue: false,
       ) as bool);
 
   @override
-  void setNavigationUIEnabled(
+  void setTrafficPromptsEnabled(
     int? viewId,
     bool? enabled,
   ) =>
       super.noSuchMethod(
         Invocation.method(
-          #setNavigationUIEnabled,
+          #setTrafficPromptsEnabled,
+          [
+            viewId,
+            enabled,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  bool isReportIncidentButtonEnabled(int? viewId) => (super.noSuchMethod(
+        Invocation.method(
+          #isReportIncidentButtonEnabled,
+          [viewId],
+        ),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  void setReportIncidentButtonEnabled(
+    int? viewId,
+    bool? enabled,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #setReportIncidentButtonEnabled,
           [
             viewId,
             enabled,
@@ -1124,283 +1451,6 @@ class MockTestMapViewApi extends _i1.Mock implements _i3.TestMapViewApi {
         ),
         returnValueForMissingStub: null,
       );
-
-  @override
-  void setMyLocationButtonEnabled(
-    int? viewId,
-    bool? enabled,
-  ) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #setMyLocationButtonEnabled,
-          [
-            viewId,
-            enabled,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void setConsumeMyLocationButtonClickEventsEnabled(
-    int? viewId,
-    bool? enabled,
-  ) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #setConsumeMyLocationButtonClickEventsEnabled,
-          [
-            viewId,
-            enabled,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void setZoomGesturesEnabled(
-    int? viewId,
-    bool? enabled,
-  ) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #setZoomGesturesEnabled,
-          [
-            viewId,
-            enabled,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void setZoomControlsEnabled(
-    int? viewId,
-    bool? enabled,
-  ) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #setZoomControlsEnabled,
-          [
-            viewId,
-            enabled,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void setCompassEnabled(
-    int? viewId,
-    bool? enabled,
-  ) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #setCompassEnabled,
-          [
-            viewId,
-            enabled,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void setRotateGesturesEnabled(
-    int? viewId,
-    bool? enabled,
-  ) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #setRotateGesturesEnabled,
-          [
-            viewId,
-            enabled,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void setScrollGesturesEnabled(
-    int? viewId,
-    bool? enabled,
-  ) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #setScrollGesturesEnabled,
-          [
-            viewId,
-            enabled,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void setScrollGesturesDuringRotateOrZoomEnabled(
-    int? viewId,
-    bool? enabled,
-  ) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #setScrollGesturesDuringRotateOrZoomEnabled,
-          [
-            viewId,
-            enabled,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void setTiltGesturesEnabled(
-    int? viewId,
-    bool? enabled,
-  ) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #setTiltGesturesEnabled,
-          [
-            viewId,
-            enabled,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void setMapToolbarEnabled(
-    int? viewId,
-    bool? enabled,
-  ) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #setMapToolbarEnabled,
-          [
-            viewId,
-            enabled,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void setTrafficEnabled(
-    int? viewId,
-    bool? enabled,
-  ) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #setTrafficEnabled,
-          [
-            viewId,
-            enabled,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  bool isMyLocationButtonEnabled(int? viewId) => (super.noSuchMethod(
-        Invocation.method(
-          #isMyLocationButtonEnabled,
-          [viewId],
-        ),
-        returnValue: false,
-      ) as bool);
-
-  @override
-  bool isConsumeMyLocationButtonClickEventsEnabled(int? viewId) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #isConsumeMyLocationButtonClickEventsEnabled,
-          [viewId],
-        ),
-        returnValue: false,
-      ) as bool);
-
-  @override
-  bool isZoomGesturesEnabled(int? viewId) => (super.noSuchMethod(
-        Invocation.method(
-          #isZoomGesturesEnabled,
-          [viewId],
-        ),
-        returnValue: false,
-      ) as bool);
-
-  @override
-  bool isZoomControlsEnabled(int? viewId) => (super.noSuchMethod(
-        Invocation.method(
-          #isZoomControlsEnabled,
-          [viewId],
-        ),
-        returnValue: false,
-      ) as bool);
-
-  @override
-  bool isCompassEnabled(int? viewId) => (super.noSuchMethod(
-        Invocation.method(
-          #isCompassEnabled,
-          [viewId],
-        ),
-        returnValue: false,
-      ) as bool);
-
-  @override
-  bool isRotateGesturesEnabled(int? viewId) => (super.noSuchMethod(
-        Invocation.method(
-          #isRotateGesturesEnabled,
-          [viewId],
-        ),
-        returnValue: false,
-      ) as bool);
-
-  @override
-  bool isScrollGesturesEnabled(int? viewId) => (super.noSuchMethod(
-        Invocation.method(
-          #isScrollGesturesEnabled,
-          [viewId],
-        ),
-        returnValue: false,
-      ) as bool);
-
-  @override
-  bool isScrollGesturesEnabledDuringRotateOrZoom(int? viewId) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #isScrollGesturesEnabledDuringRotateOrZoom,
-          [viewId],
-        ),
-        returnValue: false,
-      ) as bool);
-
-  @override
-  bool isTiltGesturesEnabled(int? viewId) => (super.noSuchMethod(
-        Invocation.method(
-          #isTiltGesturesEnabled,
-          [viewId],
-        ),
-        returnValue: false,
-      ) as bool);
-
-  @override
-  bool isMapToolbarEnabled(int? viewId) => (super.noSuchMethod(
-        Invocation.method(
-          #isMapToolbarEnabled,
-          [viewId],
-        ),
-        returnValue: false,
-      ) as bool);
-
-  @override
-  bool isTrafficEnabled(int? viewId) => (super.noSuchMethod(
-        Invocation.method(
-          #isTrafficEnabled,
-          [viewId],
-        ),
-        returnValue: false,
-      ) as bool);
 
   @override
   List<_i2.MarkerDto?> getMarkers(int? viewId) => (super.noSuchMethod(

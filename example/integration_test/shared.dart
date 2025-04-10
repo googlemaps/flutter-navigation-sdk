@@ -498,3 +498,7 @@ int? colorToInt(Color? color) {
   (color.green << 8) |
   (color.blue);
 }
+
+/// Helper function to build a reason for the test.
+String buildReasonForToggle(String toggle, bool result) =>
+    'set$toggle($result) should update the internal state so that a subsequent call to is$toggle returns $result.';
