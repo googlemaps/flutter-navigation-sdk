@@ -121,10 +121,6 @@ void main() {
 
     final List<bool> results = <bool>[false, true, false];
 
-    /// Helper function to build a reason for the test.
-    buildReasonForToggle(String toggle, bool result) =>
-        'set$toggle($result) should update the internal state so that a subsequent call to is$toggle returns $result.';
-
     /// Test enabling and disabling the navigation UI.
     for (final bool result in results) {
       await viewController.setNavigationUIEnabled(result);
