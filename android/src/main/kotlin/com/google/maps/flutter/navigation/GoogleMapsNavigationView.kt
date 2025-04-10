@@ -215,7 +215,6 @@ internal constructor(
   }
 
   fun setReportIncidentButtonEnabled(enabled: Boolean) {
-    invalidateViewAfterMapLoad()
     _navigationView.setReportIncidentButtonEnabled(enabled)
     _isReportIncidentButtonEnabled = enabled
   }
@@ -225,7 +224,6 @@ internal constructor(
   }
 
   fun setTrafficPromptsEnabled(enabled: Boolean) {
-    invalidateViewAfterMapLoad()
     _navigationView.setTrafficPromptsEnabled(enabled)
     _isTrafficPromptsEnabled = enabled
   }
