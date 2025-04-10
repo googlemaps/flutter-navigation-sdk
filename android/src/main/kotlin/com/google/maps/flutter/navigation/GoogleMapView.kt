@@ -51,7 +51,6 @@ internal constructor(
       imageRegistry.mapViewInitializationComplete()
       mapReady()
       mapOptions.padding?.let { setPadding(it) }
-      invalidateViewAfterMapLoad()
     }
   }
 
