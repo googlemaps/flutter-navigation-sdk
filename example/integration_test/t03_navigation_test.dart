@@ -468,9 +468,9 @@ void main() {
 
     /// Specify tolerance and navigation end coordinates.
     const double endLat = 68.60338455021943, endLng = 23.548804200724454;
+    const double tolerance = 0.001;
 
     /// Use the helper function to simulate and test location
-    const double tolerance = 0.001;
     await setSimulatedUserLocationWithCheck(
         $, viewController, startLat, startLng, tolerance);
 
