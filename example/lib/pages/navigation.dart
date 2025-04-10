@@ -101,6 +101,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   bool _speedometerEnabled = false;
   bool _speedLimitIconEnabled = false;
   bool _trafficIndicentCardsEnabled = false;
+  bool _trafficPromptsEnabled = true;
+  bool _reportIncidentButtonEnabled = true;
 
   bool _termsAndConditionsAccepted = false;
   bool _locationPermissionsAccepted = false;
@@ -502,6 +504,10 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
           await _navigationViewController!.isSpeedLimitIconEnabled();
       final bool trafficIndicentCardsEnabled =
           await _navigationViewController!.isTrafficIncidentCardsEnabled();
+      final bool trafficPromptsEnabled =
+          await _navigationViewController!.isTrafficPromptsEnabled();
+      final bool reportIncidentButtonEnabled =
+          await _navigationViewController!.isReportIncidentButtonEnabled();
 
       setState(() {
         _navigationHeaderEnabled = navigationHeaderEnabled;
@@ -512,6 +518,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         _speedometerEnabled = speedometerEnabled;
         _speedLimitIconEnabled = speedLimitIconEnabled;
         _trafficIndicentCardsEnabled = trafficIndicentCardsEnabled;
+        _trafficPromptsEnabled = trafficPromptsEnabled;
+        _reportIncidentButtonEnabled = reportIncidentButtonEnabled;
       });
     }
   }
@@ -1499,6 +1507,26 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                             .setTrafficIncidentCardsEnabled(newValue);
                         setState(() {
                           _trafficIndicentCardsEnabled = newValue;
+                        });
+                      }),
+                  ExampleSwitch(
+                      title: 'Display traffic prompts',
+                      initialValue: _trafficPromptsEnabled,
+                      onChanged: (bool newValue) async {
+                        await _navigationViewController!
+                            .setTrafficPromptsEnabled(newValue);
+                        setState(() {
+                          _trafficPromptsEnabled = newValue;
+                        });
+                      }),
+                  ExampleSwitch(
+                      title: 'Display report incident button',
+                      initialValue: _reportIncidentButtonEnabled,
+                      onChanged: (bool newValue) async {
+                        await _navigationViewController!
+                            .setReportIncidentButtonEnabled(newValue);
+                        setState(() {
+                          _reportIncidentButtonEnabled = newValue;
                         });
                       }),
                   Text(

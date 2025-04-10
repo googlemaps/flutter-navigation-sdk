@@ -2042,13 +2042,65 @@ interface MapViewApi {
 
   fun setSpeedometerEnabled(viewId: Long, enabled: Boolean)
 
+  fun isNavigationUIEnabled(viewId: Long): Boolean
+
+  fun setNavigationUIEnabled(viewId: Long, enabled: Boolean)
+
+  fun isMyLocationButtonEnabled(viewId: Long): Boolean
+
+  fun setMyLocationButtonEnabled(viewId: Long, enabled: Boolean)
+
+  fun isConsumeMyLocationButtonClickEventsEnabled(viewId: Long): Boolean
+
+  fun setConsumeMyLocationButtonClickEventsEnabled(viewId: Long, enabled: Boolean)
+
+  fun isZoomGesturesEnabled(viewId: Long): Boolean
+
+  fun setZoomGesturesEnabled(viewId: Long, enabled: Boolean)
+
+  fun isZoomControlsEnabled(viewId: Long): Boolean
+
+  fun setZoomControlsEnabled(viewId: Long, enabled: Boolean)
+
+  fun isCompassEnabled(viewId: Long): Boolean
+
+  fun setCompassEnabled(viewId: Long, enabled: Boolean)
+
+  fun isRotateGesturesEnabled(viewId: Long): Boolean
+
+  fun setRotateGesturesEnabled(viewId: Long, enabled: Boolean)
+
+  fun isScrollGesturesEnabled(viewId: Long): Boolean
+
+  fun setScrollGesturesEnabled(viewId: Long, enabled: Boolean)
+
+  fun isScrollGesturesEnabledDuringRotateOrZoom(viewId: Long): Boolean
+
+  fun setScrollGesturesDuringRotateOrZoomEnabled(viewId: Long, enabled: Boolean)
+
+  fun isTiltGesturesEnabled(viewId: Long): Boolean
+
+  fun setTiltGesturesEnabled(viewId: Long, enabled: Boolean)
+
+  fun isMapToolbarEnabled(viewId: Long): Boolean
+
+  fun setMapToolbarEnabled(viewId: Long, enabled: Boolean)
+
+  fun isTrafficEnabled(viewId: Long): Boolean
+
+  fun setTrafficEnabled(viewId: Long, enabled: Boolean)
+
   fun isTrafficIncidentCardsEnabled(viewId: Long): Boolean
 
   fun setTrafficIncidentCardsEnabled(viewId: Long, enabled: Boolean)
 
-  fun isNavigationUIEnabled(viewId: Long): Boolean
+  fun isTrafficPromptsEnabled(viewId: Long): Boolean
 
-  fun setNavigationUIEnabled(viewId: Long, enabled: Boolean)
+  fun setTrafficPromptsEnabled(viewId: Long, enabled: Boolean)
+
+  fun isReportIncidentButtonEnabled(viewId: Long): Boolean
+
+  fun setReportIncidentButtonEnabled(viewId: Long, enabled: Boolean)
 
   fun getCameraPosition(viewId: Long): CameraPositionDto
 
@@ -2135,50 +2187,6 @@ interface MapViewApi {
   fun setMinZoomPreference(viewId: Long, minZoomPreference: Double)
 
   fun setMaxZoomPreference(viewId: Long, maxZoomPreference: Double)
-
-  fun setMyLocationButtonEnabled(viewId: Long, enabled: Boolean)
-
-  fun setConsumeMyLocationButtonClickEventsEnabled(viewId: Long, enabled: Boolean)
-
-  fun setZoomGesturesEnabled(viewId: Long, enabled: Boolean)
-
-  fun setZoomControlsEnabled(viewId: Long, enabled: Boolean)
-
-  fun setCompassEnabled(viewId: Long, enabled: Boolean)
-
-  fun setRotateGesturesEnabled(viewId: Long, enabled: Boolean)
-
-  fun setScrollGesturesEnabled(viewId: Long, enabled: Boolean)
-
-  fun setScrollGesturesDuringRotateOrZoomEnabled(viewId: Long, enabled: Boolean)
-
-  fun setTiltGesturesEnabled(viewId: Long, enabled: Boolean)
-
-  fun setMapToolbarEnabled(viewId: Long, enabled: Boolean)
-
-  fun setTrafficEnabled(viewId: Long, enabled: Boolean)
-
-  fun isMyLocationButtonEnabled(viewId: Long): Boolean
-
-  fun isConsumeMyLocationButtonClickEventsEnabled(viewId: Long): Boolean
-
-  fun isZoomGesturesEnabled(viewId: Long): Boolean
-
-  fun isZoomControlsEnabled(viewId: Long): Boolean
-
-  fun isCompassEnabled(viewId: Long): Boolean
-
-  fun isRotateGesturesEnabled(viewId: Long): Boolean
-
-  fun isScrollGesturesEnabled(viewId: Long): Boolean
-
-  fun isScrollGesturesEnabledDuringRotateOrZoom(viewId: Long): Boolean
-
-  fun isTiltGesturesEnabled(viewId: Long): Boolean
-
-  fun isMapToolbarEnabled(viewId: Long): Boolean
-
-  fun isTrafficEnabled(viewId: Long): Boolean
 
   fun getMarkers(viewId: Long): List<MarkerDto>
 
@@ -2695,6 +2703,582 @@ interface MapViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationUIEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isNavigationUIEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationUIEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            val enabledArg = args[1] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setNavigationUIEnabled(viewIdArg, enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationButtonEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isMyLocationButtonEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationButtonEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            val enabledArg = args[1] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setMyLocationButtonEnabled(viewIdArg, enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isConsumeMyLocationButtonClickEventsEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isConsumeMyLocationButtonClickEventsEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setConsumeMyLocationButtonClickEventsEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            val enabledArg = args[1] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setConsumeMyLocationButtonClickEventsEnabled(viewIdArg, enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomGesturesEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isZoomGesturesEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomGesturesEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            val enabledArg = args[1] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setZoomGesturesEnabled(viewIdArg, enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomControlsEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isZoomControlsEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomControlsEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            val enabledArg = args[1] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setZoomControlsEnabled(viewIdArg, enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isCompassEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isCompassEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setCompassEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            val enabledArg = args[1] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setCompassEnabled(viewIdArg, enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRotateGesturesEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isRotateGesturesEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRotateGesturesEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            val enabledArg = args[1] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setRotateGesturesEnabled(viewIdArg, enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isScrollGesturesEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            val enabledArg = args[1] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setScrollGesturesEnabled(viewIdArg, enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabledDuringRotateOrZoom",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isScrollGesturesEnabledDuringRotateOrZoom(viewIdArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesDuringRotateOrZoomEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            val enabledArg = args[1] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setScrollGesturesDuringRotateOrZoomEnabled(viewIdArg, enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTiltGesturesEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isTiltGesturesEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTiltGesturesEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            val enabledArg = args[1] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setTiltGesturesEnabled(viewIdArg, enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMapToolbarEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isMapToolbarEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapToolbarEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            val enabledArg = args[1] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setMapToolbarEnabled(viewIdArg, enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isTrafficEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            val enabledArg = args[1] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setTrafficEnabled(viewIdArg, enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficIncidentCardsEnabled",
             codec,
           )
@@ -2743,7 +3327,7 @@ interface MapViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationUIEnabled",
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficPromptsEnabled",
             codec,
           )
         if (api != null) {
@@ -2752,7 +3336,7 @@ interface MapViewApi {
             val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
             var wrapped: List<Any?>
             try {
-              wrapped = listOf<Any?>(api.isNavigationUIEnabled(viewIdArg))
+              wrapped = listOf<Any?>(api.isTrafficPromptsEnabled(viewIdArg))
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
             }
@@ -2766,7 +3350,7 @@ interface MapViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationUIEnabled",
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficPromptsEnabled",
             codec,
           )
         if (api != null) {
@@ -2776,7 +3360,55 @@ interface MapViewApi {
             val enabledArg = args[1] as Boolean
             var wrapped: List<Any?>
             try {
-              api.setNavigationUIEnabled(viewIdArg, enabledArg)
+              api.setTrafficPromptsEnabled(viewIdArg, enabledArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isReportIncidentButtonEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isReportIncidentButtonEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setReportIncidentButtonEnabled",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
+            val enabledArg = args[1] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setReportIncidentButtonEnabled(viewIdArg, enabledArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -3373,534 +4005,6 @@ interface MapViewApi {
             try {
               api.setMaxZoomPreference(viewIdArg, maxZoomPreferenceArg)
               wrapped = listOf<Any?>(null)
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationButtonEnabled",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
-            val enabledArg = args[1] as Boolean
-            var wrapped: List<Any?>
-            try {
-              api.setMyLocationButtonEnabled(viewIdArg, enabledArg)
-              wrapped = listOf<Any?>(null)
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setConsumeMyLocationButtonClickEventsEnabled",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
-            val enabledArg = args[1] as Boolean
-            var wrapped: List<Any?>
-            try {
-              api.setConsumeMyLocationButtonClickEventsEnabled(viewIdArg, enabledArg)
-              wrapped = listOf<Any?>(null)
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomGesturesEnabled",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
-            val enabledArg = args[1] as Boolean
-            var wrapped: List<Any?>
-            try {
-              api.setZoomGesturesEnabled(viewIdArg, enabledArg)
-              wrapped = listOf<Any?>(null)
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomControlsEnabled",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
-            val enabledArg = args[1] as Boolean
-            var wrapped: List<Any?>
-            try {
-              api.setZoomControlsEnabled(viewIdArg, enabledArg)
-              wrapped = listOf<Any?>(null)
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setCompassEnabled",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
-            val enabledArg = args[1] as Boolean
-            var wrapped: List<Any?>
-            try {
-              api.setCompassEnabled(viewIdArg, enabledArg)
-              wrapped = listOf<Any?>(null)
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRotateGesturesEnabled",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
-            val enabledArg = args[1] as Boolean
-            var wrapped: List<Any?>
-            try {
-              api.setRotateGesturesEnabled(viewIdArg, enabledArg)
-              wrapped = listOf<Any?>(null)
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesEnabled",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
-            val enabledArg = args[1] as Boolean
-            var wrapped: List<Any?>
-            try {
-              api.setScrollGesturesEnabled(viewIdArg, enabledArg)
-              wrapped = listOf<Any?>(null)
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesDuringRotateOrZoomEnabled",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
-            val enabledArg = args[1] as Boolean
-            var wrapped: List<Any?>
-            try {
-              api.setScrollGesturesDuringRotateOrZoomEnabled(viewIdArg, enabledArg)
-              wrapped = listOf<Any?>(null)
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTiltGesturesEnabled",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
-            val enabledArg = args[1] as Boolean
-            var wrapped: List<Any?>
-            try {
-              api.setTiltGesturesEnabled(viewIdArg, enabledArg)
-              wrapped = listOf<Any?>(null)
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapToolbarEnabled",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
-            val enabledArg = args[1] as Boolean
-            var wrapped: List<Any?>
-            try {
-              api.setMapToolbarEnabled(viewIdArg, enabledArg)
-              wrapped = listOf<Any?>(null)
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficEnabled",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
-            val enabledArg = args[1] as Boolean
-            var wrapped: List<Any?>
-            try {
-              api.setTrafficEnabled(viewIdArg, enabledArg)
-              wrapped = listOf<Any?>(null)
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationButtonEnabled",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
-            var wrapped: List<Any?>
-            try {
-              wrapped = listOf<Any?>(api.isMyLocationButtonEnabled(viewIdArg))
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isConsumeMyLocationButtonClickEventsEnabled",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
-            var wrapped: List<Any?>
-            try {
-              wrapped = listOf<Any?>(api.isConsumeMyLocationButtonClickEventsEnabled(viewIdArg))
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomGesturesEnabled",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
-            var wrapped: List<Any?>
-            try {
-              wrapped = listOf<Any?>(api.isZoomGesturesEnabled(viewIdArg))
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomControlsEnabled",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
-            var wrapped: List<Any?>
-            try {
-              wrapped = listOf<Any?>(api.isZoomControlsEnabled(viewIdArg))
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isCompassEnabled",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
-            var wrapped: List<Any?>
-            try {
-              wrapped = listOf<Any?>(api.isCompassEnabled(viewIdArg))
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRotateGesturesEnabled",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
-            var wrapped: List<Any?>
-            try {
-              wrapped = listOf<Any?>(api.isRotateGesturesEnabled(viewIdArg))
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabled",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
-            var wrapped: List<Any?>
-            try {
-              wrapped = listOf<Any?>(api.isScrollGesturesEnabled(viewIdArg))
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabledDuringRotateOrZoom",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
-            var wrapped: List<Any?>
-            try {
-              wrapped = listOf<Any?>(api.isScrollGesturesEnabledDuringRotateOrZoom(viewIdArg))
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTiltGesturesEnabled",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
-            var wrapped: List<Any?>
-            try {
-              wrapped = listOf<Any?>(api.isTiltGesturesEnabled(viewIdArg))
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMapToolbarEnabled",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
-            var wrapped: List<Any?>
-            try {
-              wrapped = listOf<Any?>(api.isMapToolbarEnabled(viewIdArg))
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficEnabled",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
-            var wrapped: List<Any?>
-            try {
-              wrapped = listOf<Any?>(api.isTrafficEnabled(viewIdArg))
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
             }

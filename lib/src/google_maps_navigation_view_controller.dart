@@ -128,6 +128,40 @@ class GoogleNavigationViewController extends GoogleMapViewController {
     );
   }
 
+  /// Is the report incident button is shown.
+  Future<bool> isReportIncidentButtonEnabled() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .isReportIncidentButtonEnabled(viewId: getViewId());
+  }
+
+  /// Enable or disable showing of the report incident button.
+  ///
+  /// By default, the report incident button is shown.
+  Future<void> setReportIncidentButtonEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .setReportIncidentButtonEnabled(
+      viewId: getViewId(),
+      enabled: enabled,
+    );
+  }
+
+  /// Are the traffic prompts shown.
+  Future<bool> isTrafficPromptsEnabled() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .isTrafficPromptsEnabled(viewId: getViewId());
+  }
+
+  /// Enable or disable showing of the traffic prompts.
+  ///
+  /// By default, the traffic prompts are shown.
+  Future<void> setTrafficPromptsEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .setTrafficPromptsEnabled(
+      viewId: getViewId(),
+      enabled: enabled,
+    );
+  }
+
   /// Check if the navigation user interface is shown.
   Future<bool> isNavigationUIEnabled() {
     return GoogleMapsNavigationPlatform.instance.viewAPI
