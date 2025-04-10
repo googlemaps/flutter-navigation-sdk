@@ -85,38 +85,18 @@ class GoogleMapsNavigationAndroid extends GoogleMapsNavigationPlatform {
       initializationOptions,
     );
 
-    return PlatformViewLink(
+    return AndroidView(
       viewType: viewType,
-      surfaceFactory:
-          (BuildContext context, PlatformViewController controller) {
-        return AndroidViewSurface(
-          controller: controller as AndroidViewController,
-          gestureRecognizers: initializationOptions.gestureRecognizers,
-          hitTestBehavior: PlatformViewHitTestBehavior.opaque,
-        );
+      onPlatformViewCreated: (int viewId) async {
+        // On Android the map is initialized asyncronously.
+        // Wait map to be ready before calling [onMapReady] callback
+        await viewAPI.awaitMapReady(viewId: viewId);
+        onMapReady(viewId);
       },
-      onCreatePlatformView: (PlatformViewCreationParams params) {
-        return PlatformViewsService.initSurfaceAndroidView(
-          id: params.id,
-          viewType: viewType,
-          layoutDirection: initializationOptions.layoutDirection,
-          creationParams: creationParams.encode(),
-          creationParamsCodec: const StandardMessageCodec(),
-          onFocus: () {
-            params.onFocusChanged(true);
-          },
-        )
-          ..addOnPlatformViewCreatedListener(params.onPlatformViewCreated)
-          ..addOnPlatformViewCreatedListener(
-            (int viewId) async {
-              // On Android the map is initialized asyncronously.
-              // Wait map to be ready before calling [onMapReady] callback
-              await viewAPI.awaitMapReady(viewId: viewId);
-              onMapReady(viewId);
-            },
-          )
-          ..create();
-      },
+      gestureRecognizers: initializationOptions.gestureRecognizers,
+      layoutDirection: initializationOptions.layoutDirection,
+      creationParams: creationParams.encode(),
+      creationParamsCodec: const StandardMessageCodec(),
     );
   }
 
