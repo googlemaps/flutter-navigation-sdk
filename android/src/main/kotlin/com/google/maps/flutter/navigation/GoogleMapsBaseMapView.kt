@@ -59,7 +59,7 @@ abstract class GoogleMapsBaseMapView(
 
   // Nullable variable to hold the callback function
   private var _mapReadyCallback: ((Result<Unit>) -> Unit)? = null
-  private var _loadedCallbackPending = false
+  private var _pendingCameraEventsListererSetup = false
 
   /// Default values for UI features.
   private var _consumeMyLocationButtonClickEventsEnabled: Boolean = false
@@ -212,6 +212,10 @@ abstract class GoogleMapsBaseMapView(
           }
         }
       )
+
+    if (_pendingCameraEventsListererSetup) {
+      setOnCameraChangedListeners()
+    }
   }
 
   // Installs a custom invalidator for the map view.
@@ -910,7 +914,17 @@ abstract class GoogleMapsBaseMapView(
     _circles.clear()
   }
 
-  fun registerOnCameraChangedListener() {
+  fun enableOnCameraChangedEvents() {
+    // If map is already initialized, set the listeners.
+    // Otherwise, the listeners will be set in the initListeners method.
+    if (_map != null) {
+      setOnCameraChangedListeners()
+    } else {
+      _pendingCameraEventsListererSetup = true
+    }
+  }
+
+  fun setOnCameraChangedListeners() {
     getMap().setOnCameraMoveStartedListener { reason ->
       val event =
         when (reason) {
@@ -943,6 +957,7 @@ abstract class GoogleMapsBaseMapView(
         position,
       ) {}
     }
+    _pendingCameraEventsListererSetup = false
   }
 
   fun setPadding(padding: MapPaddingDto) {

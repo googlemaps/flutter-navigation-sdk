@@ -537,7 +537,7 @@ abstract class MapViewApi {
   void removeCircles(int viewId, List<CircleDto> circles);
   void clearCircles(int viewId);
 
-  void registerOnCameraChangedListener(int viewId);
+  void enableOnCameraChangedEvents(int viewId);
   void setPadding(int viewId, MapPaddingDto padding);
   MapPaddingDto getPadding(int viewId);
 }
@@ -1403,7 +1403,7 @@ abstract class AutoMapViewApi {
   void removeCircles(List<CircleDto> circles);
   void clearCircles();
 
-  void registerOnCameraChangedListener();
+  void enableOnCameraChangedEvents();
   bool isAutoScreenAvailable();
   void setPadding(MapPaddingDto padding);
   MapPaddingDto getPadding();

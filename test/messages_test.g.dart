@@ -343,7 +343,7 @@ abstract class TestMapViewApi {
 
   void clearCircles(int viewId);
 
-  void registerOnCameraChangedListener(int viewId);
+  void enableOnCameraChangedEvents(int viewId);
 
   void setPadding(int viewId, MapPaddingDto padding);
 
@@ -3465,7 +3465,7 @@ abstract class TestMapViewApi {
     {
       final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.registerOnCameraChangedListener',
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.enableOnCameraChangedEvents',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3476,13 +3476,13 @@ abstract class TestMapViewApi {
             .setMockDecodedMessageHandler<Object?>(__pigeon_channel,
                 (Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.registerOnCameraChangedListener was null.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.enableOnCameraChangedEvents was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
           assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.registerOnCameraChangedListener was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.enableOnCameraChangedEvents was null, expected non-null int.');
           try {
-            api.registerOnCameraChangedListener(arg_viewId!);
+            api.enableOnCameraChangedEvents(arg_viewId!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
