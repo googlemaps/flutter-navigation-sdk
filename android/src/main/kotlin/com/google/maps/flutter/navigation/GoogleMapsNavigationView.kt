@@ -152,7 +152,7 @@ internal constructor(
   }
 
   fun setNavigationTripProgressBarEnabled(enabled: Boolean) {
-        _navigationView.setTripProgressBarEnabled(enabled)
+    _navigationView.setTripProgressBarEnabled(enabled)
     _isNavigationTripProgressBarEnabled = enabled
   }
 
@@ -161,7 +161,7 @@ internal constructor(
   }
 
   fun setNavigationHeaderEnabled(enabled: Boolean) {
-        _navigationView.setHeaderEnabled(enabled)
+    _navigationView.setHeaderEnabled(enabled)
     _isNavigationHeaderEnabled = enabled
   }
 
@@ -170,7 +170,7 @@ internal constructor(
   }
 
   fun setNavigationFooterEnabled(enabled: Boolean) {
-        _navigationView.setEtaCardEnabled(enabled)
+    _navigationView.setEtaCardEnabled(enabled)
     _isNavigationFooterEnabled = enabled
   }
 
@@ -179,7 +179,7 @@ internal constructor(
   }
 
   fun setRecenterButtonEnabled(enabled: Boolean) {
-        _navigationView.setRecenterButtonEnabled(enabled)
+    _navigationView.setRecenterButtonEnabled(enabled)
     _isRecenterButtonEnabled = enabled
   }
 
@@ -188,7 +188,7 @@ internal constructor(
   }
 
   fun setSpeedLimitIconEnabled(enabled: Boolean) {
-        _navigationView.setSpeedLimitIconEnabled(enabled)
+    _navigationView.setSpeedLimitIconEnabled(enabled)
     _isSpeedLimitIconEnabled = enabled
   }
 
@@ -197,7 +197,7 @@ internal constructor(
   }
 
   fun setSpeedometerEnabled(enabled: Boolean) {
-        _navigationView.setSpeedometerEnabled(enabled)
+    _navigationView.setSpeedometerEnabled(enabled)
     _isSpeedometerEnabled = enabled
   }
 
@@ -206,7 +206,7 @@ internal constructor(
   }
 
   fun setTrafficIncidentCardsEnabled(enabled: Boolean) {
-        _navigationView.setTrafficIncidentCardsEnabled(enabled)
+    _navigationView.setTrafficIncidentCardsEnabled(enabled)
     _isTrafficIncidentCardsEnabled = enabled
   }
 
@@ -236,11 +236,11 @@ internal constructor(
 
   fun setNavigationUIEnabled(enabled: Boolean) {
     if (_navigationView.isNavigationUiEnabled != enabled) {
-            _navigationView.isNavigationUiEnabled = enabled
+      _navigationView.isNavigationUiEnabled = enabled
     }
   }
 
   fun showRouteOverview() {
-        _navigationView.showRouteOverview()
+    _navigationView.showRouteOverview()
   }
 }

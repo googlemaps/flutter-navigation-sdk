@@ -37,7 +37,6 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.Polygon
 import com.google.android.gms.maps.model.Polyline
-import com.google.android.libraries.navigation.NavigationView
 
 abstract class GoogleMapsBaseMapView(
   protected val viewId: Int?,
@@ -106,7 +105,7 @@ abstract class GoogleMapsBaseMapView(
 
   protected fun mapReady() {
     // Install custom invalidator for the map view.
-    installInvalidator();
+    installInvalidator()
 
     // Call and clear view ready callback if available.
     _mapReadyCallback?.let { callback ->
@@ -227,26 +226,28 @@ abstract class GoogleMapsBaseMapView(
     }
     val internalListener = textureView.surfaceTextureListener
 
-    // Override the Maps internal SurfaceTextureListener with one that invalidates mapview on texture update.
-    textureView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
-      override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
-        internalListener?.onSurfaceTextureAvailable(surface, width, height)
-      }
+    // Override the Maps internal SurfaceTextureListener with one that invalidates mapview on
+    // texture update.
+    textureView.surfaceTextureListener =
+      object : TextureView.SurfaceTextureListener {
+        override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
+          internalListener?.onSurfaceTextureAvailable(surface, width, height)
+        }
 
-      override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
-        return internalListener?.onSurfaceTextureDestroyed(surface) ?: true
-      }
+        override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
+          return internalListener?.onSurfaceTextureDestroyed(surface) ?: true
+        }
 
-      override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture, width: Int, height: Int) {
-        internalListener?.onSurfaceTextureSizeChanged(surface, width, height)
-      }
+        override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture, width: Int, height: Int) {
+          internalListener?.onSurfaceTextureSizeChanged(surface, width, height)
+        }
 
-      override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {
-        internalListener?.onSurfaceTextureUpdated(surface)
-        // Invalidate the view to ensure it is redrawn.
-        getView()?.invalidate()
+        override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {
+          internalListener?.onSurfaceTextureUpdated(surface)
+          // Invalidate the view to ensure it is redrawn.
+          getView()?.invalidate()
+        }
       }
-    }
   }
 
   // Returns the first TextureView found in the view hierarchy.
@@ -256,7 +257,9 @@ abstract class GoogleMapsBaseMapView(
     }
     if (view is ViewGroup) {
       for (i in 0 until view.childCount) {
-        findTextureView(view.getChildAt(i))?.let { return it }
+        findTextureView(view.getChildAt(i))?.let {
+          return it
+        }
       }
     }
     return null
@@ -329,19 +332,19 @@ abstract class GoogleMapsBaseMapView(
 
   @SuppressLint("MissingPermission")
   fun setMyLocationEnabled(enabled: Boolean) {
-        getMap().isMyLocationEnabled = enabled
+    getMap().isMyLocationEnabled = enabled
   }
 
   fun setMyLocationButtonEnabled(enabled: Boolean) {
-        getMap().uiSettings.isMyLocationButtonEnabled = enabled
+    getMap().uiSettings.isMyLocationButtonEnabled = enabled
   }
 
   fun setZoomGesturesEnabled(enabled: Boolean) {
-        getMap().uiSettings.isZoomGesturesEnabled = enabled
+    getMap().uiSettings.isZoomGesturesEnabled = enabled
   }
 
   fun setZoomControlsEnabled(enabled: Boolean) {
-        getMap().uiSettings.isZoomControlsEnabled = enabled
+    getMap().uiSettings.isZoomControlsEnabled = enabled
   }
 
   fun getMinZoomPreference(): Float {
@@ -385,7 +388,7 @@ abstract class GoogleMapsBaseMapView(
   }
 
   fun setCompassEnabled(enabled: Boolean) {
-        getMap().uiSettings.isCompassEnabled = enabled
+    getMap().uiSettings.isCompassEnabled = enabled
   }
 
   fun setRotateGesturesEnabled(enabled: Boolean) {
@@ -596,18 +599,18 @@ abstract class GoogleMapsBaseMapView(
   }
 
   fun setMapType(mapType: Int) {
-        getMap().mapType = mapType
+    getMap().mapType = mapType
   }
 
   fun setMapStyle(styleJson: String) {
-        if (!getMap().setMapStyle(MapStyleOptions(styleJson))) {
+    if (!getMap().setMapStyle(MapStyleOptions(styleJson))) {
       throw FlutterError("mapStyleError", "Failed to set map style")
     }
   }
 
   @SuppressLint("MissingPermission")
   fun followMyLocation(perspective: Int, zoomLevel: Double?) {
-        getMap().followMyLocation(perspective)
+    getMap().followMyLocation(perspective)
     if (zoomLevel != null) {
       val options: FollowMyLocationOptions =
         FollowMyLocationOptions.builder().setZoomLevel(zoomLevel.toFloat()).build()
@@ -696,7 +699,7 @@ abstract class GoogleMapsBaseMapView(
 
   @Throws(FlutterError::class)
   fun removeMarkers(markers: List<MarkerDto>) {
-        var error: Throwable? = null
+    var error: Throwable? = null
     markers.forEach {
       findMarkerController(it.markerId)?.let { controller ->
         controller.remove()
@@ -710,7 +713,7 @@ abstract class GoogleMapsBaseMapView(
   }
 
   fun clearMarkers() {
-        _markers.forEach { controller -> controller.remove() }
+    _markers.forEach { controller -> controller.remove() }
     _markers.clear()
   }
 
@@ -731,7 +734,7 @@ abstract class GoogleMapsBaseMapView(
 
   fun addPolygons(polygons: List<PolygonDto>): List<PolygonDto> {
     val density = Resources.getSystem().displayMetrics.density
-        val result = mutableListOf<PolygonDto>()
+    val result = mutableListOf<PolygonDto>()
     polygons.forEach {
       val builder = PolygonBuilder()
       Convert.sinkPolygonOptions(it.options, builder, density)
@@ -747,7 +750,7 @@ abstract class GoogleMapsBaseMapView(
   }
 
   fun updatePolygons(polygons: List<PolygonDto>): List<PolygonDto> {
-        var error: Throwable? = null
+    var error: Throwable? = null
     val result = mutableListOf<PolygonDto>()
     val density = Resources.getSystem().displayMetrics.density
     polygons.forEach {
@@ -766,7 +769,7 @@ abstract class GoogleMapsBaseMapView(
   }
 
   fun removePolygons(polygons: List<PolygonDto>) {
-        var error: Throwable? = null
+    var error: Throwable? = null
     polygons.forEach {
       findPolygonController(it.polygonId)?.let { controller ->
         controller.remove()
@@ -781,7 +784,7 @@ abstract class GoogleMapsBaseMapView(
   }
 
   fun clearPolygons() {
-        _polygons.forEach { controller -> controller.remove() }
+    _polygons.forEach { controller -> controller.remove() }
     _polygons.clear()
   }
 
@@ -794,7 +797,7 @@ abstract class GoogleMapsBaseMapView(
 
   fun addPolylines(polylines: List<PolylineDto>): List<PolylineDto> {
     val density = Resources.getSystem().displayMetrics.density
-        val result = mutableListOf<PolylineDto>()
+    val result = mutableListOf<PolylineDto>()
     polylines.forEach {
       val builder = PolylineBuilder()
       Convert.sinkPolylineOptions(it.options, builder, density)
@@ -812,7 +815,7 @@ abstract class GoogleMapsBaseMapView(
   fun updatePolylines(polylines: List<PolylineDto>): List<PolylineDto> {
     var error: Throwable? = null
     val density = Resources.getSystem().displayMetrics.density
-        val result = mutableListOf<PolylineDto>()
+    val result = mutableListOf<PolylineDto>()
     polylines.forEach {
       findPolylineController(it.polylineId)?.let { controller ->
         Convert.sinkPolylineOptions(it.options, controller, density)
@@ -828,7 +831,7 @@ abstract class GoogleMapsBaseMapView(
   }
 
   fun removePolylines(polylines: List<PolylineDto>) {
-        var error: Throwable? = null
+    var error: Throwable? = null
     polylines.forEach {
       findPolylineController(it.polylineId)?.let { controller ->
         controller.remove()
@@ -843,7 +846,7 @@ abstract class GoogleMapsBaseMapView(
   }
 
   fun clearPolylines() {
-        _polylines.forEach { controller -> controller.remove() }
+    _polylines.forEach { controller -> controller.remove() }
     _polylines.clear()
   }
 
@@ -856,7 +859,7 @@ abstract class GoogleMapsBaseMapView(
 
   fun addCircles(circles: List<CircleDto>): List<CircleDto> {
     val density = Resources.getSystem().displayMetrics.density
-        val result = mutableListOf<CircleDto>()
+    val result = mutableListOf<CircleDto>()
     circles.forEach {
       val builder = CircleBuilder()
       Convert.sinkCircleOptions(it.options, builder, density)
@@ -873,7 +876,7 @@ abstract class GoogleMapsBaseMapView(
 
   fun updateCircles(circles: List<CircleDto>): List<CircleDto> {
     val density = Resources.getSystem().displayMetrics.density
-        val result = mutableListOf<CircleDto>()
+    val result = mutableListOf<CircleDto>()
     var error: Throwable? = null
     circles.forEach {
       findCircleController(it.circleId)?.let { controller ->
@@ -889,7 +892,7 @@ abstract class GoogleMapsBaseMapView(
   }
 
   fun removeCircles(circles: List<CircleDto>) {
-        var error: Throwable? = null
+    var error: Throwable? = null
     circles.forEach {
       findCircleController(it.circleId)?.let { controller ->
         controller.remove()
@@ -903,7 +906,7 @@ abstract class GoogleMapsBaseMapView(
   }
 
   fun clearCircles() {
-        _circles.forEach { controller -> controller.remove() }
+    _circles.forEach { controller -> controller.remove() }
     _circles.clear()
   }
 

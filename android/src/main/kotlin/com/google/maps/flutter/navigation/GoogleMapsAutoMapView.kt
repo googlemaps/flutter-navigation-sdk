@@ -38,7 +38,7 @@ internal constructor(
     imageRegistry.mapViewInitializationComplete()
     viewRegistry.registerAndroidAutoView(this)
     mapReady()
-      }
+  }
 
   // Handled by AndroidAutoBaseScreen.
   override fun onStart() {}
