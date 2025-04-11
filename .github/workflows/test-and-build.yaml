@@ -225,6 +225,7 @@ jobs:
       labels: ubuntu-latest
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
+      PATROL_ANALYTICS_ENABLED: false
       patrol_cli_version: "3.5.0"
       working_directory: "example"
     steps:
@@ -317,6 +318,7 @@ jobs:
       labels: macos-latest-xlarge
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
+      PATROL_ANALYTICS_ENABLED: false
       patrol_cli_version: "3.5.0"
       working_directory: "example"
     steps:

@@ -51,7 +51,7 @@ scripts:
   format:
     run: |
       melos run format:dart && \
-      melos run format:ios &&  \
+      melos run format:ios && \
       melos run format:android
     description: |
       Formats the code of all packages (Dart, iOS, Android).

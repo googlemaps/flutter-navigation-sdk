@@ -163,6 +163,10 @@ Future<void> checkLocationDialogAcceptance(PatrolIntegrationTester $) async {
     final Future<PermissionStatus> locationGranted =
         Permission.locationWhenInUse.request();
 
+    // Wait for the dialog to be shown, otherwise patrol sometimes clicks
+    // before the dialog accepts the clicks.
+    await $.pumpAndSettle();
+
     // Grant location permission.
     await $.native.grantPermissionWhenInUse();
 
