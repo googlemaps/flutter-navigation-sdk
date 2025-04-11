@@ -39,7 +39,7 @@ jobs:
       - name: Run addlicense
         run: go install github.com/google/addlicense@latest
       - name: Install Flutter
-        uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
+        uses: subosito/flutter-action@e938fdf56512cc96ef2f93601a5a40bde3801046
         with:
           flutter-version: "3.27.x"
           channel: "stable"
