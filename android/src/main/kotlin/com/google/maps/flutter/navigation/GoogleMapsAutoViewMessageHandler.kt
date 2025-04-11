@@ -378,8 +378,8 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
     getView().clearCircles()
   }
 
-  override fun registerOnCameraChangedListener() {
-    getView().registerOnCameraChangedListener()
+  override fun enableOnCameraChangedEvents() {
+    getView().enableOnCameraChangedEvents()
   }
 
   override fun isAutoScreenAvailable(): Boolean {

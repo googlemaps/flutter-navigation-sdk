@@ -732,8 +732,8 @@ class AutoMapViewAPIImpl {
   }
 
   /// Register camera changed listeners.
-  Future<void> registerOnCameraChangedListener() {
-    return _viewApi.registerOnCameraChangedListener();
+  Future<void> enableOnCameraChangedEvents() {
+    return _viewApi.enableOnCameraChangedEvents();
   }
 
   Future<void> setPadding({required EdgeInsets padding}) {

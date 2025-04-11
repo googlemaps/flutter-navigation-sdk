@@ -961,8 +961,8 @@ class MapViewAPIImpl {
   }
 
   /// Register camera changed listeners.
-  Future<void> registerOnCameraChangedListener({required int viewId}) {
-    return _viewApi.registerOnCameraChangedListener(viewId);
+  Future<void> enableOnCameraChangedEvents({required int viewId}) {
+    return _viewApi.enableOnCameraChangedEvents(viewId);
   }
 
   Future<void> setPadding({required int viewId, required EdgeInsets padding}) {
