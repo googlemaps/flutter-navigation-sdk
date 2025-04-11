@@ -360,7 +360,7 @@ abstract class MapViewState<T extends GoogleMapsBaseMapView> extends State<T> {
         widget.onCameraMove != null ||
         widget.onCameraIdle != null) {
       GoogleMapsNavigationPlatform.instance.viewAPI
-          .registerOnCameraChangedListener(viewId: viewId);
+          .enableOnCameraChangedEvents(viewId: viewId);
     }
     GoogleMapsNavigationPlatform.instance.viewAPI
         .getCameraChangedEventStream(viewId: viewId)
@@ -412,13 +412,17 @@ class GoogleMapsMapViewState extends MapViewState<GoogleMapsMapView> {
             padding: widget.initialPadding,
           ),
         ),
-        onMapReady: _onPlatformViewCreated);
+        onPlatformViewCreated: _onPlatformViewCreated,
+        onMapReady: _onMapReady);
   }
 
-  /// Callback method when platform view is created.
+  /// Callback method for platform view is created event.
   void _onPlatformViewCreated(int viewId) {
     initMapViewListeners(viewId);
+  }
 
+  /// Callback method for map ready event.
+  void _onMapReady(int viewId) {
     final GoogleMapViewController viewController =
         GoogleMapViewController(viewId);
     widget.onViewCreated(viewController);
