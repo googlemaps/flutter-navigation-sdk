@@ -225,6 +225,7 @@ jobs:
       labels: ubuntu-latest
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
+      PATROL_ANALYTICS_ENABLED: false
       patrol_cli_version: "3.5.0"
       working_directory: "example"
     steps:
@@ -294,7 +295,8 @@ jobs:
         run: flutter build apk --config-only
       - name: Run integration tests
         working-directory: ${{ env.working_directory }}
-        run: patrol test --verbose
+        run: |
+          patrol test ${{ runner.debug && '--show-flutter-logs --verbose' || '' }}
       - name: Upload test report
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
@@ -312,6 +314,7 @@ jobs:
       labels: macos-latest-xlarge
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
+      PATROL_ANALYTICS_ENABLED: false
       patrol_cli_version: "3.5.0"
       working_directory: "example"
     steps:
@@ -378,7 +381,7 @@ jobs:
         id: tests_step
         working-directory: ${{ env.working_directory }}
         run: |
-          patrol test --dart-define=MAPS_API_KEY="$MAPS_API_KEY" --verbose -d "$DEVICE_ID"
+          patrol test --dart-define=MAPS_API_KEY="$MAPS_API_KEY" ${{ runner.debug && '--show-flutter-logs --verbose' || '' }} -d "$DEVICE_ID"
       - name: Upload test report
         uses: actions/upload-artifact@v4
         if: ${{ always() }}

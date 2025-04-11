@@ -36,7 +36,7 @@ dev_dependencies:
   integration_test:
     sdk: flutter
   meta: any
-  patrol: ^3.14.0
+  patrol: 3.14.1 # Patrol 3.15.1 has hang issues on Android. Pinging to 3.14.1 for now.
   pub_semver: ^2.1.4
   test_api: any
 
