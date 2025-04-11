@@ -28,7 +28,15 @@ import 'package:flutter/material.dart';
 import 'shared.dart';
 
 void main() {
-  patrol('Test session initialization errors',
+  // Patrol runs the tests in alphabetical order, add a prefix to the test
+  // name to control the order with script:
+  int testCounter = 0;
+  String prefix(String name) {
+    testCounter++;
+    return 'IT${testCounter.toString().padLeft(2, '0')} $name';
+  }
+
+  patrol(prefix('Test session initialization errors'),
       (PatrolIntegrationTester $) async {
     await GoogleMapsNavigator.resetTermsAccepted();
     expect(await GoogleMapsNavigator.areTermsAccepted(), false);
@@ -174,7 +182,7 @@ void main() {
     }
   });
 
-  patrol('Test Maps initialization', (PatrolIntegrationTester $) async {
+  patrol(prefix('Test Maps initialization'), (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
         Completer<GoogleNavigationViewController>();
 
@@ -266,7 +274,7 @@ void main() {
     expect(await controller.isNavigationUIEnabled(), true);
   });
 
-  patrol('Test Maps initialization without navigation',
+  patrol(prefix('Test Maps initialization without navigation'),
       (PatrolIntegrationTester $) async {
     final Completer<GoogleMapViewController> viewControllerCompleter =
         Completer<GoogleMapViewController>();

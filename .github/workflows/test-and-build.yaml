@@ -296,11 +296,7 @@ jobs:
       - name: Run integration tests
         working-directory: ${{ env.working_directory }}
         run: |
-          debug_flags=""
-          if [ "$ACTIONS_STEP_DEBUG" = "true" ]; then
-            debug_flags="--show-flutter-logs --verbose"
-          fi
-          patrol test  $debug_flags
+          patrol test ${{ runner.debug && '--show-flutter-logs --verbose' || '' }}
       - name: Upload test report
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
@@ -385,11 +381,7 @@ jobs:
         id: tests_step
         working-directory: ${{ env.working_directory }}
         run: |
-          debug_flags=""
-          if [ "$ACTIONS_STEP_DEBUG" = "true" ]; then
-            debug_flags="--show-flutter-logs --verbose"
-          fi
-          patrol test --dart-define=MAPS_API_KEY="$MAPS_API_KEY" $debug_flags -d "$DEVICE_ID"
+          patrol test --dart-define=MAPS_API_KEY="$MAPS_API_KEY" ${{ runner.debug && '--show-flutter-logs --verbose' || '' }} -d "$DEVICE_ID"
       - name: Upload test report
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
