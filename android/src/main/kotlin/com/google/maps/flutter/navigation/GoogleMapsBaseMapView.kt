@@ -59,7 +59,7 @@ abstract class GoogleMapsBaseMapView(
 
   // Nullable variable to hold the callback function
   private var _mapReadyCallback: ((Result<Unit>) -> Unit)? = null
-  private var _pendingCameraEventsListererSetup = false
+  private var _pendingCameraEventsListenerSetup = false
 
   /// Default values for UI features.
   private var _consumeMyLocationButtonClickEventsEnabled: Boolean = false
@@ -213,7 +213,7 @@ abstract class GoogleMapsBaseMapView(
         }
       )
 
-    if (_pendingCameraEventsListererSetup) {
+    if (_pendingCameraEventsListenerSetup) {
       setOnCameraChangedListeners()
     }
   }
@@ -920,7 +920,7 @@ abstract class GoogleMapsBaseMapView(
     if (_map != null) {
       setOnCameraChangedListeners()
     } else {
-      _pendingCameraEventsListererSetup = true
+      _pendingCameraEventsListenerSetup = true
     }
   }
 
@@ -957,7 +957,7 @@ abstract class GoogleMapsBaseMapView(
         position,
       ) {}
     }
-    _pendingCameraEventsListererSetup = false
+    _pendingCameraEventsListenerSetup = false
   }
 
   fun setPadding(padding: MapPaddingDto) {
