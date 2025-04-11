@@ -2042,7 +2042,7 @@ protocol MapViewApi {
   func updateCircles(viewId: Int64, circles: [CircleDto]) throws -> [CircleDto]
   func removeCircles(viewId: Int64, circles: [CircleDto]) throws
   func clearCircles(viewId: Int64) throws
-  func registerOnCameraChangedListener(viewId: Int64) throws
+  func enableOnCameraChangedEvents(viewId: Int64) throws
   func setPadding(viewId: Int64, padding: MapPaddingDto) throws
   func getPadding(viewId: Int64) throws -> MapPaddingDto
 }
@@ -3761,23 +3761,22 @@ class MapViewApiSetup {
     } else {
       clearCirclesChannel.setMessageHandler(nil)
     }
-    let registerOnCameraChangedListenerChannel = FlutterBasicMessageChannel(
-      name:
-        "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.registerOnCameraChangedListener",
+    let enableOnCameraChangedEventsChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.enableOnCameraChangedEvents",
       binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      registerOnCameraChangedListenerChannel.setMessageHandler { message, reply in
+      enableOnCameraChangedEventsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let viewIdArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
         do {
-          try api.registerOnCameraChangedListener(viewId: viewIdArg)
+          try api.enableOnCameraChangedEvents(viewId: viewIdArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      registerOnCameraChangedListenerChannel.setMessageHandler(nil)
+      enableOnCameraChangedEventsChannel.setMessageHandler(nil)
     }
     let setPaddingChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setPadding",
@@ -5630,7 +5629,7 @@ protocol AutoMapViewApi {
   func updateCircles(circles: [CircleDto]) throws -> [CircleDto]
   func removeCircles(circles: [CircleDto]) throws
   func clearCircles() throws
-  func registerOnCameraChangedListener() throws
+  func enableOnCameraChangedEvents() throws
   func isAutoScreenAvailable() throws -> Bool
   func setPadding(padding: MapPaddingDto) throws
   func getPadding() throws -> MapPaddingDto
@@ -6855,21 +6854,21 @@ class AutoMapViewApiSetup {
     } else {
       clearCirclesChannel.setMessageHandler(nil)
     }
-    let registerOnCameraChangedListenerChannel = FlutterBasicMessageChannel(
+    let enableOnCameraChangedEventsChannel = FlutterBasicMessageChannel(
       name:
-        "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.registerOnCameraChangedListener",
+        "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.enableOnCameraChangedEvents",
       binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      registerOnCameraChangedListenerChannel.setMessageHandler { _, reply in
+      enableOnCameraChangedEventsChannel.setMessageHandler { _, reply in
         do {
-          try api.registerOnCameraChangedListener()
+          try api.enableOnCameraChangedEvents()
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      registerOnCameraChangedListenerChannel.setMessageHandler(nil)
+      enableOnCameraChangedEventsChannel.setMessageHandler(nil)
     }
     let isAutoScreenAvailableChannel = FlutterBasicMessageChannel(
       name: "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isAutoScreenAvailable",

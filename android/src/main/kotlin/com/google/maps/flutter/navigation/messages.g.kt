@@ -2230,7 +2230,7 @@ interface MapViewApi {
 
   fun clearCircles(viewId: Long)
 
-  fun registerOnCameraChangedListener(viewId: Long)
+  fun enableOnCameraChangedEvents(viewId: Long)
 
   fun setPadding(viewId: Long, padding: MapPaddingDto)
 
@@ -4522,7 +4522,7 @@ interface MapViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.registerOnCameraChangedListener",
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.enableOnCameraChangedEvents",
             codec,
           )
         if (api != null) {
@@ -4531,7 +4531,7 @@ interface MapViewApi {
             val viewIdArg = args[0].let { if (it is Int) it.toLong() else it as Long }
             var wrapped: List<Any?>
             try {
-              api.registerOnCameraChangedListener(viewIdArg)
+              api.enableOnCameraChangedEvents(viewIdArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -6630,7 +6630,7 @@ interface AutoMapViewApi {
 
   fun clearCircles()
 
-  fun registerOnCameraChangedListener()
+  fun enableOnCameraChangedEvents()
 
   fun isAutoScreenAvailable(): Boolean
 
@@ -8297,14 +8297,14 @@ interface AutoMapViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.registerOnCameraChangedListener",
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.enableOnCameraChangedEvents",
             codec,
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             var wrapped: List<Any?>
             try {
-              api.registerOnCameraChangedListener()
+              api.enableOnCameraChangedEvents()
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)

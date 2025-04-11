@@ -488,8 +488,8 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
     getView(viewId.toInt()).clearCircles()
   }
 
-  override fun registerOnCameraChangedListener(viewId: Long) {
-    getView(viewId.toInt()).registerOnCameraChangedListener()
+  override fun enableOnCameraChangedEvents(viewId: Long) {
+    getView(viewId.toInt()).enableOnCameraChangedEvents()
   }
 
   override fun setPadding(viewId: Long, padding: MapPaddingDto) {

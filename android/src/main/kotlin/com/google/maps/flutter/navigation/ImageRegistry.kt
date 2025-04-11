@@ -27,6 +27,8 @@ class ImageRegistry {
 
   private var isMapViewInitialized = false
 
+  // BitmapDescriptor cannot be created if map view is not initialized yet.
+  // When map view is initialized, all queued bitmaps are processed and added to the registry.
   fun mapViewInitializationComplete() {
     isMapViewInitialized = true
     bitmapQueue.forEach {
@@ -47,7 +49,7 @@ class ImageRegistry {
     val bitmap = createBitmap(bytes, imagePixelRatio, density, width, height)
 
     if (!isMapViewInitialized) {
-      // BitmapDescriptor cannot me created if map view is not initialized yet.
+      // BitmapDescriptor cannot be created if map view is not initialized yet.
       // Add to queue to make it later.
       bitmapQueue.add(QueuedBitmap(imageId, bitmap, imagePixelRatio, width, height))
     } else {
