@@ -28,7 +28,7 @@ import 'package:flutter/material.dart';
 import 'shared.dart';
 
 void main() {
-  patrol('C01 - Test session initialization errors',
+  patrol('Test session initialization errors',
       (PatrolIntegrationTester $) async {
     await GoogleMapsNavigator.resetTermsAccepted();
     expect(await GoogleMapsNavigator.areTermsAccepted(), false);
@@ -174,7 +174,7 @@ void main() {
     }
   });
 
-  patrol('C02 - Test Maps initialization', (PatrolIntegrationTester $) async {
+  patrol('Test Maps initialization', (PatrolIntegrationTester $) async {
     final Completer<GoogleNavigationViewController> viewControllerCompleter =
         Completer<GoogleNavigationViewController>();
 
@@ -266,7 +266,7 @@ void main() {
     expect(await controller.isNavigationUIEnabled(), true);
   });
 
-  patrol('C03 - Test Maps initialization without navigation',
+  patrol('Test Maps initialization without navigation',
       (PatrolIntegrationTester $) async {
     final Completer<GoogleMapViewController> viewControllerCompleter =
         Completer<GoogleMapViewController>();
