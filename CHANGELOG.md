@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.6.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.5.2...0.6.0) (2025-04-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* switch to TLHC mode to fix rendering issues on Android ([#340](https://github.com/googlemaps/flutter-navigation-sdk/issues/340))
+
+### Features
+
+* support for real-time disruption settings ([#338](https://github.com/googlemaps/flutter-navigation-sdk/issues/338)) ([97c803f](https://github.com/googlemaps/flutter-navigation-sdk/commit/97c803f86182b80577ecc7f3f230963cd8724168))
+* switch to TLHC mode to fix rendering issues on Android ([#340](https://github.com/googlemaps/flutter-navigation-sdk/issues/340)) ([76685a7](https://github.com/googlemaps/flutter-navigation-sdk/commit/76685a7a9f9ce5f745457bdfe48e47c4f02b81c4))
+* update navigation SDKs ([#332](https://github.com/googlemaps/flutter-navigation-sdk/issues/332)) ([ed31ce0](https://github.com/googlemaps/flutter-navigation-sdk/commit/ed31ce041d49fee489b984f24a27831f203b8935))
+
+
+### Bug Fixes
+
+* initialize view listeners on platform view creation ([#342](https://github.com/googlemaps/flutter-navigation-sdk/issues/342)) ([e113fdd](https://github.com/googlemaps/flutter-navigation-sdk/commit/e113fdd7846a1ccc24038b648cbcb5d36828bc66))
+
 ## [0.5.2](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.5.1...0.5.2) (2025-03-31)
 
 
