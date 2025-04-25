@@ -40,7 +40,11 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
   }
 
   override fun awaitMapReady(viewId: Long, callback: (Result<Unit>) -> Unit) {
-    return getView(viewId.toInt()).awaitMapReady(callback)
+    try {
+      getView(viewId.toInt()).awaitMapReady(callback)
+    } catch (e: Throwable) {
+      callback(Result.failure(e))
+    }
   }
 
   override fun isMyLocationEnabled(viewId: Long): Boolean {
