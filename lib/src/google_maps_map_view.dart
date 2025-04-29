@@ -283,7 +283,33 @@ class GoogleMapsMapView extends GoogleMapsBaseMapView {
       super.onCameraStartedFollowingLocation,
       super.onCameraStoppedFollowingLocation});
 
-  /// On view created callback.
+  /// Callback triggered when the map view is created.
+  ///
+  /// Provides a [OnMapViewCreatedCallback] for interacting with and
+  /// controlling the map after initialization.
+  ///
+  /// To ensure safe usage, wrap controller calls inside a `try-catch` block
+  /// as native method calls are asynchronous. This prevents exceptions if the
+  /// view is unmounted before the native message is handled on the platform
+  /// side.
+  ///
+  /// Example:
+  /// ```dart
+  /// onViewCreated: (controller) async {
+  ///   try {
+  ///     final CameraUpdate cameraUpdate = CameraUpdate.newLatLng(
+  ///       const LatLng(latitude: 12.3456, longitude: 12.3456),
+  ///     );
+  ///     await controller.setCameraPosition(CameraPosition(
+  ///       target: LatLng(37.7749, -122.4194),
+  ///       zoom: 12,
+  ///     ));
+  ///   } on ViewNotFoundException {
+  ///     // Handle the case when the view is disposed before the call is
+  ///     // handled on the platform side.
+  ///   }
+  /// },
+  /// ```
   final OnMapViewCreatedCallback onViewCreated;
 
   /// Creates a [State] for this [GoogleMapsMapView].
