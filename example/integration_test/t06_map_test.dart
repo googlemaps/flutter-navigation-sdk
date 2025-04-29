@@ -20,9 +20,10 @@
 // For more information about Flutter integration tests, please see
 // https://docs.flutter.dev/cookbook/testing/integration/introduction
 
-import 'dart:async';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
+
 import 'shared.dart';
 
 void main() {
