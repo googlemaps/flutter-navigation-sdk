@@ -20,16 +20,14 @@
 // For more information about Flutter integration tests, please see
 // https://docs.flutter.dev/cookbook/testing/integration/introduction
 
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 import 'shared.dart';
 
 void main() {
   patrol('Test enabling navigation UI', (PatrolIntegrationTester $) async {
-    final Completer<GoogleNavigationViewController> viewControllerCompleter =
-        Completer<GoogleNavigationViewController>();
+    final ControllerCompleter<GoogleNavigationViewController>
+        viewControllerCompleter = ControllerCompleter();
 
     /// For testing NavigationUIEnabledChanged
     bool navigationUIisEnabled = false;

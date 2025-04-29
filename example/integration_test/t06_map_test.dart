@@ -56,8 +56,8 @@ void main() {
   patrol(
     'Test platform view creation params',
     (PatrolIntegrationTester $) async {
-      final Completer<GoogleMapViewController> controllerCompleter =
-          Completer<GoogleMapViewController>();
+      final ControllerCompleter<GoogleMapViewController> controllerCompleter =
+          ControllerCompleter<GoogleMapViewController>();
 
       switch (mapTypeVariants.currentValue!) {
         case TestMapType.mapView:
@@ -298,8 +298,9 @@ void main() {
     (PatrolIntegrationTester $) async {
       /// For some reason the functionality works on Android example app, but it doesn't work
       /// during the testing. Will skip Android testing for now.
-      final Completer<GoogleMapViewController> viewControllerCompleter =
-          Completer<GoogleMapViewController>();
+      final ControllerCompleter<GoogleMapViewController>
+          viewControllerCompleter =
+          ControllerCompleter<GoogleMapViewController>();
 
       await checkLocationDialogAcceptance($);
 
@@ -391,8 +392,9 @@ void main() {
     (PatrolIntegrationTester $) async {
       /// For some reason the functionality works on Android example app, but it doesn't work
       /// during the testing. Will skip Android testing for now.
-      final Completer<GoogleMapViewController> viewControllerCompleter =
-          Completer<GoogleMapViewController>();
+      final ControllerCompleter<GoogleMapViewController>
+          viewControllerCompleter =
+          ControllerCompleter<GoogleMapViewController>();
 
       await checkLocationDialogAcceptance($);
 

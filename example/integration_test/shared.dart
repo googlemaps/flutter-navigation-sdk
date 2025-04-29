@@ -190,8 +190,8 @@ Future<GoogleNavigationViewController> startNavigation(
     void Function(CameraPosition)? onCameraIdle,
     void Function(CameraPosition)? onCameraStartedFollowingLocation,
     void Function(CameraPosition)? onCameraStoppedFollowingLocation}) async {
-  final Completer<GoogleNavigationViewController> controllerCompleter =
-      Completer<GoogleNavigationViewController>();
+  final ControllerCompleter<GoogleNavigationViewController>
+      controllerCompleter = ControllerCompleter();
 
   await checkLocationDialogAndTosAcceptance($);
 
@@ -433,8 +433,8 @@ Future<GoogleMapViewController> startMapView(
       onRecenterButtonClicked,
   void Function(CameraPosition)? onCameraIdle,
 }) async {
-  final Completer<GoogleMapViewController> controllerCompleter =
-      Completer<GoogleMapViewController>();
+  final ControllerCompleter<GoogleMapViewController> controllerCompleter =
+      ControllerCompleter();
 
   //await checkLocationDialogAndTosAcceptance($);
 
@@ -507,3 +507,33 @@ int? colorToInt(Color? color) {
 /// Helper function to build a reason for the test.
 String buildReasonForToggle(String toggle, bool result) =>
     'set$toggle($result) should update the internal state so that a subsequent call to is$toggle returns $result.';
+
+/// A wrapper for `Completer<T>` to handle timeouts. T must be either
+/// [GoogleNavigationViewController] or [GoogleMapViewController].
+class ControllerCompleter<T> {
+  ControllerCompleter()
+      : assert(
+          T is GoogleNavigationViewController || T is GoogleMapViewController,
+          'T must be either GoogleNavigationViewController or GoogleMapViewController',
+        );
+
+  final Completer<T> _completer = Completer<T>();
+
+  /// Completes the completer with the provided [value].
+  void complete(T value) {
+    _completer.complete(value);
+  }
+
+  /// Returns the future of the completer. This future will complete
+  /// with the controller value or throw a [TestFailure] if timeout is reached.
+  Future<T> get future => _completer.future.timeout(
+        const Duration(seconds: 1),
+        onTimeout: () {
+          fail(
+            'Controller not created in time, '
+            'this could happen if view is disposed before onViewCreated '
+            'is called',
+          );
+        },
+      );
+}

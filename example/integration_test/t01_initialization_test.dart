@@ -183,8 +183,8 @@ void main() {
   });
 
   patrol(prefix('Test Maps initialization'), (PatrolIntegrationTester $) async {
-    final Completer<GoogleNavigationViewController> viewControllerCompleter =
-        Completer<GoogleNavigationViewController>();
+    final ControllerCompleter<GoogleNavigationViewController>
+        viewControllerCompleter = ControllerCompleter();
 
     await checkTermsAndConditionsAcceptance($);
     await checkLocationDialogAcceptance($);
@@ -276,8 +276,8 @@ void main() {
 
   patrol(prefix('Test Maps initialization without navigation'),
       (PatrolIntegrationTester $) async {
-    final Completer<GoogleMapViewController> viewControllerCompleter =
-        Completer<GoogleMapViewController>();
+    final ControllerCompleter<GoogleMapViewController> viewControllerCompleter =
+        ControllerCompleter<GoogleMapViewController>();
 
     const CameraPosition cameraPosition =
         CameraPosition(target: LatLng(latitude: 65, longitude: 25.5), zoom: 12);
