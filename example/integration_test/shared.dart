@@ -513,7 +513,7 @@ String buildReasonForToggle(String toggle, bool result) =>
 class ControllerCompleter<T> {
   ControllerCompleter()
       : assert(
-          T is GoogleNavigationViewController || T is GoogleMapViewController,
+          T == GoogleNavigationViewController || T == GoogleMapViewController,
           'T must be either GoogleNavigationViewController or GoogleMapViewController',
         );
 
