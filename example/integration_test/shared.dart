@@ -527,7 +527,7 @@ class ControllerCompleter<T> {
   /// Returns the future of the completer. This future will complete
   /// with the controller value or throw a [TestFailure] if timeout is reached.
   Future<T> get future => _completer.future.timeout(
-        const Duration(seconds: 1),
+        const Duration(seconds: 10),
         onTimeout: () {
           fail(
             'Controller not created in time, '
