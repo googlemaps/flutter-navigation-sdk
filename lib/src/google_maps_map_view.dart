@@ -304,9 +304,11 @@ class GoogleMapsMapView extends GoogleMapsBaseMapView {
   ///       target: LatLng(37.7749, -122.4194),
   ///       zoom: 12,
   ///     ));
-  ///   } on ViewNotFoundException {
-  ///     // Handle the case when the view is disposed before the call is
-  ///     // handled on the platform side.
+  ///   } on PlatformException catch (exception, stack) {
+  ///     if (exception.code == 'viewNotFound') {
+  ///       // Handle the case when the view is disposed before the call is
+  ///       // handled on the platform side.
+  ///     }
   ///   }
   /// },
   /// ```
