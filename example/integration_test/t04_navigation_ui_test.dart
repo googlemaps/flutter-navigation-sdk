@@ -47,7 +47,6 @@ void main() {
       GoogleMapsNavigationView(
         key: key,
         onViewCreated: (GoogleNavigationViewController controller) {
-          controller.setMyLocationEnabled(true);
           viewControllerCompleter.complete(controller);
         },
         onNavigationUIEnabledChanged: (bool isEnabled) {
@@ -59,6 +58,8 @@ void main() {
 
     final GoogleNavigationViewController viewController =
         await viewControllerCompleter.future;
+
+    await viewController.setMyLocationEnabled(true);
 
     expect(await viewController.isNavigationUIEnabled(), false,
         reason:

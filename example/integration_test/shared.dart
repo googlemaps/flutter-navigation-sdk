@@ -61,6 +61,10 @@ const double startLocationLng = 23.510763;
 /// Timeout for tests in seconds.
 const int testTimeoutSeconds = 240; // 4 minutes
 
+/// Timeout for controller completer in seconds. This timeout is set to be
+/// long as on CI emulator the controller creation can take a while.
+const int controllerCompleterTimeoutSeconds = 30;
+
 const NativeAutomatorConfig _nativeAutomatorConfig = NativeAutomatorConfig(
   findTimeout: Duration(seconds: 20),
 );
@@ -526,14 +530,16 @@ class ControllerCompleter<T> {
 
   /// Returns the future of the completer. This future will complete
   /// with the controller value or throw a [TestFailure] if timeout is reached.
-  Future<T> get future => _completer.future.timeout(
-        const Duration(seconds: 10),
-        onTimeout: () {
-          fail(
-            'Controller not created in time, '
-            'this could happen if view is disposed before onViewCreated '
-            'is called',
-          );
-        },
-      );
+  Future<T> get future {
+    return _completer.future.timeout(
+      const Duration(seconds: controllerCompleterTimeoutSeconds),
+      onTimeout: () {
+        fail(
+          'Controller not created in time, '
+          'this could happen if view is disposed before onViewCreated '
+          'is called',
+        );
+      },
+    );
+  }
 }
