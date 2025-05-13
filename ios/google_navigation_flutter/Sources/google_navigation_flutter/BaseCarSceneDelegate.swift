@@ -103,6 +103,7 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
         self.navView?.setRecenterButtonEnabled(false)
         self.navView?.setNavigationFooterEnabled(false)
         self.navView?.setSpeedometerEnabled(false)
+        self.navView?.setReportIncidentButtonEnabled(false)
         self.navViewController = UIViewController()
         self.navViewController?.view = self.navView?.view()
         self.carWindow?.rootViewController = self.navViewController
