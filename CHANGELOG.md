@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.1](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.6.0...0.6.1) (2025-05-14)
+
+
+### Bug Fixes
+
+* error handling for awaitMapReady calls ([#353](https://github.com/googlemaps/flutter-navigation-sdk/issues/353)) ([867f500](https://github.com/googlemaps/flutter-navigation-sdk/commit/867f500c338702d8309e64e36793a5066ed5c2cb))
+* hide report incident button from the carplay view ([#364](https://github.com/googlemaps/flutter-navigation-sdk/issues/364)) ([794a890](https://github.com/googlemaps/flutter-navigation-sdk/commit/794a89041d1cbea712d527a772b6f9ea5f5bd44b))
+
 ## [0.6.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.5.2...0.6.0) (2025-04-11)
 
 
