@@ -162,7 +162,7 @@ class MapViewAPIImpl {
   /// Get the preference for whether the my location should be enabled or disabled.
   Future<bool> isMyLocationEnabled({required int viewId}) async {
     try {
-      return await _viewApi.isMyLocationEnabled(100); // FIXME
+      return await _viewApi.isMyLocationEnabled(viewId);
     } catch (e, stackTrace) {
       throw convertPlatformException(e, stackTrace);
     }
