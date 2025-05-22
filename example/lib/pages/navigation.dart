@@ -475,7 +475,13 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     setState(() {
       _navigationViewController = controller;
     });
-    await controller.setMyLocationEnabled(true);
+
+    try {
+      await controller.setMyLocationEnabled(true);
+    } on ViewNotFoundException catch (_) {
+      // View not found exception is thrown if view is disposed before async
+      // method is handled on native side.
+    }
 
     if (_guidanceRunning) {
       // Guidance is running, enable navigation UI.
@@ -611,8 +617,17 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       // Update existing marker.
       final Marker updatedWaypointMarker =
           _newWaypointMarker!.copyWith(options: markerOptions);
-      final List<Marker?> updatedMarkers = await _navigationViewController!
-          .updateMarkers(<Marker>[updatedWaypointMarker]);
+
+      final List<Marker?> updatedMarkers;
+      try {
+        updatedMarkers = await _navigationViewController!
+            .updateMarkers(<Marker>[updatedWaypointMarker]);
+      } on MarkerNotFoundException catch (e) {
+        debugPrint(e.toString());
+        showMessage('Marker not found');
+        return;
+      }
+
       if (updatedMarkers.first != null) {
         _newWaypointMarker = updatedMarkers.first;
       } else {
@@ -623,24 +638,38 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   }
 
   Future<void> _removeNewWaypointMarker() async {
-    if (_newWaypointMarker != null) {
+    if (_newWaypointMarker == null) return;
+
+    try {
       await _navigationViewController!
           .removeMarkers(<Marker>[_newWaypointMarker!]);
-      _newWaypointMarker = null;
-      setState(() {});
+    } on MarkerNotFoundException catch (e) {
+      debugPrint(e.toString());
+      showMessage('Marker not found');
+      return;
     }
+
+    _newWaypointMarker = null;
+    setState(() {});
   }
 
   Future<void> _removeDestinationWaypointMarkers() async {
-    if (_destinationWaypointMarkers.isNotEmpty) {
+    if (_destinationWaypointMarkers.isEmpty) return;
+
+    try {
       await _navigationViewController!
           .removeMarkers(_destinationWaypointMarkers);
-      _destinationWaypointMarkers.clear();
-
-      // Unregister custom marker images
-      await clearRegisteredImages();
-      setState(() {});
+    } on MarkerNotFoundException catch (e) {
+      debugPrint(e.toString());
+      showMessage('Marker not found');
+      return;
     }
+
+    _destinationWaypointMarkers.clear();
+
+    // Unregister custom marker images
+    await clearRegisteredImages();
+    setState(() {});
   }
 
   Future<void> _onMapClicked(LatLng location) async {
@@ -690,16 +719,25 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     final ImageDescriptor waypointMarkerImage =
         await registerWaypointMarkerImage(
             index, MediaQuery.of(context).devicePixelRatio);
-    final List<Marker?> destinationMarkers =
-        await _navigationViewController!.updateMarkers(<Marker>[
-      _newWaypointMarker!.copyWith(
-        options: _newWaypointMarker!.options.copyWith(
-          infoWindow: InfoWindow(title: title),
-          anchor: const MarkerAnchor(u: 0.5, v: 1.2),
-          icon: waypointMarkerImage,
-        ),
-      )
-    ]);
+
+    final List<Marker?> destinationMarkers;
+    try {
+      destinationMarkers =
+          await _navigationViewController!.updateMarkers(<Marker>[
+        _newWaypointMarker!.copyWith(
+          options: _newWaypointMarker!.options.copyWith(
+            infoWindow: InfoWindow(title: title),
+            anchor: const MarkerAnchor(u: 0.5, v: 1.2),
+            icon: waypointMarkerImage,
+          ),
+        )
+      ]);
+    } on MarkerNotFoundException catch (e) {
+      debugPrint(e.toString());
+      showMessage('Marker not found');
+      return;
+    }
+
     _destinationWaypointMarkers.add(destinationMarkers.first!);
     _newWaypointMarker = null;
   }
@@ -723,7 +761,15 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     // Remove the first destination marker from the list.
     if (_destinationWaypointMarkers.isNotEmpty) {
       final Marker markerToRemove = _destinationWaypointMarkers.first;
-      await _navigationViewController!.removeMarkers(<Marker>[markerToRemove]);
+
+      try {
+        await _navigationViewController!
+            .removeMarkers(<Marker>[markerToRemove]);
+      } on MarkerNotFoundException catch (e) {
+        debugPrint(e.toString());
+        showMessage('Marker not found');
+        return;
+      }
 
       // Unregister custom marker image.
       await unregisterImage(markerToRemove.options.icon);

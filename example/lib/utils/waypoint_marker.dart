@@ -39,7 +39,15 @@ Future<ImageDescriptor> registerWaypointMarkerImage(
       await image.toByteData(format: ui.ImageByteFormat.png);
 
   // Call registerBitmapImage with ByteData
-  return registerBitmapImage(bitmap: bytes!, imagePixelRatio: imagePixelRatio);
+  try {
+    return await registerBitmapImage(
+      bitmap: bytes!,
+      imagePixelRatio: imagePixelRatio,
+    );
+  } on ImageDecodingFailedException catch (_) {
+    debugPrint('Failed to decode image');
+    rethrow;
+  }
 }
 
 class _WaypointMarkerPainter extends CustomPainter {

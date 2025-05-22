@@ -23,3 +23,4 @@ export 'src/google_maps_map_view.dart';
 export 'src/google_maps_map_view_controller.dart';
 export 'src/google_maps_navigation_view_controller.dart';
 export 'src/google_maps_auto_view_controller.dart';
+export 'src/google_maps_exceptions.dart';

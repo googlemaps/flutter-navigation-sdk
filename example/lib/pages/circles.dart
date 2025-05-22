@@ -87,8 +87,16 @@ class _CirclesPageState extends ExamplePageState<CirclesPage> {
   Future<void> _updateSelectedCircleWithOptions(CircleOptions options) async {
     final Circle newCircle = _selectedCircle!.copyWith(options: options);
 
-    final List<Circle?> circles =
-        await _navigationViewController.updateCircles(<Circle>[newCircle]);
+    final List<Circle?> circles;
+    try {
+      circles =
+          await _navigationViewController.updateCircles(<Circle>[newCircle]);
+    } on CircleNotFoundException catch (e) {
+      debugPrint(e.toString());
+      showMessage('Circle not found');
+      return;
+    }
+
     final Circle? circle = circles.firstOrNull;
     if (circle != null) {
       setState(() {
@@ -102,7 +110,13 @@ class _CirclesPageState extends ExamplePageState<CirclesPage> {
   }
 
   Future<void> _removeCircle() async {
-    await _navigationViewController.removeCircles(<Circle>[_selectedCircle!]);
+    try {
+      await _navigationViewController.removeCircles(<Circle>[_selectedCircle!]);
+    } on CircleNotFoundException catch (e) {
+      debugPrint(e.toString());
+      showMessage('Circle not found');
+      return;
+    }
 
     setState(() {
       _circles = _circles

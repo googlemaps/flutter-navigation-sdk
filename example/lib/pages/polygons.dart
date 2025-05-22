@@ -150,8 +150,16 @@ class _PolygonsPageState extends ExamplePageState<PolygonsPage> {
   Future<void> _updateSelectedPolygonWithOptions(PolygonOptions options) async {
     final Polygon newPolygon = _selectedPolygon!.copyWith(options: options);
 
-    final List<Polygon?> polygons =
-        await _navigationViewController.updatePolygons(<Polygon>[newPolygon]);
+    final List<Polygon?> polygons;
+    try {
+      polygons =
+          await _navigationViewController.updatePolygons(<Polygon>[newPolygon]);
+    } on PolygonNotFoundException catch (e) {
+      debugPrint(e.toString());
+      showMessage('Polygon not found');
+      return;
+    }
+
     final Polygon? polygon = polygons.firstOrNull;
     if (polygon != null) {
       setState(() {
@@ -165,8 +173,14 @@ class _PolygonsPageState extends ExamplePageState<PolygonsPage> {
   }
 
   Future<void> _removePolygon() async {
-    await _navigationViewController
-        .removePolygons(<Polygon>[_selectedPolygon!]);
+    try {
+      await _navigationViewController
+          .removePolygons(<Polygon>[_selectedPolygon!]);
+    } on PolygonNotFoundException catch (e) {
+      debugPrint(e.toString());
+      showMessage('Polygon not found');
+      return;
+    }
 
     setState(() {
       _polygons = _polygons

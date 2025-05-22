@@ -69,7 +69,14 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
   }
 
   Future<void> _removeMarker() async {
-    await _navigationViewController.removeMarkers(<Marker>[_selectedMarker!]);
+    try {
+      await _navigationViewController.removeMarkers(<Marker>[_selectedMarker!]);
+    } on MarkerNotFoundException catch (e) {
+      debugPrint(e.toString());
+      showMessage('Marker not found');
+      return;
+    }
+
     setState(() {
       _markers.remove(_selectedMarker);
       _selectedMarker = null;
@@ -86,8 +93,16 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
   Future<void> _updateSelectedMarkerWithOptions(MarkerOptions options) async {
     final Marker newMarker = _selectedMarker!.copyWith(options: options);
 
-    final List<Marker?> markers =
-        await _navigationViewController.updateMarkers(<Marker>[newMarker]);
+    final List<Marker?> markers;
+    try {
+      markers =
+          await _navigationViewController.updateMarkers(<Marker>[newMarker]);
+    } on MarkerNotFoundException catch (e) {
+      debugPrint(e.toString());
+      showMessage('Marker not found');
+      return;
+    }
+
     final Marker? marker = markers.firstOrNull;
     if (marker != null) {
       setState(() {
@@ -153,8 +168,16 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
         await assetImage.obtainKey(configuration);
     final double imagePixelRatio = assetBundleImageKey.scale;
     final ByteData imageBytes = await rootBundle.load(assetBundleImageKey.name);
-    _registeredCustomIcon = await registerBitmapImage(
-        bitmap: imageBytes, imagePixelRatio: imagePixelRatio);
+
+    try {
+      _registeredCustomIcon = await registerBitmapImage(
+          bitmap: imageBytes, imagePixelRatio: imagePixelRatio);
+    } on ImageDecodingFailedException catch (e) {
+      debugPrint(e.toString());
+      showMessage('Failed to decode image');
+      return ImageDescriptor.defaultImage;
+    }
+
     return _registeredCustomIcon!;
   }
 
