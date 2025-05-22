@@ -151,31 +151,51 @@ class MapViewAPIImpl {
   }
 
   /// Awaits the platform view to be ready for communication.
-  Future<void> awaitMapReady({required int viewId}) {
-    return _viewApi.awaitMapReady(viewId);
+  Future<void> awaitMapReady({required int viewId}) async {
+    try {
+      await _viewApi.awaitMapReady(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Get the preference for whether the my location should be enabled or disabled.
-  Future<bool> isMyLocationEnabled({required int viewId}) {
-    return _viewApi.isMyLocationEnabled(viewId);
+  Future<bool> isMyLocationEnabled({required int viewId}) async {
+    try {
+      return await _viewApi.isMyLocationEnabled(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Enabled location in the navigation view.
   Future<void> setMyLocationEnabled(
-      {required int viewId, required bool enabled}) {
-    return _viewApi.setMyLocationEnabled(viewId, enabled);
+      {required int viewId, required bool enabled}) async {
+    try {
+      return await _viewApi.setMyLocationEnabled(viewId, enabled);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Get the map type.
   Future<MapType> getMapType({required int viewId}) async {
-    final MapTypeDto mapType = await _viewApi.getMapType(viewId);
-    return mapType.toMapType();
+    try {
+      final MapTypeDto mapType = await _viewApi.getMapType(viewId);
+      return mapType.toMapType();
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Modified visible map type.
   Future<void> setMapType(
       {required int viewId, required MapType mapType}) async {
-    return _viewApi.setMapType(viewId, mapType.toDto());
+    try {
+      await _viewApi.setMapType(viewId, mapType.toDto());
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Set map style by json string.
@@ -184,195 +204,282 @@ class MapViewAPIImpl {
       // Set the given json to the viewApi or reset the map style if
       // the styleJson is null.
       return await _viewApi.setMapStyle(viewId, styleJson ?? '[]');
-    } on PlatformException catch (error) {
-      if (error.code == 'mapStyleError') {
-        throw const MapStyleException();
-      } else {
-        rethrow;
-      }
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
     }
   }
 
   /// Enables or disables the my-location button.
   Future<void> setMyLocationButtonEnabled(
-      {required int viewId, required bool enabled}) {
-    return _viewApi.setMyLocationButtonEnabled(viewId, enabled);
+      {required int viewId, required bool enabled}) async {
+    try {
+      await _viewApi.setMyLocationButtonEnabled(viewId, enabled);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Enables or disables if the my location button consumes click events.
   Future<void> setConsumeMyLocationButtonClickEventsEnabled(
       {required int viewId, required bool enabled}) async {
-    return _viewApi.setConsumeMyLocationButtonClickEventsEnabled(
-        viewId, enabled);
+    try {
+      await _viewApi.setConsumeMyLocationButtonClickEventsEnabled(
+        viewId,
+        enabled,
+      );
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Enables or disables the zoom gestures.
   Future<void> setZoomGesturesEnabled(
-      {required int viewId, required bool enabled}) {
-    return _viewApi.setZoomGesturesEnabled(viewId, enabled);
+      {required int viewId, required bool enabled}) async {
+    try {
+      await _viewApi.setZoomGesturesEnabled(viewId, enabled);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Enables or disables the zoom controls.
   Future<void> setZoomControlsEnabled(
       {required int viewId, required bool enabled}) async {
     try {
-      return await _viewApi.setZoomControlsEnabled(viewId, enabled);
-    } on PlatformException catch (error) {
-      if (error.code == 'notSupported') {
+      await _viewApi.setZoomControlsEnabled(viewId, enabled);
+    } catch (e, stackTrace) {
+      if (e is PlatformException && e.code == 'notSupported') {
         throw UnsupportedError('Zoom controls are not supported on iOS.');
       } else {
-        rethrow;
+        throw convertPlatformException(e, stackTrace);
       }
     }
   }
 
   /// Enables or disables the compass.
-  Future<void> setCompassEnabled({required int viewId, required bool enabled}) {
-    return _viewApi.setCompassEnabled(viewId, enabled);
+  Future<void> setCompassEnabled(
+      {required int viewId, required bool enabled}) async {
+    try {
+      await _viewApi.setCompassEnabled(viewId, enabled);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Sets the preference for whether rotate gestures should be enabled or disabled.
   Future<void> setRotateGesturesEnabled(
-      {required int viewId, required bool enabled}) {
-    return _viewApi.setRotateGesturesEnabled(viewId, enabled);
+      {required int viewId, required bool enabled}) async {
+    try {
+      await _viewApi.setRotateGesturesEnabled(viewId, enabled);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Sets the preference for whether scroll gestures should be enabled or disabled.
   Future<void> setScrollGesturesEnabled(
-      {required int viewId, required bool enabled}) {
-    return _viewApi.setScrollGesturesEnabled(viewId, enabled);
+      {required int viewId, required bool enabled}) async {
+    try {
+      await _viewApi.setScrollGesturesEnabled(viewId, enabled);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Sets the preference for whether scroll gestures can take place at the same time as a zoom or rotate gesture.
   Future<void> setScrollGesturesDuringRotateOrZoomEnabled(
-      {required int viewId, required bool enabled}) {
-    return _viewApi.setScrollGesturesDuringRotateOrZoomEnabled(viewId, enabled);
+      {required int viewId, required bool enabled}) async {
+    try {
+      await _viewApi.setScrollGesturesDuringRotateOrZoomEnabled(
+        viewId,
+        enabled,
+      );
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Sets the preference for whether tilt gestures should be enabled or disabled.
   Future<void> setTiltGesturesEnabled(
-      {required int viewId, required bool enabled}) {
-    return _viewApi.setTiltGesturesEnabled(viewId, enabled);
+      {required int viewId, required bool enabled}) async {
+    try {
+      await _viewApi.setTiltGesturesEnabled(viewId, enabled);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Sets the preference for whether the Map Toolbar should be enabled or disabled.
   Future<void> setMapToolbarEnabled(
       {required int viewId, required bool enabled}) async {
     try {
-      return await _viewApi.setMapToolbarEnabled(viewId, enabled);
-    } on PlatformException catch (error) {
-      if (error.code == 'notSupported') {
+      await _viewApi.setMapToolbarEnabled(viewId, enabled);
+    } catch (e, stackTrace) {
+      if (e is PlatformException && e.code == 'notSupported') {
         throw UnsupportedError('Map toolbar is not supported on iOS.');
       } else {
-        rethrow;
+        throw convertPlatformException(e, stackTrace);
       }
     }
   }
 
   /// Turns the traffic layer on or off.
-  Future<void> setTrafficEnabled({required int viewId, required bool enabled}) {
-    return _viewApi.setTrafficEnabled(viewId, enabled);
+  Future<void> setTrafficEnabled(
+      {required int viewId, required bool enabled}) async {
+    try {
+      await _viewApi.setTrafficEnabled(viewId, enabled);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Get the preference for whether the my location button should be enabled or disabled.
-  Future<bool> isMyLocationButtonEnabled({required int viewId}) {
-    return _viewApi.isMyLocationButtonEnabled(viewId);
+  Future<bool> isMyLocationButtonEnabled({required int viewId}) async {
+    try {
+      return await _viewApi.isMyLocationButtonEnabled(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Get the preference for whether the my location button consumes click events.
   Future<bool> isConsumeMyLocationButtonClickEventsEnabled(
-      {required int viewId}) {
-    return _viewApi.isConsumeMyLocationButtonClickEventsEnabled(viewId);
+      {required int viewId}) async {
+    try {
+      return await _viewApi.isConsumeMyLocationButtonClickEventsEnabled(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Gets the preference for whether zoom gestures should be enabled or disabled.
-  Future<bool> isZoomGesturesEnabled({required int viewId}) {
-    return _viewApi.isZoomGesturesEnabled(viewId);
+  Future<bool> isZoomGesturesEnabled({required int viewId}) async {
+    try {
+      return await _viewApi.isZoomGesturesEnabled(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Gets the preference for whether zoom controls should be enabled or disabled.
   Future<bool> isZoomControlsEnabled({required int viewId}) async {
     try {
       return await _viewApi.isZoomControlsEnabled(viewId);
-    } on PlatformException catch (error) {
-      if (error.code == 'notSupported') {
+    } catch (e, stackTrace) {
+      if (e is PlatformException && e.code == 'notSupported') {
         throw UnsupportedError('Zoom controls are not supported on iOS.');
       } else {
-        rethrow;
+        throw convertPlatformException(e, stackTrace);
       }
     }
   }
 
   /// Gets the preference for whether compass should be enabled or disabled.
-  Future<bool> isCompassEnabled({required int viewId}) {
-    return _viewApi.isCompassEnabled(viewId);
+  Future<bool> isCompassEnabled({required int viewId}) async {
+    try {
+      return await _viewApi.isCompassEnabled(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Gets the preference for whether rotate gestures should be enabled or disabled.
-  Future<bool> isRotateGesturesEnabled({required int viewId}) {
-    return _viewApi.isRotateGesturesEnabled(viewId);
+  Future<bool> isRotateGesturesEnabled({required int viewId}) async {
+    try {
+      return await _viewApi.isRotateGesturesEnabled(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Gets the preference for whether scroll gestures should be enabled or disabled.
-  Future<bool> isScrollGesturesEnabled({required int viewId}) {
-    return _viewApi.isScrollGesturesEnabled(viewId);
+  Future<bool> isScrollGesturesEnabled({required int viewId}) async {
+    try {
+      return await _viewApi.isScrollGesturesEnabled(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Gets the preference for whether scroll gestures can take place at the same time as a zoom or rotate gesture.
   Future<bool> isScrollGesturesEnabledDuringRotateOrZoom(
-      {required int viewId}) {
-    return _viewApi.isScrollGesturesEnabledDuringRotateOrZoom(viewId);
+      {required int viewId}) async {
+    try {
+      return await _viewApi.isScrollGesturesEnabledDuringRotateOrZoom(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Gets the preference for whether tilt gestures should be enabled or disabled.
-  Future<bool> isTiltGesturesEnabled({required int viewId}) {
-    return _viewApi.isTiltGesturesEnabled(viewId);
+  Future<bool> isTiltGesturesEnabled({required int viewId}) async {
+    try {
+      return await _viewApi.isTiltGesturesEnabled(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Gets whether the Map Toolbar is enabled/disabled.
   Future<bool> isMapToolbarEnabled({required int viewId}) async {
     try {
       return await _viewApi.isMapToolbarEnabled(viewId);
-    } on PlatformException catch (error) {
-      if (error.code == 'notSupported') {
+    } catch (e, stackTrace) {
+      if (e is PlatformException && e.code == 'notSupported') {
         throw UnsupportedError('Map toolbar is not supported on iOS.');
       } else {
-        rethrow;
+        throw convertPlatformException(e, stackTrace);
       }
     }
   }
 
   /// Checks whether the map is drawing traffic data.
-  Future<bool> isTrafficEnabled({required int viewId}) {
-    return _viewApi.isTrafficEnabled(viewId);
+  Future<bool> isTrafficEnabled({required int viewId}) async {
+    try {
+      return await _viewApi.isTrafficEnabled(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Gets users current location.
   Future<LatLng?> getMyLocation({required int viewId}) async {
-    final LatLngDto? myLocation = await _viewApi.getMyLocation(viewId);
-    if (myLocation == null) {
-      return null;
+    try {
+      final LatLngDto? myLocation = await _viewApi.getMyLocation(viewId);
+      if (myLocation == null) {
+        return null;
+      }
+      return myLocation.toLatLng();
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
     }
-    return myLocation.toLatLng();
   }
 
   /// Gets the current position of the camera.
   Future<CameraPosition> getCameraPosition({required int viewId}) async {
-    final CameraPositionDto position = await _viewApi.getCameraPosition(
-      viewId,
-    );
-    return position.toCameraPosition();
+    try {
+      final CameraPositionDto position = await _viewApi.getCameraPosition(
+        viewId,
+      );
+      return position.toCameraPosition();
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Gets the current visible area / camera bounds.
   Future<LatLngBounds> getVisibleRegion({required int viewId}) async {
-    final LatLngBoundsDto bounds = await _viewApi.getVisibleRegion(
-      viewId,
-    );
-    return LatLngBounds(
-      southwest: bounds.southwest.toLatLng(),
-      northeast: bounds.northeast.toLatLng(),
-    );
+    try {
+      final LatLngBoundsDto bounds = await _viewApi.getVisibleRegion(
+        viewId,
+      );
+      return LatLngBounds(
+        southwest: bounds.southwest.toLatLng(),
+        northeast: bounds.northeast.toLatLng(),
+      );
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Animates the movement of the camera.
@@ -466,138 +573,238 @@ class MapViewAPIImpl {
   Future<void> followMyLocation(
       {required int viewId,
       required CameraPerspective perspective,
-      required double? zoomLevel}) {
-    return _viewApi.followMyLocation(viewId, perspective.toDto(), zoomLevel);
+      required double? zoomLevel}) async {
+    try {
+      await _viewApi.followMyLocation(viewId, perspective.toDto(), zoomLevel);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Is the navigation trip progress bar enabled.
-  Future<bool> isNavigationTripProgressBarEnabled({required int viewId}) {
-    return _viewApi.isNavigationTripProgressBarEnabled(viewId);
+  Future<bool> isNavigationTripProgressBarEnabled({required int viewId}) async {
+    try {
+      return await _viewApi.isNavigationTripProgressBarEnabled(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Enable navigation trip progress bar.
   Future<void> setNavigationTripProgressBarEnabled(
-      {required int viewId, required bool enabled}) {
-    return _viewApi.setNavigationTripProgressBarEnabled(viewId, enabled);
+      {required int viewId, required bool enabled}) async {
+    try {
+      await _viewApi.setNavigationTripProgressBarEnabled(viewId, enabled);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Is the navigation header enabled.
-  Future<bool> isNavigationHeaderEnabled({required int viewId}) {
-    return _viewApi.isNavigationHeaderEnabled(viewId);
+  Future<bool> isNavigationHeaderEnabled({required int viewId}) async {
+    try {
+      return await _viewApi.isNavigationHeaderEnabled(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Enable navigation header.
   Future<void> setNavigationHeaderEnabled(
-      {required int viewId, required bool enabled}) {
-    return _viewApi.setNavigationHeaderEnabled(viewId, enabled);
+      {required int viewId, required bool enabled}) async {
+    try {
+      return await _viewApi.setNavigationHeaderEnabled(viewId, enabled);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Is the navigation footer enabled.
-  Future<bool> isNavigationFooterEnabled({required int viewId}) {
-    return _viewApi.isNavigationFooterEnabled(viewId);
+  Future<bool> isNavigationFooterEnabled({required int viewId}) async {
+    try {
+      return await _viewApi.isNavigationFooterEnabled(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Enable the navigation footer.
   Future<void> setNavigationFooterEnabled(
-      {required int viewId, required bool enabled}) {
-    return _viewApi.setNavigationFooterEnabled(viewId, enabled);
+      {required int viewId, required bool enabled}) async {
+    try {
+      await _viewApi.setNavigationFooterEnabled(viewId, enabled);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Is the recenter button enabled.
-  Future<bool> isRecenterButtonEnabled({required int viewId}) {
-    return _viewApi.isRecenterButtonEnabled(viewId);
+  Future<bool> isRecenterButtonEnabled({required int viewId}) async {
+    try {
+      return await _viewApi.isRecenterButtonEnabled(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Enable the recenter button.
   Future<void> setRecenterButtonEnabled(
-      {required int viewId, required bool enabled}) {
-    return _viewApi.setRecenterButtonEnabled(viewId, enabled);
+      {required int viewId, required bool enabled}) async {
+    try {
+      await _viewApi.setRecenterButtonEnabled(viewId, enabled);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Is the speed limit displayed.
-  Future<bool> isSpeedLimitIconEnabled({required int viewId}) {
-    return _viewApi.isSpeedLimitIconEnabled(viewId);
+  Future<bool> isSpeedLimitIconEnabled({required int viewId}) async {
+    try {
+      return await _viewApi.isSpeedLimitIconEnabled(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Should display speed limit.
   Future<void> setSpeedLimitIconEnabled(
-      {required int viewId, required bool enabled}) {
-    return _viewApi.setSpeedLimitIconEnabled(viewId, enabled);
+      {required int viewId, required bool enabled}) async {
+    try {
+      await _viewApi.setSpeedLimitIconEnabled(viewId, enabled);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Is speedometer displayed.
-  Future<bool> isSpeedometerEnabled({required int viewId}) {
-    return _viewApi.isSpeedometerEnabled(viewId);
+  Future<bool> isSpeedometerEnabled({required int viewId}) async {
+    try {
+      return await _viewApi.isSpeedometerEnabled(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Should display speedometer.
   Future<void> setSpeedometerEnabled(
-      {required int viewId, required bool enabled}) {
-    return _viewApi.setSpeedometerEnabled(viewId, enabled);
+      {required int viewId, required bool enabled}) async {
+    try {
+      await _viewApi.setSpeedometerEnabled(viewId, enabled);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Is incident cards displayed.
-  Future<bool> isTrafficIncidentCardsEnabled({required int viewId}) {
-    return _viewApi.isTrafficIncidentCardsEnabled(viewId);
+  Future<bool> isTrafficIncidentCardsEnabled({required int viewId}) async {
+    try {
+      return await _viewApi.isTrafficIncidentCardsEnabled(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Should display incident cards.
   Future<void> setTrafficIncidentCardsEnabled(
-      {required int viewId, required bool enabled}) {
-    return _viewApi.setTrafficIncidentCardsEnabled(viewId, enabled);
+      {required int viewId, required bool enabled}) async {
+    try {
+      await _viewApi.setTrafficIncidentCardsEnabled(viewId, enabled);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Is the report incident button displayed.
-  Future<bool> isReportIncidentButtonEnabled({required int viewId}) {
-    return _viewApi.isReportIncidentButtonEnabled(viewId);
+  Future<bool> isReportIncidentButtonEnabled({required int viewId}) async {
+    try {
+      return await _viewApi.isReportIncidentButtonEnabled(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Should display the report incident button.
   Future<void> setReportIncidentButtonEnabled(
-      {required int viewId, required bool enabled}) {
-    return _viewApi.setReportIncidentButtonEnabled(viewId, enabled);
+      {required int viewId, required bool enabled}) async {
+    try {
+      await _viewApi.setReportIncidentButtonEnabled(viewId, enabled);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Are the traffic prompts displayed.
-  Future<bool> isTrafficPromptsEnabled({required int viewId}) {
-    return _viewApi.isTrafficPromptsEnabled(viewId);
+  Future<bool> isTrafficPromptsEnabled({required int viewId}) async {
+    try {
+      return await _viewApi.isTrafficPromptsEnabled(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Should display the traffic prompts..
   Future<void> setTrafficPromptsEnabled(
-      {required int viewId, required bool enabled}) {
-    return _viewApi.setTrafficPromptsEnabled(viewId, enabled);
+      {required int viewId, required bool enabled}) async {
+    try {
+      await _viewApi.setTrafficPromptsEnabled(viewId, enabled);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Is navigation UI enabled.
-  Future<bool> isNavigationUIEnabled({required int viewId}) {
-    return _viewApi.isNavigationUIEnabled(viewId);
+  Future<bool> isNavigationUIEnabled({required int viewId}) async {
+    try {
+      return await _viewApi.isNavigationUIEnabled(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Enable navigation UI.
   Future<void> setNavigationUIEnabled(
-      {required int viewId, required bool enabled}) {
-    return _viewApi.setNavigationUIEnabled(viewId, enabled);
+      {required int viewId, required bool enabled}) async {
+    try {
+      await _viewApi.setNavigationUIEnabled(viewId, enabled);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Show route overview.
-  Future<void> showRouteOverview({required int viewId}) {
-    return _viewApi.showRouteOverview(viewId);
+  Future<void> showRouteOverview({required int viewId}) async {
+    try {
+      await _viewApi.showRouteOverview(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Returns the minimum zoom level.
-  Future<double> getMinZoomPreference({required int viewId}) {
-    return _viewApi.getMinZoomPreference(viewId);
+  Future<double> getMinZoomPreference({required int viewId}) async {
+    try {
+      return await _viewApi.getMinZoomPreference(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Returns the maximum zoom level for the current camera position.
-  Future<double> getMaxZoomPreference({required int viewId}) {
-    return _viewApi.getMaxZoomPreference(viewId);
+  Future<double> getMaxZoomPreference({required int viewId}) async {
+    try {
+      return await _viewApi.getMaxZoomPreference(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Removes any previously specified upper and lower zoom bounds.
-  Future<void> resetMinMaxZoomPreference({required int viewId}) {
-    return _viewApi.resetMinMaxZoomPreference(viewId);
+  Future<void> resetMinMaxZoomPreference({required int viewId}) async {
+    try {
+      await _viewApi.resetMinMaxZoomPreference(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Sets a preferred lower bound for the camera zoom.
@@ -605,12 +812,8 @@ class MapViewAPIImpl {
       {required int viewId, required double minZoomPreference}) async {
     try {
       return await _viewApi.setMinZoomPreference(viewId, minZoomPreference);
-    } on PlatformException catch (error) {
-      if (error.code == 'minZoomGreaterThanMaxZoom') {
-        throw const MinZoomRangeException();
-      } else {
-        rethrow;
-      }
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
     }
   }
 
@@ -619,12 +822,8 @@ class MapViewAPIImpl {
       {required int viewId, required double maxZoomPreference}) async {
     try {
       return await _viewApi.setMaxZoomPreference(viewId, maxZoomPreference);
-    } on PlatformException catch (error) {
-      if (error.code == 'maxZoomLessThanMinZoom') {
-        throw const MaxZoomRangeException();
-      } else {
-        rethrow;
-      }
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
     }
   }
 
@@ -637,38 +836,46 @@ class MapViewAPIImpl {
 
   /// Get all markers from map view.
   Future<List<Marker?>> getMarkers({required int viewId}) async {
-    final List<MarkerDto?> markers = await _viewApi.getMarkers(viewId);
-    return markers
-        .whereType<MarkerDto>()
-        .map((MarkerDto e) => e.toMarker())
-        .toList();
+    try {
+      final List<MarkerDto?> markers = await _viewApi.getMarkers(viewId);
+      return markers
+          .whereType<MarkerDto>()
+          .map((MarkerDto e) => e.toMarker())
+          .toList();
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Add markers to map view.
   Future<List<Marker>> addMarkers(
       {required int viewId, required List<MarkerOptions> markerOptions}) async {
-    // Convert options to pigeon format
-    final List<MarkerOptionsDto> options =
-        markerOptions.map((MarkerOptions opt) => opt.toDto()).toList();
+    try {
+      // Convert options to pigeon format
+      final List<MarkerOptionsDto> options =
+          markerOptions.map((MarkerOptions opt) => opt.toDto()).toList();
 
-    // Create marker objects with new ID's
-    final List<MarkerDto> markersToAdd = options
-        .map((MarkerOptionsDto options) =>
-            MarkerDto(markerId: _createMarkerId(), options: options))
-        .toList();
+      // Create marker objects with new ID's
+      final List<MarkerDto> markersToAdd = options
+          .map((MarkerOptionsDto options) =>
+              MarkerDto(markerId: _createMarkerId(), options: options))
+          .toList();
 
-    // Add markers to map
-    final List<MarkerDto?> markersAdded =
-        await _viewApi.addMarkers(viewId, markersToAdd);
+      // Add markers to map
+      final List<MarkerDto?> markersAdded =
+          await _viewApi.addMarkers(viewId, markersToAdd);
 
-    if (markersToAdd.length != markersAdded.length) {
-      throw Exception('Could not add all markers to map view');
+      if (markersToAdd.length != markersAdded.length) {
+        throw Exception('Could not add all markers to map view');
+      }
+
+      return markersAdded
+          .whereType<MarkerDto>()
+          .map((MarkerDto markerDto) => markerDto.toMarker())
+          .toList();
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
     }
-
-    return markersAdded
-        .whereType<MarkerDto>()
-        .map((MarkerDto markerDto) => markerDto.toMarker())
-        .toList();
   }
 
   /// Update markers on the map view.
@@ -683,12 +890,8 @@ class MapViewAPIImpl {
           .whereType<MarkerDto>()
           .map((MarkerDto markerDto) => markerDto.toMarker())
           .toList();
-    } on PlatformException catch (error) {
-      if (error.code == 'markerNotFound') {
-        throw const MarkerNotFoundException();
-      } else {
-        rethrow;
-      }
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
     }
   }
 
@@ -699,61 +902,73 @@ class MapViewAPIImpl {
       final List<MarkerDto> markerDtos =
           markers.map((Marker marker) => marker.toDto()).toList();
       return await _viewApi.removeMarkers(viewId, markerDtos);
-    } on PlatformException catch (error) {
-      if (error.code == 'markerNotFound') {
-        throw const MarkerNotFoundException();
-      } else {
-        rethrow;
-      }
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
     }
   }
 
   /// Remove all markers from map view.
-  Future<void> clearMarkers({required int viewId}) {
-    return _viewApi.clearMarkers(viewId);
+  Future<void> clearMarkers({required int viewId}) async {
+    try {
+      await _viewApi.clearMarkers(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Removes all markers, polylines, polygons, overlays, etc from the map.
-  Future<void> clear({required int viewId}) {
-    return _viewApi.clear(viewId);
+  Future<void> clear({required int viewId}) async {
+    try {
+      await _viewApi.clear(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Get all polygons from map view.
   Future<List<Polygon?>> getPolygons({required int viewId}) async {
-    final List<PolygonDto?> polygons = await _viewApi.getPolygons(viewId);
+    try {
+      final List<PolygonDto?> polygons = await _viewApi.getPolygons(viewId);
 
-    return polygons
-        .whereType<PolygonDto>()
-        .map((PolygonDto polygon) => polygon.toPolygon())
-        .toList();
+      return polygons
+          .whereType<PolygonDto>()
+          .map((PolygonDto polygon) => polygon.toPolygon())
+          .toList();
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Add polygons to map view.
   Future<List<Polygon?>> addPolygons(
       {required int viewId,
       required List<PolygonOptions> polygonOptions}) async {
-    // Convert options to pigeon format
-    final List<PolygonOptionsDto> options =
-        polygonOptions.map((PolygonOptions opt) => opt.toDto()).toList();
+    try {
+      // Convert options to pigeon format
+      final List<PolygonOptionsDto> options =
+          polygonOptions.map((PolygonOptions opt) => opt.toDto()).toList();
 
-    // Create polygon objects with new ID's
-    final List<PolygonDto> polygonsToAdd = options
-        .map((PolygonOptionsDto options) =>
-            PolygonDto(polygonId: _createPolygonId(), options: options))
-        .toList();
+      // Create polygon objects with new ID's
+      final List<PolygonDto> polygonsToAdd = options
+          .map((PolygonOptionsDto options) =>
+              PolygonDto(polygonId: _createPolygonId(), options: options))
+          .toList();
 
-    // Add polygons to map
-    final List<PolygonDto?> polygonsAdded =
-        await _viewApi.addPolygons(viewId, polygonsToAdd);
+      // Add polygons to map
+      final List<PolygonDto?> polygonsAdded =
+          await _viewApi.addPolygons(viewId, polygonsToAdd);
 
-    if (polygonsToAdd.length != polygonsAdded.length) {
-      throw Exception('Could not add all polygons to map view');
+      if (polygonsToAdd.length != polygonsAdded.length) {
+        throw Exception('Could not add all polygons to map view');
+      }
+
+      return polygonsAdded
+          .whereType<PolygonDto>()
+          .map((PolygonDto polygon) => polygon.toPolygon())
+          .toList();
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
     }
-
-    return polygonsAdded
-        .whereType<PolygonDto>()
-        .map((PolygonDto polygon) => polygon.toPolygon())
-        .toList();
   }
 
   /// Update polygons on the map view.
@@ -768,12 +983,8 @@ class MapViewAPIImpl {
           .whereType<PolygonDto>()
           .map((PolygonDto polygon) => polygon.toPolygon())
           .toList();
-    } on PlatformException catch (error) {
-      if (error.code == 'polygonNotFound') {
-        throw const PolygonNotFoundException();
-      } else {
-        rethrow;
-      }
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
     }
   }
 
@@ -784,56 +995,64 @@ class MapViewAPIImpl {
       final List<PolygonDto> navigationViewPolygons =
           polygons.map((Polygon polygon) => polygon.toDto()).toList();
       return await _viewApi.removePolygons(viewId, navigationViewPolygons);
-    } on PlatformException catch (error) {
-      if (error.code == 'polygonNotFound') {
-        throw const PolygonNotFoundException();
-      } else {
-        rethrow;
-      }
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
     }
   }
 
   /// Remove all polygons from map view.
-  Future<void> clearPolygons({required int viewId}) {
-    return _viewApi.clearPolygons(viewId);
+  Future<void> clearPolygons({required int viewId}) async {
+    try {
+      await _viewApi.clearPolygons(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Get all polylines from map view.
   Future<List<Polyline?>> getPolylines({required int viewId}) async {
-    final List<PolylineDto?> polylines = await _viewApi.getPolylines(viewId);
+    try {
+      final List<PolylineDto?> polylines = await _viewApi.getPolylines(viewId);
 
-    return polylines
-        .whereType<PolylineDto>()
-        .map((PolylineDto polyline) => polyline.toPolyline())
-        .toList();
+      return polylines
+          .whereType<PolylineDto>()
+          .map((PolylineDto polyline) => polyline.toPolyline())
+          .toList();
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Add polylines to map view.
   Future<List<Polyline?>> addPolylines(
       {required int viewId,
       required List<PolylineOptions> polylineOptions}) async {
-    // Convert options to pigeon format
-    final List<PolylineOptionsDto> options =
-        polylineOptions.map((PolylineOptions opt) => opt.toDto()).toList();
+    try {
+      // Convert options to pigeon format
+      final List<PolylineOptionsDto> options =
+          polylineOptions.map((PolylineOptions opt) => opt.toDto()).toList();
 
-    // Create polyline objects with new ID's
-    final List<PolylineDto> polylinesToAdd = options
-        .map((PolylineOptionsDto options) =>
-            PolylineDto(polylineId: _createPolylineId(), options: options))
-        .toList();
+      // Create polyline objects with new ID's
+      final List<PolylineDto> polylinesToAdd = options
+          .map((PolylineOptionsDto options) =>
+              PolylineDto(polylineId: _createPolylineId(), options: options))
+          .toList();
 
-    // Add polylines to map
-    final List<PolylineDto?> polylinesAdded =
-        await _viewApi.addPolylines(viewId, polylinesToAdd);
+      // Add polylines to map
+      final List<PolylineDto?> polylinesAdded =
+          await _viewApi.addPolylines(viewId, polylinesToAdd);
 
-    if (polylinesToAdd.length != polylinesAdded.length) {
-      throw Exception('Could not add all polylines to map view');
+      if (polylinesToAdd.length != polylinesAdded.length) {
+        throw Exception('Could not add all polylines to map view');
+      }
+
+      return polylinesAdded
+          .whereType<PolylineDto>()
+          .map((PolylineDto polyline) => polyline.toPolyline())
+          .toList();
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
     }
-
-    return polylinesAdded
-        .whereType<PolylineDto>()
-        .map((PolylineDto polyline) => polyline.toPolyline())
-        .toList();
   }
 
   /// Update polylines on the map view.
@@ -849,12 +1068,8 @@ class MapViewAPIImpl {
           .whereType<PolylineDto>()
           .map((PolylineDto polyline) => polyline.toPolyline())
           .toList();
-    } on PlatformException catch (error) {
-      if (error.code == 'polylineNotFound') {
-        throw const PolylineNotFoundException();
-      } else {
-        rethrow;
-      }
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
     }
   }
 
@@ -866,55 +1081,63 @@ class MapViewAPIImpl {
           .map((Polyline polyline) => polyline.toNavigationViewPolyline())
           .toList();
       return await _viewApi.removePolylines(viewId, navigationViewPolylines);
-    } on PlatformException catch (error) {
-      if (error.code == 'polylineNotFound') {
-        throw const PolylineNotFoundException();
-      } else {
-        rethrow;
-      }
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
     }
   }
 
   /// Remove all polylines from map view.
-  Future<void> clearPolylines({required int viewId}) {
-    return _viewApi.clearPolylines(viewId);
+  Future<void> clearPolylines({required int viewId}) async {
+    try {
+      await _viewApi.clearPolylines(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Get all circles from map view.
   Future<List<Circle?>> getCircles({required int viewId}) async {
-    final List<CircleDto?> circles = await _viewApi.getCircles(viewId);
+    try {
+      final List<CircleDto?> circles = await _viewApi.getCircles(viewId);
 
-    return circles
-        .whereType<CircleDto>()
-        .map((CircleDto circle) => circle.toCircle())
-        .toList();
+      return circles
+          .whereType<CircleDto>()
+          .map((CircleDto circle) => circle.toCircle())
+          .toList();
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Add circles to map view.
   Future<List<Circle?>> addCircles(
       {required int viewId, required List<CircleOptions> options}) async {
-    // Convert options to pigeon format
-    final List<CircleOptionsDto> optionsDto =
-        options.map((CircleOptions opt) => opt.toDto()).toList();
+    try {
+      // Convert options to pigeon format
+      final List<CircleOptionsDto> optionsDto =
+          options.map((CircleOptions opt) => opt.toDto()).toList();
 
-    // Create circle objects with new ID's
-    final List<CircleDto> circlesToAdd = optionsDto
-        .map((CircleOptionsDto options) =>
-            CircleDto(circleId: _createCircleId(), options: options))
-        .toList();
+      // Create circle objects with new ID's
+      final List<CircleDto> circlesToAdd = optionsDto
+          .map((CircleOptionsDto options) =>
+              CircleDto(circleId: _createCircleId(), options: options))
+          .toList();
 
-    // Add circles to map
-    final List<CircleDto?> circlesAdded =
-        await _viewApi.addCircles(viewId, circlesToAdd);
+      // Add circles to map
+      final List<CircleDto?> circlesAdded =
+          await _viewApi.addCircles(viewId, circlesToAdd);
 
-    if (circlesToAdd.length != circlesAdded.length) {
-      throw Exception('Could not add all circles to map view');
+      if (circlesToAdd.length != circlesAdded.length) {
+        throw Exception('Could not add all circles to map view');
+      }
+
+      return circlesAdded
+          .whereType<CircleDto>()
+          .map((CircleDto circle) => circle.toCircle())
+          .toList();
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
     }
-
-    return circlesAdded
-        .whereType<CircleDto>()
-        .map((CircleDto circle) => circle.toCircle())
-        .toList();
   }
 
   /// Update circles on the map view.
@@ -930,12 +1153,8 @@ class MapViewAPIImpl {
           .whereType<CircleDto>()
           .map((CircleDto circle) => circle.toCircle())
           .toList();
-    } on PlatformException catch (error) {
-      if (error.code == 'circleNotFound') {
-        throw const CircleNotFoundException();
-      } else {
-        rethrow;
-      }
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
     }
   }
 
@@ -946,43 +1165,59 @@ class MapViewAPIImpl {
       final List<CircleDto> navigationViewCircles =
           circles.map((Circle circle) => circle.toDto()).toList();
       return await _viewApi.removeCircles(viewId, navigationViewCircles);
-    } on PlatformException catch (error) {
-      if (error.code == 'circleNotFound') {
-        throw const CircleNotFoundException();
-      } else {
-        rethrow;
-      }
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
     }
   }
 
   /// Remove all circles from map view.
-  Future<void> clearCircles({required int viewId}) {
-    return _viewApi.clearCircles(viewId);
+  Future<void> clearCircles({required int viewId}) async {
+    try {
+      await _viewApi.clearCircles(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   /// Register camera changed listeners.
-  Future<void> enableOnCameraChangedEvents({required int viewId}) {
-    return _viewApi.enableOnCameraChangedEvents(viewId);
+  Future<void> enableOnCameraChangedEvents({required int viewId}) async {
+    try {
+      await _viewApi.enableOnCameraChangedEvents(viewId);
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
-  Future<void> setPadding({required int viewId, required EdgeInsets padding}) {
-    return _viewApi.setPadding(
+  Future<void> setPadding(
+      {required int viewId, required EdgeInsets padding}) async {
+    try {
+      await _viewApi.setPadding(
         viewId,
         MapPaddingDto(
-            top: padding.top.toInt(),
-            left: padding.left.toInt(),
-            bottom: padding.bottom.toInt(),
-            right: padding.right.toInt()));
+          top: padding.top.toInt(),
+          left: padding.left.toInt(),
+          bottom: padding.bottom.toInt(),
+          right: padding.right.toInt(),
+        ),
+      );
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   // Gets the map padding from the map view.
   Future<EdgeInsets> getPadding({required int viewId}) async {
-    final MapPaddingDto padding = await _viewApi.getPadding(viewId);
-    return EdgeInsets.only(
+    try {
+      final MapPaddingDto padding = await _viewApi.getPadding(viewId);
+      return EdgeInsets.only(
         top: padding.top.toDouble(),
         left: padding.left.toDouble(),
         bottom: padding.bottom.toDouble(),
-        right: padding.right.toDouble());
+        right: padding.right.toDouble(),
+      );
+    } catch (e, stackTrace) {
+      throw convertPlatformException(e, stackTrace);
+    }
   }
 
   Stream<MapClickEvent> getMapClickEventStream({required int viewId}) {

@@ -43,8 +43,8 @@ class ImageRegistryAPIImpl {
           newImageId, bitmap, imagePixelRatio, width, height);
       return addedImage.toImageDescriptor();
     } on PlatformException catch (error) {
-      if (error.code == 'imageDecodingFailed') {
-        throw const ImageDecodingFailedException();
+      if (error.code == ImageDecodingFailedException.platformCode) {
+        throw ImageDecodingFailedException(exception: error);
       } else {
         rethrow;
       }

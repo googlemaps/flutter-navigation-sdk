@@ -106,8 +106,16 @@ class _PolylinesPageState extends ExamplePageState<PolylinesPage> {
       PolylineOptions options) async {
     final Polyline newPolyline = _selectedPolyline!.copyWith(options: options);
 
-    final List<Polyline?> polylines = await _navigationViewController
-        .updatePolylines(<Polyline>[newPolyline]);
+    final List<Polyline?> polylines;
+    try {
+      polylines = await _navigationViewController
+          .updatePolylines(<Polyline>[newPolyline]);
+    } on PolylineNotFoundException catch (e) {
+      debugPrint(e.toString());
+      _showMessage('Polyline not found');
+      return;
+    }
+
     final Polyline? polyline = polylines.firstOrNull;
     if (polyline != null) {
       setState(() {
@@ -121,8 +129,14 @@ class _PolylinesPageState extends ExamplePageState<PolylinesPage> {
   }
 
   Future<void> _removePolyline() async {
-    await _navigationViewController
-        .removePolylines(<Polyline>[_selectedPolyline!]);
+    try {
+      await _navigationViewController
+          .removePolylines(<Polyline>[_selectedPolyline!]);
+    } on PolylineNotFoundException catch (e) {
+      debugPrint(e.toString());
+      _showMessage('Polyline not found');
+      return;
+    }
 
     setState(() {
       _polylines = _polylines
@@ -202,6 +216,23 @@ class _PolylinesPageState extends ExamplePageState<PolylinesPage> {
 
     await _updateSelectedPolylineWithOptions(
         _selectedPolyline!.options.copyWith(zIndex: newZIndex));
+  }
+
+  void _showMessage(String message) {
+    if (!mounted) {
+      return;
+    }
+    _hideMessage();
+    if (isOverlayVisible) {
+      showOverlaySnackBar(message);
+    } else {
+      final SnackBar snackBar = SnackBar(content: Text(message));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
+  void _hideMessage() {
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
   }
 
   @override
