@@ -82,13 +82,15 @@ class MapViewAPIImpl {
   }
 
   /// Builds creation params used to initialize navigation view with initial parameters.
-  ViewCreationOptionsDto buildNavigationViewCreationOptions(
-      MapViewType mapViewType,
-      MapViewInitializationOptions initializationSettings) {
+  ViewCreationOptionsDto buildPlatformViewCreationOptions(
+    MapViewType mapViewType,
+    MapViewInitializationOptions initializationSettings,
+  ) {
     assert(
-        mapViewType == MapViewType.navigation ||
-            initializationSettings.navigationViewOptions == null,
-        'Navigation view options can only be set when using navigation view type');
+      mapViewType == MapViewType.navigation ||
+          initializationSettings.navigationViewOptions == null,
+      'Navigation view options can only be set when using navigation view type',
+    );
 
     /// Map options
     final MapOptions mapOptions = initializationSettings.mapOptions;

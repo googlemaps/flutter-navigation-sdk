@@ -83,16 +83,13 @@ class GoogleMapsNavigationIOS extends GoogleMapsNavigationPlatform {
     const String viewType = 'google_navigation_flutter';
 
     // Build creation params used to initialize navigation view with initial parameters
-    final ViewCreationOptionsDto creationParams =
-        viewAPI.buildNavigationViewCreationOptions(
-      mapViewType,
-      initializationOptions,
-    );
+    final ViewCreationOptionsDto creationParams = viewAPI
+        .buildPlatformViewCreationOptions(mapViewType, initializationOptions);
 
     return UiKitView(
       viewType: viewType,
-      creationParams: creationParams.encode(),
-      creationParamsCodec: const StandardMessageCodec(),
+      creationParams: creationParams,
+      creationParamsCodec: ViewCreationApi.pigeonChannelCodec,
       onPlatformViewCreated: (int viewId) async {
         try {
           onPlatformViewCreated(viewId);
