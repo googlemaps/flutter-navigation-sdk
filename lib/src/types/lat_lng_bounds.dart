@@ -22,17 +22,18 @@ import '../../google_navigation_flutter.dart';
 @immutable
 class LatLngBounds {
   /// Initialize LatLngBounds with the given southwest and northeast points.
-  LatLngBounds({
-    required this.southwest,
-    required this.northeast,
-  })  : assert(northeast.latitude >= southwest.latitude,
-            'The latitude of northeast must be greater than or equal to the latitude of southwest.'),
-        assert(
-            southwest.longitude <= northeast.longitude ||
-                (southwest.longitude > northeast.longitude &&
-                    (southwest.longitude <= 180.0 &&
-                        northeast.longitude >= -180.0)),
-            'Longitudes must form a valid range.');
+  LatLngBounds({required this.southwest, required this.northeast})
+    : assert(
+        northeast.latitude >= southwest.latitude,
+        'The latitude of northeast must be greater than or equal to the latitude of southwest.',
+      ),
+      assert(
+        southwest.longitude <= northeast.longitude ||
+            (southwest.longitude > northeast.longitude &&
+                (southwest.longitude <= 180.0 &&
+                    northeast.longitude >= -180.0)),
+        'Longitudes must form a valid range.',
+      );
 
   /// Southwest corner of the bound.
   final LatLng southwest;
@@ -85,9 +86,9 @@ class LatLngBounds {
 
   /// Returns a new [LatLngBounds] instance offset by the given [LatLng].
   LatLngBounds offset(LatLng latLngOffset) => LatLngBounds(
-        southwest: southwest.offset(latLngOffset),
-        northeast: northeast.offset(latLngOffset),
-      );
+    southwest: southwest.offset(latLngOffset),
+    northeast: northeast.offset(latLngOffset),
+  );
 
   /// Returns a new [LatLngBounds] instance that is the smallest bounding box
   /// that contains list of given [LatLng] points.

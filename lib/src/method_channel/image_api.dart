@@ -32,15 +32,21 @@ class ImageRegistryAPIImpl {
   }
 
   /// Register bitmap to image registry.
-  Future<ImageDescriptor> registerBitmapImage(
-      {required Uint8List bitmap,
-      required double imagePixelRatio,
-      double? width,
-      double? height}) async {
+  Future<ImageDescriptor> registerBitmapImage({
+    required Uint8List bitmap,
+    required double imagePixelRatio,
+    double? width,
+    double? height,
+  }) async {
     final String newImageId = _createImageId();
     try {
       final ImageDescriptorDto addedImage = await _imageApi.registerBitmapImage(
-          newImageId, bitmap, imagePixelRatio, width, height);
+        newImageId,
+        bitmap,
+        imagePixelRatio,
+        width,
+        height,
+      );
       return addedImage.toImageDescriptor();
     } on PlatformException catch (error) {
       if (error.code == 'imageDecodingFailed') {

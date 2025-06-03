@@ -79,10 +79,11 @@ abstract class GoogleMapsNavigationPlatform extends PlatformInterface {
   ///
   /// The [onMapReady] callback is invoked once the platform view has been created
   /// and is ready for interaction.
-  Widget buildMapView(
-      {required MapViewInitializationOptions initializationOptions,
-      required PlatformViewCreatedCallback onPlatformViewCreated,
-      required MapReadyCallback onMapReady});
+  Widget buildMapView({
+    required MapViewInitializationOptions initializationOptions,
+    required PlatformViewCreatedCallback onPlatformViewCreated,
+    required MapReadyCallback onMapReady,
+  });
 
   /// Builds and returns a navigation view.
   ///
@@ -91,16 +92,18 @@ abstract class GoogleMapsNavigationPlatform extends PlatformInterface {
   ///
   /// The [onMapReady] callback is invoked once the platform view has been created
   /// and is ready for interaction.
-  Widget buildNavigationView(
-      {required MapViewInitializationOptions initializationOptions,
-      required PlatformViewCreatedCallback onPlatformViewCreated,
-      required MapReadyCallback onMapReady});
+  Widget buildNavigationView({
+    required MapViewInitializationOptions initializationOptions,
+    required PlatformViewCreatedCallback onPlatformViewCreated,
+    required MapReadyCallback onMapReady,
+  });
 
   /// Populates [GoogleNavigationInspectorPlatform.instance] to allow
   /// inspecting the platform map state.
   @visibleForTesting
   void enableDebugInspection() {
     throw UnimplementedError(
-        'enableDebugInspection() has not been implemented.');
+      'enableDebugInspection() has not been implemented.',
+    );
   }
 }

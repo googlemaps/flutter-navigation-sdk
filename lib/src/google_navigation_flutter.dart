@@ -18,9 +18,8 @@ import '../google_navigation_flutter.dart';
 import 'google_navigation_flutter_platform_interface.dart';
 
 /// Called during speeding event.
-typedef OnSpeedingUpdatedEventCallback = void Function(
-  SpeedingUpdatedEvent onSpeedingUpdatedEvent,
-);
+typedef OnSpeedingUpdatedEventCallback =
+    void Function(SpeedingUpdatedEvent onSpeedingUpdatedEvent);
 
 /// Called when the camera animation finishes.
 ///
@@ -29,14 +28,16 @@ typedef OnSpeedingUpdatedEventCallback = void Function(
 typedef AnimationFinishedCallback = void Function(bool success);
 
 /// Called during road snapped location event.
-typedef OnRoadSnappedLocationUpdatedEventCallback = void Function(
-  RoadSnappedLocationUpdatedEvent onRoadSnappedLocationUpdatedEvent,
-);
+typedef OnRoadSnappedLocationUpdatedEventCallback =
+    void Function(
+      RoadSnappedLocationUpdatedEvent onRoadSnappedLocationUpdatedEvent,
+    );
 
 /// Called during road snapped raw location event (Android only).
-typedef OnRoadSnappedRawLocationUpdatedEventCallback = void Function(
-  RoadSnappedRawLocationUpdatedEvent onRoadSnappedRawLocationUpdatedEvent,
-);
+typedef OnRoadSnappedRawLocationUpdatedEventCallback =
+    void Function(
+      RoadSnappedRawLocationUpdatedEvent onRoadSnappedRawLocationUpdatedEvent,
+    );
 
 /// Called during arriving to destination event.
 typedef OnArrivalEventCallback = void Function(OnArrivalEvent onArrivalEvent);
@@ -45,8 +46,8 @@ typedef OnArrivalEventCallback = void Function(OnArrivalEvent onArrivalEvent);
 typedef OnReroutingEventCallback = void Function();
 
 /// Called during GPS availability event. (Android only).
-typedef OnGpsAvailabilityEventCallback = void Function(
-    GpsAvailabilityUpdatedEvent gpsAvailabilityUpdatedEvent);
+typedef OnGpsAvailabilityEventCallback =
+    void Function(GpsAvailabilityUpdatedEvent gpsAvailabilityUpdatedEvent);
 
 /// Called during traffic updated event. (Android only)
 typedef OnTrafficUpdatedEventCallback = void Function();
@@ -55,12 +56,14 @@ typedef OnTrafficUpdatedEventCallback = void Function();
 typedef OnRouteChangedEventCallback = void Function();
 
 /// Called during recenter button click event.
-typedef OnRecenterButtonClicked = void Function(
-    NavigationViewRecenterButtonClickedEvent);
+typedef OnRecenterButtonClicked =
+    void Function(NavigationViewRecenterButtonClickedEvent);
 
 /// Called during remaining time or distance changed event.
-typedef OnRemainingTimeOrDistanceChangedEventCallback = void Function(
-    RemainingTimeOrDistanceChangedEvent onRemainingTimeOrDistanceChangedEvent);
+typedef OnRemainingTimeOrDistanceChangedEventCallback =
+    void Function(
+      RemainingTimeOrDistanceChangedEvent onRemainingTimeOrDistanceChangedEvent,
+    );
 
 /// Called on navigation info event.
 typedef OnNavInfoEventCallback = void Function(NavInfoEvent onNavInfo);
@@ -120,8 +123,8 @@ typedef OnMyLocationButtonClicked = void Function(MyLocationButtonClickedEvent);
 /// to user actions. For example: zoom buttons, my location button, or marker
 /// clicks.
 /// [position] is the camera position where the motion started.
-typedef OnCameraMoveStarted = void Function(
-    CameraPosition position, bool gesture);
+typedef OnCameraMoveStarted =
+    void Function(CameraPosition position, bool gesture);
 
 /// Called repeatedly as the camera continues to move after the
 /// [OnCameraMoveStarted] call. The method may be called as often as once every
@@ -141,8 +144,8 @@ typedef OnCameraIdle = void Function(CameraPosition position);
 /// Only applicable on Android.
 ///
 /// [position] is the current camera position.
-typedef OnCameraStartedFollowingLocation = void Function(
-    CameraPosition position);
+typedef OnCameraStartedFollowingLocation =
+    void Function(CameraPosition position);
 
 /// Called when the camera stops following current location. A camera already
 /// following location will exit the follow mode if the camera is moved via
@@ -151,8 +154,8 @@ typedef OnCameraStartedFollowingLocation = void Function(
 /// Only applicable on Android.
 ///
 /// [position] is the current camera position.
-typedef OnCameraStoppedFollowingLocation = void Function(
-    CameraPosition position);
+typedef OnCameraStoppedFollowingLocation =
+    void Function(CameraPosition position);
 
 /// Settings for the user interface of the map.
 /// {@category Navigation View}
@@ -183,15 +186,19 @@ class NavigationViewUISettings {
   Future<void> setConsumeMyLocationButtonClickEventsEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance.viewAPI
         .setConsumeMyLocationButtonClickEventsEnabled(
-            viewId: _viewId, enabled: enabled);
+          viewId: _viewId,
+          enabled: enabled,
+        );
   }
 
   /// Sets the preference for whether the user is allowed to zoom the map using a gesture.
   ///
   /// Initial value can be set with [GoogleMapsNavigationView.initialZoomGesturesEnabled].
   Future<void> setZoomGesturesEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance.viewAPI
-        .setZoomGesturesEnabled(viewId: _viewId, enabled: enabled);
+    return GoogleMapsNavigationPlatform.instance.viewAPI.setZoomGesturesEnabled(
+      viewId: _viewId,
+      enabled: enabled,
+    );
   }
 
   /// Enables or disables the zoom controls.
@@ -200,8 +207,10 @@ class NavigationViewUISettings {
   ///
   /// The zoom controls are only available on Android. Throws [UnsupportedError] on iOS.
   Future<void> setZoomControlsEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance.viewAPI
-        .setZoomControlsEnabled(viewId: _viewId, enabled: enabled);
+    return GoogleMapsNavigationPlatform.instance.viewAPI.setZoomControlsEnabled(
+      viewId: _viewId,
+      enabled: enabled,
+    );
   }
 
   /// Enables or disables the compass.
@@ -211,8 +220,10 @@ class NavigationViewUISettings {
   ///
   /// Initial value can be set with [GoogleMapsNavigationView.initialCompassEnabled].
   Future<void> setCompassEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance.viewAPI
-        .setCompassEnabled(viewId: _viewId, enabled: enabled);
+    return GoogleMapsNavigationPlatform.instance.viewAPI.setCompassEnabled(
+      viewId: _viewId,
+      enabled: enabled,
+    );
   }
 
   /// Sets the preference for whether the user is allowed to rotate the map using a gesture.
@@ -238,23 +249,29 @@ class NavigationViewUISettings {
   Future<void> setScrollGesturesDuringRotateOrZoomEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance.viewAPI
         .setScrollGesturesDuringRotateOrZoomEnabled(
-            viewId: _viewId, enabled: enabled);
+          viewId: _viewId,
+          enabled: enabled,
+        );
   }
 
   /// Sets the preference for whether the user is allowed to tilt the map with a gesture.
   ///
   /// Initial value can be set with [GoogleMapsNavigationView.initialTiltGesturesEnabled].
   Future<void> setTiltGesturesEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance.viewAPI
-        .setTiltGesturesEnabled(viewId: _viewId, enabled: enabled);
+    return GoogleMapsNavigationPlatform.instance.viewAPI.setTiltGesturesEnabled(
+      viewId: _viewId,
+      enabled: enabled,
+    );
   }
 
   /// Turns the traffic layer on or off.
   ///
   /// By default, the traffic layer is off.
   Future<void> setTrafficEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance.viewAPI
-        .setTrafficEnabled(viewId: _viewId, enabled: enabled);
+    return GoogleMapsNavigationPlatform.instance.viewAPI.setTrafficEnabled(
+      viewId: _viewId,
+      enabled: enabled,
+    );
   }
 
   /// Sets the preference for whether the map toolbar should be enabled or disabled.
@@ -263,8 +280,10 @@ class NavigationViewUISettings {
   ///
   /// The map toolbar is only available on Android. Throws [UnsupportedError] on iOS.
   Future<void> setMapToolbarEnabled(bool enabled) {
-    return GoogleMapsNavigationPlatform.instance.viewAPI
-        .setMapToolbarEnabled(viewId: _viewId, enabled: enabled);
+    return GoogleMapsNavigationPlatform.instance.viewAPI.setMapToolbarEnabled(
+      viewId: _viewId,
+      enabled: enabled,
+    );
   }
 
   /// Checks if the my location button is enabled.
@@ -281,22 +300,25 @@ class NavigationViewUISettings {
 
   /// Checks if the zoom gestures are enabled.
   Future<bool> isZoomGesturesEnabled() async {
-    return GoogleMapsNavigationPlatform.instance.viewAPI
-        .isZoomGesturesEnabled(viewId: _viewId);
+    return GoogleMapsNavigationPlatform.instance.viewAPI.isZoomGesturesEnabled(
+      viewId: _viewId,
+    );
   }
 
   /// Checks if the zoom controls are enabled.
   ///
   /// The zoom controls are only available on Android. Throws [UnsupportedError] on iOS.
   Future<bool> isZoomControlsEnabled() async {
-    return GoogleMapsNavigationPlatform.instance.viewAPI
-        .isZoomControlsEnabled(viewId: _viewId);
+    return GoogleMapsNavigationPlatform.instance.viewAPI.isZoomControlsEnabled(
+      viewId: _viewId,
+    );
   }
 
   /// Checks if the compass is enabled.
   Future<bool> isCompassEnabled() async {
-    return GoogleMapsNavigationPlatform.instance.viewAPI
-        .isCompassEnabled(viewId: _viewId);
+    return GoogleMapsNavigationPlatform.instance.viewAPI.isCompassEnabled(
+      viewId: _viewId,
+    );
   }
 
   /// Checks if the rotate gestures are enabled.
@@ -320,22 +342,25 @@ class NavigationViewUISettings {
 
   /// Checks if the scroll gestures are enabled.
   Future<bool> isTiltGesturesEnabled() async {
-    return GoogleMapsNavigationPlatform.instance.viewAPI
-        .isTiltGesturesEnabled(viewId: _viewId);
+    return GoogleMapsNavigationPlatform.instance.viewAPI.isTiltGesturesEnabled(
+      viewId: _viewId,
+    );
   }
 
   /// Checks if the map toolbar is enabled.
   ///
   /// The map toolbar is only available on Android. Throws [UnsupportedError] on iOS.
   Future<bool> isMapToolbarEnabled() async {
-    return GoogleMapsNavigationPlatform.instance.viewAPI
-        .isMapToolbarEnabled(viewId: _viewId);
+    return GoogleMapsNavigationPlatform.instance.viewAPI.isMapToolbarEnabled(
+      viewId: _viewId,
+    );
   }
 
   /// Checks if the map is displaying traffic data.
   Future<bool> isTrafficEnabled() async {
-    return GoogleMapsNavigationPlatform.instance.viewAPI
-        .isTrafficEnabled(viewId: _viewId);
+    return GoogleMapsNavigationPlatform.instance.viewAPI.isTrafficEnabled(
+      viewId: _viewId,
+    );
   }
 }
 

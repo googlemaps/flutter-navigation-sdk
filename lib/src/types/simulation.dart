@@ -50,9 +50,7 @@ class SpeedingUpdatedEvent {
 /// {@category Navigation}
 class RoadSnappedLocationUpdatedEvent {
   /// Initialize road snapped location updated event message.
-  RoadSnappedLocationUpdatedEvent({
-    required this.location,
-  });
+  RoadSnappedLocationUpdatedEvent({required this.location});
 
   /// Coordinate of the updated location.
   final LatLng location;
@@ -62,9 +60,7 @@ class RoadSnappedLocationUpdatedEvent {
 /// {@category Navigation}
 class RoadSnappedRawLocationUpdatedEvent {
   /// Initialize road snapped raw location updated event message.
-  RoadSnappedRawLocationUpdatedEvent({
-    required this.location,
-  });
+  RoadSnappedRawLocationUpdatedEvent({required this.location});
 
   /// Coordinate of the updated location.
   final LatLng location;
@@ -84,9 +80,7 @@ class GpsAvailabilityUpdatedEvent {
 /// {@category Navigation}
 class SimulationOptions {
   /// Initialize navigation simulation options.
-  SimulationOptions({
-    required this.speedMultiplier,
-  });
+  SimulationOptions({required this.speedMultiplier});
 
   /// Speed multiplier.
   final double speedMultiplier;
@@ -112,9 +106,7 @@ class RemainingTimeOrDistanceChangedEvent {
 /// {@category Navigation}
 class OnArrivalEvent {
   /// Initialize with arrival waypoint.
-  OnArrivalEvent({
-    required this.waypoint,
-  });
+  OnArrivalEvent({required this.waypoint});
 
   /// Arrival waypoint.
   final NavigationWaypoint waypoint;

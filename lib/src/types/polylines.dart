@@ -153,17 +153,17 @@ class PolylineOptions {
 
   @override
   int get hashCode => Object.hash(
-        points.hashCode,
-        clickable.hashCode,
-        geodesic.hashCode,
-        colorToInt(strokeColor),
-        strokeJointType.hashCode,
-        strokePattern.hashCode,
-        strokeWidth.hashCode,
-        visible.hashCode,
-        zIndex.hashCode,
-        spans.hashCode,
-      );
+    points.hashCode,
+    clickable.hashCode,
+    geodesic.hashCode,
+    colorToInt(strokeColor),
+    strokeJointType.hashCode,
+    strokePattern.hashCode,
+    strokeWidth.hashCode,
+    visible.hashCode,
+    zIndex.hashCode,
+    spans.hashCode,
+  );
 }
 
 /// Style for stroke of a polyline.
@@ -171,9 +171,7 @@ class PolylineOptions {
 /// {@category Map View}
 class StyleSpanStrokeStyle {
   /// Initialize with solid color.
-  StyleSpanStrokeStyle.solidColor({
-    required this.solidColor,
-  });
+  StyleSpanStrokeStyle.solidColor({required this.solidColor});
 
   /// Initialize with gradient color.
   StyleSpanStrokeStyle.gradientColor({
@@ -196,10 +194,7 @@ class StyleSpanStrokeStyle {
 /// {@category Map View}
 class StyleSpan {
   /// Initialize with length and style.
-  StyleSpan({
-    required this.length,
-    required this.style,
-  });
+  StyleSpan({required this.length, required this.style});
 
   /// Length of a stroke.
   final double length;
@@ -219,7 +214,7 @@ enum StrokeJointType {
   defaultJoint,
 
   /// Rounded on the outside of the joint by an arc of radius equal to half the stroke width, centered at the vertex.
-  round
+  round,
 }
 
 /// Event emitted when a polyline is clicked.
@@ -228,9 +223,7 @@ enum StrokeJointType {
 @immutable
 class PolylineClickedEvent {
   /// Initialize [PolylineClickedEvent] object.
-  const PolylineClickedEvent({
-    required this.polylineId,
-  });
+  const PolylineClickedEvent({required this.polylineId});
 
   /// Id of the polyline that has been tapped.
   final String polylineId;

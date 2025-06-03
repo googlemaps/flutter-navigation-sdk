@@ -33,18 +33,23 @@ extension ConvertPolygonOptions on PolygonOptions {
   /// Convert [PolygonOptions] to [PolygonOptionsDto].
   PolygonOptionsDto toDto() {
     return PolygonOptionsDto(
-        points: points.map((LatLng point) => point.toDto()).toList(),
-        holes: holes
-            .map((List<LatLng> e) =>
-                PolygonHoleDto(points: e.map((LatLng e) => e.toDto()).toList()))
-            .toList(),
-        clickable: clickable,
-        fillColor: colorToInt(fillColor)!,
-        geodesic: geodesic,
-        strokeColor: colorToInt(strokeColor)!,
-        strokeWidth: strokeWidth,
-        visible: visible,
-        zIndex: zIndex);
+      points: points.map((LatLng point) => point.toDto()).toList(),
+      holes:
+          holes
+              .map(
+                (List<LatLng> e) => PolygonHoleDto(
+                  points: e.map((LatLng e) => e.toDto()).toList(),
+                ),
+              )
+              .toList(),
+      clickable: clickable,
+      fillColor: colorToInt(fillColor)!,
+      geodesic: geodesic,
+      strokeColor: colorToInt(strokeColor)!,
+      strokeWidth: strokeWidth,
+      visible: visible,
+      zIndex: zIndex,
+    );
   }
 }
 
@@ -63,15 +68,16 @@ extension ConvertPolygonOptionsDto on PolygonOptionsDto {
   /// Convert [PolygonOptionsDto] to [PolygonOptions].
   PolygonOptions toPolygonOptions() {
     return PolygonOptions(
-        points: _convertPoints(points),
-        holes: _convertHoles(holes),
-        clickable: clickable,
-        fillColor: Color(fillColor),
-        geodesic: geodesic,
-        strokeColor: Color(strokeColor),
-        strokeWidth: strokeWidth,
-        visible: visible,
-        zIndex: zIndex);
+      points: _convertPoints(points),
+      holes: _convertHoles(holes),
+      clickable: clickable,
+      fillColor: Color(fillColor),
+      geodesic: geodesic,
+      strokeColor: Color(strokeColor),
+      strokeWidth: strokeWidth,
+      visible: visible,
+      zIndex: zIndex,
+    );
   }
 
   List<List<LatLng>> _convertHoles(List<PolygonHoleDto?> holes) {

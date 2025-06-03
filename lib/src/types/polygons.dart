@@ -61,16 +61,17 @@ class Polygon {
 @immutable
 class PolygonOptions {
   /// Initialize [PolygonOptions] object.
-  const PolygonOptions(
-      {this.points = const <LatLng>[],
-      this.holes = const <List<LatLng>>[],
-      this.clickable = false,
-      this.fillColor = Colors.black,
-      this.geodesic = false,
-      this.strokeColor = Colors.black,
-      this.strokeWidth = 10,
-      this.visible = true,
-      this.zIndex = 0});
+  const PolygonOptions({
+    this.points = const <LatLng>[],
+    this.holes = const <List<LatLng>>[],
+    this.clickable = false,
+    this.fillColor = Colors.black,
+    this.geodesic = false,
+    this.strokeColor = Colors.black,
+    this.strokeWidth = 10,
+    this.visible = true,
+    this.zIndex = 0,
+  });
 
   /// Vertices of the polygon to be drawn.
   ///
@@ -118,26 +119,28 @@ class PolygonOptions {
   final double zIndex;
 
   /// Create copy of [PolygonOptions] with specified parameters.
-  PolygonOptions copyWith(
-      {List<LatLng>? points,
-      List<List<LatLng>>? holes,
-      bool? clickable,
-      Color? fillColor,
-      bool? geodesic,
-      Color? strokeColor,
-      double? strokeWidth,
-      bool? visible,
-      double? zIndex}) {
+  PolygonOptions copyWith({
+    List<LatLng>? points,
+    List<List<LatLng>>? holes,
+    bool? clickable,
+    Color? fillColor,
+    bool? geodesic,
+    Color? strokeColor,
+    double? strokeWidth,
+    bool? visible,
+    double? zIndex,
+  }) {
     return PolygonOptions(
-        points: points ?? this.points,
-        holes: holes ?? this.holes,
-        clickable: clickable ?? this.clickable,
-        fillColor: fillColor ?? this.fillColor,
-        geodesic: geodesic ?? this.geodesic,
-        strokeColor: strokeColor ?? this.strokeColor,
-        strokeWidth: strokeWidth ?? this.strokeWidth,
-        visible: visible ?? this.visible,
-        zIndex: zIndex ?? this.zIndex);
+      points: points ?? this.points,
+      holes: holes ?? this.holes,
+      clickable: clickable ?? this.clickable,
+      fillColor: fillColor ?? this.fillColor,
+      geodesic: geodesic ?? this.geodesic,
+      strokeColor: strokeColor ?? this.strokeColor,
+      strokeWidth: strokeWidth ?? this.strokeWidth,
+      visible: visible ?? this.visible,
+      zIndex: zIndex ?? this.zIndex,
+    );
   }
 
   @override
@@ -162,15 +165,16 @@ class PolygonOptions {
 
   @override
   int get hashCode => Object.hash(
-      points.hashCode,
-      holes.hashCode,
-      clickable.hashCode,
-      colorToInt(fillColor),
-      geodesic.hashCode,
-      colorToInt(strokeColor),
-      strokeWidth.hashCode,
-      visible.hashCode,
-      zIndex.hashCode);
+    points.hashCode,
+    holes.hashCode,
+    clickable.hashCode,
+    colorToInt(fillColor),
+    geodesic.hashCode,
+    colorToInt(strokeColor),
+    strokeWidth.hashCode,
+    visible.hashCode,
+    zIndex.hashCode,
+  );
 }
 
 /// Event emitted when a polygon is clicked.
@@ -179,9 +183,7 @@ class PolygonOptions {
 @immutable
 class PolygonClickedEvent {
   /// Initialize [PolygonClickedEvent] object.
-  const PolygonClickedEvent({
-    required this.polygonId,
-  });
+  const PolygonClickedEvent({required this.polygonId});
 
   /// Id of the polygon that has been tapped.
   final String polygonId;

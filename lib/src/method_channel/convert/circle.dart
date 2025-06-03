@@ -41,18 +41,20 @@ extension ConvertCircleOptionsDto on CircleOptionsDto {
   /// Convert [CircleOptionsDto] to [CircleOptions].
   CircleOptions toCircleOptions() {
     return CircleOptions(
-        position: position.toLatLng(),
-        radius: radius,
-        clickable: clickable,
-        fillColor: Color(fillColor),
-        strokeColor: Color(strokeColor),
-        strokeWidth: strokeWidth,
-        strokePattern: strokePattern
-            .map((PatternItemDto? e) => e?.toPatternItem())
-            .whereType<PatternItem>()
-            .toList(),
-        visible: visible,
-        zIndex: zIndex);
+      position: position.toLatLng(),
+      radius: radius,
+      clickable: clickable,
+      fillColor: Color(fillColor),
+      strokeColor: Color(strokeColor),
+      strokeWidth: strokeWidth,
+      strokePattern:
+          strokePattern
+              .map((PatternItemDto? e) => e?.toPatternItem())
+              .whereType<PatternItem>()
+              .toList(),
+      visible: visible,
+      zIndex: zIndex,
+    );
   }
 }
 
@@ -62,15 +64,15 @@ extension ConvertCircleOptions on CircleOptions {
   /// Convert [CircleOptions] to [CircleOptionsDto].
   CircleOptionsDto toDto() {
     return CircleOptionsDto(
-        position: position.toDto(),
-        radius: radius,
-        strokePattern:
-            strokePattern.map((PatternItem pi) => pi.toDto()).toList(),
-        clickable: clickable,
-        fillColor: colorToInt(fillColor)!,
-        strokeColor: colorToInt(strokeColor)!,
-        strokeWidth: strokeWidth,
-        visible: visible,
-        zIndex: zIndex);
+      position: position.toDto(),
+      radius: radius,
+      strokePattern: strokePattern.map((PatternItem pi) => pi.toDto()).toList(),
+      clickable: clickable,
+      fillColor: colorToInt(fillColor)!,
+      strokeColor: colorToInt(strokeColor)!,
+      strokeWidth: strokeWidth,
+      visible: visible,
+      zIndex: zIndex,
+    );
   }
 }

@@ -102,10 +102,11 @@ class MapOptions {
     this.cameraTargetBounds,
     this.padding,
   }) : assert(
-            minZoomPreference == null ||
-                maxZoomPreference == null ||
-                minZoomPreference <= maxZoomPreference,
-            'minZoomPreference must be less than or equal to maxZoomPreference.');
+         minZoomPreference == null ||
+             maxZoomPreference == null ||
+             minZoomPreference <= maxZoomPreference,
+         'minZoomPreference must be less than or equal to maxZoomPreference.',
+       );
 
   /// The initial positioning of the camera in the map view.
   final CameraPosition cameraPosition;
