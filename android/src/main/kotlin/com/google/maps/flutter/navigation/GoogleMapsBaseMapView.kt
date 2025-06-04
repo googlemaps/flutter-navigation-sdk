@@ -39,7 +39,7 @@ import com.google.android.gms.maps.model.Polygon
 import com.google.android.gms.maps.model.Polyline
 
 abstract class GoogleMapsBaseMapView(
-  protected val viewId: Int?,
+  private val viewId: Int?,
   mapOptions: MapOptions,
   protected val viewEventApi: ViewEventApi?,
   private val imageRegistry: ImageRegistry,
@@ -220,14 +220,7 @@ abstract class GoogleMapsBaseMapView(
 
   // Installs a custom invalidator for the map view.
   private fun installInvalidator() {
-    if (getView() == null) {
-      // This should only happen in tests.
-      return
-    }
-    val textureView = findTextureView(getView()!!)
-    if (textureView == null) {
-      return
-    }
+    val textureView = findTextureView(getView()) ?: return
     val internalListener = textureView.surfaceTextureListener
 
     // Override the Maps internal SurfaceTextureListener with one that invalidates mapview on
@@ -249,7 +242,7 @@ abstract class GoogleMapsBaseMapView(
         override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {
           internalListener?.onSurfaceTextureUpdated(surface)
           // Invalidate the view to ensure it is redrawn.
-          getView()?.invalidate()
+          getView().invalidate()
         }
       }
   }
@@ -924,7 +917,7 @@ abstract class GoogleMapsBaseMapView(
     }
   }
 
-  fun setOnCameraChangedListeners() {
+  private fun setOnCameraChangedListeners() {
     getMap().setOnCameraMoveStartedListener { reason ->
       val event =
         when (reason) {

@@ -18,4 +18,4 @@ package com.google.maps.flutter.navigation
 
 import com.google.android.gms.maps.GoogleMapOptions
 
-class MapOptions(val googleMapOptions: GoogleMapOptions, var padding: MapPaddingDto?) {}
+class MapOptions(val googleMapOptions: GoogleMapOptions, var padding: MapPaddingDto?)
