@@ -46,7 +46,7 @@ jobs:
           cache: true
       - uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
         with:
-          melos-version: "6.0.0"
+          melos-version: "6.3.3"
       - name: "Run flutter test"
         run: melos run test:dart
 
@@ -73,7 +73,7 @@ jobs:
       - name: Setup melos
         uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
         with:
-          melos-version: "6.0.0"
+          melos-version: "6.3.3"
       - name: "Run Android native unit tests"
         run: melos run test:android
       - name: Upload build artifact
@@ -103,7 +103,7 @@ jobs:
       - name: Setup melos
         uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
         with:
-          melos-version: "6.0.0"
+          melos-version: "6.3.3"
       - name: Cache podfiles
         uses: actions/cache@v4
         with:
@@ -153,7 +153,7 @@ jobs:
       - name: Setup melos
         uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
         with:
-          melos-version: "6.0.0"
+          melos-version: "6.3.3"
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
@@ -191,7 +191,7 @@ jobs:
       - name: Setup melos
         uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
         with:
-          melos-version: "6.0.0"
+          melos-version: "6.3.3"
       - name: Cache podfiles
         uses: actions/cache@v4
         with:

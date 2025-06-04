@@ -35,7 +35,7 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
-  melos: ^6.0.0
+  melos: ^6.3.3
   mockito: 5.4.6
   pigeon: 25.3.2
 

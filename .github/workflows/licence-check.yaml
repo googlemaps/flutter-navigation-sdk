@@ -50,6 +50,6 @@ jobs:
           # Running `melos bootstrap` is not needed because we use Melos just
           # for the `check-license-header` script.
           run-bootstrap: false
-          melos-version: "6.0.0"
+          melos-version: "6.3.3"
       - name: Check license header
         run: melos run check-license-header
