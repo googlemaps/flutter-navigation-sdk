@@ -133,8 +133,8 @@ void main() {
 
   group('Navigation Options tests', () {
     test('tests Navigation Display options conversion to Pigeon DTO', () {
-      final NavigationDisplayOptionsDto pigeonDtoDisplayOptions =
-          displayOptions.toDto();
+      final NavigationDisplayOptionsDto pigeonDtoDisplayOptions = displayOptions
+          .toDto();
 
       expect(
         pigeonDtoDisplayOptions.showDestinationMarkers,
@@ -185,8 +185,9 @@ void main() {
     });
 
     test('tests Navigation Routing strategy conversion to Pigeon DTO', () {
-      final RoutingStrategyDto pigeonDtoStrategy =
-          NavigationRoutingStrategy.defaultBest.toDto();
+      final RoutingStrategyDto pigeonDtoStrategy = NavigationRoutingStrategy
+          .defaultBest
+          .toDto();
 
       expect(
         pigeonDtoStrategy.toString().split('.').last,
@@ -210,8 +211,8 @@ void main() {
 
   group('Navigation tests', () {
     test('Navigation RouteStatus conversion from Pigeon DTO', () {
-      final NavigationRouteStatus status =
-          RouteStatusDto.apiKeyNotAuthorized.toNavigationRouteStatus();
+      final NavigationRouteStatus status = RouteStatusDto.apiKeyNotAuthorized
+          .toNavigationRouteStatus();
 
       expect(
         status.toString().split('.').last,
@@ -220,11 +221,10 @@ void main() {
     });
 
     test('Navigation time and distance conversion from Pigeon DTO', () {
-      final NavigationTimeAndDistance td =
-          NavigationTimeAndDistanceDto(
-            time: 5.0,
-            distance: 6.0,
-          ).toNavigationTimeAndDistance();
+      final NavigationTimeAndDistance td = NavigationTimeAndDistanceDto(
+        time: 5.0,
+        distance: 6.0,
+      ).toNavigationTimeAndDistance();
 
       expect(td.time, 5.0);
       expect(td.distance, 6.0);
@@ -314,15 +314,14 @@ void main() {
     test('Road stretch rendering data from Pigeon DTO', () {
       final RouteSegmentTrafficDataRoadStretchRenderingDataDto data =
           RouteSegmentTrafficDataRoadStretchRenderingDataDto(
-            style:
-                RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
-                    .slowerTraffic,
+            style: RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
+                .slowerTraffic,
             lengthMeters: 500,
             offsetMeters: 600,
           );
 
-      final RouteSegmentTrafficDataRoadStretchRenderingData gmsData =
-          data.toRouteSegmentTrafficDataRoadStretchRenderingData();
+      final RouteSegmentTrafficDataRoadStretchRenderingData gmsData = data
+          .toRouteSegmentTrafficDataRoadStretchRenderingData();
 
       expect(data.lengthMeters, gmsData.lengthMeters);
       expect(data.offsetMeters, gmsData.offsetMeters);
@@ -335,9 +334,8 @@ void main() {
     test('Road segment traffic data from Pigeon DTO', () {
       final RouteSegmentTrafficDataRoadStretchRenderingDataDto renderingData =
           RouteSegmentTrafficDataRoadStretchRenderingDataDto(
-            style:
-                RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
-                    .slowerTraffic,
+            style: RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
+                .slowerTraffic,
             lengthMeters: 500,
             offsetMeters: 600,
           );
@@ -375,9 +373,8 @@ void main() {
     test('Navigation route segment from Pigeon DTO', () {
       final RouteSegmentTrafficDataRoadStretchRenderingDataDto renderingData =
           RouteSegmentTrafficDataRoadStretchRenderingDataDto(
-            style:
-                RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
-                    .slowerTraffic,
+            style: RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
+                .slowerTraffic,
             lengthMeters: 500,
             offsetMeters: 600,
           );

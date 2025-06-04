@@ -34,14 +34,12 @@ extension ConvertPolygonOptions on PolygonOptions {
   PolygonOptionsDto toDto() {
     return PolygonOptionsDto(
       points: points.map((LatLng point) => point.toDto()).toList(),
-      holes:
-          holes
-              .map(
-                (List<LatLng> e) => PolygonHoleDto(
-                  points: e.map((LatLng e) => e.toDto()).toList(),
-                ),
-              )
-              .toList(),
+      holes: holes
+          .map(
+            (List<LatLng> e) =>
+                PolygonHoleDto(points: e.map((LatLng e) => e.toDto()).toList()),
+          )
+          .toList(),
       clickable: clickable,
       fillColor: colorToInt(fillColor)!,
       geodesic: geodesic,
