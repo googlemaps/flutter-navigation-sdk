@@ -27,7 +27,6 @@ import 'package:pigeon/pigeon.dart';
     copyrightHeader: 'pigeons/copyright.txt',
   ),
 )
-
 /// Describes the type of map to construct.
 enum MapViewTypeDto {
   /// Navigation view supports navigation overlay, and current navigation session is displayed on the map.
@@ -107,14 +106,12 @@ enum NavigationUIEnabledPreferenceDto {
   automatic,
 
   /// Navigation UI is disabled.
-  disabled
+  disabled,
 }
 
 /// Object containing navigation options used to initialize Google Navigation view.
 class NavigationViewOptionsDto {
-  NavigationViewOptionsDto({
-    required this.navigationUIEnabledPreference,
-  });
+  NavigationViewOptionsDto({required this.navigationUIEnabledPreference});
 
   /// Determines the initial visibility of the navigation UI on map initialization.
   final NavigationUIEnabledPreferenceDto navigationUIEnabledPreference;
@@ -135,24 +132,26 @@ class ViewCreationOptionsDto {
   final NavigationViewOptionsDto? navigationViewOptions;
 }
 
+/// Dummy interface to force generation of the platform view creation params.
 /// Pigeon only generates messages if the messages are used in API.
 /// [ViewCreationOptionsDto] is encoded and decoded directly to generate a
 /// PlatformView creation message.
 ///
 /// This API should never be used directly.
 @HostApi()
-abstract class NavigationViewCreationApi {
+abstract class ViewCreationApi {
   void create(ViewCreationOptionsDto msg);
 }
 
 enum MapTypeDto { none, normal, satellite, terrain, hybrid }
 
 class CameraPositionDto {
-  CameraPositionDto(
-      {required this.bearing,
-      required this.target,
-      required this.tilt,
-      required this.zoom});
+  CameraPositionDto({
+    required this.bearing,
+    required this.target,
+    required this.tilt,
+    required this.zoom,
+  });
 
   final double bearing;
   final LatLngDto target;
@@ -173,18 +172,19 @@ class MarkerDto {
 }
 
 class MarkerOptionsDto {
-  MarkerOptionsDto(
-      {required this.alpha,
-      required this.anchor,
-      required this.draggable,
-      required this.flat,
-      required this.consumeTapEvents,
-      required this.position,
-      required this.rotation,
-      required this.infoWindow,
-      required this.visible,
-      required this.zIndex,
-      required this.icon});
+  MarkerOptionsDto({
+    required this.alpha,
+    required this.anchor,
+    required this.draggable,
+    required this.flat,
+    required this.consumeTapEvents,
+    required this.position,
+    required this.rotation,
+    required this.infoWindow,
+    required this.visible,
+    required this.zIndex,
+    required this.icon,
+  });
 
   final double alpha;
   final MarkerAnchorDto anchor;
@@ -200,8 +200,12 @@ class MarkerOptionsDto {
 }
 
 class ImageDescriptorDto {
-  const ImageDescriptorDto(
-      {this.registeredImageId, this.imagePixelRatio, this.width, this.height});
+  const ImageDescriptorDto({
+    this.registeredImageId,
+    this.imagePixelRatio,
+    this.width,
+    this.height,
+  });
   final String? registeredImageId;
   final double? imagePixelRatio;
   final double? width;
@@ -216,10 +220,7 @@ class InfoWindowDto {
 }
 
 class MarkerAnchorDto {
-  const MarkerAnchorDto({
-    required this.u,
-    required this.v,
-  });
+  const MarkerAnchorDto({required this.u, required this.v});
 
   final double u;
   final double v;
@@ -229,7 +230,7 @@ enum MarkerEventTypeDto {
   clicked,
   infoWindowClicked,
   infoWindowClosed,
-  infoWindowLongClicked
+  infoWindowLongClicked,
 }
 
 enum MarkerDragEventTypeDto { drag, dragStart, dragEnd }
@@ -242,16 +243,17 @@ class PolygonDto {
 }
 
 class PolygonOptionsDto {
-  const PolygonOptionsDto(
-      {required this.points,
-      required this.holes,
-      required this.clickable,
-      required this.fillColor,
-      required this.geodesic,
-      required this.strokeColor,
-      required this.strokeWidth,
-      required this.visible,
-      required this.zIndex});
+  const PolygonOptionsDto({
+    required this.points,
+    required this.holes,
+    required this.clickable,
+    required this.fillColor,
+    required this.geodesic,
+    required this.strokeColor,
+    required this.strokeWidth,
+    required this.visible,
+    required this.zIndex,
+  });
 
   final List<LatLngDto?> points;
   final List<PolygonHoleDto?> holes;
@@ -270,9 +272,7 @@ class PolygonHoleDto {
 }
 
 class StyleSpanStrokeStyleDto {
-  StyleSpanStrokeStyleDto.solidColor({
-    required this.solidColor,
-  });
+  StyleSpanStrokeStyleDto.solidColor({required this.solidColor});
   StyleSpanStrokeStyleDto.gradientColor({
     required this.fromColor,
     required this.toColor,
@@ -284,20 +284,14 @@ class StyleSpanStrokeStyleDto {
 }
 
 class StyleSpanDto {
-  StyleSpanDto({
-    required this.length,
-    required this.style,
-  });
+  StyleSpanDto({required this.length, required this.style});
 
   final double length;
   final StyleSpanStrokeStyleDto style;
 }
 
 class PolylineDto {
-  const PolylineDto({
-    required this.polylineId,
-    required this.options,
-  });
+  const PolylineDto({required this.polylineId, required this.options});
 
   final String polylineId;
   final PolylineOptionsDto options;
@@ -379,15 +373,16 @@ enum CameraEventTypeDto {
   onCameraMove,
   onCameraIdle,
   onCameraStartedFollowingLocation,
-  onCameraStoppedFollowingLocation
+  onCameraStoppedFollowingLocation,
 }
 
 class MapPaddingDto {
-  MapPaddingDto(
-      {required this.top,
-      required this.left,
-      required this.bottom,
-      required this.right});
+  MapPaddingDto({
+    required this.top,
+    required this.left,
+    required this.bottom,
+    required this.right,
+  });
 
   final int top;
   final int left;
@@ -475,35 +470,65 @@ abstract class MapViewApi {
   LatLngBoundsDto getVisibleRegion(int viewId);
 
   void followMyLocation(
-      int viewId, CameraPerspectiveDto perspective, double? zoomLevel);
+    int viewId,
+    CameraPerspectiveDto perspective,
+    double? zoomLevel,
+  );
   @async
   bool animateCameraToCameraPosition(
-      int viewId, CameraPositionDto cameraPosition, int? duration);
+    int viewId,
+    CameraPositionDto cameraPosition,
+    int? duration,
+  );
   @async
   bool animateCameraToLatLng(int viewId, LatLngDto point, int? duration);
   @async
   bool animateCameraToLatLngBounds(
-      int viewId, LatLngBoundsDto bounds, double padding, int? duration);
+    int viewId,
+    LatLngBoundsDto bounds,
+    double padding,
+    int? duration,
+  );
   @async
   bool animateCameraToLatLngZoom(
-      int viewId, LatLngDto point, double zoom, int? duration);
+    int viewId,
+    LatLngDto point,
+    double zoom,
+    int? duration,
+  );
   @async
   bool animateCameraByScroll(
-      int viewId, double scrollByDx, double scrollByDy, int? duration);
+    int viewId,
+    double scrollByDx,
+    double scrollByDy,
+    int? duration,
+  );
   @async
-  bool animateCameraByZoom(int viewId, double zoomBy, double? focusDx,
-      double? focusDy, int? duration);
+  bool animateCameraByZoom(
+    int viewId,
+    double zoomBy,
+    double? focusDx,
+    double? focusDy,
+    int? duration,
+  );
   @async
   bool animateCameraToZoom(int viewId, double zoom, int? duration);
 
   void moveCameraToCameraPosition(int viewId, CameraPositionDto cameraPosition);
   void moveCameraToLatLng(int viewId, LatLngDto point);
   void moveCameraToLatLngBounds(
-      int viewId, LatLngBoundsDto bounds, double padding);
+    int viewId,
+    LatLngBoundsDto bounds,
+    double padding,
+  );
   void moveCameraToLatLngZoom(int viewId, LatLngDto point, double zoom);
   void moveCameraByScroll(int viewId, double scrollByDx, double scrollByDy);
   void moveCameraByZoom(
-      int viewId, double zoomBy, double? focusDx, double? focusDy);
+    int viewId,
+    double zoomBy,
+    double? focusDx,
+    double? focusDy,
+  );
   void moveCameraToZoom(int viewId, double zoom);
   void showRouteOverview(int viewId);
   double getMinZoomPreference(int viewId);
@@ -544,8 +569,13 @@ abstract class MapViewApi {
 
 @HostApi(dartHostTestHandler: 'TestImageRegistryApi')
 abstract class ImageRegistryApi {
-  ImageDescriptorDto registerBitmapImage(String imageId, Uint8List bytes,
-      double imagePixelRatio, double? width, double? height);
+  ImageDescriptorDto registerBitmapImage(
+    String imageId,
+    Uint8List bytes,
+    double imagePixelRatio,
+    double? width,
+    double? height,
+  );
   void unregisterImage(ImageDescriptorDto imageDescriptor);
   List<ImageDescriptorDto> getRegisteredImages();
   void clearRegisteredImages();
@@ -557,8 +587,12 @@ abstract class ViewEventApi {
   void onMapLongClickEvent(int viewId, LatLngDto latLng);
   void onRecenterButtonClicked(int viewId);
   void onMarkerEvent(int viewId, String markerId, MarkerEventTypeDto eventType);
-  void onMarkerDragEvent(int viewId, String markerId,
-      MarkerDragEventTypeDto eventType, LatLngDto position);
+  void onMarkerDragEvent(
+    int viewId,
+    String markerId,
+    MarkerDragEventTypeDto eventType,
+    LatLngDto position,
+  );
   void onPolygonClicked(int viewId, String polygonId);
   void onPolylineClicked(int viewId, String polylineId);
   void onCircleClicked(int viewId, String circleId);
@@ -566,14 +600,14 @@ abstract class ViewEventApi {
   void onMyLocationClicked(int viewId);
   void onMyLocationButtonClicked(int viewId);
   void onCameraChanged(
-      int viewId, CameraEventTypeDto eventType, CameraPositionDto position);
+    int viewId,
+    CameraEventTypeDto eventType,
+    CameraPositionDto position,
+  );
 }
 
 class RouteTokenOptionsDto {
-  RouteTokenOptionsDto({
-    required this.routeToken,
-    required this.travelMode,
-  });
+  RouteTokenOptionsDto({required this.routeToken, required this.travelMode});
 
   final String routeToken;
   final TravelModeDto? travelMode;
@@ -592,25 +626,11 @@ class DestinationsDto {
   final RouteTokenOptionsDto? routeTokenOptions;
 }
 
-enum AlternateRoutesStrategyDto {
-  all,
-  none,
-  one,
-}
+enum AlternateRoutesStrategyDto { all, none, one }
 
-enum RoutingStrategyDto {
-  defaultBest,
-  deltaToTargetDistance,
-  shorter,
-}
+enum RoutingStrategyDto { defaultBest, deltaToTargetDistance, shorter }
 
-enum TravelModeDto {
-  driving,
-  cycling,
-  walking,
-  twoWheeler,
-  taxi,
-}
+enum TravelModeDto { driving, cycling, walking, twoWheeler, taxi }
 
 class RoutingOptionsDto {
   RoutingOptionsDto({
@@ -677,24 +697,17 @@ enum RouteStatusDto {
   travelModeUnsupported,
   locationUnknown,
   quotaCheckFailed,
-  unknown
+  unknown,
 }
 
 class NavigationTimeAndDistanceDto {
-  NavigationTimeAndDistanceDto({
-    required this.time,
-    required this.distance,
-  });
+  NavigationTimeAndDistanceDto({required this.time, required this.distance});
 
   final double time;
   final double distance;
 }
 
-enum AudioGuidanceTypeDto {
-  silent,
-  alertsOnly,
-  alertsAndGuidance,
-}
+enum AudioGuidanceTypeDto { silent, alertsOnly, alertsAndGuidance }
 
 class NavigationAudioGuidanceSettingsDto {
   NavigationAudioGuidanceSettingsDto({
@@ -709,27 +722,19 @@ class NavigationAudioGuidanceSettingsDto {
 }
 
 class SimulationOptionsDto {
-  SimulationOptionsDto({
-    required this.speedMultiplier,
-  });
+  SimulationOptionsDto({required this.speedMultiplier});
   final double speedMultiplier;
 }
 
 class LatLngDto {
-  const LatLngDto({
-    required this.latitude,
-    required this.longitude,
-  });
+  const LatLngDto({required this.latitude, required this.longitude});
 
   final double latitude;
   final double longitude;
 }
 
 class LatLngBoundsDto {
-  LatLngBoundsDto({
-    required this.southwest,
-    required this.northeast,
-  });
+  LatLngBoundsDto({required this.southwest, required this.northeast});
 
   final LatLngDto southwest;
   final LatLngDto northeast;
@@ -786,7 +791,7 @@ class RouteSegmentTrafficDataRoadStretchRenderingDataDto {
 enum RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto {
   unknown,
   slowerTraffic,
-  trafficJam
+  trafficJam,
 }
 
 class RouteSegmentTrafficDataDto {
@@ -797,7 +802,7 @@ class RouteSegmentTrafficDataDto {
 
   final RouteSegmentTrafficDataStatusDto status;
   final List<RouteSegmentTrafficDataRoadStretchRenderingDataDto?>
-      roadStretchRenderingDataList;
+  roadStretchRenderingDataList;
 }
 
 class RouteSegmentDto {
@@ -1077,10 +1082,7 @@ enum LaneShapeDto {
 
 /// One of the possible directions from a lane at the end of a route step, and whether it is on the recommended route.
 class LaneDirectionDto {
-  LaneDirectionDto({
-    required this.laneShape,
-    required this.isRecommended,
-  });
+  LaneDirectionDto({required this.laneShape, required this.isRecommended});
 
   /// Shape for this lane direction.
   final LaneShapeDto laneShape;
@@ -1091,9 +1093,7 @@ class LaneDirectionDto {
 
 /// Single lane on the road at the end of a route step.
 class LaneDto {
-  LaneDto({
-    required this.laneDirections,
-  });
+  LaneDto({required this.laneDirections});
 
   /// List of possible directions a driver can follow when using this lane at the end of the respective route step
   final List<LaneDirectionDto?> laneDirections;
@@ -1219,13 +1219,18 @@ enum TaskRemovedBehaviorDto {
 abstract class NavigationSessionApi {
   /// General.
   @async
-  void createNavigationSession(bool abnormalTerminationReportingEnabled,
-      TaskRemovedBehaviorDto behavior);
+  void createNavigationSession(
+    bool abnormalTerminationReportingEnabled,
+    TaskRemovedBehaviorDto behavior,
+  );
   bool isInitialized();
   void cleanup();
   @async
-  bool showTermsAndConditionsDialog(String title, String companyName,
-      bool shouldOnlyShowDriverAwarenessDisclaimer);
+  bool showTermsAndConditionsDialog(
+    String title,
+    String companyName,
+    bool shouldOnlyShowDriverAwarenessDisclaimer,
+  );
   bool areTermsAccepted();
   void resetTermsAccepted();
   String getNavSDKVersion();
@@ -1282,7 +1287,9 @@ abstract class NavigationSessionApi {
   void disableTurnByTurnNavigationEvents();
 
   void registerRemainingTimeOrDistanceChangedListener(
-      int remainingTimeThresholdSeconds, int remainingDistanceThresholdMeters);
+    int remainingTimeThresholdSeconds,
+    int remainingDistanceThresholdMeters,
+  );
 }
 
 @FlutterApi()
@@ -1293,7 +1300,9 @@ abstract class NavigationSessionEventApi {
   void onArrival(NavigationWaypointDto waypoint);
   void onRouteChanged();
   void onRemainingTimeOrDistanceChanged(
-      double remainingTime, double remainingDistance);
+    double remainingTime,
+    double remainingDistance,
+  );
 
   /// Android-only event.
   void onTrafficUpdated();
@@ -1324,20 +1333,32 @@ abstract class AutoMapViewApi {
   void followMyLocation(CameraPerspectiveDto perspective, double? zoomLevel);
   @async
   bool animateCameraToCameraPosition(
-      CameraPositionDto cameraPosition, int? duration);
+    CameraPositionDto cameraPosition,
+    int? duration,
+  );
   @async
   bool animateCameraToLatLng(LatLngDto point, int? duration);
   @async
   bool animateCameraToLatLngBounds(
-      LatLngBoundsDto bounds, double padding, int? duration);
+    LatLngBoundsDto bounds,
+    double padding,
+    int? duration,
+  );
   @async
   bool animateCameraToLatLngZoom(LatLngDto point, double zoom, int? duration);
   @async
   bool animateCameraByScroll(
-      double scrollByDx, double scrollByDy, int? duration);
+    double scrollByDx,
+    double scrollByDy,
+    int? duration,
+  );
   @async
   bool animateCameraByZoom(
-      double zoomBy, double? focusDx, double? focusDy, int? duration);
+    double zoomBy,
+    double? focusDx,
+    double? focusDy,
+    int? duration,
+  );
   @async
   bool animateCameraToZoom(double zoom, int? duration);
 

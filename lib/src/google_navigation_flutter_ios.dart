@@ -30,12 +30,7 @@ class GoogleMapsNavigationIOS extends GoogleMapsNavigationPlatform {
     MapViewAPIImpl viewAPI,
     AutoMapViewAPIImpl autoAPI,
     ImageRegistryAPIImpl imageRegistryAPI,
-  ) : super(
-          navigationSessionAPI,
-          viewAPI,
-          imageRegistryAPI,
-          autoAPI,
-        );
+  ) : super(navigationSessionAPI, viewAPI, imageRegistryAPI, autoAPI);
 
   /// Registers the iOS implementation of GoogleMapsNavigationPlatform.
   static void registerWith() {
@@ -48,34 +43,39 @@ class GoogleMapsNavigationIOS extends GoogleMapsNavigationPlatform {
   }
 
   @override
-  Widget buildMapView(
-      {required MapViewInitializationOptions initializationOptions,
-      required PlatformViewCreatedCallback onPlatformViewCreated,
-      required MapReadyCallback onMapReady}) {
+  Widget buildMapView({
+    required MapViewInitializationOptions initializationOptions,
+    required PlatformViewCreatedCallback onPlatformViewCreated,
+    required MapReadyCallback onMapReady,
+  }) {
     return _buildView(
-        mapViewType: MapViewType.map,
-        initializationOptions: initializationOptions,
-        onPlatformViewCreated: onPlatformViewCreated,
-        onMapReady: onMapReady);
+      mapViewType: MapViewType.map,
+      initializationOptions: initializationOptions,
+      onPlatformViewCreated: onPlatformViewCreated,
+      onMapReady: onMapReady,
+    );
   }
 
   @override
-  Widget buildNavigationView(
-      {required MapViewInitializationOptions initializationOptions,
-      required PlatformViewCreatedCallback onPlatformViewCreated,
-      required MapReadyCallback onMapReady}) {
+  Widget buildNavigationView({
+    required MapViewInitializationOptions initializationOptions,
+    required PlatformViewCreatedCallback onPlatformViewCreated,
+    required MapReadyCallback onMapReady,
+  }) {
     return _buildView(
-        mapViewType: MapViewType.navigation,
-        initializationOptions: initializationOptions,
-        onPlatformViewCreated: onPlatformViewCreated,
-        onMapReady: onMapReady);
+      mapViewType: MapViewType.navigation,
+      initializationOptions: initializationOptions,
+      onPlatformViewCreated: onPlatformViewCreated,
+      onMapReady: onMapReady,
+    );
   }
 
-  Widget _buildView(
-      {required MapViewType mapViewType,
-      required MapViewInitializationOptions initializationOptions,
-      required PlatformViewCreatedCallback onPlatformViewCreated,
-      required MapReadyCallback onMapReady}) {
+  Widget _buildView({
+    required MapViewType mapViewType,
+    required MapViewInitializationOptions initializationOptions,
+    required PlatformViewCreatedCallback onPlatformViewCreated,
+    required MapReadyCallback onMapReady,
+  }) {
     // Initialize method channel for view communication if needed.
     viewAPI.ensureViewAPISetUp();
 
@@ -83,16 +83,13 @@ class GoogleMapsNavigationIOS extends GoogleMapsNavigationPlatform {
     const String viewType = 'google_navigation_flutter';
 
     // Build creation params used to initialize navigation view with initial parameters
-    final ViewCreationOptionsDto creationParams =
-        viewAPI.buildNavigationViewCreationOptions(
-      mapViewType,
-      initializationOptions,
-    );
+    final ViewCreationOptionsDto creationParams = viewAPI
+        .buildPlatformViewCreationOptions(mapViewType, initializationOptions);
 
     return UiKitView(
       viewType: viewType,
-      creationParams: creationParams.encode(),
-      creationParamsCodec: const StandardMessageCodec(),
+      creationParams: creationParams,
+      creationParamsCodec: ViewCreationApi.pigeonChannelCodec,
       onPlatformViewCreated: (int viewId) async {
         try {
           onPlatformViewCreated(viewId);
@@ -108,12 +105,14 @@ class GoogleMapsNavigationIOS extends GoogleMapsNavigationPlatform {
             return;
           } else {
             // Pass other exceptions to the Flutter error handler.
-            FlutterError.reportError(FlutterErrorDetails(
-              exception: exception,
-              stack: stack,
-              library: 'google_navigation_flutter',
-              context: ErrorDescription(exception.message ?? ''),
-            ));
+            FlutterError.reportError(
+              FlutterErrorDetails(
+                exception: exception,
+                stack: stack,
+                library: 'google_navigation_flutter',
+                context: ErrorDescription(exception.message ?? ''),
+              ),
+            );
           }
         }
       },

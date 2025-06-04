@@ -24,55 +24,63 @@ void main() {
 
   setUp(() {
     polygon = const Polygon(
-        polygonId: 'Polygon_0',
-        options: PolygonOptions(
-            points: <LatLng>[
-              LatLng(latitude: 10.0, longitude: 20.0),
-              LatLng(latitude: 30.0, longitude: 40.0),
-              LatLng(latitude: 50.0, longitude: 60.0)
-            ],
-            holes: <List<LatLng>>[
-              <LatLng>[
-                LatLng(latitude: 60.0, longitude: 70.0),
-                LatLng(latitude: 80.0, longitude: 90.0)
-              ],
-              <LatLng>[
-                LatLng(latitude: 30.0, longitude: 40.0),
-                LatLng(latitude: 50.0, longitude: 60.0)
-              ]
-            ],
-            clickable: true,
-            fillColor: Colors.amber,
-            geodesic: true,
-            strokeColor: Colors.blue,
-            strokeWidth: 4,
-            zIndex: 3));
+      polygonId: 'Polygon_0',
+      options: PolygonOptions(
+        points: <LatLng>[
+          LatLng(latitude: 10.0, longitude: 20.0),
+          LatLng(latitude: 30.0, longitude: 40.0),
+          LatLng(latitude: 50.0, longitude: 60.0),
+        ],
+        holes: <List<LatLng>>[
+          <LatLng>[
+            LatLng(latitude: 60.0, longitude: 70.0),
+            LatLng(latitude: 80.0, longitude: 90.0),
+          ],
+          <LatLng>[
+            LatLng(latitude: 30.0, longitude: 40.0),
+            LatLng(latitude: 50.0, longitude: 60.0),
+          ],
+        ],
+        clickable: true,
+        fillColor: Colors.amber,
+        geodesic: true,
+        strokeColor: Colors.blue,
+        strokeWidth: 4,
+        zIndex: 3,
+      ),
+    );
 
     navigationViewPolygon = PolygonDto(
-        polygonId: 'Polygon_0',
-        options: PolygonOptionsDto(
-            points: <LatLngDto>[
-              LatLngDto(latitude: 10.0, longitude: 20.0),
+      polygonId: 'Polygon_0',
+      options: PolygonOptionsDto(
+        points: <LatLngDto>[
+          LatLngDto(latitude: 10.0, longitude: 20.0),
+          LatLngDto(latitude: 30.0, longitude: 40.0),
+          LatLngDto(latitude: 50.0, longitude: 60.0),
+        ],
+        holes: <PolygonHoleDto?>[
+          PolygonHoleDto(
+            points: <LatLngDto?>[
+              LatLngDto(latitude: 60.0, longitude: 70.0),
+              LatLngDto(latitude: 80.0, longitude: 90.0),
+            ],
+          ),
+          PolygonHoleDto(
+            points: <LatLngDto?>[
               LatLngDto(latitude: 30.0, longitude: 40.0),
-              LatLngDto(latitude: 50.0, longitude: 60.0)
+              LatLngDto(latitude: 50.0, longitude: 60.0),
             ],
-            holes: <PolygonHoleDto?>[
-              PolygonHoleDto(points: <LatLngDto?>[
-                LatLngDto(latitude: 60.0, longitude: 70.0),
-                LatLngDto(latitude: 80.0, longitude: 90.0)
-              ]),
-              PolygonHoleDto(points: <LatLngDto?>[
-                LatLngDto(latitude: 30.0, longitude: 40.0),
-                LatLngDto(latitude: 50.0, longitude: 60.0)
-              ])
-            ],
-            clickable: true,
-            fillColor: colorToInt(Colors.amber)!,
-            geodesic: true,
-            strokeColor: colorToInt(Colors.blue)!,
-            strokeWidth: 4,
-            visible: true,
-            zIndex: 3));
+          ),
+        ],
+        clickable: true,
+        fillColor: colorToInt(Colors.amber)!,
+        geodesic: true,
+        strokeColor: colorToInt(Colors.blue)!,
+        strokeWidth: 4,
+        visible: true,
+        zIndex: 3,
+      ),
+    );
   });
 
   group('Polygon conversion tests', () {
@@ -139,7 +147,9 @@ void main() {
       expect(colorToInt(converted.options.fillColor), colorToInt(Colors.amber));
       expect(converted.options.geodesic, true);
       expect(
-          colorToInt(converted.options.strokeColor), colorToInt(Colors.blue));
+        colorToInt(converted.options.strokeColor),
+        colorToInt(Colors.blue),
+      );
       expect(converted.options.strokeWidth, 4);
       expect(converted.options.visible, true);
       expect(converted.options.zIndex, 3);

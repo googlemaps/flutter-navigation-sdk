@@ -38,14 +38,15 @@ extension ConvertPolylineOptions on PolylineOptions {
       geodesic: geodesic,
       strokeColor: colorToInt(strokeColor),
       strokeJointType: strokeJointType?.toStrokeJointTypeDto(),
-      strokePattern:
-          strokePattern?.map((PatternItem pi) => pi.toDto()).toList(),
+      strokePattern: strokePattern
+          ?.map((PatternItem pi) => pi.toDto())
+          .toList(),
       strokeWidth: strokeWidth,
       visible: visible,
       zIndex: zIndex,
       spans:
           spans?.map((StyleSpan s) => s.toNavigationViewStyleSpan()).toList() ??
-              <StyleSpanDto>[],
+          <StyleSpanDto>[],
     );
   }
 }
@@ -100,21 +101,22 @@ extension ConvertPolylineOptionsDto on PolylineOptionsDto {
   /// Convert [PolylineOptionsDto] to [PolylineOptions].
   PolylineOptions toPolylineOptions() {
     return PolylineOptions(
-        points: points
-            ?.map((LatLngDto? point) => point?.toLatLng())
-            .whereType<LatLng>()
-            .toList(),
-        clickable: clickable,
-        geodesic: geodesic,
-        strokeColor: strokeColor != null ? Color(strokeColor!) : null,
-        strokeJointType: strokeJointType?.toStrokeJointType(),
-        strokePattern: strokePattern
-            ?.map((PatternItemDto? pidto) => pidto?.toPatternItem())
-            .whereType<PatternItem>()
-            .toList(),
-        strokeWidth: strokeWidth,
-        visible: visible,
-        zIndex: zIndex);
+      points: points
+          ?.map((LatLngDto? point) => point?.toLatLng())
+          .whereType<LatLng>()
+          .toList(),
+      clickable: clickable,
+      geodesic: geodesic,
+      strokeColor: strokeColor != null ? Color(strokeColor!) : null,
+      strokeJointType: strokeJointType?.toStrokeJointType(),
+      strokePattern: strokePattern
+          ?.map((PatternItemDto? pidto) => pidto?.toPatternItem())
+          .whereType<PatternItem>()
+          .toList(),
+      strokeWidth: strokeWidth,
+      visible: visible,
+      zIndex: zIndex,
+    );
   }
 }
 

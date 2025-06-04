@@ -50,15 +50,19 @@ class CameraPosition {
   /// By default, the camera centers on the geographical coordinates (0,0) with
   /// no tilt (0 degrees), camera zoomed out (3.0) and the bearing heading north
   /// (0 degrees).
-  const CameraPosition(
-      {this.bearing = 0,
-      this.target = const LatLng(latitude: 0, longitude: 0),
-      this.tilt = 0,
-      this.zoom = 3.0})
-      : assert(0 <= bearing && bearing < 360,
-            'Bearing must be between 0 and 360 degrees.'),
-        assert(
-            0 <= tilt && tilt <= 90, 'Tilt must be between 0 and 90 degrees.');
+  const CameraPosition({
+    this.bearing = 0,
+    this.target = const LatLng(latitude: 0, longitude: 0),
+    this.tilt = 0,
+    this.zoom = 3.0,
+  }) : assert(
+         0 <= bearing && bearing < 360,
+         'Bearing must be between 0 and 360 degrees.',
+       ),
+       assert(
+         0 <= tilt && tilt <= 90,
+         'Tilt must be between 0 and 90 degrees.',
+       );
 
   /// Bearing of the camera, in degrees clockwise from true north.
   final double bearing;
@@ -85,7 +89,7 @@ enum CameraPerspective {
   topDownHeadingUp,
 
   /// A north-facing top-down perspective of the camera's target.
-  topDownNorthUp
+  topDownNorthUp,
 }
 
 class CustomNavigationAutoEvent {
@@ -173,7 +177,7 @@ enum RouteSegmentTrafficDataRoadStretchRenderingDataStyle {
   slowerTraffic,
 
   /// TRAFFIC JAM.
-  trafficJam
+  trafficJam,
 }
 
 /// Route segment traffic data.
@@ -190,7 +194,7 @@ class RouteSegmentTrafficData {
 
   /// Rendering data list.
   final List<RouteSegmentTrafficDataRoadStretchRenderingData?>
-      roadStretchRenderingDataList;
+  roadStretchRenderingDataList;
 }
 
 /// Navigation route segment
@@ -241,7 +245,7 @@ enum CameraUpdateType {
   zoomBy,
 
   /// Camera update to an absolute zoom value.
-  zoomTo
+  zoomTo,
 }
 
 /// Defines a camera move, supporting absolute moves as well as moves relative
@@ -272,8 +276,10 @@ class CameraUpdate {
   /// logical pixels from the map view's edges.
   ///
   /// The camera's new tilt and bearing will both be 0.0.
-  static CameraUpdate newLatLngBounds(LatLngBounds bounds,
-      {double padding = 0.0}) {
+  static CameraUpdate newLatLngBounds(
+    LatLngBounds bounds, {
+    double padding = 0.0,
+  }) {
     final CameraUpdate update = CameraUpdate._(CameraUpdateType.latLngBounds);
     update.bounds = bounds;
 
@@ -423,7 +429,7 @@ enum CameraEventType {
   onCameraStartedFollowingLocation,
 
   /// Called when camera stops following location (Android only).
-  onCameraStoppedFollowingLocation
+  onCameraStoppedFollowingLocation,
 }
 
 /// Represents camera changed events in a Google Maps view.

@@ -31,7 +31,7 @@ class GoogleMapsNavigationViewFactory: NSObject, FlutterPlatformViewFactory {
   }
 
   public func createArgsCodec() -> FlutterMessageCodec & NSObjectProtocol {
-    FlutterStandardMessageCodec.sharedInstance()
+    MessagesPigeonCodec.shared
   }
 
   func create(
@@ -39,9 +39,7 @@ class GoogleMapsNavigationViewFactory: NSObject, FlutterPlatformViewFactory {
     viewIdentifier viewId: Int64,
     arguments args: Any?
   ) -> FlutterPlatformView {
-    guard let argsList = args as? [Any?],
-      let params = ViewCreationOptionsDto.fromList(argsList)
-    else {
+    guard let params = args as? ViewCreationOptionsDto else {
       fatalError("Failed to decode ViewCreationOptionsDto")
     }
 

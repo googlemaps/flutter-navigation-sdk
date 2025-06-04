@@ -36,9 +36,9 @@ class GoogleNavigationViewController extends GoogleMapViewController {
   Future<void> setNavigationTripProgressBarEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance.viewAPI
         .setNavigationTripProgressBarEnabled(
-      viewId: getViewId(),
-      enabled: enabled,
-    );
+          viewId: getViewId(),
+          enabled: enabled,
+        );
   }
 
   /// Is the navigation header enabled.
@@ -52,10 +52,7 @@ class GoogleNavigationViewController extends GoogleMapViewController {
   /// By default, the navigation header is enabled.
   Future<void> setNavigationHeaderEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance.viewAPI
-        .setNavigationHeaderEnabled(
-      viewId: getViewId(),
-      enabled: enabled,
-    );
+        .setNavigationHeaderEnabled(viewId: getViewId(), enabled: enabled);
   }
 
   /// Is the navigation footer enabled.
@@ -72,10 +69,7 @@ class GoogleNavigationViewController extends GoogleMapViewController {
   /// calls [setEtaCardEnabled().](https://developers.google.com/maps/documentation/navigation/android-sdk/v1/reference/com/google/android/libraries/navigation/NavigationView#setEtaCardEnabled(boolean))
   Future<void> setNavigationFooterEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance.viewAPI
-        .setNavigationFooterEnabled(
-      viewId: getViewId(),
-      enabled: enabled,
-    );
+        .setNavigationFooterEnabled(viewId: getViewId(), enabled: enabled);
   }
 
   /// Can the speed limit indication be displayed.
@@ -89,16 +83,14 @@ class GoogleNavigationViewController extends GoogleMapViewController {
   /// By default, the speed limit is not displayed.
   Future<void> setSpeedLimitIconEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance.viewAPI
-        .setSpeedLimitIconEnabled(
-      viewId: getViewId(),
-      enabled: enabled,
-    );
+        .setSpeedLimitIconEnabled(viewId: getViewId(), enabled: enabled);
   }
 
   /// Can the speedometer be displayed.
   Future<bool> isSpeedometerEnabled() {
-    return GoogleMapsNavigationPlatform.instance.viewAPI
-        .isSpeedometerEnabled(viewId: getViewId());
+    return GoogleMapsNavigationPlatform.instance.viewAPI.isSpeedometerEnabled(
+      viewId: getViewId(),
+    );
   }
 
   /// Allow showing the speedometer.
@@ -122,10 +114,7 @@ class GoogleNavigationViewController extends GoogleMapViewController {
   /// By default, the incident cards are shown.
   Future<void> setTrafficIncidentCardsEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance.viewAPI
-        .setTrafficIncidentCardsEnabled(
-      viewId: getViewId(),
-      enabled: enabled,
-    );
+        .setTrafficIncidentCardsEnabled(viewId: getViewId(), enabled: enabled);
   }
 
   /// Is the report incident button is shown.
@@ -139,10 +128,7 @@ class GoogleNavigationViewController extends GoogleMapViewController {
   /// By default, the report incident button is shown.
   Future<void> setReportIncidentButtonEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance.viewAPI
-        .setReportIncidentButtonEnabled(
-      viewId: getViewId(),
-      enabled: enabled,
-    );
+        .setReportIncidentButtonEnabled(viewId: getViewId(), enabled: enabled);
   }
 
   /// Are the traffic prompts shown.
@@ -156,16 +142,14 @@ class GoogleNavigationViewController extends GoogleMapViewController {
   /// By default, the traffic prompts are shown.
   Future<void> setTrafficPromptsEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance.viewAPI
-        .setTrafficPromptsEnabled(
-      viewId: getViewId(),
-      enabled: enabled,
-    );
+        .setTrafficPromptsEnabled(viewId: getViewId(), enabled: enabled);
   }
 
   /// Check if the navigation user interface is shown.
   Future<bool> isNavigationUIEnabled() {
-    return GoogleMapsNavigationPlatform.instance.viewAPI
-        .isNavigationUIEnabled(viewId: getViewId());
+    return GoogleMapsNavigationPlatform.instance.viewAPI.isNavigationUIEnabled(
+      viewId: getViewId(),
+    );
   }
 
   /// Show or hide the navigation user interface shown on top of the map.

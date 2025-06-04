@@ -21,8 +21,12 @@ import 'package:flutter/material.dart';
 @immutable
 class ImageDescriptor {
   /// Construct [ImageDescriptor].
-  const ImageDescriptor(
-      {this.registeredImageId, this.imagePixelRatio, this.width, this.height});
+  const ImageDescriptor({
+    this.registeredImageId,
+    this.imagePixelRatio,
+    this.width,
+    this.height,
+  });
 
   /// If this class represents an image from image registry, [registeredImageId] is not null.
   final String? registeredImageId;
@@ -55,6 +59,10 @@ class ImageDescriptor {
   }
 
   @override
-  int get hashCode => Object.hash(registeredImageId.hashCode,
-      imagePixelRatio.hashCode, width.hashCode, height.hashCode);
+  int get hashCode => Object.hash(
+    registeredImageId.hashCode,
+    imagePixelRatio.hashCode,
+    width.hashCode,
+    height.hashCode,
+  );
 }
