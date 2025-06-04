@@ -38,7 +38,7 @@ class NavigationSessionAPIImpl {
   /// called when initializing navigation session.
   void ensureSessionAPISetUp() {
     if (!_sessionApiHasBeenSetUp) {
-      NavigationSessionEventApi.setup(
+      NavigationSessionEventApi.setUp(
         NavigationSessionEventApiImpl(
           sessionEventStreamController: _sessionEventStreamController,
         ),
@@ -239,8 +239,8 @@ class NavigationSessionAPIImpl {
   /// Continues to next waypoint.
   Future<NavigationWaypoint?> continueToNextDestination() async {
     try {
-      final NavigationWaypointDto? waypointDto =
-          await _sessionApi.continueToNextDestination();
+      final NavigationWaypointDto? waypointDto = await _sessionApi
+          .continueToNextDestination();
       if (waypointDto == null) {
         return null;
       }
@@ -258,8 +258,8 @@ class NavigationSessionAPIImpl {
   /// Gets current time and distance left.
   Future<NavigationTimeAndDistance> getCurrentTimeAndDistance() async {
     try {
-      final NavigationTimeAndDistanceDto timeAndDistance =
-          await _sessionApi.getCurrentTimeAndDistance();
+      final NavigationTimeAndDistanceDto timeAndDistance = await _sessionApi
+          .getCurrentTimeAndDistance();
       return timeAndDistance.toNavigationTimeAndDistance();
     } on PlatformException catch (e) {
       switch (e.code) {
@@ -526,8 +526,8 @@ class NavigationSessionAPIImpl {
   /// Get route segments.
   Future<List<RouteSegment>> getRouteSegments() async {
     try {
-      final List<RouteSegmentDto?> routeSegments =
-          await _sessionApi.getRouteSegments();
+      final List<RouteSegmentDto?> routeSegments = await _sessionApi
+          .getRouteSegments();
       return routeSegments
           .where((RouteSegmentDto? p) => p != null)
           .cast<RouteSegmentDto>()
@@ -546,8 +546,8 @@ class NavigationSessionAPIImpl {
   /// Get traveled route.
   Future<List<LatLng>> getTraveledRoute() async {
     try {
-      final List<LatLngDto?> traveledRoute =
-          await _sessionApi.getTraveledRoute();
+      final List<LatLngDto?> traveledRoute = await _sessionApi
+          .getTraveledRoute();
       return traveledRoute
           .where((LatLngDto? p) => p != null)
           .cast<LatLngDto>()
@@ -569,8 +569,8 @@ class NavigationSessionAPIImpl {
   /// Get current route segment.
   Future<RouteSegment?> getCurrentRouteSegment() async {
     try {
-      final RouteSegmentDto? currentRouteSegment =
-          await _sessionApi.getCurrentRouteSegment();
+      final RouteSegmentDto? currentRouteSegment = await _sessionApi
+          .getCurrentRouteSegment();
       return currentRouteSegment?.toRouteSegment();
     } on PlatformException catch (e) {
       switch (e.code) {

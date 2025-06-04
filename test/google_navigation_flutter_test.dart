@@ -56,9 +56,9 @@ void main() {
     sessionMockApi = MockTestNavigationSessionApi();
     viewMockApi = MockTestMapViewApi();
     imageRegistryMockApi = MockTestImageRegistryApi();
-    TestNavigationSessionApi.setup(sessionMockApi);
-    TestMapViewApi.setup(viewMockApi);
-    TestImageRegistryApi.setup(imageRegistryMockApi);
+    TestNavigationSessionApi.setUp(sessionMockApi);
+    TestMapViewApi.setUp(viewMockApi);
+    TestImageRegistryApi.setUp(imageRegistryMockApi);
   });
 
   void verifyEnabled(VerificationResult result, bool enabled) {
@@ -132,8 +132,8 @@ void main() {
 
           // Get camera position
 
-          final CameraPosition positionOut =
-              await controller.getCameraPosition();
+          final CameraPosition positionOut = await controller
+              .getCameraPosition();
           final VerificationResult result = verify(
             viewMockApi.getCameraPosition(captureAny),
           );
