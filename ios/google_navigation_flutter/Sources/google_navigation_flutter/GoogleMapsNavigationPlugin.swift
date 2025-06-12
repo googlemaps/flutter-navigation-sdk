@@ -15,8 +15,6 @@
 import Flutter
 import UIKit
 
-extension FlutterError: Error {}
-
 public class GoogleMapsNavigationPlugin: NSObject, FlutterPlugin {
   private static var viewRegistry: GoogleMapsNavigationViewRegistry?
   private static var viewMessageHandler: GoogleMapsNavigationViewMessageHandler?

@@ -39,9 +39,9 @@ extension ConvertSpeedAlertSeverityDto on SpeedAlertSeverityDto {
 extension ConvertSpeedingUpdatedEventDto on SpeedingUpdatedEventDto {
   /// Converts [SpeedingUpdatedEventDto] to [SpeedingUpdatedEvent]
   SpeedingUpdatedEvent toSpeedingUpdatedEvent() => SpeedingUpdatedEvent(
-        percentageAboveLimit: percentageAboveLimit,
-        severity: severity.toSpeedAlertSeverity(),
-      );
+    percentageAboveLimit: percentageAboveLimit,
+    severity: severity.toSpeedAlertSeverity(),
+  );
 }
 
 /// [RouteStatusDto] convert extension.
@@ -124,27 +124,27 @@ extension ConvertRouteSegmentTrafficDataRoadStretchRenderingDataDto
     on RouteSegmentTrafficDataRoadStretchRenderingDataDto {
   /// Converts [RouteSegmentTrafficDataRoadStretchRenderingDataDto] to [RouteSegmentTrafficDataRoadStretchRenderingData]
   RouteSegmentTrafficDataRoadStretchRenderingData
-      toRouteSegmentTrafficDataRoadStretchRenderingData() =>
-          RouteSegmentTrafficDataRoadStretchRenderingData(
-            style: () {
-              switch (style) {
-                case RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
-                      .slowerTraffic:
-                  return RouteSegmentTrafficDataRoadStretchRenderingDataStyle
-                      .slowerTraffic;
-                case RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
-                      .trafficJam:
-                  return RouteSegmentTrafficDataRoadStretchRenderingDataStyle
-                      .trafficJam;
-                case RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
-                      .unknown:
-                  return RouteSegmentTrafficDataRoadStretchRenderingDataStyle
-                      .unknown;
-              }
-            }(),
-            lengthMeters: lengthMeters,
-            offsetMeters: offsetMeters,
-          );
+  toRouteSegmentTrafficDataRoadStretchRenderingData() =>
+      RouteSegmentTrafficDataRoadStretchRenderingData(
+        style: () {
+          switch (style) {
+            case RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
+                .slowerTraffic:
+              return RouteSegmentTrafficDataRoadStretchRenderingDataStyle
+                  .slowerTraffic;
+            case RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
+                .trafficJam:
+              return RouteSegmentTrafficDataRoadStretchRenderingDataStyle
+                  .trafficJam;
+            case RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
+                .unknown:
+              return RouteSegmentTrafficDataRoadStretchRenderingDataStyle
+                  .unknown;
+          }
+        }(),
+        lengthMeters: lengthMeters,
+        offsetMeters: offsetMeters,
+      );
 }
 
 /// [RouteSegmentTrafficDataDto] convert extension.
@@ -162,11 +162,15 @@ extension ConvertRouteSegmentTrafficDataDto on RouteSegmentTrafficDataDto {
           }
         }(),
         roadStretchRenderingDataList: roadStretchRenderingDataList
-            .where((RouteSegmentTrafficDataRoadStretchRenderingDataDto? d) =>
-                d != null)
+            .where(
+              (RouteSegmentTrafficDataRoadStretchRenderingDataDto? d) =>
+                  d != null,
+            )
             .cast<RouteSegmentTrafficDataRoadStretchRenderingDataDto>()
-            .map((RouteSegmentTrafficDataRoadStretchRenderingDataDto d) =>
-                d.toRouteSegmentTrafficDataRoadStretchRenderingData())
+            .map(
+              (RouteSegmentTrafficDataRoadStretchRenderingDataDto d) =>
+                  d.toRouteSegmentTrafficDataRoadStretchRenderingData(),
+            )
             .toList(),
       );
 }
@@ -176,18 +180,20 @@ extension ConvertRouteSegmentTrafficDataDto on RouteSegmentTrafficDataDto {
 extension ConvertRouteSegmentDto on RouteSegmentDto {
   /// Converts [RouteSegmentDto] to [RouteSegment]
   RouteSegment toRouteSegment() => RouteSegment(
-        destinationLatLng: LatLng(
-            latitude: destinationLatLng.latitude,
-            longitude: destinationLatLng.longitude),
-        destinationWaypoint: destinationWaypoint?.toNavigationWaypoint(),
-        latLngs: latLngs
-            ?.where((LatLngDto? p) => p != null)
-            .cast<LatLngDto>()
-            .map((LatLngDto p) =>
-                LatLng(latitude: p.latitude, longitude: p.longitude))
-            .toList(),
-        trafficData: trafficData?.toRouteSegmentTrafficData(),
-      );
+    destinationLatLng: LatLng(
+      latitude: destinationLatLng.latitude,
+      longitude: destinationLatLng.longitude,
+    ),
+    destinationWaypoint: destinationWaypoint?.toNavigationWaypoint(),
+    latLngs: latLngs
+        ?.where((LatLngDto? p) => p != null)
+        .cast<LatLngDto>()
+        .map(
+          (LatLngDto p) => LatLng(latitude: p.latitude, longitude: p.longitude),
+        )
+        .toList(),
+    trafficData: trafficData?.toRouteSegmentTrafficData(),
+  );
 }
 
 /// [NavigationViewOptions] convert extension.

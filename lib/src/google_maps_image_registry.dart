@@ -30,24 +30,27 @@ import 'types/types.dart';
 ///
 /// Throws [ImageDecodingFailedException] if bitmap decoding fails.
 /// {@category Image Registry}
-Future<ImageDescriptor> registerBitmapImage(
-    {required ByteData bitmap,
-    double imagePixelRatio = 1.0,
-    double? width,
-    double? height}) {
+Future<ImageDescriptor> registerBitmapImage({
+  required ByteData bitmap,
+  double imagePixelRatio = 1.0,
+  double? width,
+  double? height,
+}) {
   return GoogleMapsNavigationPlatform.instance.imageRegistryAPI
       .registerBitmapImage(
-          bitmap: bitmap.buffer.asUint8List(),
-          imagePixelRatio: imagePixelRatio,
-          width: width,
-          height: height);
+        bitmap: bitmap.buffer.asUint8List(),
+        imagePixelRatio: imagePixelRatio,
+        width: width,
+        height: height,
+      );
 }
 
 /// Delete previously registered bitmap from image registry.
 /// {@category Image Registry}
 Future<void> unregisterImage(ImageDescriptor imageDescriptor) {
-  return GoogleMapsNavigationPlatform.instance.imageRegistryAPI
-      .unregisterImage(imageDescriptor: imageDescriptor);
+  return GoogleMapsNavigationPlatform.instance.imageRegistryAPI.unregisterImage(
+    imageDescriptor: imageDescriptor,
+  );
 }
 
 /// Get all registered bitmaps from image registry.

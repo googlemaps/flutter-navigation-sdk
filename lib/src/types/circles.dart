@@ -147,15 +147,16 @@ class CircleOptions {
 
   @override
   int get hashCode => Object.hash(
-      position.hashCode,
-      radius.hashCode,
-      strokeWidth.hashCode,
-      colorToInt(strokeColor),
-      strokePattern.hashCode,
-      colorToInt(fillColor),
-      clickable.hashCode,
-      visible.hashCode,
-      zIndex.hashCode);
+    position.hashCode,
+    radius.hashCode,
+    strokeWidth.hashCode,
+    colorToInt(strokeColor),
+    strokePattern.hashCode,
+    colorToInt(fillColor),
+    clickable.hashCode,
+    visible.hashCode,
+    zIndex.hashCode,
+  );
 }
 
 /// Event emitted when a circle is clicked.
@@ -164,9 +165,7 @@ class CircleOptions {
 @immutable
 class CircleClickedEvent {
   /// Initialize [CircleClickedEvent] object.
-  const CircleClickedEvent({
-    required this.circleId,
-  });
+  const CircleClickedEvent({required this.circleId});
 
   /// Id of the circle that has been tapped.
   final String circleId;

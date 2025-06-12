@@ -49,13 +49,16 @@ class GoogleMapsNavigator {
   /// Optional parameter [abnormalTerminationReportingEnabled] can be used enables/disables
   /// reporting abnormal SDK terminations such as the app crashes while the SDK is still running.
   ///
-  static Future<void> initializeNavigationSession(
-      {bool abnormalTerminationReportingEnabled = true,
-      TaskRemovedBehavior taskRemovedBehavior =
-          TaskRemovedBehavior.continueService}) async {
+  static Future<void> initializeNavigationSession({
+    bool abnormalTerminationReportingEnabled = true,
+    TaskRemovedBehavior taskRemovedBehavior =
+        TaskRemovedBehavior.continueService,
+  }) async {
     await GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .createNavigationSession(
-            abnormalTerminationReportingEnabled, taskRemovedBehavior);
+          abnormalTerminationReportingEnabled,
+          taskRemovedBehavior,
+        );
 
     // Enable road-snapped location updates if there are subscriptions to them.
     if ((_roadSnappedLocationUpdatedController?.hasListener ?? false) ||
@@ -116,7 +119,8 @@ class GoogleMapsNavigator {
   /// await subscription.cancel();
   /// ```
   static StreamSubscription<OnArrivalEvent> setOnArrivalListener(
-      OnArrivalEventCallback listener) {
+    OnArrivalEventCallback listener,
+  ) {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .getNavigationOnArrivalEventStream()
         .listen(listener);
@@ -138,12 +142,13 @@ class GoogleMapsNavigator {
   /// await subscription.cancel();
   /// ```
   static StreamSubscription<void> setOnReroutingListener(
-      OnReroutingEventCallback listener) {
+    OnReroutingEventCallback listener,
+  ) {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .getNavigationOnReroutingEventStream()
         .listen((void event) {
-      listener.call();
-    });
+          listener.call();
+        });
   }
 
   /// Sets the event channel listener for the GPS availability events.
@@ -169,26 +174,31 @@ class GoogleMapsNavigator {
   /// await subscription.cancel();
   /// ```
   static Future<StreamSubscription<GpsAvailabilityUpdatedEvent>>
-      setOnGpsAvailabilityListener(
-          OnGpsAvailabilityEventCallback listener) async {
+  setOnGpsAvailabilityListener(OnGpsAvailabilityEventCallback listener) async {
     if (_gpsAvailabilityUpdatedController == null) {
       _gpsAvailabilityUpdatedController =
-          StreamController<GpsAvailabilityUpdatedEvent>.broadcast(onCancel: () {
-        _disableRoadSnappedLocationUpdatesIfNoActiveListeners();
-      }, onListen: () {
-        GoogleMapsNavigationPlatform.instance.navigationSessionAPI
-            .enableRoadSnappedLocationUpdates();
-      });
-      unawaited(_gpsAvailabilityUpdatedController!.addStream(
+          StreamController<GpsAvailabilityUpdatedEvent>.broadcast(
+            onCancel: () {
+              _disableRoadSnappedLocationUpdatesIfNoActiveListeners();
+            },
+            onListen: () {
+              GoogleMapsNavigationPlatform.instance.navigationSessionAPI
+                  .enableRoadSnappedLocationUpdates();
+            },
+          );
+      unawaited(
+        _gpsAvailabilityUpdatedController!.addStream(
           GoogleMapsNavigationPlatform.instance.navigationSessionAPI
-              .getNavigationOnGpsAvailabilityUpdateEventStream()));
+              .getNavigationOnGpsAvailabilityUpdateEventStream(),
+        ),
+      );
     }
 
     return _gpsAvailabilityUpdatedController!.stream.listen(listener);
   }
 
   static StreamController<GpsAvailabilityUpdatedEvent>?
-      _gpsAvailabilityUpdatedController;
+  _gpsAvailabilityUpdatedController;
 
   /// Sets the event channel listener for the traffic updated events. (Android only)
   ///
@@ -206,12 +216,13 @@ class GoogleMapsNavigator {
   /// await subscription.cancel();
   /// ```
   static StreamSubscription<void> setTrafficUpdatedListener(
-      OnTrafficUpdatedEventCallback listener) {
+    OnTrafficUpdatedEventCallback listener,
+  ) {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .getNavigationTrafficUpdatedEventStream()
         .listen((void event) {
-      listener.call();
-    });
+          listener.call();
+        });
   }
 
   /// Sets the event channel listener for the on route changed events.
@@ -230,12 +241,13 @@ class GoogleMapsNavigator {
   /// await subscription.cancel();
   /// ```
   static StreamSubscription<void> setOnRouteChangedListener(
-      OnRouteChangedEventCallback listener) {
+    OnRouteChangedEventCallback listener,
+  ) {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .getNavigationOnRouteChangedEventStream()
         .listen((void event) {
-      listener.call();
-    });
+          listener.call();
+        });
   }
 
   /// Sets the event channel listener for [RemainingTimeOrDistanceChangedEvent]s.
@@ -254,7 +266,7 @@ class GoogleMapsNavigator {
   /// await subscription.cancel();
   /// ```
   static StreamSubscription<RemainingTimeOrDistanceChangedEvent>
-      setOnRemainingTimeOrDistanceChangedListener(
+  setOnRemainingTimeOrDistanceChangedListener(
     OnRemainingTimeOrDistanceChangedEventCallback listener, {
     int remainingTimeThresholdSeconds = 1,
     int remainingDistanceThresholdMeters = 1,
@@ -263,7 +275,9 @@ class GoogleMapsNavigator {
     assert(remainingDistanceThresholdMeters >= 0);
     GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .registerRemainingTimeOrDistanceChangedListener(
-            remainingTimeThresholdSeconds, remainingDistanceThresholdMeters);
+          remainingTimeThresholdSeconds,
+          remainingDistanceThresholdMeters,
+        );
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .getNavigationRemainingTimeOrDistanceChangedEventStream()
         .listen(listener);
@@ -294,10 +308,13 @@ class GoogleMapsNavigator {
   /// await subscription.cancel();
   /// ```
   static StreamSubscription<NavInfoEvent> setNavInfoListener(
-      OnNavInfoEventCallback listener,
-      {int? numNextStepsToPreview}) {
-    assert(numNextStepsToPreview == null || numNextStepsToPreview >= 0,
-        'numNextStepsToPreview must be a non-negative integer or null.');
+    OnNavInfoEventCallback listener, {
+    int? numNextStepsToPreview,
+  }) {
+    assert(
+      numNextStepsToPreview == null || numNextStepsToPreview >= 0,
+      'numNextStepsToPreview must be a non-negative integer or null.',
+    );
     if (_navInfoEventStreamController == null) {
       _navInfoEventStreamController = StreamController<NavInfoEvent>.broadcast(
         onCancel: () {
@@ -307,9 +324,12 @@ class GoogleMapsNavigator {
           }
         },
       );
-      unawaited(_navInfoEventStreamController!.addStream(
+      unawaited(
+        _navInfoEventStreamController!.addStream(
           GoogleMapsNavigationPlatform.instance.navigationSessionAPI
-              .getNavInfoStream()));
+              .getNavInfoStream(),
+        ),
+      );
     }
 
     GoogleMapsNavigationPlatform.instance.navigationSessionAPI
@@ -319,7 +339,7 @@ class GoogleMapsNavigator {
   }
 
   static StreamController<RoadSnappedLocationUpdatedEvent>?
-      _roadSnappedLocationUpdatedController;
+  _roadSnappedLocationUpdatedController;
 
   /// Sets the event channel listener for [RoadSnappedLocationUpdatedEvent]s.
   ///
@@ -338,30 +358,33 @@ class GoogleMapsNavigator {
   /// await subscription.cancel();
   /// ```
   static Future<StreamSubscription<RoadSnappedLocationUpdatedEvent>>
-      setRoadSnappedLocationUpdatedListener(
+  setRoadSnappedLocationUpdatedListener(
     OnRoadSnappedLocationUpdatedEventCallback listener,
   ) async {
     if (_roadSnappedLocationUpdatedController == null) {
       _roadSnappedLocationUpdatedController =
           StreamController<RoadSnappedLocationUpdatedEvent>.broadcast(
-        onCancel: () {
-          _disableRoadSnappedLocationUpdatesIfNoActiveListeners();
-        },
-        onListen: () {
+            onCancel: () {
+              _disableRoadSnappedLocationUpdatesIfNoActiveListeners();
+            },
+            onListen: () {
+              GoogleMapsNavigationPlatform.instance.navigationSessionAPI
+                  .enableRoadSnappedLocationUpdates();
+            },
+          );
+      unawaited(
+        _roadSnappedLocationUpdatedController!.addStream(
           GoogleMapsNavigationPlatform.instance.navigationSessionAPI
-              .enableRoadSnappedLocationUpdates();
-        },
+              .getNavigationRoadSnappedLocationEventStream(),
+        ),
       );
-      unawaited(_roadSnappedLocationUpdatedController!.addStream(
-          GoogleMapsNavigationPlatform.instance.navigationSessionAPI
-              .getNavigationRoadSnappedLocationEventStream()));
     }
 
     return _roadSnappedLocationUpdatedController!.stream.listen(listener);
   }
 
   static StreamController<RoadSnappedRawLocationUpdatedEvent>?
-      _roadSnappedRawLocationUpdatedController;
+  _roadSnappedRawLocationUpdatedController;
 
   /// Sets the event channel listener for [RoadSnappedRawLocationUpdatedEvent]s
   /// (Android only).
@@ -381,23 +404,26 @@ class GoogleMapsNavigator {
   /// await subscription.cancel();
   /// ```
   static Future<StreamSubscription<RoadSnappedRawLocationUpdatedEvent>>
-      setRoadSnappedRawLocationUpdatedListener(
+  setRoadSnappedRawLocationUpdatedListener(
     OnRoadSnappedRawLocationUpdatedEventCallback listener,
   ) async {
     if (_roadSnappedRawLocationUpdatedController == null) {
       _roadSnappedRawLocationUpdatedController =
           StreamController<RoadSnappedRawLocationUpdatedEvent>.broadcast(
-        onCancel: () {
-          _disableRoadSnappedLocationUpdatesIfNoActiveListeners();
-        },
-        onListen: () {
+            onCancel: () {
+              _disableRoadSnappedLocationUpdatesIfNoActiveListeners();
+            },
+            onListen: () {
+              GoogleMapsNavigationPlatform.instance.navigationSessionAPI
+                  .enableRoadSnappedLocationUpdates();
+            },
+          );
+      unawaited(
+        _roadSnappedRawLocationUpdatedController!.addStream(
           GoogleMapsNavigationPlatform.instance.navigationSessionAPI
-              .enableRoadSnappedLocationUpdates();
-        },
+              .getNavigationRoadSnappedRawLocationEventStream(),
+        ),
       );
-      unawaited(_roadSnappedRawLocationUpdatedController!.addStream(
-          GoogleMapsNavigationPlatform.instance.navigationSessionAPI
-              .getNavigationRoadSnappedRawLocationEventStream()));
     }
 
     return _roadSnappedRawLocationUpdatedController!.stream.listen(listener);
@@ -439,11 +465,16 @@ class GoogleMapsNavigator {
   ///  Returns true if the user accepts the terms, and false if not. If the terms
   ///  have already been accepted returns true without showing the dialog again.
   static Future<bool> showTermsAndConditionsDialog(
-      String title, String companyName,
-      {bool shouldOnlyShowDriverAwarenessDisclaimer = false}) async {
+    String title,
+    String companyName, {
+    bool shouldOnlyShowDriverAwarenessDisclaimer = false,
+  }) async {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .showTermsAndConditionsDialog(
-            title, companyName, shouldOnlyShowDriverAwarenessDisclaimer);
+          title,
+          companyName,
+          shouldOnlyShowDriverAwarenessDisclaimer,
+        );
   }
 
   /// Checks if terms and conditions have already been accepted by the user.
@@ -495,7 +526,8 @@ class GoogleMapsNavigator {
   /// If the options are omitted, the default routing and display options will
   /// be used.
   static Future<NavigationRouteStatus> setDestinations(
-      Destinations destinations) {
+    Destinations destinations,
+  ) {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .setDestinations(destinations);
   }
@@ -524,7 +556,8 @@ class GoogleMapsNavigator {
 
   /// Sets the audio guidance settings.
   static Future<void> setAudioGuidance(
-      NavigationAudioGuidanceSettings settings) {
+    NavigationAudioGuidanceSettings settings,
+  ) {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .setAudioGuidance(settings);
   }
@@ -534,9 +567,7 @@ class GoogleMapsNavigator {
   /// Throws [UnsupportedError] on Android.
   static Future<void> allowBackgroundLocationUpdates(bool allow) {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
-        .allowBackgroundLocationUpdates(
-      allow,
-    );
+        .allowBackgroundLocationUpdates(allow);
   }
 
   /// Get route segments.
@@ -558,7 +589,8 @@ class GoogleMapsNavigator {
   }
 
   static Future<void> enableTurnByTurnNavigationEvents(
-      int? numNextStepsToPreview) {
+    int? numNextStepsToPreview,
+  ) {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .enableTurnByTurnNavigationEvents(numNextStepsToPreview);
   }
@@ -579,7 +611,7 @@ enum SessionInitializationError {
   locationPermissionMissing,
 
   /// The session initialization failed, because the user has not yet accepted the navigation terms and conditions.
-  termsNotAccepted
+  termsNotAccepted,
 }
 
 /// Exception thrown by [GoogleMapsNavigator.initializeNavigationSession].

@@ -22,12 +22,11 @@ import 'navigation_waypoint.dart';
 extension ConvertDestinations on Destinations {
   /// Converts [Destinations] to [DestinationsDto]
   DestinationsDto toDto() => DestinationsDto(
-      waypoints: waypoints.map(
-        (NavigationWaypoint e) {
-          return e.toDto();
-        },
-      ).toList(),
-      displayOptions: displayOptions.toDto(),
-      routingOptions: routingOptions?.toDto(),
-      routeTokenOptions: routeTokenOptions?.toDto());
+    waypoints: waypoints.map((NavigationWaypoint e) {
+      return e.toDto();
+    }).toList(),
+    displayOptions: displayOptions.toDto(),
+    routingOptions: routingOptions?.toDto(),
+    routeTokenOptions: routeTokenOptions?.toDto(),
+  );
 }

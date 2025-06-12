@@ -21,13 +21,15 @@ import 'package:flutter/foundation.dart';
 @immutable
 class LatLng {
   /// Initializes a [LatLng] with the provided latitude and longitude values.
-  const LatLng({
-    required this.latitude,
-    required this.longitude,
-  })  : assert(latitude >= -90.0 && latitude <= 90.0,
-            'Latitude must be between -90 and 90 degrees.'),
-        assert(longitude >= -180.0 && longitude <= 180.0,
-            'Longitude must be between -180 and 180 degrees.');
+  const LatLng({required this.latitude, required this.longitude})
+    : assert(
+        latitude >= -90.0 && latitude <= 90.0,
+        'Latitude must be between -90 and 90 degrees.',
+      ),
+      assert(
+        longitude >= -180.0 && longitude <= 180.0,
+        'Longitude must be between -180 and 180 degrees.',
+      );
 
   /// The latitude of this point in degrees, where negative values indicate south of the equator.
   final double latitude;
@@ -39,8 +41,10 @@ class LatLng {
   /// Asserts that the operation does not cross the poles.
   LatLng offset(LatLng offset) {
     final double newLatitude = latitude + offset.latitude;
-    assert(newLatitude >= -90.0 && newLatitude <= 90.0,
-        'Latitude after applying offset must be between -90 and 90 degrees.');
+    assert(
+      newLatitude >= -90.0 && newLatitude <= 90.0,
+      'Latitude after applying offset must be between -90 and 90 degrees.',
+    );
 
     // Handle longitude wrap-around (across the 180th meridian)
     double newLongitude = longitude + offset.longitude;

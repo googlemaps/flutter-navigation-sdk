@@ -21,9 +21,7 @@ class Simulator {
   /// Sets user location.
   Future<void> setUserLocation(LatLng location) {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
-        .setUserLocation(
-      location,
-    );
+        .setUserLocation(location);
   }
 
   /// Stops simulation by unsetting user location simulation.
@@ -43,9 +41,7 @@ class Simulator {
     SimulationOptions options,
   ) {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
-        .simulateLocationsAlongExistingRouteWithOptions(
-      options,
-    );
+        .simulateLocationsAlongExistingRouteWithOptions(options);
   }
 
   /// Simulates locations along new route.
@@ -53,37 +49,35 @@ class Simulator {
     List<NavigationWaypoint> waypoints,
   ) {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
-        .simulateLocationsAlongNewRoute(
-      waypoints,
-    );
+        .simulateLocationsAlongNewRoute(waypoints);
   }
 
   /// Simulates locations along new route with routing options.
   Future<NavigationRouteStatus>
-      simulateLocationsAlongNewRouteWithRoutingOptions(
+  simulateLocationsAlongNewRouteWithRoutingOptions(
     List<NavigationWaypoint> waypoints,
     RoutingOptions routingOptions,
   ) {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .simulateLocationsAlongNewRouteWithRoutingOptions(
-      waypoints,
-      routingOptions,
-    );
+          waypoints,
+          routingOptions,
+        );
   }
 
   /// Simulates locations along new route with routing and simulation options.
   Future<NavigationRouteStatus>
-      simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
+  simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
     List<NavigationWaypoint> waypoints,
     RoutingOptions routingOptions,
     SimulationOptions simulationOptions,
   ) {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
-      waypoints,
-      routingOptions,
-      simulationOptions,
-    );
+          waypoints,
+          routingOptions,
+          simulationOptions,
+        );
   }
 
   /// Pauses simulation.

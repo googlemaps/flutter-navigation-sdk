@@ -39,7 +39,7 @@ import com.google.android.gms.maps.model.Polygon
 import com.google.android.gms.maps.model.Polyline
 
 abstract class GoogleMapsBaseMapView(
-  protected val viewId: Int?,
+  private val viewId: Int?,
   mapOptions: MapOptions,
   protected val viewEventApi: ViewEventApi?,
   private val imageRegistry: ImageRegistry,
@@ -144,20 +144,20 @@ abstract class GoogleMapsBaseMapView(
           }
 
           override fun onMarkerDragEnd(marker: Marker) {
-            sendMarkerDragEvent(marker, MarkerDragEventTypeDto.DRAGEND)
+            sendMarkerDragEvent(marker, MarkerDragEventTypeDto.DRAG_END)
           }
 
           override fun onMarkerDragStart(marker: Marker) {
-            sendMarkerDragEvent(marker, MarkerDragEventTypeDto.DRAGSTART)
+            sendMarkerDragEvent(marker, MarkerDragEventTypeDto.DRAG_START)
           }
         }
       )
     getMap().setOnInfoWindowClickListener { marker ->
-      sendMarkerEvent(marker, MarkerEventTypeDto.INFOWINDOWCLICKED)
+      sendMarkerEvent(marker, MarkerEventTypeDto.INFO_WINDOW_CLICKED)
     }
     getMap().setOnInfoWindowCloseListener { marker ->
       try {
-        sendMarkerEvent(marker, MarkerEventTypeDto.INFOWINDOWCLOSED)
+        sendMarkerEvent(marker, MarkerEventTypeDto.INFO_WINDOW_CLOSED)
       } catch (exception: FlutterError) {
         // Google maps trigger this callback if info window is open for marker that is removed.
         // As marker and it's information that maps the marker to the markerId is removed,
@@ -165,7 +165,7 @@ abstract class GoogleMapsBaseMapView(
       }
     }
     getMap().setOnInfoWindowLongClickListener { marker ->
-      sendMarkerEvent(marker, MarkerEventTypeDto.INFOWINDOWLONGCLICKED)
+      sendMarkerEvent(marker, MarkerEventTypeDto.INFO_WINDOW_LONG_CLICKED)
     }
 
     getMap().setOnPolygonClickListener { polygon ->
@@ -198,7 +198,7 @@ abstract class GoogleMapsBaseMapView(
           override fun onCameraStartedFollowingLocation() {
             viewEventApi?.onCameraChanged(
               getViewId().toLong(),
-              CameraEventTypeDto.ONCAMERASTARTEDFOLLOWINGLOCATION,
+              CameraEventTypeDto.ON_CAMERA_STARTED_FOLLOWING_LOCATION,
               Convert.convertCameraPositionToDto(getMap().cameraPosition),
             ) {}
           }
@@ -206,7 +206,7 @@ abstract class GoogleMapsBaseMapView(
           override fun onCameraStoppedFollowingLocation() {
             viewEventApi?.onCameraChanged(
               getViewId().toLong(),
-              CameraEventTypeDto.ONCAMERASTOPPEDFOLLOWINGLOCATION,
+              CameraEventTypeDto.ON_CAMERA_STOPPED_FOLLOWING_LOCATION,
               Convert.convertCameraPositionToDto(getMap().cameraPosition),
             ) {}
           }
@@ -220,14 +220,7 @@ abstract class GoogleMapsBaseMapView(
 
   // Installs a custom invalidator for the map view.
   private fun installInvalidator() {
-    if (getView() == null) {
-      // This should only happen in tests.
-      return
-    }
-    val textureView = findTextureView(getView()!!)
-    if (textureView == null) {
-      return
-    }
+    val textureView = findTextureView(getView()) ?: return
     val internalListener = textureView.surfaceTextureListener
 
     // Override the Maps internal SurfaceTextureListener with one that invalidates mapview on
@@ -249,7 +242,7 @@ abstract class GoogleMapsBaseMapView(
         override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {
           internalListener?.onSurfaceTextureUpdated(surface)
           // Invalidate the view to ensure it is redrawn.
-          getView()?.invalidate()
+          getView().invalidate()
         }
       }
   }
@@ -924,15 +917,15 @@ abstract class GoogleMapsBaseMapView(
     }
   }
 
-  fun setOnCameraChangedListeners() {
+  private fun setOnCameraChangedListeners() {
     getMap().setOnCameraMoveStartedListener { reason ->
       val event =
         when (reason) {
           GoogleMap.OnCameraMoveStartedListener.REASON_API_ANIMATION,
           GoogleMap.OnCameraMoveStartedListener.REASON_DEVELOPER_ANIMATION ->
-            CameraEventTypeDto.MOVESTARTEDBYAPI
+            CameraEventTypeDto.MOVE_STARTED_BY_API
           GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE ->
-            CameraEventTypeDto.MOVESTARTEDBYGESTURE
+            CameraEventTypeDto.MOVE_STARTED_BY_GESTURE
           else -> {
             // This should not happen, added that the compiler does not complain.
             throw RuntimeException("Unknown camera move started reason: $reason")
@@ -945,7 +938,7 @@ abstract class GoogleMapsBaseMapView(
       val position = Convert.convertCameraPositionToDto(getMap().cameraPosition)
       viewEventApi?.onCameraChanged(
         getViewId().toLong(),
-        CameraEventTypeDto.ONCAMERAMOVE,
+        CameraEventTypeDto.ON_CAMERA_MOVE,
         position,
       ) {}
     }
@@ -953,7 +946,7 @@ abstract class GoogleMapsBaseMapView(
       val position = Convert.convertCameraPositionToDto(getMap().cameraPosition)
       viewEventApi?.onCameraChanged(
         getViewId().toLong(),
-        CameraEventTypeDto.ONCAMERAIDLE,
+        CameraEventTypeDto.ON_CAMERA_IDLE,
         position,
       ) {}
     }
