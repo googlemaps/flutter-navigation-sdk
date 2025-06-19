@@ -27,7 +27,7 @@ import 'shared.dart';
 void main() {
   patrol('Test enabling navigation UI', (PatrolIntegrationTester $) async {
     final ControllerCompleter<GoogleNavigationViewController>
-        viewControllerCompleter = ControllerCompleter();
+    viewControllerCompleter = ControllerCompleter();
 
     /// For testing NavigationUIEnabledChanged
     bool navigationUIisEnabled = false;
@@ -36,8 +36,9 @@ void main() {
 
     /// The events are not tested because there's no reliable way to trigger them currently.
     void onRecenterButtonClicked(
-        NavigationViewRecenterButtonClickedEvent event) {
-      debugPrint('Re-center button clicked event: $event.');
+      NavigationViewRecenterButtonClickedEvent event,
+    ) {
+      $.log('Re-center button clicked event: $event.');
     }
 
     /// Display navigation view.
@@ -61,9 +62,12 @@ void main() {
 
     await viewController.setMyLocationEnabled(true);
 
-    expect(await viewController.isNavigationUIEnabled(), false,
-        reason:
-            'isNavigationUIEnabled should return false when navigation is not yet initialized.');
+    expect(
+      await viewController.isNavigationUIEnabled(),
+      false,
+      reason:
+          'isNavigationUIEnabled should return false when navigation is not yet initialized.',
+    );
     waitForValueMatchingPredicate<bool>(
       $,
       () async => navigationUIisEnabled,
@@ -74,25 +78,30 @@ void main() {
     /// Initialize navigation.
     await GoogleMapsNavigator.initializeNavigationSession();
 
-    expect(await viewController.isNavigationUIEnabled(), true,
-        reason:
-            'isNavigationUIEnabled should return true after navigation is initialized.');
+    expect(
+      await viewController.isNavigationUIEnabled(),
+      true,
+      reason:
+          'isNavigationUIEnabled should return true after navigation is initialized.',
+    );
     waitForValueMatchingPredicate<bool>(
       $,
       () async => navigationUIisEnabled,
       (bool value) => value == true,
     );
-    expect(navigationUIisEnabled, true,
-        reason:
-            'onNavigationUIEnabledChanged should be called after navigation is initialized with enabled state.');
+    expect(
+      navigationUIisEnabled,
+      true,
+      reason:
+          'onNavigationUIEnabledChanged should be called after navigation is initialized with enabled state.',
+    );
 
     await $.pumpAndSettle();
 
     /// Simulate location (1298 California St)
-    await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
-      latitude: 37.79136614772824,
-      longitude: -122.41565900473043,
-    ));
+    await GoogleMapsNavigator.simulator.setUserLocation(
+      const LatLng(latitude: 37.79136614772824, longitude: -122.41565900473043),
+    );
     await $.pumpAndSettle(timeout: const Duration(seconds: 1));
 
     /// Set Destination.
@@ -100,10 +109,7 @@ void main() {
       waypoints: <NavigationWaypoint>[
         NavigationWaypoint.withLatLngTarget(
           title: 'California St & Jones St',
-          target: const LatLng(
-            latitude: 37.791424,
-            longitude: -122.414139,
-          ),
+          target: const LatLng(latitude: 37.791424, longitude: -122.414139),
         ),
       ],
       displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
@@ -125,8 +131,11 @@ void main() {
       await viewController.setNavigationUIEnabled(result);
       await $.pumpAndSettle();
       final bool isEnabled = await viewController.isNavigationUIEnabled();
-      expect(isEnabled, result,
-          reason: buildReasonForToggle('NavigationUIEnabled', result));
+      expect(
+        isEnabled,
+        result,
+        reason: buildReasonForToggle('NavigationUIEnabled', result),
+      );
 
       /// Test that NavigationUIEnabledChanged event works.
       waitForValueMatchingPredicate<bool>(
@@ -142,8 +151,11 @@ void main() {
       await viewController.setNavigationHeaderEnabled(result);
       await $.pumpAndSettle();
       final bool isEnabled = await viewController.isNavigationHeaderEnabled();
-      expect(isEnabled, result,
-          reason: buildReasonForToggle('NavigationHeaderEnabled', result));
+      expect(
+        isEnabled,
+        result,
+        reason: buildReasonForToggle('NavigationHeaderEnabled', result),
+      );
     }
 
     /// Test enabling and disabling the footer.
@@ -151,8 +163,11 @@ void main() {
       await viewController.setNavigationFooterEnabled(result);
       await $.pumpAndSettle();
       final bool isEnabled = await viewController.isNavigationFooterEnabled();
-      expect(isEnabled, result,
-          reason: buildReasonForToggle('NavigationFooterEnabled', result));
+      expect(
+        isEnabled,
+        result,
+        reason: buildReasonForToggle('NavigationFooterEnabled', result),
+      );
     }
 
     /// Test enabling and disabling the trip progress bar.
@@ -161,9 +176,14 @@ void main() {
       await $.pumpAndSettle();
       final bool isEnabled =
           await viewController.isNavigationTripProgressBarEnabled();
-      expect(isEnabled, result,
-          reason:
-              buildReasonForToggle('NavigationTripProgressBarEnabled', result));
+      expect(
+        isEnabled,
+        result,
+        reason: buildReasonForToggle(
+          'NavigationTripProgressBarEnabled',
+          result,
+        ),
+      );
     }
 
     /// Test enabling and disabling the speedometer.
@@ -171,8 +191,11 @@ void main() {
       await viewController.setSpeedometerEnabled(result);
       await $.pumpAndSettle();
       final bool isEnabled = await viewController.isSpeedometerEnabled();
-      expect(isEnabled, result,
-          reason: buildReasonForToggle('SpeedometerEnabled', result));
+      expect(
+        isEnabled,
+        result,
+        reason: buildReasonForToggle('SpeedometerEnabled', result),
+      );
     }
 
     /// Test enabling and disabling the speed limit.
@@ -180,8 +203,11 @@ void main() {
       await viewController.setSpeedLimitIconEnabled(result);
       await $.pumpAndSettle();
       final bool isEnabled = await viewController.isSpeedLimitIconEnabled();
-      expect(isEnabled, result,
-          reason: buildReasonForToggle('SpeedLimitIconEnabled', result));
+      expect(
+        isEnabled,
+        result,
+        reason: buildReasonForToggle('SpeedLimitIconEnabled', result),
+      );
     }
 
     /// Test enabling and disabling the traffic incident cards.
@@ -190,16 +216,22 @@ void main() {
       await $.pumpAndSettle();
       final bool isEnabled =
           await viewController.isTrafficIncidentCardsEnabled();
-      expect(isEnabled, result,
-          reason: buildReasonForToggle('TrafficIncidentCardsEnabled', result));
+      expect(
+        isEnabled,
+        result,
+        reason: buildReasonForToggle('TrafficIncidentCardsEnabled', result),
+      );
     }
 
     /// Test enabling and disabling the recenter button.
     for (final bool result in results) {
       await viewController.setRecenterButtonEnabled(result);
       final bool isEnabled = await viewController.isRecenterButtonEnabled();
-      expect(isEnabled, result,
-          reason: buildReasonForToggle('RecenterButtonEnabled', result));
+      expect(
+        isEnabled,
+        result,
+        reason: buildReasonForToggle('RecenterButtonEnabled', result),
+      );
     }
 
     /// Test enabling and disabling the report incident button.
@@ -207,16 +239,22 @@ void main() {
       await viewController.setReportIncidentButtonEnabled(result);
       final bool isEnabled =
           await viewController.isReportIncidentButtonEnabled();
-      expect(isEnabled, result,
-          reason: buildReasonForToggle('ReportIncidentButtonEnabled', result));
+      expect(
+        isEnabled,
+        result,
+        reason: buildReasonForToggle('ReportIncidentButtonEnabled', result),
+      );
     }
 
     /// Test enabling and disabling the traffic prompts.
     for (final bool result in results) {
       await viewController.setTrafficPromptsEnabled(result);
       final bool isEnabled = await viewController.isTrafficPromptsEnabled();
-      expect(isEnabled, result,
-          reason: buildReasonForToggle('TrafficPromptsEnabled', result));
+      expect(
+        isEnabled,
+        result,
+        reason: buildReasonForToggle('TrafficPromptsEnabled', result),
+      );
     }
 
     await GoogleMapsNavigator.cleanup();

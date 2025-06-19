@@ -99,7 +99,13 @@ scripts:
       if [ -d "example" ]; then cd example; fi && \
         if [ ! -f android/gradlew ]; then flutter build apk --config-only; fi && \
         cd android && \
-        ./gradlew test
+        ./gradlew test \
+          -x :flutter_plugin_android_lifecycle:testDebugUnitTest \
+          -x :flutter_plugin_android_lifecycle:testProfileUnitTest \
+          -x :flutter_plugin_android_lifecycle:testReleaseUnitTest \
+          -x :integration_test:testDebugUnitTest \
+          -x :integration_test:testProfileUnitTest \
+          -x :integration_test:testReleaseUnitTest
     exec:
       concurrency: 1
       failFast: true

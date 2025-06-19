@@ -20,53 +20,53 @@ import '../google_navigation_flutter.dart';
 import 'google_navigation_flutter_platform_interface.dart';
 
 /// On Google Map view created callback.
-typedef OnMapViewCreatedCallback = void Function(
-  GoogleMapViewController controller,
-);
+typedef OnMapViewCreatedCallback =
+    void Function(GoogleMapViewController controller);
 
 /// The base view for map view and navigation view. Not to be used by itself.
 /// {@category Map View}
 @protected
 abstract class GoogleMapsBaseMapView extends StatefulWidget {
   /// Abstract base class that contans the shared logic of GoogleMapsMapView and GoogleMapsNavigation View.
-  const GoogleMapsBaseMapView(
-      {super.key,
-      this.initialCameraPosition = const CameraPosition(),
-      this.initialMapType = MapType.normal,
-      this.initialCompassEnabled = true,
-      this.initialRotateGesturesEnabled = true,
-      this.initialScrollGesturesEnabled = true,
-      this.initialTiltGesturesEnabled = true,
-      this.initialZoomGesturesEnabled = true,
-      this.initialScrollGesturesEnabledDuringRotateOrZoom = true,
-      this.initialMapToolbarEnabled = true,
-      this.initialMinZoomPreference,
-      this.initialMaxZoomPreference,
-      this.initialZoomControlsEnabled = true,
-      this.initialCameraTargetBounds,
-      this.initialPadding,
-      this.layoutDirection,
-      this.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
-      this.onRecenterButtonClicked,
-      this.onMarkerClicked,
-      this.onMarkerDrag,
-      this.onMarkerDragStart,
-      this.onMarkerDragEnd,
-      this.onMarkerInfoWindowClicked,
-      this.onMarkerInfoWindowClosed,
-      this.onMarkerInfoWindowLongClicked,
-      this.onMapClicked,
-      this.onMapLongClicked,
-      this.onPolygonClicked,
-      this.onPolylineClicked,
-      this.onCircleClicked,
-      this.onMyLocationClicked,
-      this.onMyLocationButtonClicked,
-      this.onCameraMoveStarted,
-      this.onCameraMove,
-      this.onCameraIdle,
-      this.onCameraStartedFollowingLocation,
-      this.onCameraStoppedFollowingLocation});
+  const GoogleMapsBaseMapView({
+    super.key,
+    this.initialCameraPosition = const CameraPosition(),
+    this.initialMapType = MapType.normal,
+    this.initialCompassEnabled = true,
+    this.initialRotateGesturesEnabled = true,
+    this.initialScrollGesturesEnabled = true,
+    this.initialTiltGesturesEnabled = true,
+    this.initialZoomGesturesEnabled = true,
+    this.initialScrollGesturesEnabledDuringRotateOrZoom = true,
+    this.initialMapToolbarEnabled = true,
+    this.initialMinZoomPreference,
+    this.initialMaxZoomPreference,
+    this.initialZoomControlsEnabled = true,
+    this.initialCameraTargetBounds,
+    this.initialPadding,
+    this.layoutDirection,
+    this.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
+    this.onRecenterButtonClicked,
+    this.onMarkerClicked,
+    this.onMarkerDrag,
+    this.onMarkerDragStart,
+    this.onMarkerDragEnd,
+    this.onMarkerInfoWindowClicked,
+    this.onMarkerInfoWindowClosed,
+    this.onMarkerInfoWindowLongClicked,
+    this.onMapClicked,
+    this.onMapLongClicked,
+    this.onPolygonClicked,
+    this.onPolylineClicked,
+    this.onCircleClicked,
+    this.onMyLocationClicked,
+    this.onMyLocationButtonClicked,
+    this.onCameraMoveStarted,
+    this.onCameraMove,
+    this.onCameraIdle,
+    this.onCameraStartedFollowingLocation,
+    this.onCameraStoppedFollowingLocation,
+  });
 
   /// The initial positioning of the camera in the map view.
   final CameraPosition initialCameraPosition;
@@ -242,46 +242,46 @@ class GoogleMapsMapView extends GoogleMapsBaseMapView {
   ///   // Other initial map settings...
   /// )
   /// ```
-  const GoogleMapsMapView(
-      {super.key,
-      required this.onViewCreated,
-      super.initialCameraPosition = const CameraPosition(),
-      super.initialMapType = MapType.normal,
-      super.initialCompassEnabled = true,
-      super.initialRotateGesturesEnabled = true,
-      super.initialScrollGesturesEnabled = true,
-      super.initialTiltGesturesEnabled = true,
-      super.initialZoomGesturesEnabled = true,
-      super.initialScrollGesturesEnabledDuringRotateOrZoom = true,
-      super.initialMapToolbarEnabled = true,
-      super.initialMinZoomPreference,
-      super.initialMaxZoomPreference,
-      super.initialZoomControlsEnabled = true,
-      super.initialCameraTargetBounds,
-      super.initialPadding,
-      super.layoutDirection,
-      super.gestureRecognizers =
-          const <Factory<OneSequenceGestureRecognizer>>{},
-      super.onRecenterButtonClicked,
-      super.onMarkerClicked,
-      super.onMarkerDrag,
-      super.onMarkerDragStart,
-      super.onMarkerDragEnd,
-      super.onMarkerInfoWindowClicked,
-      super.onMarkerInfoWindowClosed,
-      super.onMarkerInfoWindowLongClicked,
-      super.onMapClicked,
-      super.onMapLongClicked,
-      super.onPolygonClicked,
-      super.onPolylineClicked,
-      super.onCircleClicked,
-      super.onMyLocationClicked,
-      super.onMyLocationButtonClicked,
-      super.onCameraMoveStarted,
-      super.onCameraMove,
-      super.onCameraIdle,
-      super.onCameraStartedFollowingLocation,
-      super.onCameraStoppedFollowingLocation});
+  const GoogleMapsMapView({
+    super.key,
+    required this.onViewCreated,
+    super.initialCameraPosition = const CameraPosition(),
+    super.initialMapType = MapType.normal,
+    super.initialCompassEnabled = true,
+    super.initialRotateGesturesEnabled = true,
+    super.initialScrollGesturesEnabled = true,
+    super.initialTiltGesturesEnabled = true,
+    super.initialZoomGesturesEnabled = true,
+    super.initialScrollGesturesEnabledDuringRotateOrZoom = true,
+    super.initialMapToolbarEnabled = true,
+    super.initialMinZoomPreference,
+    super.initialMaxZoomPreference,
+    super.initialZoomControlsEnabled = true,
+    super.initialCameraTargetBounds,
+    super.initialPadding,
+    super.layoutDirection,
+    super.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
+    super.onRecenterButtonClicked,
+    super.onMarkerClicked,
+    super.onMarkerDrag,
+    super.onMarkerDragStart,
+    super.onMarkerDragEnd,
+    super.onMarkerInfoWindowClicked,
+    super.onMarkerInfoWindowClosed,
+    super.onMarkerInfoWindowLongClicked,
+    super.onMapClicked,
+    super.onMapLongClicked,
+    super.onPolygonClicked,
+    super.onPolylineClicked,
+    super.onCircleClicked,
+    super.onMyLocationClicked,
+    super.onMyLocationButtonClicked,
+    super.onCameraMoveStarted,
+    super.onCameraMove,
+    super.onCameraIdle,
+    super.onCameraStartedFollowingLocation,
+    super.onCameraStoppedFollowingLocation,
+  });
 
   /// Callback triggered when the map view is created.
   ///
@@ -326,88 +326,89 @@ abstract class MapViewState<T extends GoogleMapsBaseMapView> extends State<T> {
       GoogleMapsNavigationPlatform.instance.viewAPI
           .getMapClickEventStream(viewId: viewId)
           .listen((MapClickEvent event) {
-        widget.onMapClicked!(event.target);
-      });
+            widget.onMapClicked!(event.target);
+          });
     }
 
     if (widget.onMapLongClicked != null) {
       GoogleMapsNavigationPlatform.instance.viewAPI
           .getMapLongClickEventStream(viewId: viewId)
           .listen((MapLongClickEvent event) {
-        widget.onMapLongClicked!(event.target);
-      });
+            widget.onMapLongClicked!(event.target);
+          });
     }
 
     GoogleMapsNavigationPlatform.instance.viewAPI
         .getMarkerEventStream(viewId: viewId)
         .listen((MarkerEvent event) {
-      switch (event.eventType) {
-        case MarkerEventType.clicked:
-          widget.onMarkerClicked?.call(event.markerId);
-        case MarkerEventType.infoWindowClicked:
-          widget.onMarkerInfoWindowClicked?.call(event.markerId);
-        case MarkerEventType.infoWindowClosed:
-          widget.onMarkerInfoWindowClosed?.call(event.markerId);
-        case MarkerEventType.infoWindowLongClicked:
-          widget.onMarkerInfoWindowLongClicked?.call(event.markerId);
-      }
-    });
+          switch (event.eventType) {
+            case MarkerEventType.clicked:
+              widget.onMarkerClicked?.call(event.markerId);
+            case MarkerEventType.infoWindowClicked:
+              widget.onMarkerInfoWindowClicked?.call(event.markerId);
+            case MarkerEventType.infoWindowClosed:
+              widget.onMarkerInfoWindowClosed?.call(event.markerId);
+            case MarkerEventType.infoWindowLongClicked:
+              widget.onMarkerInfoWindowLongClicked?.call(event.markerId);
+          }
+        });
 
     GoogleMapsNavigationPlatform.instance.viewAPI
         .getMarkerDragEventStream(viewId: viewId)
         .listen((MarkerDragEvent event) {
-      switch (event.eventType) {
-        case MarkerDragEventType.drag:
-          widget.onMarkerDrag?.call(event.markerId, event.position);
-        case MarkerDragEventType.dragEnd:
-          widget.onMarkerDragEnd?.call(event.markerId, event.position);
-        case MarkerDragEventType.dragStart:
-          widget.onMarkerDragStart?.call(event.markerId, event.position);
-      }
-    });
+          switch (event.eventType) {
+            case MarkerDragEventType.drag:
+              widget.onMarkerDrag?.call(event.markerId, event.position);
+            case MarkerDragEventType.dragEnd:
+              widget.onMarkerDragEnd?.call(event.markerId, event.position);
+            case MarkerDragEventType.dragStart:
+              widget.onMarkerDragStart?.call(event.markerId, event.position);
+          }
+        });
 
     GoogleMapsNavigationPlatform.instance.viewAPI
         .getPolygonClickedEventStream(viewId: viewId)
         .listen((PolygonClickedEvent event) {
-      widget.onPolygonClicked?.call(event.polygonId);
-    });
+          widget.onPolygonClicked?.call(event.polygonId);
+        });
 
     GoogleMapsNavigationPlatform.instance.viewAPI
         .getPolylineClickedEventStream(viewId: viewId)
         .listen((PolylineClickedEvent event) {
-      widget.onPolylineClicked?.call(event.polylineId);
-    });
+          widget.onPolylineClicked?.call(event.polylineId);
+        });
 
     GoogleMapsNavigationPlatform.instance.viewAPI
         .getCircleClickedEventStream(viewId: viewId)
         .listen((CircleClickedEvent event) {
-      widget.onCircleClicked?.call(event.circleId);
-    });
+          widget.onCircleClicked?.call(event.circleId);
+        });
 
     if (widget.onCameraMoveStarted != null ||
         widget.onCameraMove != null ||
         widget.onCameraIdle != null) {
-      GoogleMapsNavigationPlatform.instance.viewAPI
-          .enableOnCameraChangedEvents(viewId: viewId);
+      GoogleMapsNavigationPlatform.instance.viewAPI.enableOnCameraChangedEvents(
+        viewId: viewId,
+      );
     }
     GoogleMapsNavigationPlatform.instance.viewAPI
         .getCameraChangedEventStream(viewId: viewId)
         .listen((CameraChangedEvent event) {
-      switch (event.eventType) {
-        case CameraEventType.moveStartedByApi:
-          widget.onCameraMoveStarted?.call(event.position, false);
-        case CameraEventType.moveStartedByGesture:
-          widget.onCameraMoveStarted?.call(event.position, true);
-        case CameraEventType.onCameraMove:
-          widget.onCameraMove?.call(event.position);
-        case CameraEventType.onCameraIdle:
-          widget.onCameraIdle?.call(event.position);
-        case CameraEventType.onCameraStartedFollowingLocation:
-          widget.onCameraStartedFollowingLocation?.call(event.position);
-        case CameraEventType.onCameraStoppedFollowingLocation:
-          widget.onCameraStoppedFollowingLocation?.call(event.position);
-      }
-    });
+          switch (event.eventType) {
+            case CameraEventType.moveStartedByApi:
+              widget.onCameraMoveStarted?.call(event.position, false);
+            case CameraEventType.moveStartedByGesture:
+              widget.onCameraMoveStarted?.call(event.position, true);
+            case CameraEventType.onCameraMove:
+              widget.onCameraMove?.call(event.position);
+            case CameraEventType.onCameraIdle:
+              widget.onCameraIdle?.call(event.position);
+            case CameraEventType.onCameraStartedFollowingLocation:
+              widget.onCameraStartedFollowingLocation?.call(event.position);
+            case CameraEventType.onCameraStoppedFollowingLocation:
+              widget.onCameraStoppedFollowingLocation?.call(event.position);
+          }
+        });
   }
 }
 
@@ -417,31 +418,33 @@ class GoogleMapsMapViewState extends MapViewState<GoogleMapsMapView> {
   @override
   Widget build(BuildContext context) {
     return GoogleMapsNavigationPlatform.instance.buildMapView(
-        initializationOptions: MapViewInitializationOptions(
-          layoutDirection: widget.layoutDirection ??
-              Directionality.maybeOf(context) ??
-              TextDirection.ltr,
-          gestureRecognizers: widget.gestureRecognizers,
-          mapOptions: MapOptions(
-            cameraPosition: widget.initialCameraPosition,
-            mapType: widget.initialMapType,
-            compassEnabled: widget.initialCompassEnabled,
-            rotateGesturesEnabled: widget.initialRotateGesturesEnabled,
-            scrollGesturesEnabled: widget.initialScrollGesturesEnabled,
-            tiltGesturesEnabled: widget.initialTiltGesturesEnabled,
-            zoomGesturesEnabled: widget.initialZoomGesturesEnabled,
-            scrollGesturesEnabledDuringRotateOrZoom:
-                widget.initialScrollGesturesEnabledDuringRotateOrZoom,
-            mapToolbarEnabled: widget.initialMapToolbarEnabled,
-            minZoomPreference: widget.initialMinZoomPreference,
-            maxZoomPreference: widget.initialMaxZoomPreference,
-            zoomControlsEnabled: widget.initialZoomControlsEnabled,
-            cameraTargetBounds: widget.initialCameraTargetBounds,
-            padding: widget.initialPadding,
-          ),
+      initializationOptions: MapViewInitializationOptions(
+        layoutDirection:
+            widget.layoutDirection ??
+            Directionality.maybeOf(context) ??
+            TextDirection.ltr,
+        gestureRecognizers: widget.gestureRecognizers,
+        mapOptions: MapOptions(
+          cameraPosition: widget.initialCameraPosition,
+          mapType: widget.initialMapType,
+          compassEnabled: widget.initialCompassEnabled,
+          rotateGesturesEnabled: widget.initialRotateGesturesEnabled,
+          scrollGesturesEnabled: widget.initialScrollGesturesEnabled,
+          tiltGesturesEnabled: widget.initialTiltGesturesEnabled,
+          zoomGesturesEnabled: widget.initialZoomGesturesEnabled,
+          scrollGesturesEnabledDuringRotateOrZoom:
+              widget.initialScrollGesturesEnabledDuringRotateOrZoom,
+          mapToolbarEnabled: widget.initialMapToolbarEnabled,
+          minZoomPreference: widget.initialMinZoomPreference,
+          maxZoomPreference: widget.initialMaxZoomPreference,
+          zoomControlsEnabled: widget.initialZoomControlsEnabled,
+          cameraTargetBounds: widget.initialCameraTargetBounds,
+          padding: widget.initialPadding,
         ),
-        onPlatformViewCreated: _onPlatformViewCreated,
-        onMapReady: _onMapReady);
+      ),
+      onPlatformViewCreated: _onPlatformViewCreated,
+      onMapReady: _onMapReady,
+    );
   }
 
   /// Callback method for platform view is created event.
@@ -451,8 +454,9 @@ class GoogleMapsMapViewState extends MapViewState<GoogleMapsMapView> {
 
   /// Callback method for map ready event.
   void _onMapReady(int viewId) {
-    final GoogleMapViewController viewController =
-        GoogleMapViewController(viewId);
+    final GoogleMapViewController viewController = GoogleMapViewController(
+      viewId,
+    );
     widget.onViewCreated(viewController);
   }
 }

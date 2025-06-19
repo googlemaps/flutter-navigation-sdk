@@ -21,7 +21,7 @@ import '../widgets/widgets.dart';
 
 class PolygonsPage extends ExamplePage {
   const PolygonsPage({super.key})
-      : super(leading: const Icon(Icons.square), title: 'Polygons');
+    : super(leading: const Icon(Icons.square), title: 'Polygons');
   @override
   ExamplePageState<PolygonsPage> createState() => _PolygonsPageState();
 }
@@ -35,7 +35,7 @@ class _PolygonsPageState extends ExamplePageState<PolygonsPage> {
     Colors.black,
     Colors.red,
     Colors.green,
-    Colors.blue
+    Colors.blue,
   ];
   final List<double> _strokeWidths = <double>[2, 6, 10];
   final List<double> _zIndexes = <double>[-1, 0, 1];
@@ -57,8 +57,9 @@ class _PolygonsPageState extends ExamplePageState<PolygonsPage> {
       clickable: true,
       fillColor: Colors.red,
     );
-    final List<Polygon?> polygons =
-        await _navigationViewController.addPolygons(<PolygonOptions>[options]);
+    final List<Polygon?> polygons = await _navigationViewController.addPolygons(
+      <PolygonOptions>[options],
+    );
     final Polygon? polygon = polygons.firstOrNull;
     if (polygon != null) {
       setState(() {
@@ -74,14 +75,18 @@ class _PolygonsPageState extends ExamplePageState<PolygonsPage> {
     final double latInsetAmount = (bounds.latitudeSpan) * insetFraction;
     final double lonInsetAmount = (bounds.longitudeSpan) * insetFraction;
 
-    final LatLng northWest = bounds.northwest
-        .offset(LatLng(longitude: lonInsetAmount, latitude: -latInsetAmount));
-    final LatLng northEast = bounds.northeast
-        .offset(LatLng(longitude: -lonInsetAmount, latitude: -latInsetAmount));
-    final LatLng southEast = bounds.southeast
-        .offset(LatLng(longitude: -lonInsetAmount, latitude: latInsetAmount));
-    final LatLng southWest = bounds.southwest
-        .offset(LatLng(longitude: lonInsetAmount, latitude: latInsetAmount));
+    final LatLng northWest = bounds.northwest.offset(
+      LatLng(longitude: lonInsetAmount, latitude: -latInsetAmount),
+    );
+    final LatLng northEast = bounds.northeast.offset(
+      LatLng(longitude: -lonInsetAmount, latitude: -latInsetAmount),
+    );
+    final LatLng southEast = bounds.southeast.offset(
+      LatLng(longitude: -lonInsetAmount, latitude: latInsetAmount),
+    );
+    final LatLng southWest = bounds.southwest.offset(
+      LatLng(longitude: lonInsetAmount, latitude: latInsetAmount),
+    );
     return <LatLng>[northWest, northEast, southEast, southWest];
   }
 
@@ -91,7 +96,7 @@ class _PolygonsPageState extends ExamplePageState<PolygonsPage> {
       bounds.northwest,
       bounds.northeast,
       bounds.southeast,
-      bounds.southwest
+      bounds.southwest,
     ];
   }
 
@@ -115,27 +120,38 @@ class _PolygonsPageState extends ExamplePageState<PolygonsPage> {
     final double width = bounds.longitudeSpan;
 
     // Offsets for creating holes.
-    final LatLng firstHoleCornerOffset =
-        LatLng(latitude: height * 0.1, longitude: width * 0.1);
-    final LatLng secondHoleCornerOffset =
-        LatLng(latitude: height * 0.4, longitude: width * 0.4);
+    final LatLng firstHoleCornerOffset = LatLng(
+      latitude: height * 0.1,
+      longitude: width * 0.1,
+    );
+    final LatLng secondHoleCornerOffset = LatLng(
+      latitude: height * 0.4,
+      longitude: width * 0.4,
+    );
 
     // Create hole that is 30% of the total rectangle width,
     // hole will be 10% of width away from the southwest corner.
-    final List<LatLng> firstHole = _createSquare(LatLngBounds(
-      southwest: bounds.southwest.offset(firstHoleCornerOffset),
-      northeast: bounds.southwest.offset(secondHoleCornerOffset),
-    ));
+    final List<LatLng> firstHole = _createSquare(
+      LatLngBounds(
+        southwest: bounds.southwest.offset(firstHoleCornerOffset),
+        northeast: bounds.southwest.offset(secondHoleCornerOffset),
+      ),
+    );
 
     // Create hole that is 30% of the total rectangle width,
     // hole will be 10% of width away from the northeast corner.
-    final List<LatLng> secondHole = _createSquare(LatLngBounds(
-      southwest: bounds.northeast.offset(-secondHoleCornerOffset),
-      northeast: bounds.northeast.offset(-firstHoleCornerOffset),
-    ));
+    final List<LatLng> secondHole = _createSquare(
+      LatLngBounds(
+        southwest: bounds.northeast.offset(-secondHoleCornerOffset),
+        northeast: bounds.northeast.offset(-firstHoleCornerOffset),
+      ),
+    );
 
-    await _updateSelectedPolygonWithOptions(_selectedPolygon!.options
-        .copyWith(holes: <List<LatLng>>[firstHole, secondHole]));
+    await _updateSelectedPolygonWithOptions(
+      _selectedPolygon!.options.copyWith(
+        holes: <List<LatLng>>[firstHole, secondHole],
+      ),
+    );
   }
 
   Future<void> _removeHoles() async {
@@ -144,20 +160,22 @@ class _PolygonsPageState extends ExamplePageState<PolygonsPage> {
     }
 
     await _updateSelectedPolygonWithOptions(
-        _selectedPolygon!.options.copyWith(holes: <List<LatLng>>[]));
+      _selectedPolygon!.options.copyWith(holes: <List<LatLng>>[]),
+    );
   }
 
   Future<void> _updateSelectedPolygonWithOptions(PolygonOptions options) async {
     final Polygon newPolygon = _selectedPolygon!.copyWith(options: options);
 
-    final List<Polygon?> polygons =
-        await _navigationViewController.updatePolygons(<Polygon>[newPolygon]);
+    final List<Polygon?> polygons = await _navigationViewController
+        .updatePolygons(<Polygon>[newPolygon]);
     final Polygon? polygon = polygons.firstOrNull;
     if (polygon != null) {
       setState(() {
-        _polygons = _polygons
-            .where((Polygon element) => element != _selectedPolygon)
-            .toList();
+        _polygons =
+            _polygons
+                .where((Polygon element) => element != _selectedPolygon)
+                .toList();
         _selectedPolygon = polygon;
         _polygons = _polygons + <Polygon>[polygon];
       });
@@ -165,20 +183,23 @@ class _PolygonsPageState extends ExamplePageState<PolygonsPage> {
   }
 
   Future<void> _removePolygon() async {
-    await _navigationViewController
-        .removePolygons(<Polygon>[_selectedPolygon!]);
+    await _navigationViewController.removePolygons(<Polygon>[
+      _selectedPolygon!,
+    ]);
 
     setState(() {
-      _polygons = _polygons
-          .where((Polygon element) => element != _selectedPolygon)
-          .toList();
+      _polygons =
+          _polygons
+              .where((Polygon element) => element != _selectedPolygon)
+              .toList();
       _selectedPolygon = null;
     });
   }
 
   void _onPolygonClicked(String polygonId) {
-    final Polygon polygon = _polygons
-        .firstWhere((Polygon element) => element.polygonId == polygonId);
+    final Polygon polygon = _polygons.firstWhere(
+      (Polygon element) => element.polygonId == polygonId,
+    );
     setState(() {
       _selectedPolygon = polygon;
     });
@@ -186,22 +207,28 @@ class _PolygonsPageState extends ExamplePageState<PolygonsPage> {
 
   Future<void> _setFillColor() async {
     final Color oldColor = _selectedPolygon!.options.fillColor;
-    final Color newColor = _colors.elementAtOrNull(
-            _colors.indexWhere((Color e) => e == oldColor) + 1) ??
+    final Color newColor =
+        _colors.elementAtOrNull(
+          _colors.indexWhere((Color e) => e == oldColor) + 1,
+        ) ??
         _colors[0];
 
     await _updateSelectedPolygonWithOptions(
-        _selectedPolygon!.options.copyWith(fillColor: newColor));
+      _selectedPolygon!.options.copyWith(fillColor: newColor),
+    );
   }
 
   Future<void> _setStrokeColor() async {
     final Color oldColor = _selectedPolygon!.options.strokeColor;
-    final Color newColor = _colors.elementAtOrNull(
-            _colors.indexWhere((Color e) => e == oldColor) + 1) ??
+    final Color newColor =
+        _colors.elementAtOrNull(
+          _colors.indexWhere((Color e) => e == oldColor) + 1,
+        ) ??
         _colors[0];
 
     await _updateSelectedPolygonWithOptions(
-        _selectedPolygon!.options.copyWith(strokeColor: newColor));
+      _selectedPolygon!.options.copyWith(strokeColor: newColor),
+    );
   }
 
   String _colorName(Color? color) {
@@ -219,66 +246,81 @@ class _PolygonsPageState extends ExamplePageState<PolygonsPage> {
   }
 
   Future<void> _toggleGeodesic() async {
-    await _updateSelectedPolygonWithOptions(_selectedPolygon!.options
-        .copyWith(geodesic: !_selectedPolygon!.options.geodesic));
+    await _updateSelectedPolygonWithOptions(
+      _selectedPolygon!.options.copyWith(
+        geodesic: !_selectedPolygon!.options.geodesic,
+      ),
+    );
   }
 
   Future<void> _setStrokeWidth() async {
     final double oldStrokeWidth = _selectedPolygon!.options.strokeWidth;
-    final double newStrokeWidth = _strokeWidths.elementAtOrNull(
-            _strokeWidths.indexWhere((double e) => e == oldStrokeWidth) + 1) ??
+    final double newStrokeWidth =
+        _strokeWidths.elementAtOrNull(
+          _strokeWidths.indexWhere((double e) => e == oldStrokeWidth) + 1,
+        ) ??
         _strokeWidths[0];
 
     await _updateSelectedPolygonWithOptions(
-        _selectedPolygon!.options.copyWith(strokeWidth: newStrokeWidth));
+      _selectedPolygon!.options.copyWith(strokeWidth: newStrokeWidth),
+    );
   }
 
   Future<void> _toggleVisibility() async {
     final bool oldVisibility = _selectedPolygon!.options.visible;
 
     await _updateSelectedPolygonWithOptions(
-        _selectedPolygon!.options.copyWith(visible: !oldVisibility));
+      _selectedPolygon!.options.copyWith(visible: !oldVisibility),
+    );
   }
 
   Future<void> _setZIndex() async {
     final double oldZIndex = _selectedPolygon!.options.zIndex;
-    final double newZIndex = _zIndexes.elementAtOrNull(
-            _zIndexes.indexWhere((double e) => e == oldZIndex) + 1) ??
+    final double newZIndex =
+        _zIndexes.elementAtOrNull(
+          _zIndexes.indexWhere((double e) => e == oldZIndex) + 1,
+        ) ??
         _zIndexes[0];
 
     await _updateSelectedPolygonWithOptions(
-        _selectedPolygon!.options.copyWith(zIndex: newZIndex));
+      _selectedPolygon!.options.copyWith(zIndex: newZIndex),
+    );
   }
 
   @override
   Widget build(BuildContext context) => buildPage(
-      context,
-      (BuildContext context) => Padding(
-            padding: EdgeInsets.zero,
-            child: Column(children: <Widget>[
-              Expanded(
-                  child: GoogleMapsNavigationView(
-                initialCameraPosition: const CameraPosition(
-                    target: LatLng(latitude: 37.422, longitude: -122.084),
-                    zoom: 12),
-                initialNavigationUIEnabledPreference:
-                    NavigationUIEnabledPreference.disabled,
-                onViewCreated: _onViewCreated,
-                onPolygonClicked: _onPolygonClicked,
-              )),
-              const SizedBox(height: 10),
-              Text(
-                _polygons.isEmpty
-                    ? 'No polygons added. Move camera to place polygon.'
-                    : _selectedPolygon == null
-                        ? 'Click to select polygon'
-                        : 'Selected polygon ${_selectedPolygon!.polygonId}',
-                style: const TextStyle(fontSize: 15),
-                textAlign: TextAlign.center,
+    context,
+    (BuildContext context) => Padding(
+      padding: EdgeInsets.zero,
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: GoogleMapsNavigationView(
+              initialCameraPosition: const CameraPosition(
+                target: LatLng(latitude: 37.422, longitude: -122.084),
+                zoom: 12,
               ),
-              bottomControls
-            ]),
-          ));
+              initialNavigationUIEnabledPreference:
+                  NavigationUIEnabledPreference.disabled,
+              onViewCreated: _onViewCreated,
+              onPolygonClicked: _onPolygonClicked,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            _polygons.isEmpty
+                ? 'No polygons added. Move camera to place polygon.'
+                : _selectedPolygon == null
+                ? 'Click to select polygon'
+                : 'Selected polygon ${_selectedPolygon!.polygonId}',
+            style: const TextStyle(fontSize: 15),
+            textAlign: TextAlign.center,
+          ),
+          bottomControls,
+        ],
+      ),
+    ),
+  );
 
   Widget get bottomControls {
     return Padding(
@@ -301,9 +343,10 @@ class _PolygonsPageState extends ExamplePageState<PolygonsPage> {
               ElevatedButton(
                 onPressed:
                     _selectedPolygon == null ? null : () => _toggleHoles(),
-                child: _selectedPolygon?.options.holes.isEmpty ?? true
-                    ? const Text('Add holes')
-                    : const Text('Remove holes'),
+                child:
+                    _selectedPolygon?.options.holes.isEmpty ?? true
+                        ? const Text('Add holes')
+                        : const Text('Remove holes'),
               ),
               ElevatedButton(
                 onPressed:
@@ -314,19 +357,22 @@ class _PolygonsPageState extends ExamplePageState<PolygonsPage> {
                 onPressed:
                     _selectedPolygon == null ? null : () => _setFillColor(),
                 child: Text(
-                    'Fill color: ${_colorName(_selectedPolygon?.options.fillColor)}'),
+                  'Fill color: ${_colorName(_selectedPolygon?.options.fillColor)}',
+                ),
               ),
               ElevatedButton(
                 onPressed:
                     _selectedPolygon == null ? null : () => _setStrokeColor(),
                 child: Text(
-                    'Stroke color: ${_colorName(_selectedPolygon?.options.strokeColor)}'),
+                  'Stroke color: ${_colorName(_selectedPolygon?.options.strokeColor)}',
+                ),
               ),
               ElevatedButton(
                 onPressed:
                     _selectedPolygon == null ? null : () => _setStrokeWidth(),
                 child: Text(
-                    'Stroke width: ${_selectedPolygon?.options.strokeWidth}'),
+                  'Stroke width: ${_selectedPolygon?.options.strokeWidth}',
+                ),
               ),
               ElevatedButton(
                 onPressed:
@@ -338,15 +384,16 @@ class _PolygonsPageState extends ExamplePageState<PolygonsPage> {
                 child: Text('Z-index: ${_selectedPolygon?.options.zIndex}'),
               ),
               ElevatedButton(
-                onPressed: _polygons.isNotEmpty
-                    ? () {
-                        setState(() {
-                          _navigationViewController.clearPolygons();
-                          _polygons.clear();
-                          _selectedPolygon = null;
-                        });
-                      }
-                    : null,
+                onPressed:
+                    _polygons.isNotEmpty
+                        ? () {
+                          setState(() {
+                            _navigationViewController.clearPolygons();
+                            _polygons.clear();
+                            _selectedPolygon = null;
+                          });
+                        }
+                        : null,
                 child: const Text('Clear all'),
               ),
             ],

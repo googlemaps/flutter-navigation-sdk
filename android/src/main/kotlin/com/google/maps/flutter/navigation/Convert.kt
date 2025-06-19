@@ -57,9 +57,9 @@ import com.google.android.libraries.navigation.Waypoint
 /** Converters from and to Pigeon generated values. */
 object Convert {
   /**
-   * Converts pigeon [NavigationViewCreationOptionsDto] to [GoogleMapOptions].
+   * Converts pigeon [MapOptionsDto] to [GoogleMapOptions].
    *
-   * @param options pigeon message [NavigationViewCreationOptionsDto].
+   * @param options pigeon message [MapOptionsDto].
    * @return Google Map Options [GoogleMapOptions].
    */
   fun convertMapOptionsFromDto(options: MapOptionsDto): MapOptions {
@@ -136,8 +136,8 @@ object Convert {
   fun convertCameraPerspectiveFromDto(perspective: CameraPerspectiveDto): Int {
     return when (perspective) {
       CameraPerspectiveDto.TILTED -> GoogleMap.CameraPerspective.TILTED
-      CameraPerspectiveDto.TOPDOWNHEADINGUP -> GoogleMap.CameraPerspective.TOP_DOWN_HEADING_UP
-      CameraPerspectiveDto.TOPDOWNNORTHUP -> GoogleMap.CameraPerspective.TOP_DOWN_NORTH_UP
+      CameraPerspectiveDto.TOP_DOWN_HEADING_UP -> GoogleMap.CameraPerspective.TOP_DOWN_HEADING_UP
+      CameraPerspectiveDto.TOP_DOWN_NORTH_UP -> GoogleMap.CameraPerspective.TOP_DOWN_NORTH_UP
     }
   }
 
@@ -341,8 +341,8 @@ object Convert {
     var base =
       when (settings.guidanceType) {
         AudioGuidanceTypeDto.SILENT -> AudioGuidance.SILENT
-        AudioGuidanceTypeDto.ALERTSONLY -> AudioGuidance.VOICE_ALERTS_ONLY
-        AudioGuidanceTypeDto.ALERTSANDGUIDANCE -> AudioGuidance.VOICE_ALERTS_AND_GUIDANCE
+        AudioGuidanceTypeDto.ALERTS_ONLY -> AudioGuidance.VOICE_ALERTS_ONLY
+        AudioGuidanceTypeDto.ALERTS_AND_GUIDANCE -> AudioGuidance.VOICE_ALERTS_AND_GUIDANCE
         null -> AudioGuidance.SILENT
       }
     if (settings.isBluetoothAudioEnabled == true) {
@@ -382,8 +382,8 @@ object Convert {
    */
   fun convertRoutingStrategyFromDto(routingStrategy: RoutingStrategyDto): Int {
     return when (routingStrategy) {
-      RoutingStrategyDto.DEFAULTBEST -> RoutingStrategy.DEFAULT_BEST
-      RoutingStrategyDto.DELTATOTARGETDISTANCE -> RoutingStrategy.TARGET_DISTANCE
+      RoutingStrategyDto.DEFAULT_BEST -> RoutingStrategy.DEFAULT_BEST
+      RoutingStrategyDto.DELTA_TO_TARGET_DISTANCE -> RoutingStrategy.TARGET_DISTANCE
       RoutingStrategyDto.SHORTER -> RoutingStrategy.SHORTER
     }
   }
@@ -415,7 +415,7 @@ object Convert {
       TravelModeDto.CYCLING -> RoutingOptions.TravelMode.CYCLING
       TravelModeDto.DRIVING -> RoutingOptions.TravelMode.DRIVING
       TravelModeDto.WALKING -> RoutingOptions.TravelMode.WALKING
-      TravelModeDto.TWOWHEELER -> RoutingOptions.TravelMode.TWO_WHEELER
+      TravelModeDto.TWO_WHEELER -> RoutingOptions.TravelMode.TWO_WHEELER
       TravelModeDto.TAXI -> RoutingOptions.TravelMode.TAXI
     }
   }
@@ -466,14 +466,14 @@ object Convert {
    */
   fun convertRouteStatusToDto(status: Navigator.RouteStatus): RouteStatusDto {
     return when (status) {
-      Navigator.RouteStatus.NO_ROUTE_FOUND -> RouteStatusDto.ROUTENOTFOUND
-      Navigator.RouteStatus.ROUTE_CANCELED -> RouteStatusDto.STATUSCANCELED
-      Navigator.RouteStatus.LOCATION_DISABLED -> RouteStatusDto.LOCATIONUNAVAILABLE
-      Navigator.RouteStatus.LOCATION_UNKNOWN -> RouteStatusDto.LOCATIONUNKNOWN
-      Navigator.RouteStatus.NETWORK_ERROR -> RouteStatusDto.NETWORKERROR
-      Navigator.RouteStatus.OK -> RouteStatusDto.STATUSOK
-      Navigator.RouteStatus.QUOTA_CHECK_FAILED -> RouteStatusDto.QUOTACHECKFAILED
-      Navigator.RouteStatus.WAYPOINT_ERROR -> RouteStatusDto.WAYPOINTERROR
+      Navigator.RouteStatus.NO_ROUTE_FOUND -> RouteStatusDto.ROUTE_NOT_FOUND
+      Navigator.RouteStatus.ROUTE_CANCELED -> RouteStatusDto.STATUS_CANCELED
+      Navigator.RouteStatus.LOCATION_DISABLED -> RouteStatusDto.LOCATION_UNAVAILABLE
+      Navigator.RouteStatus.LOCATION_UNKNOWN -> RouteStatusDto.LOCATION_UNKNOWN
+      Navigator.RouteStatus.NETWORK_ERROR -> RouteStatusDto.NETWORK_ERROR
+      Navigator.RouteStatus.OK -> RouteStatusDto.STATUS_OK
+      Navigator.RouteStatus.QUOTA_CHECK_FAILED -> RouteStatusDto.QUOTA_CHECK_FAILED
+      Navigator.RouteStatus.WAYPOINT_ERROR -> RouteStatusDto.WAYPOINT_ERROR
     }
   }
 
@@ -485,7 +485,7 @@ object Convert {
    */
   fun convertSpeedAlertSeverityFromDto(severity: SpeedAlertSeverity): SpeedAlertSeverityDto {
     return when (severity) {
-      SpeedAlertSeverity.NONE -> SpeedAlertSeverityDto.NOTSPEEDING
+      SpeedAlertSeverity.NONE -> SpeedAlertSeverityDto.NOT_SPEEDING
       SpeedAlertSeverity.MINOR -> SpeedAlertSeverityDto.MINOR
       SpeedAlertSeverity.MAJOR -> SpeedAlertSeverityDto.MAJOR
     }
@@ -499,7 +499,7 @@ object Convert {
    */
   fun convertSpeedAlertSeverityFromDto(severity: SpeedAlertSeverityDto): SpeedAlertSeverity {
     return when (severity) {
-      SpeedAlertSeverityDto.NOTSPEEDING -> SpeedAlertSeverity.NONE
+      SpeedAlertSeverityDto.NOT_SPEEDING -> SpeedAlertSeverity.NONE
       SpeedAlertSeverityDto.MINOR -> SpeedAlertSeverity.MINOR
       SpeedAlertSeverityDto.MAJOR -> SpeedAlertSeverity.MAJOR
       SpeedAlertSeverityDto.UNKNOWN -> SpeedAlertSeverity.NONE
@@ -576,9 +576,9 @@ object Convert {
         val style =
           when (it.style) {
             NavigationRoadStretchRenderingData.Style.SLOWER_TRAFFIC ->
-              RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto.SLOWERTRAFFIC
+              RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto.SLOWER_TRAFFIC
             NavigationRoadStretchRenderingData.Style.TRAFFIC_JAM ->
-              RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto.TRAFFICJAM
+              RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto.TRAFFIC_JAM
             NavigationRoadStretchRenderingData.Style.UNKNOWN ->
               RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto.UNKNOWN
             null -> {
@@ -726,7 +726,7 @@ object Convert {
   private fun convertStrokeJointType(strokeJointType: StrokeJointTypeDto): Int {
     return when (strokeJointType) {
       StrokeJointTypeDto.BEVEL -> JointType.BEVEL
-      StrokeJointTypeDto.DEFAULTJOINT -> JointType.DEFAULT
+      StrokeJointTypeDto.DEFAULT_JOINT -> JointType.DEFAULT
       StrokeJointTypeDto.ROUND -> JointType.ROUND
     }
   }
@@ -740,9 +740,9 @@ object Convert {
   private fun convertStrokeJointType(jointType: Int): StrokeJointTypeDto {
     return when (jointType) {
       JointType.BEVEL -> StrokeJointTypeDto.BEVEL
-      JointType.DEFAULT -> StrokeJointTypeDto.DEFAULTJOINT
+      JointType.DEFAULT -> StrokeJointTypeDto.DEFAULT_JOINT
       JointType.ROUND -> StrokeJointTypeDto.ROUND
-      else -> StrokeJointTypeDto.DEFAULTJOINT
+      else -> StrokeJointTypeDto.DEFAULT_JOINT
     }
   }
 
@@ -831,14 +831,14 @@ object Convert {
     return when (laneShape) {
       LaneShape.UNKNOWN -> LaneShapeDto.UNKNOWN
       LaneShape.STRAIGHT -> LaneShapeDto.STRAIGHT
-      LaneShape.SLIGHT_LEFT -> LaneShapeDto.SLIGHTLEFT
-      LaneShape.SLIGHT_RIGHT -> LaneShapeDto.SLIGHTRIGHT
-      LaneShape.SHARP_LEFT -> LaneShapeDto.SHARPLEFT
-      LaneShape.SHARP_RIGHT -> LaneShapeDto.SHARPRIGHT
-      LaneShape.NORMAL_LEFT -> LaneShapeDto.NORMALLEFT
-      LaneShape.NORMAL_RIGHT -> LaneShapeDto.NORMALRIGHT
-      LaneShape.U_TURN_LEFT -> LaneShapeDto.UTURNLEFT
-      LaneShape.U_TURN_RIGHT -> LaneShapeDto.UTURNRIGHT
+      LaneShape.SLIGHT_LEFT -> LaneShapeDto.SLIGHT_LEFT
+      LaneShape.SLIGHT_RIGHT -> LaneShapeDto.SLIGHT_RIGHT
+      LaneShape.SHARP_LEFT -> LaneShapeDto.SHARP_LEFT
+      LaneShape.SHARP_RIGHT -> LaneShapeDto.SHARP_RIGHT
+      LaneShape.NORMAL_LEFT -> LaneShapeDto.NORMAL_LEFT
+      LaneShape.NORMAL_RIGHT -> LaneShapeDto.NORMAL_RIGHT
+      LaneShape.U_TURN_LEFT -> LaneShapeDto.U_TURN_LEFT
+      LaneShape.U_TURN_RIGHT -> LaneShapeDto.U_TURN_RIGHT
       else -> LaneShapeDto.UNKNOWN
     }
   }
@@ -847,74 +847,74 @@ object Convert {
     return when (maneuver) {
       Maneuver.DEPART -> ManeuverDto.DEPART
       Maneuver.DESTINATION -> ManeuverDto.DESTINATION
-      Maneuver.DESTINATION_LEFT -> ManeuverDto.DESTINATIONLEFT
-      Maneuver.DESTINATION_RIGHT -> ManeuverDto.DESTINATIONRIGHT
-      Maneuver.FERRY_BOAT -> ManeuverDto.FERRYBOAT
-      Maneuver.FERRY_TRAIN -> ManeuverDto.FERRYTRAIN
-      Maneuver.FORK_LEFT -> ManeuverDto.FORKLEFT
-      Maneuver.FORK_RIGHT -> ManeuverDto.FORKRIGHT
-      Maneuver.MERGE_LEFT -> ManeuverDto.MERGELEFT
-      Maneuver.MERGE_RIGHT -> ManeuverDto.MERGERIGHT
-      Maneuver.MERGE_UNSPECIFIED -> ManeuverDto.MERGEUNSPECIFIED
-      Maneuver.NAME_CHANGE -> ManeuverDto.NAMECHANGE
-      Maneuver.OFF_RAMP_KEEP_LEFT -> ManeuverDto.OFFRAMPKEEPLEFT
-      Maneuver.OFF_RAMP_KEEP_RIGHT -> ManeuverDto.OFFRAMPKEEPRIGHT
-      Maneuver.OFF_RAMP_LEFT -> ManeuverDto.OFFRAMPLEFT
-      Maneuver.OFF_RAMP_RIGHT -> ManeuverDto.OFFRAMPRIGHT
-      Maneuver.OFF_RAMP_SHARP_LEFT -> ManeuverDto.OFFRAMPSHARPLEFT
-      Maneuver.OFF_RAMP_SHARP_RIGHT -> ManeuverDto.OFFRAMPSHARPRIGHT
-      Maneuver.OFF_RAMP_SLIGHT_LEFT -> ManeuverDto.OFFRAMPSLIGHTLEFT
-      Maneuver.OFF_RAMP_SLIGHT_RIGHT -> ManeuverDto.OFFRAMPSLIGHTRIGHT
-      Maneuver.OFF_RAMP_U_TURN_CLOCKWISE -> ManeuverDto.OFFRAMPUNSPECIFIED
-      Maneuver.OFF_RAMP_U_TURN_COUNTERCLOCKWISE -> ManeuverDto.OFFRAMPUTURNCLOCKWISE
-      Maneuver.OFF_RAMP_UNSPECIFIED -> ManeuverDto.OFFRAMPUTURNCOUNTERCLOCKWISE
-      Maneuver.ON_RAMP_KEEP_LEFT -> ManeuverDto.ONRAMPKEEPLEFT
-      Maneuver.ON_RAMP_KEEP_RIGHT -> ManeuverDto.ONRAMPKEEPRIGHT
-      Maneuver.ON_RAMP_LEFT -> ManeuverDto.ONRAMPLEFT
-      Maneuver.ON_RAMP_RIGHT -> ManeuverDto.ONRAMPRIGHT
-      Maneuver.ON_RAMP_SHARP_LEFT -> ManeuverDto.ONRAMPSHARPLEFT
-      Maneuver.ON_RAMP_SHARP_RIGHT -> ManeuverDto.ONRAMPSHARPRIGHT
-      Maneuver.ON_RAMP_SLIGHT_LEFT -> ManeuverDto.ONRAMPSLIGHTLEFT
-      Maneuver.ON_RAMP_SLIGHT_RIGHT -> ManeuverDto.ONRAMPSLIGHTRIGHT
-      Maneuver.ON_RAMP_U_TURN_CLOCKWISE -> ManeuverDto.ONRAMPUNSPECIFIED
-      Maneuver.ON_RAMP_U_TURN_COUNTERCLOCKWISE -> ManeuverDto.ONRAMPUTURNCLOCKWISE
-      Maneuver.ON_RAMP_UNSPECIFIED -> ManeuverDto.ONRAMPUTURNCOUNTERCLOCKWISE
-      Maneuver.ROUNDABOUT_CLOCKWISE -> ManeuverDto.ROUNDABOUTCLOCKWISE
-      Maneuver.ROUNDABOUT_COUNTERCLOCKWISE -> ManeuverDto.ROUNDABOUTCOUNTERCLOCKWISE
-      Maneuver.ROUNDABOUT_EXIT_CLOCKWISE -> ManeuverDto.ROUNDABOUTEXITCLOCKWISE
-      Maneuver.ROUNDABOUT_EXIT_COUNTERCLOCKWISE -> ManeuverDto.ROUNDABOUTEXITCOUNTERCLOCKWISE
-      Maneuver.ROUNDABOUT_LEFT_CLOCKWISE -> ManeuverDto.ROUNDABOUTLEFTCLOCKWISE
-      Maneuver.ROUNDABOUT_LEFT_COUNTERCLOCKWISE -> ManeuverDto.ROUNDABOUTLEFTCOUNTERCLOCKWISE
-      Maneuver.ROUNDABOUT_RIGHT_CLOCKWISE -> ManeuverDto.ROUNDABOUTRIGHTCLOCKWISE
-      Maneuver.ROUNDABOUT_RIGHT_COUNTERCLOCKWISE -> ManeuverDto.ROUNDABOUTRIGHTCOUNTERCLOCKWISE
-      Maneuver.ROUNDABOUT_SHARP_LEFT_CLOCKWISE -> ManeuverDto.ROUNDABOUTSHARPLEFTCLOCKWISE
+      Maneuver.DESTINATION_LEFT -> ManeuverDto.DESTINATION_LEFT
+      Maneuver.DESTINATION_RIGHT -> ManeuverDto.DESTINATION_RIGHT
+      Maneuver.FERRY_BOAT -> ManeuverDto.FERRY_BOAT
+      Maneuver.FERRY_TRAIN -> ManeuverDto.FERRY_TRAIN
+      Maneuver.FORK_LEFT -> ManeuverDto.FORK_LEFT
+      Maneuver.FORK_RIGHT -> ManeuverDto.FORK_RIGHT
+      Maneuver.MERGE_LEFT -> ManeuverDto.MERGE_LEFT
+      Maneuver.MERGE_RIGHT -> ManeuverDto.MERGE_RIGHT
+      Maneuver.MERGE_UNSPECIFIED -> ManeuverDto.MERGE_UNSPECIFIED
+      Maneuver.NAME_CHANGE -> ManeuverDto.NAME_CHANGE
+      Maneuver.OFF_RAMP_KEEP_LEFT -> ManeuverDto.OFF_RAMP_KEEP_LEFT
+      Maneuver.OFF_RAMP_KEEP_RIGHT -> ManeuverDto.OFF_RAMP_KEEP_RIGHT
+      Maneuver.OFF_RAMP_LEFT -> ManeuverDto.OFF_RAMP_LEFT
+      Maneuver.OFF_RAMP_RIGHT -> ManeuverDto.OFF_RAMP_RIGHT
+      Maneuver.OFF_RAMP_SHARP_LEFT -> ManeuverDto.OFF_RAMP_SHARP_LEFT
+      Maneuver.OFF_RAMP_SHARP_RIGHT -> ManeuverDto.OFF_RAMP_SHARP_RIGHT
+      Maneuver.OFF_RAMP_SLIGHT_LEFT -> ManeuverDto.OFF_RAMP_SLIGHT_LEFT
+      Maneuver.OFF_RAMP_SLIGHT_RIGHT -> ManeuverDto.OFF_RAMP_SLIGHT_RIGHT
+      Maneuver.OFF_RAMP_U_TURN_CLOCKWISE -> ManeuverDto.OFF_RAMP_UTURN_CLOCKWISE
+      Maneuver.OFF_RAMP_U_TURN_COUNTERCLOCKWISE -> ManeuverDto.OFF_RAMP_UTURN_COUNTERCLOCKWISE
+      Maneuver.OFF_RAMP_UNSPECIFIED -> ManeuverDto.OFF_RAMP_UNSPECIFIED
+      Maneuver.ON_RAMP_KEEP_LEFT -> ManeuverDto.ON_RAMP_KEEP_LEFT
+      Maneuver.ON_RAMP_KEEP_RIGHT -> ManeuverDto.ON_RAMP_KEEP_RIGHT
+      Maneuver.ON_RAMP_LEFT -> ManeuverDto.ON_RAMP_LEFT
+      Maneuver.ON_RAMP_RIGHT -> ManeuverDto.ON_RAMP_RIGHT
+      Maneuver.ON_RAMP_SHARP_LEFT -> ManeuverDto.ON_RAMP_SHARP_LEFT
+      Maneuver.ON_RAMP_SHARP_RIGHT -> ManeuverDto.ON_RAMP_SHARP_RIGHT
+      Maneuver.ON_RAMP_SLIGHT_LEFT -> ManeuverDto.ON_RAMP_SLIGHT_LEFT
+      Maneuver.ON_RAMP_SLIGHT_RIGHT -> ManeuverDto.ON_RAMP_SLIGHT_RIGHT
+      Maneuver.ON_RAMP_U_TURN_CLOCKWISE -> ManeuverDto.ON_RAMP_UTURN_CLOCKWISE
+      Maneuver.ON_RAMP_U_TURN_COUNTERCLOCKWISE -> ManeuverDto.ON_RAMP_UTURN_COUNTERCLOCKWISE
+      Maneuver.ON_RAMP_UNSPECIFIED -> ManeuverDto.ON_RAMP_UNSPECIFIED
+      Maneuver.ROUNDABOUT_CLOCKWISE -> ManeuverDto.ROUNDABOUT_CLOCKWISE
+      Maneuver.ROUNDABOUT_COUNTERCLOCKWISE -> ManeuverDto.ROUNDABOUT_COUNTERCLOCKWISE
+      Maneuver.ROUNDABOUT_EXIT_CLOCKWISE -> ManeuverDto.ROUNDABOUT_EXIT_CLOCKWISE
+      Maneuver.ROUNDABOUT_EXIT_COUNTERCLOCKWISE -> ManeuverDto.ROUNDABOUT_EXIT_COUNTERCLOCKWISE
+      Maneuver.ROUNDABOUT_LEFT_CLOCKWISE -> ManeuverDto.ROUNDABOUT_LEFT_CLOCKWISE
+      Maneuver.ROUNDABOUT_LEFT_COUNTERCLOCKWISE -> ManeuverDto.ROUNDABOUT_LEFT_COUNTERCLOCKWISE
+      Maneuver.ROUNDABOUT_RIGHT_CLOCKWISE -> ManeuverDto.ROUNDABOUT_RIGHT_CLOCKWISE
+      Maneuver.ROUNDABOUT_RIGHT_COUNTERCLOCKWISE -> ManeuverDto.ROUNDABOUT_RIGHT_COUNTERCLOCKWISE
+      Maneuver.ROUNDABOUT_SHARP_LEFT_CLOCKWISE -> ManeuverDto.ROUNDABOUT_SHARP_LEFT_CLOCKWISE
       Maneuver.ROUNDABOUT_SHARP_LEFT_COUNTERCLOCKWISE ->
-        ManeuverDto.ROUNDABOUTSHARPLEFTCOUNTERCLOCKWISE
-      Maneuver.ROUNDABOUT_SHARP_RIGHT_CLOCKWISE -> ManeuverDto.ROUNDABOUTSHARPRIGHTCLOCKWISE
+        ManeuverDto.ROUNDABOUT_SHARP_LEFT_COUNTERCLOCKWISE
+      Maneuver.ROUNDABOUT_SHARP_RIGHT_CLOCKWISE -> ManeuverDto.ROUNDABOUT_SHARP_RIGHT_CLOCKWISE
       Maneuver.ROUNDABOUT_SHARP_RIGHT_COUNTERCLOCKWISE ->
-        ManeuverDto.ROUNDABOUTSHARPRIGHTCOUNTERCLOCKWISE
-      Maneuver.ROUNDABOUT_SLIGHT_LEFT_CLOCKWISE -> ManeuverDto.ROUNDABOUTSLIGHTLEFTCLOCKWISE
+        ManeuverDto.ROUNDABOUT_SHARP_RIGHT_COUNTERCLOCKWISE
+      Maneuver.ROUNDABOUT_SLIGHT_LEFT_CLOCKWISE -> ManeuverDto.ROUNDABOUT_SLIGHT_LEFT_CLOCKWISE
       Maneuver.ROUNDABOUT_SLIGHT_LEFT_COUNTERCLOCKWISE ->
-        ManeuverDto.ROUNDABOUTSLIGHTLEFTCOUNTERCLOCKWISE
-      Maneuver.ROUNDABOUT_SLIGHT_RIGHT_CLOCKWISE -> ManeuverDto.ROUNDABOUTSLIGHTRIGHTCLOCKWISE
+        ManeuverDto.ROUNDABOUT_SLIGHT_LEFT_COUNTERCLOCKWISE
+      Maneuver.ROUNDABOUT_SLIGHT_RIGHT_CLOCKWISE -> ManeuverDto.ROUNDABOUT_SLIGHT_RIGHT_CLOCKWISE
       Maneuver.ROUNDABOUT_SLIGHT_RIGHT_COUNTERCLOCKWISE ->
-        ManeuverDto.ROUNDABOUTSLIGHTRIGHTCOUNTERCLOCKWISE
-      Maneuver.ROUNDABOUT_STRAIGHT_CLOCKWISE -> ManeuverDto.ROUNDABOUTSTRAIGHTCLOCKWISE
+        ManeuverDto.ROUNDABOUT_SLIGHT_RIGHT_COUNTERCLOCKWISE
+      Maneuver.ROUNDABOUT_STRAIGHT_CLOCKWISE -> ManeuverDto.ROUNDABOUT_STRAIGHT_CLOCKWISE
       Maneuver.ROUNDABOUT_STRAIGHT_COUNTERCLOCKWISE ->
-        ManeuverDto.ROUNDABOUTSTRAIGHTCOUNTERCLOCKWISE
-      Maneuver.ROUNDABOUT_U_TURN_CLOCKWISE -> ManeuverDto.ROUNDABOUTUTURNCLOCKWISE
-      Maneuver.ROUNDABOUT_U_TURN_COUNTERCLOCKWISE -> ManeuverDto.ROUNDABOUTUTURNCOUNTERCLOCKWISE
+        ManeuverDto.ROUNDABOUT_STRAIGHT_COUNTERCLOCKWISE
+      Maneuver.ROUNDABOUT_U_TURN_CLOCKWISE -> ManeuverDto.ROUNDABOUT_UTURN_CLOCKWISE
+      Maneuver.ROUNDABOUT_U_TURN_COUNTERCLOCKWISE -> ManeuverDto.ROUNDABOUT_UTURN_COUNTERCLOCKWISE
       Maneuver.STRAIGHT -> ManeuverDto.STRAIGHT
-      Maneuver.TURN_KEEP_LEFT -> ManeuverDto.TURNKEEPLEFT
-      Maneuver.TURN_KEEP_RIGHT -> ManeuverDto.TURNKEEPRIGHT
-      Maneuver.TURN_LEFT -> ManeuverDto.TURNLEFT
-      Maneuver.TURN_RIGHT -> ManeuverDto.TURNRIGHT
-      Maneuver.TURN_SHARP_LEFT -> ManeuverDto.TURNSHARPLEFT
-      Maneuver.TURN_SHARP_RIGHT -> ManeuverDto.TURNSHARPRIGHT
-      Maneuver.TURN_SLIGHT_LEFT -> ManeuverDto.TURNSLIGHTLEFT
-      Maneuver.TURN_SLIGHT_RIGHT -> ManeuverDto.TURNSLIGHTRIGHT
-      Maneuver.TURN_U_TURN_CLOCKWISE -> ManeuverDto.TURNUTURNCLOCKWISE
-      Maneuver.TURN_U_TURN_COUNTERCLOCKWISE -> ManeuverDto.TURNUTURNCOUNTERCLOCKWISE
+      Maneuver.TURN_KEEP_LEFT -> ManeuverDto.TURN_KEEP_LEFT
+      Maneuver.TURN_KEEP_RIGHT -> ManeuverDto.TURN_KEEP_RIGHT
+      Maneuver.TURN_LEFT -> ManeuverDto.TURN_LEFT
+      Maneuver.TURN_RIGHT -> ManeuverDto.TURN_RIGHT
+      Maneuver.TURN_SHARP_LEFT -> ManeuverDto.TURN_SHARP_LEFT
+      Maneuver.TURN_SHARP_RIGHT -> ManeuverDto.TURN_SHARP_RIGHT
+      Maneuver.TURN_SLIGHT_LEFT -> ManeuverDto.TURN_SLIGHT_LEFT
+      Maneuver.TURN_SLIGHT_RIGHT -> ManeuverDto.TURN_SLIGHT_RIGHT
+      Maneuver.TURN_U_TURN_CLOCKWISE -> ManeuverDto.TURN_UTURN_CLOCKWISE
+      Maneuver.TURN_U_TURN_COUNTERCLOCKWISE -> ManeuverDto.TURN_UTURN_COUNTERCLOCKWISE
       Maneuver.UNKNOWN -> ManeuverDto.UNKNOWN
       else -> ManeuverDto.UNKNOWN
     }
@@ -1061,8 +1061,8 @@ object Convert {
     behavior: TaskRemovedBehaviorDto?
   ): @TaskRemovedBehavior Int {
     return when (behavior) {
-      TaskRemovedBehaviorDto.CONTINUESERVICE -> TaskRemovedBehavior.CONTINUE_SERVICE
-      TaskRemovedBehaviorDto.QUITSERVICE -> TaskRemovedBehavior.QUIT_SERVICE
+      TaskRemovedBehaviorDto.CONTINUE_SERVICE -> TaskRemovedBehavior.CONTINUE_SERVICE
+      TaskRemovedBehaviorDto.QUIT_SERVICE -> TaskRemovedBehavior.QUIT_SERVICE
       else -> TaskRemovedBehavior.CONTINUE_SERVICE
     }
   }

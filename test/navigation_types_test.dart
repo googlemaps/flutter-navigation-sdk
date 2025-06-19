@@ -27,31 +27,24 @@ void main() {
   setUp(() {
     waypointDto = NavigationWaypointDto(
       title: 'testTitle',
-      target: LatLngDto(
-        latitude: 5.0,
-        longitude: 6.0,
-      ),
+      target: LatLngDto(latitude: 5.0, longitude: 6.0),
       placeID: 'testID',
       preferSameSideOfRoad: true,
       preferredSegmentHeading: 50,
     );
     waypoint = NavigationWaypoint.withLatLngTarget(
       title: 'title',
-      target: const LatLng(
-        latitude: 5.0,
-        longitude: 6.0,
-      ),
+      target: const LatLng(latitude: 5.0, longitude: 6.0),
     );
     destinations = Destinations(
       waypoints: <NavigationWaypoint>[waypoint],
-      displayOptions: NavigationDisplayOptions(
-        showDestinationMarkers: false,
-      ),
+      displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
     );
     displayOptions = NavigationDisplayOptions(
-        showDestinationMarkers: false,
-        showStopSigns: true,
-        showTrafficLights: true);
+      showDestinationMarkers: false,
+      showStopSigns: true,
+      showTrafficLights: true,
+    );
     routingOptions = RoutingOptions(
       alternateRoutesStrategy: NavigationAlternateRoutesStrategy.all,
       routingStrategy: NavigationRoutingStrategy.defaultBest,
@@ -71,9 +64,13 @@ void main() {
       expect(gmsWaypoint.target?.longitude, waypointDto.target?.longitude);
       expect(gmsWaypoint.placeID, waypointDto.placeID);
       expect(
-          gmsWaypoint.preferSameSideOfRoad, waypointDto.preferSameSideOfRoad);
-      expect(gmsWaypoint.preferredSegmentHeading,
-          waypointDto.preferredSegmentHeading);
+        gmsWaypoint.preferSameSideOfRoad,
+        waypointDto.preferSameSideOfRoad,
+      );
+      expect(
+        gmsWaypoint.preferredSegmentHeading,
+        waypointDto.preferredSegmentHeading,
+      );
     });
 
     test('tests Navigation Waypoint conversion to DTO', () {
@@ -83,8 +80,10 @@ void main() {
       expect(waypoint.target?.longitude, waypointDto2.target?.longitude);
       expect(waypoint.placeID, waypointDto2.placeID);
       expect(waypoint.preferSameSideOfRoad, waypointDto2.preferSameSideOfRoad);
-      expect(waypoint.preferredSegmentHeading,
-          waypointDto2.preferredSegmentHeading);
+      expect(
+        waypoint.preferredSegmentHeading,
+        waypointDto2.preferredSegmentHeading,
+      );
     });
   });
 
@@ -92,25 +91,43 @@ void main() {
     test('tests Navigation Destination Message conversion to DTO', () {
       final DestinationsDto pidgeonDestinationMessage = destinations.toDto();
 
-      expect(destinations.displayOptions.showDestinationMarkers,
-          pidgeonDestinationMessage.displayOptions.showDestinationMarkers);
-      expect(destinations.displayOptions.showStopSigns,
-          pidgeonDestinationMessage.displayOptions.showStopSigns);
-      expect(destinations.displayOptions.showTrafficLights,
-          pidgeonDestinationMessage.displayOptions.showTrafficLights);
+      expect(
+        destinations.displayOptions.showDestinationMarkers,
+        pidgeonDestinationMessage.displayOptions.showDestinationMarkers,
+      );
+      expect(
+        destinations.displayOptions.showStopSigns,
+        pidgeonDestinationMessage.displayOptions.showStopSigns,
+      );
+      expect(
+        destinations.displayOptions.showTrafficLights,
+        pidgeonDestinationMessage.displayOptions.showTrafficLights,
+      );
 
-      expect(destinations.waypoints.length,
-          pidgeonDestinationMessage.waypoints.length);
-      expect(destinations.waypoints[0].target?.latitude,
-          pidgeonDestinationMessage.waypoints[0]!.target?.latitude);
-      expect(destinations.waypoints[0].target?.longitude,
-          pidgeonDestinationMessage.waypoints[0]!.target?.longitude);
-      expect(destinations.waypoints[0].placeID,
-          pidgeonDestinationMessage.waypoints[0]!.placeID);
-      expect(destinations.waypoints[0].preferSameSideOfRoad,
-          pidgeonDestinationMessage.waypoints[0]!.preferSameSideOfRoad);
-      expect(destinations.waypoints[0].preferredSegmentHeading,
-          pidgeonDestinationMessage.waypoints[0]!.preferredSegmentHeading);
+      expect(
+        destinations.waypoints.length,
+        pidgeonDestinationMessage.waypoints.length,
+      );
+      expect(
+        destinations.waypoints[0].target?.latitude,
+        pidgeonDestinationMessage.waypoints[0]!.target?.latitude,
+      );
+      expect(
+        destinations.waypoints[0].target?.longitude,
+        pidgeonDestinationMessage.waypoints[0]!.target?.longitude,
+      );
+      expect(
+        destinations.waypoints[0].placeID,
+        pidgeonDestinationMessage.waypoints[0]!.placeID,
+      );
+      expect(
+        destinations.waypoints[0].preferSameSideOfRoad,
+        pidgeonDestinationMessage.waypoints[0]!.preferSameSideOfRoad,
+      );
+      expect(
+        destinations.waypoints[0].preferredSegmentHeading,
+        pidgeonDestinationMessage.waypoints[0]!.preferredSegmentHeading,
+      );
     });
   });
 
@@ -155,18 +172,12 @@ void main() {
         pigeonDtoRoutingOptions.travelMode.toString().split('.').last,
         routingOptions.travelMode.toString().split('.').last,
       );
-      expect(
-        pigeonDtoRoutingOptions.avoidFerries,
-        routingOptions.avoidFerries,
-      );
+      expect(pigeonDtoRoutingOptions.avoidFerries, routingOptions.avoidFerries);
       expect(
         pigeonDtoRoutingOptions.avoidHighways,
         routingOptions.avoidHighways,
       );
-      expect(
-        pigeonDtoRoutingOptions.avoidTolls,
-        routingOptions.avoidTolls,
-      );
+      expect(pigeonDtoRoutingOptions.avoidTolls, routingOptions.avoidTolls);
       expect(
         pigeonDtoRoutingOptions.locationTimeoutMs,
         routingOptions.locationTimeoutMs,
@@ -183,16 +194,18 @@ void main() {
       );
     });
 
-    test('tests Navigation AlternativeRoutes strategy conversion to Pigeon DTO',
-        () {
-      final AlternateRoutesStrategyDto pigeonDtoStrategy =
-          NavigationAlternateRoutesStrategy.all.toDto();
+    test(
+      'tests Navigation AlternativeRoutes strategy conversion to Pigeon DTO',
+      () {
+        final AlternateRoutesStrategyDto pigeonDtoStrategy =
+            NavigationAlternateRoutesStrategy.all.toDto();
 
-      expect(
-        pigeonDtoStrategy.toString().split('.').last,
-        NavigationAlternateRoutesStrategy.all.toString().split('.').last,
-      );
-    });
+        expect(
+          pigeonDtoStrategy.toString().split('.').last,
+          NavigationAlternateRoutesStrategy.all.toString().split('.').last,
+        );
+      },
+    );
   });
 
   group('Navigation tests', () {
@@ -207,37 +220,26 @@ void main() {
     });
 
     test('Navigation time and distance conversion from Pigeon DTO', () {
-      final NavigationTimeAndDistance td = NavigationTimeAndDistanceDto(
-        time: 5.0,
-        distance: 6.0,
-      ).toNavigationTimeAndDistance();
+      final NavigationTimeAndDistance td =
+          NavigationTimeAndDistanceDto(
+            time: 5.0,
+            distance: 6.0,
+          ).toNavigationTimeAndDistance();
 
-      expect(
-        td.time,
-        5.0,
-      );
-      expect(
-        td.distance,
-        6.0,
-      );
+      expect(td.time, 5.0);
+      expect(td.distance, 6.0);
     });
 
     test('Navigation audio guidance conversion to Pigeon DTO', () {
       final NavigationAudioGuidanceSettingsDto settings =
           NavigationAudioGuidanceSettings(
-                  isBluetoothAudioEnabled: true,
-                  isVibrationEnabled: true,
-                  guidanceType: NavigationAudioGuidanceType.alertsAndGuidance)
-              .toDto();
+            isBluetoothAudioEnabled: true,
+            isVibrationEnabled: true,
+            guidanceType: NavigationAudioGuidanceType.alertsAndGuidance,
+          ).toDto();
 
-      expect(
-        settings.isBluetoothAudioEnabled,
-        true,
-      );
-      expect(
-        settings.isVibrationEnabled,
-        true,
-      );
+      expect(settings.isBluetoothAudioEnabled, true);
+      expect(settings.isVibrationEnabled, true);
       expect(
         settings.guidanceType.toString().split('.').last,
         NavigationAudioGuidanceType.alertsAndGuidance
@@ -269,8 +271,9 @@ void main() {
     test('Navigation simulation options conversion to Pigeon DTO', () {
       expect(
         SimulationOptionsDto(speedMultiplier: 5.5).speedMultiplier,
-        simulationOptionsToDto(SimulationOptions(speedMultiplier: 5.5))
-            .speedMultiplier,
+        simulationOptionsToDto(
+          SimulationOptions(speedMultiplier: 5.5),
+        ).speedMultiplier,
       );
     });
 
@@ -288,8 +291,9 @@ void main() {
     test('Speeding updated event message conversion from Pigeon DTO', () {
       expect(
         SpeedingUpdatedEvent(
-                percentageAboveLimit: 5.0, severity: SpeedAlertSeverity.major)
-            .severity,
+          percentageAboveLimit: 5.0,
+          severity: SpeedAlertSeverity.major,
+        ).severity,
         SpeedingUpdatedEventDto(
           percentageAboveLimit: 5.0,
           severity: SpeedAlertSeverityDto.major,
@@ -297,8 +301,9 @@ void main() {
       );
       expect(
         SpeedingUpdatedEvent(
-                percentageAboveLimit: 5.0, severity: SpeedAlertSeverity.major)
-            .percentageAboveLimit,
+          percentageAboveLimit: 5.0,
+          severity: SpeedAlertSeverity.major,
+        ).percentageAboveLimit,
         SpeedingUpdatedEventDto(
           percentageAboveLimit: 5.0,
           severity: SpeedAlertSeverityDto.major,
@@ -309,108 +314,146 @@ void main() {
     test('Road stretch rendering data from Pigeon DTO', () {
       final RouteSegmentTrafficDataRoadStretchRenderingDataDto data =
           RouteSegmentTrafficDataRoadStretchRenderingDataDto(
-        style: RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
-            .slowerTraffic,
-        lengthMeters: 500,
-        offsetMeters: 600,
-      );
+            style:
+                RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
+                    .slowerTraffic,
+            lengthMeters: 500,
+            offsetMeters: 600,
+          );
 
       final RouteSegmentTrafficDataRoadStretchRenderingData gmsData =
           data.toRouteSegmentTrafficDataRoadStretchRenderingData();
 
       expect(data.lengthMeters, gmsData.lengthMeters);
       expect(data.offsetMeters, gmsData.offsetMeters);
-      expect(data.style.toString().split('.').last,
-          gmsData.style.toString().split('.').last);
+      expect(
+        data.style.toString().split('.').last,
+        gmsData.style.toString().split('.').last,
+      );
     });
 
     test('Road segment traffic data from Pigeon DTO', () {
       final RouteSegmentTrafficDataRoadStretchRenderingDataDto renderingData =
           RouteSegmentTrafficDataRoadStretchRenderingDataDto(
-        style: RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
-            .slowerTraffic,
-        lengthMeters: 500,
-        offsetMeters: 600,
-      );
+            style:
+                RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
+                    .slowerTraffic,
+            lengthMeters: 500,
+            offsetMeters: 600,
+          );
       final RouteSegmentTrafficDataDto data = RouteSegmentTrafficDataDto(
-          status: RouteSegmentTrafficDataStatusDto.ok,
-          roadStretchRenderingDataList: <RouteSegmentTrafficDataRoadStretchRenderingDataDto?>[
-            renderingData
-          ]);
+        status: RouteSegmentTrafficDataStatusDto.ok,
+        roadStretchRenderingDataList:
+            <RouteSegmentTrafficDataRoadStretchRenderingDataDto?>[
+              renderingData,
+            ],
+      );
 
       final RouteSegmentTrafficData gmsData = data.toRouteSegmentTrafficData();
 
-      expect(data.status.toString().split('.').last,
-          gmsData.status.toString().split('.').last);
-      expect(data.roadStretchRenderingDataList[0]!.lengthMeters,
-          gmsData.roadStretchRenderingDataList[0]!.lengthMeters);
-      expect(data.roadStretchRenderingDataList[0]!.offsetMeters,
-          gmsData.roadStretchRenderingDataList[0]!.offsetMeters);
       expect(
-          data.roadStretchRenderingDataList[0]!.style
-              .toString()
-              .split('.')
-              .last,
-          gmsData.roadStretchRenderingDataList[0]!.style
-              .toString()
-              .split('.')
-              .last);
+        data.status.toString().split('.').last,
+        gmsData.status.toString().split('.').last,
+      );
+      expect(
+        data.roadStretchRenderingDataList[0]!.lengthMeters,
+        gmsData.roadStretchRenderingDataList[0]!.lengthMeters,
+      );
+      expect(
+        data.roadStretchRenderingDataList[0]!.offsetMeters,
+        gmsData.roadStretchRenderingDataList[0]!.offsetMeters,
+      );
+      expect(
+        data.roadStretchRenderingDataList[0]!.style.toString().split('.').last,
+        gmsData.roadStretchRenderingDataList[0]!.style
+            .toString()
+            .split('.')
+            .last,
+      );
     });
 
     test('Navigation route segment from Pigeon DTO', () {
       final RouteSegmentTrafficDataRoadStretchRenderingDataDto renderingData =
           RouteSegmentTrafficDataRoadStretchRenderingDataDto(
-        style: RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
-            .slowerTraffic,
-        lengthMeters: 500,
-        offsetMeters: 600,
-      );
+            style:
+                RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
+                    .slowerTraffic,
+            lengthMeters: 500,
+            offsetMeters: 600,
+          );
       final RouteSegmentTrafficDataDto trafficData = RouteSegmentTrafficDataDto(
-          status: RouteSegmentTrafficDataStatusDto.ok,
-          roadStretchRenderingDataList: <RouteSegmentTrafficDataRoadStretchRenderingDataDto?>[
-            renderingData
-          ]);
+        status: RouteSegmentTrafficDataStatusDto.ok,
+        roadStretchRenderingDataList:
+            <RouteSegmentTrafficDataRoadStretchRenderingDataDto?>[
+              renderingData,
+            ],
+      );
       final RouteSegmentDto segment = RouteSegmentDto(
-          trafficData: trafficData,
-          destinationLatLng: LatLngDto(latitude: 44.0, longitude: 55.0),
-          destinationWaypoint: NavigationWaypointDto(
-              title: 'test',
-              target: LatLngDto(latitude: 77.0, longitude: 88.0)),
-          latLngs: <LatLngDto?>[LatLngDto(latitude: 11.0, longitude: 22.0)]);
+        trafficData: trafficData,
+        destinationLatLng: LatLngDto(latitude: 44.0, longitude: 55.0),
+        destinationWaypoint: NavigationWaypointDto(
+          title: 'test',
+          target: LatLngDto(latitude: 77.0, longitude: 88.0),
+        ),
+        latLngs: <LatLngDto?>[LatLngDto(latitude: 11.0, longitude: 22.0)],
+      );
 
       final RouteSegment gmsSegment = segment.toRouteSegment();
 
-      expect(segment.destinationLatLng.latitude,
-          gmsSegment.destinationLatLng.latitude);
-      expect(segment.destinationLatLng.longitude,
-          gmsSegment.destinationLatLng.longitude);
-      expect(segment.destinationWaypoint!.target?.latitude,
-          gmsSegment.destinationWaypoint!.target?.latitude);
-      expect(segment.destinationWaypoint!.target?.longitude,
-          gmsSegment.destinationWaypoint!.target?.longitude);
-      expect(segment.latLngs!.first!.latitude,
-          gmsSegment.latLngs!.first!.latitude);
-      expect(segment.latLngs!.first!.longitude,
-          gmsSegment.latLngs!.first!.longitude);
-      expect(segment.trafficData!.status.toString().split('.').last,
-          gmsSegment.trafficData!.status.toString().split('.').last);
       expect(
-          segment.trafficData!.roadStretchRenderingDataList.first!.style
-              .toString()
-              .split('.')
-              .last,
-          gmsSegment.trafficData!.roadStretchRenderingDataList.first!.style
-              .toString()
-              .split('.')
-              .last);
+        segment.destinationLatLng.latitude,
+        gmsSegment.destinationLatLng.latitude,
+      );
       expect(
-          segment.trafficData!.roadStretchRenderingDataList.first!.lengthMeters,
-          gmsSegment
-              .trafficData!.roadStretchRenderingDataList.first!.lengthMeters);
+        segment.destinationLatLng.longitude,
+        gmsSegment.destinationLatLng.longitude,
+      );
       expect(
-          segment.trafficData!.roadStretchRenderingDataList.first!.offsetMeters,
-          gmsSegment
-              .trafficData!.roadStretchRenderingDataList.first!.offsetMeters);
+        segment.destinationWaypoint!.target?.latitude,
+        gmsSegment.destinationWaypoint!.target?.latitude,
+      );
+      expect(
+        segment.destinationWaypoint!.target?.longitude,
+        gmsSegment.destinationWaypoint!.target?.longitude,
+      );
+      expect(
+        segment.latLngs!.first!.latitude,
+        gmsSegment.latLngs!.first!.latitude,
+      );
+      expect(
+        segment.latLngs!.first!.longitude,
+        gmsSegment.latLngs!.first!.longitude,
+      );
+      expect(
+        segment.trafficData!.status.toString().split('.').last,
+        gmsSegment.trafficData!.status.toString().split('.').last,
+      );
+      expect(
+        segment.trafficData!.roadStretchRenderingDataList.first!.style
+            .toString()
+            .split('.')
+            .last,
+        gmsSegment.trafficData!.roadStretchRenderingDataList.first!.style
+            .toString()
+            .split('.')
+            .last,
+      );
+      expect(
+        segment.trafficData!.roadStretchRenderingDataList.first!.lengthMeters,
+        gmsSegment
+            .trafficData!
+            .roadStretchRenderingDataList
+            .first!
+            .lengthMeters,
+      );
+      expect(
+        segment.trafficData!.roadStretchRenderingDataList.first!.offsetMeters,
+        gmsSegment
+            .trafficData!
+            .roadStretchRenderingDataList
+            .first!
+            .offsetMeters,
+      );
     });
   });
 

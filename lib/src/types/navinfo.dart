@@ -281,10 +281,7 @@ enum LaneShape {
 /// {@category Navigation}
 class LaneDirection {
   /// Construct [LaneDirection].
-  LaneDirection({
-    required this.laneShape,
-    required this.isRecommended,
-  });
+  LaneDirection({required this.laneShape, required this.isRecommended});
 
   /// Shape for this lane direction.
   final LaneShape laneShape;
@@ -297,9 +294,7 @@ class LaneDirection {
 /// {@category Navigation}
 class Lane {
   /// Construct [Lane].
-  Lane({
-    required this.laneDirections,
-  });
+  Lane({required this.laneDirections});
 
   /// List of possible directions a driver can follow when using this lane at the end of the respective route step
   final List<LaneDirection> laneDirections;
@@ -421,9 +416,7 @@ class NavInfo {
 /// {@category Navigation}
 class NavInfoEvent {
   /// Initialize with [NavInfo] object.
-  NavInfoEvent({
-    required this.navInfo,
-  });
+  NavInfoEvent({required this.navInfo});
 
   /// Navigation information.
   final NavInfo navInfo;

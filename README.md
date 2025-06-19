@@ -11,7 +11,7 @@ This repository contains a Flutter plugin that provides a [Google Navigation](ht
 
 |                                 | Android       | iOS       |
 | ------------------------------- | ------------- | --------- |
-| **Minimum mobile OS supported** | API level 23+ | iOS 15.0+ |
+| **Minimum mobile OS supported** | API level 23+ | iOS 16.0+ |
 
 * A Flutter project
 * A Google Cloud project
@@ -34,17 +34,17 @@ flutter pub add google_navigation_flutter
 
 ### Android
 
-Set the `minSdkVersion` in `android/app/build.gradle`:
+Set the `minSdk` in `android/app/build.gradle`:
 
 ```groovy
 android {
     defaultConfig {
-        minSdkVersion 23
+        minSdk 23
     }
 }
 ```
 
-If `minSdkVersion` is set to less than 34 (API 34), you need to configure desugaring for your Android app.
+If `minSdk` is set to less than 34 (API 34), you need to configure desugaring for your Android app.
 To enable desugaring, add the following configurations to `android/app/build.gradle` file:
 ```groovy
 android {
@@ -66,8 +66,8 @@ dependencies {
 2. Add the following lines to the beginning of this Podfile:
 
 ```
-  # Set platform to 15.0 to enable latest Google Maps SDK
-  platform :ios, '15.0'
+  # Set platform to 16.0 to enable latest Google Maps SDK
+  platform :ios, '16.0'
 ```
 3. In Xcode open Info.plist file and add `App registers for location updates` to the list of `Required background modes`
 

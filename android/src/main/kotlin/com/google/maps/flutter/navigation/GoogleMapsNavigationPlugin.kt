@@ -35,7 +35,7 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
   internal lateinit var viewRegistry: GoogleMapsViewRegistry
   private lateinit var viewMessageHandler: GoogleMapsViewMessageHandler
   private lateinit var imageRegistryMessageHandler: GoogleMapsImageRegistryMessageHandler
-  internal lateinit var viewEventApi: ViewEventApi
+  private lateinit var viewEventApi: ViewEventApi
   private lateinit var _binding: FlutterPlugin.FlutterPluginBinding
   private lateinit var lifecycle: Lifecycle
   internal lateinit var imageRegistry: ImageRegistry

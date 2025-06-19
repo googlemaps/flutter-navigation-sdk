@@ -22,8 +22,7 @@ import '../widgets/widgets.dart';
 
 class TurnByTurnPage extends ExamplePage {
   const TurnByTurnPage({super.key})
-      : super(
-            leading: const Icon(Icons.roundabout_right), title: 'Turn-by-turn');
+    : super(leading: const Icon(Icons.roundabout_right), title: 'Turn-by-turn');
 
   @override
   ExamplePageState<TurnByTurnPage> createState() => _TurnByTurnPageState();
@@ -56,16 +55,14 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
 
     /// Simulate location.
     await GoogleMapsNavigator.simulator.setUserLocation(
-        const LatLng(latitude: 37.528560, longitude: -122.361996));
+      const LatLng(latitude: 37.528560, longitude: -122.361996),
+    );
 
     final Destinations msg = Destinations(
       waypoints: <NavigationWaypoint>[
         NavigationWaypoint.withLatLngTarget(
           title: 'Grace Cathedral',
-          target: const LatLng(
-            latitude: 37.791957,
-            longitude: -122.412529,
-          ),
+          target: const LatLng(latitude: 37.791957, longitude: -122.412529),
         ),
       ],
       displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
@@ -77,8 +74,9 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
     if (status == NavigationRouteStatus.statusOk) {
       await GoogleMapsNavigator.startGuidance();
       await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
-      await _navigationViewController
-          .followMyLocation(CameraPerspective.tilted);
+      await _navigationViewController.followMyLocation(
+        CameraPerspective.tilted,
+      );
 
       _hideMessage();
       setState(() {
@@ -107,9 +105,7 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
     _navInfoSubscription = null;
   }
 
-  void _onNavInfoEvent(
-    NavInfoEvent event,
-  ) {
+  void _onNavInfoEvent(NavInfoEvent event) {
     if (!mounted) {
       return;
     }
@@ -141,53 +137,61 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
 
   @override
   Widget build(BuildContext context) => buildPage(
-      context,
-      (BuildContext context) => SafeArea(
-            child: Column(
-              children: <Widget>[
-                Expanded(
-                  child: GoogleMapsNavigationView(
-                    onViewCreated: _onViewCreated,
-                    initialNavigationUIEnabledPreference:
-                        NavigationUIEnabledPreference.disabled,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Wrap(
-                    alignment: WrapAlignment.center,
-                    spacing: 10,
-                    children: <Widget>[
-                      ElevatedButton(
-                          onPressed: _navigationRunning
-                              ? () => _stopNavigation()
-                              : () => _startNavigation(),
-                          child: Text(_navigationRunning
-                              ? 'Stop navigation'
-                              : 'Start navigation')),
-                      ElevatedButton(
-                          onPressed: _navigationRunning
-                              ? () async {
-                                  await _navigationViewController
-                                      .setNavigationHeaderEnabled(
-                                          !(await _navigationViewController
-                                              .isNavigationHeaderEnabled()));
-                                  await _navigationViewController
-                                      .setNavigationFooterEnabled(
-                                          !(await _navigationViewController
-                                              .isNavigationFooterEnabled()));
-                                }
-                              : null,
-                          child: const Text('Toggle header/footer')),
-                    ]),
-                if (_navInfo != null) _getNavInfoWidgets(context, _navInfo!),
-                if (_navInfo != null)
-                  ElevatedButton(
-                    onPressed: () => _showSteps(context, _navInfo!),
-                    child: const Text('Show all remaining steps'),
-                  ),
-              ],
+    context,
+    (BuildContext context) => SafeArea(
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: GoogleMapsNavigationView(
+              onViewCreated: _onViewCreated,
+              initialNavigationUIEnabledPreference:
+                  NavigationUIEnabledPreference.disabled,
             ),
-          ));
+          ),
+          const SizedBox(height: 10),
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 10,
+            children: <Widget>[
+              ElevatedButton(
+                onPressed:
+                    _navigationRunning
+                        ? () => _stopNavigation()
+                        : () => _startNavigation(),
+                child: Text(
+                  _navigationRunning ? 'Stop navigation' : 'Start navigation',
+                ),
+              ),
+              ElevatedButton(
+                onPressed:
+                    _navigationRunning
+                        ? () async {
+                          await _navigationViewController
+                              .setNavigationHeaderEnabled(
+                                !(await _navigationViewController
+                                    .isNavigationHeaderEnabled()),
+                              );
+                          await _navigationViewController
+                              .setNavigationFooterEnabled(
+                                !(await _navigationViewController
+                                    .isNavigationFooterEnabled()),
+                              );
+                        }
+                        : null,
+                child: const Text('Toggle header/footer'),
+              ),
+            ],
+          ),
+          if (_navInfo != null) _getNavInfoWidgets(context, _navInfo!),
+          if (_navInfo != null)
+            ElevatedButton(
+              onPressed: () => _showSteps(context, _navInfo!),
+              child: const Text('Show all remaining steps'),
+            ),
+        ],
+      ),
+    ),
+  );
 
   void _showMessage(String message) {
     _hideMessage();
@@ -208,22 +212,28 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
   /// Note: This method does not display all available navigation information.
   /// Look at the [NavInfo] documentation for more information.
   Widget _getNavInfoWidgets(BuildContext context, NavInfo navInfo) {
-    const TextStyle navInfoTextStyle =
-        TextStyle(fontSize: 12, color: Colors.white);
+    const TextStyle navInfoTextStyle = TextStyle(
+      fontSize: 12,
+      color: Colors.white,
+    );
     return Container(
       padding: const EdgeInsets.all(20),
-      child: Column(children: <Widget>[
-        if (navInfo.navState == NavState.stopped)
-          const Text('Navigation stopped.'),
-        if (navInfo.currentStep != null) ...<Widget>[
-          _getNavInfoWidgetForStep(context, navInfo.currentStep!,
-              navInfo.distanceToCurrentStepMeters),
-          const SizedBox(height: 5),
-          Card(
-            color: Colors.green.shade400,
-            child: Padding(
-              padding: const EdgeInsets.all(5),
-              child: Row(
+      child: Column(
+        children: <Widget>[
+          if (navInfo.navState == NavState.stopped)
+            const Text('Navigation stopped.'),
+          if (navInfo.currentStep != null) ...<Widget>[
+            _getNavInfoWidgetForStep(
+              context,
+              navInfo.currentStep!,
+              navInfo.distanceToCurrentStepMeters,
+            ),
+            const SizedBox(height: 5),
+            Card(
+              color: Colors.green.shade400,
+              child: Padding(
+                padding: const EdgeInsets.all(5),
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Column(
@@ -241,12 +251,14 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
                             style: navInfoTextStyle,
                           ),
                       ],
-                    )
-                  ]),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          )
-        ]
-      ]),
+          ],
+        ],
+      ),
     );
   }
 
@@ -255,10 +267,15 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
   /// Note: This method does not display all available step information.
   /// Look at the [NavInfo] documentation for more information.
   Widget _getNavInfoWidgetForStep(
-      BuildContext context, StepInfo stepInfo, int? metersToStep) {
+    BuildContext context,
+    StepInfo stepInfo,
+    int? metersToStep,
+  ) {
     final double screenWidth = MediaQuery.of(context).size.width;
-    const TextStyle navInfoTextStyle =
-        TextStyle(fontSize: 12, color: Colors.white);
+    const TextStyle navInfoTextStyle = TextStyle(
+      fontSize: 12,
+      color: Colors.white,
+    );
     return Card(
       color: Colors.green.shade400,
       child: Padding(
@@ -287,7 +304,9 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
                             text:
                                 '\n\n${formatRemainingDistance(metersToStep)}',
                             style: const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                       ],
                     ),
@@ -326,7 +345,7 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -345,8 +364,9 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
               children: <Widget>[
                 const Text('Steps', style: TextStyle(fontSize: 20)),
                 ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('Close')),
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Close'),
+                ),
               ],
             ),
             SizedBox(
@@ -364,7 +384,7 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       );

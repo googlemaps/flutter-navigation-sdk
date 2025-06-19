@@ -30,20 +30,25 @@ const String _mapsApiKey = String.fromEnvironment('MAPS_API_KEY');
 /// [travelMode] is a string representing the travel mode.
 /// Returns a list of route tokens or throws an error if the request fails.
 Future<List<String>> getRouteToken(List<NavigationWaypoint> waypoints) async {
-  assert(_mapsApiKey.isNotEmpty,
-      'MAPS_API_KEY is not provided. Please pass it as a Dart define during the app build.');
-  assert(waypoints.length >= 2,
-      'At least two waypoints (origin and destination) are required.');
+  assert(
+    _mapsApiKey.isNotEmpty,
+    'MAPS_API_KEY is not provided. Please pass it as a Dart define during the app build.',
+  );
+  assert(
+    waypoints.length >= 2,
+    'At least two waypoints (origin and destination) are required.',
+  );
 
   final Uri apiUrl = Uri.parse(_computeRoutesUrl);
 
   final Map<String, dynamic> requestBody = <String, dynamic>{
     'origin': _toRoutesApiWaypoint(waypoints.first),
     'destination': _toRoutesApiWaypoint(waypoints.last),
-    'intermediates': waypoints
-        .sublist(1, waypoints.length - 1)
-        .map((NavigationWaypoint wp) => _toRoutesApiWaypoint(wp, via: true))
-        .toList(),
+    'intermediates':
+        waypoints
+            .sublist(1, waypoints.length - 1)
+            .map((NavigationWaypoint wp) => _toRoutesApiWaypoint(wp, via: true))
+            .toList(),
     'travelMode': 'DRIVE',
     'routingPreference': 'TRAFFIC_AWARE',
   };
@@ -54,8 +59,11 @@ Future<List<String>> getRouteToken(List<NavigationWaypoint> waypoints) async {
     'Content-Type': 'application/json',
   };
 
-  final http.Response response =
-      await http.post(apiUrl, headers: headers, body: jsonEncode(requestBody));
+  final http.Response response = await http.post(
+    apiUrl,
+    headers: headers,
+    body: jsonEncode(requestBody),
+  );
 
   if (response.statusCode == 200) {
     final Map<String, dynamic> responseData =
@@ -67,32 +75,37 @@ Future<List<String>> getRouteToken(List<NavigationWaypoint> waypoints) async {
     }
 
     return routeTokens
-        .map<String>((dynamic route) =>
-            (route as Map<String, dynamic>)['routeToken'] as String)
+        .map<String>(
+          (dynamic route) =>
+              (route as Map<String, dynamic>)['routeToken'] as String,
+        )
         .toList();
   } else {
     throw Exception(
-        'Failed to get route tokens: ${response.reasonPhrase}:\n${response.body}');
+      'Failed to get route tokens: ${response.reasonPhrase}:\n${response.body}',
+    );
   }
 }
 
 /// Converts a [NavigationWaypoint] to a waypoint request format supported
 /// by the Routes API.
-Map<String, dynamic> _toRoutesApiWaypoint(NavigationWaypoint waypoint,
-    {bool via = false}) {
-  assert(waypoint.target != null || waypoint.placeID != null,
-      'Invalid NavigationWaypoint: Either target or placeID must be provided.');
-  final Map<String, dynamic> output = <String, dynamic>{
-    'via': via,
-  };
+Map<String, dynamic> _toRoutesApiWaypoint(
+  NavigationWaypoint waypoint, {
+  bool via = false,
+}) {
+  assert(
+    waypoint.target != null || waypoint.placeID != null,
+    'Invalid NavigationWaypoint: Either target or placeID must be provided.',
+  );
+  final Map<String, dynamic> output = <String, dynamic>{'via': via};
   if (waypoint.placeID != null) {
     output['placeId'] = waypoint.placeID;
   } else if (waypoint.target != null) {
     final Map<String, dynamic> location = <String, dynamic>{
       'latLng': <String, dynamic>{
         'latitude': waypoint.target!.latitude,
-        'longitude': waypoint.target!.longitude
-      }
+        'longitude': waypoint.target!.longitude,
+      },
     };
 
     if (waypoint.preferredSegmentHeading != null) {

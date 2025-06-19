@@ -21,24 +21,25 @@ Widget getOptionsButton(
   BuildContext context, {
   required void Function()? onPressed,
   ButtonStyle? style,
-}) =>
-    ElevatedButton.icon(
-      style: style ?? ElevatedButton.styleFrom(minimumSize: const Size(80, 36)),
-      icon: const Icon(Icons.settings),
-      onPressed: onPressed,
-      label: const Text('Options'),
-    );
+}) => ElevatedButton.icon(
+  style: style ?? ElevatedButton.styleFrom(minimumSize: const Size(80, 36)),
+  icon: const Icon(Icons.settings),
+  onPressed: onPressed,
+  label: const Text('Options'),
+);
 
 /// Builds options button Widget with positioned alignment for the example app.
-Widget getOverlayOptionsButton(BuildContext context,
-        {required void Function()? onPressed, ButtonStyle? style}) =>
-    SafeArea(
-      child: Align(
-        alignment:
-            Platform.isAndroid ? Alignment.bottomCenter : Alignment.bottomRight,
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: getOptionsButton(context, onPressed: onPressed, style: style),
-        ),
-      ),
-    );
+Widget getOverlayOptionsButton(
+  BuildContext context, {
+  required void Function()? onPressed,
+  ButtonStyle? style,
+}) => SafeArea(
+  child: Align(
+    alignment:
+        Platform.isAndroid ? Alignment.bottomCenter : Alignment.bottomRight,
+    child: Padding(
+      padding: const EdgeInsets.all(10),
+      child: getOptionsButton(context, onPressed: onPressed, style: style),
+    ),
+  ),
+);

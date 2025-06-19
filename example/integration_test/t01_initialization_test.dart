@@ -35,8 +35,9 @@ void main() {
     return 'IT${testCounter.toString().padLeft(2, '0')} $name';
   }
 
-  patrol(prefix('Test session initialization errors'),
-      (PatrolIntegrationTester $) async {
+  patrol(prefix('Test session initialization errors'), (
+    PatrolIntegrationTester $,
+  ) async {
     await GoogleMapsNavigator.resetTermsAccepted();
     expect(await GoogleMapsNavigator.areTermsAccepted(), false);
     expect(await GoogleMapsNavigator.isInitialized(), false);
@@ -47,8 +48,10 @@ void main() {
       fail('Expected SessionInitializationException');
     } on Exception catch (e) {
       expect(e, const TypeMatcher<SessionInitializationException>());
-      expect((e as SessionInitializationException).code,
-          SessionInitializationError.termsNotAccepted);
+      expect(
+        (e as SessionInitializationException).code,
+        SessionInitializationError.termsNotAccepted,
+      );
     }
     expect(await GoogleMapsNavigator.isInitialized(), false);
 
@@ -60,8 +63,10 @@ void main() {
       fail('Expected SessionInitializationException');
     } on Exception catch (e) {
       expect(e, const TypeMatcher<SessionInitializationException>());
-      expect((e as SessionInitializationException).code,
-          SessionInitializationError.locationPermissionMissing);
+      expect(
+        (e as SessionInitializationException).code,
+        SessionInitializationError.locationPermissionMissing,
+      );
     }
     expect(await GoogleMapsNavigator.isInitialized(), false);
 
@@ -96,16 +101,14 @@ void main() {
 
     try {
       final Destinations destinations = Destinations(
-          waypoints: <NavigationWaypoint>[
-            NavigationWaypoint.withLatLngTarget(
-                title: 'California St & Jones St',
-                target: const LatLng(
-                  latitude: 37.791424,
-                  longitude: -122.414139,
-                )),
-          ],
-          displayOptions:
-              NavigationDisplayOptions(showDestinationMarkers: false));
+        waypoints: <NavigationWaypoint>[
+          NavigationWaypoint.withLatLngTarget(
+            title: 'California St & Jones St',
+            target: const LatLng(latitude: 37.791424, longitude: -122.414139),
+          ),
+        ],
+        displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
+      );
       await GoogleMapsNavigator.setDestinations(destinations);
       fail('Expected SessionNotInitializedException.');
     } on Exception catch (e) {
@@ -156,7 +159,8 @@ void main() {
     try {
       await GoogleMapsNavigator.resetTermsAccepted();
       fail(
-          'Expected the terms reset to fail after successful session creation.');
+        'Expected the terms reset to fail after successful session creation.',
+      );
     } on Exception catch (e) {
       expect(e, const TypeMatcher<ResetTermsAndConditionsException>());
     }
@@ -165,7 +169,8 @@ void main() {
       await GoogleMapsNavigator.isGuidanceRunning();
     } on SessionNotInitializedException {
       fail(
-          'Expected isGuidanceRunning() to succeed after the successful navigation initialization.');
+        'Expected isGuidanceRunning() to succeed after the successful navigation initialization.',
+      );
     }
 
     // Test that SDK version call returns non-empty version string.
@@ -175,7 +180,8 @@ void main() {
     // Test initializing with abnormal termination reporting enabled.
     try {
       await GoogleMapsNavigator.initializeNavigationSession(
-          abnormalTerminationReportingEnabled: false);
+        abnormalTerminationReportingEnabled: false,
+      );
     } on Exception {
       fail('Expected the initialization to go through');
     }
@@ -183,10 +189,7 @@ void main() {
 
   patrol(prefix('Test Maps initialization'), (PatrolIntegrationTester $) async {
     final ControllerCompleter<GoogleNavigationViewController>
-        viewControllerCompleter = ControllerCompleter();
-
-    await checkTermsAndConditionsAcceptance($);
-    await checkLocationDialogAcceptance($);
+    viewControllerCompleter = ControllerCompleter();
 
     // Now the initialization should finally succeed.
     try {
@@ -196,8 +199,10 @@ void main() {
     }
     expect(await GoogleMapsNavigator.isInitialized(), true);
 
-    const CameraPosition cameraPosition =
-        CameraPosition(target: LatLng(latitude: 65, longitude: 25.5), zoom: 12);
+    const CameraPosition cameraPosition = CameraPosition(
+      target: LatLng(latitude: 65, longitude: 25.5),
+      zoom: 12,
+    );
     const MapType mapType = MapType.satellite;
     const bool compassEnabled = false;
     const bool rotateGesturesEnabled = false;
@@ -210,7 +215,7 @@ void main() {
     const double minZoomPreference = 5.0;
     const double maxZoomPreference = 18.0;
     const NavigationUIEnabledPreference navigationUiEnabledPreference =
-        NavigationUIEnabledPreference.automatic;
+        NavigationUIEnabledPreference.disabled;
 
     /// Display navigation view.
     final Key key = GlobalKey();
@@ -246,42 +251,91 @@ void main() {
 
     final CameraPosition cameraOut = await controller.getCameraPosition();
 
-    expect(cameraOut.target.latitude,
-        closeTo(cameraPosition.target.latitude, 0.1));
-    expect(cameraOut.target.longitude,
-        closeTo(cameraPosition.target.longitude, 0.1));
-    expect(cameraOut.zoom, closeTo(cameraPosition.zoom, 0.1));
-    expect(await controller.getMapType(), mapType);
-    expect(await controller.settings.isCompassEnabled(), compassEnabled);
-    expect(await controller.settings.isRotateGesturesEnabled(),
-        rotateGesturesEnabled);
-    expect(await controller.settings.isScrollGesturesEnabled(),
-        scrollGesturesEnabled);
     expect(
-        await controller.settings.isTiltGesturesEnabled(), tiltGesturesEnabled);
+      cameraOut.target.latitude,
+      closeTo(cameraPosition.target.latitude, 0.1),
+      reason: 'Latitude value mismatch',
+    );
     expect(
-        await controller.settings.isZoomGesturesEnabled(), zoomGesturesEnabled);
+      cameraOut.target.longitude,
+      closeTo(cameraPosition.target.longitude, 0.1),
+      reason: 'Longitude value mismatch',
+    );
     expect(
-        await controller.settings.isScrollGesturesEnabledDuringRotateOrZoom(),
-        scrollGesturesEnabledDuringRotateOrZoom);
+      cameraOut.zoom,
+      closeTo(cameraPosition.zoom, 0.1),
+      reason: 'Zoom value mismatch',
+    );
+    expect(await controller.getMapType(), mapType, reason: 'Map type mismatch');
+    expect(
+      await controller.settings.isCompassEnabled(),
+      compassEnabled,
+      reason: 'Compass enabled mismatch',
+    );
+    expect(
+      await controller.settings.isRotateGesturesEnabled(),
+      rotateGesturesEnabled,
+      reason: 'Rotate gestures enabled mismatch',
+    );
+    expect(
+      await controller.settings.isScrollGesturesEnabled(),
+      scrollGesturesEnabled,
+      reason: 'Scroll gestures enabled mismatch',
+    );
+    expect(
+      await controller.settings.isTiltGesturesEnabled(),
+      tiltGesturesEnabled,
+      reason: 'Tilt gestures enabled mismatch',
+    );
+    expect(
+      await controller.settings.isZoomGesturesEnabled(),
+      zoomGesturesEnabled,
+      reason: 'Zoom gestures enabled mismatch',
+    );
+    expect(
+      await controller.settings.isScrollGesturesEnabledDuringRotateOrZoom(),
+      scrollGesturesEnabledDuringRotateOrZoom,
+      reason: 'Scroll gestures during rotate or zoom mismatch',
+    );
     if (Platform.isAndroid) {
       expect(
-          await controller.settings.isMapToolbarEnabled(), mapToolbarEnabled);
-      expect(await controller.settings.isZoomControlsEnabled(),
-          zoomControlsEnabled);
+        await controller.settings.isMapToolbarEnabled(),
+        mapToolbarEnabled,
+        reason: 'Map toolbar enabled mismatch',
+      );
+      expect(
+        await controller.settings.isZoomControlsEnabled(),
+        zoomControlsEnabled,
+        reason: 'Zoom controls enabled mismatch',
+      );
     }
-    expect(await controller.getMinZoomPreference(), minZoomPreference);
-    expect(await controller.getMaxZoomPreference(), maxZoomPreference);
-    expect(await controller.isNavigationUIEnabled(), true);
+    expect(
+      await controller.getMinZoomPreference(),
+      minZoomPreference,
+      reason: 'Min zoom preference mismatch',
+    );
+    expect(
+      await controller.getMaxZoomPreference(),
+      maxZoomPreference,
+      reason: 'Max zoom preference mismatch',
+    );
+    expect(
+      await controller.isNavigationUIEnabled(),
+      false,
+      reason: 'Navigation UI enabled mismatch',
+    );
   });
 
-  patrol(prefix('Test Maps initialization without navigation'),
-      (PatrolIntegrationTester $) async {
+  patrol(prefix('Test Maps initialization without navigation'), (
+    PatrolIntegrationTester $,
+  ) async {
     final ControllerCompleter<GoogleMapViewController> viewControllerCompleter =
         ControllerCompleter<GoogleMapViewController>();
 
-    const CameraPosition cameraPosition =
-        CameraPosition(target: LatLng(latitude: 65, longitude: 25.5), zoom: 12);
+    const CameraPosition cameraPosition = CameraPosition(
+      target: LatLng(latitude: 65, longitude: 25.5),
+      zoom: 12,
+    );
     const MapType mapType = MapType.satellite;
     const bool compassEnabled = false;
     const bool rotateGesturesEnabled = false;
@@ -326,31 +380,72 @@ void main() {
 
     final CameraPosition cameraOut = await controller.getCameraPosition();
 
-    expect(cameraOut.target.latitude,
-        closeTo(cameraPosition.target.latitude, 0.1));
-    expect(cameraOut.target.longitude,
-        closeTo(cameraPosition.target.longitude, 0.1));
-    expect(cameraOut.zoom, closeTo(cameraPosition.zoom, 0.1));
-    expect(await controller.getMapType(), mapType);
-    expect(await controller.settings.isCompassEnabled(), compassEnabled);
-    expect(await controller.settings.isRotateGesturesEnabled(),
-        rotateGesturesEnabled);
-    expect(await controller.settings.isScrollGesturesEnabled(),
-        scrollGesturesEnabled);
     expect(
-        await controller.settings.isTiltGesturesEnabled(), tiltGesturesEnabled);
+      cameraOut.target.latitude,
+      closeTo(cameraPosition.target.latitude, 0.1),
+      reason: 'Latitude value mismatch',
+    );
     expect(
-        await controller.settings.isZoomGesturesEnabled(), zoomGesturesEnabled);
+      cameraOut.target.longitude,
+      closeTo(cameraPosition.target.longitude, 0.1),
+      reason: 'Longitude value mismatch',
+    );
     expect(
-        await controller.settings.isScrollGesturesEnabledDuringRotateOrZoom(),
-        scrollGesturesEnabledDuringRotateOrZoom);
+      cameraOut.zoom,
+      closeTo(cameraPosition.zoom, 0.1),
+      reason: 'Zoom value mismatch',
+    );
+    expect(await controller.getMapType(), mapType, reason: 'Map type mismatch');
+    expect(
+      await controller.settings.isCompassEnabled(),
+      compassEnabled,
+      reason: 'Compass enabled mismatch',
+    );
+    expect(
+      await controller.settings.isRotateGesturesEnabled(),
+      rotateGesturesEnabled,
+      reason: 'Rotate gestures enabled mismatch',
+    );
+    expect(
+      await controller.settings.isScrollGesturesEnabled(),
+      scrollGesturesEnabled,
+      reason: 'Scroll gestures enabled mismatch',
+    );
+    expect(
+      await controller.settings.isTiltGesturesEnabled(),
+      tiltGesturesEnabled,
+    );
+    expect(
+      await controller.settings.isZoomGesturesEnabled(),
+      zoomGesturesEnabled,
+      reason: 'Zoom gestures enabled mismatch',
+    );
+    expect(
+      await controller.settings.isScrollGesturesEnabledDuringRotateOrZoom(),
+      scrollGesturesEnabledDuringRotateOrZoom,
+      reason: 'Scroll gestures during rotate or zoom mismatch',
+    );
     if (Platform.isAndroid) {
       expect(
-          await controller.settings.isMapToolbarEnabled(), mapToolbarEnabled);
-      expect(await controller.settings.isZoomControlsEnabled(),
-          zoomControlsEnabled);
+        await controller.settings.isMapToolbarEnabled(),
+        mapToolbarEnabled,
+        reason: 'Map toolbar enabled mismatch',
+      );
+      expect(
+        await controller.settings.isZoomControlsEnabled(),
+        zoomControlsEnabled,
+        reason: 'Zoom controls enabled mismatch',
+      );
     }
-    expect(await controller.getMinZoomPreference(), minZoomPreference);
-    expect(await controller.getMaxZoomPreference(), maxZoomPreference);
+    expect(
+      await controller.getMinZoomPreference(),
+      minZoomPreference,
+      reason: 'Min zoom preference mismatch',
+    );
+    expect(
+      await controller.getMaxZoomPreference(),
+      maxZoomPreference,
+      reason: 'Max zoom preference mismatch',
+    );
   });
 }

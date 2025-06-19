@@ -90,7 +90,7 @@ internal class ConvertTest {
         NavigationAudioGuidanceSettingsDto(
           isBluetoothAudioEnabled = false,
           isVibrationEnabled = false,
-          guidanceType = AudioGuidanceTypeDto.ALERTSANDGUIDANCE,
+          guidanceType = AudioGuidanceTypeDto.ALERTS_AND_GUIDANCE,
         )
       ),
     )
@@ -110,7 +110,7 @@ internal class ConvertTest {
         NavigationAudioGuidanceSettingsDto(
           isBluetoothAudioEnabled = false,
           isVibrationEnabled = false,
-          guidanceType = AudioGuidanceTypeDto.ALERTSONLY,
+          guidanceType = AudioGuidanceTypeDto.ALERTS_ONLY,
         )
       ),
     )
@@ -120,7 +120,7 @@ internal class ConvertTest {
         NavigationAudioGuidanceSettingsDto(
           isBluetoothAudioEnabled = false,
           isVibrationEnabled = true,
-          guidanceType = AudioGuidanceTypeDto.ALERTSANDGUIDANCE,
+          guidanceType = AudioGuidanceTypeDto.ALERTS_AND_GUIDANCE,
         )
       ),
     )
@@ -130,7 +130,7 @@ internal class ConvertTest {
         NavigationAudioGuidanceSettingsDto(
           isBluetoothAudioEnabled = true,
           isVibrationEnabled = false,
-          guidanceType = AudioGuidanceTypeDto.ALERTSANDGUIDANCE,
+          guidanceType = AudioGuidanceTypeDto.ALERTS_AND_GUIDANCE,
         )
       ),
     )
@@ -172,7 +172,7 @@ internal class ConvertTest {
   fun convertRoutingStrategy_returnsExpectedValue() {
     assertEquals(
       RoutingStrategy.DEFAULT_BEST,
-      Convert.convertRoutingStrategyFromDto(RoutingStrategyDto.DEFAULTBEST),
+      Convert.convertRoutingStrategyFromDto(RoutingStrategyDto.DEFAULT_BEST),
     )
     assertEquals(
       RoutingStrategy.SHORTER,
@@ -180,7 +180,7 @@ internal class ConvertTest {
     )
     assertEquals(
       RoutingStrategy.TARGET_DISTANCE,
-      Convert.convertRoutingStrategyFromDto(RoutingStrategyDto.DELTATOTARGETDISTANCE),
+      Convert.convertRoutingStrategyFromDto(RoutingStrategyDto.DELTA_TO_TARGET_DISTANCE),
     )
   }
 
@@ -205,7 +205,7 @@ internal class ConvertTest {
     val options =
       RoutingOptionsDto(
         AlternateRoutesStrategyDto.ONE,
-        RoutingStrategyDto.DEFAULTBEST,
+        RoutingStrategyDto.DEFAULT_BEST,
         null,
         TravelModeDto.DRIVING,
         avoidTolls = true,
@@ -226,7 +226,7 @@ internal class ConvertTest {
     val optionsWithTargetDistance =
       RoutingOptionsDto(
         AlternateRoutesStrategyDto.ONE,
-        RoutingStrategyDto.DEFAULTBEST,
+        RoutingStrategyDto.DEFAULT_BEST,
         listOf(10, 100),
       )
 
@@ -244,7 +244,7 @@ internal class ConvertTest {
   @Test
   fun convertSpeedAlertSeverityNativeToPigeon_returnsExpectedValue() {
     assertEquals(
-      SpeedAlertSeverityDto.NOTSPEEDING,
+      SpeedAlertSeverityDto.NOT_SPEEDING,
       Convert.convertSpeedAlertSeverityFromDto(SpeedAlertSeverity.NONE),
     )
     assertEquals(
@@ -261,7 +261,7 @@ internal class ConvertTest {
   fun convertSpeedAlertSeverityPigeonToNative_returnsExpectedValue() {
     assertEquals(
       SpeedAlertSeverity.NONE,
-      Convert.convertSpeedAlertSeverityFromDto(SpeedAlertSeverityDto.NOTSPEEDING),
+      Convert.convertSpeedAlertSeverityFromDto(SpeedAlertSeverityDto.NOT_SPEEDING),
     )
     assertEquals(
       SpeedAlertSeverity.MINOR,
@@ -466,10 +466,10 @@ internal class ConvertTest {
 
   @Test
   fun convertRouteSegmentTrafficData_returnsExpectedValue() {
-    var googleRenderingData =
+    val googleRenderingData =
       NavigationRoadStretchRenderingData(NavigationRoadStretchRenderingData.Style.UNKNOWN, 500, 600)
-    var googleTrafficData = NavigationTrafficData(listOf(googleRenderingData))
-    var trafficData = Convert.convertRouteSegmentTrafficDataToDto(googleTrafficData)
+    val googleTrafficData = NavigationTrafficData(listOf(googleRenderingData))
+    val trafficData = Convert.convertRouteSegmentTrafficDataToDto(googleTrafficData)
 
     assertEquals(
       trafficData.roadStretchRenderingDataList[0]!!.lengthMeters,
@@ -498,8 +498,8 @@ internal class ConvertTest {
     every { polygon.zIndex } returns 4F
     val options = Convert.polygonToPolygonOptions(polygon, 1.0F)
 
-    assertEquals(10.0, options.points?.get(0)?.latitude)
-    assertEquals(20.0, options.points?.get(0)?.longitude)
+    assertEquals(10.0, options.points[0]?.latitude)
+    assertEquals(20.0, options.points[0]?.longitude)
     assertEquals(true, options.clickable)
     assertEquals(Color.RED.toLong(), options.fillColor)
     assertEquals(true, options.geodesic)
@@ -590,7 +590,7 @@ internal class ConvertTest {
     assertEquals(emptyList(), options.strokePattern)
     assertEquals(Color.BLACK.toLong(), options.strokeColor)
     assertEquals(2.0, options.strokeWidth)
-    assertEquals(StrokeJointTypeDto.DEFAULTJOINT, options.strokeJointType)
+    assertEquals(StrokeJointTypeDto.DEFAULT_JOINT, options.strokeJointType)
     assertEquals(true, options.visible)
     assertEquals(4.0, options.zIndex)
     assertEquals(emptyList(), options.spans)
@@ -611,11 +611,11 @@ internal class ConvertTest {
   fun taskRemovedBehaviorDtoToTaskRemovedBehavior_returnsExpectedValue() {
     assertEquals(
       TaskRemovedBehavior.QUIT_SERVICE,
-      Convert.taskRemovedBehaviorDtoToTaskRemovedBehavior(TaskRemovedBehaviorDto.QUITSERVICE),
+      Convert.taskRemovedBehaviorDtoToTaskRemovedBehavior(TaskRemovedBehaviorDto.QUIT_SERVICE),
     )
     assertEquals(
       TaskRemovedBehavior.CONTINUE_SERVICE,
-      Convert.taskRemovedBehaviorDtoToTaskRemovedBehavior(TaskRemovedBehaviorDto.CONTINUESERVICE),
+      Convert.taskRemovedBehaviorDtoToTaskRemovedBehavior(TaskRemovedBehaviorDto.CONTINUE_SERVICE),
     )
     assertEquals(
       TaskRemovedBehavior.CONTINUE_SERVICE,

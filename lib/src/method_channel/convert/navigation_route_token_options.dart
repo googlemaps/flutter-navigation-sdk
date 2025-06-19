@@ -20,7 +20,7 @@ import '../method_channel.dart';
 extension ConvertRouteTokenOptions on RouteTokenOptions {
   /// Converts [RouteTokenOptions] to [RouteTokenOptionsDto]
   RouteTokenOptionsDto toDto() => RouteTokenOptionsDto(
-        routeToken: routeToken,
-        travelMode: travelMode?.toDto(),
-      );
+    routeToken: routeToken,
+    travelMode: travelMode?.toDto(),
+  );
 }

@@ -20,13 +20,14 @@ import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 import 'widgets.dart';
 
 class ExampleLatLngBoundsEditor extends StatefulWidget {
-  const ExampleLatLngBoundsEditor(
-      {super.key,
-      required this.initialBounds,
-      required this.onChanged,
-      required this.onAssert,
-      this.initiallyExpanded = false,
-      this.title = 'Bounds'});
+  const ExampleLatLngBoundsEditor({
+    super.key,
+    required this.initialBounds,
+    required this.onChanged,
+    required this.onAssert,
+    this.initiallyExpanded = false,
+    this.title = 'Bounds',
+  });
 
   final LatLngBounds initialBounds;
   final bool initiallyExpanded;
@@ -55,10 +56,7 @@ class _ExampleLatLngBoundsEditorState extends State<ExampleLatLngBoundsEditor> {
 
   void _updateBounds(LatLng newNortheast, LatLng newSouthwest) {
     try {
-      bounds = LatLngBounds(
-        northeast: newNortheast,
-        southwest: newSouthwest,
-      );
+      bounds = LatLngBounds(northeast: newNortheast, southwest: newSouthwest);
       widget.onChanged(bounds);
     } on AssertionError catch (e) {
       // Note that AssertionErrors are available only on debug build and are not available

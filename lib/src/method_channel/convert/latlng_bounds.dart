@@ -20,7 +20,7 @@ import '../method_channel.dart';
 extension ConvertLatLngBounds on LatLngBounds {
   /// Convert [LatLngBounds] to [LatLngBoundsDto].
   LatLngBoundsDto toDto() => LatLngBoundsDto(
-        northeast: northeast.toDto(),
-        southwest: southwest.toDto(),
-      );
+    northeast: northeast.toDto(),
+    southwest: southwest.toDto(),
+  );
 }

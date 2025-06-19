@@ -22,7 +22,7 @@ import '../widgets/widgets.dart';
 
 class PolylinesPage extends ExamplePage {
   const PolylinesPage({super.key})
-      : super(leading: const Icon(Icons.polyline), title: 'Polylines');
+    : super(leading: const Icon(Icons.polyline), title: 'Polylines');
 
   @override
   ExamplePageState<PolylinesPage> createState() => _PolylinesPageState();
@@ -37,7 +37,7 @@ class _PolylinesPageState extends ExamplePageState<PolylinesPage> {
     Colors.black,
     Colors.red,
     Colors.green,
-    Colors.blue
+    Colors.blue,
   ];
   final List<double> _strokeWidths = <double>[2, 6, 10];
   final List<double> _zIndexes = <double>[-1, 0, 1];
@@ -49,8 +49,8 @@ class _PolylinesPageState extends ExamplePageState<PolylinesPage> {
     <PatternItem>[
       const DashPattern(length: 20),
       const DotPattern(),
-      const GapPattern(length: 50)
-    ]
+      const GapPattern(length: 50),
+    ],
   ];
   int _selectedStrokePatternIndex = 0;
 
@@ -86,24 +86,28 @@ class _PolylinesPageState extends ExamplePageState<PolylinesPage> {
   /// Creates list of 4 coordinates, 3 for each corner of the triangle and starting point again.
   /// Each point is offset away from the center point.
   List<LatLng> _createInsetTriangle(LatLngBounds bounds, double insetFraction) {
-// Calculate inset amounts based on the fraction of the latitude and longitude spans
+    // Calculate inset amounts based on the fraction of the latitude and longitude spans
     final double latInsetAmount = bounds.latitudeSpan * insetFraction;
     final double lonInsetAmount = bounds.longitudeSpan * insetFraction;
 
     // Offset each corner of the bounds inward
-    final LatLng corner1 = bounds.northwest
-        .offset(LatLng(latitude: -latInsetAmount, longitude: lonInsetAmount));
-    final LatLng corner2 = bounds.northeast
-        .offset(LatLng(latitude: -latInsetAmount, longitude: -lonInsetAmount));
-    final LatLng corner3 = bounds.southeast
-        .offset(LatLng(latitude: latInsetAmount, longitude: -lonInsetAmount));
+    final LatLng corner1 = bounds.northwest.offset(
+      LatLng(latitude: -latInsetAmount, longitude: lonInsetAmount),
+    );
+    final LatLng corner2 = bounds.northeast.offset(
+      LatLng(latitude: -latInsetAmount, longitude: -lonInsetAmount),
+    );
+    final LatLng corner3 = bounds.southeast.offset(
+      LatLng(latitude: latInsetAmount, longitude: -lonInsetAmount),
+    );
 
     // Return the points forming the triangle, ending at the starting point
     return <LatLng>[corner1, corner2, corner3, corner1];
   }
 
   Future<void> _updateSelectedPolylineWithOptions(
-      PolylineOptions options) async {
+    PolylineOptions options,
+  ) async {
     final Polyline newPolyline = _selectedPolyline!.copyWith(options: options);
 
     final List<Polyline?> polylines = await _navigationViewController
@@ -111,9 +115,10 @@ class _PolylinesPageState extends ExamplePageState<PolylinesPage> {
     final Polyline? polyline = polylines.firstOrNull;
     if (polyline != null) {
       setState(() {
-        _polylines = _polylines
-            .where((Polyline element) => element != _selectedPolyline)
-            .toList();
+        _polylines =
+            _polylines
+                .where((Polyline element) => element != _selectedPolyline)
+                .toList();
         _selectedPolyline = polyline;
         _polylines = _polylines + <Polyline>[polyline];
       });
@@ -121,20 +126,23 @@ class _PolylinesPageState extends ExamplePageState<PolylinesPage> {
   }
 
   Future<void> _removePolyline() async {
-    await _navigationViewController
-        .removePolylines(<Polyline>[_selectedPolyline!]);
+    await _navigationViewController.removePolylines(<Polyline>[
+      _selectedPolyline!,
+    ]);
 
     setState(() {
-      _polylines = _polylines
-          .where((Polyline element) => element != _selectedPolyline)
-          .toList();
+      _polylines =
+          _polylines
+              .where((Polyline element) => element != _selectedPolyline)
+              .toList();
       _selectedPolyline = null;
     });
   }
 
   void _onPolylineClicked(String polylineId) {
-    final Polyline polyline = _polylines
-        .firstWhere((Polyline element) => element.polylineId == polylineId);
+    final Polyline polyline = _polylines.firstWhere(
+      (Polyline element) => element.polylineId == polylineId,
+    );
     setState(() {
       _selectedPolyline = polyline;
     });
@@ -142,20 +150,26 @@ class _PolylinesPageState extends ExamplePageState<PolylinesPage> {
 
   Future<void> _setStrokeColor() async {
     final Color oldColor = _selectedPolyline!.options.strokeColor!;
-    final Color newColor = _colors.elementAtOrNull(
-            _colors.indexWhere((Color e) => e == oldColor) + 1) ??
+    final Color newColor =
+        _colors.elementAtOrNull(
+          _colors.indexWhere((Color e) => e == oldColor) + 1,
+        ) ??
         _colors[0];
 
     await _updateSelectedPolylineWithOptions(
-        _selectedPolyline!.options.copyWith(strokeColor: newColor));
+      _selectedPolyline!.options.copyWith(strokeColor: newColor),
+    );
   }
 
   // Android only.
   Future<void> _setStrokePattern() async {
     _selectedStrokePatternIndex =
         (_selectedStrokePatternIndex + 1) % _strokePatterns.length;
-    await _updateSelectedPolylineWithOptions(_selectedPolyline!.options
-        .copyWith(strokePattern: _strokePatterns[_selectedStrokePatternIndex]));
+    await _updateSelectedPolylineWithOptions(
+      _selectedPolyline!.options.copyWith(
+        strokePattern: _strokePatterns[_selectedStrokePatternIndex],
+      ),
+    );
   }
 
   String _colorName(Color? color) {
@@ -173,66 +187,81 @@ class _PolylinesPageState extends ExamplePageState<PolylinesPage> {
   }
 
   Future<void> _toggleGeodesic() async {
-    await _updateSelectedPolylineWithOptions(_selectedPolyline!.options
-        .copyWith(geodesic: !_selectedPolyline!.options.geodesic!));
+    await _updateSelectedPolylineWithOptions(
+      _selectedPolyline!.options.copyWith(
+        geodesic: !_selectedPolyline!.options.geodesic!,
+      ),
+    );
   }
 
   Future<void> _setStrokeWidth() async {
     final double oldStrokeWidth = _selectedPolyline!.options.strokeWidth!;
-    final double newStrokeWidth = _strokeWidths.elementAtOrNull(
-            _strokeWidths.indexWhere((double e) => e == oldStrokeWidth) + 1) ??
+    final double newStrokeWidth =
+        _strokeWidths.elementAtOrNull(
+          _strokeWidths.indexWhere((double e) => e == oldStrokeWidth) + 1,
+        ) ??
         _strokeWidths[0];
 
     await _updateSelectedPolylineWithOptions(
-        _selectedPolyline!.options.copyWith(strokeWidth: newStrokeWidth));
+      _selectedPolyline!.options.copyWith(strokeWidth: newStrokeWidth),
+    );
   }
 
   Future<void> _toggleVisibility() async {
     final bool oldVisibility = _selectedPolyline!.options.visible!;
 
     await _updateSelectedPolylineWithOptions(
-        _selectedPolyline!.options.copyWith(visible: !oldVisibility));
+      _selectedPolyline!.options.copyWith(visible: !oldVisibility),
+    );
   }
 
   Future<void> _setZIndex() async {
     final double oldZIndex = _selectedPolyline!.options.zIndex!;
-    final double newZIndex = _zIndexes.elementAtOrNull(
-            _zIndexes.indexWhere((double e) => e == oldZIndex) + 1) ??
+    final double newZIndex =
+        _zIndexes.elementAtOrNull(
+          _zIndexes.indexWhere((double e) => e == oldZIndex) + 1,
+        ) ??
         _zIndexes[0];
 
     await _updateSelectedPolylineWithOptions(
-        _selectedPolyline!.options.copyWith(zIndex: newZIndex));
+      _selectedPolyline!.options.copyWith(zIndex: newZIndex),
+    );
   }
 
   @override
   Widget build(BuildContext context) => buildPage(
-      context,
-      (BuildContext context) => Padding(
-            padding: EdgeInsets.zero,
-            child: Column(children: <Widget>[
-              Expanded(
-                  child: GoogleMapsNavigationView(
-                initialCameraPosition: const CameraPosition(
-                    target: LatLng(latitude: 37.422, longitude: -122.084),
-                    zoom: 12),
-                initialNavigationUIEnabledPreference:
-                    NavigationUIEnabledPreference.disabled,
-                onViewCreated: _onViewCreated,
-                onPolylineClicked: _onPolylineClicked,
-              )),
-              const SizedBox(height: 10),
-              Text(
-                _polylines.isEmpty
-                    ? 'No polylines added. Move camera to place polyline.'
-                    : _selectedPolyline == null
-                        ? 'Click to select polyline'
-                        : 'Selected polyline ${_selectedPolyline!.polylineId}',
-                style: const TextStyle(fontSize: 15),
-                textAlign: TextAlign.center,
+    context,
+    (BuildContext context) => Padding(
+      padding: EdgeInsets.zero,
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: GoogleMapsNavigationView(
+              initialCameraPosition: const CameraPosition(
+                target: LatLng(latitude: 37.422, longitude: -122.084),
+                zoom: 12,
               ),
-              bottomControls
-            ]),
-          ));
+              initialNavigationUIEnabledPreference:
+                  NavigationUIEnabledPreference.disabled,
+              onViewCreated: _onViewCreated,
+              onPolylineClicked: _onPolylineClicked,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            _polylines.isEmpty
+                ? 'No polylines added. Move camera to place polyline.'
+                : _selectedPolyline == null
+                ? 'Click to select polyline'
+                : 'Selected polyline ${_selectedPolyline!.polylineId}',
+            style: const TextStyle(fontSize: 15),
+            textAlign: TextAlign.center,
+          ),
+          bottomControls,
+        ],
+      ),
+    ),
+  );
 
   Widget get bottomControls {
     return Padding(
@@ -261,27 +290,32 @@ class _PolylinesPageState extends ExamplePageState<PolylinesPage> {
                 onPressed:
                     _selectedPolyline == null ? null : () => _setStrokeColor(),
                 child: Text(
-                    'Stroke color: ${_colorName(_selectedPolyline?.options.strokeColor)}'),
+                  'Stroke color: ${_colorName(_selectedPolyline?.options.strokeColor)}',
+                ),
               ),
               ElevatedButton(
                 onPressed:
                     _selectedPolyline == null ? null : () => _setStrokeWidth(),
                 child: Text(
-                    'Stroke width: ${_selectedPolyline?.options.strokeWidth}'),
+                  'Stroke width: ${_selectedPolyline?.options.strokeWidth}',
+                ),
               ),
               if (Platform.isAndroid)
                 ElevatedButton(
-                  onPressed: _selectedPolyline == null
-                      ? null
-                      : () => _setStrokePattern(),
+                  onPressed:
+                      _selectedPolyline == null
+                          ? null
+                          : () => _setStrokePattern(),
                   child: const Text('Change stroke pattern'),
                 ),
               ElevatedButton(
-                onPressed: _selectedPolyline == null
-                    ? null
-                    : () => _toggleVisibility(),
-                child:
-                    Text('Visibility: ${_selectedPolyline?.options.visible}'),
+                onPressed:
+                    _selectedPolyline == null
+                        ? null
+                        : () => _toggleVisibility(),
+                child: Text(
+                  'Visibility: ${_selectedPolyline?.options.visible}',
+                ),
               ),
               ElevatedButton(
                 onPressed:
@@ -289,15 +323,16 @@ class _PolylinesPageState extends ExamplePageState<PolylinesPage> {
                 child: Text('Z-index: ${_selectedPolyline?.options.zIndex}'),
               ),
               ElevatedButton(
-                onPressed: _polylines.isNotEmpty
-                    ? () {
-                        setState(() {
-                          _navigationViewController.clearPolylines();
-                          _polylines.clear();
-                          _selectedPolyline = null;
-                        });
-                      }
-                    : null,
+                onPressed:
+                    _polylines.isNotEmpty
+                        ? () {
+                          setState(() {
+                            _navigationViewController.clearPolylines();
+                            _polylines.clear();
+                            _selectedPolyline = null;
+                          });
+                        }
+                        : null,
                 child: const Text('Clear all'),
               ),
             ],

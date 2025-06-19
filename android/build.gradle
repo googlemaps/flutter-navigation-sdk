@@ -20,11 +20,11 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url 'https://plugins.gradle.org/m2/' }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.4.0'
+        classpath 'com.android.tools.build:gradle:8.7.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.ncorti.ktfmt.gradle:plugin:0.21.0'
     }
@@ -53,7 +53,7 @@ ktfmt {
 android {
     namespace 'com.google.maps.flutter.navigation'
     
-    compileSdk 34
+    compileSdk = 35
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
@@ -61,7 +61,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = JavaVersion.VERSION_11
     }
 
     sourceSets {
@@ -70,18 +70,18 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 23
+        minSdk = 23
         consumerProguardFiles 'proguard.txt'
     }
 
     dependencies {
-        implementation "androidx.car.app:app:1.4.0"
-        implementation "androidx.car.app:app-projected:1.4.0"
-        implementation "com.google.android.libraries.navigation:navigation:6.2.0"
+        implementation 'androidx.car.app:app:1.4.0'
+        implementation 'androidx.car.app:app-projected:1.4.0'
+        implementation 'com.google.android.libraries.navigation:navigation:6.2.2'
         testImplementation 'org.jetbrains.kotlin:kotlin-test'
         testImplementation 'io.mockk:mockk:1.13.8'
         testImplementation 'junit:junit:4.13.2'
-        testImplementation 'org.robolectric:robolectric:4.9'
+        testImplementation 'org.robolectric:robolectric:4.14.1'
     }
 
     testOptions {
@@ -90,7 +90,7 @@ android {
         }
         unitTests.all {
             testLogging {
-                events "passed", "skipped", "failed", "standardOut", "standardError"
+                events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
                 outputs.upToDateWhen {false}
                 showStandardStreams = true
             }
