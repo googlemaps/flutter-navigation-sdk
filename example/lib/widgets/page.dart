@@ -52,10 +52,7 @@ abstract class ExamplePageState<T extends ExamplePage> extends State<T>
     _overlayOffsetAnimation = Tween<Offset>(
       begin: const Offset(0.0, 1.0),
       end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    ));
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   /// Toggles overlay visibility.
@@ -99,9 +96,7 @@ abstract class ExamplePageState<T extends ExamplePage> extends State<T>
     return Stack(
       children: <Widget>[
         Scaffold(
-          appBar: AppBar(
-            title: Text(widget.title),
-          ),
+          appBar: AppBar(title: Text(widget.title)),
           body: Builder(builder: (BuildContext context) => builder(context)),
         ),
         if (_isOverlayVisible) _buildOverlay(),
@@ -114,12 +109,17 @@ abstract class ExamplePageState<T extends ExamplePage> extends State<T>
       children: <Widget>[
         // Overlay background, which is used to close overlay when tapped.
         GestureDetector(
-            onTap: hideOverlay,
-            child: AnimatedBuilder(
-                animation: _controller,
-                builder: (BuildContext context, Widget? child) => Container(
-                    color: Colors.black.withAlpha(
-                        (255.0 * _controller.value * 0.5).round())))),
+          onTap: hideOverlay,
+          child: AnimatedBuilder(
+            animation: _controller,
+            builder:
+                (BuildContext context, Widget? child) => Container(
+                  color: Colors.black.withAlpha(
+                    (255.0 * _controller.value * 0.5).round(),
+                  ),
+                ),
+          ),
+        ),
         // Overlay content
         SlideTransition(
           position: _overlayOffsetAnimation,
@@ -134,8 +134,9 @@ abstract class ExamplePageState<T extends ExamplePage> extends State<T>
                 color: Theme.of(context).cardColor,
                 elevation: 4,
                 borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(16)),
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
+                ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
@@ -153,11 +154,15 @@ abstract class ExamplePageState<T extends ExamplePage> extends State<T>
                     // Container for overlay content
                     Container(
                       constraints: BoxConstraints(
-                          maxHeight: MediaQuery.of(context).size.height * 0.6),
+                        maxHeight: MediaQuery.of(context).size.height * 0.6,
+                      ),
                       child: SafeArea(
                         top: false,
                         minimum: const EdgeInsets.only(
-                            left: 8, right: 8, bottom: 16),
+                          left: 8,
+                          right: 8,
+                          bottom: 16,
+                        ),
                         // Make content scrollable
                         child: Scrollbar(
                           thumbVisibility: true,
@@ -173,42 +178,47 @@ abstract class ExamplePageState<T extends ExamplePage> extends State<T>
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }
 
   /// Helper method to show message overlay.
-  void showOverlaySnackBar(String message,
-      {Alignment alignment = Alignment.bottomCenter}) {
+  void showOverlaySnackBar(
+    String message, {
+    Alignment alignment = Alignment.bottomCenter,
+  }) {
     final OverlayState overlay = Overlay.of(context);
     final OverlayEntry overlayEntry = OverlayEntry(
-      builder: (BuildContext context) => Align(
-        alignment: alignment,
-        child: SizedBox(
-          width: double.infinity,
-          child: Material(
-            elevation: 10.0,
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              color: Theme.of(context).snackBarTheme.backgroundColor,
-              child: SafeArea(
-                  top: false,
-                  child: Text(
-                    message,
-                    style: Theme.of(context).snackBarTheme.contentTextStyle,
-                  )),
+      builder:
+          (BuildContext context) => Align(
+            alignment: alignment,
+            child: SizedBox(
+              width: double.infinity,
+              child: Material(
+                elevation: 10.0,
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  color: Theme.of(context).snackBarTheme.backgroundColor,
+                  child: SafeArea(
+                    top: false,
+                    child: Text(
+                      message,
+                      style: Theme.of(context).snackBarTheme.contentTextStyle,
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
-        ),
-      ),
     );
 
     overlay.insert(overlayEntry);
 
     // Automatically remove the snack bar after some duration
-    Future<void>.delayed(const Duration(seconds: 3))
-        .then((_) => overlayEntry.remove());
+    Future<void>.delayed(
+      const Duration(seconds: 3),
+    ).then((_) => overlayEntry.remove());
   }
 
   @override

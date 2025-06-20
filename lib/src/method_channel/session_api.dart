@@ -38,7 +38,7 @@ class NavigationSessionAPIImpl {
   /// called when initializing navigation session.
   void ensureSessionAPISetUp() {
     if (!_sessionApiHasBeenSetUp) {
-      NavigationSessionEventApi.setup(
+      NavigationSessionEventApi.setUp(
         NavigationSessionEventApiImpl(
           sessionEventStreamController: _sessionEventStreamController,
         ),
@@ -48,25 +48,32 @@ class NavigationSessionAPIImpl {
   }
 
   /// Creates navigation session in the native platform and returns navigation session controller.
-  Future<void> createNavigationSession(bool abnormalTerminationReportingEnabled,
-      TaskRemovedBehavior taskRemovedBehavior) async {
+  Future<void> createNavigationSession(
+    bool abnormalTerminationReportingEnabled,
+    TaskRemovedBehavior taskRemovedBehavior,
+  ) async {
     // Setup session API streams.
     ensureSessionAPISetUp();
     try {
       // Create native navigation session manager.
       await _sessionApi.createNavigationSession(
-          abnormalTerminationReportingEnabled, taskRemovedBehavior.toDto());
+        abnormalTerminationReportingEnabled,
+        taskRemovedBehavior.toDto(),
+      );
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'notAuthorized':
           throw const SessionInitializationException(
-              SessionInitializationError.notAuthorized);
+            SessionInitializationError.notAuthorized,
+          );
         case 'locationPermissionMissing':
           throw const SessionInitializationException(
-              SessionInitializationError.locationPermissionMissing);
+            SessionInitializationError.locationPermissionMissing,
+          );
         case 'termsNotAccepted':
           throw const SessionInitializationException(
-              SessionInitializationError.termsNotAccepted);
+            SessionInitializationError.termsNotAccepted,
+          );
         default:
           rethrow;
       }
@@ -93,17 +100,24 @@ class NavigationSessionAPIImpl {
   }
 
   /// Show terms and conditions dialog.
-  Future<bool> showTermsAndConditionsDialog(String title, String companyName,
-      bool shouldOnlyShowDriverAwarenessDisclaimer) async {
+  Future<bool> showTermsAndConditionsDialog(
+    String title,
+    String companyName,
+    bool shouldOnlyShowDriverAwarenessDisclaimer,
+  ) async {
     try {
       return await _sessionApi.showTermsAndConditionsDialog(
-          title, companyName, shouldOnlyShowDriverAwarenessDisclaimer);
+        title,
+        companyName,
+        shouldOnlyShowDriverAwarenessDisclaimer,
+      );
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'notSupported':
           if (Platform.isIOS && shouldOnlyShowDriverAwarenessDisclaimer) {
             throw UnsupportedError(
-                'Driver awareness disclaimer is currently not supported on iOS.');
+              'Driver awareness disclaimer is currently not supported on iOS.',
+            );
           } else {
             rethrow;
           }
@@ -191,8 +205,9 @@ class NavigationSessionAPIImpl {
   /// Sets destination waypoints and other settings.
   Future<NavigationRouteStatus> setDestinations(Destinations msg) async {
     try {
-      final RouteStatusDto status =
-          await _sessionApi.setDestinations(msg.toDto());
+      final RouteStatusDto status = await _sessionApi.setDestinations(
+        msg.toDto(),
+      );
 
       return status.toNavigationRouteStatus();
     } on PlatformException catch (e) {
@@ -258,7 +273,8 @@ class NavigationSessionAPIImpl {
 
   /// Sets audio guidance settings.
   Future<void> setAudioGuidance(
-      NavigationAudioGuidanceSettings settings) async {
+    NavigationAudioGuidanceSettings settings,
+  ) async {
     try {
       return await _sessionApi.setAudioGuidance(settings.toDto());
     } on PlatformException catch (e) {
@@ -315,10 +331,12 @@ class NavigationSessionAPIImpl {
 
   /// Simulates locations along existing route with simulation options.
   Future<void> simulateLocationsAlongExistingRouteWithOptions(
-      SimulationOptions options) async {
+    SimulationOptions options,
+  ) async {
     try {
       return await _sessionApi.simulateLocationsAlongExistingRouteWithOptions(
-          simulationOptionsToDto(options));
+        simulationOptionsToDto(options),
+      );
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'sessionNotInitialized':
@@ -331,14 +349,15 @@ class NavigationSessionAPIImpl {
 
   /// Simulates locations along new route.
   Future<NavigationRouteStatus> simulateLocationsAlongNewRoute(
-      List<NavigationWaypoint> waypoints) async {
+    List<NavigationWaypoint> waypoints,
+  ) async {
     try {
-      final RouteStatusDto routeStatus =
-          await _sessionApi.simulateLocationsAlongNewRoute(waypoints.map(
-        (NavigationWaypoint e) {
-          return e.toDto();
-        },
-      ).toList());
+      final RouteStatusDto routeStatus = await _sessionApi
+          .simulateLocationsAlongNewRoute(
+            waypoints.map((NavigationWaypoint e) {
+              return e.toDto();
+            }).toList(),
+          );
       return routeStatus.toNavigationRouteStatus();
     } on PlatformException catch (e) {
       switch (e.code) {
@@ -352,21 +371,20 @@ class NavigationSessionAPIImpl {
 
   /// Simulates locations along new route with routing and simulation options.
   Future<NavigationRouteStatus>
-      simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
-          List<NavigationWaypoint> waypoints,
-          RoutingOptions routingOptions,
-          SimulationOptions simulationOptions) async {
+  simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
+    List<NavigationWaypoint> waypoints,
+    RoutingOptions routingOptions,
+    SimulationOptions simulationOptions,
+  ) async {
     try {
       final RouteStatusDto routeStatus = await _sessionApi
           .simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
-        waypoints.map(
-          (NavigationWaypoint e) {
-            return e.toDto();
-          },
-        ).toList(),
-        routingOptions.toDto(),
-        simulationOptionsToDto(simulationOptions),
-      );
+            waypoints.map((NavigationWaypoint e) {
+              return e.toDto();
+            }).toList(),
+            routingOptions.toDto(),
+            simulationOptionsToDto(simulationOptions),
+          );
       return routeStatus.toNavigationRouteStatus();
     } on PlatformException catch (e) {
       switch (e.code) {
@@ -380,19 +398,18 @@ class NavigationSessionAPIImpl {
 
   /// Simulates locations along new route with routing options.
   Future<NavigationRouteStatus>
-      simulateLocationsAlongNewRouteWithRoutingOptions(
-          List<NavigationWaypoint> waypoints,
-          RoutingOptions routingOptions) async {
+  simulateLocationsAlongNewRouteWithRoutingOptions(
+    List<NavigationWaypoint> waypoints,
+    RoutingOptions routingOptions,
+  ) async {
     try {
-      final RouteStatusDto routeStatus =
-          await _sessionApi.simulateLocationsAlongNewRouteWithRoutingOptions(
-        waypoints.map(
-          (NavigationWaypoint e) {
-            return e.toDto();
-          },
-        ).toList(),
-        routingOptions.toDto(),
-      );
+      final RouteStatusDto routeStatus = await _sessionApi
+          .simulateLocationsAlongNewRouteWithRoutingOptions(
+            waypoints.map((NavigationWaypoint e) {
+              return e.toDto();
+            }).toList(),
+            routingOptions.toDto(),
+          );
       return routeStatus.toNavigationRouteStatus();
     } on PlatformException catch (e) {
       switch (e.code) {
@@ -476,10 +493,12 @@ class NavigationSessionAPIImpl {
 
   /// Enables navigation info updates.
   Future<void> enableTurnByTurnNavigationEvents(
-      int? numNextStepsToPreview) async {
+    int? numNextStepsToPreview,
+  ) async {
     try {
-      return await _sessionApi
-          .enableTurnByTurnNavigationEvents(numNextStepsToPreview);
+      return await _sessionApi.enableTurnByTurnNavigationEvents(
+        numNextStepsToPreview,
+      );
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'sessionNotInitialized':
@@ -532,8 +551,10 @@ class NavigationSessionAPIImpl {
       return traveledRoute
           .where((LatLngDto? p) => p != null)
           .cast<LatLngDto>()
-          .map((LatLngDto p) =>
-              LatLng(latitude: p.latitude, longitude: p.longitude))
+          .map(
+            (LatLngDto p) =>
+                LatLng(latitude: p.latitude, longitude: p.longitude),
+          )
           .toList();
     } on PlatformException catch (e) {
       switch (e.code) {
@@ -570,7 +591,7 @@ class NavigationSessionAPIImpl {
 
   /// Get navigation road snapped location event stream from the navigation session.
   Stream<RoadSnappedLocationUpdatedEvent>
-      getNavigationRoadSnappedLocationEventStream() {
+  getNavigationRoadSnappedLocationEventStream() {
     return _sessionEventStreamController.stream
         .whereType<RoadSnappedLocationUpdatedEvent>();
   }
@@ -578,7 +599,7 @@ class NavigationSessionAPIImpl {
   /// Get navigation road snapped raw location event stream from the navigation session.
   /// Android only.
   Stream<RoadSnappedRawLocationUpdatedEvent>
-      getNavigationRoadSnappedRawLocationEventStream() {
+  getNavigationRoadSnappedRawLocationEventStream() {
     return _sessionEventStreamController.stream
         .whereType<RoadSnappedRawLocationUpdatedEvent>();
   }
@@ -597,7 +618,7 @@ class NavigationSessionAPIImpl {
 
   /// Get navigation on GPS availability update event stream from the navigation session.
   Stream<GpsAvailabilityUpdatedEvent>
-      getNavigationOnGpsAvailabilityUpdateEventStream() {
+  getNavigationOnGpsAvailabilityUpdateEventStream() {
     return _sessionEventStreamController.stream
         .whereType<GpsAvailabilityUpdatedEvent>();
   }
@@ -618,16 +639,20 @@ class NavigationSessionAPIImpl {
 
   /// Get navigation remaining time or distance event stream from the navigation session.
   Stream<RemainingTimeOrDistanceChangedEvent>
-      getNavigationRemainingTimeOrDistanceChangedEventStream() {
+  getNavigationRemainingTimeOrDistanceChangedEventStream() {
     return _sessionEventStreamController.stream
         .whereType<RemainingTimeOrDistanceChangedEvent>();
   }
 
   /// Register remaining time or distance change listener with thresholds.
   Future<void> registerRemainingTimeOrDistanceChangedListener(
-      int remainingTimeThresholdSeconds, int remainingDistanceThresholdMeters) {
+    int remainingTimeThresholdSeconds,
+    int remainingDistanceThresholdMeters,
+  ) {
     return _sessionApi.registerRemainingTimeOrDistanceChangedListener(
-        remainingTimeThresholdSeconds, remainingDistanceThresholdMeters);
+      remainingTimeThresholdSeconds,
+      remainingDistanceThresholdMeters,
+    );
   }
 
   /// Get navigation info event stream from the navigation session.
@@ -653,8 +678,9 @@ class NavigationSessionEventApiImpl implements NavigationSessionEventApi {
 
   @override
   void onArrival(NavigationWaypointDto waypoint) {
-    sessionEventStreamController
-        .add(OnArrivalEvent(waypoint: waypoint.toNavigationWaypoint()));
+    sessionEventStreamController.add(
+      OnArrivalEvent(waypoint: waypoint.toNavigationWaypoint()),
+    );
   }
 
   @override
@@ -664,8 +690,9 @@ class NavigationSessionEventApiImpl implements NavigationSessionEventApi {
 
   @override
   void onGpsAvailabilityUpdate(bool available) {
-    sessionEventStreamController
-        .add(GpsAvailabilityUpdatedEvent(available: available));
+    sessionEventStreamController.add(
+      GpsAvailabilityUpdatedEvent(available: available),
+    );
   }
 
   @override
@@ -680,28 +707,37 @@ class NavigationSessionEventApiImpl implements NavigationSessionEventApi {
 
   @override
   void onRoadSnappedLocationUpdated(LatLngDto location) {
-    sessionEventStreamController
-        .add(RoadSnappedLocationUpdatedEvent(location: location.toLatLng()));
+    sessionEventStreamController.add(
+      RoadSnappedLocationUpdatedEvent(location: location.toLatLng()),
+    );
   }
 
   // Android only.
   @override
   void onRoadSnappedRawLocationUpdated(LatLngDto location) {
-    sessionEventStreamController
-        .add(RoadSnappedRawLocationUpdatedEvent(location: location.toLatLng()));
+    sessionEventStreamController.add(
+      RoadSnappedRawLocationUpdatedEvent(location: location.toLatLng()),
+    );
   }
 
   @override
   void onRemainingTimeOrDistanceChanged(
-      double remainingTime, double remainingDistance) {
-    sessionEventStreamController.add(RemainingTimeOrDistanceChangedEvent(
-        remainingTime: remainingTime, remainingDistance: remainingDistance));
+    double remainingTime,
+    double remainingDistance,
+  ) {
+    sessionEventStreamController.add(
+      RemainingTimeOrDistanceChangedEvent(
+        remainingTime: remainingTime,
+        remainingDistance: remainingDistance,
+      ),
+    );
   }
 
   @override
   void onNavInfo(NavInfoDto navInfo) {
-    sessionEventStreamController
-        .add(NavInfoEvent(navInfo: navInfo.toNavInfo()));
+    sessionEventStreamController.add(
+      NavInfoEvent(navInfo: navInfo.toNavInfo()),
+    );
   }
 }
 

@@ -46,7 +46,7 @@ enum TestMapType {
 // Map types to be tested
 const List<TestMapType> testMapTypes = <TestMapType>[
   TestMapType.mapView,
-  TestMapType.navigationView
+  TestMapType.navigationView,
 ];
 
 // Get a variants for the test map types.
@@ -79,18 +79,16 @@ void patrol(
   NativeAutomatorConfig? nativeAutomatorConfig,
   TestVariant<Object?> variant = const DefaultTestVariant(),
 }) {
-  /// The patrolTest skip functionality does not work as expected and can
-  /// hang the test execution.
-  /// https://github.com/leancodepl/patrol/issues/1690
-  /// Skip the test manually for now.
-  if (skip) {
-    debugPrint('Skipping test: $description');
-    return;
-  }
-
   patrolTest(
     description,
-    callback,
+    (PatrolIntegrationTester $) async {
+      // Log the test start.
+      $.log('Starting test: $description');
+      // Run the test callback.
+      await callback($);
+      // Log the test end.
+      $.log('Test completed: $description');
+    },
     skip: skip,
     variant: variant,
     timeout: Timeout(Duration(seconds: timeoutSeconds)),
@@ -100,49 +98,42 @@ void patrol(
 
 /// Pumps a [navigationView] widget in tester [$] and then waits until it settles.
 Future<void> pumpNavigationView(
-    PatrolIntegrationTester $, GoogleMapsNavigationView navigationView) async {
+  PatrolIntegrationTester $,
+  GoogleMapsNavigationView navigationView,
+) async {
   await $.pumpWidget(wrapNavigationView(navigationView));
   await $.pumpAndSettle();
 }
 
 /// Wraps a [navigationView] in widgets.
 Widget wrapNavigationView(GoogleMapsNavigationView navigationView) {
-  return MaterialApp(
-    home: Scaffold(
-      body: Center(
-        child: navigationView,
-      ),
-    ),
-  );
+  return MaterialApp(home: Scaffold(body: Center(child: navigationView)));
 }
 
 /// Pumps a [mapView] widget in tester [$] and then waits until it settles.
 Future<void> pumpMapView(
-    PatrolIntegrationTester $, GoogleMapsMapView mapView) async {
+  PatrolIntegrationTester $,
+  GoogleMapsMapView mapView,
+) async {
   await $.pumpWidget(wrapMapView(mapView));
   await $.pumpAndSettle();
 }
 
 /// Wraps a [mapView] in widgets.
 Widget wrapMapView(GoogleMapsMapView mapView) {
-  return MaterialApp(
-    home: Scaffold(
-      body: Center(
-        child: mapView,
-      ),
-    ),
-  );
+  return MaterialApp(home: Scaffold(body: Center(child: mapView)));
 }
 
 Future<void> checkTermsAndConditionsAcceptance(
-    PatrolIntegrationTester $) async {
+  PatrolIntegrationTester $,
+) async {
   if (!await GoogleMapsNavigator.areTermsAccepted()) {
     /// Request native TOS dialog.
     final Future<bool> tosAccepted =
         GoogleMapsNavigator.showTermsAndConditionsDialog(
-      'test_title',
-      'test_company_name',
-    );
+          'test_title',
+          'test_company_name',
+        );
 
     await $.pumpAndSettle();
     // Tap accept or cancel.
@@ -167,8 +158,9 @@ Future<void> checkLocationDialogAcceptance(PatrolIntegrationTester $) async {
     final Future<PermissionStatus> locationGranted =
         Permission.locationWhenInUse.request();
 
-    if (await $.native
-        .isPermissionDialogVisible(timeout: const Duration(seconds: 5))) {
+    if (await $.native.isPermissionDialogVisible(
+      timeout: const Duration(seconds: 5),
+    )) {
       // Grant location permission.
       await $.native.grantPermissionWhenInUse();
     }
@@ -182,20 +174,22 @@ Future<void> checkLocationDialogAcceptance(PatrolIntegrationTester $) async {
 
 /// Accept ToS and grant location permission if not accepted/granted.
 Future<void> checkLocationDialogAndTosAcceptance(
-    PatrolIntegrationTester $) async {
+  PatrolIntegrationTester $,
+) async {
   await checkTermsAndConditionsAcceptance($);
   await checkLocationDialogAcceptance($);
 }
 
 Future<GoogleNavigationViewController> startNavigation(
-    PatrolIntegrationTester $,
-    {void Function(CameraPosition, bool)? onCameraMoveStarted,
-    void Function(CameraPosition)? onCameraMove,
-    void Function(CameraPosition)? onCameraIdle,
-    void Function(CameraPosition)? onCameraStartedFollowingLocation,
-    void Function(CameraPosition)? onCameraStoppedFollowingLocation}) async {
+  PatrolIntegrationTester $, {
+  void Function(CameraPosition, bool)? onCameraMoveStarted,
+  void Function(CameraPosition)? onCameraMove,
+  void Function(CameraPosition)? onCameraIdle,
+  void Function(CameraPosition)? onCameraStartedFollowingLocation,
+  void Function(CameraPosition)? onCameraStoppedFollowingLocation,
+}) async {
   final ControllerCompleter<GoogleNavigationViewController>
-      controllerCompleter = ControllerCompleter();
+  controllerCompleter = ControllerCompleter();
 
   await checkLocationDialogAndTosAcceptance($);
 
@@ -221,10 +215,9 @@ Future<GoogleNavigationViewController> startNavigation(
   await GoogleMapsNavigator.initializeNavigationSession();
   await $.pumpAndSettle();
 
-  await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
-    latitude: startLocationLat,
-    longitude: startLocationLng,
-  ));
+  await GoogleMapsNavigator.simulator.setUserLocation(
+    const LatLng(latitude: startLocationLat, longitude: startLocationLng),
+  );
   await $.pumpAndSettle(timeout: const Duration(seconds: 1));
 
   /// Set Destination.
@@ -276,7 +269,7 @@ Future<GoogleMapViewController> getMapViewControllerForTestMapType(
   void Function(String)? onPolygonClicked,
   void Function(String)? onPolylineClicked,
   void Function(NavigationViewRecenterButtonClickedEvent)?
-      onRecenterButtonClicked,
+  onRecenterButtonClicked,
   void Function(CameraPosition)? onCameraIdle,
 }) async {
   GoogleMapViewController viewController;
@@ -358,7 +351,7 @@ Future<GoogleNavigationViewController> startNavigationWithoutDestination(
   void Function(String)? onPolygonClicked,
   void Function(String)? onPolylineClicked,
   void Function(NavigationViewRecenterButtonClickedEvent)?
-      onRecenterButtonClicked,
+  onRecenterButtonClicked,
   void Function(CameraPosition)? onCameraIdle,
 }) async {
   final Completer<GoogleNavigationViewController> controllerCompleter =
@@ -404,10 +397,9 @@ Future<GoogleNavigationViewController> startNavigationWithoutDestination(
   }
 
   if (simulateLocation) {
-    await GoogleMapsNavigator.simulator.setUserLocation(const LatLng(
-      latitude: startLocationLat,
-      longitude: startLocationLng,
-    ));
+    await GoogleMapsNavigator.simulator.setUserLocation(
+      const LatLng(latitude: startLocationLat, longitude: startLocationLng),
+    );
     await $.pumpAndSettle(timeout: const Duration(seconds: 1));
   }
 
@@ -434,7 +426,7 @@ Future<GoogleMapViewController> startMapView(
   void Function(String)? onPolygonClicked,
   void Function(String)? onPolylineClicked,
   void Function(NavigationViewRecenterButtonClickedEvent)?
-      onRecenterButtonClicked,
+  onRecenterButtonClicked,
   void Function(CameraPosition)? onCameraIdle,
 }) async {
   final ControllerCompleter<GoogleMapViewController> controllerCompleter =
@@ -481,9 +473,13 @@ Future<GoogleMapViewController> startMapView(
 /// to the provided [predicate] function until the [predicate] function returns true.
 /// Then the function returns that Value. If [maxTries] are reached without
 /// predicate returning true, null is returned.
-Future<Value?> waitForValueMatchingPredicate<Value>(PatrolIntegrationTester $,
-    Future<Value> Function() getValue, bool Function(Value) predicate,
-    {int maxTries = 200, int delayMs = 100}) async {
+Future<Value?> waitForValueMatchingPredicate<Value>(
+  PatrolIntegrationTester $,
+  Future<Value> Function() getValue,
+  bool Function(Value) predicate, {
+  int maxTries = 200,
+  int delayMs = 100,
+}) async {
   for (int i = 0; i < maxTries; i++) {
     final Value currentValue = await getValue();
     if (predicate(currentValue)) {
@@ -516,10 +512,10 @@ String buildReasonForToggle(String toggle, bool result) =>
 /// [GoogleNavigationViewController] or [GoogleMapViewController].
 class ControllerCompleter<T> {
   ControllerCompleter()
-      : assert(
-          T == GoogleNavigationViewController || T == GoogleMapViewController,
-          'T must be either GoogleNavigationViewController or GoogleMapViewController',
-        );
+    : assert(
+        T == GoogleNavigationViewController || T == GoogleMapViewController,
+        'T must be either GoogleNavigationViewController or GoogleMapViewController',
+      );
 
   final Completer<T> _completer = Completer<T>();
 

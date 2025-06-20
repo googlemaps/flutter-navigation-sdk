@@ -23,7 +23,7 @@ import '../widgets/widgets.dart';
 
 class CirclesPage extends ExamplePage {
   const CirclesPage({super.key})
-      : super(leading: const Icon(Icons.circle), title: 'Circles');
+    : super(leading: const Icon(Icons.circle), title: 'Circles');
   @override
   ExamplePageState<CirclesPage> createState() => _CirclesPageState();
 }
@@ -37,7 +37,7 @@ class _CirclesPageState extends ExamplePageState<CirclesPage> {
     Colors.black,
     Colors.red,
     Colors.green,
-    Colors.blue
+    Colors.blue,
   ];
   final List<double> _radiusList = <double>[5, 50, 500, 5000, 50000];
   final List<double> _strokeWidths = <double>[2, 6, 10];
@@ -50,8 +50,8 @@ class _CirclesPageState extends ExamplePageState<CirclesPage> {
     <PatternItem>[
       const DashPattern(length: 20),
       const DotPattern(),
-      const GapPattern(length: 50)
-    ]
+      const GapPattern(length: 50),
+    ],
   ];
   int _selectedStrokePatternIndex = 0;
 
@@ -68,13 +68,15 @@ class _CirclesPageState extends ExamplePageState<CirclesPage> {
     final LatLng centerPoint = cameraBounds.center;
 
     final CircleOptions options = CircleOptions(
-        position: centerPoint,
-        radius: 50,
-        clickable: true,
-        fillColor: Colors.red,
-        strokePattern: _strokePatterns[0]);
-    final List<Circle?> circles =
-        await _navigationViewController.addCircles(<CircleOptions>[options]);
+      position: centerPoint,
+      radius: 50,
+      clickable: true,
+      fillColor: Colors.red,
+      strokePattern: _strokePatterns[0],
+    );
+    final List<Circle?> circles = await _navigationViewController.addCircles(
+      <CircleOptions>[options],
+    );
     final Circle? circle = circles.firstOrNull;
     if (circle != null) {
       setState(() {
@@ -87,14 +89,16 @@ class _CirclesPageState extends ExamplePageState<CirclesPage> {
   Future<void> _updateSelectedCircleWithOptions(CircleOptions options) async {
     final Circle newCircle = _selectedCircle!.copyWith(options: options);
 
-    final List<Circle?> circles =
-        await _navigationViewController.updateCircles(<Circle>[newCircle]);
+    final List<Circle?> circles = await _navigationViewController.updateCircles(
+      <Circle>[newCircle],
+    );
     final Circle? circle = circles.firstOrNull;
     if (circle != null) {
       setState(() {
-        _circles = _circles
-            .where((Circle element) => element != _selectedCircle)
-            .toList();
+        _circles =
+            _circles
+                .where((Circle element) => element != _selectedCircle)
+                .toList();
         _selectedCircle = circle;
         _circles = _circles + <Circle>[circle];
       });
@@ -105,16 +109,18 @@ class _CirclesPageState extends ExamplePageState<CirclesPage> {
     await _navigationViewController.removeCircles(<Circle>[_selectedCircle!]);
 
     setState(() {
-      _circles = _circles
-          .where((Circle element) => element != _selectedCircle)
-          .toList();
+      _circles =
+          _circles
+              .where((Circle element) => element != _selectedCircle)
+              .toList();
       _selectedCircle = null;
     });
   }
 
   void _onCircleClicked(String circleId) {
-    final Circle circle =
-        _circles.firstWhere((Circle element) => element.circleId == circleId);
+    final Circle circle = _circles.firstWhere(
+      (Circle element) => element.circleId == circleId,
+    );
     setState(() {
       _selectedCircle = circle;
     });
@@ -122,40 +128,52 @@ class _CirclesPageState extends ExamplePageState<CirclesPage> {
 
   Future<void> _setRadius() async {
     final double oldRadius = _selectedCircle!.options.radius;
-    final double newRadius = _radiusList.elementAtOrNull(
-            _radiusList.indexWhere((double e) => e == oldRadius) + 1) ??
+    final double newRadius =
+        _radiusList.elementAtOrNull(
+          _radiusList.indexWhere((double e) => e == oldRadius) + 1,
+        ) ??
         _radiusList[0];
 
     await _updateSelectedCircleWithOptions(
-        _selectedCircle!.options.copyWith(radius: newRadius));
+      _selectedCircle!.options.copyWith(radius: newRadius),
+    );
   }
 
   // Android only.
   Future<void> _setStrokePattern() async {
     _selectedStrokePatternIndex =
         (_selectedStrokePatternIndex + 1) % _strokePatterns.length;
-    await _updateSelectedCircleWithOptions(_selectedCircle!.options
-        .copyWith(strokePattern: _strokePatterns[_selectedStrokePatternIndex]));
+    await _updateSelectedCircleWithOptions(
+      _selectedCircle!.options.copyWith(
+        strokePattern: _strokePatterns[_selectedStrokePatternIndex],
+      ),
+    );
   }
 
   Future<void> _setFillColor() async {
     final Color oldColor = _selectedCircle!.options.fillColor;
-    final Color newColor = _colors.elementAtOrNull(
-            _colors.indexWhere((Color e) => e == oldColor) + 1) ??
+    final Color newColor =
+        _colors.elementAtOrNull(
+          _colors.indexWhere((Color e) => e == oldColor) + 1,
+        ) ??
         _colors[0];
 
     await _updateSelectedCircleWithOptions(
-        _selectedCircle!.options.copyWith(fillColor: newColor));
+      _selectedCircle!.options.copyWith(fillColor: newColor),
+    );
   }
 
   Future<void> _setStrokeColor() async {
     final Color oldColor = _selectedCircle!.options.strokeColor;
-    final Color newColor = _colors.elementAtOrNull(
-            _colors.indexWhere((Color e) => e == oldColor) + 1) ??
+    final Color newColor =
+        _colors.elementAtOrNull(
+          _colors.indexWhere((Color e) => e == oldColor) + 1,
+        ) ??
         _colors[0];
 
     await _updateSelectedCircleWithOptions(
-        _selectedCircle!.options.copyWith(strokeColor: newColor));
+      _selectedCircle!.options.copyWith(strokeColor: newColor),
+    );
   }
 
   String _colorName(Color? color) {
@@ -174,60 +192,72 @@ class _CirclesPageState extends ExamplePageState<CirclesPage> {
 
   Future<void> _setStrokeWidth() async {
     final double oldStrokeWidth = _selectedCircle!.options.strokeWidth;
-    final double newStrokeWidth = _strokeWidths.elementAtOrNull(
-            _strokeWidths.indexWhere((double e) => e == oldStrokeWidth) + 1) ??
+    final double newStrokeWidth =
+        _strokeWidths.elementAtOrNull(
+          _strokeWidths.indexWhere((double e) => e == oldStrokeWidth) + 1,
+        ) ??
         _strokeWidths[0];
 
     await _updateSelectedCircleWithOptions(
-        _selectedCircle!.options.copyWith(strokeWidth: newStrokeWidth));
+      _selectedCircle!.options.copyWith(strokeWidth: newStrokeWidth),
+    );
   }
 
   Future<void> _toggleVisibility() async {
     final bool oldVisibility = _selectedCircle!.options.visible;
 
     await _updateSelectedCircleWithOptions(
-        _selectedCircle!.options.copyWith(visible: !oldVisibility));
+      _selectedCircle!.options.copyWith(visible: !oldVisibility),
+    );
   }
 
   Future<void> _setZIndex() async {
     final double oldZIndex = _selectedCircle!.options.zIndex;
-    final double newZIndex = _zIndexes.elementAtOrNull(
-            _zIndexes.indexWhere((double e) => e == oldZIndex) + 1) ??
+    final double newZIndex =
+        _zIndexes.elementAtOrNull(
+          _zIndexes.indexWhere((double e) => e == oldZIndex) + 1,
+        ) ??
         _zIndexes[0];
 
     await _updateSelectedCircleWithOptions(
-        _selectedCircle!.options.copyWith(zIndex: newZIndex));
+      _selectedCircle!.options.copyWith(zIndex: newZIndex),
+    );
   }
 
   @override
   Widget build(BuildContext context) => buildPage(
-      context,
-      (BuildContext context) => Padding(
-            padding: EdgeInsets.zero,
-            child: Column(children: <Widget>[
-              Expanded(
-                  child: GoogleMapsNavigationView(
-                initialCameraPosition: const CameraPosition(
-                    target: LatLng(latitude: 37.422, longitude: -122.084),
-                    zoom: 12),
-                initialNavigationUIEnabledPreference:
-                    NavigationUIEnabledPreference.disabled,
-                onViewCreated: _onViewCreated,
-                onCircleClicked: _onCircleClicked,
-              )),
-              const SizedBox(height: 10),
-              Text(
-                _circles.isEmpty
-                    ? 'No circles added. Move camera to place circle.'
-                    : _selectedCircle == null
-                        ? 'Click to select circle'
-                        : 'Selected circle ${_selectedCircle!.circleId}',
-                style: const TextStyle(fontSize: 15),
-                textAlign: TextAlign.center,
+    context,
+    (BuildContext context) => Padding(
+      padding: EdgeInsets.zero,
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: GoogleMapsNavigationView(
+              initialCameraPosition: const CameraPosition(
+                target: LatLng(latitude: 37.422, longitude: -122.084),
+                zoom: 12,
               ),
-              bottomControls
-            ]),
-          ));
+              initialNavigationUIEnabledPreference:
+                  NavigationUIEnabledPreference.disabled,
+              onViewCreated: _onViewCreated,
+              onCircleClicked: _onCircleClicked,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            _circles.isEmpty
+                ? 'No circles added. Move camera to place circle.'
+                : _selectedCircle == null
+                ? 'Click to select circle'
+                : 'Selected circle ${_selectedCircle!.circleId}',
+            style: const TextStyle(fontSize: 15),
+            textAlign: TextAlign.center,
+          ),
+          bottomControls,
+        ],
+      ),
+    ),
+  );
 
   Widget get bottomControls {
     return Padding(
@@ -255,25 +285,29 @@ class _CirclesPageState extends ExamplePageState<CirclesPage> {
                 onPressed:
                     _selectedCircle == null ? null : () => _setFillColor(),
                 child: Text(
-                    'Fill color: ${_colorName(_selectedCircle?.options.fillColor)}'),
+                  'Fill color: ${_colorName(_selectedCircle?.options.fillColor)}',
+                ),
               ),
               ElevatedButton(
                 onPressed:
                     _selectedCircle == null ? null : () => _setStrokeColor(),
                 child: Text(
-                    'Stroke color: ${_colorName(_selectedCircle?.options.strokeColor)}'),
+                  'Stroke color: ${_colorName(_selectedCircle?.options.strokeColor)}',
+                ),
               ),
               ElevatedButton(
                 onPressed:
                     _selectedCircle == null ? null : () => _setStrokeWidth(),
                 child: Text(
-                    'Stroke width: ${_selectedCircle?.options.strokeWidth}'),
+                  'Stroke width: ${_selectedCircle?.options.strokeWidth}',
+                ),
               ),
               if (Platform.isAndroid)
                 ElevatedButton(
-                  onPressed: _selectedCircle == null
-                      ? null
-                      : () => _setStrokePattern(),
+                  onPressed:
+                      _selectedCircle == null
+                          ? null
+                          : () => _setStrokePattern(),
                   child: const Text('Change stroke pattern'),
                 ),
               ElevatedButton(
@@ -286,15 +320,16 @@ class _CirclesPageState extends ExamplePageState<CirclesPage> {
                 child: Text('Z-index: ${_selectedCircle?.options.zIndex}'),
               ),
               ElevatedButton(
-                onPressed: _circles.isNotEmpty
-                    ? () {
-                        setState(() {
-                          _navigationViewController.clearCircles();
-                          _circles.clear();
-                          _selectedCircle = null;
-                        });
-                      }
-                    : null,
+                onPressed:
+                    _circles.isNotEmpty
+                        ? () {
+                          setState(() {
+                            _navigationViewController.clearCircles();
+                            _circles.clear();
+                            _selectedCircle = null;
+                          });
+                        }
+                        : null,
                 child: const Text('Clear all'),
               ),
             ],

@@ -372,18 +372,18 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
 
     if (routeChangedListener == null) {
       routeChangedListener =
-        Navigator.RouteChangedListener { navigationSessionEventApi.onRouteChanged() {} }
+        Navigator.RouteChangedListener { navigationSessionEventApi.onRouteChanged {} }
       navigator.addRouteChangedListener(routeChangedListener)
     }
 
     if (reroutingListener == null) {
-      reroutingListener = Navigator.ReroutingListener { navigationSessionEventApi.onRerouting() {} }
+      reroutingListener = Navigator.ReroutingListener { navigationSessionEventApi.onRerouting {} }
       navigator.addReroutingListener(reroutingListener)
     }
 
     if (trafficUpdatedListener == null) {
       trafficUpdatedListener =
-        Navigator.TrafficUpdatedListener { navigationSessionEventApi.onTrafficUpdated() {} }
+        Navigator.TrafficUpdatedListener { navigationSessionEventApi.onTrafficUpdated {} }
       navigator.addTrafficUpdatedListener(trafficUpdatedListener)
     }
 
@@ -592,7 +592,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   }
 
   /**
-   * Wraps [Simulator.setUserLocation]. See
+   * Wraps [com.google.android.libraries.navigation.Simulator.setUserLocation]. See
    * [Google Navigation SDK for Android](https://developers.google.com/maps/documentation/navigation/android-sdk/reference/com/google/android/libraries/navigation/Simulator#setUserLocation(com.google.android.gms.maps.model.LatLng)).
    */
   fun setUserLocation(location: LatLng) {
@@ -600,7 +600,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   }
 
   /**
-   * Wraps [Simulator.unsetUserLocation]. See
+   * Wraps [com.google.android.libraries.navigation.Simulator.unsetUserLocation]. See
    * [Google Navigation SDK for Android](https://developers.google.com/maps/documentation/navigation/android-sdk/reference/com/google/android/libraries/navigation/Simulator#unsetUserLocation()).
    */
   fun removeUserLocation() {
@@ -608,7 +608,8 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   }
 
   /**
-   * Wraps [Simulator.simulateLocationsAlongExistingRoute]. See
+   * Wraps [com.google.android.libraries.navigation.Simulator.simulateLocationsAlongExistingRoute].
+   * See
    * [Google Navigation SDK for Android](https://developers.google.com/maps/documentation/navigation/android-sdk/reference/com/google/android/libraries/navigation/Simulator#simulateLocationsAlongExistingRoute()).
    */
   fun simulateLocationsAlongExistingRoute() {
@@ -616,7 +617,8 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   }
 
   /**
-   * Wraps [Simulator.simulateLocationsAlongExistingRoute]. See
+   * Wraps [com.google.android.libraries.navigation.Simulator.simulateLocationsAlongExistingRoute].
+   * See
    * [Google Navigation SDK for Android](https://developers.google.com/maps/documentation/navigation/android-sdk/reference/com/google/android/libraries/navigation/Simulator#simulateLocationsAlongExistingRoute()).
    */
   fun simulateLocationsAlongExistingRouteWithOptions(options: SimulationOptions) {
@@ -624,7 +626,8 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   }
 
   /**
-   * Wraps [Simulator.simulateLocationsAlongNewRoute] with callback. See
+   * Wraps [com.google.android.libraries.navigation.Simulator.simulateLocationsAlongNewRoute] with
+   * callback. See
    * [Google Navigation SDK for Android](https://developers.google.com/maps/documentation/navigation/android-sdk/reference/com/google/android/libraries/navigation/Simulator#simulateLocationsAlongExistingRoute(com.google.android.libraries.navigation.SimulationOptions)).
    */
   fun simulateLocationsAlongNewRoute(
@@ -641,7 +644,8 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   }
 
   /**
-   * Wraps [Simulator.simulateLocationsAlongNewRoute] with callback. See
+   * Wraps [com.google.android.libraries.navigation.Simulator.simulateLocationsAlongNewRoute] with
+   * callback. See
    * [Google Navigation SDK for Android](https://developers.google.com/maps/documentation/navigation/android-sdk/reference/com/google/android/libraries/navigation/Simulator#simulateLocationsAlongExistingRoute(com.google.android.libraries.navigation.SimulationOptions)).
    */
   fun simulateLocationsAlongNewRouteWithRoutingOptions(
@@ -660,7 +664,8 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   }
 
   /**
-   * Wraps [Simulator.simulateLocationsAlongNewRoute] with callback. See
+   * Wraps [com.google.android.libraries.navigation.Simulator.simulateLocationsAlongNewRoute] with
+   * callback. See
    * [Google Navigation SDK for Android](https://developers.google.com/maps/documentation/navigation/android-sdk/reference/com/google/android/libraries/navigation/Simulator#simulateLocationsAlongExistingRoute(com.google.android.libraries.navigation.SimulationOptions)).
    */
   fun simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
@@ -680,7 +685,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   }
 
   /**
-   * Wraps [Simulator.pause]. See
+   * Wraps [com.google.android.libraries.navigation.Simulator.pause]. See
    * [Google Navigation SDK for Android](https://developers.google.com/maps/documentation/navigation/android-sdk/reference/com/google/android/libraries/navigation/Simulator#pause()).
    */
   fun pauseSimulation() {
@@ -688,7 +693,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   }
 
   /**
-   * Wraps [Simulator.resume]. See
+   * Wraps [com.google.android.libraries.navigation.Simulator.resume]. See
    * [Google Navigation SDK for Android](https://developers.google.com/maps/documentation/navigation/android-sdk/reference/com/google/android/libraries/navigation/Simulator#resume()).
    */
   fun resumeSimulation() {
@@ -697,12 +702,12 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
 
   @Throws(FlutterError::class)
   fun enableTurnByTurnNavigationEvents(numNextStepsToPreview: Int) {
-    var lifeCycleOwner: LifecycleOwner? = weakLifecycleOwner?.get()
+    val lifeCycleOwner: LifecycleOwner? = weakLifecycleOwner?.get()
     if (!turnByTurnEventsEnabled && lifeCycleOwner != null) {
 
       /// DisplayMetrics is required to be set for turn-by-turn updates.
       /// But not used as image generation is disabled.
-      var displayMetrics = DisplayMetrics()
+      val displayMetrics = DisplayMetrics()
       displayMetrics.density = 2.0f
 
       // Configure options for navigation updates.
@@ -742,7 +747,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
 
   @Throws(FlutterError::class)
   fun disableTurnByTurnNavigationEvents() {
-    var lifeCycleOwner: LifecycleOwner? = weakLifecycleOwner?.get()
+    val lifeCycleOwner: LifecycleOwner? = weakLifecycleOwner?.get()
     if (turnByTurnEventsEnabled && lifeCycleOwner != null) {
       GoogleMapsNavigationNavUpdatesService.navInfoLiveData.removeObservers(lifeCycleOwner)
       val success = getNavigator().unregisterServiceForNavUpdates()

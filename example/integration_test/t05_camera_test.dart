@@ -140,11 +140,17 @@ void main() {
 
   /// Check the camera coordinates match each other within tolerance.
   void checkCameraCoordinatesMatch(
-      CameraPosition received, CameraPosition expected) {
-    expect(received.target.latitude,
-        closeTo(expected.target.latitude, latLngTestThreshold));
-    expect(received.target.longitude,
-        closeTo(expected.target.longitude, latLngTestThreshold));
+    CameraPosition received,
+    CameraPosition expected,
+  ) {
+    expect(
+      received.target.latitude,
+      closeTo(expected.target.latitude, latLngTestThreshold),
+    );
+    expect(
+      received.target.longitude,
+      closeTo(expected.target.longitude, latLngTestThreshold),
+    );
   }
 
   patrol('Test camera modes', (PatrolIntegrationTester $) async {
@@ -186,7 +192,10 @@ void main() {
       // it doesn't happen within the max retries (≈20s).
       final CameraPosition? followMyLocationCheck =
           await waitForValueMatchingPredicate(
-              $, getPosition, checkCoordinatesMatch);
+            $,
+            getPosition,
+            checkCoordinatesMatch,
+          );
       expect(followMyLocationCheck, isNotNull);
 
       // Check that Android camera started following location events have come in.
@@ -213,9 +222,9 @@ void main() {
     );
     expect(camera, isNotNull);
 
-    debugPrint('Default tilt: ${camera!.tilt}');
-    debugPrint('Default zoom: ${camera.zoom}');
-    debugPrint('Default bearing: ${camera.bearing}');
+    $.log('Default tilt: ${camera!.tilt}');
+    $.log('Default zoom: ${camera.zoom}');
+    $.log('Default bearing: ${camera.bearing}');
 
     // Verify that the follow my location camera mode is active.
     await checkCameraFollowsLocation();
@@ -232,12 +241,15 @@ void main() {
 
     // Wait until the camera tilt is less than or equal the expected tilt.
     camera = await waitForValueMatchingPredicate(
-        $, getPosition, checkTiltLessThanOrEqualTo);
+      $,
+      getPosition,
+      checkTiltLessThanOrEqualTo,
+    );
     expect(camera, isNotNull);
 
-    debugPrint('topDownHeadingUp tilt: ${camera!.tilt}');
-    debugPrint('topDownHeadingUp zoom: ${camera.zoom}');
-    debugPrint('topDownHeadingUp bearing: ${camera.bearing}');
+    $.log('topDownHeadingUp tilt: ${camera!.tilt}');
+    $.log('topDownHeadingUp zoom: ${camera.zoom}');
+    $.log('topDownHeadingUp bearing: ${camera.bearing}');
 
     // Verify that the follow my location camera mode is active.
     await checkCameraFollowsLocation();
@@ -262,14 +274,20 @@ void main() {
     // Wait until the bearing & tilt are less than or equal to the expected bearing & tilt.
     // On iOS the random small tilt change caused occasional test failures.
     await waitForValueMatchingPredicate(
-        $, getPosition, checkTiltLessThanOrEqualTo);
+      $,
+      getPosition,
+      checkTiltLessThanOrEqualTo,
+    );
     camera = await waitForValueMatchingPredicate(
-        $, getPosition, checkBearingLessThanOrEqualTo);
+      $,
+      getPosition,
+      checkBearingLessThanOrEqualTo,
+    );
     expect(camera, isNotNull);
 
-    debugPrint('topDownNorthUp tilt: ${camera!.tilt}');
-    debugPrint('topDownNorthUp zoom: ${camera.zoom}');
-    debugPrint('topDownNorthUp bearing: ${camera.bearing}');
+    $.log('topDownNorthUp tilt: ${camera!.tilt}');
+    $.log('topDownNorthUp zoom: ${camera.zoom}');
+    $.log('topDownNorthUp bearing: ${camera.bearing}');
 
     // Verify that the follow my location camera mode is active.
     await checkCameraFollowsLocation();
@@ -297,12 +315,15 @@ void main() {
 
     // Wait until the tilt is greater than or equal to the expected tilt.
     camera = await waitForValueMatchingPredicate(
-        $, getPosition, checkTiltGreaterThanOrEqualTo);
+      $,
+      getPosition,
+      checkTiltGreaterThanOrEqualTo,
+    );
     expect(camera, isNotNull);
 
-    debugPrint('tilted tilt: ${camera!.tilt}');
-    debugPrint('tilted zoom: ${camera.zoom}');
-    debugPrint('tilted bearing: ${camera.bearing}');
+    $.log('tilted tilt: ${camera!.tilt}');
+    $.log('tilted zoom: ${camera.zoom}');
+    $.log('tilted bearing: ${camera.bearing}');
 
     // Verify that the follow my location camera mode is active.
     await checkCameraFollowsLocation();
@@ -313,7 +334,10 @@ void main() {
 
     // Wait until camera target has moved (follows users location).
     cameraHasMoved = await waitForValueMatchingPredicate(
-        $, getPosition, checkCoordinatesDiffer);
+      $,
+      getPosition,
+      checkCoordinatesDiffer,
+    );
     expect(cameraHasMoved, isNotNull);
 
     oldTarget = camera.target;
@@ -325,7 +349,10 @@ void main() {
 
     // Wait until the tilt is less than or equal to the expected tilt.
     camera = await waitForValueMatchingPredicate(
-        $, getPosition, checkTiltLessThanOrEqualTo);
+      $,
+      getPosition,
+      checkTiltLessThanOrEqualTo,
+    );
 
     // Test that stoppedFollowingMyLocation event has been received and
     // followMyLocation is not active.
@@ -334,9 +361,9 @@ void main() {
       expect(stoppedFollowingMyLocationPosition, isNotNull);
     }
 
-    debugPrint('showRouteOverview tilt: ${camera!.tilt}');
-    debugPrint('showRouteOverview zoom: ${camera.zoom}');
-    debugPrint('showRouteOverview bearing: ${camera.bearing}');
+    $.log('showRouteOverview tilt: ${camera!.tilt}');
+    $.log('showRouteOverview zoom: ${camera.zoom}');
+    $.log('showRouteOverview bearing: ${camera.bearing}');
 
     // No tilt when in route overview.
     expect(camera.tilt, lessThanOrEqualTo(0.1));
@@ -349,21 +376,29 @@ void main() {
 
     // Wait until camera target has moved (follows users location).
     cameraHasMoved = await waitForValueMatchingPredicate(
-        $, getPosition, checkCoordinatesDiffer);
+      $,
+      getPosition,
+      checkCoordinatesDiffer,
+    );
     expect(cameraHasMoved, isNotNull);
 
     // 6. Test the optional follow my location parameter zoom level
     // and the startedFollowingMyLocation event.
     const double zoomLevel = 8.5;
     expectedPosition = const CameraPosition(zoom: zoomLevel);
-    await controller.followMyLocation(CameraPerspective.tilted,
-        zoomLevel: zoomLevel);
+    await controller.followMyLocation(
+      CameraPerspective.tilted,
+      zoomLevel: zoomLevel,
+    );
 
     final CameraPosition oldCamera = await controller.getCameraPosition();
 
     // Wait until the zoom roughly matches the provided zoom.
-    camera =
-        await waitForValueMatchingPredicate($, getPosition, checkZoomMatch);
+    camera = await waitForValueMatchingPredicate(
+      $,
+      getPosition,
+      checkZoomMatch,
+    );
     expect(camera, isNotNull);
     expect(camera!.zoom, closeTo(zoomLevel, 0.01));
 
@@ -372,7 +407,9 @@ void main() {
     if (Platform.isAndroid) {
       expect(followingMyLocationActive, true);
       checkCameraCoordinatesMatch(
-          startedFollowingMyLocationPosition!, oldCamera);
+        startedFollowingMyLocationPosition!,
+        oldCamera,
+      );
     }
 
     oldTarget = camera.target;
@@ -382,26 +419,35 @@ void main() {
     resetCameraEventCompleters();
 
     // Stop followMyLocation.
-    final CameraUpdate positionUpdate = CameraUpdate.newLatLng(LatLng(
+    final CameraUpdate positionUpdate = CameraUpdate.newLatLng(
+      LatLng(
         latitude: oldTarget.latitude + 0.5,
-        longitude: oldTarget.longitude + 0.5));
+        longitude: oldTarget.longitude + 0.5,
+      ),
+    );
     await controller.moveCamera(positionUpdate);
 
     // Wait for cameraIdleEvent before doing doing the tests.
-    await cameraIdleCompleter.future.timeout(const Duration(seconds: 10),
-        onTimeout: () {
-      fail('Future timed out');
-    });
+    await cameraIdleCompleter.future.timeout(
+      const Duration(seconds: 10),
+      onTimeout: () {
+        fail('Future timed out');
+      },
+    );
     camera = await controller.getCameraPosition();
 
     // Test stoppedFollowingMyLocation event is received on Android.
     if (Platform.isAndroid) {
       const double tolerance = 0.01;
       expect(followingMyLocationActive, false);
-      expect(stoppedFollowingMyLocationPosition!.target.latitude,
-          closeTo(oldTarget.latitude, tolerance));
-      expect(stoppedFollowingMyLocationPosition!.target.longitude,
-          closeTo(oldTarget.longitude, tolerance));
+      expect(
+        stoppedFollowingMyLocationPosition!.target.latitude,
+        closeTo(oldTarget.latitude, tolerance),
+      );
+      expect(
+        stoppedFollowingMyLocationPosition!.target.longitude,
+        closeTo(oldTarget.longitude, tolerance),
+      );
     }
 
     // 8. Test cameraMoveStarted, cameraMove and cameraIdle events.
@@ -410,8 +456,9 @@ void main() {
     resetCameraEventCompleters();
 
     final LatLng newTarget = LatLng(
-        latitude: camera.target.latitude + 0.5,
-        longitude: camera.target.longitude + 0.5);
+      latitude: camera.target.latitude + 0.5,
+      longitude: camera.target.longitude + 0.5,
+    );
 
     // Define the target position.
     expectedPosition = CameraPosition(target: newTarget);
@@ -436,14 +483,22 @@ void main() {
     // Test that cameraMoveEvent position coordinates are between the start and the end coordinates
     // and that the other values match within tolerance.
     const double tolerance = 0.01;
-    expect(cameraMovePosition.target.latitude,
-        greaterThanOrEqualTo(camera.target.latitude - tolerance));
-    expect(cameraMovePosition.target.latitude,
-        lessThanOrEqualTo(expectedPosition.target.latitude + tolerance));
-    expect(cameraMovePosition.target.longitude,
-        greaterThanOrEqualTo(camera.target.longitude - tolerance));
-    expect(cameraMovePosition.target.longitude,
-        lessThanOrEqualTo(expectedPosition.target.longitude + tolerance));
+    expect(
+      cameraMovePosition.target.latitude,
+      greaterThanOrEqualTo(camera.target.latitude - tolerance),
+    );
+    expect(
+      cameraMovePosition.target.latitude,
+      lessThanOrEqualTo(expectedPosition.target.latitude + tolerance),
+    );
+    expect(
+      cameraMovePosition.target.longitude,
+      greaterThanOrEqualTo(camera.target.longitude - tolerance),
+    );
+    expect(
+      cameraMovePosition.target.longitude,
+      lessThanOrEqualTo(expectedPosition.target.longitude + tolerance),
+    );
     expect(cameraMovePosition.bearing, closeTo(camera.bearing, 30));
     expect(cameraMovePosition.tilt, camera.tilt);
     expect(cameraMovePosition.zoom, closeTo(camera.zoom, 0.1));
@@ -461,33 +516,35 @@ void main() {
     (PatrolIntegrationTester $) async {
       const double startLat = startLocationLat + 1;
       const double startLng = startLocationLng + 1;
-      const LatLng target =
-          LatLng(latitude: startLat + 1, longitude: startLng + 1);
+      const LatLng target = LatLng(
+        latitude: startLat + 1,
+        longitude: startLng + 1,
+      );
 
-      final CameraUpdate start =
-          CameraUpdate.newCameraPosition(const CameraPosition(
-        target: LatLng(
-          latitude: startLat,
-          longitude: startLng,
+      final CameraUpdate start = CameraUpdate.newCameraPosition(
+        const CameraPosition(
+          target: LatLng(latitude: startLat, longitude: startLng),
+          zoom: 9,
         ),
-        zoom: 9,
-      ));
+      );
 
       /// Initialize view with the event listener functions.
       final GoogleMapViewController viewController =
           await getMapViewControllerForTestMapType(
-        $,
-        testMapType: mapTypeVariants.currentValue!,
-        onCameraIdle: onCameraIdle,
-      );
+            $,
+            testMapType: mapTypeVariants.currentValue!,
+            onCameraIdle: onCameraIdle,
+          );
       // Move camera back to the start.
       Future<void> moveCameraToStart() async {
         resetCameraEventCompleters();
         await viewController.moveCamera(start);
-        await cameraIdleCompleter.future.timeout(const Duration(seconds: 10),
-            onTimeout: () {
-          fail('Future timed out');
-        });
+        await cameraIdleCompleter.future.timeout(
+          const Duration(seconds: 10),
+          onTimeout: () {
+            fail('Future timed out');
+          },
+        );
       }
 
       // Move camera to the start position.
@@ -497,10 +554,12 @@ void main() {
       Future<void> moveCamera(CameraUpdate update) async {
         resetCameraEventCompleters();
         await viewController.moveCamera(update);
-        await cameraIdleCompleter.future.timeout(const Duration(seconds: 10),
-            onTimeout: () {
-          fail('Future timed out');
-        });
+        await cameraIdleCompleter.future.timeout(
+          const Duration(seconds: 10),
+          onTimeout: () {
+            fail('Future timed out');
+          },
+        );
       }
 
       // Create a wrapper for animateCamera() that waits until move is finished
@@ -522,25 +581,23 @@ void main() {
         );
 
         // Wait until the cameraIdle event comes in.
-        await cameraIdleCompleter.future.timeout(const Duration(seconds: 10),
-            onTimeout: () {
-          fail('Future timed out');
-        });
+        await cameraIdleCompleter.future.timeout(
+          const Duration(seconds: 10),
+          onTimeout: () {
+            fail('Future timed out');
+          },
+        );
       }
 
       final List<Future<void> Function(CameraUpdate update)> cameraMethods =
           <Future<void> Function(CameraUpdate update)>[
-        moveCamera,
-        animateCamera
-      ];
+            moveCamera,
+            animateCamera,
+          ];
 
-      final CameraUpdate updateCameraPosition =
-          CameraUpdate.newCameraPosition(const CameraPosition(
-        bearing: 5,
-        target: target,
-        tilt: 30,
-        zoom: 20.0,
-      ));
+      final CameraUpdate updateCameraPosition = CameraUpdate.newCameraPosition(
+        const CameraPosition(bearing: 5, target: target, tilt: 30, zoom: 20.0),
+      );
 
       // Test the CameraUpdate.newCameraPosition() with moveCamera and animateCamera commands.
       for (final Future<void> Function(CameraUpdate update) cameraMethod
@@ -549,13 +606,21 @@ void main() {
 
         // Test that the camera position matches the provided position.
         checkCameraCoordinatesMatch(
-            cameraIdlePosition, updateCameraPosition.cameraPosition!);
-        expect(cameraIdlePosition.bearing,
-            closeTo(updateCameraPosition.cameraPosition!.bearing, 0.1));
-        expect(cameraIdlePosition.tilt,
-            closeTo(updateCameraPosition.cameraPosition!.tilt, 0.1));
-        expect(cameraIdlePosition.zoom,
-            closeTo(updateCameraPosition.cameraPosition!.zoom, 0.1));
+          cameraIdlePosition,
+          updateCameraPosition.cameraPosition!,
+        );
+        expect(
+          cameraIdlePosition.bearing,
+          closeTo(updateCameraPosition.cameraPosition!.bearing, 0.1),
+        );
+        expect(
+          cameraIdlePosition.tilt,
+          closeTo(updateCameraPosition.cameraPosition!.tilt, 0.1),
+        );
+        expect(
+          cameraIdlePosition.zoom,
+          closeTo(updateCameraPosition.cameraPosition!.zoom, 0.1),
+        );
 
         await moveCameraToStart();
       }
@@ -568,29 +633,41 @@ void main() {
         await cameraMethod(updateNewLatLng);
 
         // Test that the camera target matches the provided target.
-        expect(cameraIdlePosition.target.latitude,
-            closeTo(updateNewLatLng.latLng!.latitude, latLngTestThreshold));
-        expect(cameraIdlePosition.target.longitude,
-            closeTo(updateNewLatLng.latLng!.longitude, latLngTestThreshold));
+        expect(
+          cameraIdlePosition.target.latitude,
+          closeTo(updateNewLatLng.latLng!.latitude, latLngTestThreshold),
+        );
+        expect(
+          cameraIdlePosition.target.longitude,
+          closeTo(updateNewLatLng.latLng!.longitude, latLngTestThreshold),
+        );
 
         // Test that the other values haven't changed
-        expect(cameraIdlePosition.bearing,
-            closeTo(start.cameraPosition!.bearing, 0.1));
         expect(
-            cameraIdlePosition.tilt, closeTo(start.cameraPosition!.tilt, 0.1));
+          cameraIdlePosition.bearing,
+          closeTo(start.cameraPosition!.bearing, 0.1),
+        );
         expect(
-            cameraIdlePosition.zoom, closeTo(start.cameraPosition!.zoom, 0.1));
+          cameraIdlePosition.tilt,
+          closeTo(start.cameraPosition!.tilt, 0.1),
+        );
+        expect(
+          cameraIdlePosition.zoom,
+          closeTo(start.cameraPosition!.zoom, 0.1),
+        );
 
         await moveCameraToStart();
       }
 
-      final CameraUpdate updateLatLngBounds =
-          CameraUpdate.newLatLngBounds(LatLngBounds(
-              southwest: target,
-              northeast: LatLng(
-                latitude: target.latitude + 1,
-                longitude: target.longitude + 1,
-              )));
+      final CameraUpdate updateLatLngBounds = CameraUpdate.newLatLngBounds(
+        LatLngBounds(
+          southwest: target,
+          northeast: LatLng(
+            latitude: target.latitude + 1,
+            longitude: target.longitude + 1,
+          ),
+        ),
+      );
 
       // Test the CameraUpdate.newLatLngBounds() with moveCamera and animateCamera commands.
       for (final Future<void> Function(CameraUpdate update) cameraMethod
@@ -599,25 +676,37 @@ void main() {
 
         // Test that the camera target matches the centre of the LatLngBounds.
         expect(
-            cameraIdlePosition.target.latitude,
-            closeTo(updateLatLngBounds.bounds!.center.latitude,
-                latLngTestThreshold));
+          cameraIdlePosition.target.latitude,
+          closeTo(
+            updateLatLngBounds.bounds!.center.latitude,
+            latLngTestThreshold,
+          ),
+        );
         expect(
-            cameraIdlePosition.target.longitude,
-            closeTo(updateLatLngBounds.bounds!.center.longitude,
-                latLngTestThreshold));
+          cameraIdlePosition.target.longitude,
+          closeTo(
+            updateLatLngBounds.bounds!.center.longitude,
+            latLngTestThreshold,
+          ),
+        );
 
         // Test that the other values, excluding zoom, haven't changed.
-        expect(cameraIdlePosition.bearing,
-            closeTo(start.cameraPosition!.bearing, 0.1));
         expect(
-            cameraIdlePosition.tilt, closeTo(start.cameraPosition!.tilt, 0.1));
+          cameraIdlePosition.bearing,
+          closeTo(start.cameraPosition!.bearing, 0.1),
+        );
+        expect(
+          cameraIdlePosition.tilt,
+          closeTo(start.cameraPosition!.tilt, 0.1),
+        );
 
         await moveCameraToStart();
       }
 
-      final CameraUpdate updateLatLngZoom =
-          CameraUpdate.newLatLngZoom(target, 12);
+      final CameraUpdate updateLatLngZoom = CameraUpdate.newLatLngZoom(
+        target,
+        12,
+      );
 
       // Test the CameraUpdate.newLatLngZoom() with moveCamera and animateCamera commands.
       for (final Future<void> Function(CameraUpdate update) cameraMethod
@@ -625,17 +714,25 @@ void main() {
         await cameraMethod(updateLatLngZoom);
 
         // Test that the camera target and zoom match the provided target and zoom.
-        expect(cameraIdlePosition.target.latitude,
-            closeTo(target.latitude, latLngTestThreshold));
-        expect(cameraIdlePosition.target.longitude,
-            closeTo(target.longitude, latLngTestThreshold));
+        expect(
+          cameraIdlePosition.target.latitude,
+          closeTo(target.latitude, latLngTestThreshold),
+        );
+        expect(
+          cameraIdlePosition.target.longitude,
+          closeTo(target.longitude, latLngTestThreshold),
+        );
         expect(cameraIdlePosition.zoom, closeTo(updateLatLngZoom.zoom!, 0.1));
 
         // Test that the the other values haven't changed
-        expect(cameraIdlePosition.bearing,
-            closeTo(start.cameraPosition!.bearing, 0.1));
         expect(
-            cameraIdlePosition.tilt, closeTo(start.cameraPosition!.tilt, 0.1));
+          cameraIdlePosition.bearing,
+          closeTo(start.cameraPosition!.bearing, 0.1),
+        );
+        expect(
+          cameraIdlePosition.tilt,
+          closeTo(start.cameraPosition!.tilt, 0.1),
+        );
 
         await moveCameraToStart();
       }
@@ -649,24 +746,36 @@ void main() {
         await cameraMethod(updateScrollBy);
 
         // Test that the camera position has moved to the northeast.
-        expect(cameraIdlePosition.target.latitude,
-            greaterThan(start.cameraPosition!.target.latitude));
-        expect(cameraIdlePosition.target.longitude,
-            greaterThan(start.cameraPosition!.target.longitude));
+        expect(
+          cameraIdlePosition.target.latitude,
+          greaterThan(start.cameraPosition!.target.latitude),
+        );
+        expect(
+          cameraIdlePosition.target.longitude,
+          greaterThan(start.cameraPosition!.target.longitude),
+        );
 
         // Test that the the other values haven't changed.
-        expect(cameraIdlePosition.bearing,
-            closeTo(start.cameraPosition!.bearing, 0.1));
         expect(
-            cameraIdlePosition.tilt, closeTo(start.cameraPosition!.tilt, 0.1));
+          cameraIdlePosition.bearing,
+          closeTo(start.cameraPosition!.bearing, 0.1),
+        );
         expect(
-            cameraIdlePosition.zoom, closeTo(start.cameraPosition!.zoom, 0.1));
+          cameraIdlePosition.tilt,
+          closeTo(start.cameraPosition!.tilt, 0.1),
+        );
+        expect(
+          cameraIdlePosition.zoom,
+          closeTo(start.cameraPosition!.zoom, 0.1),
+        );
 
         await moveCameraToStart();
       }
 
-      final CameraUpdate updateZoomByAmount =
-          CameraUpdate.zoomBy(5, focus: const Offset(50, 50));
+      final CameraUpdate updateZoomByAmount = CameraUpdate.zoomBy(
+        5,
+        focus: const Offset(50, 50),
+      );
 
       // Test the CameraUpdate.zoomBy() with moveCamera and animateCamera commands.
       for (final Future<void> Function(CameraUpdate update) cameraMethod
@@ -674,23 +783,33 @@ void main() {
         await cameraMethod(updateZoomByAmount);
 
         // Test that the [focus] parameter caused the camera position to change.
-        expect(cameraIdlePosition.target.latitude,
-            isNot(closeTo(target.latitude, latLngTestThreshold)));
-        expect(cameraIdlePosition.target.longitude,
-            isNot(closeTo(target.longitude, latLngTestThreshold)));
+        expect(
+          cameraIdlePosition.target.latitude,
+          isNot(closeTo(target.latitude, latLngTestThreshold)),
+        );
+        expect(
+          cameraIdlePosition.target.longitude,
+          isNot(closeTo(target.longitude, latLngTestThreshold)),
+        );
 
         // Test that the zoom has changed to the specified value.
         expect(
-            cameraIdlePosition.zoom,
-            closeTo(
-                start.cameraPosition!.zoom + updateZoomByAmount.zoomByAmount!,
-                0.1));
+          cameraIdlePosition.zoom,
+          closeTo(
+            start.cameraPosition!.zoom + updateZoomByAmount.zoomByAmount!,
+            0.1,
+          ),
+        );
 
         // Test that the other values haven't changed.
-        expect(cameraIdlePosition.bearing,
-            closeTo(start.cameraPosition!.bearing, 0.1));
         expect(
-            cameraIdlePosition.tilt, closeTo(start.cameraPosition!.tilt, 0.1));
+          cameraIdlePosition.bearing,
+          closeTo(start.cameraPosition!.bearing, 0.1),
+        );
+        expect(
+          cameraIdlePosition.tilt,
+          closeTo(start.cameraPosition!.tilt, 0.1),
+        );
 
         await moveCameraToStart();
       }
@@ -704,23 +823,27 @@ void main() {
 
         // Test that the zoom has changed to the specified value.
         expect(
-            cameraIdlePosition.zoom,
-            closeTo(
-                start.cameraPosition!.zoom + updateZoomIn.zoomByAmount!, 0.1));
+          cameraIdlePosition.zoom,
+          closeTo(start.cameraPosition!.zoom + updateZoomIn.zoomByAmount!, 0.1),
+        );
 
         // Test that the other values haven't changed.
-        expect(cameraIdlePosition.bearing,
-            closeTo(start.cameraPosition!.bearing, 0.1));
         expect(
-            cameraIdlePosition.target.latitude,
-            closeTo(
-                start.cameraPosition!.target.latitude, latLngTestThreshold));
+          cameraIdlePosition.bearing,
+          closeTo(start.cameraPosition!.bearing, 0.1),
+        );
         expect(
-            cameraIdlePosition.target.longitude,
-            closeTo(
-                start.cameraPosition!.target.longitude, latLngTestThreshold));
+          cameraIdlePosition.target.latitude,
+          closeTo(start.cameraPosition!.target.latitude, latLngTestThreshold),
+        );
         expect(
-            cameraIdlePosition.tilt, closeTo(start.cameraPosition!.tilt, 0.1));
+          cameraIdlePosition.target.longitude,
+          closeTo(start.cameraPosition!.target.longitude, latLngTestThreshold),
+        );
+        expect(
+          cameraIdlePosition.tilt,
+          closeTo(start.cameraPosition!.tilt, 0.1),
+        );
 
         await moveCameraToStart();
       }
@@ -734,23 +857,30 @@ void main() {
 
         // Test that the zoom has changed to the specified value.
         expect(
-            cameraIdlePosition.zoom,
-            closeTo(
-                start.cameraPosition!.zoom + updateZoomOut.zoomByAmount!, 0.1));
+          cameraIdlePosition.zoom,
+          closeTo(
+            start.cameraPosition!.zoom + updateZoomOut.zoomByAmount!,
+            0.1,
+          ),
+        );
 
         // Test that the target and camera tilt haven't changed.
-        expect(cameraIdlePosition.bearing,
-            closeTo(start.cameraPosition!.bearing, 0.1));
         expect(
-            cameraIdlePosition.target.latitude,
-            closeTo(
-                start.cameraPosition!.target.latitude, latLngTestThreshold));
+          cameraIdlePosition.bearing,
+          closeTo(start.cameraPosition!.bearing, 0.1),
+        );
         expect(
-            cameraIdlePosition.target.longitude,
-            closeTo(
-                start.cameraPosition!.target.longitude, latLngTestThreshold));
+          cameraIdlePosition.target.latitude,
+          closeTo(start.cameraPosition!.target.latitude, latLngTestThreshold),
+        );
         expect(
-            cameraIdlePosition.tilt, closeTo(start.cameraPosition!.tilt, 0.1));
+          cameraIdlePosition.target.longitude,
+          closeTo(start.cameraPosition!.target.longitude, latLngTestThreshold),
+        );
+        expect(
+          cameraIdlePosition.tilt,
+          closeTo(start.cameraPosition!.tilt, 0.1),
+        );
 
         await moveCameraToStart();
       }
@@ -766,18 +896,22 @@ void main() {
         expect(cameraIdlePosition.zoom, closeTo(updateZoomTo.zoom!, 0.1));
 
         // Test that the target and camera tilt haven't changed.
-        expect(cameraIdlePosition.bearing,
-            closeTo(start.cameraPosition!.bearing, 0.1));
         expect(
-            cameraIdlePosition.target.latitude,
-            closeTo(
-                start.cameraPosition!.target.latitude, latLngTestThreshold));
+          cameraIdlePosition.bearing,
+          closeTo(start.cameraPosition!.bearing, 0.1),
+        );
         expect(
-            cameraIdlePosition.target.longitude,
-            closeTo(
-                start.cameraPosition!.target.longitude, latLngTestThreshold));
+          cameraIdlePosition.target.latitude,
+          closeTo(start.cameraPosition!.target.latitude, latLngTestThreshold),
+        );
         expect(
-            cameraIdlePosition.tilt, closeTo(start.cameraPosition!.tilt, 0.1));
+          cameraIdlePosition.target.longitude,
+          closeTo(start.cameraPosition!.target.longitude, latLngTestThreshold),
+        );
+        expect(
+          cameraIdlePosition.tilt,
+          closeTo(start.cameraPosition!.tilt, 0.1),
+        );
 
         await moveCameraToStart();
       }

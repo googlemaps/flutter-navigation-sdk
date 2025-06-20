@@ -58,7 +58,7 @@ internal constructor(
     _navigationView.onResume()
 
     // Initialize navigation view with given navigation view options
-    var navigationViewEnabled: Boolean = false
+    var navigationViewEnabled = false
     if (
       navigationOptions?.navigationUiEnabledPreference == NavigationUIEnabledPreference.AUTOMATIC
     ) {

@@ -43,8 +43,9 @@ class ExampleSlider extends StatelessWidget {
       children: <Widget>[
         ListTile(
           title: Text(title),
-          trailing:
-              Text(value.toStringAsFixed(fractionDigits ?? 1) + (unit ?? '')),
+          trailing: Text(
+            value.toStringAsFixed(fractionDigits ?? 1) + (unit ?? ''),
+          ),
         ),
         Slider(
           value: value,

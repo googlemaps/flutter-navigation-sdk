@@ -72,9 +72,10 @@ class AutoMapViewAPIImpl {
   /// called when initializing auto view controller.
   void ensureAutoViewApiSetUp() {
     if (!_viewApiHasBeenSetUp) {
-      AutoViewEventApi.setup(
+      AutoViewEventApi.setUp(
         AutoViewEventApiImpl(
-            viewEventStreamController: _autoEventStreamController),
+          viewEventStreamController: _autoEventStreamController,
+        ),
       );
       _viewApiHasBeenSetUp = true;
     }
@@ -122,8 +123,9 @@ class AutoMapViewAPIImpl {
   }
 
   /// Enables or disables if the my location button consumes click events.
-  Future<void> setConsumeMyLocationButtonClickEventsEnabled(
-      {required bool enabled}) async {
+  Future<void> setConsumeMyLocationButtonClickEventsEnabled({
+    required bool enabled,
+  }) async {
     return _viewApi.setConsumeMyLocationButtonClickEventsEnabled(enabled);
   }
 
@@ -161,8 +163,9 @@ class AutoMapViewAPIImpl {
   }
 
   /// Sets the preference for whether scroll gestures can take place at the same time as a zoom or rotate gesture.
-  Future<void> setScrollGesturesDuringRotateOrZoomEnabled(
-      {required bool enabled}) {
+  Future<void> setScrollGesturesDuringRotateOrZoomEnabled({
+    required bool enabled,
+  }) {
     return _viewApi.setScrollGesturesDuringRotateOrZoomEnabled(enabled);
   }
 
@@ -261,8 +264,10 @@ class AutoMapViewAPIImpl {
   }
 
   /// Sets the Camera to follow the location of the user.
-  Future<void> followMyLocation(
-      {required CameraPerspective perspective, required double? zoomLevel}) {
+  Future<void> followMyLocation({
+    required CameraPerspective perspective,
+    required double? zoomLevel,
+  }) {
     return _viewApi.followMyLocation(perspective.toDto(), zoomLevel);
   }
 
@@ -291,58 +296,109 @@ class AutoMapViewAPIImpl {
   }
 
   /// Animates the movement of the camera.
-  Future<void> animateCamera(
-      {required CameraUpdate cameraUpdate,
-      required int? duration,
-      AnimationFinishedCallback? onFinished}) async {
+  Future<void> animateCamera({
+    required CameraUpdate cameraUpdate,
+    required int? duration,
+    AnimationFinishedCallback? onFinished,
+  }) async {
     switch (cameraUpdate.type) {
       case CameraUpdateType.cameraPosition:
-        unawaited(_viewApi
-            .animateCameraToCameraPosition(
-                cameraUpdate.cameraPosition!.toCameraPosition(), duration)
-            .then((bool success) => onFinished != null && Platform.isAndroid
-                ? onFinished(success)
-                : null));
+        unawaited(
+          _viewApi
+              .animateCameraToCameraPosition(
+                cameraUpdate.cameraPosition!.toCameraPosition(),
+                duration,
+              )
+              .then(
+                (bool success) =>
+                    onFinished != null && Platform.isAndroid
+                        ? onFinished(success)
+                        : null,
+              ),
+        );
       case CameraUpdateType.latLng:
-        unawaited(_viewApi
-            .animateCameraToLatLng(cameraUpdate.latLng!.toDto(), duration)
-            .then((bool success) => onFinished != null && Platform.isAndroid
-                ? onFinished(success)
-                : null));
+        unawaited(
+          _viewApi
+              .animateCameraToLatLng(cameraUpdate.latLng!.toDto(), duration)
+              .then(
+                (bool success) =>
+                    onFinished != null && Platform.isAndroid
+                        ? onFinished(success)
+                        : null,
+              ),
+        );
       case CameraUpdateType.latLngBounds:
-        unawaited(_viewApi
-            .animateCameraToLatLngBounds(
-                cameraUpdate.bounds!.toDto(), cameraUpdate.padding!, duration)
-            .then((bool success) => onFinished != null && Platform.isAndroid
-                ? onFinished(success)
-                : null));
+        unawaited(
+          _viewApi
+              .animateCameraToLatLngBounds(
+                cameraUpdate.bounds!.toDto(),
+                cameraUpdate.padding!,
+                duration,
+              )
+              .then(
+                (bool success) =>
+                    onFinished != null && Platform.isAndroid
+                        ? onFinished(success)
+                        : null,
+              ),
+        );
       case CameraUpdateType.latLngZoom:
-        unawaited(_viewApi
-            .animateCameraToLatLngZoom(
-                cameraUpdate.latLng!.toDto(), cameraUpdate.zoom!, duration)
-            .then((bool success) => onFinished != null && Platform.isAndroid
-                ? onFinished(success)
-                : null));
+        unawaited(
+          _viewApi
+              .animateCameraToLatLngZoom(
+                cameraUpdate.latLng!.toDto(),
+                cameraUpdate.zoom!,
+                duration,
+              )
+              .then(
+                (bool success) =>
+                    onFinished != null && Platform.isAndroid
+                        ? onFinished(success)
+                        : null,
+              ),
+        );
       case CameraUpdateType.scrollBy:
-        unawaited(_viewApi
-            .animateCameraByScroll(
-                cameraUpdate.scrollByDx!, cameraUpdate.scrollByDy!, duration)
-            .then((bool success) => onFinished != null && Platform.isAndroid
-                ? onFinished(success)
-                : null));
+        unawaited(
+          _viewApi
+              .animateCameraByScroll(
+                cameraUpdate.scrollByDx!,
+                cameraUpdate.scrollByDy!,
+                duration,
+              )
+              .then(
+                (bool success) =>
+                    onFinished != null && Platform.isAndroid
+                        ? onFinished(success)
+                        : null,
+              ),
+        );
       case CameraUpdateType.zoomBy:
-        unawaited(_viewApi
-            .animateCameraByZoom(cameraUpdate.zoomByAmount!,
-                cameraUpdate.focus?.dx, cameraUpdate.focus?.dy, duration)
-            .then((bool success) => onFinished != null && Platform.isAndroid
-                ? onFinished(success)
-                : null));
+        unawaited(
+          _viewApi
+              .animateCameraByZoom(
+                cameraUpdate.zoomByAmount!,
+                cameraUpdate.focus?.dx,
+                cameraUpdate.focus?.dy,
+                duration,
+              )
+              .then(
+                (bool success) =>
+                    onFinished != null && Platform.isAndroid
+                        ? onFinished(success)
+                        : null,
+              ),
+        );
       case CameraUpdateType.zoomTo:
-        unawaited(_viewApi
-            .animateCameraToZoom(cameraUpdate.zoom!, duration)
-            .then((bool success) => onFinished != null && Platform.isAndroid
-                ? onFinished(success)
-                : null));
+        unawaited(
+          _viewApi
+              .animateCameraToZoom(cameraUpdate.zoom!, duration)
+              .then(
+                (bool success) =>
+                    onFinished != null && Platform.isAndroid
+                        ? onFinished(success)
+                        : null,
+              ),
+        );
     }
   }
 
@@ -352,22 +408,32 @@ class AutoMapViewAPIImpl {
       case CameraUpdateType.cameraPosition:
         assert(cameraUpdate.cameraPosition != null, 'Camera position is null');
         return _viewApi.moveCameraToCameraPosition(
-            cameraUpdate.cameraPosition!.toCameraPosition());
+          cameraUpdate.cameraPosition!.toCameraPosition(),
+        );
       case CameraUpdateType.latLng:
         return _viewApi.moveCameraToLatLng(cameraUpdate.latLng!.toDto());
       case CameraUpdateType.latLngBounds:
         assert(cameraUpdate.padding != null, 'Camera position is null');
         return _viewApi.moveCameraToLatLngBounds(
-            cameraUpdate.bounds!.toDto(), cameraUpdate.padding!);
+          cameraUpdate.bounds!.toDto(),
+          cameraUpdate.padding!,
+        );
       case CameraUpdateType.latLngZoom:
         return _viewApi.moveCameraToLatLngZoom(
-            cameraUpdate.latLng!.toDto(), cameraUpdate.zoom!);
+          cameraUpdate.latLng!.toDto(),
+          cameraUpdate.zoom!,
+        );
       case CameraUpdateType.scrollBy:
         return _viewApi.moveCameraByScroll(
-            cameraUpdate.scrollByDx!, cameraUpdate.scrollByDy!);
+          cameraUpdate.scrollByDx!,
+          cameraUpdate.scrollByDy!,
+        );
       case CameraUpdateType.zoomBy:
-        return _viewApi.moveCameraByZoom(cameraUpdate.zoomByAmount!,
-            cameraUpdate.focus?.dx, cameraUpdate.focus?.dy);
+        return _viewApi.moveCameraByZoom(
+          cameraUpdate.zoomByAmount!,
+          cameraUpdate.focus?.dx,
+          cameraUpdate.focus?.dy,
+        );
       case CameraUpdateType.zoomTo:
         return _viewApi.moveCameraToZoom(cameraUpdate.zoom!);
     }
@@ -424,21 +490,26 @@ class AutoMapViewAPIImpl {
   }
 
   /// Add markers to map view.
-  Future<List<Marker>> addMarkers(
-      {required List<MarkerOptions> markerOptions}) async {
+  Future<List<Marker>> addMarkers({
+    required List<MarkerOptions> markerOptions,
+  }) async {
     // Convert options to pigeon format
     final List<MarkerOptionsDto> options =
         markerOptions.map((MarkerOptions opt) => opt.toDto()).toList();
 
     // Create marker objects with new ID's
-    final List<MarkerDto> markersToAdd = options
-        .map((MarkerOptionsDto options) =>
-            MarkerDto(markerId: _createMarkerId(), options: options))
-        .toList();
+    final List<MarkerDto> markersToAdd =
+        options
+            .map(
+              (MarkerOptionsDto options) =>
+                  MarkerDto(markerId: _createMarkerId(), options: options),
+            )
+            .toList();
 
     // Add markers to map
-    final List<MarkerDto?> markersAdded =
-        await _viewApi.addMarkers(markersToAdd);
+    final List<MarkerDto?> markersAdded = await _viewApi.addMarkers(
+      markersToAdd,
+    );
 
     if (markersToAdd.length != markersAdded.length) {
       throw Exception('Could not add all markers to map view');
@@ -455,8 +526,9 @@ class AutoMapViewAPIImpl {
     try {
       final List<MarkerDto> markerDtos =
           markers.map((Marker marker) => marker.toDto()).toList();
-      final List<MarkerDto?> updatedMarkers =
-          await _viewApi.updateMarkers(markerDtos);
+      final List<MarkerDto?> updatedMarkers = await _viewApi.updateMarkers(
+        markerDtos,
+      );
       return updatedMarkers
           .whereType<MarkerDto>()
           .map((MarkerDto markerDto) => markerDto.toMarker())
@@ -506,21 +578,26 @@ class AutoMapViewAPIImpl {
   }
 
   /// Add polygons to map view.
-  Future<List<Polygon?>> addPolygons(
-      {required List<PolygonOptions> polygonOptions}) async {
+  Future<List<Polygon?>> addPolygons({
+    required List<PolygonOptions> polygonOptions,
+  }) async {
     // Convert options to pigeon format
     final List<PolygonOptionsDto> options =
         polygonOptions.map((PolygonOptions opt) => opt.toDto()).toList();
 
     // Create polygon objects with new ID's
-    final List<PolygonDto> polygonsToAdd = options
-        .map((PolygonOptionsDto options) =>
-            PolygonDto(polygonId: _createPolygonId(), options: options))
-        .toList();
+    final List<PolygonDto> polygonsToAdd =
+        options
+            .map(
+              (PolygonOptionsDto options) =>
+                  PolygonDto(polygonId: _createPolygonId(), options: options),
+            )
+            .toList();
 
     // Add polygons to map
-    final List<PolygonDto?> polygonsAdded =
-        await _viewApi.addPolygons(polygonsToAdd);
+    final List<PolygonDto?> polygonsAdded = await _viewApi.addPolygons(
+      polygonsToAdd,
+    );
 
     if (polygonsToAdd.length != polygonsAdded.length) {
       throw Exception('Could not add all polygons to map view');
@@ -533,13 +610,15 @@ class AutoMapViewAPIImpl {
   }
 
   /// Update polygons on the map view.
-  Future<List<Polygon?>> updatePolygons(
-      {required List<Polygon> polygons}) async {
+  Future<List<Polygon?>> updatePolygons({
+    required List<Polygon> polygons,
+  }) async {
     try {
       final List<PolygonDto> navigationViewPolygons =
           polygons.map((Polygon polygon) => polygon.toDto()).toList();
-      final List<PolygonDto?> updatedPolygons =
-          await _viewApi.updatePolygons(navigationViewPolygons);
+      final List<PolygonDto?> updatedPolygons = await _viewApi.updatePolygons(
+        navigationViewPolygons,
+      );
       return updatedPolygons
           .whereType<PolygonDto>()
           .map((PolygonDto polygon) => polygon.toPolygon())
@@ -584,21 +663,28 @@ class AutoMapViewAPIImpl {
   }
 
   /// Add polylines to map view.
-  Future<List<Polyline?>> addPolylines(
-      {required List<PolylineOptions> polylineOptions}) async {
+  Future<List<Polyline?>> addPolylines({
+    required List<PolylineOptions> polylineOptions,
+  }) async {
     // Convert options to pigeon format
     final List<PolylineOptionsDto> options =
         polylineOptions.map((PolylineOptions opt) => opt.toDto()).toList();
 
     // Create polyline objects with new ID's
-    final List<PolylineDto> polylinesToAdd = options
-        .map((PolylineOptionsDto options) =>
-            PolylineDto(polylineId: _createPolylineId(), options: options))
-        .toList();
+    final List<PolylineDto> polylinesToAdd =
+        options
+            .map(
+              (PolylineOptionsDto options) => PolylineDto(
+                polylineId: _createPolylineId(),
+                options: options,
+              ),
+            )
+            .toList();
 
     // Add polylines to map
-    final List<PolylineDto?> polylinesAdded =
-        await _viewApi.addPolylines(polylinesToAdd);
+    final List<PolylineDto?> polylinesAdded = await _viewApi.addPolylines(
+      polylinesToAdd,
+    );
 
     if (polylinesToAdd.length != polylinesAdded.length) {
       throw Exception('Could not add all polylines to map view');
@@ -611,14 +697,16 @@ class AutoMapViewAPIImpl {
   }
 
   /// Update polylines on the map view.
-  Future<List<Polyline?>> updatePolylines(
-      {required List<Polyline> polylines}) async {
+  Future<List<Polyline?>> updatePolylines({
+    required List<Polyline> polylines,
+  }) async {
     try {
-      final List<PolylineDto> navigationViewPolylines = polylines
-          .map((Polyline polyline) => polyline.toNavigationViewPolyline())
-          .toList();
-      final List<PolylineDto?> updatedPolylines =
-          await _viewApi.updatePolylines(navigationViewPolylines);
+      final List<PolylineDto> navigationViewPolylines =
+          polylines
+              .map((Polyline polyline) => polyline.toNavigationViewPolyline())
+              .toList();
+      final List<PolylineDto?> updatedPolylines = await _viewApi
+          .updatePolylines(navigationViewPolylines);
       return updatedPolylines
           .whereType<PolylineDto>()
           .map((PolylineDto polyline) => polyline.toPolyline())
@@ -635,9 +723,10 @@ class AutoMapViewAPIImpl {
   /// Remove polylines from map view.
   Future<void> removePolylines({required List<Polyline> polylines}) async {
     try {
-      final List<PolylineDto> navigationViewPolylines = polylines
-          .map((Polyline polyline) => polyline.toNavigationViewPolyline())
-          .toList();
+      final List<PolylineDto> navigationViewPolylines =
+          polylines
+              .map((Polyline polyline) => polyline.toNavigationViewPolyline())
+              .toList();
       return await _viewApi.removePolylines(navigationViewPolylines);
     } on PlatformException catch (error) {
       if (error.code == 'polylineNotFound') {
@@ -664,21 +753,26 @@ class AutoMapViewAPIImpl {
   }
 
   /// Add circles to map view.
-  Future<List<Circle?>> addCircles(
-      {required List<CircleOptions> options}) async {
+  Future<List<Circle?>> addCircles({
+    required List<CircleOptions> options,
+  }) async {
     // Convert options to pigeon format
     final List<CircleOptionsDto> optionsDto =
         options.map((CircleOptions opt) => opt.toDto()).toList();
 
     // Create circle objects with new ID's
-    final List<CircleDto> circlesToAdd = optionsDto
-        .map((CircleOptionsDto options) =>
-            CircleDto(circleId: _createCircleId(), options: options))
-        .toList();
+    final List<CircleDto> circlesToAdd =
+        optionsDto
+            .map(
+              (CircleOptionsDto options) =>
+                  CircleDto(circleId: _createCircleId(), options: options),
+            )
+            .toList();
 
     // Add circles to map
-    final List<CircleDto?> circlesAdded =
-        await _viewApi.addCircles(circlesToAdd);
+    final List<CircleDto?> circlesAdded = await _viewApi.addCircles(
+      circlesToAdd,
+    );
 
     if (circlesToAdd.length != circlesAdded.length) {
       throw Exception('Could not add all circles to map view');
@@ -695,8 +789,9 @@ class AutoMapViewAPIImpl {
     try {
       final List<CircleDto> navigationViewCircles =
           circles.map((Circle circle) => circle.toDto()).toList();
-      final List<CircleDto?> updatedCircles =
-          await _viewApi.updateCircles(navigationViewCircles);
+      final List<CircleDto?> updatedCircles = await _viewApi.updateCircles(
+        navigationViewCircles,
+      );
 
       return updatedCircles
           .whereType<CircleDto>()
@@ -737,21 +832,25 @@ class AutoMapViewAPIImpl {
   }
 
   Future<void> setPadding({required EdgeInsets padding}) {
-    return _viewApi.setPadding(MapPaddingDto(
+    return _viewApi.setPadding(
+      MapPaddingDto(
         top: padding.top.toInt(),
         left: padding.left.toInt(),
         bottom: padding.bottom.toInt(),
-        right: padding.right.toInt()));
+        right: padding.right.toInt(),
+      ),
+    );
   }
 
   // Gets the map padding from the map view.
   Future<EdgeInsets> getPadding() async {
     final MapPaddingDto padding = await _viewApi.getPadding();
     return EdgeInsets.only(
-        top: padding.top.toDouble(),
-        left: padding.left.toDouble(),
-        bottom: padding.bottom.toDouble(),
-        right: padding.right.toDouble());
+      top: padding.top.toDouble(),
+      left: padding.left.toDouble(),
+      bottom: padding.bottom.toDouble(),
+      right: padding.right.toDouble(),
+    );
   }
 
   Future<bool> isAutoScreenAvailable() {
@@ -765,7 +864,7 @@ class AutoMapViewAPIImpl {
 
   /// Get auto screen availibility changed event stream from the auto view.
   Stream<AutoScreenAvailabilityChangedEvent>
-      getAutoScreenAvailabilityChangedEventStream() {
+  getAutoScreenAvailabilityChangedEventStream() {
     return _unwrapEventStream<AutoScreenAvailabilityChangedEvent>();
   }
 }
@@ -781,14 +880,17 @@ class AutoViewEventApiImpl implements AutoViewEventApi {
   @override
   void onCustomNavigationAutoEvent(String event, Object data) {
     _viewEventStreamController.add(
-        _AutoEventWrapper(CustomNavigationAutoEvent(event: event, data: data)));
+      _AutoEventWrapper(CustomNavigationAutoEvent(event: event, data: data)),
+    );
   }
 
   @override
   void onAutoScreenAvailabilityChanged(bool isAvailable) {
-    _viewEventStreamController.add(_AutoEventWrapper(
-      AutoScreenAvailabilityChangedEvent(isAvailable: isAvailable),
-    ));
+    _viewEventStreamController.add(
+      _AutoEventWrapper(
+        AutoScreenAvailabilityChangedEvent(isAvailable: isAvailable),
+      ),
+    );
   }
 }
 

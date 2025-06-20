@@ -82,40 +82,42 @@ class ExampleLatLngTextEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      Padding(
-        padding: const EdgeInsetsDirectional.only(start: 16.0, end: 24.0),
-        child: TextFormField(
-          initialValue: initialLatLng.latitude.toString(),
-          decoration: const InputDecoration(labelText: 'Latitude'),
-          keyboardType: TextInputType.number,
-          onChanged: (String value) {
-            onChanged(
-              LatLng(
-                latitude: double.parse(value),
-                longitude: initialLatLng.longitude,
-              ),
-            );
-          },
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsetsDirectional.only(start: 16.0, end: 24.0),
+          child: TextFormField(
+            initialValue: initialLatLng.latitude.toString(),
+            decoration: const InputDecoration(labelText: 'Latitude'),
+            keyboardType: TextInputType.number,
+            onChanged: (String value) {
+              onChanged(
+                LatLng(
+                  latitude: double.parse(value),
+                  longitude: initialLatLng.longitude,
+                ),
+              );
+            },
+          ),
         ),
-      ),
-      Padding(
-        padding: const EdgeInsetsDirectional.only(start: 16.0, end: 24.0),
-        child: TextFormField(
-          initialValue: initialLatLng.longitude.toString(),
-          decoration: const InputDecoration(labelText: 'Longitude'),
-          keyboardType: TextInputType.number,
-          onChanged: (String value) {
-            onChanged(
-              LatLng(
-                latitude: initialLatLng.latitude,
-                longitude: double.parse(value),
-              ),
-            );
-          },
+        Padding(
+          padding: const EdgeInsetsDirectional.only(start: 16.0, end: 24.0),
+          child: TextFormField(
+            initialValue: initialLatLng.longitude.toString(),
+            decoration: const InputDecoration(labelText: 'Longitude'),
+            keyboardType: TextInputType.number,
+            onChanged: (String value) {
+              onChanged(
+                LatLng(
+                  latitude: initialLatLng.latitude,
+                  longitude: double.parse(value),
+                ),
+              );
+            },
+          ),
         ),
-      ),
-    ]);
+      ],
+    );
   }
 }
 
@@ -155,9 +157,7 @@ class ExampleLatLngSlideEditorState extends State<ExampleLatLngSlideEditor> {
             setState(() {
               latitude = newValue;
             });
-            widget.onChanged(
-              LatLng(latitude: newValue, longitude: longitude),
-            );
+            widget.onChanged(LatLng(latitude: newValue, longitude: longitude));
           },
           title: 'Latitude',
           min: -90,
@@ -169,9 +169,7 @@ class ExampleLatLngSlideEditorState extends State<ExampleLatLngSlideEditor> {
             setState(() {
               longitude = newValue;
             });
-            widget.onChanged(
-              LatLng(latitude: latitude, longitude: newValue),
-            );
+            widget.onChanged(LatLng(latitude: latitude, longitude: newValue));
           },
           title: 'Longitude',
           min: -180,

@@ -20,7 +20,11 @@ import '../method_channel.dart';
 extension ConvertCameraPositionDto on CameraPositionDto {
   /// Convert [CameraPositionDto] to [CameraPosition].
   CameraPosition toCameraPosition() => CameraPosition(
-      bearing: bearing, target: target.toLatLng(), tilt: tilt, zoom: zoom);
+    bearing: bearing,
+    target: target.toLatLng(),
+    tilt: tilt,
+    zoom: zoom,
+  );
 }
 
 /// [CameraPosition] convert extension.
@@ -28,7 +32,11 @@ extension ConvertCameraPositionDto on CameraPositionDto {
 extension ConvertCameraPosition on CameraPosition {
   /// Convert [CameraPosition] to [CameraPositionDto].
   CameraPositionDto toCameraPosition() => CameraPositionDto(
-      bearing: bearing, target: target.toDto(), tilt: tilt, zoom: zoom);
+    bearing: bearing,
+    target: target.toDto(),
+    tilt: tilt,
+    zoom: zoom,
+  );
 }
 
 /// [CameraPerspective] convert extension.

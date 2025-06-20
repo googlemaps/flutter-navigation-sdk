@@ -41,7 +41,7 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
-          flutter-version: "3.27.x"
+          flutter-version: "3.32.x"
           channel: "stable"
           cache: true
       - name: Install Melos
@@ -50,6 +50,6 @@ jobs:
           # Running `melos bootstrap` is not needed because we use Melos just
           # for the `check-license-header` script.
           run-bootstrap: false
-          melos-version: "6.0.0"
+          melos-version: "6.3.2"
       - name: Check license header
         run: melos run check-license-header

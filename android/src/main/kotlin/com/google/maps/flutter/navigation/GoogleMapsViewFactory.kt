@@ -17,17 +17,17 @@
 package com.google.maps.flutter.navigation
 
 import android.content.Context
-import io.flutter.plugin.common.StandardMessageCodec
 import io.flutter.plugin.platform.PlatformView
 import io.flutter.plugin.platform.PlatformViewFactory
+import java.util.Objects
 
 class GoogleMapsViewFactory(
   private val viewRegistry: GoogleMapsViewRegistry,
   private val viewEventApi: ViewEventApi,
   private val imageRegistry: ImageRegistry,
-) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
+) : PlatformViewFactory(ViewCreationApi.codec) {
   override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
-    val params = ViewCreationOptionsDto.fromList(args as List<Any?>)
+    val params = Objects.requireNonNull(args as ViewCreationOptionsDto)
     val mapOptions = Convert.convertMapOptionsFromDto(params.mapOptions)
     if (params.mapViewType == MapViewTypeDto.NAVIGATION) {
       val navigationViewOptionsDto =

@@ -15,7 +15,7 @@
 set -e
 
 DEVICE_NAME=${TEST_DEVICE:-'iPhone 16 Pro'} # Default to 'iPhone 16 Pro' if no argument is provided
-OS_VERSION=${TEST_OS:-'18.1'} # Default to 'iPhone 16 Pro' if no argument is provided
+OS_VERSION=${TEST_OS:-'18.5'} # Default to 'iOS 18.5' if no argument is provided
 
 # Navigate to the ios directory and run xcodebuild with the provided device name
 cd ios && xcodebuild test \

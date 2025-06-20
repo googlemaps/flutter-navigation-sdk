@@ -40,7 +40,7 @@ internal class PolylineControllerTest {
         geodesic = true,
         strokeColor = Color.RED.toLong(),
         strokeWidth = 3.0,
-        strokeJointType = StrokeJointTypeDto.DEFAULTJOINT,
+        strokeJointType = StrokeJointTypeDto.DEFAULT_JOINT,
         visible = true,
         strokePattern = emptyList(),
         zIndex = 5.0,

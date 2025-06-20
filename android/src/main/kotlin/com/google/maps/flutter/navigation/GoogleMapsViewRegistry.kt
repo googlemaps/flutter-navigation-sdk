@@ -99,6 +99,7 @@ class GoogleMapsViewRegistry : DefaultLifecycleObserver, ComponentCallbacks, Com
     navigationViews.forEach { _, view -> view.onConfigurationChanged(configuration) }
   }
 
+  @Deprecated("Deprecated in Java")
   override fun onLowMemory() {
     // Ignored as NavigationView only supports onTrimMemory
   }

@@ -29,7 +29,7 @@ import '../widgets/widgets.dart';
 class NavigationPage extends ExamplePage {
   /// Creates a new navigation demo page widget.
   const NavigationPage({super.key})
-      : super(leading: const Icon(Icons.navigation), title: 'Navigation');
+    : super(leading: const Icon(Icons.navigation), title: 'Navigation');
 
   @override
   ExamplePageState<NavigationPage> createState() => _NavigationPageState();
@@ -63,8 +63,10 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   /// Camera location used to initialize the map view on simulator if location
   /// is not available by the given timeout [_userLocationTimeoutMS].
-  static const LatLng cameraLocationMIT =
-      LatLng(latitude: 42.3601, longitude: -71.094013);
+  static const LatLng cameraLocationMIT = LatLng(
+    latitude: 42.3601,
+    longitude: -71.094013,
+  );
   static const int _userLocationTimeoutMS = 1500;
 
   /// Speed multiplier used for simulation.
@@ -136,11 +138,11 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   StreamSubscription<void>? _trafficUpdatedSubscription;
   StreamSubscription<void>? _onRouteChangedSubscription;
   StreamSubscription<RemainingTimeOrDistanceChangedEvent>?
-      _remainingTimeOrDistanceChangedSubscription;
+  _remainingTimeOrDistanceChangedSubscription;
   StreamSubscription<RoadSnappedLocationUpdatedEvent>?
-      _roadSnappedLocationUpdatedSubscription;
+  _roadSnappedLocationUpdatedSubscription;
   StreamSubscription<RoadSnappedRawLocationUpdatedEvent>?
-      _roadSnappedRawLocationUpdatedSubscription;
+  _roadSnappedRawLocationUpdatedSubscription;
 
   int _nextWaypointIndex = 0;
 
@@ -180,9 +182,11 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
     _isAutoScreenAvailable = await _autoViewController.isAutoScreenAvailable();
     _autoViewController.listenForAutoScreenAvailibilityChangedEvent((event) {
-      debugPrint(event.isAvailable
-          ? "Auto screen is available"
-          : "Auto screen is not available");
+      debugPrint(
+        event.isAvailable
+            ? "Auto screen is available"
+            : "Auto screen is not available",
+      );
       setState(() {
         _isAutoScreenAvailable = event.isAvailable;
       });
@@ -207,7 +211,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   Future<void> _initializeNavigator() async {
     assert(_termsAndConditionsAccepted, 'Terms must be accepted');
     assert(
-        _locationPermissionsAccepted, 'Location permissions must be granted');
+      _locationPermissionsAccepted,
+      'Location permissions must be granted',
+    );
 
     if (!_navigatorInitialized) {
       debugPrint('Initializing new navigation session...');
@@ -226,8 +232,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   }
 
   Future<void> _moveCameraForAuto() async {
-    final CameraUpdate positionUpdate = CameraUpdate.newLatLng(const LatLng(
-        latitude: 60.34856639667419, longitude: 25.03459821831162));
+    final CameraUpdate positionUpdate = CameraUpdate.newLatLng(
+      const LatLng(latitude: 60.34856639667419, longitude: 25.03459821831162),
+    );
     await _autoViewController.moveCamera(positionUpdate);
   }
 
@@ -248,16 +255,19 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   /// events. Initialize user location to [cameraLocationMIT] if user
   /// location is not available after timeout.
   Future<void> _setDefaultUserLocationAfterDelay() async {
-    Future<void>.delayed(const Duration(milliseconds: _userLocationTimeoutMS),
-        () async {
-      if (mounted && _userLocation == null) {
-        _userLocation = await _navigationViewController?.getMyLocation() ??
-            cameraLocationMIT;
-        if (mounted) {
-          setState(() {});
+    Future<void>.delayed(
+      const Duration(milliseconds: _userLocationTimeoutMS),
+      () async {
+        if (mounted && _userLocation == null) {
+          _userLocation =
+              await _navigationViewController?.getMyLocation() ??
+              cameraLocationMIT;
+          if (mounted) {
+            setState(() {});
+          }
         }
-      }
-    });
+      },
+    );
   }
 
   // Navigator state is not persisted between app restarts, so we need to check
@@ -326,30 +336,39 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   Future<void> _setupListeners() async {
     // Clear old listeners to make sure we subscribe to each event only once.
     _clearListeners();
-    _speedUpdatedSubscription =
-        GoogleMapsNavigator.setSpeedingUpdatedListener(_onSpeedingUpdatedEvent);
-    _onArrivalSubscription =
-        GoogleMapsNavigator.setOnArrivalListener(_onArrivalEvent);
-    _onReRoutingSubscription =
-        GoogleMapsNavigator.setOnReroutingListener(_onReroutingEvent);
+    _speedUpdatedSubscription = GoogleMapsNavigator.setSpeedingUpdatedListener(
+      _onSpeedingUpdatedEvent,
+    );
+    _onArrivalSubscription = GoogleMapsNavigator.setOnArrivalListener(
+      _onArrivalEvent,
+    );
+    _onReRoutingSubscription = GoogleMapsNavigator.setOnReroutingListener(
+      _onReroutingEvent,
+    );
     _onGpsAvailabilitySubscription =
         await GoogleMapsNavigator.setOnGpsAvailabilityListener(
-            _onGpsAvailabilityEvent);
-    _trafficUpdatedSubscription =
-        GoogleMapsNavigator.setTrafficUpdatedListener(_onTrafficUpdatedEvent);
-    _onRouteChangedSubscription =
-        GoogleMapsNavigator.setOnRouteChangedListener(_onRouteChangedEvent);
+          _onGpsAvailabilityEvent,
+        );
+    _trafficUpdatedSubscription = GoogleMapsNavigator.setTrafficUpdatedListener(
+      _onTrafficUpdatedEvent,
+    );
+    _onRouteChangedSubscription = GoogleMapsNavigator.setOnRouteChangedListener(
+      _onRouteChangedEvent,
+    );
     _remainingTimeOrDistanceChangedSubscription =
         GoogleMapsNavigator.setOnRemainingTimeOrDistanceChangedListener(
-            _onRemainingTimeOrDistanceChangedEvent,
-            remainingTimeThresholdSeconds: 60,
-            remainingDistanceThresholdMeters: 100);
+          _onRemainingTimeOrDistanceChangedEvent,
+          remainingTimeThresholdSeconds: 60,
+          remainingDistanceThresholdMeters: 100,
+        );
     _roadSnappedLocationUpdatedSubscription =
         await GoogleMapsNavigator.setRoadSnappedLocationUpdatedListener(
-            _onRoadSnappedLocationUpdatedEvent);
+          _onRoadSnappedLocationUpdatedEvent,
+        );
     _roadSnappedRawLocationUpdatedSubscription =
         await GoogleMapsNavigator.setRoadSnappedRawLocationUpdatedListener(
-            _onRoadSnappedRawLocationUpdatedEvent);
+          _onRoadSnappedRawLocationUpdatedEvent,
+        );
   }
 
   void _clearListeners() {
@@ -382,7 +401,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   }
 
   void _onRoadSnappedLocationUpdatedEvent(
-      RoadSnappedLocationUpdatedEvent event) {
+    RoadSnappedLocationUpdatedEvent event,
+  ) {
     if (!mounted) {
       return;
     }
@@ -395,7 +415,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   // Note: Raw location updates are not available on iOS.
   void _onRoadSnappedRawLocationUpdatedEvent(
-      RoadSnappedRawLocationUpdatedEvent event) {
+    RoadSnappedRawLocationUpdatedEvent event,
+  ) {
     if (!mounted) {
       return;
     }
@@ -407,7 +428,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   }
 
   void _onRemainingTimeOrDistanceChangedEvent(
-      RemainingTimeOrDistanceChangedEvent event) {
+    RemainingTimeOrDistanceChangedEvent event,
+  ) {
     if (!mounted) {
       return;
     }
@@ -448,9 +470,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     });
   }
 
-  void _onArrivalEvent(
-    OnArrivalEvent event,
-  ) {
+  void _onArrivalEvent(OnArrivalEvent event) {
     if (!mounted) {
       return;
     }
@@ -460,9 +480,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     });
   }
 
-  void _onSpeedingUpdatedEvent(
-    SpeedingUpdatedEvent event,
-  ) {
+  void _onSpeedingUpdatedEvent(SpeedingUpdatedEvent event) {
     if (!mounted) {
       return;
     }
@@ -525,7 +543,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   }
 
   void _onRecenterButtonClickedEvent(
-      NavigationViewRecenterButtonClickedEvent msg) {
+    NavigationViewRecenterButtonClickedEvent msg,
+  ) {
     setState(() {
       _onRecenterButtonClickedEventCallCount += 1;
     });
@@ -561,16 +580,21 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     _waypoints.clear();
 
     // Reset navigation perspective to top down north up.
-    await _navigationViewController!
-        .followMyLocation(CameraPerspective.topDownNorthUp);
+    await _navigationViewController!.followMyLocation(
+      CameraPerspective.topDownNorthUp,
+    );
 
     // Disable navigation UI after small delay to make sure routes are cleared.
     // On Android routes are not always created on the map, if navigation UI is
     // disabled right after cleanup.
-    unawaited(Future<void>.delayed(
-        const Duration(milliseconds: _disableNavigationUIDelay), () async {
-      await _navigationViewController!.setNavigationUIEnabled(false);
-    }));
+    unawaited(
+      Future<void>.delayed(
+        const Duration(milliseconds: _disableNavigationUIDelay),
+        () async {
+          await _navigationViewController!.setNavigationUIEnabled(false);
+        },
+      ),
+    );
 
     // Make sure that navigation initialization state is up-to-date.
     await _updateNavigatorInitializationState();
@@ -591,9 +615,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   MarkerOptions _buildNewWaypointMarkerOptions(LatLng target) {
     return MarkerOptions(
-        infoWindow: const InfoWindow(title: 'Destination'),
-        position:
-            LatLng(latitude: target.latitude, longitude: target.longitude));
+      infoWindow: const InfoWindow(title: 'Destination'),
+      position: LatLng(latitude: target.latitude, longitude: target.longitude),
+    );
   }
 
   Future<void> _updateNewWaypointMarker(LatLng target) async {
@@ -609,8 +633,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       }
     } else {
       // Update existing marker.
-      final Marker updatedWaypointMarker =
-          _newWaypointMarker!.copyWith(options: markerOptions);
+      final Marker updatedWaypointMarker = _newWaypointMarker!.copyWith(
+        options: markerOptions,
+      );
       final List<Marker?> updatedMarkers = await _navigationViewController!
           .updateMarkers(<Marker>[updatedWaypointMarker]);
       if (updatedMarkers.first != null) {
@@ -624,8 +649,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   Future<void> _removeNewWaypointMarker() async {
     if (_newWaypointMarker != null) {
-      await _navigationViewController!
-          .removeMarkers(<Marker>[_newWaypointMarker!]);
+      await _navigationViewController!.removeMarkers(<Marker>[
+        _newWaypointMarker!,
+      ]);
       _newWaypointMarker = null;
       setState(() {});
     }
@@ -633,8 +659,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   Future<void> _removeDestinationWaypointMarkers() async {
     if (_destinationWaypointMarkers.isNotEmpty) {
-      await _navigationViewController!
-          .removeMarkers(_destinationWaypointMarkers);
+      await _navigationViewController!.removeMarkers(
+        _destinationWaypointMarkers,
+      );
       _destinationWaypointMarkers.clear();
 
       // Unregister custom marker images
@@ -653,13 +680,15 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         _validRoute = false;
       });
       _nextWaypointIndex += 1;
-      _waypoints.add(NavigationWaypoint.withLatLngTarget(
-        title: 'Waypoint $_nextWaypointIndex',
-        target: LatLng(
-          latitude: _newWaypointMarker!.options.position.latitude,
-          longitude: _newWaypointMarker!.options.position.longitude,
+      _waypoints.add(
+        NavigationWaypoint.withLatLngTarget(
+          title: 'Waypoint $_nextWaypointIndex',
+          target: LatLng(
+            latitude: _newWaypointMarker!.options.position.latitude,
+            longitude: _newWaypointMarker!.options.position.longitude,
+          ),
         ),
-      ));
+      );
 
       // Convert new waypoint marker to destination marker.
       await _convertNewWaypointMarkerToDestinationMarker(_nextWaypointIndex);
@@ -685,21 +714,24 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   }
 
   Future<void> _convertNewWaypointMarkerToDestinationMarker(
-      final int index) async {
+    final int index,
+  ) async {
     final String title = 'Waypoint $index';
     final ImageDescriptor waypointMarkerImage =
         await registerWaypointMarkerImage(
-            index, MediaQuery.of(context).devicePixelRatio);
-    final List<Marker?> destinationMarkers =
-        await _navigationViewController!.updateMarkers(<Marker>[
-      _newWaypointMarker!.copyWith(
-        options: _newWaypointMarker!.options.copyWith(
-          infoWindow: InfoWindow(title: title),
-          anchor: const MarkerAnchor(u: 0.5, v: 1.2),
-          icon: waypointMarkerImage,
-        ),
-      )
-    ]);
+          index,
+          MediaQuery.of(context).devicePixelRatio,
+        );
+    final List<Marker?> destinationMarkers = await _navigationViewController!
+        .updateMarkers(<Marker>[
+          _newWaypointMarker!.copyWith(
+            options: _newWaypointMarker!.options.copyWith(
+              infoWindow: InfoWindow(title: title),
+              anchor: const MarkerAnchor(u: 0.5, v: 1.2),
+              icon: waypointMarkerImage,
+            ),
+          ),
+        ]);
     _destinationWaypointMarkers.add(destinationMarkers.first!);
     _newWaypointMarker = null;
   }
@@ -762,9 +794,10 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     }
 
     // If route tokens are enabled, build destinations with route tokens.
-    final Destinations? destinations = _routeTokensEnabled
-        ? (await _buildDestinationsWithRoutesApi())
-        : _buildDestinations();
+    final Destinations? destinations =
+        _routeTokensEnabled
+            ? (await _buildDestinationsWithRoutesApi())
+            : _buildDestinations();
 
     if (destinations == null) {
       // Failed to build destinations.
@@ -789,42 +822,52 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
           return true;
         case NavigationRouteStatus.internalError:
           showMessage(
-              'Unexpected internal error occured. Please restart the app.');
+            'Unexpected internal error occured. Please restart the app.',
+          );
         case NavigationRouteStatus.routeNotFound:
           showMessage('The route could not be calculated.');
         case NavigationRouteStatus.networkError:
           showMessage(
-              'Working network connection is required to calculate the route.');
+            'Working network connection is required to calculate the route.',
+          );
         case NavigationRouteStatus.quotaExceeded:
           showMessage('Insufficient API quota to use the navigation.');
         case NavigationRouteStatus.quotaCheckFailed:
           showMessage(
-              'API quota check failed, cannot authorize the navigation.');
+            'API quota check failed, cannot authorize the navigation.',
+          );
         case NavigationRouteStatus.apiKeyNotAuthorized:
           showMessage('A valid API key is required to use the navigation.');
         case NavigationRouteStatus.statusCanceled:
           showMessage(
-              'The route calculation was canceled in favor of a newer one.');
+            'The route calculation was canceled in favor of a newer one.',
+          );
         case NavigationRouteStatus.duplicateWaypointsError:
           showMessage(
-              'The route could not be calculated because of duplicate waypoints.');
+            'The route could not be calculated because of duplicate waypoints.',
+          );
         case NavigationRouteStatus.noWaypointsError:
           showMessage(
-              'The route could not be calculated because no waypoints were provided.');
+            'The route could not be calculated because no waypoints were provided.',
+          );
         case NavigationRouteStatus.locationUnavailable:
           showMessage(
-              'No user location is available. Did you allow location permission?');
+            'No user location is available. Did you allow location permission?',
+          );
         case NavigationRouteStatus.waypointError:
           showMessage('Invalid waypoints provided.');
         case NavigationRouteStatus.travelModeUnsupported:
           showMessage(
-              'The route could not calculated for the given travel mode.');
+            'The route could not calculated for the given travel mode.',
+          );
         case NavigationRouteStatus.unknown:
           showMessage(
-              'The route could not be calculated due to an unknown error.');
+            'The route could not be calculated due to an unknown error.',
+          );
         case NavigationRouteStatus.locationUnknown:
           showMessage(
-              'The route could not be calculated, because the user location is unknown.');
+            'The route could not be calculated, because the user location is unknown.',
+          );
       }
     } on RouteTokenMalformedException catch (_) {
       showMessage('Malformed route token');
@@ -870,14 +913,14 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
     List<String> routeTokens = <String>[];
     try {
-      routeTokens = await getRouteToken(
-        <NavigationWaypoint>[
-          // Add users location as start location for getting routetoken.
-          NavigationWaypoint.withLatLngTarget(
-              title: 'Origin', target: _userLocation),
-          ..._waypoints,
-        ],
-      );
+      routeTokens = await getRouteToken(<NavigationWaypoint>[
+        // Add users location as start location for getting routetoken.
+        NavigationWaypoint.withLatLngTarget(
+          title: 'Origin',
+          target: _userLocation,
+        ),
+        ..._waypoints,
+      ]);
     } catch (e) {
       showMessage('Failed to get route tokens from Routes API. $e');
       return null;
@@ -888,16 +931,18 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       return null;
     } else if (routeTokens.length > 1) {
       showMessage(
-          'More than one route token received from Routes API. Using the first one.');
+        'More than one route token received from Routes API. Using the first one.',
+      );
     }
 
     return Destinations(
-        waypoints: _waypoints,
-        displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
-        routeTokenOptions: RouteTokenOptions(
-          routeToken: routeTokens.first, // Uses first fetched route token.
-          travelMode: _travelMode,
-        ));
+      waypoints: _waypoints,
+      displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
+      routeTokenOptions: RouteTokenOptions(
+        routeToken: routeTokens.first, // Uses first fetched route token.
+        travelMode: _travelMode,
+      ),
+    );
   }
 
   Future<void> _startGuidance() async {
@@ -932,8 +977,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
       await GoogleMapsNavigator.simulator
           .simulateLocationsAlongExistingRouteWithOptions(
-        SimulationOptions(speedMultiplier: simulationSpeedMultiplier),
-      );
+            SimulationOptions(speedMultiplier: simulationSpeedMultiplier),
+          );
 
       setState(() {
         _simulationState = SimulationState.running;
@@ -983,7 +1028,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     final RouteSegment? segment =
         await GoogleMapsNavigator.getCurrentRouteSegment();
     showMessage(
-        'Current route segment destination: ${segment?.destinationWaypoint?.title ?? 'unknown'}');
+      'Current route segment destination: ${segment?.destinationWaypoint?.title ?? 'unknown'}',
+    );
   }
 
   Future<void> _setPadding(EdgeInsets padding) async {
@@ -1010,17 +1056,18 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   @override
   Widget build(BuildContext context) => buildPage(
-      context,
-      (BuildContext context) => Padding(
-          padding: EdgeInsets.zero,
-          child: Stack(
+    context,
+    (BuildContext context) => Padding(
+      padding: EdgeInsets.zero,
+      child: Stack(
+        children: <Widget>[
+          Column(
             children: <Widget>[
-              Column(children: <Widget>[
-                _travelModeSelection,
-                Expanded(
-                  child: _navigatorInitializedAtLeastOnce &&
-                          _userLocation != null
-                      ? GoogleMapsNavigationView(
+              _travelModeSelection,
+              Expanded(
+                child:
+                    _navigatorInitializedAtLeastOnce && _userLocation != null
+                        ? GoogleMapsNavigationView(
                           onViewCreated: _onViewCreated,
                           onMapClicked: _onMapClicked,
                           onMapLongClicked: _onMapClicked,
@@ -1033,44 +1080,53 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                             target: _userLocation!,
                             zoom: 15,
                           ),
-                          initialNavigationUIEnabledPreference: _guidanceRunning
-                              ? NavigationUIEnabledPreference.automatic
-                              : NavigationUIEnabledPreference.disabled,
-                          initialPadding: const EdgeInsets.all(0))
-                      : const Center(
+                          initialNavigationUIEnabledPreference:
+                              _guidanceRunning
+                                  ? NavigationUIEnabledPreference.automatic
+                                  : NavigationUIEnabledPreference.disabled,
+                          initialPadding: const EdgeInsets.all(0),
+                        )
+                        : const Center(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Text('Waiting navigator and user location'),
                               SizedBox(height: 10),
                               SizedBox(
-                                  width: 30,
-                                  height: 30,
-                                  child: CircularProgressIndicator())
+                                width: 30,
+                                height: 30,
+                                child: CircularProgressIndicator(),
+                              ),
                             ],
                           ),
                         ),
-                ),
-                if (_navigationViewController != null) bottomControls
-              ]),
-              if (_showRemainingTimeAndDistanceLabels)
-                _createRemainingTimeAndDistanceLabels()
+              ),
+              if (_navigationViewController != null) bottomControls,
             ],
-          )));
+          ),
+          if (_showRemainingTimeAndDistanceLabels)
+            _createRemainingTimeAndDistanceLabels(),
+        ],
+      ),
+    ),
+  );
 
   Widget get bottomControls {
     if (!_termsAndConditionsAccepted || !_locationPermissionsAccepted) {
       return Padding(
-          padding: const EdgeInsets.all(15),
-          child: Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 10,
-              children: <Widget>[
-                const Text(
-                    'Terms and conditions and location permissions must be accepted'
-                    ' before navigation can be started.'),
-                getOptionsButton(context, onPressed: () => toggleOverlay())
-              ]));
+        padding: const EdgeInsets.all(15),
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          spacing: 10,
+          children: <Widget>[
+            const Text(
+              'Terms and conditions and location permissions must be accepted'
+              ' before navigation can be started.',
+            ),
+            getOptionsButton(context, onPressed: () => toggleOverlay()),
+          ],
+        ),
+      );
     }
     if (!_navigatorInitializedAtLeastOnce) {
       return const Text('Waiting for navigator to initialize...');
@@ -1089,15 +1145,16 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
           if (_guidanceRunning &&
               _simulationState == SimulationState.runningOutdated)
             Wrap(
-                alignment: WrapAlignment.center,
-                spacing: 10,
-                children: <Widget>[
-                  const Text('Simulation is running with outdated route'),
-                  ElevatedButton(
-                    onPressed: () => _startSimulation(),
-                    child: const Text('Update simulation'),
-                  ),
-                ]),
+              alignment: WrapAlignment.center,
+              spacing: 10,
+              children: <Widget>[
+                const Text('Simulation is running with outdated route'),
+                ElevatedButton(
+                  onPressed: () => _startSimulation(),
+                  child: const Text('Update simulation'),
+                ),
+              ],
+            ),
           if (_waypoints.isNotEmpty)
             Wrap(
               alignment: WrapAlignment.center,
@@ -1149,12 +1206,13 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                 child: const Text('Add waypoint'),
               ),
               ElevatedButton(
-                onPressed: _waypoints.isNotEmpty && !_guidanceRunning
-                    ? () => _clearNavigationWaypoints()
-                    : null,
+                onPressed:
+                    _waypoints.isNotEmpty && !_guidanceRunning
+                        ? () => _clearNavigationWaypoints()
+                        : null,
                 child: const Text('Clear waypoints'),
               ),
-              getOptionsButton(context, onPressed: () => toggleOverlay())
+              getOptionsButton(context, onPressed: () => toggleOverlay()),
             ],
           ),
         ],
@@ -1164,27 +1222,30 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   Widget _createRemainingTimeAndDistanceLabels() {
     return SafeArea(
-        minimum: const EdgeInsets.all(8.0),
-        child: Align(
-            alignment: Alignment.topLeft,
-            child: Card(
-                child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text(
-                    'Remaining time: ${formatRemainingDuration(Duration(seconds: _remainingTime))}',
-                    style: const TextStyle(fontSize: 15),
-                  ),
-                  Text(
-                    'Remaining distance: ${formatRemainingDistance(_remainingDistance)}',
-                    style: const TextStyle(fontSize: 15),
-                  ),
-                ],
-              ),
-            ))));
+      minimum: const EdgeInsets.all(8.0),
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  'Remaining time: ${formatRemainingDuration(Duration(seconds: _remainingTime))}',
+                  style: const TextStyle(fontSize: 15),
+                ),
+                Text(
+                  'Remaining distance: ${formatRemainingDistance(_remainingDistance)}',
+                  style: const TextStyle(fontSize: 15),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   // Opens a bottom sheet showing total calls to each event listener.
@@ -1193,79 +1254,100 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-            padding: const EdgeInsets.all(16.0),
-            child: ListView(
-              children: <Widget>[
-                Card(
-                    child: ListTile(
+          padding: const EdgeInsets.all(16.0),
+          child: ListView(
+            children: <Widget>[
+              Card(
+                child: ListTile(
                   title: const Text('On route changed event call count'),
                   trailing: Text(_onRouteChangedEventCallCount.toString()),
-                )),
-                Card(
-                    child: ListTile(
+                ),
+              ),
+              Card(
+                child: ListTile(
                   title: const Text(
-                      'On road snapped location updated event call count'),
+                    'On road snapped location updated event call count',
+                  ),
                   trailing: Text(
-                      _onRoadSnappedLocationUpdatedEventCallCount.toString()),
-                )),
-                if (Platform.isAndroid)
-                  Card(
-                      child: ListTile(
-                    title: const Text(
-                        'On road snapped raw location updated event call count'),
-                    trailing: Text(
-                        _onRoadSnappedRawLocationUpdatedEventCallCount
-                            .toString()),
-                  )),
+                    _onRoadSnappedLocationUpdatedEventCallCount.toString(),
+                  ),
+                ),
+              ),
+              if (Platform.isAndroid)
                 Card(
-                    child: ListTile(
+                  child: ListTile(
+                    title: const Text(
+                      'On road snapped raw location updated event call count',
+                    ),
+                    trailing: Text(
+                      _onRoadSnappedRawLocationUpdatedEventCallCount.toString(),
+                    ),
+                  ),
+                ),
+              Card(
+                child: ListTile(
                   title: const Text('On traffic updated event call count'),
                   trailing: Text(_onTrafficUpdatedEventCallCount.toString()),
-                )),
-                Card(
-                    child: ListTile(
+                ),
+              ),
+              Card(
+                child: ListTile(
                   title: const Text('On rerouting event call count'),
                   trailing: Text(_onReroutingEventCallCount.toString()),
-                )),
-                if (Platform.isAndroid)
-                  Card(
-                      child: ListTile(
+                ),
+              ),
+              if (Platform.isAndroid)
+                Card(
+                  child: ListTile(
                     title: const Text('On GPS availability event call count'),
                     trailing: Text(_onGpsAvailabilityEventCallCount.toString()),
-                  )),
-                Card(
-                    child: ListTile(
+                  ),
+                ),
+              Card(
+                child: ListTile(
                   title: const Text('On arrival event call count'),
                   trailing: Text(_onArrivalEventCallCount.toString()),
-                )),
-                Card(
-                    child: ListTile(
+                ),
+              ),
+              Card(
+                child: ListTile(
                   title: const Text('On speeding updated event call count'),
                   trailing: Text(_onSpeedingUpdatedEventCallCount.toString()),
-                )),
-                Card(
-                    child: ListTile(
-                  title:
-                      const Text('On recenter button clicked event call count'),
-                  trailing:
-                      Text(_onRecenterButtonClickedEventCallCount.toString()),
-                )),
-                Card(
-                    child: ListTile(
+                ),
+              ),
+              Card(
+                child: ListTile(
                   title: const Text(
-                      'On remaining time or distance changed event call count'),
-                  trailing: Text(_onRemainingTimeOrDistanceChangedEventCallCount
-                      .toString()),
-                )),
-                Card(
-                    child: ListTile(
-                  title: const Text(
-                      'On navigation UI enabled changed event call count'),
+                    'On recenter button clicked event call count',
+                  ),
                   trailing: Text(
-                      _onNavigationUIEnabledChangedEventCallCount.toString()),
-                )),
-              ],
-            ));
+                    _onRecenterButtonClickedEventCallCount.toString(),
+                  ),
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  title: const Text(
+                    'On remaining time or distance changed event call count',
+                  ),
+                  trailing: Text(
+                    _onRemainingTimeOrDistanceChangedEventCallCount.toString(),
+                  ),
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  title: const Text(
+                    'On navigation UI enabled changed event call count',
+                  ),
+                  trailing: Text(
+                    _onNavigationUIEnabledChangedEventCallCount.toString(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
       },
     );
   }
@@ -1276,19 +1358,21 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       return disabled ? Theme.of(context).disabledColor : null;
     }
 
-    return Column(children: <Widget>[
-      Card(
-        child: ExpansionTile(
-          title: const Text('Terms and conditions'),
-          children: <Widget>[
-            Wrap(
+    return Column(
+      children: <Widget>[
+        Card(
+          child: ExpansionTile(
+            title: const Text('Terms and conditions'),
+            children: <Widget>[
+              Wrap(
                 alignment: WrapAlignment.center,
                 spacing: 10,
                 children: <Widget>[
                   ElevatedButton(
-                    onPressed: !_termsAndConditionsAccepted
-                        ? () => _showTermsAndConditionsDialogIfNeeded()
-                        : null,
+                    onPressed:
+                        !_termsAndConditionsAccepted
+                            ? () => _showTermsAndConditionsDialogIfNeeded()
+                            : null,
                     child: const Text('Show TOS'),
                   ),
                   ElevatedButton(
@@ -1296,106 +1380,123 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                         _termsAndConditionsAccepted ? () => _resetTOS() : null,
                     child: const Text('Reset TOS'),
                   ),
-                ]),
-            const SizedBox(height: 10)
-          ],
-        ),
-      ),
-      Card(
-        child:
-            ExpansionTile(title: const Text('Navigation'), children: <Widget>[
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 10,
-            children: <Widget>[
-              ElevatedButton(
-                onPressed: !_navigatorInitialized
-                    ? () => _initializeNavigator()
-                    : null,
-                child: const Text('Start navigation'),
+                ],
               ),
-              ElevatedButton(
-                onPressed: _navigatorInitialized
-                    ? () => _stopGuidedNavigation()
-                    : null,
-                child: const Text('Stop navigation'),
-              ),
-              ElevatedButton(
-                onPressed: _navigatorInitialized
-                    ? (_guidanceRunning ? _stopGuidance : _startGuidance)
-                    : null,
-                child:
-                    Text(_guidanceRunning ? 'Stop guidance' : 'Start guidance'),
-              ),
-              ElevatedButton(
-                onPressed: () =>
-                    _showNavigationEventListenerCallCounts(context),
-                child: const Text('Show listeners'),
-              ),
-              ElevatedButton(
-                onPressed: () => _showNativeNavigatorState(),
-                child: const Text('Show native navigator state'),
-              ),
-              ElevatedButton(
-                onPressed: _waypoints.isNotEmpty ? _displayRouteSegments : null,
-                child: const Text('Display route segments'),
-              ),
-              ElevatedButton(
-                onPressed:
-                    _waypoints.isNotEmpty ? _displayCurrentRouteSegment : null,
-                child: const Text('Display current route segment'),
-              ),
-              ElevatedButton(
-                onPressed: _waypoints.isNotEmpty && _guidanceRunning
-                    ? _displayTraveledRoute
-                    : null,
-                child: const Text('Display travelled route'),
-              ),
-              ExampleSwitch(
-                  title: 'Show remaining time and distance',
-                  initialValue: _showRemainingTimeAndDistanceLabels,
-                  onChanged: (bool newValue) async {
-                    setState(() {
-                      _showRemainingTimeAndDistanceLabels = newValue;
-                    });
-                  }),
-              ExampleSwitch(
-                title: 'Use route tokens',
-                initialValue: _routeTokensEnabled,
-                onChanged: _guidanceRunning
-                    ? null
-                    : (bool value) => _setRouteTokensEnabled(value),
-              ),
-              ExampleSwitch(
-                  title: 'Turn by turn events',
-                  initialValue: _turnByTurnNavigationEventEnabled,
-                  onChanged: (bool newValue) async {
-                    if (newValue) {
-                      await GoogleMapsNavigator
-                          .enableTurnByTurnNavigationEvents(
-                              double.maxFinite.toInt());
-                    } else {
-                      await GoogleMapsNavigator
-                          .disableTurnByTurnNavigationEvents();
-                    }
-                    setState(() {
-                      _turnByTurnNavigationEventEnabled = newValue;
-                    });
-                  }),
+              const SizedBox(height: 10),
             ],
           ),
-          const SizedBox(height: 10)
-        ]),
-      ),
-      IgnorePointer(
+        ),
+        Card(
+          child: ExpansionTile(
+            title: const Text('Navigation'),
+            children: <Widget>[
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 10,
+                children: <Widget>[
+                  ElevatedButton(
+                    onPressed:
+                        !_navigatorInitialized
+                            ? () => _initializeNavigator()
+                            : null,
+                    child: const Text('Start navigation'),
+                  ),
+                  ElevatedButton(
+                    onPressed:
+                        _navigatorInitialized
+                            ? () => _stopGuidedNavigation()
+                            : null,
+                    child: const Text('Stop navigation'),
+                  ),
+                  ElevatedButton(
+                    onPressed:
+                        _navigatorInitialized
+                            ? (_guidanceRunning
+                                ? _stopGuidance
+                                : _startGuidance)
+                            : null,
+                    child: Text(
+                      _guidanceRunning ? 'Stop guidance' : 'Start guidance',
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed:
+                        () => _showNavigationEventListenerCallCounts(context),
+                    child: const Text('Show listeners'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => _showNativeNavigatorState(),
+                    child: const Text('Show native navigator state'),
+                  ),
+                  ElevatedButton(
+                    onPressed:
+                        _waypoints.isNotEmpty ? _displayRouteSegments : null,
+                    child: const Text('Display route segments'),
+                  ),
+                  ElevatedButton(
+                    onPressed:
+                        _waypoints.isNotEmpty
+                            ? _displayCurrentRouteSegment
+                            : null,
+                    child: const Text('Display current route segment'),
+                  ),
+                  ElevatedButton(
+                    onPressed:
+                        _waypoints.isNotEmpty && _guidanceRunning
+                            ? _displayTraveledRoute
+                            : null,
+                    child: const Text('Display travelled route'),
+                  ),
+                  ExampleSwitch(
+                    title: 'Show remaining time and distance',
+                    initialValue: _showRemainingTimeAndDistanceLabels,
+                    onChanged: (bool newValue) async {
+                      setState(() {
+                        _showRemainingTimeAndDistanceLabels = newValue;
+                      });
+                    },
+                  ),
+                  ExampleSwitch(
+                    title: 'Use route tokens',
+                    initialValue: _routeTokensEnabled,
+                    onChanged:
+                        _guidanceRunning
+                            ? null
+                            : (bool value) => _setRouteTokensEnabled(value),
+                  ),
+                  ExampleSwitch(
+                    title: 'Turn by turn events',
+                    initialValue: _turnByTurnNavigationEventEnabled,
+                    onChanged: (bool newValue) async {
+                      if (newValue) {
+                        await GoogleMapsNavigator.enableTurnByTurnNavigationEvents(
+                          double.maxFinite.toInt(),
+                        );
+                      } else {
+                        await GoogleMapsNavigator.disableTurnByTurnNavigationEvents();
+                      }
+                      setState(() {
+                        _turnByTurnNavigationEventEnabled = newValue;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+            ],
+          ),
+        ),
+        IgnorePointer(
           ignoring: !_navigatorInitialized,
           child: Card(
             child: ExpansionTile(
               title: const Text('Simulation'),
-              collapsedTextColor:
-                  getExpansionTileTextColor(!_navigatorInitialized),
-              collapsedIconColor:
-                  getExpansionTileTextColor(!_navigatorInitialized),
+              collapsedTextColor: getExpansionTileTextColor(
+                !_navigatorInitialized,
+              ),
+              collapsedIconColor: getExpansionTileTextColor(
+                !_navigatorInitialized,
+              ),
               children: <Widget>[
                 Wrap(
                   alignment: WrapAlignment.center,
@@ -1415,192 +1516,232 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                       Text(_simulationState.description),
                   ],
                 ),
-                const SizedBox(height: 10)
+                const SizedBox(height: 10),
               ],
             ),
-          )),
-      IgnorePointer(
+          ),
+        ),
+        IgnorePointer(
           ignoring: !_navigatorInitialized || _navigationViewController == null,
           child: Card(
             child: ExpansionTile(
-                title: const Text('Navigation view'),
-                collapsedTextColor: getExpansionTileTextColor(
-                    !_navigatorInitialized ||
-                        _navigationViewController == null),
-                collapsedIconColor: getExpansionTileTextColor(
-                    !_navigatorInitialized ||
-                        _navigationViewController == null),
-                children: <Widget>[
-                  ExampleSwitch(
-                      title: 'Enable guidance header',
-                      initialValue: _navigationHeaderEnabled,
-                      onChanged: (bool newValue) async {
-                        await _navigationViewController!
-                            .setNavigationHeaderEnabled(newValue);
-                        setState(() {
-                          _navigationHeaderEnabled = newValue;
-                        });
-                      }),
-                  ExampleSwitch(
-                      title: 'Enable footer',
-                      initialValue: _navigationFooterEnabled,
-                      onChanged: (bool newValue) async {
-                        await _navigationViewController!
-                            .setNavigationFooterEnabled(newValue);
-                        setState(() {
-                          _navigationFooterEnabled = newValue;
-                        });
-                      }),
-                  ExampleSwitch(
-                      title: 'Enable progress bar',
-                      initialValue: _navigationTripProgressBarEnabled,
-                      onChanged: (bool newValue) async {
-                        await _navigationViewController!
-                            .setNavigationTripProgressBarEnabled(newValue);
-                        setState(() {
-                          _navigationTripProgressBarEnabled = newValue;
-                        });
-                      }),
-                  ExampleSwitch(
-                      title: 'Enable Navigation UI',
-                      initialValue: _navigationUIEnabled,
-                      onChanged: (bool newValue) async {
-                        await _navigationViewController!
-                            .setNavigationUIEnabled(newValue);
-                        setState(() {
-                          _navigationUIEnabled = newValue;
-                        });
-                      }),
-                  ExampleSwitch(
-                      title: 'Enable recenter button',
-                      initialValue: _recenterButtonEnabled,
-                      onChanged: (bool newValue) async {
-                        await _navigationViewController!
-                            .setRecenterButtonEnabled(newValue);
-                        setState(() {
-                          _recenterButtonEnabled = newValue;
-                        });
-                      }),
-                  ExampleSwitch(
-                      title: 'Display speedlimit icon',
-                      initialValue: _speedLimitIconEnabled,
-                      onChanged: (bool newValue) async {
-                        await _navigationViewController!
-                            .setSpeedLimitIconEnabled(newValue);
-                        setState(() {
-                          _speedLimitIconEnabled = newValue;
-                        });
-                      }),
-                  ExampleSwitch(
-                      title: 'Display speedometer',
-                      initialValue: _speedometerEnabled,
-                      onChanged: (bool newValue) async {
-                        await _navigationViewController!
-                            .setSpeedometerEnabled(newValue);
-                        setState(() {
-                          _speedometerEnabled = newValue;
-                        });
-                      }),
-                  ExampleSwitch(
-                      title: 'Display traffic incident cards',
-                      initialValue: _trafficIndicentCardsEnabled,
-                      onChanged: (bool newValue) async {
-                        await _navigationViewController!
-                            .setTrafficIncidentCardsEnabled(newValue);
-                        setState(() {
-                          _trafficIndicentCardsEnabled = newValue;
-                        });
-                      }),
-                  ExampleSwitch(
-                      title: 'Display traffic prompts',
-                      initialValue: _trafficPromptsEnabled,
-                      onChanged: (bool newValue) async {
-                        await _navigationViewController!
-                            .setTrafficPromptsEnabled(newValue);
-                        setState(() {
-                          _trafficPromptsEnabled = newValue;
-                        });
-                      }),
-                  ExampleSwitch(
-                      title: 'Display report incident button',
-                      initialValue: _reportIncidentButtonEnabled,
-                      onChanged: (bool newValue) async {
-                        await _navigationViewController!
-                            .setReportIncidentButtonEnabled(newValue);
-                        setState(() {
-                          _reportIncidentButtonEnabled = newValue;
-                        });
-                      }),
-                  Text(
-                      'Map left padding: ${_mapPadding.left.toStringAsFixed(0)}'),
-                  Slider(
-                      value: _mapPadding.left.toDouble(),
-                      min: 0,
-                      max: 200,
-                      divisions: 20,
-                      label: _mapPadding.left.toStringAsFixed(0),
-                      onChanged: (double value) {
-                        _setPadding(EdgeInsets.only(
-                            top: _mapPadding.top,
-                            left: value,
-                            bottom: _mapPadding.bottom,
-                            right: _mapPadding.right));
-                      }),
-                  Text(
-                      'Map right padding: ${_mapPadding.right.toStringAsFixed(0)}'),
-                  Slider(
-                      value: _mapPadding.right.toDouble(),
-                      min: 0,
-                      max: 200,
-                      divisions: 20,
-                      label: _mapPadding.right.toStringAsFixed(0),
-                      onChanged: (double value) {
-                        _setPadding(EdgeInsets.only(
-                            top: _mapPadding.top,
-                            left: _mapPadding.left,
-                            bottom: _mapPadding.bottom,
-                            right: value));
-                      }),
-                  Text(
-                      'Map top padding: ${_mapPadding.top.toStringAsFixed(0)}'),
-                  Slider(
-                      value: _mapPadding.top.toDouble(),
-                      min: 0,
-                      max: 200,
-                      divisions: 20,
-                      label: _mapPadding.top.toStringAsFixed(0),
-                      onChanged: (double value) {
-                        _setPadding(EdgeInsets.only(
-                            top: value,
-                            left: _mapPadding.left,
-                            bottom: _mapPadding.bottom,
-                            right: _mapPadding.right));
-                      }),
-                  Text(
-                      'Map bottom padding: ${_mapPadding.bottom.toStringAsFixed(0)}'),
-                  Slider(
-                      value: _mapPadding.bottom.toDouble(),
-                      min: 0,
-                      max: 200,
-                      divisions: 20,
-                      label: _mapPadding.bottom.toStringAsFixed(0),
-                      onChanged: (double value) {
-                        _setPadding(EdgeInsets.only(
-                            top: _mapPadding.top,
-                            left: _mapPadding.left,
-                            bottom: value,
-                            right: _mapPadding.right));
-                      }),
-                ]),
-          )),
-      Card(
-        child: ExpansionTile(
+              title: const Text('Navigation view'),
+              collapsedTextColor: getExpansionTileTextColor(
+                !_navigatorInitialized || _navigationViewController == null,
+              ),
+              collapsedIconColor: getExpansionTileTextColor(
+                !_navigatorInitialized || _navigationViewController == null,
+              ),
+              children: <Widget>[
+                ExampleSwitch(
+                  title: 'Enable guidance header',
+                  initialValue: _navigationHeaderEnabled,
+                  onChanged: (bool newValue) async {
+                    await _navigationViewController!.setNavigationHeaderEnabled(
+                      newValue,
+                    );
+                    setState(() {
+                      _navigationHeaderEnabled = newValue;
+                    });
+                  },
+                ),
+                ExampleSwitch(
+                  title: 'Enable footer',
+                  initialValue: _navigationFooterEnabled,
+                  onChanged: (bool newValue) async {
+                    await _navigationViewController!.setNavigationFooterEnabled(
+                      newValue,
+                    );
+                    setState(() {
+                      _navigationFooterEnabled = newValue;
+                    });
+                  },
+                ),
+                ExampleSwitch(
+                  title: 'Enable progress bar',
+                  initialValue: _navigationTripProgressBarEnabled,
+                  onChanged: (bool newValue) async {
+                    await _navigationViewController!
+                        .setNavigationTripProgressBarEnabled(newValue);
+                    setState(() {
+                      _navigationTripProgressBarEnabled = newValue;
+                    });
+                  },
+                ),
+                ExampleSwitch(
+                  title: 'Enable Navigation UI',
+                  initialValue: _navigationUIEnabled,
+                  onChanged: (bool newValue) async {
+                    await _navigationViewController!.setNavigationUIEnabled(
+                      newValue,
+                    );
+                    setState(() {
+                      _navigationUIEnabled = newValue;
+                    });
+                  },
+                ),
+                ExampleSwitch(
+                  title: 'Enable recenter button',
+                  initialValue: _recenterButtonEnabled,
+                  onChanged: (bool newValue) async {
+                    await _navigationViewController!.setRecenterButtonEnabled(
+                      newValue,
+                    );
+                    setState(() {
+                      _recenterButtonEnabled = newValue;
+                    });
+                  },
+                ),
+                ExampleSwitch(
+                  title: 'Display speedlimit icon',
+                  initialValue: _speedLimitIconEnabled,
+                  onChanged: (bool newValue) async {
+                    await _navigationViewController!.setSpeedLimitIconEnabled(
+                      newValue,
+                    );
+                    setState(() {
+                      _speedLimitIconEnabled = newValue;
+                    });
+                  },
+                ),
+                ExampleSwitch(
+                  title: 'Display speedometer',
+                  initialValue: _speedometerEnabled,
+                  onChanged: (bool newValue) async {
+                    await _navigationViewController!.setSpeedometerEnabled(
+                      newValue,
+                    );
+                    setState(() {
+                      _speedometerEnabled = newValue;
+                    });
+                  },
+                ),
+                ExampleSwitch(
+                  title: 'Display traffic incident cards',
+                  initialValue: _trafficIndicentCardsEnabled,
+                  onChanged: (bool newValue) async {
+                    await _navigationViewController!
+                        .setTrafficIncidentCardsEnabled(newValue);
+                    setState(() {
+                      _trafficIndicentCardsEnabled = newValue;
+                    });
+                  },
+                ),
+                ExampleSwitch(
+                  title: 'Display traffic prompts',
+                  initialValue: _trafficPromptsEnabled,
+                  onChanged: (bool newValue) async {
+                    await _navigationViewController!.setTrafficPromptsEnabled(
+                      newValue,
+                    );
+                    setState(() {
+                      _trafficPromptsEnabled = newValue;
+                    });
+                  },
+                ),
+                ExampleSwitch(
+                  title: 'Display report incident button',
+                  initialValue: _reportIncidentButtonEnabled,
+                  onChanged: (bool newValue) async {
+                    await _navigationViewController!
+                        .setReportIncidentButtonEnabled(newValue);
+                    setState(() {
+                      _reportIncidentButtonEnabled = newValue;
+                    });
+                  },
+                ),
+                Text(
+                  'Map left padding: ${_mapPadding.left.toStringAsFixed(0)}',
+                ),
+                Slider(
+                  value: _mapPadding.left.toDouble(),
+                  min: 0,
+                  max: 200,
+                  divisions: 20,
+                  label: _mapPadding.left.toStringAsFixed(0),
+                  onChanged: (double value) {
+                    _setPadding(
+                      EdgeInsets.only(
+                        top: _mapPadding.top,
+                        left: value,
+                        bottom: _mapPadding.bottom,
+                        right: _mapPadding.right,
+                      ),
+                    );
+                  },
+                ),
+                Text(
+                  'Map right padding: ${_mapPadding.right.toStringAsFixed(0)}',
+                ),
+                Slider(
+                  value: _mapPadding.right.toDouble(),
+                  min: 0,
+                  max: 200,
+                  divisions: 20,
+                  label: _mapPadding.right.toStringAsFixed(0),
+                  onChanged: (double value) {
+                    _setPadding(
+                      EdgeInsets.only(
+                        top: _mapPadding.top,
+                        left: _mapPadding.left,
+                        bottom: _mapPadding.bottom,
+                        right: value,
+                      ),
+                    );
+                  },
+                ),
+                Text('Map top padding: ${_mapPadding.top.toStringAsFixed(0)}'),
+                Slider(
+                  value: _mapPadding.top.toDouble(),
+                  min: 0,
+                  max: 200,
+                  divisions: 20,
+                  label: _mapPadding.top.toStringAsFixed(0),
+                  onChanged: (double value) {
+                    _setPadding(
+                      EdgeInsets.only(
+                        top: value,
+                        left: _mapPadding.left,
+                        bottom: _mapPadding.bottom,
+                        right: _mapPadding.right,
+                      ),
+                    );
+                  },
+                ),
+                Text(
+                  'Map bottom padding: ${_mapPadding.bottom.toStringAsFixed(0)}',
+                ),
+                Slider(
+                  value: _mapPadding.bottom.toDouble(),
+                  min: 0,
+                  max: 200,
+                  divisions: 20,
+                  label: _mapPadding.bottom.toStringAsFixed(0),
+                  onChanged: (double value) {
+                    _setPadding(
+                      EdgeInsets.only(
+                        top: _mapPadding.top,
+                        left: _mapPadding.left,
+                        bottom: value,
+                        right: _mapPadding.right,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+        Card(
+          child: ExpansionTile(
             enabled: _isAutoScreenAvailable,
             title: const Text('Auto view'),
-            collapsedTextColor:
-                getExpansionTileTextColor(!_isAutoScreenAvailable),
-            collapsedIconColor:
-                getExpansionTileTextColor(!_isAutoScreenAvailable),
+            collapsedTextColor: getExpansionTileTextColor(
+              !_isAutoScreenAvailable,
+            ),
+            collapsedIconColor: getExpansionTileTextColor(
+              !_isAutoScreenAvailable,
+            ),
             children: <Widget>[
               ElevatedButton(
                 onPressed: () => _setMapTypeForAutoToSatellite(),
@@ -1616,109 +1757,140 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
               ),
               Text('Map left padding: ${_autoViewMapPadding.left}'),
               Slider(
-                  value: _autoViewMapPadding.left.toDouble(),
-                  min: 0,
-                  max: 200,
-                  divisions: 20,
-                  label: _autoViewMapPadding.left.toString(),
-                  onChanged: (double value) {
-                    _setAutoViewPadding(EdgeInsets.only(
-                        top: _autoViewMapPadding.top,
-                        left: value,
-                        bottom: _autoViewMapPadding.bottom,
-                        right: _autoViewMapPadding.right));
-                  }),
+                value: _autoViewMapPadding.left.toDouble(),
+                min: 0,
+                max: 200,
+                divisions: 20,
+                label: _autoViewMapPadding.left.toString(),
+                onChanged: (double value) {
+                  _setAutoViewPadding(
+                    EdgeInsets.only(
+                      top: _autoViewMapPadding.top,
+                      left: value,
+                      bottom: _autoViewMapPadding.bottom,
+                      right: _autoViewMapPadding.right,
+                    ),
+                  );
+                },
+              ),
               Text('Map right padding: ${_autoViewMapPadding.right}'),
               Slider(
-                  value: _autoViewMapPadding.right.toDouble(),
-                  min: 0,
-                  max: 200,
-                  divisions: 20,
-                  label: _autoViewMapPadding.right.toString(),
-                  onChanged: (double value) {
-                    _setAutoViewPadding(EdgeInsets.only(
-                        top: _autoViewMapPadding.top,
-                        left: _autoViewMapPadding.left,
-                        bottom: _autoViewMapPadding.bottom,
-                        right: value));
-                  }),
+                value: _autoViewMapPadding.right.toDouble(),
+                min: 0,
+                max: 200,
+                divisions: 20,
+                label: _autoViewMapPadding.right.toString(),
+                onChanged: (double value) {
+                  _setAutoViewPadding(
+                    EdgeInsets.only(
+                      top: _autoViewMapPadding.top,
+                      left: _autoViewMapPadding.left,
+                      bottom: _autoViewMapPadding.bottom,
+                      right: value,
+                    ),
+                  );
+                },
+              ),
               Text('Map top padding: ${_autoViewMapPadding.top}'),
               Slider(
-                  value: _autoViewMapPadding.top.toDouble(),
-                  min: 0,
-                  max: 200,
-                  divisions: 20,
-                  label: _autoViewMapPadding.top.toString(),
-                  onChanged: (double value) {
-                    _setAutoViewPadding(EdgeInsets.only(
-                        top: value,
-                        left: _autoViewMapPadding.left,
-                        bottom: _autoViewMapPadding.bottom,
-                        right: _autoViewMapPadding.right));
-                  }),
+                value: _autoViewMapPadding.top.toDouble(),
+                min: 0,
+                max: 200,
+                divisions: 20,
+                label: _autoViewMapPadding.top.toString(),
+                onChanged: (double value) {
+                  _setAutoViewPadding(
+                    EdgeInsets.only(
+                      top: value,
+                      left: _autoViewMapPadding.left,
+                      bottom: _autoViewMapPadding.bottom,
+                      right: _autoViewMapPadding.right,
+                    ),
+                  );
+                },
+              ),
               Text('Map bottom padding: ${_autoViewMapPadding.bottom}'),
               Slider(
-                  value: _autoViewMapPadding.bottom.toDouble(),
-                  min: 0,
-                  max: 200,
-                  divisions: 20,
-                  label: _autoViewMapPadding.bottom.toString(),
-                  onChanged: (double value) {
-                    _setAutoViewPadding(EdgeInsets.only(
-                        top: _autoViewMapPadding.top,
-                        left: _autoViewMapPadding.left,
-                        bottom: value,
-                        right: _autoViewMapPadding.right));
-                  }),
-            ]),
-      ),
-      IgnorePointer(
+                value: _autoViewMapPadding.bottom.toDouble(),
+                min: 0,
+                max: 200,
+                divisions: 20,
+                label: _autoViewMapPadding.bottom.toString(),
+                onChanged: (double value) {
+                  _setAutoViewPadding(
+                    EdgeInsets.only(
+                      top: _autoViewMapPadding.top,
+                      left: _autoViewMapPadding.left,
+                      bottom: value,
+                      right: _autoViewMapPadding.right,
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+        IgnorePointer(
           ignoring: !_navigatorInitialized || _navigationViewController == null,
           child: Card(
             child: ExpansionTile(
-                title: const Text('Camera'),
-                collapsedTextColor: getExpansionTileTextColor(
-                    !_navigatorInitialized ||
-                        _navigationViewController == null),
-                collapsedIconColor: getExpansionTileTextColor(
-                    !_navigatorInitialized ||
-                        _navigationViewController == null),
-                children: <Widget>[
-                  Wrap(
-                      alignment: WrapAlignment.center,
-                      spacing: 10,
-                      children: <Widget>[
-                        ElevatedButton(
-                          onPressed: () =>
-                              _navigationViewController!.showRouteOverview(),
-                          child: const Text('Route overview'),
-                        ),
-                        ElevatedButton(
-                          onPressed: () => _navigationViewController!
-                              .followMyLocation(CameraPerspective.tilted),
-                          child: const Text('Follow my location'),
-                        )
-                      ]),
-                  const SizedBox(height: 10)
-                ]),
-          )),
-    ]);
+              title: const Text('Camera'),
+              collapsedTextColor: getExpansionTileTextColor(
+                !_navigatorInitialized || _navigationViewController == null,
+              ),
+              collapsedIconColor: getExpansionTileTextColor(
+                !_navigatorInitialized || _navigationViewController == null,
+              ),
+              children: <Widget>[
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 10,
+                  children: <Widget>[
+                    ElevatedButton(
+                      onPressed:
+                          () => _navigationViewController!.showRouteOverview(),
+                      child: const Text('Route overview'),
+                    ),
+                    ElevatedButton(
+                      onPressed:
+                          () => _navigationViewController!.followMyLocation(
+                            CameraPerspective.tilted,
+                          ),
+                      child: const Text('Follow my location'),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget get _travelModeSelection => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          _buildTravelModeChoice(
-              NavigationTravelMode.driving, Icons.directions_car),
-          _buildTravelModeChoice(
-              NavigationTravelMode.cycling, Icons.directions_bike),
-          _buildTravelModeChoice(
-              NavigationTravelMode.walking, Icons.directions_walk),
-          _buildTravelModeChoice(NavigationTravelMode.taxi, Icons.local_taxi),
-          _buildTravelModeChoice(
-              NavigationTravelMode.twoWheeler, Icons.two_wheeler),
-        ],
-      );
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: <Widget>[
+      _buildTravelModeChoice(
+        NavigationTravelMode.driving,
+        Icons.directions_car,
+      ),
+      _buildTravelModeChoice(
+        NavigationTravelMode.cycling,
+        Icons.directions_bike,
+      ),
+      _buildTravelModeChoice(
+        NavigationTravelMode.walking,
+        Icons.directions_walk,
+      ),
+      _buildTravelModeChoice(NavigationTravelMode.taxi, Icons.local_taxi),
+      _buildTravelModeChoice(
+        NavigationTravelMode.twoWheeler,
+        Icons.two_wheeler,
+      ),
+    ],
+  );
 
   Widget _buildTravelModeChoice(NavigationTravelMode mode, IconData icon) {
     final bool isSelected = mode == _travelMode;
@@ -1730,16 +1902,18 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Padding(
-              padding: const EdgeInsets.all(5),
-              child: Icon(
-                icon,
-                size: 30,
-                color: enabled
-                    ? (isSelected
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.secondary)
-                    : Theme.of(context).colorScheme.secondary.withAlpha(128),
-              )),
+            padding: const EdgeInsets.all(5),
+            child: Icon(
+              icon,
+              size: 30,
+              color:
+                  enabled
+                      ? (isSelected
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.secondary)
+                      : Theme.of(context).colorScheme.secondary.withAlpha(128),
+            ),
+          ),
           if (isSelected)
             Container(
               height: 3,

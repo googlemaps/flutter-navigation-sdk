@@ -75,8 +75,9 @@ class _NavigationDemoState extends State<NavigationBody> {
   }
 
   Future<void> _pushPage(BuildContext context, ExamplePage page) async {
-    await Navigator.of(context)
-        .push(MaterialPageRoute<void>(builder: (_) => page));
+    await Navigator.of(
+      context,
+    ).push(MaterialPageRoute<void>(builder: (_) => page));
   }
 
   /// Request permission for accessing the device's location and notifications.
@@ -103,34 +104,37 @@ class _NavigationDemoState extends State<NavigationBody> {
     return Scaffold(
       appBar: AppBar(title: const Text('Google Navigation Flutter examples')),
       body: SafeArea(
-          top: false,
-          minimum: const EdgeInsets.all(8.0),
-          child: ListView.builder(
-            itemCount: _allPages.length + 1,
-            itemBuilder: (_, int index) {
-              if (index == 0) {
-                return Card(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    alignment: Alignment.center,
-                    child: Column(
-                      children: <Widget>[
-                        Text(Platform.isIOS
+        top: false,
+        minimum: const EdgeInsets.all(8.0),
+        child: ListView.builder(
+          itemCount: _allPages.length + 1,
+          itemBuilder: (_, int index) {
+            if (index == 0) {
+              return Card(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  alignment: Alignment.center,
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        Platform.isIOS
                             ? 'Location ${_locationPermitted ? 'granted' : 'denied'} • Notifications ${_notificationsPermitted ? 'granted' : 'denied'}'
-                            : 'Location ${_locationPermitted ? 'granted' : 'denied'} '),
-                        Text('Navigation SDK version: $_navSDKVersion'),
-                      ],
-                    ),
+                            : 'Location ${_locationPermitted ? 'granted' : 'denied'} ',
+                      ),
+                      Text('Navigation SDK version: $_navSDKVersion'),
+                    ],
                   ),
-                );
-              }
-              return ListTile(
-                leading: _allPages[index - 1].leading,
-                title: Text(_allPages[index - 1].title),
-                onTap: () => _pushPage(context, _allPages[index - 1]),
+                ),
               );
-            },
-          )),
+            }
+            return ListTile(
+              leading: _allPages[index - 1].leading,
+              title: Text(_allPages[index - 1].title),
+              onTap: () => _pushPage(context, _allPages[index - 1]),
+            );
+          },
+        ),
+      ),
     );
   }
 }
@@ -138,13 +142,18 @@ class _NavigationDemoState extends State<NavigationBody> {
 void main() {
   final ElevatedButtonThemeData exampleButtonDefaultTheme =
       ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(minimumSize: const Size(160, 36)));
+        style: ElevatedButton.styleFrom(minimumSize: const Size(160, 36)),
+      );
 
-  runApp(MaterialApp(
-    home: const NavigationDemo(),
-    theme: ThemeData.light()
-        .copyWith(elevatedButtonTheme: exampleButtonDefaultTheme),
-    darkTheme: ThemeData.dark()
-        .copyWith(elevatedButtonTheme: exampleButtonDefaultTheme),
-  ));
+  runApp(
+    MaterialApp(
+      home: const NavigationDemo(),
+      theme: ThemeData.light().copyWith(
+        elevatedButtonTheme: exampleButtonDefaultTheme,
+      ),
+      darkTheme: ThemeData.dark().copyWith(
+        elevatedButtonTheme: exampleButtonDefaultTheme,
+      ),
+    ),
+  );
 }

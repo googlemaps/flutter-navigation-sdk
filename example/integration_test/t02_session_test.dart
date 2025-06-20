@@ -25,18 +25,21 @@ import 'package:flutter/material.dart';
 import 'shared.dart';
 
 void main() {
-  patrol('Test terms and conditions (TOS) dialog acceptance',
-      (PatrolIntegrationTester $) async {
+  patrol('Test terms and conditions (TOS) dialog acceptance', (
+    PatrolIntegrationTester $,
+  ) async {
     // Grant the location permission.
     await checkLocationDialogAcceptance($);
 
     /// Display navigation view.
     final Key key = GlobalKey();
     await pumpNavigationView(
-        $,
-        GoogleMapsNavigationView(
-            key: key,
-            onViewCreated: (GoogleNavigationViewController controller) {}));
+      $,
+      GoogleMapsNavigationView(
+        key: key,
+        onViewCreated: (GoogleNavigationViewController controller) {},
+      ),
+    );
 
     /// Reset TOS acceptance.
     await GoogleMapsNavigator.resetTermsAccepted();
@@ -45,9 +48,9 @@ void main() {
     /// Request native TOS dialog.
     final Future<bool> tosAccepted =
         GoogleMapsNavigator.showTermsAndConditionsDialog(
-      'test_title',
-      'test_company_name',
-    );
+          'test_title',
+          'test_company_name',
+        );
 
     // Tap ok.
     if (Platform.isAndroid) {
@@ -69,24 +72,27 @@ void main() {
     expect(await GoogleMapsNavigator.areTermsAccepted(), true);
     final bool redundantAccept =
         await GoogleMapsNavigator.showTermsAndConditionsDialog(
-      'test_title',
-      'test_company_name',
-    );
+          'test_title',
+          'test_company_name',
+        );
     expect(redundantAccept, true);
   });
 
-  patrol('Test driver awareness disclaimer (noTOS) acknowledgement',
-      (PatrolIntegrationTester $) async {
+  patrol('Test driver awareness disclaimer (noTOS) acknowledgement', (
+    PatrolIntegrationTester $,
+  ) async {
     // Grant location permissions if not granted.
     await checkLocationDialogAcceptance($);
 
     /// Display navigation view.
     final Key key = GlobalKey();
     await pumpNavigationView(
-        $,
-        GoogleMapsNavigationView(
-            key: key,
-            onViewCreated: (GoogleNavigationViewController controller) {}));
+      $,
+      GoogleMapsNavigationView(
+        key: key,
+        onViewCreated: (GoogleNavigationViewController controller) {},
+      ),
+    );
 
     await GoogleMapsNavigator.resetTermsAccepted();
 
@@ -94,8 +100,10 @@ void main() {
       /// Request native TOS dialog
       final Future<bool> tosAccepted =
           GoogleMapsNavigator.showTermsAndConditionsDialog(
-              'test_title', 'test_company_name',
-              shouldOnlyShowDriverAwarenessDisclaimer: true);
+            'test_title',
+            'test_company_name',
+            shouldOnlyShowDriverAwarenessDisclaimer: true,
+          );
 
       // Accept driver awareness disclaimer.
       if (Platform.isAndroid) {
@@ -121,8 +129,10 @@ void main() {
       // Test that iOS throws unsupported error
       try {
         await GoogleMapsNavigator.showTermsAndConditionsDialog(
-            'test_title', 'test_company_name',
-            shouldOnlyShowDriverAwarenessDisclaimer: true);
+          'test_title',
+          'test_company_name',
+          shouldOnlyShowDriverAwarenessDisclaimer: true,
+        );
         fail('Expected to get UnsupportedError');
       } on Object catch (e) {
         expect(e, const TypeMatcher<UnsupportedError>());

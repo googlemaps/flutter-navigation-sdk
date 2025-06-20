@@ -122,7 +122,7 @@ To run unit tests on iOS, follow these steps:
 Or to run the iOS unit tests from command line, call
 
 ```bash
-TEST_DEVICE='iPhone 16 Pro' TEST_OS="18.1" melos run test:ios
+TEST_DEVICE='iPhone 16 Pro' TEST_OS="18.5" melos run test:ios
 ```
 
 Specify the device you want to run the tests on with the DEVICE env variable. 

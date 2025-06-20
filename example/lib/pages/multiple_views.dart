@@ -24,7 +24,7 @@ import 'navigation.dart';
 
 class MultipleMapViewsPage extends ExamplePage {
   const MultipleMapViewsPage({super.key})
-      : super(leading: const Icon(Icons.view_stream), title: 'Multiple maps');
+    : super(leading: const Icon(Icons.view_stream), title: 'Multiple maps');
 
   @override
   ExamplePageState<MultipleMapViewsPage> createState() => _MultiplexState();
@@ -56,8 +56,10 @@ class _MultiplexState extends ExamplePageState<MultipleMapViewsPage> {
 
   /// Camera location used to initialize the map view on simulator if location
   /// is not available by the given timeout [_userLocationTimeoutMS].
-  static const LatLng cameraLocationMIT =
-      LatLng(latitude: 42.3601, longitude: -71.094013);
+  static const LatLng cameraLocationMIT = LatLng(
+    latitude: 42.3601,
+    longitude: -71.094013,
+  );
   static const int _userLocationTimeoutMS = 1500;
 
   /// Latest user location received from the navigator.
@@ -102,7 +104,9 @@ class _MultiplexState extends ExamplePageState<MultipleMapViewsPage> {
   Future<void> _initializeNavigator() async {
     assert(_termsAndConditionsAccepted, 'Terms must be accepted');
     assert(
-        _locationPermissionsAccepted, 'Location permissions must be granted');
+      _locationPermissionsAccepted,
+      'Location permissions must be granted',
+    );
 
     if (!_navigatorInitialized) {
       debugPrint('Initializing new navigation session...');
@@ -120,16 +124,18 @@ class _MultiplexState extends ExamplePageState<MultipleMapViewsPage> {
   /// events. Initialize user location to [cameraLocationMIT] if user
   /// location is not available after timeout.
   Future<void> _setDefaultUserLocationAfterDelay() async {
-    Future<void>.delayed(const Duration(milliseconds: _userLocationTimeoutMS),
-        () async {
-      if (mounted && _userLocation == null) {
-        _userLocation =
-            await _navigationController?.getMyLocation() ?? cameraLocationMIT;
-        if (mounted) {
-          setState(() {});
+    Future<void>.delayed(
+      const Duration(milliseconds: _userLocationTimeoutMS),
+      () async {
+        if (mounted && _userLocation == null) {
+          _userLocation =
+              await _navigationController?.getMyLocation() ?? cameraLocationMIT;
+          if (mounted) {
+            setState(() {});
+          }
         }
-      }
-    });
+      },
+    );
   }
 
   // Navigator state is not persisted between app restarts, so we need to check
@@ -197,7 +203,8 @@ class _MultiplexState extends ExamplePageState<MultipleMapViewsPage> {
   }
 
   Future<void> _onViewCreated2(
-      GoogleNavigationViewController controller) async {
+    GoogleNavigationViewController controller,
+  ) async {
     setState(() {
       _navigationController = controller;
     });
@@ -205,10 +212,16 @@ class _MultiplexState extends ExamplePageState<MultipleMapViewsPage> {
   }
 
   Future<void> _moveCameras() async {
-    await _mapController!.moveCamera(CameraUpdate.newCameraPosition(
-        _cameraMoveCounter.isEven ? cameraPositionOxford : cameraPositionMIT));
-    await _navigationController!.moveCamera(CameraUpdate.newCameraPosition(
-        _cameraMoveCounter.isOdd ? cameraPositionOxford : cameraPositionMIT));
+    await _mapController!.moveCamera(
+      CameraUpdate.newCameraPosition(
+        _cameraMoveCounter.isEven ? cameraPositionOxford : cameraPositionMIT,
+      ),
+    );
+    await _navigationController!.moveCamera(
+      CameraUpdate.newCameraPosition(
+        _cameraMoveCounter.isOdd ? cameraPositionOxford : cameraPositionMIT,
+      ),
+    );
     setState(() {
       _cameraMoveCounter += 1;
     });
@@ -216,53 +229,52 @@ class _MultiplexState extends ExamplePageState<MultipleMapViewsPage> {
 
   @override
   Widget build(BuildContext context) => buildPage(
-      context,
-      (BuildContext context) => Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  SizedBox(
-                    height: 200,
-                    child: GoogleMapsMapView(
-                      onViewCreated: _onViewCreated,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    height: 200,
-                    child: _navigatorInitializedAtLeastOnce &&
-                            _userLocation != null
-                        ? GoogleMapsNavigationView(
-                            onViewCreated: _onViewCreated2,
-                            initialCameraPosition: CameraPosition(
-                              // Initialize map to user location.
-                              target: _userLocation!,
-                              zoom: 15,
-                            ),
-                          )
-                        : const Center(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Text('Waiting navigator and user location'),
-                                SizedBox(height: 10),
-                                SizedBox(
-                                    width: 30,
-                                    height: 30,
-                                    child: CircularProgressIndicator())
-                              ],
-                            ),
+    context,
+    (BuildContext context) => Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          SizedBox(
+            height: 200,
+            child: GoogleMapsMapView(onViewCreated: _onViewCreated),
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            height: 200,
+            child:
+                _navigatorInitializedAtLeastOnce && _userLocation != null
+                    ? GoogleMapsNavigationView(
+                      onViewCreated: _onViewCreated2,
+                      initialCameraPosition: CameraPosition(
+                        // Initialize map to user location.
+                        target: _userLocation!,
+                        zoom: 15,
+                      ),
+                    )
+                    : const Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text('Waiting navigator and user location'),
+                          SizedBox(height: 10),
+                          SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: CircularProgressIndicator(),
                           ),
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  if (_mapController != null && _navigationController != null)
-                    ElevatedButton(
-                      onPressed: _moveCameras,
-                      child: const Text('Move cameras'),
+                        ],
+                      ),
                     ),
-                ]),
-          ));
+          ),
+          const SizedBox(height: 50),
+          if (_mapController != null && _navigationController != null)
+            ElevatedButton(
+              onPressed: _moveCameras,
+              child: const Text('Move cameras'),
+            ),
+        ],
+      ),
+    ),
+  );
 }

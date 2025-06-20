@@ -43,9 +43,7 @@ extension ConvertPatternItem on PatternItem {
           length: (this as DashPattern).length,
         );
       case PatternType.dot:
-        return PatternItemDto(
-          type: PatternTypeDto.dot,
-        );
+        return PatternItemDto(type: PatternTypeDto.dot);
       case PatternType.gap:
         return PatternItemDto(
           type: PatternTypeDto.gap,

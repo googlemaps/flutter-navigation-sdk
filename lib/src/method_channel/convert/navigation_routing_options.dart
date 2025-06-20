@@ -20,15 +20,15 @@ import '../method_channel.dart';
 extension ConvertRoutingOptions on RoutingOptions {
   /// Converts [RoutingOptions] to [RoutingOptionsDto]
   RoutingOptionsDto toDto() => RoutingOptionsDto(
-        alternateRoutesStrategy: alternateRoutesStrategy?.toDto(),
-        routingStrategy: routingStrategy?.toDto(),
-        targetDistanceMeters: targetDistanceMeters,
-        travelMode: travelMode?.toDto(),
-        avoidFerries: avoidFerries,
-        avoidHighways: avoidHighways,
-        avoidTolls: avoidTolls,
-        locationTimeoutMs: locationTimeoutMs,
-      );
+    alternateRoutesStrategy: alternateRoutesStrategy?.toDto(),
+    routingStrategy: routingStrategy?.toDto(),
+    targetDistanceMeters: targetDistanceMeters,
+    travelMode: travelMode?.toDto(),
+    avoidFerries: avoidFerries,
+    avoidHighways: avoidHighways,
+    avoidTolls: avoidTolls,
+    locationTimeoutMs: locationTimeoutMs,
+  );
 }
 
 /// [NavigationAlternateRoutesStrategy] convert extension.

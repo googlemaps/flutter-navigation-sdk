@@ -20,20 +20,21 @@ import '../method_channel.dart';
 extension ConvertNavInfoDto on NavInfoDto {
   /// Converts [NavInfoDto] to [NavInfo]
   NavInfo toNavInfo() => NavInfo(
-        currentStep: currentStep?.toStepInfo(),
-        remainingSteps: remainingSteps
+    currentStep: currentStep?.toStepInfo(),
+    remainingSteps:
+        remainingSteps
             .whereType<StepInfoDto>()
             .map<StepInfo>((StepInfoDto stepinfo) => stepinfo.toStepInfo())
             .toList(),
-        routeChanged: routeChanged,
-        distanceToCurrentStepMeters: distanceToCurrentStepMeters,
-        distanceToNextDestinationMeters: distanceToNextDestinationMeters,
-        distanceToFinalDestinationMeters: distanceToFinalDestinationMeters,
-        timeToCurrentStepSeconds: timeToCurrentStepSeconds,
-        timeToNextDestinationSeconds: timeToNextDestinationSeconds,
-        timeToFinalDestinationSeconds: timeToFinalDestinationSeconds,
-        navState: navState.toNavState(),
-      );
+    routeChanged: routeChanged,
+    distanceToCurrentStepMeters: distanceToCurrentStepMeters,
+    distanceToNextDestinationMeters: distanceToNextDestinationMeters,
+    distanceToFinalDestinationMeters: distanceToFinalDestinationMeters,
+    timeToCurrentStepSeconds: timeToCurrentStepSeconds,
+    timeToNextDestinationSeconds: timeToNextDestinationSeconds,
+    timeToFinalDestinationSeconds: timeToFinalDestinationSeconds,
+    navState: navState.toNavState(),
+  );
 }
 
 /// [StepInfoDto] convert extension.
@@ -41,21 +42,22 @@ extension ConvertNavInfoDto on NavInfoDto {
 extension ConvertStepInfoDto on StepInfoDto {
   /// Converts [StepInfoDto] to [StepInfo]
   StepInfo toStepInfo() => StepInfo(
-        distanceFromPrevStepMeters: distanceFromPrevStepMeters,
-        timeFromPrevStepSeconds: timeFromPrevStepSeconds,
-        drivingSide: drivingSide.toDrivingSide(),
-        exitNumber: exitNumber,
-        fullInstructions: fullInstructions,
-        fullRoadName: fullRoadName,
-        simpleRoadName: simpleRoadName,
-        roundaboutTurnNumber: roundaboutTurnNumber,
-        stepNumber: stepNumber,
-        lanes: lanes
+    distanceFromPrevStepMeters: distanceFromPrevStepMeters,
+    timeFromPrevStepSeconds: timeFromPrevStepSeconds,
+    drivingSide: drivingSide.toDrivingSide(),
+    exitNumber: exitNumber,
+    fullInstructions: fullInstructions,
+    fullRoadName: fullRoadName,
+    simpleRoadName: simpleRoadName,
+    roundaboutTurnNumber: roundaboutTurnNumber,
+    stepNumber: stepNumber,
+    lanes:
+        lanes
             .whereType<LaneDto>()
             .map<Lane>((LaneDto lane) => lane.toLane())
             .toList(),
-        maneuver: maneuver.toManeuver(),
-      );
+    maneuver: maneuver.toManeuver(),
+  );
 }
 
 /// [NavStateDto] convert extension.
@@ -239,12 +241,15 @@ extension ConvertManeuverDto on ManeuverDto {
 extension ConvertLaneDto on LaneDto {
   /// Converts [LaneDto] to [Lane]
   Lane toLane() => Lane(
-        laneDirections: laneDirections
+    laneDirections:
+        laneDirections
             .whereType<LaneDirectionDto>()
-            .map<LaneDirection>((LaneDirectionDto laneDirection) =>
-                laneDirection.toLaneDirection())
+            .map<LaneDirection>(
+              (LaneDirectionDto laneDirection) =>
+                  laneDirection.toLaneDirection(),
+            )
             .toList(),
-      );
+  );
 }
 
 /// [LaneDirectionDto] convert extension.
@@ -252,9 +257,9 @@ extension ConvertLaneDto on LaneDto {
 extension ConvertLaneDirectionDto on LaneDirectionDto {
   /// Converts [LaneDirectionDto] to [LaneDirection]
   LaneDirection toLaneDirection() => LaneDirection(
-        laneShape: laneShape.toLaneShape(),
-        isRecommended: isRecommended,
-      );
+    laneShape: laneShape.toLaneShape(),
+    isRecommended: isRecommended,
+  );
 }
 
 /// [LaneShapeDto] convert extension.

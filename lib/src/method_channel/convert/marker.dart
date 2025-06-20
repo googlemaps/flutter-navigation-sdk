@@ -39,17 +39,18 @@ extension ConvertMarkerOptions on MarkerOptions {
   /// Converts [MarkerOptions] to [MarkerOptionsDto]
   MarkerOptionsDto toDto() {
     return MarkerOptionsDto(
-        alpha: alpha,
-        anchor: anchor.toDto(),
-        draggable: draggable,
-        flat: flat,
-        icon: icon.toDto(),
-        consumeTapEvents: consumeTapEvents,
-        position: position.toDto(),
-        rotation: rotation,
-        infoWindow: infoWindow.toDto(),
-        visible: visible,
-        zIndex: zIndex);
+      alpha: alpha,
+      anchor: anchor.toDto(),
+      draggable: draggable,
+      flat: flat,
+      icon: icon.toDto(),
+      consumeTapEvents: consumeTapEvents,
+      position: position.toDto(),
+      rotation: rotation,
+      infoWindow: infoWindow.toDto(),
+      visible: visible,
+      zIndex: zIndex,
+    );
   }
 }
 
@@ -59,17 +60,18 @@ extension ConvertMarkerOptionsDto on MarkerOptionsDto {
   /// Converts [MarkerOptionsDto] to [MarkerOptions]
   MarkerOptions toMarkerOptions() {
     return MarkerOptions(
-        alpha: alpha,
-        anchor: anchor.toMarkerAnchor(),
-        draggable: draggable,
-        flat: flat,
-        icon: icon.toImageDescriptor(),
-        consumeTapEvents: consumeTapEvents,
-        position: position.toLatLng(),
-        rotation: rotation,
-        infoWindow: infoWindow.toInfoWindow(),
-        visible: visible,
-        zIndex: zIndex);
+      alpha: alpha,
+      anchor: anchor.toMarkerAnchor(),
+      draggable: draggable,
+      flat: flat,
+      icon: icon.toImageDescriptor(),
+      consumeTapEvents: consumeTapEvents,
+      position: position.toLatLng(),
+      rotation: rotation,
+      infoWindow: infoWindow.toInfoWindow(),
+      visible: visible,
+      zIndex: zIndex,
+    );
   }
 }
 
@@ -97,7 +99,10 @@ extension ConvertInfoWindow on InfoWindow {
   /// Converts [InfoWindow] to [InfoWindowDto].
   InfoWindowDto toDto() {
     return InfoWindowDto(
-        title: title, snippet: snippet, anchor: anchor.toDto());
+      title: title,
+      snippet: snippet,
+      anchor: anchor.toDto(),
+    );
   }
 }
 
@@ -107,7 +112,10 @@ extension ConvertInfoWindowDto on InfoWindowDto {
   /// Converts [InfoWindowDto] to [InfoWindow].
   InfoWindow toInfoWindow() {
     return InfoWindow(
-        title: title, snippet: snippet, anchor: anchor.toMarkerAnchor());
+      title: title,
+      snippet: snippet,
+      anchor: anchor.toMarkerAnchor(),
+    );
   }
 }
 
@@ -135,10 +143,11 @@ extension ConvertImageDescriptor on ImageDescriptor {
   /// Converts [ImageDescriptor] to [ImageDescriptorDto].
   ImageDescriptorDto toDto() {
     return ImageDescriptorDto(
-        registeredImageId: registeredImageId,
-        imagePixelRatio: imagePixelRatio,
-        width: width,
-        height: height);
+      registeredImageId: registeredImageId,
+      imagePixelRatio: imagePixelRatio,
+      width: width,
+      height: height,
+    );
   }
 }
 
@@ -148,9 +157,10 @@ extension ConvertImageDescriptorDto on ImageDescriptorDto {
   /// Converts [ImageDescriptorDto] to [ImageDescriptor].
   ImageDescriptor toImageDescriptor() {
     return ImageDescriptor(
-        registeredImageId: registeredImageId,
-        imagePixelRatio: imagePixelRatio,
-        width: width,
-        height: height);
+      registeredImageId: registeredImageId,
+      imagePixelRatio: imagePixelRatio,
+      width: width,
+      height: height,
+    );
   }
 }

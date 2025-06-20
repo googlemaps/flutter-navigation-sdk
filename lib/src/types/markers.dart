@@ -58,18 +58,19 @@ class Marker {
 @immutable
 class MarkerOptions {
   /// Initialize MarkerOptions object.
-  const MarkerOptions(
-      {this.alpha = 1.0,
-      this.anchor = const MarkerAnchor(u: 0.5, v: 1.0),
-      this.draggable = false,
-      this.flat = false,
-      this.icon = ImageDescriptor.defaultImage,
-      this.consumeTapEvents = false,
-      this.position = const LatLng(latitude: 0.0, longitude: 0.0),
-      this.rotation = 0.0,
-      this.infoWindow = InfoWindow.noInfo,
-      this.visible = true,
-      this.zIndex = 0.0});
+  const MarkerOptions({
+    this.alpha = 1.0,
+    this.anchor = const MarkerAnchor(u: 0.5, v: 1.0),
+    this.draggable = false,
+    this.flat = false,
+    this.icon = ImageDescriptor.defaultImage,
+    this.consumeTapEvents = false,
+    this.position = const LatLng(latitude: 0.0, longitude: 0.0),
+    this.rotation = 0.0,
+    this.infoWindow = InfoWindow.noInfo,
+    this.visible = true,
+    this.zIndex = 0.0,
+  });
 
   /// Sets the alpha (opacity) of the marker.
   ///
@@ -130,33 +131,35 @@ class MarkerOptions {
   final double zIndex;
 
   /// Create copy of [MarkerOptions] with specified parameters
-  MarkerOptions copyWith(
-      {double? alpha,
-      MarkerAnchor? anchor,
-      bool? draggable,
-      bool? flat,
-      ImageDescriptor? icon,
-      bool? consumeTapEvents,
-      MarkerAnchor? infoWindowAnchor,
-      LatLng? position,
-      double? rotation,
-      String? snippet,
-      String? title,
-      InfoWindow? infoWindow,
-      bool? visible,
-      double? zIndex}) {
+  MarkerOptions copyWith({
+    double? alpha,
+    MarkerAnchor? anchor,
+    bool? draggable,
+    bool? flat,
+    ImageDescriptor? icon,
+    bool? consumeTapEvents,
+    MarkerAnchor? infoWindowAnchor,
+    LatLng? position,
+    double? rotation,
+    String? snippet,
+    String? title,
+    InfoWindow? infoWindow,
+    bool? visible,
+    double? zIndex,
+  }) {
     return MarkerOptions(
-        alpha: alpha ?? this.alpha,
-        anchor: anchor ?? this.anchor,
-        draggable: draggable ?? this.draggable,
-        flat: flat ?? this.flat,
-        icon: icon ?? this.icon,
-        consumeTapEvents: consumeTapEvents ?? this.consumeTapEvents,
-        position: position ?? this.position,
-        rotation: rotation ?? this.rotation,
-        infoWindow: infoWindow ?? this.infoWindow,
-        visible: visible ?? this.visible,
-        zIndex: zIndex ?? this.zIndex);
+      alpha: alpha ?? this.alpha,
+      anchor: anchor ?? this.anchor,
+      draggable: draggable ?? this.draggable,
+      flat: flat ?? this.flat,
+      icon: icon ?? this.icon,
+      consumeTapEvents: consumeTapEvents ?? this.consumeTapEvents,
+      position: position ?? this.position,
+      rotation: rotation ?? this.rotation,
+      infoWindow: infoWindow ?? this.infoWindow,
+      visible: visible ?? this.visible,
+      zIndex: zIndex ?? this.zIndex,
+    );
   }
 
   @override
@@ -183,17 +186,18 @@ class MarkerOptions {
 
   @override
   int get hashCode => Object.hash(
-      alpha.hashCode,
-      anchor.hashCode,
-      draggable.hashCode,
-      flat.hashCode,
-      icon.hashCode,
-      consumeTapEvents.hashCode,
-      position.hashCode,
-      rotation.hashCode,
-      infoWindow.hashCode,
-      visible.hashCode,
-      zIndex.hashCode);
+    alpha.hashCode,
+    anchor.hashCode,
+    draggable.hashCode,
+    flat.hashCode,
+    icon.hashCode,
+    consumeTapEvents.hashCode,
+    position.hashCode,
+    rotation.hashCode,
+    infoWindow.hashCode,
+    visible.hashCode,
+    zIndex.hashCode,
+  );
 }
 
 /// Text labels for [Marker] info window.
@@ -202,10 +206,11 @@ class MarkerOptions {
 @immutable
 class InfoWindow {
   /// Construct [InfoWindow] object.
-  const InfoWindow(
-      {this.title,
-      this.snippet,
-      this.anchor = const MarkerAnchor(u: 0.5, v: 0.0)});
+  const InfoWindow({
+    this.title,
+    this.snippet,
+    this.anchor = const MarkerAnchor(u: 0.5, v: 0.0),
+  });
 
   /// Display no info window on the marker.
   static const InfoWindow noInfo = InfoWindow();
@@ -250,10 +255,7 @@ class InfoWindow {
 @immutable
 class MarkerAnchor {
   /// Initialize MarkerAnchor object.
-  const MarkerAnchor({
-    required this.u,
-    required this.v,
-  });
+  const MarkerAnchor({required this.u, required this.v});
 
   /// u-coordinate of the anchor, as a ratio of the image width (in the range 0, 1).
   final double u;
@@ -313,10 +315,7 @@ enum MarkerDragEventType {
 @immutable
 class MarkerEvent {
   /// Initialize [MarkerEvent] object.
-  const MarkerEvent({
-    required this.markerId,
-    required this.eventType,
-  });
+  const MarkerEvent({required this.markerId, required this.eventType});
 
   /// Id of the marker that has been tapped.
   final String markerId;
@@ -331,10 +330,11 @@ class MarkerEvent {
 @immutable
 class MarkerDragEvent {
   /// Initialize [MarkerDragEvent] object.
-  const MarkerDragEvent(
-      {required this.markerId,
-      required this.eventType,
-      required this.position});
+  const MarkerDragEvent({
+    required this.markerId,
+    required this.eventType,
+    required this.position,
+  });
 
   /// Id of the marker that has been tapped.
   final String markerId;

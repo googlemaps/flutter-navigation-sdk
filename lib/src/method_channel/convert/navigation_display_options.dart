@@ -20,8 +20,8 @@ import '../method_channel.dart';
 extension ConvertNavigationDisplayOptions on NavigationDisplayOptions {
   /// Converts [NavigationWaypoint] to [NavigationDisplayOptionsDto]
   NavigationDisplayOptionsDto toDto() => NavigationDisplayOptionsDto(
-        showDestinationMarkers: showDestinationMarkers,
-        showStopSigns: showStopSigns,
-        showTrafficLights: showTrafficLights,
-      );
+    showDestinationMarkers: showDestinationMarkers,
+    showStopSigns: showStopSigns,
+    showTrafficLights: showTrafficLights,
+  );
 }

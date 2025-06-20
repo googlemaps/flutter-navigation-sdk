@@ -30,8 +30,7 @@ import '../widgets/widgets.dart';
 class BasicMapPage extends ExamplePage {
   /// Constructs a [BasicMapPage].
   const BasicMapPage({super.key})
-      : super(
-            leading: const Icon(Icons.map), title: 'Basic Google Map Controls');
+    : super(leading: const Icon(Icons.map), title: 'Basic Google Map Controls');
 
   @override
   ExamplePageState<BasicMapPage> createState() => _MapPageState();
@@ -63,14 +62,16 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
   }
 
   Future<void> setMapStyleNight() async {
-    final String jsonString =
-        await rootBundle.loadString('assets/night_style.json');
+    final String jsonString = await rootBundle.loadString(
+      'assets/night_style.json',
+    );
     await _mapViewController.setMapStyle(jsonString);
   }
 
   Future<void> setMapStyleSepia() async {
-    final String jsonString =
-        await rootBundle.loadString('assets/sepia_style.json');
+    final String jsonString = await rootBundle.loadString(
+      'assets/sepia_style.json',
+    );
     await _mapViewController.setMapStyle(jsonString);
   }
 
@@ -83,7 +84,9 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
   void _showMessage(String message) {
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
     final SnackBar snackBar = SnackBar(
-        duration: const Duration(milliseconds: 2000), content: Text(message));
+      duration: const Duration(milliseconds: 2000),
+      content: Text(message),
+    );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
@@ -98,89 +101,98 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
   @override
   Widget build(BuildContext context) {
     final ButtonStyle mapTypeStyle = ElevatedButton.styleFrom(
-        minimumSize: const Size(80, 36),
-        disabledBackgroundColor:
-            Theme.of(context).colorScheme.primaryContainer);
+      minimumSize: const Size(80, 36),
+      disabledBackgroundColor: Theme.of(context).colorScheme.primaryContainer,
+    );
 
     return buildPage(
-        context,
-        (BuildContext context) => Stack(
+      context,
+      (BuildContext context) => Stack(
+        children: <Widget>[
+          GoogleMapsMapView(
+            onViewCreated: _onViewCreated,
+            onMyLocationClicked: _onMyLocationClicked,
+            onMyLocationButtonClicked: _onMyLocationButtonClicked,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            child: Column(
               children: <Widget>[
-                GoogleMapsMapView(
-                  onViewCreated: _onViewCreated,
-                  onMyLocationClicked: _onMyLocationClicked,
-                  onMyLocationButtonClicked: _onMyLocationButtonClicked,
+                ElevatedButton(
+                  style: mapTypeStyle,
+                  onPressed:
+                      mapType == MapType.normal
+                          ? null
+                          : () => setMapType(MapType.normal),
+                  child: const Text('Normal'),
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  child: Column(
-                    children: <Widget>[
-                      ElevatedButton(
-                          style: mapTypeStyle,
-                          onPressed: mapType == MapType.normal
-                              ? null
-                              : () => setMapType(MapType.normal),
-                          child: const Text('Normal')),
-                      ElevatedButton(
-                          style: mapTypeStyle,
-                          onPressed: mapType == MapType.satellite
-                              ? null
-                              : () => setMapType(MapType.satellite),
-                          child: const Text('Satellite')),
-                      ElevatedButton(
-                          style: mapTypeStyle,
-                          onPressed: mapType == MapType.terrain
-                              ? null
-                              : () => setMapType(MapType.terrain),
-                          child: const Text('Terrain')),
-                      ElevatedButton(
-                          style: mapTypeStyle,
-                          onPressed: mapType == MapType.hybrid
-                              ? null
-                              : () => setMapType(MapType.hybrid),
-                          child: const Text('Hybrid')),
-                    ],
-                  ),
+                ElevatedButton(
+                  style: mapTypeStyle,
+                  onPressed:
+                      mapType == MapType.satellite
+                          ? null
+                          : () => setMapType(MapType.satellite),
+                  child: const Text('Satellite'),
                 ),
-                if (mapType == MapType.normal)
-                  Padding(
-                    padding: isMyLocationEnabled && isMyLocationButtonEnabled
-                        ? const EdgeInsets.only(top: 50.0, right: 8.0)
-                        : const EdgeInsets.all(8.0),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: Column(
-                        children: <Widget>[
-                          ElevatedButton(
-                            style: mapTypeStyle,
-                            onPressed: () => setMapStyleDefault(),
-                            child: const Text('Default style'),
-                          ),
-                          ElevatedButton(
-                            style: mapTypeStyle,
-                            onPressed: () => setMapStyleNight(),
-                            child: const Text('Night style'),
-                          ),
-                          ElevatedButton(
-                            style: mapTypeStyle,
-                            onPressed: () => setMapStyleSepia(),
-                            child: const Text('Sepia style'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                getOverlayOptionsButton(context,
-                    onPressed: () => toggleOverlay())
+                ElevatedButton(
+                  style: mapTypeStyle,
+                  onPressed:
+                      mapType == MapType.terrain
+                          ? null
+                          : () => setMapType(MapType.terrain),
+                  child: const Text('Terrain'),
+                ),
+                ElevatedButton(
+                  style: mapTypeStyle,
+                  onPressed:
+                      mapType == MapType.hybrid
+                          ? null
+                          : () => setMapType(MapType.hybrid),
+                  child: const Text('Hybrid'),
+                ),
               ],
-            ));
+            ),
+          ),
+          if (mapType == MapType.normal)
+            Padding(
+              padding:
+                  isMyLocationEnabled && isMyLocationButtonEnabled
+                      ? const EdgeInsets.only(top: 50.0, right: 8.0)
+                      : const EdgeInsets.all(8.0),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Column(
+                  children: <Widget>[
+                    ElevatedButton(
+                      style: mapTypeStyle,
+                      onPressed: () => setMapStyleDefault(),
+                      child: const Text('Default style'),
+                    ),
+                    ElevatedButton(
+                      style: mapTypeStyle,
+                      onPressed: () => setMapStyleNight(),
+                      child: const Text('Night style'),
+                    ),
+                    ElevatedButton(
+                      style: mapTypeStyle,
+                      onPressed: () => setMapStyleSepia(),
+                      child: const Text('Sepia style'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          getOverlayOptionsButton(context, onPressed: () => toggleOverlay()),
+        ],
+      ),
+    );
   }
 
   @override
   Widget buildOverlayContent(BuildContext context) {
-    return Column(children: <Widget>[
-      SwitchListTile(
+    return Column(
+      children: <Widget>[
+        SwitchListTile(
           onChanged: (bool newValue) async {
             await _mapViewController.settings.setCompassEnabled(newValue);
             final bool enabled =
@@ -190,8 +202,9 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
             });
           },
           title: const Text('Enable compass'),
-          value: isCompassEnabled),
-      SwitchListTile(
+          value: isCompassEnabled,
+        ),
+        SwitchListTile(
           title: const Text('Enable my location'),
           value: isMyLocationEnabled,
           controlAffinity: ListTileControlAffinity.leading,
@@ -202,40 +215,47 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
               isMyLocationEnabled = enabled;
             });
           },
-          visualDensity: VisualDensity.compact),
-      SwitchListTile(
+          visualDensity: VisualDensity.compact,
+        ),
+        SwitchListTile(
           title: const Text('Enable my location button'),
           value: isMyLocationButtonEnabled,
           controlAffinity: ListTileControlAffinity.leading,
-          onChanged: isMyLocationEnabled
-              ? (bool newValue) async {
-                  await _mapViewController.settings
-                      .setMyLocationButtonEnabled(newValue);
-                  final bool enabled = await _mapViewController.settings
-                      .isMyLocationButtonEnabled();
-                  setState(() {
-                    isMyLocationButtonEnabled = enabled;
-                  });
-                }
-              : null,
-          visualDensity: VisualDensity.compact),
-      SwitchListTile(
+          onChanged:
+              isMyLocationEnabled
+                  ? (bool newValue) async {
+                    await _mapViewController.settings
+                        .setMyLocationButtonEnabled(newValue);
+                    final bool enabled =
+                        await _mapViewController.settings
+                            .isMyLocationButtonEnabled();
+                    setState(() {
+                      isMyLocationButtonEnabled = enabled;
+                    });
+                  }
+                  : null,
+          visualDensity: VisualDensity.compact,
+        ),
+        SwitchListTile(
           title: const Text('Consume my location button click'),
           value: consumeMyLocationButtonClickEvent,
           controlAffinity: ListTileControlAffinity.leading,
-          onChanged: isMyLocationEnabled && isMyLocationButtonEnabled
-              ? (bool newValue) async {
-                  await _mapViewController.settings
-                      .setConsumeMyLocationButtonClickEventsEnabled(newValue);
-                  final bool enabled = await _mapViewController.settings
-                      .isConsumeMyLocationButtonClickEventsEnabled();
-                  setState(() {
-                    consumeMyLocationButtonClickEvent = enabled;
-                  });
-                }
-              : null,
-          visualDensity: VisualDensity.compact),
-      SwitchListTile(
+          onChanged:
+              isMyLocationEnabled && isMyLocationButtonEnabled
+                  ? (bool newValue) async {
+                    await _mapViewController.settings
+                        .setConsumeMyLocationButtonClickEventsEnabled(newValue);
+                    final bool enabled =
+                        await _mapViewController.settings
+                            .isConsumeMyLocationButtonClickEventsEnabled();
+                    setState(() {
+                      consumeMyLocationButtonClickEvent = enabled;
+                    });
+                  }
+                  : null,
+          visualDensity: VisualDensity.compact,
+        ),
+        SwitchListTile(
           onChanged: (bool newValue) async {
             await _mapViewController.settings.setZoomGesturesEnabled(newValue);
             final bool enabled =
@@ -245,12 +265,14 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
             });
           },
           title: const Text('Enable zoom gestures'),
-          value: isZoomGesturesEnabled),
-      if (Platform.isAndroid)
-        SwitchListTile(
+          value: isZoomGesturesEnabled,
+        ),
+        if (Platform.isAndroid)
+          SwitchListTile(
             onChanged: (bool newValue) async {
-              await _mapViewController.settings
-                  .setZoomControlsEnabled(newValue);
+              await _mapViewController.settings.setZoomControlsEnabled(
+                newValue,
+              );
               final bool enabled =
                   await _mapViewController.settings.isZoomControlsEnabled();
               setState(() {
@@ -258,11 +280,13 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
               });
             },
             title: const Text('Enable zoom controls'),
-            value: isZoomControlsEnabled),
-      SwitchListTile(
+            value: isZoomControlsEnabled,
+          ),
+        SwitchListTile(
           onChanged: (bool newValue) async {
-            await _mapViewController.settings
-                .setRotateGesturesEnabled(newValue);
+            await _mapViewController.settings.setRotateGesturesEnabled(
+              newValue,
+            );
             final bool enabled =
                 await _mapViewController.settings.isRotateGesturesEnabled();
             setState(() {
@@ -270,11 +294,13 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
             });
           },
           title: const Text('Enable rotate gestures'),
-          value: isRotateGesturesEnabled),
-      SwitchListTile(
+          value: isRotateGesturesEnabled,
+        ),
+        SwitchListTile(
           onChanged: (bool newValue) async {
-            await _mapViewController.settings
-                .setScrollGesturesEnabled(newValue);
+            await _mapViewController.settings.setScrollGesturesEnabled(
+              newValue,
+            );
             final bool enabled =
                 await _mapViewController.settings.isScrollGesturesEnabled();
             setState(() {
@@ -282,20 +308,23 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
             });
           },
           title: const Text('Enable scroll gestures'),
-          value: isScrollGesturesEnabled),
-      SwitchListTile(
+          value: isScrollGesturesEnabled,
+        ),
+        SwitchListTile(
           onChanged: (bool newValue) async {
             await _mapViewController.settings
                 .setScrollGesturesDuringRotateOrZoomEnabled(newValue);
-            final bool enabled = await _mapViewController.settings
-                .isScrollGesturesEnabledDuringRotateOrZoom();
+            final bool enabled =
+                await _mapViewController.settings
+                    .isScrollGesturesEnabledDuringRotateOrZoom();
             setState(() {
               isScrollGesturesEnabledDuringRotateOrZoom = enabled;
             });
           },
           title: const Text('Enable scroll gestures during rotate or zoom'),
-          value: isScrollGesturesEnabledDuringRotateOrZoom),
-      SwitchListTile(
+          value: isScrollGesturesEnabledDuringRotateOrZoom,
+        ),
+        SwitchListTile(
           onChanged: (bool newValue) async {
             await _mapViewController.settings.setTiltGesturesEnabled(newValue);
             final bool enabled =
@@ -305,8 +334,9 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
             });
           },
           title: const Text('Enable tilt gestures'),
-          value: isTiltGesturesEnabled),
-      SwitchListTile(
+          value: isTiltGesturesEnabled,
+        ),
+        SwitchListTile(
           onChanged: (bool newValue) async {
             await _mapViewController.settings.setTrafficEnabled(newValue);
             final bool enabled =
@@ -316,7 +346,9 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
             });
           },
           title: const Text('Enable traffic'),
-          value: isTrafficEnabled),
-    ]);
+          value: isTrafficEnabled,
+        ),
+      ],
+    );
   }
 }

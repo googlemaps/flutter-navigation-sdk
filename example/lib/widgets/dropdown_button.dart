@@ -36,12 +36,13 @@ class ExampleDropdownButton<T> extends StatelessWidget {
       title: Text(title),
       trailing: DropdownButton<T>(
         value: value,
-        items: items.map<DropdownMenuItem<T>>((T value) {
-          return DropdownMenuItem<T>(
-            value: value,
-            child: Text(value.toString().split('.').last),
-          );
-        }).toList(),
+        items:
+            items.map<DropdownMenuItem<T>>((T value) {
+              return DropdownMenuItem<T>(
+                value: value,
+                child: Text(value.toString().split('.').last),
+              );
+            }).toList(),
         onChanged: onChanged,
       ),
     );
