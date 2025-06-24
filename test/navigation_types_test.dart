@@ -18,16 +18,22 @@ import 'package:google_navigation_flutter/src/method_channel/convert/navigation_
 import 'package:google_navigation_flutter/src/method_channel/method_channel.dart';
 
 void main() {
-  late NavigationWaypointDto waypointDto;
+  late NavigationWaypointDto placeIDWaypointDto;
+  late NavigationWaypointDto targetWaypointDto;
   late NavigationWaypoint waypoint;
   late Destinations destinations;
   late NavigationDisplayOptions displayOptions;
   late RoutingOptions routingOptions;
 
   setUp(() {
-    waypointDto = NavigationWaypointDto(
+    targetWaypointDto = NavigationWaypointDto(
       title: 'testTitle',
       target: LatLngDto(latitude: 5.0, longitude: 6.0),
+      preferSameSideOfRoad: true,
+      preferredSegmentHeading: 50,
+    );
+    placeIDWaypointDto = NavigationWaypointDto(
+      title: 'testTitle',
       placeID: 'testID',
       preferSameSideOfRoad: true,
       preferredSegmentHeading: 50,
@@ -58,18 +64,46 @@ void main() {
 
   group('NavigationWaypoint tests', () {
     test('tests Navigation Waypoint conversion from DTO', () {
-      final NavigationWaypoint gmsWaypoint = waypointDto.toNavigationWaypoint();
-      expect(gmsWaypoint.title, waypointDto.title);
-      expect(gmsWaypoint.target?.latitude, waypointDto.target?.latitude);
-      expect(gmsWaypoint.target?.longitude, waypointDto.target?.longitude);
-      expect(gmsWaypoint.placeID, waypointDto.placeID);
+      final NavigationWaypoint targetGmsWaypoint =
+          targetWaypointDto.toNavigationWaypoint();
+      expect(targetGmsWaypoint.title, targetWaypointDto.title);
       expect(
-        gmsWaypoint.preferSameSideOfRoad,
-        waypointDto.preferSameSideOfRoad,
+        targetGmsWaypoint.target?.latitude,
+        targetWaypointDto.target?.latitude,
       );
       expect(
-        gmsWaypoint.preferredSegmentHeading,
-        waypointDto.preferredSegmentHeading,
+        targetGmsWaypoint.target?.longitude,
+        targetWaypointDto.target?.longitude,
+      );
+      expect(targetGmsWaypoint.placeID, targetWaypointDto.placeID);
+      expect(
+        targetGmsWaypoint.preferSameSideOfRoad,
+        targetWaypointDto.preferSameSideOfRoad,
+      );
+      expect(
+        targetGmsWaypoint.preferredSegmentHeading,
+        targetWaypointDto.preferredSegmentHeading,
+      );
+
+      final NavigationWaypoint placeIDGmsWaypoint =
+          placeIDWaypointDto.toNavigationWaypoint();
+      expect(placeIDGmsWaypoint.title, placeIDWaypointDto.title);
+      expect(
+        placeIDGmsWaypoint.target?.latitude,
+        placeIDWaypointDto.target?.latitude,
+      );
+      expect(
+        placeIDGmsWaypoint.target?.longitude,
+        placeIDWaypointDto.target?.longitude,
+      );
+      expect(placeIDGmsWaypoint.placeID, placeIDWaypointDto.placeID);
+      expect(
+        placeIDGmsWaypoint.preferSameSideOfRoad,
+        placeIDWaypointDto.preferSameSideOfRoad,
+      );
+      expect(
+        placeIDGmsWaypoint.preferredSegmentHeading,
+        placeIDWaypointDto.preferredSegmentHeading,
       );
     });
 
@@ -84,6 +118,19 @@ void main() {
         waypoint.preferredSegmentHeading,
         waypointDto2.preferredSegmentHeading,
       );
+    });
+
+    test('tests Navigation Waypoint creation asserts', () {
+      expect(
+        () => NavigationWaypoint(
+          title: 'test',
+          target: const LatLng(latitude: 5.0, longitude: 6.0),
+          placeID: 'testID',
+        ),
+        throwsAssertionError,
+      );
+
+      expect(() => NavigationWaypoint(title: 'test'), throwsAssertionError);
     });
   });
 
