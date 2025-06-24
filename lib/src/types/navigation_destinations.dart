@@ -182,6 +182,9 @@ class NavigationDisplayOptions {
 
 /// Navigation waypoint with different constructors based in on type of
 /// initialization.
+///
+/// Either a [target] in the form of [LatLng] or a [placeID] must be provided.
+///
 /// {@category Navigation}
 class NavigationWaypoint {
   /// Initializer for [NavigationWaypoint].
@@ -194,6 +197,10 @@ class NavigationWaypoint {
   }) : assert(
          target != null || placeID != null,
          'Either target or placeID must be provided',
+       ),
+       assert(
+         target == null || placeID == null,
+         'Cannot provide both target and placeID at the same time.',
        );
 
   /// Initialize waypoint with coordinates.
