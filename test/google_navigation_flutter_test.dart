@@ -995,31 +995,29 @@ void main() {
           }
 
           // Continue to the next destination.
-          final NavigationWaypointDto waypointIn = NavigationWaypointDto(
+          final NavigationWaypointDto targetWaypointIn = NavigationWaypointDto(
             title: 'Title',
             target: LatLngDto(latitude: 0.4, longitude: 0.5),
-            placeID: 'id',
             preferSameSideOfRoad: true,
             preferredSegmentHeading: 50,
           );
 
           when(
             sessionMockApi.continueToNextDestination(),
-          ).thenReturn(waypointIn);
+          ).thenReturn(targetWaypointIn);
           final NavigationWaypoint? waypointOut =
               await GoogleMapsNavigator.continueToNextDestination();
           expect(waypointOut, isNotNull);
           if (waypointOut != null) {
-            expect(waypointIn.title, waypointOut.title);
-            expect(waypointIn.target?.latitude, waypointOut.target?.latitude);
-            expect(waypointIn.target?.longitude, waypointOut.target?.longitude);
-            expect(waypointIn.placeID, waypointOut.placeID);
+            expect(targetWaypointIn.title, waypointOut.title);
+            expect(targetWaypointIn.target?.latitude, waypointOut.target?.latitude);
+            expect(targetWaypointIn.target?.longitude, waypointOut.target?.longitude);
             expect(
-              waypointIn.preferSameSideOfRoad,
+              targetWaypointIn.preferSameSideOfRoad,
               waypointOut.preferSameSideOfRoad,
             );
             expect(
-              waypointIn.preferredSegmentHeading,
+              targetWaypointIn.preferredSegmentHeading,
               waypointOut.preferredSegmentHeading,
             );
           }
