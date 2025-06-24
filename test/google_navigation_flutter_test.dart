@@ -1010,8 +1010,14 @@ void main() {
           expect(waypointOut, isNotNull);
           if (waypointOut != null) {
             expect(targetWaypointIn.title, waypointOut.title);
-            expect(targetWaypointIn.target?.latitude, waypointOut.target?.latitude);
-            expect(targetWaypointIn.target?.longitude, waypointOut.target?.longitude);
+            expect(
+              targetWaypointIn.target?.latitude,
+              waypointOut.target?.latitude,
+            );
+            expect(
+              targetWaypointIn.target?.longitude,
+              waypointOut.target?.longitude,
+            );
             expect(
               targetWaypointIn.preferSameSideOfRoad,
               waypointOut.preferSameSideOfRoad,
