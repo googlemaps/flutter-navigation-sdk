@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.6.2](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.6.1...0.6.2) (2025-06-24)
+
+
+### Features
+
+* upgrade dependencies and environment requirements ([#375](https://github.com/googlemaps/flutter-navigation-sdk/issues/375)) ([5a83661](https://github.com/googlemaps/flutter-navigation-sdk/commit/5a83661676728c265747f51cd61a392561ee4875))
+
+
+### Bug Fixes
+
+* add assert to NavigationWaypoint constructor ([#387](https://github.com/googlemaps/flutter-navigation-sdk/issues/387)) ([aff35af](https://github.com/googlemaps/flutter-navigation-sdk/commit/aff35af4268b250909e7a6768a98c457584b0fdf))
+
 ## [0.6.1](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.6.0...0.6.1) (2025-05-14)
 
 
