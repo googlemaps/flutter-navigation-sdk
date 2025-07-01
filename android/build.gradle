@@ -77,7 +77,7 @@ android {
     dependencies {
         implementation 'androidx.car.app:app:1.4.0'
         implementation 'androidx.car.app:app-projected:1.4.0'
-        implementation 'com.google.android.libraries.navigation:navigation:6.2.2'
+        implementation 'com.google.android.libraries.navigation:navigation:6.3.0'
         testImplementation 'org.jetbrains.kotlin:kotlin-test'
         testImplementation 'io.mockk:mockk:1.13.8'
         testImplementation 'junit:junit:4.13.2'
