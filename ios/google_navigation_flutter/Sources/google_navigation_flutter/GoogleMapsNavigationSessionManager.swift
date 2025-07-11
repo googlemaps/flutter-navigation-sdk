@@ -450,6 +450,7 @@ class GoogleMapsNavigationSessionManager: NSObject {
 
   func allowBackgroundLocationUpdates(allow: Bool) {
     LocationManager.shared.allowBackgroundLocationUpdates(allow: allow)
+    _session?.roadSnappedLocationProvider?.allowsBackgroundLocationUpdates = allow
   }
 
   func setSpeedAlertOptions(options: SpeedAlertOptionsDto) throws {
