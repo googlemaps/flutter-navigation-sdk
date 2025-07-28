@@ -5795,6 +5795,9 @@ interface NavigationSessionApi {
     /** The codec used by NavigationSessionApi. */
     val codec: MessageCodec<Any?> by lazy { messagesPigeonCodec() }
 
+    private val navThread = HandlerThread("NavSdkHandlerThread").apply { start() }
+    private val navHandler = Handler(navThread.looper)
+
     /**
      * Sets up an instance of `NavigationSessionApi` to handle messages through the
      * `binaryMessenger`.
@@ -5816,16 +5819,18 @@ interface NavigationSessionApi {
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val abnormalTerminationReportingEnabledArg = args[0] as Boolean
-            val behaviorArg = args[1] as TaskRemovedBehaviorDto
-            api.createNavigationSession(abnormalTerminationReportingEnabledArg, behaviorArg) {
-              result: Result<Unit> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(MessagesPigeonUtils.wrapError(error))
-              } else {
-                reply.reply(MessagesPigeonUtils.wrapResult(null))
+            navHandler.post {
+              val args = message as List<Any?>
+              val abnormalTerminationReportingEnabledArg = args[0] as Boolean
+              val behaviorArg = args[1] as TaskRemovedBehaviorDto
+              api.createNavigationSession(abnormalTerminationReportingEnabledArg, behaviorArg) {
+                result: Result<Unit> ->
+                val error = result.exceptionOrNull()
+                if (error != null) {
+                  reply.reply(MessagesPigeonUtils.wrapError(error))
+                } else {
+                  reply.reply(MessagesPigeonUtils.wrapResult(null))
+                }
               }
             }
           }
@@ -5842,13 +5847,15 @@ interface NavigationSessionApi {
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isInitialized())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
-            reply.reply(wrapped)
+            navHandler.post {
+              val wrapped: List<Any?> =
+                try {
+                  listOf(api.isInitialized())
+                } catch (exception: Throwable) {
+                  MessagesPigeonUtils.wrapError(exception)
+                }
+              reply.reply(wrapped)
+            }
           }
         } else {
           channel.setMessageHandler(null)
@@ -5863,14 +5870,16 @@ interface NavigationSessionApi {
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.cleanup()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
-            reply.reply(wrapped)
+            navHandler.post {
+              val wrapped: List<Any?> =
+                try {
+                  api.cleanup()
+                  listOf(null)
+                } catch (exception: Throwable) {
+                  MessagesPigeonUtils.wrapError(exception)
+                }
+              reply.reply(wrapped)
+            }
           }
         } else {
           channel.setMessageHandler(null)
@@ -5885,21 +5894,23 @@ interface NavigationSessionApi {
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val titleArg = args[0] as String
-            val companyNameArg = args[1] as String
-            val shouldOnlyShowDriverAwarenessDisclaimerArg = args[2] as Boolean
-            api.showTermsAndConditionsDialog(
-              titleArg,
-              companyNameArg,
-              shouldOnlyShowDriverAwarenessDisclaimerArg,
-            ) { result: Result<Boolean> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(MessagesPigeonUtils.wrapError(error))
-              } else {
-                val data = result.getOrNull()
-                reply.reply(MessagesPigeonUtils.wrapResult(data))
+            navHandler.post {
+              val args = message as List<Any?>
+              val titleArg = args[0] as String
+              val companyNameArg = args[1] as String
+              val shouldOnlyShowDriverAwarenessDisclaimerArg = args[2] as Boolean
+              api.showTermsAndConditionsDialog(
+                titleArg,
+                companyNameArg,
+                shouldOnlyShowDriverAwarenessDisclaimerArg,
+              ) { result: Result<Boolean> ->
+                val error = result.exceptionOrNull()
+                if (error != null) {
+                  reply.reply(MessagesPigeonUtils.wrapError(error))
+                } else {
+                  val data = result.getOrNull()
+                  reply.reply(MessagesPigeonUtils.wrapResult(data))
+                }
               }
             }
           }
@@ -5916,13 +5927,15 @@ interface NavigationSessionApi {
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.areTermsAccepted())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
-            reply.reply(wrapped)
+            navHandler.post {
+              val wrapped: List<Any?> =
+                try {
+                  listOf(api.areTermsAccepted())
+                } catch (exception: Throwable) {
+                  MessagesPigeonUtils.wrapError(exception)
+                }
+              reply.reply(wrapped)
+            }
           }
         } else {
           channel.setMessageHandler(null)
@@ -5937,14 +5950,16 @@ interface NavigationSessionApi {
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.resetTermsAccepted()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
-            reply.reply(wrapped)
+            navHandler.post {
+              val wrapped: List<Any?> =
+                try {
+                  api.resetTermsAccepted()
+                  listOf(null)
+                } catch (exception: Throwable) {
+                  MessagesPigeonUtils.wrapError(exception)
+                }
+              reply.reply(wrapped)
+            }
           }
         } else {
           channel.setMessageHandler(null)
@@ -5980,13 +5995,15 @@ interface NavigationSessionApi {
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isGuidanceRunning())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
-            reply.reply(wrapped)
+            navHandler.post {
+              val wrapped: List<Any?> =
+                try {
+                  listOf(api.isGuidanceRunning())
+                } catch (exception: Throwable) {
+                  MessagesPigeonUtils.wrapError(exception)
+                }
+              reply.reply(wrapped)
+            }
           }
         } else {
           channel.setMessageHandler(null)
@@ -6001,14 +6018,16 @@ interface NavigationSessionApi {
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.startGuidance()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
-            reply.reply(wrapped)
+            navHandler.post {
+              val wrapped: List<Any?> =
+                try {
+                  api.startGuidance()
+                  listOf(null)
+                } catch (exception: Throwable) {
+                  MessagesPigeonUtils.wrapError(exception)
+                }
+              reply.reply(wrapped)
+            }
           }
         } else {
           channel.setMessageHandler(null)
@@ -6023,14 +6042,16 @@ interface NavigationSessionApi {
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.stopGuidance()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
-            reply.reply(wrapped)
+            navHandler.post {
+              val wrapped: List<Any?> =
+                try {
+                  api.stopGuidance()
+                  listOf(null)
+                } catch (exception: Throwable) {
+                  MessagesPigeonUtils.wrapError(exception)
+                }
+              reply.reply(wrapped)
+            }
           }
         } else {
           channel.setMessageHandler(null)
@@ -6045,15 +6066,17 @@ interface NavigationSessionApi {
           )
         if (api != null) {
           channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val destinationsArg = args[0] as DestinationsDto
-            api.setDestinations(destinationsArg) { result: Result<RouteStatusDto> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(MessagesPigeonUtils.wrapError(error))
-              } else {
-                val data = result.getOrNull()
-                reply.reply(MessagesPigeonUtils.wrapResult(data))
+            navHandler.post {
+              val args = message as List<Any?>
+              val destinationsArg = args[0] as DestinationsDto
+              api.setDestinations(destinationsArg) { result: Result<RouteStatusDto> ->
+                val error = result.exceptionOrNull()
+                if (error != null) {
+                  reply.reply(MessagesPigeonUtils.wrapError(error))
+                } else {
+                  val data = result.getOrNull()
+                  reply.reply(MessagesPigeonUtils.wrapResult(data))
+                }
               }
             }
           }
@@ -6070,14 +6093,16 @@ interface NavigationSessionApi {
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.clearDestinations()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
-            reply.reply(wrapped)
+            navHandler.post {
+              val wrapped: List<Any?> =
+                try {
+                  api.clearDestinations()
+                  listOf(null)
+                } catch (exception: Throwable) {
+                  MessagesPigeonUtils.wrapError(exception)
+                }
+              reply.reply(wrapped)
+            }
           }
         } else {
           channel.setMessageHandler(null)
@@ -6488,14 +6513,16 @@ interface NavigationSessionApi {
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.enableRoadSnappedLocationUpdates()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
-            reply.reply(wrapped)
+            navHandler.post {
+              val wrapped: List<Any?> =
+                try {
+                  api.enableRoadSnappedLocationUpdates()
+                  listOf(null)
+                } catch (exception: Throwable) {
+                  MessagesPigeonUtils.wrapError(exception)
+                }
+              reply.reply(wrapped)
+            }
           }
         } else {
           channel.setMessageHandler(null)
@@ -6510,14 +6537,16 @@ interface NavigationSessionApi {
           )
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.disableRoadSnappedLocationUpdates()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
-            reply.reply(wrapped)
+            navHandler.post {
+              val wrapped: List<Any?> =
+                try {
+                  api.disableRoadSnappedLocationUpdates()
+                  listOf(null)
+                } catch (exception: Throwable) {
+                  MessagesPigeonUtils.wrapError(exception)
+                }
+              reply.reply(wrapped)
+            }
           }
         } else {
           channel.setMessageHandler(null)
