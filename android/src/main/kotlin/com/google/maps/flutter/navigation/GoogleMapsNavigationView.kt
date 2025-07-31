@@ -63,6 +63,7 @@ internal constructor(
         _navigationView.onCreate(context.applicationInfo.metaData)
         _navigationView.onStart()
         _navigationView.onResume()
+        _currentLifecycleState = LifecycleState.RESUMED
 
         // Initialize navigation view with given navigation view options
         var navigationViewEnabled = false
@@ -114,19 +115,31 @@ internal constructor(
         _navigationView.isNavigationUiEnabled = false
 
         try {
-            if (_currentLifecycleState == LifecycleState.RESUMED) {
-                _navigationView.onPause()
-                _currentLifecycleState = LifecycleState.PAUSED
-            }
-
-            if (_currentLifecycleState == LifecycleState.PAUSED || _currentLifecycleState == LifecycleState.STARTED) {
-                _navigationView.onStop()
-                _currentLifecycleState = LifecycleState.STOPPED
-            }
-
-            if (_currentLifecycleState != LifecycleState.DESTROYED) {
-                _navigationView.onDestroy()
-                _currentLifecycleState = LifecycleState.DESTROYED
+            when (_currentLifecycleState) {
+                LifecycleState.RESUMED -> {
+                    _navigationView.onPause()
+                    _navigationView.onStop()
+                    _navigationView.onDestroy()
+                    _currentLifecycleState = LifecycleState.DESTROYED
+                }
+                LifecycleState.PAUSED -> {
+                    _navigationView.onStop()
+                    _navigationView.onDestroy()
+                    _currentLifecycleState = LifecycleState.DESTROYED
+                }
+                LifecycleState.STARTED -> {
+                    _navigationView.onStop()
+                    _navigationView.onDestroy()
+                    _currentLifecycleState = LifecycleState.DESTROYED
+                }
+                LifecycleState.STOPPED,
+                LifecycleState.CREATED -> {
+                    _navigationView.onDestroy()
+                    _currentLifecycleState = LifecycleState.DESTROYED
+                }
+                LifecycleState.DESTROYED -> {
+                    // already cleaned up
+                }
             }
         } catch (e: Exception) {
             android.util.Log.e("NavViewDispose", "Exception during dispose: ${e.message}", e)
@@ -139,7 +152,7 @@ internal constructor(
 
     override fun onStart() {
         try {
-            if (_currentLifecycleState == LifecycleState.CREATED || _currentLifecycleState == LifecycleState.STOPPED) {
+            if (_navigationView.isNavigationUiEnabled && (_currentLifecycleState == LifecycleState.CREATED || _currentLifecycleState == LifecycleState.STOPPED)) {
                 _navigationView.onStart()
                 _currentLifecycleState = LifecycleState.STARTED
             } else {
@@ -155,7 +168,7 @@ internal constructor(
 
     override fun onResume() {
         try {
-            if (_currentLifecycleState == LifecycleState.STARTED || _currentLifecycleState == LifecycleState.PAUSED) {
+            if (_navigationView.isNavigationUiEnabled && (_currentLifecycleState == LifecycleState.STARTED || _currentLifecycleState == LifecycleState.PAUSED)) {
                 _navigationView.onResume()
                 _currentLifecycleState = LifecycleState.RESUMED
             } else {
@@ -187,7 +200,7 @@ internal constructor(
 
     override fun onPause() {
         try {
-            if (_currentLifecycleState == LifecycleState.RESUMED) {
+            if (_navigationView.isNavigationUiEnabled && _currentLifecycleState == LifecycleState.RESUMED) {
                 _navigationView.onPause()
                 _currentLifecycleState = LifecycleState.PAUSED
             } else {
