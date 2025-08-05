@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.3](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.6.2...0.6.3) (2025-08-05)
+
+
+### Bug Fixes
+
+* fix background location updates on iOS ([#404](https://github.com/googlemaps/flutter-navigation-sdk/issues/404)) ([7389afe](https://github.com/googlemaps/flutter-navigation-sdk/commit/7389afe0e4ac9a1a84ce79b4bea287f1b08e78b1))
+
 ## [0.6.2](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.6.1...0.6.2) (2025-06-24)
 
 
