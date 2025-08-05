@@ -162,6 +162,11 @@ class _NavigationSampleState extends State<NavigationSample> {
 }
 ```
 
+> [!NOTE]
+> Route calculation is only available after the Navigation SDK has successfully acquired the user's location. If the location is not yet available when trying to set a destination, the SDK will return a NavigationRouteStatus.locationUnavailable status.
+>
+> To avoid this, ensure that the SDK has provided a valid user location before calling the setDestinations function. You can do this by subscribing to the RoadSnappedLocationUpdatedEvent and waiting for the first valid location update.
+
 #### Task Removed Behavior
 
 The `taskRemovedBehavior` parameter of navigation session initialization defines how the navigation should behave when a task is removed from the recent apps list on Android. It can either:
