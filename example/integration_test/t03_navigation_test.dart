@@ -742,7 +742,40 @@ void main() {
       tolerance,
     );
 
-    /// Set Destination.
+    /// Test route segments with placeId
+    final Destinations placeIdDestinations = Destinations(
+      waypoints: <NavigationWaypoint>[
+        NavigationWaypoint.withPlaceID(
+          title: "Golden Gate Bridge",
+          placeID: "ChIJw____96GhYARCVVwg5cT7c0",
+        ),
+      ],
+      displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
+    );
+    final NavigationRouteStatus placeIdStatus =
+        await GoogleMapsNavigator.setDestinations(placeIdDestinations);
+    expect(placeIdStatus, NavigationRouteStatus.statusOk);
+    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
+
+    final List<RouteSegment> placeIdBeginRouteSegments =
+        await GoogleMapsNavigator.getRouteSegments();
+    final RouteSegment? placeIdBeginCurrentSegment =
+        await GoogleMapsNavigator.getCurrentRouteSegment();
+
+    /// The route segments list is not empty.
+    expect(placeIdBeginRouteSegments.length, greaterThan(0));
+
+    /// The current route segment.
+    expect(
+      placeIdBeginCurrentSegment,
+      isNotNull,
+      reason: 'Current segment is null.',
+    );
+
+    // Clear placeId waypoints
+    await GoogleMapsNavigator.clearDestinations();
+
+    /// Set Destination with target.
     final Destinations destinations = Destinations(
       waypoints: <NavigationWaypoint>[
         NavigationWaypoint.withLatLngTarget(
