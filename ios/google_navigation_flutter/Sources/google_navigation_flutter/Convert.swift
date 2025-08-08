@@ -288,10 +288,12 @@ enum Convert {
   {
     .init(
       title: gmsNavigationWaypoint.title,
-      target: .init(
-        latitude: gmsNavigationWaypoint.coordinate.latitude,
-        longitude: gmsNavigationWaypoint.coordinate.longitude
-      ),
+      target: CLLocationCoordinate2DIsValid(gmsNavigationWaypoint.coordinate)
+        ? .init(
+          latitude: gmsNavigationWaypoint.coordinate.latitude,
+          longitude: gmsNavigationWaypoint.coordinate.longitude
+        )
+        : nil,
       placeID: gmsNavigationWaypoint.placeID,
       preferSameSideOfRoad: gmsNavigationWaypoint.preferSameSideOfRoad,
       preferredSegmentHeading: Int64(gmsNavigationWaypoint.preferredHeading)

@@ -796,6 +796,55 @@ void main() {
     expect(endSegment!.destinationLatLng.longitude, closeTo(-122.412, 0.002));
   });
 
+  patrol('Test route segments with placeId', (PatrolIntegrationTester $) async {
+    /// Set up navigation view and controller.
+    final GoogleNavigationViewController viewController =
+        await startNavigationWithoutDestination($);
+
+    /// Simulate location (1298 California St)
+    const double tolerance = 0.001;
+    await setSimulatedUserLocationWithCheck(
+      $,
+      viewController,
+      37.79136614772824,
+      -122.41565900473043,
+      tolerance,
+    );
+
+    /// Set Destination.
+    final Destinations destinations = Destinations(
+      waypoints: <NavigationWaypoint>[
+        NavigationWaypoint.withPlaceID(
+          title: "Golden Gate Bridge",
+          placeID: "ChIJw____96GhYARCVVwg5cT7c0",
+        ),
+      ],
+      displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
+    );
+    final NavigationRouteStatus status =
+        await GoogleMapsNavigator.setDestinations(destinations);
+    expect(status, NavigationRouteStatus.statusOk);
+    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
+
+    final List<RouteSegment> beginRouteSegments =
+        await GoogleMapsNavigator.getRouteSegments();
+    final RouteSegment? beginCurrentSegment =
+        await GoogleMapsNavigator.getCurrentRouteSegment();
+
+    /// The route segments list is not empty.
+    expect(beginRouteSegments.length, greaterThan(0));
+
+    /// The current route segment.
+    expect(beginCurrentSegment, isNotNull, reason: 'Current segment is null.');
+
+    /// Start simulation.
+    await GoogleMapsNavigator.simulator
+        .simulateLocationsAlongExistingRouteWithOptions(
+          SimulationOptions(speedMultiplier: 30),
+        );
+    await $.pumpAndSettle();
+  });
+
   patrol('Test that the navigation session is attached to existing map', (
     PatrolIntegrationTester $,
   ) async {

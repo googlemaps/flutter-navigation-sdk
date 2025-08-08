@@ -21,7 +21,7 @@ extension ConvertNavigationWaypointDto on NavigationWaypointDto {
   /// Converts [NavigationWaypointDto] to [NavigationWaypoint]
   NavigationWaypoint toNavigationWaypoint() => NavigationWaypoint(
     title: title,
-    target: target?.toLatLng(),
+    target: placeID == null ? target?.toLatLng() : null,
     placeID: placeID,
     preferSameSideOfRoad: preferSameSideOfRoad,
     preferredSegmentHeading: preferredSegmentHeading,
