@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.4](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.6.3...0.6.4) (2025-08-08)
+
+
+### Bug Fixes
+
+* waypoint conversion issue while using placeId ([#439](https://github.com/googlemaps/flutter-navigation-sdk/issues/439)) ([9280761](https://github.com/googlemaps/flutter-navigation-sdk/commit/9280761ee7fd927677e65ee9b6d446e89929dca2))
+
 ## [0.6.3](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.6.2...0.6.3) (2025-08-05)
 
 
