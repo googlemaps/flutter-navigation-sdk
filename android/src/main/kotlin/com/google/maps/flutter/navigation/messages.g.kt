@@ -2801,6 +2801,10 @@ interface MapViewApi {
 
   fun showReportIncidentsPanel(viewId: Long)
 
+  fun isBuildingsEnabled(viewId: Long): Boolean
+
+  fun setBuildingsEnabled(viewId: Long, enabled: Boolean)
+
   fun getCameraPosition(viewId: Long): CameraPositionDto
 
   fun getVisibleRegion(viewId: Long): LatLngBoundsDto
@@ -4161,6 +4165,54 @@ interface MapViewApi {
             val wrapped: List<Any?> =
               try {
                 api.showReportIncidentsPanel(viewIdArg)
+                listOf(null)
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isBuildingsEnabled$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val wrapped: List<Any?> =
+              try {
+                listOf(api.isBuildingsEnabled(viewIdArg))
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setBuildingsEnabled$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val enabledArg = args[1] as Boolean
+            val wrapped: List<Any?> =
+              try {
+                api.setBuildingsEnabled(viewIdArg, enabledArg)
                 listOf(null)
               } catch (exception: Throwable) {
                 MessagesPigeonUtils.wrapError(exception)

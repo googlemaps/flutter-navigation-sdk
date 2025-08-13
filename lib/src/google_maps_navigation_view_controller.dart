@@ -26,7 +26,7 @@ class GoogleNavigationViewController extends GoogleMapViewController {
   /// [GoogleMapsNavigationView.onViewCreated] callback.
   GoogleNavigationViewController(super.viewId);
 
-  /// Is the navigation trip progress bar enabled.
+  /// Checks if the navigation trip progress bar is enabled.
   Future<bool> isNavigationTripProgressBarEnabled() {
     return GoogleMapsNavigationPlatform.instance.viewAPI
         .isNavigationTripProgressBarEnabled(viewId: getViewId());
@@ -45,7 +45,7 @@ class GoogleNavigationViewController extends GoogleMapViewController {
         );
   }
 
-  /// Is the navigation header enabled.
+  /// Checks if the navigation header is enabled.
   Future<bool> isNavigationHeaderEnabled() {
     return GoogleMapsNavigationPlatform.instance.viewAPI
         .isNavigationHeaderEnabled(viewId: getViewId());
@@ -59,7 +59,7 @@ class GoogleNavigationViewController extends GoogleMapViewController {
         .setNavigationHeaderEnabled(viewId: getViewId(), enabled: enabled);
   }
 
-  /// Is the navigation footer enabled.
+  /// Checks if the navigation footer is enabled.
   Future<bool> isNavigationFooterEnabled() {
     return GoogleMapsNavigationPlatform.instance.viewAPI
         .isNavigationFooterEnabled(viewId: getViewId());
@@ -121,7 +121,7 @@ class GoogleNavigationViewController extends GoogleMapViewController {
         .setTrafficIncidentCardsEnabled(viewId: getViewId(), enabled: enabled);
   }
 
-  /// Is the report incident button is shown.
+  /// Checks if the report incident button is shown.
   Future<bool> isReportIncidentButtonEnabled() {
     return GoogleMapsNavigationPlatform.instance.viewAPI
         .isReportIncidentButtonEnabled(viewId: getViewId());

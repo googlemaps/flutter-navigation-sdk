@@ -430,6 +430,14 @@ class GoogleMapsNavigationViewMessageHandler: MapViewApi {
     try getView(viewId).showReportIncidentsPanel()
   }
 
+  func isBuildingsEnabled(viewId: Int64) throws -> Bool {
+    try getView(viewId).isBuildingsEnabled()
+  }
+
+  func setBuildingsEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setBuildingsEnabled(enabled)
+  }
+
   func isTrafficPromptsEnabled(viewId: Int64) throws -> Bool {
     try getView(viewId).isTrafficPromptsEnabled()
   }

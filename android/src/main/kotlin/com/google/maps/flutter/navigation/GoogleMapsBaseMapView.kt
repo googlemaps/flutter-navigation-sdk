@@ -530,6 +530,14 @@ abstract class GoogleMapsBaseMapView(
     return getMap().isTrafficEnabled
   }
 
+  fun isBuildingsEnabled(): Boolean {
+    return getMap().isBuildingsEnabled
+  }
+
+  fun setBuildingsEnabled(enabled: Boolean) {
+    getMap().isBuildingsEnabled = enabled
+  }
+
   fun getMyLocation(): Location? {
     // Remove this functionality and either guide users to use separate flutter
     // library for geolocation or implement separate method under

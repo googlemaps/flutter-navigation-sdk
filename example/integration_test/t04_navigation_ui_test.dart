@@ -267,6 +267,17 @@ void main() {
       );
     }
 
+    /// Test enabling and disabling the 3D buildings layer.
+    for (final bool result in results) {
+      await viewController.setBuildingsEnabled(result);
+      final bool isEnabled = await viewController.isBuildingsEnabled();
+      expect(
+        isEnabled,
+        result,
+        reason: buildReasonForToggle('BuildingsEnabled', result),
+      );
+    }
+
     /// Test incident reporting availability.
     final bool isIncidentReportingAvailable =
         await viewController.isIncidentReportingAvailable();

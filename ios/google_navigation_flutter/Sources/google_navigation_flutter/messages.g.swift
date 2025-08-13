@@ -2556,6 +2556,8 @@ protocol MapViewApi {
   func setReportIncidentButtonEnabled(viewId: Int64, enabled: Bool) throws
   func isIncidentReportingAvailable(viewId: Int64) throws -> Bool
   func showReportIncidentsPanel(viewId: Int64) throws
+  func isBuildingsEnabled(viewId: Int64) throws -> Bool
+  func setBuildingsEnabled(viewId: Int64, enabled: Bool) throws
   func getCameraPosition(viewId: Int64) throws -> CameraPositionDto
   func getVisibleRegion(viewId: Int64) throws -> LatLngBoundsDto
   func followMyLocation(viewId: Int64, perspective: CameraPerspectiveDto, zoomLevel: Double?) throws
@@ -3566,6 +3568,43 @@ class MapViewApiSetup {
       }
     } else {
       showReportIncidentsPanelChannel.setMessageHandler(nil)
+    }
+    let isBuildingsEnabledChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isBuildingsEnabled\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      isBuildingsEnabledChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] as! Int64
+        do {
+          let result = try api.isBuildingsEnabled(viewId: viewIdArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      isBuildingsEnabledChannel.setMessageHandler(nil)
+    }
+    let setBuildingsEnabledChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setBuildingsEnabled\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setBuildingsEnabledChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] as! Int64
+        let enabledArg = args[1] as! Bool
+        do {
+          try api.setBuildingsEnabled(viewId: viewIdArg, enabled: enabledArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setBuildingsEnabledChannel.setMessageHandler(nil)
     }
     let getCameraPositionChannel = FlutterBasicMessageChannel(
       name:
