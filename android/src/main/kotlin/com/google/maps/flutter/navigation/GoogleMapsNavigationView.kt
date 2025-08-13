@@ -144,6 +144,9 @@ internal constructor(
     _navigationView.addOnNavigationUiChangedListener {
       viewEventApi?.onNavigationUIEnabledChanged(getViewId().toLong(), it) {}
     }
+    _navigationView.addPromptVisibilityChangedListener { promptVisible ->
+      viewEventApi?.onPromptVisibilityChanged(getViewId().toLong(), promptVisible) {}
+    }
     super.initListeners()
   }
 
@@ -217,6 +220,14 @@ internal constructor(
   fun setReportIncidentButtonEnabled(enabled: Boolean) {
     _navigationView.setReportIncidentButtonEnabled(enabled)
     _isReportIncidentButtonEnabled = enabled
+  }
+
+  fun isIncidentReportingAvailable(): Boolean {
+    return _navigationView.isIncidentReportingAvailable()
+  }
+
+  fun showReportIncidentsPanel() {
+    _navigationView.showReportIncidentsPanel()
   }
 
   fun isTrafficPromptsEnabled(): Boolean {

@@ -27,6 +27,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_plugin_android_lifecycle: ^2.0.16
+  meta: any
   plugin_platform_interface: ^2.1.5
   stream_transform: ^2.1.0
 

@@ -4470,6 +4470,65 @@ class MapViewApi {
     }
   }
 
+  Future<bool> isIncidentReportingAvailable(int viewId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIncidentReportingAvailable$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  Future<void> showReportIncidentsPanel(int viewId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showReportIncidentsPanel$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
   Future<CameraPositionDto> getCameraPosition(int viewId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCameraPosition$pigeonVar_messageChannelSuffix';
@@ -6111,6 +6170,8 @@ abstract class ViewEventApi {
 
   void onNavigationUIEnabledChanged(int viewId, bool navigationUIEnabled);
 
+  void onPromptVisibilityChanged(int viewId, bool promptVisible);
+
   void onMyLocationClicked(int viewId);
 
   void onMyLocationButtonClicked(int viewId);
@@ -6488,6 +6549,45 @@ abstract class ViewEventApi {
               arg_viewId!,
               arg_navigationUIEnabled!,
             );
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        pigeonVar_channel.setMessageHandler(null);
+      } else {
+        pigeonVar_channel.setMessageHandler((Object? message) async {
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged was null.',
+          );
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged was null, expected non-null int.',
+          );
+          final bool? arg_promptVisible = (args[1] as bool?);
+          assert(
+            arg_promptVisible != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged was null, expected non-null bool.',
+          );
+          try {
+            api.onPromptVisibilityChanged(arg_viewId!, arg_promptVisible!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
