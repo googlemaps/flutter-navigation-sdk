@@ -126,6 +126,16 @@ class NavigationUIEnabledChangedEvent {
   final bool navigationUIEnabled;
 }
 
+/// Represents prompt visibility changed event in a view.
+/// {@category Navigation View}
+class PromptVisibilityChangedEvent {
+  /// Creates a [PromptVisibilityChangedEvent] object.
+  const PromptVisibilityChangedEvent(this.promptVisible);
+
+  /// Value representing whether prompts are visible or not.
+  final bool promptVisible;
+}
+
 /// Represents the long click position in a Google Maps view.
 /// {@category Navigation View}
 /// {@category Map View}

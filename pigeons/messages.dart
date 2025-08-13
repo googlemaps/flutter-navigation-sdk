@@ -466,6 +466,9 @@ abstract class MapViewApi {
   bool isReportIncidentButtonEnabled(int viewId);
   void setReportIncidentButtonEnabled(int viewId, bool enabled);
 
+  bool isIncidentReportingAvailable(int viewId);
+  void showReportIncidentsPanel(int viewId);
+
   CameraPositionDto getCameraPosition(int viewId);
   LatLngBoundsDto getVisibleRegion(int viewId);
 
@@ -597,6 +600,7 @@ abstract class ViewEventApi {
   void onPolylineClicked(int viewId, String polylineId);
   void onCircleClicked(int viewId, String circleId);
   void onNavigationUIEnabledChanged(int viewId, bool navigationUIEnabled);
+  void onPromptVisibilityChanged(int viewId, bool promptVisible);
   void onMyLocationClicked(int viewId);
   void onMyLocationButtonClicked(int viewId);
   void onCameraChanged(

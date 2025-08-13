@@ -538,6 +538,20 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     _mapView.settings.isNavigationReportIncidentButtonEnabled = enabled
   }
 
+  func isIncidentReportingAvailable() -> Bool {
+    return _mapView.isIncidentReportingAvailable
+  }
+
+  func showReportIncidentsPanel() throws {
+    Task {
+      do {
+        try await _mapView.presentReportIncidentsPanel(nil)
+      } catch {
+        // Handle error silently
+      }
+    }
+  }
+
   func isTrafficPromptsEnabled() -> Bool {
     return _isTrafficPromptsEnabled
   }
@@ -1024,6 +1038,14 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
         completion: { _ in }
       )
     }
+  }
+
+  func sendPromptVisibilityChangedEvent(promptVisible: Bool) {
+    getViewEventApi()?.onPromptVisibilityChanged(
+      viewId: _viewId!,
+      promptVisible: promptVisible,
+      completion: { _ in }
+    )
   }
 }
 

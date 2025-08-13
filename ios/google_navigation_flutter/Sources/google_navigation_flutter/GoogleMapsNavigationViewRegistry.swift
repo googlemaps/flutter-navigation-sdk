@@ -92,4 +92,14 @@ class GoogleMapsNavigationViewRegistry {
       self.carPlayView
     }
   }
+
+  func sendPromptVisibilityChangedToAllViews(promptVisible: Bool) {
+    queue.sync {
+      for view in views.values {
+        view.sendPromptVisibilityChangedEvent(promptVisible: promptVisible)
+      }
+      // Also send to CarPlay view if it exists
+      carPlayView?.sendPromptVisibilityChangedEvent(promptVisible: promptVisible)
+    }
+  }
 }

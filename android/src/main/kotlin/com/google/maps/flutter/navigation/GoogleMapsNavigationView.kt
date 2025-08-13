@@ -22,6 +22,7 @@ import android.view.View
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.libraries.navigation.NavigationView
 import com.google.android.libraries.navigation.OnNavigationUiChangedListener
+import com.google.android.libraries.navigation.PromptVisibilityChangedListener
 import io.flutter.plugin.platform.PlatformView
 
 class GoogleMapsNavigationView
@@ -50,6 +51,8 @@ internal constructor(
   private var _onRecenterButtonClickedListener: NavigationView.OnRecenterButtonClickedListener? =
     null
   private var _onNavigationUIEnabledChanged: OnNavigationUiChangedListener? = null
+
+  private var _onPromptVisibilityChanged: PromptVisibilityChangedListener? = null
 
   override fun getView(): View {
     return _navigationView
@@ -111,6 +114,10 @@ internal constructor(
       _navigationView.removeOnNavigationUiChangedListener(_onNavigationUIEnabledChanged)
       _onNavigationUIEnabledChanged = null
     }
+    if (_onPromptVisibilityChanged != null) {
+      _navigationView.removePromptVisibilityChangedListener(_onPromptVisibilityChanged)
+      _onPromptVisibilityChanged = null
+    }
 
     // When view is disposed, all of these lifecycle functions must be
     // called to properly dispose navigation view and prevent leaks.
@@ -171,6 +178,11 @@ internal constructor(
       viewEventApi?.onNavigationUIEnabledChanged(getViewId().toLong(), it) {}
     }
     _navigationView.addOnNavigationUiChangedListener(_onNavigationUIEnabledChanged)
+
+    _onPromptVisibilityChanged = PromptVisibilityChangedListener { promptVisible ->
+      viewEventApi?.onPromptVisibilityChanged(getViewId().toLong(), promptVisible) {}
+    }
+    _navigationView.addPromptVisibilityChangedListener(_onPromptVisibilityChanged)
 
     super.initListeners()
   }
@@ -245,6 +257,14 @@ internal constructor(
   fun setReportIncidentButtonEnabled(enabled: Boolean) {
     _navigationView.setReportIncidentButtonEnabled(enabled)
     _isReportIncidentButtonEnabled = enabled
+  }
+
+  fun isIncidentReportingAvailable(): Boolean {
+    return _navigationView.isIncidentReportingAvailable()
+  }
+
+  fun showReportIncidentsPanel() {
+    _navigationView.showReportIncidentsPanel()
   }
 
   fun isTrafficPromptsEnabled(): Boolean {
