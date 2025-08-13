@@ -17,6 +17,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:meta/meta.dart';
 
 import '../../google_navigation_flutter.dart';
 import '../google_navigation_flutter_platform_interface.dart';
@@ -687,6 +688,18 @@ class MapViewAPIImpl {
     return _viewApi.setReportIncidentButtonEnabled(viewId, enabled);
   }
 
+  /// Checks if incident reporting is currently available.
+  @experimental
+  Future<bool> isIncidentReportingAvailable({required int viewId}) {
+    return _viewApi.isIncidentReportingAvailable(viewId);
+  }
+
+  /// Presents a panel allowing users to report an incident.
+  @experimental
+  Future<void> showReportIncidentsPanel({required int viewId}) {
+    return _viewApi.showReportIncidentsPanel(viewId);
+  }
+
   /// Are the traffic prompts displayed.
   Future<bool> isTrafficPromptsEnabled({required int viewId}) {
     return _viewApi.isTrafficPromptsEnabled(viewId);
@@ -1224,6 +1237,13 @@ class MapViewAPIImpl {
     return _unwrapEventStream<NavigationUIEnabledChangedEvent>(viewId: viewId);
   }
 
+  /// Get prompt visibility changed event stream from the navigation view.
+  Stream<PromptVisibilityChangedEvent> getPromptVisibilityChangedEventStream({
+    required int viewId,
+  }) {
+    return _unwrapEventStream<PromptVisibilityChangedEvent>(viewId: viewId);
+  }
+
   /// Get navigation view my location clicked event stream from the navigation view.
   Stream<MyLocationClickedEvent> getMyLocationClickedEventStream({
     required int viewId,
@@ -1328,6 +1348,13 @@ class ViewEventApiImpl implements ViewEventApi {
   void onNavigationUIEnabledChanged(int viewId, bool enabled) {
     _viewEventStreamController.add(
       _ViewIdEventWrapper(viewId, NavigationUIEnabledChangedEvent(enabled)),
+    );
+  }
+
+  @override
+  void onPromptVisibilityChanged(int viewId, bool promptVisible) {
+    _viewEventStreamController.add(
+      _ViewIdEventWrapper(viewId, PromptVisibilityChangedEvent(promptVisible)),
     );
   }
 

@@ -99,6 +99,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   int _onRemainingTimeOrDistanceChangedEventCallCount = 0;
   int _onNavigationUIEnabledChangedEventCallCount = 0;
   int _onNewNavigationSessionEventCallCount = 0;
+  int _onPromptVisibilityChangedEventCallCount = 0;
 
   bool _navigationHeaderEnabled = true;
   bool _navigationFooterEnabled = true;
@@ -605,6 +606,15 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         _navigationUIEnabled = enabled;
         _onNavigationUIEnabledChangedEventCallCount += 1;
       });
+    }
+  }
+
+  void _onPromptVisibilityChanged(bool promptVisible) {
+    if (mounted) {
+      setState(() {
+        _onPromptVisibilityChangedEventCallCount += 1;
+      });
+      showMessage('Prompt visibility changed: $promptVisible');
     }
   }
 
@@ -1203,6 +1213,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                               _onRecenterButtonClickedEvent,
                           onNavigationUIEnabledChanged:
                               _onNavigationUIEnabledChanged,
+                          onPromptVisibilityChanged: _onPromptVisibilityChanged,
                           initialCameraPosition: CameraPosition(
                             // Initialize map to user location.
                             target: _userLocation!,
@@ -1485,6 +1496,16 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   title: const Text('New navigation session event call count'),
                   trailing: Text(
                     _onNewNavigationSessionEventCallCount.toString(),
+                  ),
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  title: const Text(
+                    'On prompt visibility changed event call count',
+                  ),
+                  trailing: Text(
+                    _onPromptVisibilityChangedEventCallCount.toString(),
                   ),
                 ),
               ),
@@ -2000,6 +2021,33 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                             CameraPerspective.tilted,
                           ),
                       child: const Text('Follow my location'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        final bool available =
+                            await _navigationViewController!
+                                .isIncidentReportingAvailable();
+                        if (available) {
+                          await _navigationViewController!
+                              .showReportIncidentsPanel();
+                        } else {
+                          if (context.mounted) {
+                            showMessage('Incident reporting is not available');
+                          }
+                        }
+                      },
+                      child: const Text('Report Incident'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        final bool available =
+                            await _navigationViewController!
+                                .isIncidentReportingAvailable();
+                        showMessage('Incident reporting available: $available');
+                      },
+                      child: const Text(
+                        'Check incident reporting availability',
+                      ),
                     ),
                   ],
                 ),

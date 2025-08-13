@@ -110,6 +110,9 @@ typedef OnCircleClicked = void Function(String circleId);
 /// Called when the [GoogleNavigationViewController.isNavigationUIEnabled] status changes.
 typedef OnNavigationUIEnabledChanged = void Function(bool navigationUIEnabled);
 
+/// Called when the visibility of navigation prompts changes.
+typedef OnPromptVisibilityChanged = void Function(bool promptVisible);
+
 /// Called during my location clicked event.
 typedef OnMyLocationClicked = void Function(MyLocationClickedEvent);
 

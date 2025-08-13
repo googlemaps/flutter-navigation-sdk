@@ -78,6 +78,7 @@ class GoogleMapsNavigationView extends GoogleMapsBaseMapView {
     super.onPolylineClicked,
     super.onCircleClicked,
     this.onNavigationUIEnabledChanged,
+    this.onPromptVisibilityChanged,
     super.onMyLocationClicked,
     super.onMyLocationButtonClicked,
     super.onCameraMoveStarted,
@@ -135,6 +136,9 @@ class GoogleMapsNavigationView extends GoogleMapsBaseMapView {
 
   /// On navigation UI enabled changed callback.
   final OnNavigationUIEnabledChanged? onNavigationUIEnabledChanged;
+
+  /// On prompt visibility changed callback.
+  final OnPromptVisibilityChanged? onPromptVisibilityChanged;
 
   /// Creates a [State] for this [GoogleMapsNavigationView].
   @override
@@ -212,6 +216,13 @@ class GoogleMapsNavigationViewState
             widget.onNavigationUIEnabledChanged?.call(
               event.navigationUIEnabled,
             );
+          });
+    }
+    if (widget.onPromptVisibilityChanged != null) {
+      GoogleMapsNavigationPlatform.instance.viewAPI
+          .getPromptVisibilityChangedEventStream(viewId: viewId)
+          .listen((PromptVisibilityChangedEvent event) {
+            widget.onPromptVisibilityChanged?.call(event.promptVisible);
           });
     }
     if (widget.onMyLocationButtonClicked != null) {

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:meta/meta.dart';
+
 import '../google_navigation_flutter.dart';
 import 'google_navigation_flutter_platform_interface.dart';
 
@@ -33,6 +35,8 @@ class GoogleNavigationViewController extends GoogleMapViewController {
   /// Enable or disable the navigation trip progress bar.
   ///
   /// By default, the navigation trip progress bar is disabled.
+  /// This feature is experimental and may change in the future.
+  @experimental
   Future<void> setNavigationTripProgressBarEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance.viewAPI
         .setNavigationTripProgressBarEnabled(
@@ -129,6 +133,28 @@ class GoogleNavigationViewController extends GoogleMapViewController {
   Future<void> setReportIncidentButtonEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance.viewAPI
         .setReportIncidentButtonEnabled(viewId: getViewId(), enabled: enabled);
+  }
+
+  /// Checks if incident reporting is currently available.
+  ///
+  /// Returns true if the user can report incidents at the current time,
+  /// false otherwise.
+  /// This feature is experimental and may change in the future.
+  @experimental
+  Future<bool> isIncidentReportingAvailable() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .isIncidentReportingAvailable(viewId: getViewId());
+  }
+
+  /// Presents a panel allowing users to report an incident.
+  ///
+  /// This method displays the incident reporting UI where users can select
+  /// and report various types of incidents along the route.
+  /// This feature is experimental and may change in the future.
+  @experimental
+  Future<void> showReportIncidentsPanel() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .showReportIncidentsPanel(viewId: getViewId());
   }
 
   /// Are the traffic prompts shown.

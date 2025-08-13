@@ -492,6 +492,10 @@ abstract class TestMapViewApi {
 
   void setReportIncidentButtonEnabled(int viewId, bool enabled);
 
+  bool isIncidentReportingAvailable(int viewId);
+
+  void showReportIncidentsPanel(int viewId);
+
   CameraPositionDto getCameraPosition(int viewId);
 
   LatLngBoundsDto getVisibleRegion(int viewId);
@@ -2680,6 +2684,90 @@ abstract class TestMapViewApi {
             );
           }
         });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIncidentReportingAvailable$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
+              Object? message,
+            ) async {
+              assert(
+                message != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIncidentReportingAvailable was null.',
+              );
+              final List<Object?> args = (message as List<Object?>?)!;
+              final int? arg_viewId = (args[0] as int?);
+              assert(
+                arg_viewId != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIncidentReportingAvailable was null, expected non-null int.',
+              );
+              try {
+                final bool output = api.isIncidentReportingAvailable(
+                  arg_viewId!,
+                );
+                return <Object?>[output];
+              } on PlatformException catch (e) {
+                return wrapResponse(error: e);
+              } catch (e) {
+                return wrapResponse(
+                  error: PlatformException(
+                    code: 'error',
+                    message: e.toString(),
+                  ),
+                );
+              }
+            });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showReportIncidentsPanel$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
+              Object? message,
+            ) async {
+              assert(
+                message != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showReportIncidentsPanel was null.',
+              );
+              final List<Object?> args = (message as List<Object?>?)!;
+              final int? arg_viewId = (args[0] as int?);
+              assert(
+                arg_viewId != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showReportIncidentsPanel was null, expected non-null int.',
+              );
+              try {
+                api.showReportIncidentsPanel(arg_viewId!);
+                return wrapResponse(empty: true);
+              } on PlatformException catch (e) {
+                return wrapResponse(error: e);
+              } catch (e) {
+                return wrapResponse(
+                  error: PlatformException(
+                    code: 'error',
+                    message: e.toString(),
+                  ),
+                );
+              }
+            });
       }
     }
     {

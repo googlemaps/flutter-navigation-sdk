@@ -2554,6 +2554,8 @@ protocol MapViewApi {
   func setTrafficPromptsEnabled(viewId: Int64, enabled: Bool) throws
   func isReportIncidentButtonEnabled(viewId: Int64) throws -> Bool
   func setReportIncidentButtonEnabled(viewId: Int64, enabled: Bool) throws
+  func isIncidentReportingAvailable(viewId: Int64) throws -> Bool
+  func showReportIncidentsPanel(viewId: Int64) throws
   func getCameraPosition(viewId: Int64) throws -> CameraPositionDto
   func getVisibleRegion(viewId: Int64) throws -> LatLngBoundsDto
   func followMyLocation(viewId: Int64, perspective: CameraPerspectiveDto, zoomLevel: Double?) throws
@@ -3528,6 +3530,42 @@ class MapViewApiSetup {
       }
     } else {
       setReportIncidentButtonEnabledChannel.setMessageHandler(nil)
+    }
+    let isIncidentReportingAvailableChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIncidentReportingAvailable\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      isIncidentReportingAvailableChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] as! Int64
+        do {
+          let result = try api.isIncidentReportingAvailable(viewId: viewIdArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      isIncidentReportingAvailableChannel.setMessageHandler(nil)
+    }
+    let showReportIncidentsPanelChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showReportIncidentsPanel\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      showReportIncidentsPanelChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] as! Int64
+        do {
+          try api.showReportIncidentsPanel(viewId: viewIdArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      showReportIncidentsPanelChannel.setMessageHandler(nil)
     }
     let getCameraPositionChannel = FlutterBasicMessageChannel(
       name:
@@ -4564,6 +4602,9 @@ protocol ViewEventApiProtocol {
   func onNavigationUIEnabledChanged(
     viewId viewIdArg: Int64, navigationUIEnabled navigationUIEnabledArg: Bool,
     completion: @escaping (Result<Void, PigeonError>) -> Void)
+  func onPromptVisibilityChanged(
+    viewId viewIdArg: Int64, promptVisible promptVisibleArg: Bool,
+    completion: @escaping (Result<Void, PigeonError>) -> Void)
   func onMyLocationClicked(
     viewId viewIdArg: Int64, completion: @escaping (Result<Void, PigeonError>) -> Void)
   func onMyLocationButtonClicked(
@@ -4777,6 +4818,29 @@ class ViewEventApi: ViewEventApiProtocol {
     let channel = FlutterBasicMessageChannel(
       name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage([viewIdArg, navigationUIEnabledArg] as [Any?]) { response in
+      guard let listResponse = response as? [Any?] else {
+        completion(.failure(createConnectionError(withChannelName: channelName)))
+        return
+      }
+      if listResponse.count > 1 {
+        let code: String = listResponse[0] as! String
+        let message: String? = nilOrValue(listResponse[1])
+        let details: String? = nilOrValue(listResponse[2])
+        completion(.failure(PigeonError(code: code, message: message, details: details)))
+      } else {
+        completion(.success(()))
+      }
+    }
+  }
+  func onPromptVisibilityChanged(
+    viewId viewIdArg: Int64, promptVisible promptVisibleArg: Bool,
+    completion: @escaping (Result<Void, PigeonError>) -> Void
+  ) {
+    let channelName: String =
+      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged\(messageChannelSuffix)"
+    let channel = FlutterBasicMessageChannel(
+      name: channelName, binaryMessenger: binaryMessenger, codec: codec)
+    channel.sendMessage([viewIdArg, promptVisibleArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
