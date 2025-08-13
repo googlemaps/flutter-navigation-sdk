@@ -2797,6 +2797,10 @@ interface MapViewApi {
 
   fun setReportIncidentButtonEnabled(viewId: Long, enabled: Boolean)
 
+  fun isIncidentReportingAvailable(viewId: Long): Boolean
+
+  fun showReportIncidentsPanel(viewId: Long)
+
   fun getCameraPosition(viewId: Long): CameraPositionDto
 
   fun getVisibleRegion(viewId: Long): LatLngBoundsDto
@@ -4110,6 +4114,53 @@ interface MapViewApi {
             val wrapped: List<Any?> =
               try {
                 api.setReportIncidentButtonEnabled(viewIdArg, enabledArg)
+                listOf(null)
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIncidentReportingAvailable$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val wrapped: List<Any?> =
+              try {
+                listOf(api.isIncidentReportingAvailable(viewIdArg))
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showReportIncidentsPanel$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val wrapped: List<Any?> =
+              try {
+                api.showReportIncidentsPanel(viewIdArg)
                 listOf(null)
               } catch (exception: Throwable) {
                 MessagesPigeonUtils.wrapError(exception)
@@ -5616,6 +5667,29 @@ class ViewEventApi(
       "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onNavigationUIEnabledChanged$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(viewIdArg, navigationUIEnabledArg)) {
+      if (it is List<*>) {
+        if (it.size > 1) {
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+        } else {
+          callback(Result.success(Unit))
+        }
+      } else {
+        callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
+      }
+    }
+  }
+
+  fun onPromptVisibilityChanged(
+    viewIdArg: Long,
+    promptVisibleArg: Boolean,
+    callback: (Result<Unit>) -> Unit,
+  ) {
+    val separatedMessageChannelSuffix =
+      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName =
+      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged$separatedMessageChannelSuffix"
+    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
+    channel.send(listOf(viewIdArg, promptVisibleArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))

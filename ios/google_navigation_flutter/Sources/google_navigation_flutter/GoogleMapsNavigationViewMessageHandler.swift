@@ -422,6 +422,14 @@ class GoogleMapsNavigationViewMessageHandler: MapViewApi {
     try getView(viewId).isReportIncidentButtonEnabled()
   }
 
+  func isIncidentReportingAvailable(viewId: Int64) throws -> Bool {
+    try getView(viewId).isIncidentReportingAvailable()
+  }
+
+  func showReportIncidentsPanel(viewId: Int64) throws {
+    try getView(viewId).showReportIncidentsPanel()
+  }
+
   func isTrafficPromptsEnabled(viewId: Int64) throws -> Bool {
     try getView(viewId).isTrafficPromptsEnabled()
   }
