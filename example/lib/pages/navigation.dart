@@ -111,6 +111,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   bool _trafficIndicentCardsEnabled = false;
   bool _trafficPromptsEnabled = true;
   bool _reportIncidentButtonEnabled = true;
+  bool _buildingsEnabled = true;
 
   bool _termsAndConditionsAccepted = false;
   bool _locationPermissionsAccepted = false;
@@ -576,6 +577,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
           await _navigationViewController!.isTrafficPromptsEnabled();
       final bool reportIncidentButtonEnabled =
           await _navigationViewController!.isReportIncidentButtonEnabled();
+      final bool buildingsEnabled =
+          await _navigationViewController!.isBuildingsEnabled();
 
       setState(() {
         _navigationHeaderEnabled = navigationHeaderEnabled;
@@ -588,6 +591,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         _trafficIndicentCardsEnabled = trafficIndicentCardsEnabled;
         _trafficPromptsEnabled = trafficPromptsEnabled;
         _reportIncidentButtonEnabled = reportIncidentButtonEnabled;
+        _buildingsEnabled = buildingsEnabled;
       });
     }
   }
@@ -1811,6 +1815,18 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                         .setReportIncidentButtonEnabled(newValue);
                     setState(() {
                       _reportIncidentButtonEnabled = newValue;
+                    });
+                  },
+                ),
+                ExampleSwitch(
+                  title: 'Show 3D buildings',
+                  initialValue: _buildingsEnabled,
+                  onChanged: (bool newValue) async {
+                    await _navigationViewController!.setBuildingsEnabled(
+                      newValue,
+                    );
+                    setState(() {
+                      _buildingsEnabled = newValue;
                     });
                   },
                 ),

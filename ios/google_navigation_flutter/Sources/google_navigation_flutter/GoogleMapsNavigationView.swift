@@ -338,6 +338,14 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     _mapView.isTrafficEnabled
   }
 
+  func isBuildingsEnabled() -> Bool {
+    _mapView.isBuildingsEnabled
+  }
+
+  func setBuildingsEnabled(_ enabled: Bool) {
+    _mapView.isBuildingsEnabled = enabled
+  }
+
   func showRouteOverview() {
     _mapView.cameraMode = .overview
   }

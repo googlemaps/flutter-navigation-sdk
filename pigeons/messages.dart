@@ -469,6 +469,9 @@ abstract class MapViewApi {
   bool isIncidentReportingAvailable(int viewId);
   void showReportIncidentsPanel(int viewId);
 
+  bool isBuildingsEnabled(int viewId);
+  void setBuildingsEnabled(int viewId, bool enabled);
+
   CameraPositionDto getCameraPosition(int viewId);
   LatLngBoundsDto getVisibleRegion(int viewId);
 

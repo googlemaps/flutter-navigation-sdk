@@ -674,6 +674,7 @@ void main() {
           when(viewMockApi.isTrafficPromptsEnabled(any)).thenReturn(true);
           when(viewMockApi.isReportIncidentButtonEnabled(any)).thenReturn(true);
           when(viewMockApi.isIncidentReportingAvailable(any)).thenReturn(true);
+          when(viewMockApi.isBuildingsEnabled(any)).thenReturn(false);
           when(viewMockApi.isNavigationHeaderEnabled(any)).thenReturn(true);
           when(viewMockApi.isNavigationFooterEnabled(any)).thenReturn(true);
           when(viewMockApi.isSpeedLimitIconEnabled(any)).thenReturn(true);
@@ -745,6 +746,7 @@ void main() {
           await controller.setTrafficPromptsEnabled(true);
           await controller.setReportIncidentButtonEnabled(true);
           await controller.showReportIncidentsPanel();
+          await controller.setBuildingsEnabled(true);
           await controller.setNavigationHeaderEnabled(true);
           await controller.setNavigationFooterEnabled(true);
           await controller.setSpeedLimitIconEnabled(true);
@@ -821,6 +823,10 @@ void main() {
           );
           verify(viewMockApi.showReportIncidentsPanel(captureAny));
           verifyEnabled(
+            verify(viewMockApi.setBuildingsEnabled(captureAny, captureAny)),
+            true,
+          );
+          verifyEnabled(
             verify(
               viewMockApi.setNavigationHeaderEnabled(captureAny, captureAny),
             ),
@@ -867,6 +873,7 @@ void main() {
           when(
             viewMockApi.isReportIncidentButtonEnabled(any),
           ).thenReturn(false);
+          when(viewMockApi.isBuildingsEnabled(any)).thenReturn(false);
 
           // Test isIncidentReportingAvailable
           final bool isAvailable =
@@ -899,6 +906,26 @@ void main() {
           );
           expect(setButtonEnabledResult.captured[0] as int, viewId);
           expect(setButtonEnabledResult.captured[1] as bool, true);
+
+          // Test isBuildingsEnabled
+          final bool isBuildingsEnabled = await controller.isBuildingsEnabled();
+          expect(isBuildingsEnabled, false);
+
+          // Verify the API was called
+          final VerificationResult buildingsEnabledResult = verify(
+            viewMockApi.isBuildingsEnabled(captureAny),
+          );
+          expect(buildingsEnabledResult.captured[0] as int, viewId);
+
+          // Test setBuildingsEnabled
+          await controller.setBuildingsEnabled(true);
+
+          // Verify the API was called with correct parameters
+          final VerificationResult setBuildingsEnabledResult = verify(
+            viewMockApi.setBuildingsEnabled(captureAny, captureAny),
+          );
+          expect(setBuildingsEnabledResult.captured[0] as int, viewId);
+          expect(setBuildingsEnabledResult.captured[1] as bool, true);
 
           // Test showReportIncidentsPanel
           await controller.showReportIncidentsPanel();
