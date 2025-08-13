@@ -29,7 +29,6 @@
 		9BAC8E60A263AA40A946AFCF /* Pods_Runner_RunnerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 981DBDBFB0E241F931B1E394 /* Pods_Runner_RunnerUITests.framework */; };
 		C9CBB6602AD89694007C737E /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 506F57582AD8055D004AC70F /* XCTest.framework */; platformFilter = ios; };
 		D3A3B5ED895816BDF2A70351 /* Pods_RunnerCarPlay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B269F01B5CD151328AA7F8EB /* Pods_RunnerCarPlay.framework */; };
-		DA52652595AF0077243F8014 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64B801515FD75D36D58A86FE /* Pods_Runner.framework */; };
 		EDFE577D2F64CF5D3712A4E9 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64B801515FD75D36D58A86FE /* Pods_Runner.framework */; };
 		78A318202AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 78A3181F2AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage */; };
 /* End PBXBuildFile section */
@@ -143,7 +142,6 @@
 			files = (
 				78A318202AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage in Frameworks */,
 				EDFE577D2F64CF5D3712A4E9 /* Pods_Runner.framework in Frameworks */,
-				DA52652595AF0077243F8014 /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -452,9 +450,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -522,9 +524,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner-RunnerUITests/Pods-Runner-RunnerUITests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner-RunnerUITests/Pods-Runner-RunnerUITests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -606,9 +612,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RunnerCarPlay/Pods-RunnerCarPlay-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RunnerCarPlay/Pods-RunnerCarPlay-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -623,9 +633,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner-RunnerUITests/Pods-Runner-RunnerUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner-RunnerUITests/Pods-Runner-RunnerUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -684,9 +698,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RunnerCarPlay/Pods-RunnerCarPlay-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RunnerCarPlay/Pods-RunnerCarPlay-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -723,9 +741,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
