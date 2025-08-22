@@ -75,9 +75,7 @@ jobs:
         run: |
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
-          curl -O https://raw.githubusercontent.com/Homebrew/homebrew-core/402e262f48947bad849ea7793752ff16b7038406/Formula/s/swift-format.rb
-          echo 'brew "swift-format.rb"' > Brewfile
-          brew bundle
+          brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/402e262f48947bad849ea7793752ff16b7038406/Formula/s/swift-format.rb
       - name: Save Cache
         uses: actions/cache/save@v4
         if: steps.cache.outputs.cache-hit != 'true'
