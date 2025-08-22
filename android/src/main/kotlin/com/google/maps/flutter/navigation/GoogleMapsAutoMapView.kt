@@ -41,14 +41,19 @@ internal constructor(
   }
 
   // Handled by AndroidAutoBaseScreen.
-  override fun onStart() {}
+  override fun onStart():Boolean {
+    return super.onStart()
+  }
 
-  // Handled by AndroidAutoBaseScreen.
-  override fun onResume() {}
+  override fun onResume():Boolean {
+    return super.onResume()
+  }
 
-  // Handled by AndroidAutoBaseScreen.
-  override fun onStop() {}
+  override fun onStop():Boolean {
+    return super.onStop()
+  }
 
-  // Handled by AndroidAutoBaseScreen.
-  override fun onPause() {}
+  override fun onPause():Boolean {
+    return super.onPause()
+  }
 }

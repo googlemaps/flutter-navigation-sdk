@@ -21,6 +21,7 @@ import android.content.res.Configuration
 import android.view.View
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.libraries.navigation.NavigationView
+import com.google.android.libraries.navigation.OnNavigationUiChangedListener
 import io.flutter.plugin.platform.PlatformView
 
 class GoogleMapsNavigationView
@@ -46,6 +47,9 @@ internal constructor(
   private var _isReportIncidentButtonEnabled: Boolean = true
   private var _isTrafficPromptsEnabled: Boolean = true
 
+  private var _onRecenterButtonClickedListener: NavigationView.OnRecenterButtonClickedListener? = null
+  private var _onNavigationUIEnabledChanged: OnNavigationUiChangedListener? = null
+
   override fun getView(): View {
     return _navigationView
   }
@@ -54,8 +58,8 @@ internal constructor(
     // Call all of these three lifecycle functions in sequence to fully
     // initialize the navigation view.
     _navigationView.onCreate(context.applicationInfo.metaData)
-    _navigationView.onStart()
-    _navigationView.onResume()
+    onStart()
+    onResume()
 
     // Initialize navigation view with given navigation view options
     var navigationViewEnabled = false
@@ -91,42 +95,60 @@ internal constructor(
   }
 
   override fun dispose() {
-    getMap().setOnMapClickListener(null)
-    getMap().setOnMapLongClickListener(null)
-    getMap().setOnMarkerClickListener(null)
-    getMap().setOnMarkerDragListener(null)
-    getMap().setOnInfoWindowClickListener(null)
-    getMap().setOnInfoWindowClickListener(null)
-    getMap().setOnInfoWindowLongClickListener(null)
-    getMap().setOnPolygonClickListener(null)
-    getMap().setOnPolylineClickListener(null)
+    if (super.isDestroyed()) {
+      return
+    }
+
+    viewRegistry.unregisterNavigationView(getViewId())
+
+    // Remove navigation view specific listeners
+    if (_onRecenterButtonClickedListener != null) {
+      _navigationView.removeOnRecenterButtonClickedListener(_onRecenterButtonClickedListener)
+      _onRecenterButtonClickedListener = null
+    }
+    if (_onNavigationUIEnabledChanged != null) {
+      _navigationView.removeOnNavigationUiChangedListener(_onNavigationUIEnabledChanged)
+      _onNavigationUIEnabledChanged = null
+    }
 
     // When view is disposed, all of these lifecycle functions must be
     // called to properly dispose navigation view and prevent leaks.
-    _navigationView.isNavigationUiEnabled = false
-    _navigationView.onPause()
-    _navigationView.onStop()
+    onPause()
+    onStop()
+    super.onDispose()
     _navigationView.onDestroy()
-
-    _navigationView.removeOnRecenterButtonClickedListener {}
-
-    viewRegistry.unregisterNavigationView(getViewId())
   }
 
-  override fun onStart() {
-    _navigationView.onStart()
+  override fun onStart():Boolean {
+    if (super.onStart()) {
+      _navigationView.onStart()
+      return true
+    }
+    return false
   }
 
-  override fun onResume() {
-    _navigationView.onResume()
+  override fun onResume():Boolean {
+    if (super.onResume()) {
+      _navigationView.onResume()
+      return true
+    }
+    return false
   }
 
-  override fun onStop() {
-    _navigationView.onStop()
+  override fun onStop():Boolean {
+    if (super.onStop()) {
+      _navigationView.onStop()
+      return true
+    }
+    return false
   }
 
-  override fun onPause() {
-    _navigationView.onPause()
+  override fun onPause():Boolean {
+    if (super.onPause()) {
+      _navigationView.onPause()
+      return true
+    }
+    return false
   }
 
   fun onConfigurationChanged(configuration: Configuration) {
@@ -138,12 +160,16 @@ internal constructor(
   }
 
   override fun initListeners() {
-    _navigationView.addOnRecenterButtonClickedListener {
+    _onRecenterButtonClickedListener = NavigationView.OnRecenterButtonClickedListener {
       viewEventApi?.onRecenterButtonClicked(getViewId().toLong()) {}
     }
-    _navigationView.addOnNavigationUiChangedListener {
+    _navigationView.addOnRecenterButtonClickedListener(_onRecenterButtonClickedListener)
+
+    _onNavigationUIEnabledChanged = OnNavigationUiChangedListener {
       viewEventApi?.onNavigationUIEnabledChanged(getViewId().toLong(), it) {}
     }
+    _navigationView.addOnNavigationUiChangedListener(_onNavigationUIEnabledChanged)
+
     super.initListeners()
   }
 
