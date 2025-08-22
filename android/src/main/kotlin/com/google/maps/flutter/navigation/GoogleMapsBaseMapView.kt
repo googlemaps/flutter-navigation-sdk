@@ -71,8 +71,9 @@ abstract class GoogleMapsBaseMapView(
     RESUMED,
     PAUSED,
     STOPPED,
-    DESTROYED
+    DESTROYED,
   }
+
   // Current lifecycle state tracks the state of the view.
   // This is used to avoid calling lifecycle methods in the wrong order.
   private var currentLifecycleState: LifecycleState = LifecycleState.NONE
@@ -80,7 +81,10 @@ abstract class GoogleMapsBaseMapView(
   abstract fun getView(): View
 
   open fun onStart(): Boolean {
-    if (currentLifecycleState == LifecycleState.STOPPED || currentLifecycleState == LifecycleState.NONE) {
+    if (
+      currentLifecycleState == LifecycleState.STOPPED ||
+        currentLifecycleState == LifecycleState.NONE
+    ) {
       currentLifecycleState = LifecycleState.STARTED
       return true
     }
@@ -88,7 +92,10 @@ abstract class GoogleMapsBaseMapView(
   }
 
   open fun onResume(): Boolean {
-    if (currentLifecycleState == LifecycleState.STARTED || currentLifecycleState == LifecycleState.PAUSED) {
+    if (
+      currentLifecycleState == LifecycleState.STARTED ||
+        currentLifecycleState == LifecycleState.PAUSED
+    ) {
       currentLifecycleState = LifecycleState.RESUMED
       return true
     }
@@ -96,7 +103,10 @@ abstract class GoogleMapsBaseMapView(
   }
 
   open fun onStop(): Boolean {
-    if (currentLifecycleState == LifecycleState.PAUSED || currentLifecycleState == LifecycleState.STARTED) {
+    if (
+      currentLifecycleState == LifecycleState.PAUSED ||
+        currentLifecycleState == LifecycleState.STARTED
+    ) {
       currentLifecycleState = LifecycleState.STOPPED
       return true
     }
@@ -110,7 +120,7 @@ abstract class GoogleMapsBaseMapView(
     }
     return false
   }
-  
+
   protected fun isDestroyed(): Boolean {
     return currentLifecycleState == LifecycleState.DESTROYED
   }
@@ -280,8 +290,8 @@ abstract class GoogleMapsBaseMapView(
 
     // Clear surfaceTextureListener
     val textureView = findTextureView(getView()) ?: return
-    textureView.surfaceTextureListener = null;
-    _map = null;
+    textureView.surfaceTextureListener = null
+    _map = null
 
     currentLifecycleState = LifecycleState.DESTROYED
   }

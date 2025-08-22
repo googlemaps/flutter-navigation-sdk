@@ -47,7 +47,8 @@ internal constructor(
   private var _isReportIncidentButtonEnabled: Boolean = true
   private var _isTrafficPromptsEnabled: Boolean = true
 
-  private var _onRecenterButtonClickedListener: NavigationView.OnRecenterButtonClickedListener? = null
+  private var _onRecenterButtonClickedListener: NavigationView.OnRecenterButtonClickedListener? =
+    null
   private var _onNavigationUIEnabledChanged: OnNavigationUiChangedListener? = null
 
   override fun getView(): View {
@@ -119,7 +120,7 @@ internal constructor(
     _navigationView.onDestroy()
   }
 
-  override fun onStart():Boolean {
+  override fun onStart(): Boolean {
     if (super.onStart()) {
       _navigationView.onStart()
       return true
@@ -127,7 +128,7 @@ internal constructor(
     return false
   }
 
-  override fun onResume():Boolean {
+  override fun onResume(): Boolean {
     if (super.onResume()) {
       _navigationView.onResume()
       return true
@@ -135,7 +136,7 @@ internal constructor(
     return false
   }
 
-  override fun onStop():Boolean {
+  override fun onStop(): Boolean {
     if (super.onStop()) {
       _navigationView.onStop()
       return true
@@ -143,7 +144,7 @@ internal constructor(
     return false
   }
 
-  override fun onPause():Boolean {
+  override fun onPause(): Boolean {
     if (super.onPause()) {
       _navigationView.onPause()
       return true
@@ -160,9 +161,10 @@ internal constructor(
   }
 
   override fun initListeners() {
-    _onRecenterButtonClickedListener = NavigationView.OnRecenterButtonClickedListener {
-      viewEventApi?.onRecenterButtonClicked(getViewId().toLong()) {}
-    }
+    _onRecenterButtonClickedListener =
+      NavigationView.OnRecenterButtonClickedListener {
+        viewEventApi?.onRecenterButtonClicked(getViewId().toLong()) {}
+      }
     _navigationView.addOnRecenterButtonClickedListener(_onRecenterButtonClickedListener)
 
     _onNavigationUIEnabledChanged = OnNavigationUiChangedListener {

@@ -69,7 +69,7 @@ internal constructor(
     _mapView.onDestroy()
   }
 
-  override fun onStart():Boolean {
+  override fun onStart(): Boolean {
     if (super.onStart()) {
       _mapView.onStart()
       return true
@@ -77,7 +77,7 @@ internal constructor(
     return false
   }
 
-  override fun onResume():Boolean {
+  override fun onResume(): Boolean {
     if (super.onResume()) {
       _mapView.onResume()
       return true
@@ -85,7 +85,7 @@ internal constructor(
     return false
   }
 
-  override fun onStop():Boolean {
+  override fun onStop(): Boolean {
     if (super.onStop()) {
       _mapView.onStop()
       return true
@@ -93,7 +93,7 @@ internal constructor(
     return false
   }
 
-  override fun onPause():Boolean {
+  override fun onPause(): Boolean {
     if (super.onPause()) {
       _mapView.onPause()
       return true
