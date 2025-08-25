@@ -61,18 +61,69 @@ abstract class GoogleMapsBaseMapView(
   private var _mapReadyCallback: ((Result<Unit>) -> Unit)? = null
   private var _pendingCameraEventsListenerSetup = false
 
-  /// Default values for UI features.
+  // Default values for UI features.
   private var _consumeMyLocationButtonClickEventsEnabled: Boolean = false
+
+  // View lifecycle states.
+  private enum class LifecycleState {
+    NONE,
+    STARTED,
+    RESUMED,
+    PAUSED,
+    STOPPED,
+    DESTROYED,
+  }
+
+  // Current lifecycle state tracks the state of the view.
+  // This is used to avoid calling lifecycle methods in the wrong order.
+  private var currentLifecycleState: LifecycleState = LifecycleState.NONE
 
   abstract fun getView(): View
 
-  abstract fun onStart()
+  open fun onStart(): Boolean {
+    if (
+      currentLifecycleState == LifecycleState.STOPPED ||
+        currentLifecycleState == LifecycleState.NONE
+    ) {
+      currentLifecycleState = LifecycleState.STARTED
+      return true
+    }
+    return false
+  }
 
-  abstract fun onResume()
+  open fun onResume(): Boolean {
+    if (
+      currentLifecycleState == LifecycleState.STARTED ||
+        currentLifecycleState == LifecycleState.PAUSED
+    ) {
+      currentLifecycleState = LifecycleState.RESUMED
+      return true
+    }
+    return false
+  }
 
-  abstract fun onStop()
+  open fun onStop(): Boolean {
+    if (
+      currentLifecycleState == LifecycleState.PAUSED ||
+        currentLifecycleState == LifecycleState.STARTED
+    ) {
+      currentLifecycleState = LifecycleState.STOPPED
+      return true
+    }
+    return false
+  }
 
-  abstract fun onPause()
+  open fun onPause(): Boolean {
+    if (currentLifecycleState == LifecycleState.RESUMED) {
+      currentLifecycleState = LifecycleState.PAUSED
+      return true
+    }
+    return false
+  }
+
+  protected fun isDestroyed(): Boolean {
+    return currentLifecycleState == LifecycleState.DESTROYED
+  }
 
   // Method to set the _map object
   protected fun setMap(map: GoogleMap) {
@@ -216,6 +267,33 @@ abstract class GoogleMapsBaseMapView(
     if (_pendingCameraEventsListenerSetup) {
       setOnCameraChangedListeners()
     }
+  }
+
+  protected open fun onDispose() {
+    getMap().run {
+      setOnMapClickListener(null)
+      setOnMapLongClickListener(null)
+      setOnMarkerClickListener(null)
+      setOnMarkerDragListener(null)
+      setOnInfoWindowClickListener(null)
+      setOnInfoWindowClickListener(null)
+      setOnInfoWindowLongClickListener(null)
+      setOnPolygonClickListener(null)
+      setOnPolylineClickListener(null)
+      setOnMyLocationClickListener(null)
+      setOnMyLocationButtonClickListener(null)
+      setOnFollowMyLocationCallback(null)
+      setOnCameraMoveStartedListener(null)
+      setOnCameraMoveListener(null)
+      setOnCameraIdleListener(null)
+    }
+
+    // Clear surfaceTextureListener
+    val textureView = findTextureView(getView()) ?: return
+    textureView.surfaceTextureListener = null
+    _map = null
+
+    currentLifecycleState = LifecycleState.DESTROYED
   }
 
   // Installs a custom invalidator for the map view.
