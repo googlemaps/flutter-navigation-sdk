@@ -40,8 +40,8 @@ internal constructor(
     // Call all of these three lifecycle functions in sequence to fully
     // initialize the map view.
     _mapView.onCreate(context.applicationInfo.metaData)
-    _mapView.onStart()
-    _mapView.onResume()
+    onStart()
+    onResume()
 
     viewRegistry.registerMapView(viewId, this)
 
@@ -55,28 +55,49 @@ internal constructor(
   }
 
   override fun dispose() {
+    if (super.isDestroyed()) {
+      return
+    }
+
+    viewRegistry.unregisterNavigationView(getViewId())
+
     // When view is disposed, all of these lifecycle functions must be
     // called to properly dispose navigation view and prevent leaks.
-    _mapView.onPause()
-    _mapView.onStop()
+    onPause()
+    onStop()
+    super.onDispose()
     _mapView.onDestroy()
-
-    viewRegistry.unregisterMapView(getViewId())
   }
 
-  override fun onStart() {
-    _mapView.onStart()
+  override fun onStart(): Boolean {
+    if (super.onStart()) {
+      _mapView.onStart()
+      return true
+    }
+    return false
   }
 
-  override fun onResume() {
-    _mapView.onResume()
+  override fun onResume(): Boolean {
+    if (super.onResume()) {
+      _mapView.onResume()
+      return true
+    }
+    return false
   }
 
-  override fun onStop() {
-    _mapView.onStop()
+  override fun onStop(): Boolean {
+    if (super.onStop()) {
+      _mapView.onStop()
+      return true
+    }
+    return false
   }
 
-  override fun onPause() {
-    _mapView.onPause()
+  override fun onPause(): Boolean {
+    if (super.onPause()) {
+      _mapView.onPause()
+      return true
+    }
+    return false
   }
 }
