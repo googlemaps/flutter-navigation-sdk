@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.5](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.6.4...0.6.5) (2025-08-28)
+
+
+### Bug Fixes
+
+* view dispose crash on android if view is on background ([#453](https://github.com/googlemaps/flutter-navigation-sdk/issues/453)) ([9774479](https://github.com/googlemaps/flutter-navigation-sdk/commit/977447918151a0d1a46616c0c13d89c622459ee7))
+
 ## [0.6.4](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.6.3...0.6.4) (2025-08-08)
 
 
