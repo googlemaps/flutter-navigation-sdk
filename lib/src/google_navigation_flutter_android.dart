@@ -96,23 +96,21 @@ class GoogleMapsNavigationAndroid extends GoogleMapsNavigationPlatform {
           // Wait map to be ready before calling [onMapReady] callback
           await viewAPI.awaitMapReady(viewId: viewId);
           onMapReady(viewId);
+        } on ViewNotFoundException catch (_) {
+          // This exception can happen if the view is disposed before the calls
+          // are made to the platform side. We can ignore this exception as
+          // the view is already disposed.
+          return;
         } on PlatformException catch (exception, stack) {
-          if (exception.code == 'viewNotFound') {
-            // This exeption can happen if the view is disposed before the calls
-            // are made to the platform side. We can ignore this exception as
-            // the view is already disposed.
-            return;
-          } else {
-            // Pass other exceptions to the Flutter error handler.
-            FlutterError.reportError(
-              FlutterErrorDetails(
-                exception: exception,
-                stack: stack,
-                library: 'google_navigation_flutter',
-                context: ErrorDescription(exception.message ?? ''),
-              ),
-            );
-          }
+          // Pass other exceptions to the Flutter error handler.
+          FlutterError.reportError(
+            FlutterErrorDetails(
+              exception: exception,
+              stack: stack,
+              library: 'google_navigation_flutter',
+              context: ErrorDescription(exception.message ?? ''),
+            ),
+          );
         }
       },
       gestureRecognizers: initializationOptions.gestureRecognizers,

@@ -41,16 +41,23 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
   bool _showCameraUpdates = false;
   String _latestCameraUpdate = '';
   bool _isFollowingLocation = false;
+  bool _ready = false;
 
   // ignore: use_setters_to_change_properties
   Future<void> _onViewCreated(GoogleNavigationViewController controller) async {
-    _navigationViewController = controller;
-    calculateFocusCenter();
-    _minZoomLevel = await _navigationViewController.getMinZoomPreference();
-    _maxZoomLevel = await _navigationViewController.getMaxZoomPreference();
-
-    if (mounted) {
-      setState(() {});
+    try {
+      _navigationViewController = controller;
+      calculateFocusCenter();
+      _minZoomLevel = await _navigationViewController.getMinZoomPreference();
+      _maxZoomLevel = await _navigationViewController.getMaxZoomPreference();
+      if (mounted) {
+        setState(() {
+          _ready = true;
+        });
+      }
+    } on ViewNotFoundException catch (_) {
+      // View not found exception is thrown if view is disposed before async
+      // method is handled on native side.
     }
   }
 
@@ -147,7 +154,10 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
           onCameraStartedFollowingLocation: _onCameraStartedFollowingLocation,
           onCameraStoppedFollowingLocation: _onCameraStoppedFollowingLocation,
         ),
-        getOverlayOptionsButton(context, onPressed: () => toggleOverlay()),
+        getOverlayOptionsButton(
+          context,
+          onPressed: _ready ? () => toggleOverlay() : null,
+        ),
         if (_showCameraUpdates)
           Container(
             width: 180,
@@ -247,8 +257,9 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
       setState(() {
         _minZoomLevel = newMinZoomLevel;
       });
-    } catch (e) {
-      showMessage(e.toString());
+    } on MinZoomRangeException catch (e) {
+      debugPrint(e.toString());
+      showMessage('Cannot set min zoom');
     }
   }
 
@@ -258,8 +269,9 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
       setState(() {
         _maxZoomLevel = newMaxZoomLevel;
       });
-    } catch (e) {
-      showMessage(e.toString());
+    } on MaxZoomRangeException catch (e) {
+      debugPrint(e.toString());
+      showMessage('Cannot set max zoom');
     }
   }
 
