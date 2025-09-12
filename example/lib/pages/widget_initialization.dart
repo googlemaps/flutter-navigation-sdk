@@ -70,7 +70,11 @@ class _ViewInitializationPageState
   @override
   void dispose() {
     if (_navigationInitialized) {
-      GoogleMapsNavigator.cleanup();
+      GoogleMapsNavigator.cleanup().catchError((e) {
+        if (e is! SessionNotInitializedException) {
+          debugPrint('Navigator cleanup error: $e');
+        }
+      });
     }
     super.dispose();
   }

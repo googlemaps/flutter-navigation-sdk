@@ -170,7 +170,11 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   @override
   void dispose() {
     _clearListeners();
-    GoogleMapsNavigator.cleanup();
+    GoogleMapsNavigator.cleanup().catchError((e) {
+      if (e is! SessionNotInitializedException) {
+        debugPrint('Navigator cleanup error: $e');
+      }
+    });
     clearRegisteredImages();
     super.dispose();
   }
@@ -623,7 +627,11 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
     // Cleanup navigation session.
     // This will also clear destinations, stop simulation, stop guidance
-    await GoogleMapsNavigator.cleanup();
+    await GoogleMapsNavigator.cleanup().catchError((e) {
+      if (e is! SessionNotInitializedException) {
+        debugPrint('Navigator cleanup error: $e');
+      }
+    });
     await _removeNewWaypointMarker();
     await _removeDestinationWaypointMarkers();
     _waypoints.clear();
