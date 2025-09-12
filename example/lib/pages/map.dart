@@ -38,18 +38,18 @@ class BasicMapPage extends ExamplePage {
 
 class _MapPageState extends ExamplePageState<BasicMapPage> {
   late final GoogleMapViewController _mapViewController;
-  late bool isMyLocationEnabled = false;
-  late bool isMyLocationButtonEnabled = true;
-  late bool consumeMyLocationButtonClickEvent = false;
-  late bool isZoomGesturesEnabled = true;
-  late bool isZoomControlsEnabled = true;
-  late bool isCompassEnabled = true;
-  late bool isRotateGesturesEnabled = true;
-  late bool isScrollGesturesEnabled = true;
-  late bool isScrollGesturesEnabledDuringRotateOrZoom = true;
-  late bool isTiltGesturesEnabled = true;
-  late bool isTrafficEnabled = false;
-  late MapType mapType = MapType.normal;
+  bool isMyLocationEnabled = false;
+  bool isMyLocationButtonEnabled = true;
+  bool consumeMyLocationButtonClickEvent = false;
+  bool isZoomGesturesEnabled = true;
+  bool isZoomControlsEnabled = true;
+  bool isCompassEnabled = true;
+  bool isRotateGesturesEnabled = true;
+  bool isScrollGesturesEnabled = true;
+  bool isScrollGesturesEnabledDuringRotateOrZoom = true;
+  bool isTiltGesturesEnabled = true;
+  bool isTrafficEnabled = false;
+  MapType mapType = MapType.normal;
 
   Future<void> setMapType(MapType type) async {
     mapType = type;
@@ -65,14 +65,25 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
     final String jsonString = await rootBundle.loadString(
       'assets/night_style.json',
     );
-    await _mapViewController.setMapStyle(jsonString);
+
+    try {
+      await _mapViewController.setMapStyle(jsonString);
+    } on MapStyleException catch (e) {
+      debugPrint(e.toString());
+      _showMessage('Unable to set map style');
+    }
   }
 
   Future<void> setMapStyleSepia() async {
     final String jsonString = await rootBundle.loadString(
       'assets/sepia_style.json',
     );
-    await _mapViewController.setMapStyle(jsonString);
+    try {
+      await _mapViewController.setMapStyle(jsonString);
+    } on MapStyleException catch (e) {
+      debugPrint(e.toString());
+      _showMessage('Unable to set map style');
+    }
   }
 
   // ignore: use_setters_to_change_properties

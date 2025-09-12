@@ -208,7 +208,13 @@ class _MultiplexState extends ExamplePageState<MultipleMapViewsPage> {
     setState(() {
       _navigationController = controller;
     });
-    await controller.setMyLocationEnabled(true);
+
+    try {
+      await controller.setMyLocationEnabled(true);
+    } on ViewNotFoundException catch (_) {
+      // View not found exception is thrown if view is disposed before async
+      // method is handled on native side.
+    }
   }
 
   Future<void> _moveCameras() async {

@@ -66,10 +66,3 @@ Future<void> clearRegisteredImages() {
   return GoogleMapsNavigationPlatform.instance.imageRegistryAPI
       .clearRegisteredImages();
 }
-
-/// [registerBitmapImage] failed to decode bitmap from byte array.
-/// {@category Image Registry}
-class ImageDecodingFailedException implements Exception {
-  /// Default constructor for [ImageDecodingFailedException].
-  const ImageDecodingFailedException();
-}
