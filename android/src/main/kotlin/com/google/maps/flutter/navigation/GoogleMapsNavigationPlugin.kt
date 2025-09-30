@@ -32,64 +32,93 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
     }
   }
 
-  internal lateinit var viewRegistry: GoogleMapsViewRegistry
-  private lateinit var viewMessageHandler: GoogleMapsViewMessageHandler
-  private lateinit var imageRegistryMessageHandler: GoogleMapsImageRegistryMessageHandler
-  private lateinit var viewEventApi: ViewEventApi
-  private lateinit var _binding: FlutterPlugin.FlutterPluginBinding
-  private lateinit var lifecycle: Lifecycle
-  internal lateinit var imageRegistry: ImageRegistry
-  private lateinit var autoViewMessageHandler: GoogleMapsAutoViewMessageHandler
-  internal lateinit var autoViewEventApi: AutoViewEventApi
+  internal var viewRegistry: GoogleMapsViewRegistry? = null
+  internal var imageRegistry: ImageRegistry? = null
+  internal var autoViewEventApi: AutoViewEventApi? = null
+  private var viewEventApi: ViewEventApi? = null
+
+  private var viewMessageHandler: GoogleMapsViewMessageHandler? = null
+  private var imageRegistryMessageHandler: GoogleMapsImageRegistryMessageHandler? = null
+  private var autoViewMessageHandler: GoogleMapsAutoViewMessageHandler? = null
+
+  private var lifecycle: Lifecycle? = null
 
   override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
     instance = this
+
+    // Init view registry and its method channel handlers
     viewRegistry = GoogleMapsViewRegistry()
-    imageRegistry = ImageRegistry()
-    viewMessageHandler = GoogleMapsViewMessageHandler(viewRegistry)
+    viewMessageHandler = GoogleMapsViewMessageHandler(viewRegistry!!)
     MapViewApi.setUp(binding.binaryMessenger, viewMessageHandler)
-    imageRegistryMessageHandler = GoogleMapsImageRegistryMessageHandler(imageRegistry)
-    ImageRegistryApi.setUp(binding.binaryMessenger, imageRegistryMessageHandler)
-    viewEventApi = ViewEventApi(binding.binaryMessenger)
-    _binding = binding
     binding.applicationContext.registerComponentCallbacks(viewRegistry)
-    autoViewMessageHandler = GoogleMapsAutoViewMessageHandler(viewRegistry)
+
+    // Init image registry and its method channel handlers
+    imageRegistry = ImageRegistry()
+    imageRegistryMessageHandler = GoogleMapsImageRegistryMessageHandler(imageRegistry!!)
+    ImageRegistryApi.setUp(binding.binaryMessenger, imageRegistryMessageHandler)
+
+    // Setup platform view factory and its method channel handlers
+    viewEventApi = ViewEventApi(binding.binaryMessenger)
+    val factory = GoogleMapsViewFactory(viewRegistry!!, viewEventApi!!, imageRegistry!!)
+    binding.platformViewRegistry.registerViewFactory("google_navigation_flutter", factory)
+
+    // Setup auto map view method channel handlers
+    autoViewMessageHandler = GoogleMapsAutoViewMessageHandler(viewRegistry!!)
     AutoMapViewApi.setUp(binding.binaryMessenger, autoViewMessageHandler)
     autoViewEventApi = AutoViewEventApi(binding.binaryMessenger)
+
+    // Setup navigation session manager and its method channel handlers
+    GoogleMapsNavigationSessionManager.createInstance(binding.binaryMessenger)
+    val inspectorHandler = GoogleMapsNavigationInspectorHandler(viewRegistry!!)
+    NavigationInspector.setUp(binding.binaryMessenger, inspectorHandler)
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-    MapViewApi.setUp(binding.binaryMessenger, null) // Cleanup
+    // Cleanup method channel handlers
+    MapViewApi.setUp(binding.binaryMessenger, null)
     ImageRegistryApi.setUp(binding.binaryMessenger, null)
+    AutoMapViewApi.setUp(binding.binaryMessenger, null)
+    NavigationInspector.setUp(binding.binaryMessenger, null)
+
     GoogleMapsNavigationSessionManager.destroyInstance()
     binding.applicationContext.unregisterComponentCallbacks(viewRegistry)
+
+    // Cleanup references
+    viewRegistry = null
+    viewMessageHandler = null
+    imageRegistryMessageHandler = null
+    viewEventApi = null
+    imageRegistry = null
+    autoViewMessageHandler = null
+    autoViewEventApi = null
     instance = null
   }
 
-  override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-    val factory = GoogleMapsViewFactory(viewRegistry, viewEventApi, imageRegistry)
-    _binding.platformViewRegistry.registerViewFactory("google_navigation_flutter", factory)
-    GoogleMapsNavigationSessionManager.createInstance(_binding.binaryMessenger)
-    val inspectorHandler = GoogleMapsNavigationInspectorHandler(viewRegistry)
-    NavigationInspector.setUp(_binding.binaryMessenger, inspectorHandler)
-    GoogleMapsNavigationSessionManager.getInstance().onActivityCreated(binding.activity)
-
-    lifecycle = FlutterLifecycleAdapter.getActivityLifecycle(binding)
-    lifecycle.addObserver(viewRegistry)
-    lifecycle.addObserver(GoogleMapsNavigationSessionManager.getInstance())
+  private fun attachActivity(binding: ActivityPluginBinding) {
+    lifecycle =
+      FlutterLifecycleAdapter.getActivityLifecycle(binding).also { lc ->
+        viewRegistry?.let(lc::addObserver)
+        GoogleMapsNavigationSessionManager.getInstanceOrNull()?.let(lc::addObserver)
+      }
+    GoogleMapsNavigationSessionManager.getInstanceOrNull()?.onActivityCreated(binding.activity)
   }
 
-  override fun onDetachedFromActivityForConfigChanges() {
-    GoogleMapsNavigationSessionManager.getInstance().onActivityDestroyed()
+  private fun detachActivity(forConfigChange: Boolean) {
+    lifecycle?.let { lc ->
+      viewRegistry?.let(lc::removeObserver)
+      GoogleMapsNavigationSessionManager.getInstanceOrNull()?.let(lc::removeObserver)
+    }
+
+    GoogleMapsNavigationSessionManager.getInstanceOrNull()?.onActivityDestroyed(forConfigChange)
+    lifecycle = null
   }
 
-  override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-    GoogleMapsNavigationSessionManager.getInstance().onActivityCreated(binding.activity)
-  }
+  override fun onAttachedToActivity(binding: ActivityPluginBinding) = attachActivity(binding)
 
-  override fun onDetachedFromActivity() {
-    lifecycle.removeObserver(GoogleMapsNavigationSessionManager.getInstance())
-    GoogleMapsNavigationSessionManager.getInstance().onActivityDestroyed()
-    lifecycle.removeObserver(viewRegistry)
-  }
+  override fun onDetachedFromActivityForConfigChanges() = detachActivity(forConfigChange = true)
+
+  override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) =
+    attachActivity(binding)
+
+  override fun onDetachedFromActivity() = detachActivity(forConfigChange = false)
 }
