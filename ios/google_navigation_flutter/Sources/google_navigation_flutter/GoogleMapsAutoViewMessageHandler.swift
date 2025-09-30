@@ -39,7 +39,7 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
         switch result {
         case .success:
           completion(.success(()))
-        case let .failure(error):
+        case .failure(let error):
           completion(.failure(error))
         }
       }
@@ -207,12 +207,13 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
   func animateCameraToLatLngBounds(
     bounds: LatLngBoundsDto,
     padding: Double, duration: Int64?,
-    completion: @escaping (
-      Result<
-        Bool,
-        Error
-      >
-    )
+    completion:
+      @escaping (
+        Result<
+          Bool,
+          Error
+        >
+      )
       -> Void
   ) {
     do {
@@ -264,12 +265,13 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
   func animateCameraByZoom(
     zoomBy: Double, focusDx: Double?,
     focusDy: Double?, duration: Int64?,
-    completion: @escaping (
-      Result<
-        Bool,
-        Error
-      >
-    ) -> Void
+    completion:
+      @escaping (
+        Result<
+          Bool,
+          Error
+        >
+      ) -> Void
   ) {
     do {
       let focus = Convert.convertDeltaToPoint(dx: focusDx, dy: focusDy)

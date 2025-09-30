@@ -40,7 +40,7 @@ class GoogleMapsNavigationViewMessageHandler: MapViewApi {
         switch result {
         case .success:
           completion(.success(()))
-        case let .failure(error):
+        case .failure(let error):
           completion(.failure(error))
         }
       }
@@ -208,12 +208,13 @@ class GoogleMapsNavigationViewMessageHandler: MapViewApi {
   func animateCameraToLatLngBounds(
     viewId: Int64, bounds: LatLngBoundsDto,
     padding: Double, duration: Int64?,
-    completion: @escaping (
-      Result<
-        Bool,
-        Error
-      >
-    ) -> Void
+    completion:
+      @escaping (
+        Result<
+          Bool,
+          Error
+        >
+      ) -> Void
   ) {
     do {
       try getView(viewId).animateCameraToLatLngBounds(
@@ -264,12 +265,13 @@ class GoogleMapsNavigationViewMessageHandler: MapViewApi {
   func animateCameraByZoom(
     viewId: Int64, zoomBy: Double, focusDx: Double?,
     focusDy: Double?, duration: Int64?,
-    completion: @escaping (
-      Result<
-        Bool,
-        Error
-      >
-    ) -> Void
+    completion:
+      @escaping (
+        Result<
+          Bool,
+          Error
+        >
+      ) -> Void
   ) {
     do {
       let focus = Convert.convertDeltaToPoint(dx: focusDx, dy: focusDy)
