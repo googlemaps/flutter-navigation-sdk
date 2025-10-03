@@ -15,7 +15,7 @@ A Google Maps Navigation Flutter plugin.
   s.source           = { :path => '.' }
   s.source_files = 'google_navigation_flutter/Sources/google_navigation_flutter/**/*.swift'
   s.dependency 'Flutter'
-  s.dependency 'GoogleNavigation', '10.2.0'
+  s.dependency 'GoogleNavigation', '10.4.0'
   s.platform = :ios, '16.0'
   s.static_framework = true
 
