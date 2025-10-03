@@ -120,4 +120,8 @@ class LatLngBounds {
 
   @override
   int get hashCode => Object.hash(southwest.hashCode, northeast.hashCode);
+
+  @override
+  String toString() =>
+      'LatLngBounds(southwest: $southwest, northeast: $northeast)';
 }

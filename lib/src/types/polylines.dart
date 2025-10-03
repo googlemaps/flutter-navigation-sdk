@@ -52,6 +52,9 @@ class Polyline {
 
   @override
   int get hashCode => Object.hash(polylineId.hashCode, options.hashCode);
+
+  @override
+  String toString() => 'Polyline(polylineId: $polylineId, options: $options)';
 }
 
 /// Defines PolylineOptions for a polyline.
@@ -164,6 +167,21 @@ class PolylineOptions {
     zIndex.hashCode,
     spans.hashCode,
   );
+
+  @override
+  String toString() =>
+      'PolylineOptions('
+      'points: $points, '
+      'clickable: $clickable, '
+      'geodesic: $geodesic, '
+      'strokeColor: $strokeColor, '
+      'strokeJointType: $strokeJointType, '
+      'strokePattern: $strokePattern, '
+      'strokeWidth: $strokeWidth, '
+      'visible: $visible, '
+      'zIndex: $zIndex, '
+      'spans: $spans'
+      ')';
 }
 
 /// Style for stroke of a polyline.
@@ -187,6 +205,14 @@ class StyleSpanStrokeStyle {
 
   /// Gradient to color.
   int? toColor;
+
+  @override
+  String toString() =>
+      'StyleSpanStrokeStyle('
+      'solidColor: $solidColor, '
+      'fromColor: $fromColor, '
+      'toColor: $toColor'
+      ')';
 }
 
 /// Style and length of a stroke on polyline.
@@ -201,6 +227,9 @@ class StyleSpan {
 
   /// Style of a stroke.
   final StyleSpanStrokeStyle style;
+
+  @override
+  String toString() => 'StyleSpan(length: $length, style: $style)';
 }
 
 /// Joint types for [Polyline] and outline of [Polygon].
@@ -227,4 +256,7 @@ class PolylineClickedEvent {
 
   /// Id of the polyline that has been tapped.
   final String polylineId;
+
+  @override
+  String toString() => 'PolylineClickedEvent(polylineId: $polylineId)';
 }

@@ -50,6 +50,9 @@ class Marker {
 
   @override
   int get hashCode => Object.hash(markerId.hashCode, options.hashCode);
+
+  @override
+  String toString() => 'Marker(markerId: $markerId, options: $options)';
 }
 
 /// Defines MarkerOptions for a marker.
@@ -198,6 +201,22 @@ class MarkerOptions {
     visible.hashCode,
     zIndex.hashCode,
   );
+
+  @override
+  String toString() =>
+      'MarkerOptions('
+      'alpha: $alpha, '
+      'anchor: $anchor, '
+      'draggable: $draggable, '
+      'flat: $flat, '
+      'icon: $icon, '
+      'consumeTapEvents: $consumeTapEvents, '
+      'position: $position, '
+      'rotation: $rotation, '
+      'infoWindow: $infoWindow, '
+      'visible: $visible, '
+      'zIndex: $zIndex'
+      ')';
 }
 
 /// Text labels for [Marker] info window.
@@ -247,6 +266,10 @@ class InfoWindow {
   @override
   int get hashCode =>
       Object.hash(title.hashCode, snippet.hashCode, anchor.hashCode);
+
+  @override
+  String toString() =>
+      'InfoWindow(title: $title, snippet: $snippet, anchor: $anchor)';
 }
 
 /// Specifies the anchor to be at a particular point in the marker image.
@@ -276,6 +299,9 @@ class MarkerAnchor {
 
   @override
   int get hashCode => Object.hash(u.hashCode, v.hashCode);
+
+  @override
+  String toString() => 'MarkerAnchor(u: $u, v: $v)';
 }
 
 /// Marker event types
@@ -322,6 +348,10 @@ class MarkerEvent {
 
   /// Type of the event.
   final MarkerEventType eventType;
+
+  @override
+  String toString() =>
+      'MarkerEvent(markerId: $markerId, eventType: $eventType)';
 }
 
 /// Marker drag event sent from platform side.
@@ -344,4 +374,12 @@ class MarkerDragEvent {
 
   /// Type of the event.
   final MarkerDragEventType eventType;
+
+  @override
+  String toString() =>
+      'MarkerDragEvent('
+      'markerId: $markerId, '
+      'eventType: $eventType, '
+      'position: $position'
+      ')';
 }

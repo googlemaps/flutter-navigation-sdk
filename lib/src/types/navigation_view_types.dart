@@ -75,6 +75,15 @@ class CameraPosition {
 
   /// Zoom level near the center of the screen.
   final double zoom;
+
+  @override
+  String toString() =>
+      'CameraPosition('
+      'bearing: $bearing, '
+      'target: $target, '
+      'tilt: $tilt, '
+      'zoom: $zoom'
+      ')';
 }
 
 /// Parameter given to parameter given to the [GoogleNavigationViewController.followMyLocation]
@@ -97,12 +106,19 @@ class CustomNavigationAutoEvent {
   final Object? data;
 
   CustomNavigationAutoEvent({required this.event, required this.data});
+
+  @override
+  String toString() => 'CustomNavigationAutoEvent(event: $event, data: $data)';
 }
 
 class AutoScreenAvailabilityChangedEvent {
   final bool isAvailable;
 
   AutoScreenAvailabilityChangedEvent({required this.isAvailable});
+
+  @override
+  String toString() =>
+      'AutoScreenAvailabilityChangedEvent(isAvailable: $isAvailable)';
 }
 
 /// Represents the click position in a Google Maps view.
@@ -114,6 +130,9 @@ class MapClickEvent {
 
   /// The location where the click happened.
   final LatLng target;
+
+  @override
+  String toString() => 'MapClickEvent(target: $target)';
 }
 
 /// Represents navigation UI changed event in a view.
@@ -124,6 +143,12 @@ class NavigationUIEnabledChangedEvent {
 
   /// Value representing whether UI changed or not.
   final bool navigationUIEnabled;
+
+  @override
+  String toString() =>
+      'NavigationUIEnabledChangedEvent('
+      'navigationUIEnabled: $navigationUIEnabled'
+      ')';
 }
 
 /// Represents the long click position in a Google Maps view.
@@ -135,6 +160,9 @@ class MapLongClickEvent {
 
   /// The location where the long click happened.
   final LatLng target;
+
+  @override
+  String toString() => 'MapLongClickEvent(target: $target)';
 }
 
 /// Traffic data statuses
@@ -165,6 +193,14 @@ class RouteSegmentTrafficDataRoadStretchRenderingData {
 
   /// Offset in meters.
   final int offsetMeters;
+
+  @override
+  String toString() =>
+      'RouteSegmentTrafficDataRoadStretchRenderingData('
+      'style: $style, '
+      'lengthMeters: $lengthMeters, '
+      'offsetMeters: $offsetMeters'
+      ')';
 }
 
 /// Route segment traffic data road strech rendering style.
@@ -195,6 +231,13 @@ class RouteSegmentTrafficData {
   /// Rendering data list.
   final List<RouteSegmentTrafficDataRoadStretchRenderingData?>
   roadStretchRenderingDataList;
+
+  @override
+  String toString() =>
+      'RouteSegmentTrafficData('
+      'status: $status, '
+      'roadStretchRenderingDataList: $roadStretchRenderingDataList'
+      ')';
 }
 
 /// Navigation route segment
@@ -220,6 +263,15 @@ class RouteSegment {
 
   /// Destination waypoint.
   final NavigationWaypoint? destinationWaypoint;
+
+  @override
+  String toString() =>
+      'RouteSegment('
+      'trafficData: $trafficData, '
+      'destinationLatLng: $destinationLatLng, '
+      'latLngs: $latLngs, '
+      'destinationWaypoint: $destinationWaypoint'
+      ')';
 }
 
 /// Internal camera update type.
@@ -396,6 +448,21 @@ class CameraUpdate {
 
   /// The screen position co-ordinates for the zoom-by camera.
   Offset? focus;
+
+  @override
+  String toString() =>
+      'CameraUpdate('
+      'type: $type, '
+      'cameraPosition: $cameraPosition, '
+      'latLng: $latLng, '
+      'bounds: $bounds, '
+      'padding: $padding, '
+      'zoom: $zoom, '
+      'zoomByAmount: $zoomByAmount, '
+      'scrollByDx: $scrollByDx, '
+      'scrollByDy: $scrollByDy, '
+      'focus: $focus'
+      ')';
 }
 
 /// My location clicked event.
@@ -444,4 +511,8 @@ class CameraChangedEvent {
 
   /// Current position of the camera.
   final CameraPosition position;
+
+  @override
+  String toString() =>
+      'CameraChangedEvent(eventType: $eventType, position: $position)';
 }
