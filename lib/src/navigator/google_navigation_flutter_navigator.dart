@@ -543,6 +543,10 @@ class GoogleMapsNavigator {
   /// Removes the current waypoint.
   /// Following this call, guidance will be toward the next destination,
   /// and information about the old destination is not available.
+  ///
+  /// Deprecated: Use [setDestinations] with an updated list of waypoints
+  /// instead. This approach provides better control over the navigation route.
+  @Deprecated('Use setDestinations with an updated list of waypoints instead')
   static Future<NavigationWaypoint?> continueToNextDestination() {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .continueToNextDestination();

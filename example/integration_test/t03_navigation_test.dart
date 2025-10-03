@@ -33,6 +33,10 @@ void main() {
 
   final GoogleNavigationInspectorPlatform inspector =
       GoogleNavigationInspectorPlatform.instance!;
+  final multipleDestinationsVariants = ValueVariant<String>(<String>{
+    'continueToNextDestination',
+    'setDestinations',
+  });
 
   /// Start location coordinates in Finland (Näkkäläntie).
   const double startLat = startLocationLat;
@@ -183,6 +187,7 @@ void main() {
     (PatrolIntegrationTester $) async {
       final Completer<void> navigationFinished = Completer<void>();
       int arrivalEventCount = 0;
+      List<NavigationWaypoint> waypoints = <NavigationWaypoint>[];
 
       /// Set up navigation view and controller.
       final GoogleNavigationViewController viewController =
@@ -208,7 +213,39 @@ void main() {
 
       Future<void> onArrivalEvent(OnArrivalEvent msg) async {
         arrivalEventCount += 1;
-        await GoogleMapsNavigator.continueToNextDestination();
+
+        if (multipleDestinationsVariants.currentValue ==
+            'continueToNextDestination') {
+          // Note: continueToNextDestination is deprecated.
+          // This test still uses it to verify the deprecated API works correctly.
+          // For new implementations, use setDestinations with updated waypoints instead.
+          await GoogleMapsNavigator.continueToNextDestination();
+        } else {
+          // Find and remove the waypoint that matches the arrived waypoint
+          int waypointIndex = -1;
+          for (int i = 0; i < waypoints.length; i++) {
+            final NavigationWaypoint waypoint = waypoints[i];
+            if (waypoint.title == msg.waypoint.title) {
+              waypointIndex = i;
+              break;
+            }
+          }
+
+          if (waypointIndex >= 0) {
+            waypoints.removeAt(waypointIndex);
+          }
+
+          if (waypoints.isNotEmpty) {
+            // Update destinations with remaining waypoints
+            final Destinations updatedDestinations = Destinations(
+              waypoints: waypoints,
+              displayOptions: NavigationDisplayOptions(
+                showDestinationMarkers: false,
+              ),
+            );
+            await GoogleMapsNavigator.setDestinations(updatedDestinations);
+          }
+        }
 
         /// Finish executing the tests once 2 onArrival events come in.
         /// Test the guidance stops on last Arrival.
@@ -228,18 +265,21 @@ void main() {
         tolerance,
       );
 
+      /// Set up initial waypoints.
+      waypoints = <NavigationWaypoint>[
+        NavigationWaypoint.withLatLngTarget(
+          title: 'Näkkäläntie 1st stop',
+          target: const LatLng(latitude: midLat, longitude: midLon),
+        ),
+        NavigationWaypoint.withLatLngTarget(
+          title: 'Näkkäläntie 2nd stop',
+          target: const LatLng(latitude: endLat, longitude: endLng),
+        ),
+      ];
+
       /// Set Destination.
       final Destinations destinations = Destinations(
-        waypoints: <NavigationWaypoint>[
-          NavigationWaypoint.withLatLngTarget(
-            title: 'Näkkäläntie 1st stop',
-            target: const LatLng(latitude: midLat, longitude: midLon),
-          ),
-          NavigationWaypoint.withLatLngTarget(
-            title: 'Näkkäläntie 2nd stop',
-            target: const LatLng(latitude: endLat, longitude: endLng),
-          ),
-        ],
+        waypoints: waypoints,
         displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
       );
       final NavigationRouteStatus status =
@@ -293,6 +333,7 @@ void main() {
 
       await GoogleMapsNavigator.cleanup();
     },
+    variant: multipleDestinationsVariants,
     // TODO(jokerttu): Skipping Android as this fails on Android emulator on CI.
     skip: Platform.isAndroid,
   );
