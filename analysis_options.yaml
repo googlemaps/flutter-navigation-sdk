@@ -28,6 +28,8 @@ analyzer:
   errors:
     # allow self-reference to deprecated members
     deprecated_member_use_from_same_package: ignore
+    # allow deprecated member use in test files and examples
+    deprecated_member_use: ignore
   exclude:
     # Ignore generated files
     - "**/*.g.dart"

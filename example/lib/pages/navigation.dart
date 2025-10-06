@@ -47,6 +47,10 @@ enum SimulationState {
   /// Simulation running with outdated route.
   runningOutdated,
 
+  /// Simulation waiting for a new route, and continues to the next destination
+  /// when the new route is ready.
+  waitingNewRoute,
+
   /// Simulation paused.
   paused,
 
@@ -70,7 +74,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   static const int _userLocationTimeoutMS = 1500;
 
   /// Speed multiplier used for simulation.
-  static const double simulationSpeedMultiplier = 5;
+  static const double simulationSpeedMultiplier = 3.0;
 
   /// Navigation view controller used to interact with the navigation view.
   GoogleNavigationViewController? _navigationViewController;
@@ -145,6 +149,12 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   _roadSnappedRawLocationUpdatedSubscription;
 
   int _nextWaypointIndex = 0;
+
+  /// Track when user has arrived at a waypoint but hasn't continued yet
+  bool _waitingForUserToContinue = false;
+
+  /// The waypoint the user has arrived at and needs to continue from
+  NavigationWaypoint? _arrivedWaypoint;
 
   EdgeInsets _mapPadding = const EdgeInsets.all(0);
   EdgeInsets _autoViewMapPadding = const EdgeInsets.all(0);
@@ -444,8 +454,12 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     if (!mounted) {
       return;
     }
+
     if (_simulationState == SimulationState.running) {
       _simulationState = SimulationState.runningOutdated;
+    } else if (_simulationState == SimulationState.waitingNewRoute) {
+      // Continue simulation with the new route as soon as it's available.
+      _startSimulation();
     }
     setState(() {
       _onRouteChangedEventCallCount += 1;
@@ -607,6 +621,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       _nextWaypointIndex = 0;
       _remainingDistance = 0;
       _remainingTime = 0;
+      _waitingForUserToContinue = false;
+      _arrivedWaypoint = null;
     });
   }
 
@@ -748,32 +764,102 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   Future<void> _arrivedToWaypoint(NavigationWaypoint waypoint) async {
     debugPrint('Arrived to waypoint: ${waypoint.title}');
 
-    // Remove the first waypoint from the list.
-    if (_waypoints.isNotEmpty) {
-      _waypoints.removeAt(0);
+    // Find the waypoint which has been arrived to.
+    final int waypointIndex = _waypoints.indexWhere(
+      (NavigationWaypoint currentWaypoint) =>
+          currentWaypoint.title == waypoint.title,
+    );
+
+    if (waypointIndex >= 0) {
+      // Pause simulation when arriving at any waypoint to preserve location
+      if (_simulationState != SimulationState.notRunning) {
+        await _pauseSimulation();
+        await _simulateUserLocation(_waypoints[waypointIndex].target);
+      }
+
+      // Remove the corresponding destination marker.
+      if (waypointIndex < _destinationWaypointMarkers.length) {
+        final Marker markerToRemove =
+            _destinationWaypointMarkers[waypointIndex];
+        await _navigationViewController!.removeMarkers(<Marker>[
+          markerToRemove,
+        ]);
+
+        // Unregister custom marker image.
+        await unregisterImage(markerToRemove.options.icon);
+
+        _destinationWaypointMarkers.removeAt(waypointIndex);
+      }
+
+      // Remove the arrived waypoint from the list
+      _waypoints.removeAt(waypointIndex);
     }
-    // Remove the first destination marker from the list.
-    if (_destinationWaypointMarkers.isNotEmpty) {
-      final Marker markerToRemove = _destinationWaypointMarkers.first;
-      await _navigationViewController!.removeMarkers(<Marker>[markerToRemove]);
-
-      // Unregister custom marker image.
-      await unregisterImage(markerToRemove.options.icon);
-
-      _destinationWaypointMarkers.removeAt(0);
-    }
-
-    await GoogleMapsNavigator.continueToNextDestination();
 
     if (_waypoints.isEmpty) {
-      debugPrint('Arrived to last waypoint, stopping navigation.');
+      debugPrint('Arrived to final destination, stopping navigation.');
 
-      // If there is no next waypoint, it means we have arrived at the last
-      // destination. Hence, stop navigation.
+      // If there is no next waypoint, it means we have arrived at the final
+      // destination. Stop navigation completely.
       await _stopGuidedNavigation();
+
+      showMessage('You have arrived at your final destination!');
+    } else {
+      debugPrint('Arrived at waypoint, waiting for user to continue...');
+
+      // Stop guidance but keep navigation session active
+      await _stopGuidance();
+
+      // Set state to waiting for user to continue
+      setState(() {
+        _waitingForUserToContinue = true;
+        _arrivedWaypoint = waypoint;
+      });
+
+      showMessage(
+        'You have arrived at ${waypoint.title}. Tap "Continue guidance" to proceed to the next destination.',
+      );
     }
 
     setState(() {});
+  }
+
+  /// Continue guidance to the next destination.
+  Future<void> _continueGuidanceToNextDestination() async {
+    if (!_waitingForUserToContinue || _waypoints.isEmpty) {
+      return;
+    }
+
+    debugPrint('Continuing guidance to next destination...');
+
+    // Update destinations with the remaining waypoints.
+    final Destinations? updatedDestinations = _buildDestinations();
+    if (updatedDestinations != null) {
+      if (_simulationState != SimulationState.notRunning) {
+        // If simulation was active set the simulation state to waiting for new
+        // route, so that simulation is continued automatically when the new
+        // route is ready after setting the new destinations.
+        _simulationState = SimulationState.waitingNewRoute;
+      }
+      final NavigationRouteStatus status =
+          await GoogleMapsNavigator.setDestinations(updatedDestinations);
+      if (status == NavigationRouteStatus.statusOk) {
+        // Start guidance again
+        await _startGuidance();
+
+        setState(() {
+          _waitingForUserToContinue = false;
+          _arrivedWaypoint = null;
+        });
+
+        showMessage('Continuing to next destination...');
+      } else {
+        _stopGuidance();
+        _stopSimulation();
+        showMessage(
+          'Failed to continue to next destination. Please try again.',
+        );
+      }
+    }
   }
 
   Future<void> _clearNavigationWaypoints() async {
@@ -972,7 +1058,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       final LatLng? myLocation =
           _userLocation ?? await _navigationViewController!.getMyLocation();
       if (myLocation != null) {
-        await GoogleMapsNavigator.simulator.setUserLocation(myLocation);
+        await _simulateUserLocation(myLocation);
       }
 
       await GoogleMapsNavigator.simulator
@@ -984,6 +1070,13 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         _simulationState = SimulationState.running;
       });
     }
+  }
+
+  Future<void> _simulateUserLocation(LatLng? location) async {
+    if (location == null) {
+      return;
+    }
+    await GoogleMapsNavigator.simulator.setUserLocation(location);
   }
 
   Future<void> _stopSimulation() async {
@@ -1142,25 +1235,31 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
               child: const Text('Retry'),
             ),
           ],
-          if (_guidanceRunning &&
-              _simulationState == SimulationState.runningOutdated)
+          if (_waitingForUserToContinue && _arrivedWaypoint != null)
             Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
               alignment: WrapAlignment.center,
               spacing: 10,
               children: <Widget>[
-                const Text('Simulation is running with outdated route'),
+                Text('Arrived at ${_arrivedWaypoint!.title}'),
                 ElevatedButton(
-                  onPressed: () => _startSimulation(),
-                  child: const Text('Update simulation'),
+                  onPressed: _continueGuidanceToNextDestination,
+                  child: const Text('Continue guidance'),
                 ),
               ],
+            ),
+          if (_guidanceRunning &&
+              _simulationState == SimulationState.runningOutdated)
+            ElevatedButton(
+              onPressed: () => _startSimulation(),
+              child: const Text('Update simulation route'),
             ),
           if (_waypoints.isNotEmpty)
             Wrap(
               alignment: WrapAlignment.center,
               spacing: 10,
               children: <Widget>[
-                if (!_guidanceRunning)
+                if (!_guidanceRunning && !_waitingForUserToContinue)
                   ElevatedButton(
                     onPressed: _validRoute ? _startGuidedNavigation : null,
                     child: const Text('Start Guidance'),
@@ -1183,9 +1282,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     child: const Text('Resume simulation state'),
                   ),
                 if (_guidanceRunning &&
-                    (_simulationState == SimulationState.running ||
-                        _simulationState == SimulationState.runningOutdated ||
-                        _simulationState == SimulationState.paused))
+                    (_simulationState != SimulationState.notRunning &&
+                        _simulationState != SimulationState.unknown))
                   ElevatedButton(
                     onPressed: () => _stopSimulation(),
                     child: const Text('Stop simulation'),
@@ -1207,7 +1305,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
               ),
               ElevatedButton(
                 onPressed:
-                    _waypoints.isNotEmpty && !_guidanceRunning
+                    _waypoints.isNotEmpty &&
+                            !_guidanceRunning &&
+                            !_waitingForUserToContinue
                         ? () => _clearNavigationWaypoints()
                         : null,
                 child: const Text('Clear waypoints'),
@@ -1962,6 +2062,8 @@ extension SimulationStateDescription on SimulationState {
         return 'Paused';
       case SimulationState.notRunning:
         return 'Not running';
+      case SimulationState.waitingNewRoute:
+        return 'Waiting for new route';
     }
   }
 }

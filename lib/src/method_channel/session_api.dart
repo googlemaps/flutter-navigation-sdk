@@ -237,6 +237,7 @@ class NavigationSessionAPIImpl {
   }
 
   /// Continues to next waypoint.
+  @Deprecated('Use setDestinations with an updated list of waypoints instead')
   Future<NavigationWaypoint?> continueToNextDestination() async {
     try {
       final NavigationWaypointDto? waypointDto =
