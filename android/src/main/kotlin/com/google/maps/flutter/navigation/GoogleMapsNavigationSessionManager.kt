@@ -98,6 +98,12 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
       }
       return instance!!
     }
+
+    /** Get instance if available, or null if not created. */
+    @Synchronized
+    fun getInstanceOrNull(): GoogleMapsNavigationSessionManager? {
+      return instance
+    }
   }
 
   private var navigator: Navigator? = null
@@ -142,8 +148,10 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   }
 
   /** Clean up activity reference to prevent memory leaks. */
-  fun onActivityDestroyed() {
-    unregisterListeners()
+  fun onActivityDestroyed(forConfigChange: Boolean) {
+    if (!forConfigChange) {
+      unregisterListeners()
+    }
     weakActivity?.clear()
     weakActivity = null
     weakLifecycleOwner?.clear()
