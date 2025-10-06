@@ -42,6 +42,15 @@ class Destinations {
 
   /// Navigation route token options.
   final RouteTokenOptions? routeTokenOptions;
+
+  @override
+  String toString() =>
+      'Destinations('
+      'waypoints: $waypoints, '
+      'displayOptions: $displayOptions, '
+      'routingOptions: $routingOptions, '
+      'routeTokenOptions: $routeTokenOptions'
+      ')';
 }
 
 /// Provides options for routing using a route token
@@ -70,6 +79,10 @@ class RouteTokenOptions {
   /// If there is a mismatch, [travelMode] will override the travel mode used to
   /// generate the [routeToken].
   final NavigationTravelMode? travelMode;
+
+  @override
+  String toString() =>
+      'RouteTokenOptions(routeToken: $routeToken, travelMode: $travelMode)';
 }
 
 /// Alternative routes strategy.
@@ -155,6 +168,19 @@ class RoutingOptions {
 
   /// Maximum time to wait for a location fix before failure. (Only Android)
   final int? locationTimeoutMs;
+
+  @override
+  String toString() =>
+      'RoutingOptions('
+      'alternateRoutesStrategy: $alternateRoutesStrategy, '
+      'routingStrategy: $routingStrategy, '
+      'targetDistanceMeters: $targetDistanceMeters, '
+      'travelMode: $travelMode, '
+      'avoidTolls: $avoidTolls, '
+      'avoidFerries: $avoidFerries, '
+      'avoidHighways: $avoidHighways, '
+      'locationTimeoutMs: $locationTimeoutMs'
+      ')';
 }
 
 /// Display options.
@@ -178,6 +204,14 @@ class NavigationDisplayOptions {
 
   /// Show traffic lights.
   final bool? showTrafficLights;
+
+  @override
+  String toString() =>
+      'NavigationDisplayOptions('
+      'showDestinationMarkers: $showDestinationMarkers, '
+      'showStopSigns: $showStopSigns, '
+      'showTrafficLights: $showTrafficLights'
+      ')';
 }
 
 /// Navigation waypoint with different constructors based in on type of
@@ -248,6 +282,16 @@ class NavigationWaypoint {
   /// has a lane direction that aligns (within +/- 55 degrees) with the side of
   /// the road that the waypoint is on.
   int? preferredSegmentHeading;
+
+  @override
+  String toString() =>
+      'NavigationWaypoint('
+      'title: $title, '
+      'target: $target, '
+      'placeID: $placeID, '
+      'preferSameSideOfRoad: $preferSameSideOfRoad, '
+      'preferredSegmentHeading: $preferredSegmentHeading'
+      ')';
 }
 
 /// Status of the navigation routing.
@@ -310,6 +354,10 @@ class NavigationTimeAndDistance {
 
   /// Distance to destination.
   final double distance;
+
+  @override
+  String toString() =>
+      'NavigationTimeAndDistance(time: $time, distance: $distance)';
 }
 
 /// Navigation audio guidance type.
@@ -343,4 +391,12 @@ class NavigationAudioGuidanceSettings {
 
   /// Guidance type.
   final NavigationAudioGuidanceType? guidanceType;
+
+  @override
+  String toString() =>
+      'NavigationAudioGuidanceSettings('
+      'isBluetoothAudioEnabled: $isBluetoothAudioEnabled, '
+      'isVibrationEnabled: $isVibrationEnabled, '
+      'guidanceType: $guidanceType'
+      ')';
 }

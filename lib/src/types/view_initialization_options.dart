@@ -63,6 +63,15 @@ class MapViewInitializationOptions {
   /// designating which gestures should be claimed by the platform view. By default,
   /// it's an empty set, implying no gestures will be forwarded.
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
+
+  @override
+  String toString() =>
+      'MapViewInitializationOptions('
+      'layoutDirection: $layoutDirection, '
+      'mapOptions: $mapOptions, '
+      'navigationViewOptions: $navigationViewOptions, '
+      'gestureRecognizers: $gestureRecognizers'
+      ')';
 }
 
 /// Encapsulates the initial configuration required to initialize the google map view.
@@ -190,6 +199,25 @@ class MapOptions {
   ///
   /// Null by default (no padding).
   final EdgeInsets? padding;
+
+  @override
+  String toString() =>
+      'MapOptions('
+      'cameraPosition: $cameraPosition, '
+      'mapType: $mapType, '
+      'compassEnabled: $compassEnabled, '
+      'rotateGesturesEnabled: $rotateGesturesEnabled, '
+      'scrollGesturesEnabled: $scrollGesturesEnabled, '
+      'tiltGesturesEnabled: $tiltGesturesEnabled, '
+      'zoomGesturesEnabled: $zoomGesturesEnabled, '
+      'scrollGesturesEnabledDuringRotateOrZoom: $scrollGesturesEnabledDuringRotateOrZoom, '
+      'mapToolbarEnabled: $mapToolbarEnabled, '
+      'minZoomPreference: $minZoomPreference, '
+      'maxZoomPreference: $maxZoomPreference, '
+      'zoomControlsEnabled: $zoomControlsEnabled, '
+      'cameraTargetBounds: $cameraTargetBounds, '
+      'padding: $padding'
+      ')';
 }
 
 /// Determines the initial visibility of the navigation UI on map initialization.
@@ -225,4 +253,10 @@ class NavigationViewOptions {
   /// If set to [NavigationUIEnabledPreference.disabled], navigation view
   /// initially displays a classic map view.
   final NavigationUIEnabledPreference navigationUIEnabledPreference;
+
+  @override
+  String toString() =>
+      'NavigationViewOptions('
+      'navigationUIEnabledPreference: $navigationUIEnabledPreference'
+      ')';
 }

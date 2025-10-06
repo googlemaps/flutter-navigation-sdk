@@ -44,6 +44,13 @@ class SpeedingUpdatedEvent {
 
   /// Severity of the speeding.
   final SpeedAlertSeverity severity;
+
+  @override
+  String toString() =>
+      'SpeedingUpdatedEvent('
+      'percentageAboveLimit: $percentageAboveLimit, '
+      'severity: $severity'
+      ')';
 }
 
 /// RoadSnappedLocationUpdated event message.
@@ -54,6 +61,9 @@ class RoadSnappedLocationUpdatedEvent {
 
   /// Coordinate of the updated location.
   final LatLng location;
+
+  @override
+  String toString() => 'RoadSnappedLocationUpdatedEvent(location: $location)';
 }
 
 /// RoadSnappedRawLocationUpdated event message (Android only).
@@ -64,6 +74,10 @@ class RoadSnappedRawLocationUpdatedEvent {
 
   /// Coordinate of the updated location.
   final LatLng location;
+
+  @override
+  String toString() =>
+      'RoadSnappedRawLocationUpdatedEvent(location: $location)';
 }
 
 /// GpsAvailabilityUpdated event message (Android only).
@@ -74,6 +88,9 @@ class GpsAvailabilityUpdatedEvent {
 
   /// GPS availability.
   final bool available;
+
+  @override
+  String toString() => 'GpsAvailabilityUpdatedEvent(available: $available)';
 }
 
 /// Navigation simulation options.
@@ -84,6 +101,9 @@ class SimulationOptions {
 
   /// Speed multiplier.
   final double speedMultiplier;
+
+  @override
+  String toString() => 'SimulationOptions(speedMultiplier: $speedMultiplier)';
 }
 
 /// Remaining time or distance change event message.
@@ -100,6 +120,13 @@ class RemainingTimeOrDistanceChangedEvent {
 
   /// Remaining time in seconds.
   final double remainingTime;
+
+  @override
+  String toString() =>
+      'RemainingTimeOrDistanceChangedEvent('
+      'remainingDistance: $remainingDistance, '
+      'remainingTime: $remainingTime'
+      ')';
 }
 
 /// On arrival event message
@@ -110,4 +137,7 @@ class OnArrivalEvent {
 
   /// Arrival waypoint.
   final NavigationWaypoint waypoint;
+
+  @override
+  String toString() => 'OnArrivalEvent(waypoint: $waypoint)';
 }

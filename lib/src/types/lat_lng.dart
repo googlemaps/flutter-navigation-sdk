@@ -71,4 +71,7 @@ class LatLng {
 
   @override
   int get hashCode => Object.hash(latitude.hashCode, longitude.hashCode);
+
+  @override
+  String toString() => 'LatLng(latitude: $latitude, longitude: $longitude)';
 }

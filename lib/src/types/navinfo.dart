@@ -353,6 +353,22 @@ class StepInfo {
 
   /// The index of the step in the list of all steps in the route.
   final int stepNumber;
+
+  @override
+  String toString() =>
+      'StepInfo('
+      'stepNumber: $stepNumber, '
+      'distanceFromPrevStepMeters: $distanceFromPrevStepMeters, '
+      'timeFromPrevStepSeconds: $timeFromPrevStepSeconds, '
+      'drivingSide: $drivingSide, '
+      'exitNumber: $exitNumber, '
+      'fullInstructions: $fullInstructions, '
+      'fullRoadName: $fullRoadName, '
+      'simpleRoadName: $simpleRoadName, '
+      'roundaboutTurnNumber: $roundaboutTurnNumber, '
+      'lanes: $lanes, '
+      'maneuver: $maneuver'
+      ')';
 }
 
 /// Contains information about the state of navigation, the current nav step if
@@ -410,6 +426,21 @@ class NavInfo {
   ///
   /// Android only.
   final int? timeToNextDestinationSeconds;
+
+  @override
+  String toString() =>
+      'NavInfo('
+      'navState: $navState, '
+      'currentStep: $currentStep, '
+      'remainingSteps: $remainingSteps, '
+      'routeChanged: $routeChanged, '
+      'distanceToCurrentStepMeters: $distanceToCurrentStepMeters, '
+      'distanceToFinalDestinationMeters: $distanceToFinalDestinationMeters, '
+      'distanceToNextDestinationMeters: $distanceToNextDestinationMeters, '
+      'timeToCurrentStepSeconds: $timeToCurrentStepSeconds, '
+      'timeToFinalDestinationSeconds: $timeToFinalDestinationSeconds, '
+      'timeToNextDestinationSeconds: $timeToNextDestinationSeconds'
+      ')';
 }
 
 /// NavInfo event message
@@ -420,4 +451,7 @@ class NavInfoEvent {
 
   /// Navigation information.
   final NavInfo navInfo;
+
+  @override
+  String toString() => 'NavInfoEvent(navInfo: $navInfo)';
 }

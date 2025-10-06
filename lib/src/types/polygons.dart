@@ -53,6 +53,9 @@ class Polygon {
 
   @override
   int get hashCode => Object.hash(polygonId.hashCode, options.hashCode);
+
+  @override
+  String toString() => 'Polygon(polygonId: $polygonId, options: $options)';
 }
 
 /// Defines PolygonOptions for a polygon.
@@ -175,6 +178,20 @@ class PolygonOptions {
     visible.hashCode,
     zIndex.hashCode,
   );
+
+  @override
+  String toString() =>
+      'PolygonOptions('
+      'points: $points, '
+      'holes: $holes, '
+      'clickable: $clickable, '
+      'fillColor: $fillColor, '
+      'geodesic: $geodesic, '
+      'strokeColor: $strokeColor, '
+      'strokeWidth: $strokeWidth, '
+      'visible: $visible, '
+      'zIndex: $zIndex'
+      ')';
 }
 
 /// Event emitted when a polygon is clicked.
@@ -187,4 +204,7 @@ class PolygonClickedEvent {
 
   /// Id of the polygon that has been tapped.
   final String polygonId;
+
+  @override
+  String toString() => 'PolygonClickedEvent(polygonId: $polygonId)';
 }

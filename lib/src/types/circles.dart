@@ -52,6 +52,9 @@ class Circle {
 
   @override
   int get hashCode => Object.hash(circleId.hashCode, options.hashCode);
+
+  @override
+  String toString() => 'Circle(circleId: $circleId, options: $options)';
 }
 
 /// Defines CircleOptions for a circle.
@@ -157,6 +160,21 @@ class CircleOptions {
     visible.hashCode,
     zIndex.hashCode,
   );
+
+  @override
+  String toString() =>
+      'CircleOptions('
+      'position: '
+      '$position, '
+      'radius: $radius, '
+      'strokeWidth: $strokeWidth, '
+      'strokeColor: $strokeColor, '
+      'strokePattern: $strokePattern, '
+      'fillColor: $fillColor, '
+      'zIndex: $zIndex, '
+      'visible: $visible, '
+      'clickable: $clickable'
+      ')';
 }
 
 /// Event emitted when a circle is clicked.
@@ -169,4 +187,7 @@ class CircleClickedEvent {
 
   /// Id of the circle that has been tapped.
   final String circleId;
+
+  @override
+  String toString() => 'CircleClickedEvent(circleId: $circleId)';
 }

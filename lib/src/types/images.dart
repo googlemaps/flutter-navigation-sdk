@@ -65,4 +65,13 @@ class ImageDescriptor {
     width.hashCode,
     height.hashCode,
   );
+
+  @override
+  String toString() =>
+      'ImageDescriptor('
+      'registeredImageId: $registeredImageId, '
+      'imagePixelRatio: $imagePixelRatio, '
+      'width: $width, '
+      'height: $height'
+      ')';
 }

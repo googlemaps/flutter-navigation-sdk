@@ -66,6 +66,9 @@ class DashPattern extends PatternItem {
 
   @override
   int get hashCode => length.hashCode;
+
+  @override
+  String toString() => 'DashPattern(length: $length)';
 }
 
 /// Class representing a dot used in the stroke pattern for a [Polyline] or the outline of a [Polygon] or [Circle].
@@ -75,6 +78,23 @@ class DashPattern extends PatternItem {
 class DotPattern extends PatternItem {
   /// Initialize [DotPattern] object.
   const DotPattern() : super(PatternType.dot);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is DotPattern;
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString() => 'DotPattern()';
 }
 
 /// Class representing a gap used in the stroke pattern for a [Polyline] or the outline of a [Polygon] or [Circle].
@@ -101,4 +121,7 @@ class GapPattern extends PatternItem {
 
   @override
   int get hashCode => length.hashCode;
+
+  @override
+  String toString() => 'GapPattern(length: $length)';
 }
