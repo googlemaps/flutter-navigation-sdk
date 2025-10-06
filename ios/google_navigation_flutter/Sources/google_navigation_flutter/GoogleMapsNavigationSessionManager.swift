@@ -349,12 +349,13 @@ class GoogleMapsNavigationSessionManager: NSObject {
 
   func simulateLocationsAlongNewRoute(
     waypoints: [NavigationWaypointDto],
-    completion: @escaping (
-      Result<
-        RouteStatusDto,
-        Error
-      >
-    )
+    completion:
+      @escaping (
+        Result<
+          RouteStatusDto,
+          Error
+        >
+      )
       -> Void
   ) throws {
     /// Speedmultiplier is set to default value here because the functions using
@@ -394,12 +395,13 @@ class GoogleMapsNavigationSessionManager: NSObject {
   func simulateLocationsAlongNewRouteWithRoutingOptions(
     waypoints: [NavigationWaypointDto],
     routingOptions: RoutingOptionsDto,
-    completion: @escaping (
-      Result<
-        RouteStatusDto,
-        Error
-      >
-    ) -> Void
+    completion:
+      @escaping (
+        Result<
+          RouteStatusDto,
+          Error
+        >
+      ) -> Void
   ) throws {
     /// Speedmultiplier is set to default value here because the functions using
     /// SimulationOptionsDto will set it globally to a custom value. This
@@ -421,12 +423,13 @@ class GoogleMapsNavigationSessionManager: NSObject {
     waypoints: [NavigationWaypointDto],
     routingOptions: RoutingOptionsDto,
     simulationOptions: SimulationOptionsDto,
-    completion: @escaping (
-      Result<
-        RouteStatusDto,
-        Error
-      >
-    ) -> Void
+    completion:
+      @escaping (
+        Result<
+          RouteStatusDto,
+          Error
+        >
+      ) -> Void
   ) throws {
     try getSimulator().speedMultiplier = Float(simulationOptions.speedMultiplier)
     try setRoutingOptionsGlobals(routingOptions, for: .simulator)

@@ -143,12 +143,13 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
 
   func simulateLocationsAlongNewRoute(
     waypoints: [NavigationWaypointDto],
-    completion: @escaping (
-      Result<
-        RouteStatusDto,
-        Error
-      >
-    )
+    completion:
+      @escaping (
+        Result<
+          RouteStatusDto,
+          Error
+        >
+      )
       -> Void
   ) {
     do {
@@ -164,12 +165,13 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
   func simulateLocationsAlongNewRouteWithRoutingOptions(
     waypoints: [NavigationWaypointDto],
     routingOptions: RoutingOptionsDto,
-    completion: @escaping (
-      Result<
-        RouteStatusDto,
-        Error
-      >
-    ) -> Void
+    completion:
+      @escaping (
+        Result<
+          RouteStatusDto,
+          Error
+        >
+      ) -> Void
   ) {
     do {
       try GoogleMapsNavigationSessionManager.shared
@@ -187,12 +189,13 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
     waypoints: [NavigationWaypointDto],
     routingOptions: RoutingOptionsDto,
     simulationOptions: SimulationOptionsDto,
-    completion: @escaping (
-      Result<
-        RouteStatusDto,
-        Error
-      >
-    ) -> Void
+    completion:
+      @escaping (
+        Result<
+          RouteStatusDto,
+          Error
+        >
+      ) -> Void
   ) {
     do {
       try GoogleMapsNavigationSessionManager.shared
