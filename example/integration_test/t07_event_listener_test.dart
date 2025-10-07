@@ -25,7 +25,7 @@ import 'dart:io';
 import 'shared.dart';
 
 void main() {
-  patrol('Test navigation OnRemainingTimeOrDistanceChanged event listener', (
+  patrol('Test navigation RemainingTimeOrDistanceChanged event listener', (
     PatrolIntegrationTester $,
   ) async {
     final Completer<void> eventReceived = Completer<void>();
@@ -53,7 +53,7 @@ void main() {
     await GoogleMapsNavigator.simulator.setUserLocation(
       const LatLng(latitude: 37.79136614772824, longitude: -122.41565900473043),
     );
-    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
+    await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
 
     /// Set Destination.
     final Destinations destinations = Destinations(
@@ -84,7 +84,7 @@ void main() {
     await navigationController.clear();
   });
 
-  patrol('Test NavInfoEvent listener', (PatrolIntegrationTester $) async {
+  patrol('Test NavInfo event listener', (PatrolIntegrationTester $) async {
     final Completer<void> eventReceived = Completer<void>();
 
     /// Set up navigation.
@@ -97,7 +97,7 @@ void main() {
     await GoogleMapsNavigator.simulator.setUserLocation(
       const LatLng(latitude: 37.79136614772824, longitude: -122.41565900473043),
     );
-    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
+    await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
 
     /// Set Destination.
     final Destinations destinations = Destinations(
@@ -141,66 +141,70 @@ void main() {
     await navigationController.clear();
   });
 
-  patrol('Test NavInfoEvent listener with numNextStepsToPreview value set to 1', (
-    PatrolIntegrationTester $,
-  ) async {
-    final Completer<void> eventReceived = Completer<void>();
+  patrol(
+    'Test NavInfo event listener with numNextStepsToPreview value set to 1',
+    (PatrolIntegrationTester $) async {
+      final Completer<void> eventReceived = Completer<void>();
 
-    /// Set up navigation.
-    final GoogleNavigationViewController navigationController =
-        await startNavigationWithoutDestination($);
-    await $.pumpAndSettle();
+      /// Set up navigation.
+      final GoogleNavigationViewController navigationController =
+          await startNavigationWithoutDestination($);
+      await $.pumpAndSettle();
 
-    /// Simulate location (1298 California St)
-    await GoogleMapsNavigator.simulator.setUserLocation(
-      const LatLng(latitude: 37.79136614772824, longitude: -122.41565900473043),
-    );
-    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
-
-    /// Set Destination.
-    final Destinations destinations = Destinations(
-      waypoints: <NavigationWaypoint>[
-        NavigationWaypoint.withLatLngTarget(
-          title: 'California St & Jones St',
-          target: const LatLng(latitude: 37.791424, longitude: -122.414139),
+      /// Simulate location (1298 California St)
+      await GoogleMapsNavigator.simulator.setUserLocation(
+        const LatLng(
+          latitude: 37.79136614772824,
+          longitude: -122.41565900473043,
         ),
-      ],
-      displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
-    );
-    final NavigationRouteStatus status =
-        await GoogleMapsNavigator.setDestinations(destinations);
-    expect(status, NavigationRouteStatus.statusOk);
-    await $.pumpAndSettle();
+      );
+      await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
 
-    /// Start guidance.
-    await GoogleMapsNavigator.startGuidance();
-    await $.pumpAndSettle();
+      /// Set Destination.
+      final Destinations destinations = Destinations(
+        waypoints: <NavigationWaypoint>[
+          NavigationWaypoint.withLatLngTarget(
+            title: 'California St & Jones St',
+            target: const LatLng(latitude: 37.791424, longitude: -122.414139),
+          ),
+        ],
+        displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
+      );
+      final NavigationRouteStatus status =
+          await GoogleMapsNavigator.setDestinations(destinations);
+      expect(status, NavigationRouteStatus.statusOk);
+      await $.pumpAndSettle();
 
-    /// Set up the listener and the test.
-    final StreamSubscription<NavInfoEvent> subscription =
-        GoogleMapsNavigator.setNavInfoListener(
-          expectAsync1((NavInfoEvent event) {
-            expectSync(event.navInfo, isA<NavInfo>());
+      /// Start guidance.
+      await GoogleMapsNavigator.startGuidance();
+      await $.pumpAndSettle();
 
-            /// Complete the eventReceived completer only once.
-            if (!eventReceived.isCompleted) {
-              eventReceived.complete();
-            }
-          }, max: -1),
-          numNextStepsToPreview: 1,
-        );
+      /// Set up the listener and the test.
+      final StreamSubscription<NavInfoEvent> subscription =
+          GoogleMapsNavigator.setNavInfoListener(
+            expectAsync1((NavInfoEvent event) {
+              expectSync(event.navInfo, isA<NavInfo>());
 
-    /// Start simulation.
-    await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
-    await $.pumpAndSettle();
+              /// Complete the eventReceived completer only once.
+              if (!eventReceived.isCompleted) {
+                eventReceived.complete();
+              }
+            }, max: -1),
+            numNextStepsToPreview: 1,
+          );
 
-    /// Wait until the event is received and then test cancelling the subscription.
-    await eventReceived.future;
-    await subscription.cancel();
-    await navigationController.clear();
-  });
+      /// Start simulation.
+      await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
+      await $.pumpAndSettle();
 
-  patrol('Test navigation OnRouteChanged event listener', (
+      /// Wait until the event is received and then test cancelling the subscription.
+      await eventReceived.future;
+      await subscription.cancel();
+      await navigationController.clear();
+    },
+  );
+
+  patrol('Test navigation RouteChanged event listener', (
     PatrolIntegrationTester $,
   ) async {
     final Completer<void> eventReceived = Completer<void>();
@@ -224,7 +228,7 @@ void main() {
     await GoogleMapsNavigator.simulator.setUserLocation(
       const LatLng(latitude: 37.79136614772824, longitude: -122.41565900473043),
     );
-    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
+    await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
 
     /// Set Destination.
     final Destinations destinations = Destinations(
@@ -266,7 +270,7 @@ void main() {
     await GoogleMapsNavigator.simulator.setUserLocation(
       const LatLng(latitude: 37.79136614772824, longitude: -122.41565900473043),
     );
-    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
+    await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
 
     /// Set Destination.
     final Destinations destinations = Destinations(
@@ -322,7 +326,7 @@ void main() {
     await subscription.cancel();
   });
 
-  patrol('Test navigation onArrival and onSpeedingUpdated event listeners', (
+  patrol('Test navigation Arrival event and SpeedingUpdated event listeners', (
     PatrolIntegrationTester $,
   ) async {
     final Completer<void> eventReceived = Completer<void>();
@@ -359,7 +363,7 @@ void main() {
     await GoogleMapsNavigator.simulator.setUserLocation(
       const LatLng(latitude: 37.784985, longitude: -122.419577),
     );
-    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
+    await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
 
     /// Set Destination.
     final Destinations destinations = Destinations(
@@ -429,7 +433,7 @@ void main() {
       await GoogleMapsNavigator.simulator.setUserLocation(
         const LatLng(latitude: 37.790693, longitude: -122.4132157),
       );
-      await $.pumpAndSettle(timeout: const Duration(seconds: 1));
+      await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
 
       /// Create a waypoint for simulator.
       final List<NavigationWaypoint> waypoint = <NavigationWaypoint>[

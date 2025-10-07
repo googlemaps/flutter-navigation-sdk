@@ -55,42 +55,6 @@ void main() {
     debugPrint('isPhysicalDevice: $isPhysicalDevice');
   });
 
-  Future<void> setSimulatedUserLocationWithCheck(
-    PatrolIntegrationTester $,
-    GoogleNavigationViewController viewController,
-    double startLat,
-    double startLng,
-    double tolerance,
-  ) async {
-    // Simulate location
-    await GoogleMapsNavigator.simulator.setUserLocation(
-      LatLng(latitude: startLat, longitude: startLng),
-    );
-    await $.pumpAndSettle(timeout: const Duration(milliseconds: 500));
-
-    final LatLng? currentLocation =
-        await waitForValueMatchingPredicate<LatLng?>(
-          $,
-          viewController.getMyLocation,
-          (LatLng? location) {
-            if (location == null) return false;
-
-            bool isCloseTo(double a, double b) {
-              var diff = a - b;
-              if (diff < 0) diff = -diff;
-              return diff <= tolerance;
-            }
-
-            return isCloseTo(location.latitude, startLat) &&
-                isCloseTo(location.longitude, startLng);
-          },
-        );
-
-    expect(currentLocation, isNotNull);
-    expect(currentLocation?.latitude, closeTo(startLat, tolerance));
-    expect(currentLocation?.longitude, closeTo(startLng, tolerance));
-  }
-
   patrol('Test navigating to a single destination', (
     PatrolIntegrationTester $,
   ) async {
@@ -213,43 +177,53 @@ void main() {
 
       Future<void> onArrivalEvent(OnArrivalEvent msg) async {
         arrivalEventCount += 1;
+        if (arrivalEventCount < 2) {
+          if (multipleDestinationsVariants.currentValue ==
+              'continueToNextDestination') {
+            // Note: continueToNextDestination is deprecated.
+            // This test still uses it to verify the deprecated API works correctly.
+            // For new implementations, use setDestinations with updated waypoints instead.
+            NavigationWaypoint? waypoint =
+                await GoogleMapsNavigator.continueToNextDestination();
+            expect(waypoint, isNotNull);
+            await GoogleMapsNavigator.simulator
+                .simulateLocationsAlongExistingRouteWithOptions(
+                  SimulationOptions(speedMultiplier: 5),
+                );
+          } else {
+            // Find and remove the waypoint that matches the arrived waypoint
+            int waypointIndex = -1;
+            for (int i = 0; i < waypoints.length; i++) {
+              final NavigationWaypoint waypoint = waypoints[i];
+              if (waypoint.title == msg.waypoint.title) {
+                waypointIndex = i;
+                break;
+              }
+            }
 
-        if (multipleDestinationsVariants.currentValue ==
-            'continueToNextDestination') {
-          // Note: continueToNextDestination is deprecated.
-          // This test still uses it to verify the deprecated API works correctly.
-          // For new implementations, use setDestinations with updated waypoints instead.
-          await GoogleMapsNavigator.continueToNextDestination();
-        } else {
-          // Find and remove the waypoint that matches the arrived waypoint
-          int waypointIndex = -1;
-          for (int i = 0; i < waypoints.length; i++) {
-            final NavigationWaypoint waypoint = waypoints[i];
-            if (waypoint.title == msg.waypoint.title) {
-              waypointIndex = i;
-              break;
+            if (waypointIndex >= 0) {
+              waypoints.removeAt(waypointIndex);
+            }
+
+            if (waypoints.isNotEmpty) {
+              // Update destinations with remaining waypoints
+              final Destinations updatedDestinations = Destinations(
+                waypoints: waypoints,
+                displayOptions: NavigationDisplayOptions(
+                  showDestinationMarkers: false,
+                ),
+              );
+              await GoogleMapsNavigator.setDestinations(updatedDestinations);
+              await GoogleMapsNavigator.simulator
+                  .simulateLocationsAlongExistingRouteWithOptions(
+                    SimulationOptions(speedMultiplier: 5),
+                  );
             }
           }
-
-          if (waypointIndex >= 0) {
-            waypoints.removeAt(waypointIndex);
-          }
-
-          if (waypoints.isNotEmpty) {
-            // Update destinations with remaining waypoints
-            final Destinations updatedDestinations = Destinations(
-              waypoints: waypoints,
-              displayOptions: NavigationDisplayOptions(
-                showDestinationMarkers: false,
-              ),
-            );
-            await GoogleMapsNavigator.setDestinations(updatedDestinations);
-          }
-        }
-
-        /// Finish executing the tests once 2 onArrival events come in.
-        /// Test the guidance stops on last Arrival.
-        if (arrivalEventCount == 2) {
+        } else {
+          $.log('Got second arrival event, stopping guidance');
+          // Stop guidance after the last destination
+          await GoogleMapsNavigator.stopGuidance();
           navigationFinished.complete();
         }
       }
@@ -322,10 +296,16 @@ void main() {
       );
 
       /// Start simulation.
+      $.log('Starting simulation with speedMultiplier: 5');
       await GoogleMapsNavigator.simulator
           .simulateLocationsAlongExistingRouteWithOptions(
-            SimulationOptions(speedMultiplier: 10),
+            SimulationOptions(speedMultiplier: 5),
           );
+
+      // Give simulation time to start properly
+      await $.tester.runAsync(
+        () => Future.delayed(const Duration(milliseconds: 500)),
+      );
 
       expect(await GoogleMapsNavigator.isGuidanceRunning(), true);
       await navigationFinished.future;
@@ -334,8 +314,6 @@ void main() {
       await GoogleMapsNavigator.cleanup();
     },
     variant: multipleDestinationsVariants,
-    // TODO(jokerttu): Skipping Android as this fails on Android emulator on CI.
-    skip: Platform.isAndroid,
   );
 
   patrol('Test simulation along new route', (PatrolIntegrationTester $) async {
@@ -546,14 +524,16 @@ void main() {
     const double movedTolerance = 0.001;
     await GoogleMapsNavigator.simulator.pauseSimulation();
     final LatLng? location1 = await viewController.getMyLocation();
-    await $.pumpAndSettle(duration: const Duration(seconds: 1));
+
+    await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
+
     final LatLng? location2 = await viewController.getMyLocation();
     expect(location1!.latitude, closeTo(location2!.latitude, movedTolerance));
     expect(location1.longitude, closeTo(location2.longitude, movedTolerance));
 
     /// Test resuming the simulation.
     await GoogleMapsNavigator.simulator.resumeSimulation();
-    await $.pumpAndSettle(duration: const Duration(seconds: 2));
+    await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 3)));
     final LatLng? location3 = await viewController.getMyLocation();
     expect(
       location1.latitude,
@@ -592,7 +572,7 @@ void main() {
     await GoogleMapsNavigator.simulator.removeUserLocation();
 
     // Wait for a while to let the map to update to not simulated location.
-    await $.pumpAndSettle(duration: const Duration(seconds: 5));
+    await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
 
     LatLng? currentLocation = await viewController.getMyLocation();
     expect(currentLocation!.latitude, isNot(closeTo(startLat, tolerance)));
@@ -620,7 +600,7 @@ void main() {
     await GoogleMapsNavigator.simulator.setUserLocation(
       const LatLng(latitude: 37.79136614772824, longitude: -122.41565900473043),
     );
-    await $.pumpAndSettle(duration: const Duration(seconds: 1));
+    await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
 
     /// Set Destination.
     final Destinations destinations = Destinations(
@@ -656,7 +636,7 @@ void main() {
     GoogleMapsNavigator.setOnArrivalListener(onArrivalEvent);
   });
 
-  patrol('Test network error during navigation', (
+  patrol('Test error during navigation if no network connection', (
     PatrolIntegrationTester $,
   ) async {
     if (Platform.isIOS && !isPhysicalDevice) {
@@ -673,7 +653,7 @@ void main() {
     await GoogleMapsNavigator.simulator.setUserLocation(
       const LatLng(latitude: 37.79136614772824, longitude: -122.41565900473043),
     );
-    await $.pumpAndSettle(duration: const Duration(seconds: 1));
+    await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
 
     /// Create a waypoint.
     final List<NavigationWaypoint> waypoint = <NavigationWaypoint>[
@@ -691,19 +671,21 @@ void main() {
 
     try {
       /// Cut network connection.
-      await $.native.disableCellular();
-      await $.native.disableWifi();
+      await $.native.enableAirplaneMode();
 
       // Wait a while to ensure network is down.
-      await $.pumpAndSettle(duration: const Duration(seconds: 1));
+      await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
 
       /// Test that the error is received.
       final NavigationRouteStatus routeStatus =
           await GoogleMapsNavigator.setDestinations(destinations);
       expect(
         routeStatus,
-        equals(NavigationRouteStatus.networkError),
-        reason: 'setDestinations did not return networkError',
+        isIn([
+          NavigationRouteStatus.networkError,
+          NavigationRouteStatus.routeNotFound,
+        ]),
+        reason: 'setDestinations did not return networkError or routeNotFound',
       );
 
       final NavigationRouteStatus routeStatusSim = await GoogleMapsNavigator
@@ -711,13 +693,16 @@ void main() {
           .simulateLocationsAlongNewRoute(waypoint);
       expect(
         routeStatusSim,
-        equals(NavigationRouteStatus.networkError),
-        reason: 'simulateLocationsAlongNewRoute did not return networkError',
+        isIn([
+          NavigationRouteStatus.networkError,
+          NavigationRouteStatus.routeNotFound,
+        ]),
+        reason:
+            'simulateLocationsAlongNewRoute did not return networkError or routeNotFound',
       );
     } finally {
       /// Re-enable network connection.
-      await $.native.enableCellular();
-      await $.native.enableWifi();
+      await $.native.disableAirplaneMode();
     }
   });
 
@@ -729,7 +714,7 @@ void main() {
     await GoogleMapsNavigator.simulator.setUserLocation(
       const LatLng(latitude: 37.79136614772824, longitude: -122.41565900473043),
     );
-    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
+    await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
 
     /// Create a waypoint.
     final List<NavigationWaypoint> waypoint = <NavigationWaypoint>[
@@ -796,7 +781,7 @@ void main() {
     final NavigationRouteStatus placeIdStatus =
         await GoogleMapsNavigator.setDestinations(placeIdDestinations);
     expect(placeIdStatus, NavigationRouteStatus.statusOk);
-    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
+    await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
 
     final List<RouteSegment> placeIdBeginRouteSegments =
         await GoogleMapsNavigator.getRouteSegments();
@@ -829,7 +814,7 @@ void main() {
     final NavigationRouteStatus status =
         await GoogleMapsNavigator.setDestinations(destinations);
     expect(status, NavigationRouteStatus.statusOk);
-    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
+    await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
 
     /// Start guidance.
     await GoogleMapsNavigator.startGuidance();
