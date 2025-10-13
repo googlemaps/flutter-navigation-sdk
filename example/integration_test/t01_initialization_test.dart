@@ -27,6 +27,8 @@ import 'package:flutter/material.dart';
 import 'shared.dart';
 
 void main() {
+  final mapTypeVariants = getMapTypeVariants();
+
   // Patrol runs the tests in alphabetical order, add a prefix to the test
   // name to control the order with script:
   int testCounter = 0;
@@ -190,16 +192,8 @@ void main() {
   });
 
   patrol(prefix('Test Maps initialization'), (PatrolIntegrationTester $) async {
-    final ControllerCompleter<GoogleNavigationViewController>
-    viewControllerCompleter = ControllerCompleter();
-
-    // Now the initialization should finally succeed.
-    try {
-      await GoogleMapsNavigator.initializeNavigationSession();
-    } on SessionInitializationException {
-      fail('Expected the initialization to go through');
-    }
-    expect(await GoogleMapsNavigator.isInitialized(), true);
+    final ControllerCompleter<GoogleMapViewController> viewControllerCompleter =
+        ControllerCompleter();
 
     const CameraPosition cameraPosition = CameraPosition(
       target: LatLng(latitude: 65, longitude: 25.5),
@@ -221,35 +215,69 @@ void main() {
 
     /// Display navigation view.
     final Key key = GlobalKey();
-    await pumpNavigationView(
-      $,
-      GoogleMapsNavigationView(
-        key: key,
-        onViewCreated: (GoogleNavigationViewController controller) {
-          viewControllerCompleter.complete(controller);
-        },
-        initialCameraPosition: cameraPosition,
-        initialMapType: mapType,
-        initialCompassEnabled: compassEnabled,
-        initialRotateGesturesEnabled: rotateGesturesEnabled,
-        initialScrollGesturesEnabled: scrollGesturesEnabled,
-        initialTiltGesturesEnabled: tiltGesturesEnabled,
-        initialZoomGesturesEnabled: zoomGesturesEnabled,
-        initialScrollGesturesEnabledDuringRotateOrZoom:
-            scrollGesturesEnabledDuringRotateOrZoom,
-        initialMapToolbarEnabled: mapToolbarEnabled,
-        initialZoomControlsEnabled: zoomControlsEnabled,
-        initialMinZoomPreference: minZoomPreference,
-        initialMaxZoomPreference: maxZoomPreference,
-        // ignore: avoid_redundant_argument_values
-        initialNavigationUIEnabledPreference: navigationUiEnabledPreference,
-      ),
-    );
 
-    final GoogleNavigationViewController controller =
+    switch (mapTypeVariants.currentValue!) {
+      case TestMapType.navigationView:
+        try {
+          await checkLocationDialogAndTosAcceptance($);
+          await GoogleMapsNavigator.initializeNavigationSession();
+        } on SessionInitializationException {
+          fail('Expected the initialization to go through');
+        }
+        expect(await GoogleMapsNavigator.isInitialized(), true);
+        await pumpNavigationView(
+          $,
+          GoogleMapsNavigationView(
+            key: key,
+            onViewCreated: (GoogleMapViewController controller) {
+              viewControllerCompleter.complete(controller);
+            },
+            initialCameraPosition: cameraPosition,
+            initialMapType: mapType,
+            initialCompassEnabled: compassEnabled,
+            initialRotateGesturesEnabled: rotateGesturesEnabled,
+            initialScrollGesturesEnabled: scrollGesturesEnabled,
+            initialTiltGesturesEnabled: tiltGesturesEnabled,
+            initialZoomGesturesEnabled: zoomGesturesEnabled,
+            initialScrollGesturesEnabledDuringRotateOrZoom:
+                scrollGesturesEnabledDuringRotateOrZoom,
+            initialMapToolbarEnabled: mapToolbarEnabled,
+            initialZoomControlsEnabled: zoomControlsEnabled,
+            initialMinZoomPreference: minZoomPreference,
+            initialMaxZoomPreference: maxZoomPreference,
+            // ignore: avoid_redundant_argument_values
+            initialNavigationUIEnabledPreference: navigationUiEnabledPreference,
+          ),
+        );
+      case TestMapType.mapView:
+        await pumpMapView(
+          $,
+          GoogleMapsMapView(
+            key: key,
+            onViewCreated: (GoogleMapViewController controller) {
+              viewControllerCompleter.complete(controller);
+            },
+            initialCameraPosition: cameraPosition,
+            initialMapType: mapType,
+            initialCompassEnabled: compassEnabled,
+            initialRotateGesturesEnabled: rotateGesturesEnabled,
+            initialScrollGesturesEnabled: scrollGesturesEnabled,
+            initialTiltGesturesEnabled: tiltGesturesEnabled,
+            initialZoomGesturesEnabled: zoomGesturesEnabled,
+            initialScrollGesturesEnabledDuringRotateOrZoom:
+                scrollGesturesEnabledDuringRotateOrZoom,
+            initialMapToolbarEnabled: mapToolbarEnabled,
+            initialZoomControlsEnabled: zoomControlsEnabled,
+            initialMinZoomPreference: minZoomPreference,
+            initialMaxZoomPreference: maxZoomPreference,
+          ),
+        );
+    }
+
+    final GoogleMapViewController controller =
         await viewControllerCompleter.future;
 
-    await controller.setMyLocationEnabled(true);
+    await controller.setMyLocationEnabled(false);
 
     final CameraPosition cameraOut = await controller.getCameraPosition();
 
@@ -321,133 +349,14 @@ void main() {
       maxZoomPreference,
       reason: 'Max zoom preference mismatch',
     );
-    expect(
-      await controller.isNavigationUIEnabled(),
-      false,
-      reason: 'Navigation UI enabled mismatch',
-    );
-  });
-
-  patrol(prefix('Test Maps initialization without navigation'), (
-    PatrolIntegrationTester $,
-  ) async {
-    final ControllerCompleter<GoogleMapViewController> viewControllerCompleter =
-        ControllerCompleter<GoogleMapViewController>();
-
-    const CameraPosition cameraPosition = CameraPosition(
-      target: LatLng(latitude: 65, longitude: 25.5),
-      zoom: 12,
-    );
-    const MapType mapType = MapType.satellite;
-    const bool compassEnabled = false;
-    const bool rotateGesturesEnabled = false;
-    const bool scrollGesturesEnabled = false;
-    const bool tiltGesturesEnabled = false;
-    const bool zoomGesturesEnabled = false;
-    const bool scrollGesturesEnabledDuringRotateOrZoom = false;
-    const bool mapToolbarEnabled = false;
-    const bool zoomControlsEnabled = false;
-    const double minZoomPreference = 5.0;
-    const double maxZoomPreference = 18.0;
-
-    /// Display navigation view.
-    final Key key = GlobalKey();
-    await pumpMapView(
-      $,
-      GoogleMapsMapView(
-        key: key,
-        onViewCreated: (GoogleMapViewController controller) {
-          viewControllerCompleter.complete(controller);
-        },
-        initialCameraPosition: cameraPosition,
-        initialMapType: mapType,
-        initialCompassEnabled: compassEnabled,
-        initialRotateGesturesEnabled: rotateGesturesEnabled,
-        initialScrollGesturesEnabled: scrollGesturesEnabled,
-        initialTiltGesturesEnabled: tiltGesturesEnabled,
-        initialZoomGesturesEnabled: zoomGesturesEnabled,
-        initialScrollGesturesEnabledDuringRotateOrZoom:
-            scrollGesturesEnabledDuringRotateOrZoom,
-        initialMapToolbarEnabled: mapToolbarEnabled,
-        initialZoomControlsEnabled: zoomControlsEnabled,
-        initialMinZoomPreference: minZoomPreference,
-        initialMaxZoomPreference: maxZoomPreference,
-      ),
-    );
-
-    final GoogleMapViewController controller =
-        await viewControllerCompleter.future;
-
-    await controller.setMyLocationEnabled(true);
-
-    final CameraPosition cameraOut = await controller.getCameraPosition();
-
-    expect(
-      cameraOut.target.latitude,
-      closeTo(cameraPosition.target.latitude, 0.1),
-      reason: 'Latitude value mismatch',
-    );
-    expect(
-      cameraOut.target.longitude,
-      closeTo(cameraPosition.target.longitude, 0.1),
-      reason: 'Longitude value mismatch',
-    );
-    expect(
-      cameraOut.zoom,
-      closeTo(cameraPosition.zoom, 0.1),
-      reason: 'Zoom value mismatch',
-    );
-    expect(await controller.getMapType(), mapType, reason: 'Map type mismatch');
-    expect(
-      await controller.settings.isCompassEnabled(),
-      compassEnabled,
-      reason: 'Compass enabled mismatch',
-    );
-    expect(
-      await controller.settings.isRotateGesturesEnabled(),
-      rotateGesturesEnabled,
-      reason: 'Rotate gestures enabled mismatch',
-    );
-    expect(
-      await controller.settings.isScrollGesturesEnabled(),
-      scrollGesturesEnabled,
-      reason: 'Scroll gestures enabled mismatch',
-    );
-    expect(
-      await controller.settings.isTiltGesturesEnabled(),
-      tiltGesturesEnabled,
-    );
-    expect(
-      await controller.settings.isZoomGesturesEnabled(),
-      zoomGesturesEnabled,
-      reason: 'Zoom gestures enabled mismatch',
-    );
-    expect(
-      await controller.settings.isScrollGesturesEnabledDuringRotateOrZoom(),
-      scrollGesturesEnabledDuringRotateOrZoom,
-      reason: 'Scroll gestures during rotate or zoom mismatch',
-    );
-    if (Platform.isAndroid) {
+    if (mapTypeVariants.currentValue == TestMapType.navigationView) {
+      expect(controller, isA<GoogleNavigationViewController>());
+      var navViewController = controller as GoogleNavigationViewController;
       expect(
-        await controller.settings.isMapToolbarEnabled(),
-        mapToolbarEnabled,
-        reason: 'Map toolbar enabled mismatch',
-      );
-      expect(
-        await controller.settings.isZoomControlsEnabled(),
-        zoomControlsEnabled,
-        reason: 'Zoom controls enabled mismatch',
+        await navViewController.isNavigationUIEnabled(),
+        false,
+        reason: 'Navigation UI enabled mismatch',
       );
     }
-    expect(
-      await controller.getMinZoomPreference(),
-      minZoomPreference,
-      reason: 'Min zoom preference mismatch',
-    );
-    expect(
-      await controller.getMaxZoomPreference(),
-      maxZoomPreference,
-      reason: 'Max zoom preference mismatch',
-    );
-  });
+  }, variant: mapTypeVariants);
 }

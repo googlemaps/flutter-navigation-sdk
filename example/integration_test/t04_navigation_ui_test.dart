@@ -102,7 +102,7 @@ void main() {
     await GoogleMapsNavigator.simulator.setUserLocation(
       const LatLng(latitude: 37.79136614772824, longitude: -122.41565900473043),
     );
-    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
+    await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
 
     /// Set Destination.
     final Destinations destinations = Destinations(

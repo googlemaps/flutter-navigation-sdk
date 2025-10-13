@@ -34,6 +34,8 @@ void main() {
         await getMapViewControllerForTestMapType(
           $,
           testMapType: mapTypeVariants.currentValue!,
+          initializeNavigation: false,
+          simulateLocation: false,
         );
 
     // Test default type.
@@ -150,6 +152,7 @@ void main() {
       $,
       testMapType: mapTypeVariants.currentValue!,
       initializeNavigation: false,
+      simulateLocation: false,
       onMapClicked: expectAsync1((LatLng msg) {
         expectSync(msg, isA<LatLng>());
       }, max: 1),
@@ -300,6 +303,8 @@ void main() {
         await getMapViewControllerForTestMapType(
           $,
           testMapType: mapTypeVariants.currentValue!,
+          initializeNavigation: false,
+          simulateLocation: false,
         );
 
     // Test that valid json doens't throw exception.
