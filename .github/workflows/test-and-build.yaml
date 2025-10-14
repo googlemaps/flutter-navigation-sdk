@@ -226,7 +226,7 @@ jobs:
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
       PATROL_ANALYTICS_ENABLED: false
-      patrol_cli_version: "3.5.0"
+      patrol_cli_version: "3.10.0"
       working_directory: "example"
     steps:
       - name: Fail if workflow has no access to API key
@@ -311,12 +311,13 @@ jobs:
     if: contains(github.base_ref, 'main')
     timeout-minutes: 90
     runs-on:
-      labels: macos-latest-xlarge
+      labels: macos-15-xlarge
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
       PATROL_ANALYTICS_ENABLED: false
-      patrol_cli_version: "3.5.0"
+      patrol_cli_version: "3.10.0"
       working_directory: "example"
+      IOS_VERSION: "18.6"
     steps:
       - name: Fail if workflow has no access to API key
         if: ${{ env.MAPS_API_KEY == '' }}
@@ -337,14 +338,16 @@ jobs:
         run: |
           SIMULATOR_NAME="iPhone 16 Pro"
 
-          # Find the UUID of the existing simulator by name
-          DEVICE_ID=$(xcrun simctl list devices | grep "$SIMULATOR_NAME (" | grep -Eo "\([A-F0-9-]+\)" | head -n 1 | tr -d "()")
+          # Find the UUID of the existing simulator by name and iOS version using the correct filter command
+          DEVICE_ID=$(xcrun simctl list devices $IOS_VERSION | grep "$SIMULATOR_NAME (" | grep -Eo "\([A-F0-9-]+\)" | head -n 1 | tr -d "()")
 
           if [ -z "$DEVICE_ID" ]; then
-            echo "Simulator $SIMULATOR_NAME not found."
+            echo "Simulator $SIMULATOR_NAME with iOS $IOS_VERSION not found."
+            echo "Available simulators for iOS $IOS_VERSION:"
+            xcrun simctl list devices $IOS_VERSION
             exit 1
           else
-            echo "Found existing simulator: $SIMULATOR_NAME ($DEVICE_ID)"
+            echo "Found existing simulator: $SIMULATOR_NAME iOS $IOS_VERSION ($DEVICE_ID)"
             echo "Erasing the simulator to ensure a clean state..."
             xcrun simctl erase "$DEVICE_ID"
           fi
@@ -381,7 +384,7 @@ jobs:
         id: tests_step
         working-directory: ${{ env.working_directory }}
         run: |
-          patrol test --dart-define=MAPS_API_KEY="$MAPS_API_KEY" ${{ runner.debug && '--show-flutter-logs --verbose' || '' }} -d "$DEVICE_ID"
+          patrol test --dart-define=MAPS_API_KEY="$MAPS_API_KEY" --ios=$IOS_VERSION ${{ runner.debug && '--show-flutter-logs --verbose' || '' }} -d "$DEVICE_ID"
       - name: Upload test report
         uses: actions/upload-artifact@v4
         if: ${{ always() }}

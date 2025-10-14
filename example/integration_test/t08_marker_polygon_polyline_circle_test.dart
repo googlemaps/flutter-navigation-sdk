@@ -49,6 +49,8 @@ void main() {
         await getMapViewControllerForTestMapType(
           $,
           testMapType: mapTypeVariants.currentValue!,
+          initializeNavigation: false,
+          simulateLocation: false,
           onMarkerClicked: onMarkerClicked,
           onMarkerDrag: onMarkerDrag,
           onMarkerDragEnd: onMarkerDrag,
@@ -305,6 +307,8 @@ void main() {
         await getMapViewControllerForTestMapType(
           $,
           testMapType: mapTypeVariants.currentValue!,
+          initializeNavigation: false,
+          simulateLocation: false,
           onPolylineClicked: onPolylineClicked,
         );
 
@@ -534,6 +538,8 @@ void main() {
         await getMapViewControllerForTestMapType(
           $,
           testMapType: mapTypeVariants.currentValue!,
+          initializeNavigation: false,
+          simulateLocation: false,
           onPolygonClicked: onPolygonClicked,
         );
 
@@ -872,6 +878,8 @@ void main() {
         await getMapViewControllerForTestMapType(
           $,
           testMapType: mapTypeVariants.currentValue!,
+          initializeNavigation: false,
+          simulateLocation: false,
           onCircleClicked: onCircleClicked,
         );
 

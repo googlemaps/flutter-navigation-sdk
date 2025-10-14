@@ -97,7 +97,7 @@ scripts:
   test:android:
     run: |
       if [ -d "example" ]; then cd example; fi && \
-        if [ ! -f android/gradlew ]; then flutter build apk --config-only; fi && \
+        flutter build apk --config-only && \
         cd android && \
         ./gradlew test \
           -x :flutter_plugin_android_lifecycle:testDebugUnitTest \

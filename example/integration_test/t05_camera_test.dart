@@ -533,6 +533,8 @@ void main() {
           await getMapViewControllerForTestMapType(
             $,
             testMapType: mapTypeVariants.currentValue!,
+            initializeNavigation: false,
+            simulateLocation: false,
             onCameraIdle: onCameraIdle,
           );
       // Move camera back to the start.

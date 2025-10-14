@@ -136,6 +136,11 @@ Future<void> checkTermsAndConditionsAcceptance(
         );
 
     await $.pumpAndSettle();
+    // Force wait a bit for the dialog to appear.
+    await $.tester.runAsync(
+      () => Future.delayed(const Duration(milliseconds: 250)),
+    );
+
     // Tap accept or cancel.
     if (Platform.isAndroid) {
       await $.native.tap(Selector(text: "Got It"));
@@ -188,37 +193,17 @@ Future<GoogleNavigationViewController> startNavigation(
   void Function(CameraPosition)? onCameraStartedFollowingLocation,
   void Function(CameraPosition)? onCameraStoppedFollowingLocation,
 }) async {
-  final ControllerCompleter<GoogleNavigationViewController>
-  controllerCompleter = ControllerCompleter();
-
-  await checkLocationDialogAndTosAcceptance($);
-
-  final Key key = GlobalKey();
-  await pumpNavigationView(
-    $,
-    GoogleMapsNavigationView(
-      key: key,
-      onViewCreated: (GoogleNavigationViewController viewController) {
-        controllerCompleter.complete(viewController);
-      },
-      onCameraMoveStarted: onCameraMoveStarted,
-      onCameraMove: onCameraMove,
-      onCameraIdle: onCameraIdle,
-      onCameraStartedFollowingLocation: onCameraStartedFollowingLocation,
-      onCameraStoppedFollowingLocation: onCameraStoppedFollowingLocation,
-    ),
-  );
-
   final GoogleNavigationViewController controller =
-      await controllerCompleter.future;
-
-  await GoogleMapsNavigator.initializeNavigationSession();
-  await $.pumpAndSettle();
-
-  await GoogleMapsNavigator.simulator.setUserLocation(
-    const LatLng(latitude: startLocationLat, longitude: startLocationLng),
-  );
-  await $.pumpAndSettle(timeout: const Duration(seconds: 1));
+      await startNavigationWithoutDestination(
+        $,
+        initializeNavigation: true,
+        simulateLocation: true,
+        onCameraMoveStarted: onCameraMoveStarted,
+        onCameraMove: onCameraMove,
+        onCameraIdle: onCameraIdle,
+        onCameraStartedFollowingLocation: onCameraStartedFollowingLocation,
+        onCameraStoppedFollowingLocation: onCameraStoppedFollowingLocation,
+      );
 
   /// Set Destination.
   final Destinations destinations = Destinations(
@@ -236,11 +221,9 @@ Future<GoogleNavigationViewController> startNavigation(
   final NavigationRouteStatus status =
       await GoogleMapsNavigator.setDestinations(destinations);
   expect(status, NavigationRouteStatus.statusOk);
-  await $.pumpAndSettle();
 
   /// Start guidance.
   await GoogleMapsNavigator.startGuidance();
-  await $.pumpAndSettle();
 
   expect(await GoogleMapsNavigator.isGuidanceRunning(), true);
 
@@ -350,9 +333,13 @@ Future<GoogleNavigationViewController> startNavigationWithoutDestination(
   void Function(bool)? onNavigationUIEnabledChanged,
   void Function(String)? onPolygonClicked,
   void Function(String)? onPolylineClicked,
+  void Function(CameraPosition, bool)? onCameraMoveStarted,
+  void Function(CameraPosition)? onCameraMove,
+  void Function(CameraPosition)? onCameraIdle,
+  void Function(CameraPosition)? onCameraStartedFollowingLocation,
+  void Function(CameraPosition)? onCameraStoppedFollowingLocation,
   void Function(NavigationViewRecenterButtonClickedEvent)?
   onRecenterButtonClicked,
-  void Function(CameraPosition)? onCameraIdle,
 }) async {
   final Completer<GoogleNavigationViewController> controllerCompleter =
       Completer<GoogleNavigationViewController>();
@@ -383,24 +370,30 @@ Future<GoogleNavigationViewController> startNavigationWithoutDestination(
       onPolygonClicked: onPolygonClicked,
       onPolylineClicked: onPolylineClicked,
       onRecenterButtonClicked: onRecenterButtonClicked,
+      onCameraMoveStarted: onCameraMoveStarted,
+      onCameraMove: onCameraMove,
       onCameraIdle: onCameraIdle,
+      onCameraStartedFollowingLocation: onCameraStartedFollowingLocation,
+      onCameraStoppedFollowingLocation: onCameraStoppedFollowingLocation,
     ),
   );
 
   final GoogleNavigationViewController controller =
       await controllerCompleter.future;
-  await $.pumpAndSettle();
 
   if (initializeNavigation) {
     await GoogleMapsNavigator.initializeNavigationSession();
-    await $.pumpAndSettle();
   }
 
   if (simulateLocation) {
-    await GoogleMapsNavigator.simulator.setUserLocation(
-      const LatLng(latitude: startLocationLat, longitude: startLocationLng),
+    const double tolerance = 0.001;
+    await setSimulatedUserLocationWithCheck(
+      $,
+      controller,
+      startLocationLat,
+      startLocationLng,
+      tolerance,
     );
-    await $.pumpAndSettle(timeout: const Duration(seconds: 1));
   }
 
   return controller;
@@ -431,8 +424,6 @@ Future<GoogleMapViewController> startMapView(
 }) async {
   final ControllerCompleter<GoogleMapViewController> controllerCompleter =
       ControllerCompleter();
-
-  //await checkLocationDialogAndTosAcceptance($);
 
   final Key key = GlobalKey();
   await pumpMapView(
@@ -485,9 +476,56 @@ Future<Value?> waitForValueMatchingPredicate<Value>(
     if (predicate(currentValue)) {
       return currentValue;
     }
-    await $.pump(Duration(milliseconds: delayMs));
+    await $.tester.runAsync(
+      () => Future.delayed(Duration(milliseconds: delayMs)),
+    );
   }
   return null;
+}
+
+/// Sets the simulated user location to [startLat], [startLng] and checks that
+/// the location was set correctly within the given [tolerance].
+Future<void> setSimulatedUserLocationWithCheck(
+  PatrolIntegrationTester $,
+  GoogleNavigationViewController viewController,
+  double startLat,
+  double startLng,
+  double tolerance,
+) async {
+  // Simulate location
+  await GoogleMapsNavigator.simulator.setUserLocation(
+    LatLng(latitude: startLat, longitude: startLng),
+  );
+
+  // Wait a bit for the location to be set, as this always seems to take a bit
+  // of time on both Android and iOS platforms.
+  await $.tester.runAsync(
+    () => Future.delayed(const Duration(milliseconds: 500)),
+  );
+
+  final LatLng? currentLocation = await waitForValueMatchingPredicate<LatLng?>(
+    $,
+    viewController.getMyLocation,
+    (LatLng? location) {
+      if (location == null) return false;
+
+      bool isCloseTo(double a, double b) {
+        var diff = a - b;
+        if (diff < 0) diff = -diff;
+        return diff <= tolerance;
+      }
+
+      return isCloseTo(location.latitude, startLat) &&
+          isCloseTo(location.longitude, startLng);
+    },
+    // Total time before giving up: 100 * 200ms = 20s
+    maxTries: 100,
+    delayMs: 200,
+  );
+
+  expect(currentLocation, isNotNull);
+  expect(currentLocation?.latitude, closeTo(startLat, tolerance));
+  expect(currentLocation?.longitude, closeTo(startLng, tolerance));
 }
 
 // Convert a Color to an integer.
