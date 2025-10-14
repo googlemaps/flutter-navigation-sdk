@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.6.5](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.6.4...0.6.5) (2025-10-14)
+
+
+### Features
+
+* deprecate continueToNextDestination method ([#490](https://github.com/googlemaps/flutter-navigation-sdk/issues/490)) ([083fcc5](https://github.com/googlemaps/flutter-navigation-sdk/commit/083fcc588e9f17bc5b2dbadb27f5cb9486d7e9d8))
+* improve string presentation for internal classes ([#491](https://github.com/googlemaps/flutter-navigation-sdk/issues/491)) ([a6aef40](https://github.com/googlemaps/flutter-navigation-sdk/commit/a6aef403ce13209d779fa12f79b75298d6da6e56))
+
+
+### Bug Fixes
+
+* flutter plugin lifecycle logic ([#487](https://github.com/googlemaps/flutter-navigation-sdk/issues/487)) ([48dd3e4](https://github.com/googlemaps/flutter-navigation-sdk/commit/48dd3e4490d0d4a5bacfa7dde27af02c82737c4b))
+* view dispose crash on android if view is on background ([#453](https://github.com/googlemaps/flutter-navigation-sdk/issues/453)) ([9774479](https://github.com/googlemaps/flutter-navigation-sdk/commit/977447918151a0d1a46616c0c13d89c622459ee7))
+
 ## [0.6.4](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.6.3...0.6.4) (2025-08-08)
 
 
