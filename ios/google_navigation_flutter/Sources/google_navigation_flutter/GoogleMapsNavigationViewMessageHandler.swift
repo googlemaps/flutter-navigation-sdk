@@ -178,14 +178,16 @@ class GoogleMapsNavigationViewMessageHandler: MapViewApi {
     completion: @escaping (Result<Bool, Error>) -> Void
   ) {
     do {
+      let durationInSeconds = duration != nil ? TimeInterval(duration!) / 1000.0 : nil
       try getView(viewId)
         .animateCameraToCameraPosition(
           cameraPosition:
             Convert
-            .convertCameraPosition(position: cameraPosition))
-
-      // No callback supported, just return immediately
-      completion(.success(true))
+            .convertCameraPosition(position: cameraPosition),
+          duration: durationInSeconds
+        ) { success in
+          completion(.success(success))
+        }
     } catch {
       completion(.failure(error))
     }
@@ -196,10 +198,13 @@ class GoogleMapsNavigationViewMessageHandler: MapViewApi {
     completion: @escaping (Result<Bool, Error>) -> Void
   ) {
     do {
-      try getView(viewId).animateCameraToLatLng(point: Convert.convertLatLngFromDto(point: point))
-
-      // No callback supported, just return immediately
-      completion(.success(true))
+      let durationInSeconds = duration != nil ? TimeInterval(duration!) / 1000.0 : nil
+      try getView(viewId).animateCameraToLatLng(
+        point: Convert.convertLatLngFromDto(point: point),
+        duration: durationInSeconds
+      ) { success in
+        completion(.success(success))
+      }
     } catch {
       completion(.failure(error))
     }
@@ -217,13 +222,14 @@ class GoogleMapsNavigationViewMessageHandler: MapViewApi {
       ) -> Void
   ) {
     do {
+      let durationInSeconds = duration != nil ? TimeInterval(duration!) / 1000.0 : nil
       try getView(viewId).animateCameraToLatLngBounds(
         bounds: Convert.convertLatLngBounds(bounds: bounds),
-        padding: padding
-      )
-
-      // No callback supported, just return immediately
-      completion(.success(true))
+        padding: padding,
+        duration: durationInSeconds
+      ) { success in
+        completion(.success(success))
+      }
     } catch {
       completion(.failure(error))
     }
@@ -235,13 +241,14 @@ class GoogleMapsNavigationViewMessageHandler: MapViewApi {
     completion: @escaping (Result<Bool, Error>) -> Void
   ) {
     do {
+      let durationInSeconds = duration != nil ? TimeInterval(duration!) / 1000.0 : nil
       try getView(viewId).animateCameraToLatLngZoom(
         point: Convert.convertLatLngFromDto(point: point),
-        zoom: zoom
-      )
-
-      // No callback supported, just return immediately
-      completion(.success(true))
+        zoom: zoom,
+        duration: durationInSeconds
+      ) { success in
+        completion(.success(success))
+      }
     } catch {
       completion(.failure(error))
     }
@@ -253,10 +260,14 @@ class GoogleMapsNavigationViewMessageHandler: MapViewApi {
     completion: @escaping (Result<Bool, Error>) -> Void
   ) {
     do {
-      try getView(viewId).animateCameraByScroll(dx: scrollByDx, dy: scrollByDy)
-
-      // No callback supported, just return immediately
-      completion(.success(true))
+      let durationInSeconds = duration != nil ? TimeInterval(duration!) / 1000.0 : nil
+      try getView(viewId).animateCameraByScroll(
+        dx: scrollByDx,
+        dy: scrollByDy,
+        duration: durationInSeconds
+      ) { success in
+        completion(.success(success))
+      }
     } catch {
       completion(.failure(error))
     }
@@ -274,11 +285,15 @@ class GoogleMapsNavigationViewMessageHandler: MapViewApi {
       ) -> Void
   ) {
     do {
+      let durationInSeconds = duration != nil ? TimeInterval(duration!) / 1000.0 : nil
       let focus = Convert.convertDeltaToPoint(dx: focusDx, dy: focusDy)
-      try getView(viewId).animateCameraByZoom(zoomBy: zoomBy, focus: focus)
-
-      // No callback supported, just return immediately
-      completion(.success(true))
+      try getView(viewId).animateCameraByZoom(
+        zoomBy: zoomBy,
+        focus: focus,
+        duration: durationInSeconds
+      ) { success in
+        completion(.success(success))
+      }
     } catch {
       completion(.failure(error))
     }
@@ -289,10 +304,13 @@ class GoogleMapsNavigationViewMessageHandler: MapViewApi {
     completion: @escaping (Result<Bool, Error>) -> Void
   ) {
     do {
-      try getView(viewId).animateCameraToZoom(zoom: zoom)
-
-      // No callback supported, just return immediately
-      completion(.success(true))
+      let durationInSeconds = duration != nil ? TimeInterval(duration!) / 1000.0 : nil
+      try getView(viewId).animateCameraToZoom(
+        zoom: zoom,
+        duration: durationInSeconds
+      ) { success in
+        completion(.success(success))
+      }
     } catch {
       completion(.failure(error))
     }
