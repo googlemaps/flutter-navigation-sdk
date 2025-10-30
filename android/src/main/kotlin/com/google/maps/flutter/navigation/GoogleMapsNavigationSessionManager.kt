@@ -51,62 +51,60 @@ interface NavigationReadyListener {
   fun onNavigationReady(ready: Boolean)
 }
 
+/**
+ * Singleton holder for the shared Navigator instance.
+ * Multiple GoogleMapsNavigationSessionManager instances share the same Navigator.
+ */
+object SharedNavigatorHolder {
+  @Volatile
+  private var navigator: Navigator? = null
+  private var initializationInProgress = false
+  private val initializationCallbacks = mutableListOf<NavigatorListener>()
+  
+  @Synchronized
+  fun getNavigator(): Navigator? = navigator
+  
+  @Synchronized
+  fun setNavigator(nav: Navigator?) {
+    navigator = nav
+  }
+  
+  @Synchronized
+  fun isInitializationInProgress(): Boolean = initializationInProgress
+  
+  @Synchronized
+  fun setInitializationInProgress(inProgress: Boolean) {
+    initializationInProgress = inProgress
+  }
+  
+  @Synchronized
+  fun addInitializationCallback(callback: NavigatorListener) {
+    initializationCallbacks.add(callback)
+  }
+  
+  @Synchronized
+  fun getAndClearInitializationCallbacks(): List<NavigatorListener> {
+    val callbacks = initializationCallbacks.toList()
+    initializationCallbacks.clear()
+    return callbacks
+  }
+  
+  @Synchronized
+  fun reset() {
+    navigator = null
+    initializationInProgress = false
+    initializationCallbacks.clear()
+  }
+}
+
 /** This class handles creation of navigation session and other navigation related tasks. */
 class GoogleMapsNavigationSessionManager
-private constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
+constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
   DefaultLifecycleObserver {
   companion object {
-    private var instance: GoogleMapsNavigationSessionManager? = null
     var navigationReadyListener: NavigationReadyListener? = null
-
-    /**
-     * Create new GoogleMapsNavigationSessionManager instance. Does nothing if instance is already
-     * created.
-     *
-     * @param binaryMessenger BinaryMessenger to use for API setup.
-     */
-    @Synchronized
-    fun createInstance(binaryMessenger: BinaryMessenger) {
-      if (instance != null) {
-        return
-      }
-
-      val sessionMessageHandler = GoogleMapsNavigationSessionMessageHandler()
-      NavigationSessionApi.setUp(binaryMessenger, sessionMessageHandler)
-      val navigationSessionEventApi = NavigationSessionEventApi(binaryMessenger)
-      instance = GoogleMapsNavigationSessionManager(navigationSessionEventApi)
-    }
-
-    /**
-     * Stop all navigation related tasks and destroy [GoogleMapsNavigationSessionManager] instance.
-     */
-    @Synchronized
-    fun destroyInstance() {
-      // Stop all navigation related tasks.
-      instance = null
-    }
-
-    /**
-     * Get instance that was previously created
-     *
-     * @return [GoogleMapsNavigationSessionManager] instance.
-     */
-    @Synchronized
-    fun getInstance(): GoogleMapsNavigationSessionManager {
-      if (instance == null) {
-        throw RuntimeException("Instance not created, create with createInstance()")
-      }
-      return instance!!
-    }
-
-    /** Get instance if available, or null if not created. */
-    @Synchronized
-    fun getInstanceOrNull(): GoogleMapsNavigationSessionManager? {
-      return instance
-    }
   }
 
-  private var navigator: Navigator? = null
   private var isNavigationSessionInitialized = false
   private var arrivalListener: Navigator.ArrivalListener? = null
   private var routeChangedListener: Navigator.RouteChangedListener? = null
@@ -160,8 +158,9 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
 
   @Throws(FlutterError::class)
   fun getNavigator(): Navigator {
-    if (navigator != null) {
-      return navigator!!
+    val nav = SharedNavigatorHolder.getNavigator()
+    if (nav != null) {
+      return nav
     } else {
       throw FlutterError(
         "sessionNotInitialized",
@@ -173,7 +172,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
   // Expose the navigator to the google_maps_driver side.
   // DriverApi initialization requires navigator.
   fun getNavigatorWithoutError(): Navigator? {
-    return navigator
+    return SharedNavigatorHolder.getNavigator()
   }
 
   /** Creates Navigator instance. */
@@ -182,7 +181,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
     behavior: TaskRemovedBehaviorDto,
     callback: (Result<Unit>) -> Unit,
   ) {
-    if (navigator != null) {
+    if (SharedNavigatorHolder.getNavigator() != null) {
       // Navigator is already initialized, just re-register listeners.
       registerNavigationListeners()
       isNavigationSessionInitialized = true
@@ -190,6 +189,26 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
       callback(Result.success(Unit))
       return
     }
+    
+    // Check if initialization is already in progress by another instance
+    if (SharedNavigatorHolder.isInitializationInProgress()) {
+      // Add this callback to the queue to be called when initialization completes
+      val queuedListener = object : NavigatorListener {
+        override fun onNavigatorReady(newNavigator: Navigator) {
+          registerNavigationListeners()
+          isNavigationSessionInitialized = true
+          navigationReadyListener?.onNavigationReady(true)
+          callback(Result.success(Unit))
+        }
+
+        override fun onError(@NavigationApi.ErrorCode errorCode: Int) {
+          callback(Result.failure(convertNavigatorErrorToFlutterError(errorCode)))
+        }
+      }
+      SharedNavigatorHolder.addInitializationCallback(queuedListener)
+      return
+    }
+    
     taskRemovedBehavior = Convert.taskRemovedBehaviorDtoToTaskRemovedBehavior(behavior)
 
     // Align API behavior with iOS:
@@ -209,65 +228,82 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
     // Enable or disable abnormal termination reporting.
     NavigationApi.setAbnormalTerminationReportingEnabled(abnormalTerminationReportingEnabled)
 
+    // Mark initialization as in progress
+    SharedNavigatorHolder.setInitializationInProgress(true)
+
     val listener =
       object : NavigatorListener {
         override fun onNavigatorReady(newNavigator: Navigator) {
-          navigator = newNavigator
-          navigator?.setTaskRemovedBehavior(taskRemovedBehavior)
+          SharedNavigatorHolder.setNavigator(newNavigator)
+          newNavigator.setTaskRemovedBehavior(taskRemovedBehavior)
           registerNavigationListeners()
           isNavigationSessionInitialized = true
           navigationReadyListener?.onNavigationReady(true)
+          
+          // Mark initialization as complete
+          SharedNavigatorHolder.setInitializationInProgress(false)
+          
+          // Notify all queued callbacks
+          val queuedCallbacks = SharedNavigatorHolder.getAndClearInitializationCallbacks()
+          for (queuedCallback in queuedCallbacks) {
+            queuedCallback.onNavigatorReady(newNavigator)
+          }
+          
           callback(Result.success(Unit))
         }
 
         override fun onError(@NavigationApi.ErrorCode errorCode: Int) {
-          // Keep in sync with GoogleMapsNavigationSessionManager.swift
-          when (errorCode) {
-            NavigationApi.ErrorCode.NOT_AUTHORIZED -> {
-              callback(
-                Result.failure(
-                  FlutterError(
-                    "notAuthorized",
-                    "The session initialization failed, because the required Maps API key is empty or invalid.",
-                  )
-                )
-              )
-            }
-            NavigationApi.ErrorCode.TERMS_NOT_ACCEPTED -> {
-              callback(
-                Result.failure(
-                  FlutterError(
-                    "termsNotAccepted",
-                    "The session initialization failed, because the user has not yet accepted the navigation terms and conditions.",
-                  )
-                )
-              )
-            }
-            NavigationApi.ErrorCode.NETWORK_ERROR -> {
-              callback(
-                Result.failure(
-                  FlutterError(
-                    "networkError",
-                    "The session initialization failed, because there is no working network connection.",
-                  )
-                )
-              )
-            }
-            NavigationApi.ErrorCode.LOCATION_PERMISSION_MISSING -> {
-              callback(
-                Result.failure(
-                  FlutterError(
-                    "locationPermissionMissing",
-                    "The session initialization failed, because the required location permission has not been granted.",
-                  )
-                )
-              )
-            }
+          SharedNavigatorHolder.setInitializationInProgress(false)
+          
+          val error = convertNavigatorErrorToFlutterError(errorCode)
+          
+          // Notify all queued callbacks about the error
+          val queuedCallbacks = SharedNavigatorHolder.getAndClearInitializationCallbacks()
+          for (queuedCallback in queuedCallbacks) {
+            queuedCallback.onError(errorCode)
           }
+          
+          callback(Result.failure(error))
         }
       }
 
     NavigationApi.getNavigator(getActivity(), listener)
+  }
+  
+  private fun convertNavigatorErrorToFlutterError(@NavigationApi.ErrorCode errorCode: Int): FlutterError {
+    // Keep in sync with GoogleMapsNavigationSessionManager.swift
+    return when (errorCode) {
+      NavigationApi.ErrorCode.NOT_AUTHORIZED -> {
+        FlutterError(
+          "notAuthorized",
+          "The session initialization failed, because the required Maps API key is empty or invalid.",
+        )
+      }
+      NavigationApi.ErrorCode.TERMS_NOT_ACCEPTED -> {
+        FlutterError(
+          "termsNotAccepted",
+          "The session initialization failed, because the user has not yet accepted the navigation terms and conditions.",
+        )
+      }
+      NavigationApi.ErrorCode.NETWORK_ERROR -> {
+        FlutterError(
+          "networkError",
+          "The session initialization failed, because there is no working network connection.",
+        )
+      }
+      NavigationApi.ErrorCode.LOCATION_PERMISSION_MISSING -> {
+        FlutterError(
+          "locationPermissionMissing",
+          "The session initialization failed, because the required location permission has not been granted.",
+        )
+      }
+      else -> {
+        FlutterError(
+          "unknownError",
+          "The session initialization failed with an unknown error.",
+        )
+      }
+    }
   }
 
   @Throws(FlutterError::class)
@@ -567,7 +603,7 @@ private constructor(private val navigationSessionEventApi: NavigationSessionEven
    * @return true if session is already created.
    */
   fun isInitialized(): Boolean {
-    return navigator != null && isNavigationSessionInitialized
+    return SharedNavigatorHolder.getNavigator() != null && isNavigationSessionInitialized
   }
 
   /**

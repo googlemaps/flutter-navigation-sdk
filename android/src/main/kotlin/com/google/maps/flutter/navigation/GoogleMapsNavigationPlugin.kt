@@ -40,6 +40,9 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
   private var viewMessageHandler: GoogleMapsViewMessageHandler? = null
   private var imageRegistryMessageHandler: GoogleMapsImageRegistryMessageHandler? = null
   private var autoViewMessageHandler: GoogleMapsAutoViewMessageHandler? = null
+  
+  // Instance-level session manager instead of singleton
+  internal var sessionManager: GoogleMapsNavigationSessionManager? = null
 
   private var lifecycle: Lifecycle? = null
 
@@ -67,9 +70,15 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
     AutoMapViewApi.setUp(binding.binaryMessenger, autoViewMessageHandler)
     autoViewEventApi = AutoViewEventApi(binding.binaryMessenger)
 
-    // Setup navigation session manager and its method channel handlers
-    GoogleMapsNavigationSessionManager.createInstance(binding.binaryMessenger)
-    val inspectorHandler = GoogleMapsNavigationInspectorHandler(viewRegistry!!)
+    // Setup navigation session manager (instance-level, not singleton)
+    val navigationSessionEventApi = NavigationSessionEventApi(binding.binaryMessenger)
+    sessionManager = GoogleMapsNavigationSessionManager(navigationSessionEventApi)
+    
+    // Setup navigation session message handler with this instance's session manager
+    val sessionMessageHandler = GoogleMapsNavigationSessionMessageHandler(sessionManager!!)
+    NavigationSessionApi.setUp(binding.binaryMessenger, sessionMessageHandler)
+    
+    val inspectorHandler = GoogleMapsNavigationInspectorHandler(viewRegistry!!, sessionManager!!)
     NavigationInspector.setUp(binding.binaryMessenger, inspectorHandler)
   }
 
@@ -80,10 +89,10 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
     AutoMapViewApi.setUp(binding.binaryMessenger, null)
     NavigationInspector.setUp(binding.binaryMessenger, null)
 
-    GoogleMapsNavigationSessionManager.destroyInstance()
     binding.applicationContext.unregisterComponentCallbacks(viewRegistry)
 
     // Cleanup references
+    sessionManager = null
     viewRegistry = null
     viewMessageHandler = null
     imageRegistryMessageHandler = null
@@ -98,18 +107,18 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
     lifecycle =
       FlutterLifecycleAdapter.getActivityLifecycle(binding).also { lc ->
         viewRegistry?.let(lc::addObserver)
-        GoogleMapsNavigationSessionManager.getInstanceOrNull()?.let(lc::addObserver)
+        sessionManager?.let(lc::addObserver)
       }
-    GoogleMapsNavigationSessionManager.getInstanceOrNull()?.onActivityCreated(binding.activity)
+    sessionManager?.onActivityCreated(binding.activity)
   }
 
   private fun detachActivity(forConfigChange: Boolean) {
     lifecycle?.let { lc ->
       viewRegistry?.let(lc::removeObserver)
-      GoogleMapsNavigationSessionManager.getInstanceOrNull()?.let(lc::removeObserver)
+      sessionManager?.let(lc::removeObserver)
     }
 
-    GoogleMapsNavigationSessionManager.getInstanceOrNull()?.onActivityDestroyed(forConfigChange)
+    sessionManager?.onActivityDestroyed(forConfigChange)
     lifecycle = null
   }
 

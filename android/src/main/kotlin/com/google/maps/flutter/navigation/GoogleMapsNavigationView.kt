@@ -67,7 +67,8 @@ internal constructor(
     if (
       navigationOptions?.navigationUiEnabledPreference == NavigationUIEnabledPreference.AUTOMATIC
     ) {
-      val navigatorInitialized = GoogleMapsNavigationSessionManager.getInstance().isInitialized()
+      val plugin = GoogleMapsNavigationPlugin.getInstance()
+      val navigatorInitialized = plugin?.sessionManager?.isInitialized() ?: false
       if (navigatorInitialized) {
         navigationViewEnabled = true
       }

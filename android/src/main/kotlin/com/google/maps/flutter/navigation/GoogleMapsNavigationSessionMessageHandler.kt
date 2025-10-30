@@ -20,9 +20,11 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.navigation.RoutingOptions
 import com.google.android.libraries.navigation.SimulationOptions
 
-class GoogleMapsNavigationSessionMessageHandler : NavigationSessionApi {
+class GoogleMapsNavigationSessionMessageHandler(
+  private val sessionManager: GoogleMapsNavigationSessionManager
+) : NavigationSessionApi {
   private fun manager(): GoogleMapsNavigationSessionManager {
-    return GoogleMapsNavigationSessionManager.getInstance()
+    return sessionManager
   }
 
   override fun createNavigationSession(

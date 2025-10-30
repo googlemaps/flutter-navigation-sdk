@@ -57,7 +57,7 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
     GoogleMapsNavigationSessionManager.navigationReadyListener = this
     mIsNavigationReady =
       try {
-        GoogleMapsNavigationSessionManager.getInstance().isInitialized()
+        GoogleMapsNavigationPlugin.getInstance()?.sessionManager?.isInitialized() ?: false
       } catch (exception: RuntimeException) {
         // If GoogleMapsNavigationSessionManager is not initialized navigation is not ready.
         false
