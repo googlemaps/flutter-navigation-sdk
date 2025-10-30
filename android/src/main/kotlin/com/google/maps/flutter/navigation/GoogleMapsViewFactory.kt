@@ -24,7 +24,7 @@ import java.util.Objects
 class GoogleMapsViewFactory(
   private val viewRegistry: GoogleMapsViewRegistry,
   private val viewEventApi: ViewEventApi,
-  private val imageRegistry: ImageRegistry,
+  private val imageRegistry: ImageRegistry
 ) : PlatformViewFactory(ViewCreationApi.codec) {
   override fun create(context: Context, viewId: Int, args: Any?): PlatformView {
     val params = Objects.requireNonNull(args as ViewCreationOptionsDto)
@@ -39,7 +39,7 @@ class GoogleMapsViewFactory(
         viewId,
         viewRegistry,
         viewEventApi,
-        imageRegistry,
+        imageRegistry
       )
     } else {
       return GoogleMapView(context, mapOptions, viewId, viewEventApi, viewRegistry, imageRegistry)

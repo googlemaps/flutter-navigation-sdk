@@ -32,7 +32,7 @@ internal constructor(
   viewId: Int,
   private val viewRegistry: GoogleMapsViewRegistry,
   viewEventApi: ViewEventApi,
-  private val imageRegistry: ImageRegistry,
+  private val imageRegistry: ImageRegistry
 ) : PlatformView, GoogleMapsBaseMapView(viewId, mapOptions, viewEventApi, imageRegistry) {
   private val _navigationView: NavigationView = NavigationView(context, mapOptions.googleMapOptions)
 
@@ -65,13 +65,9 @@ internal constructor(
     // Initialize navigation view with given navigation view options
     var navigationViewEnabled = false
     if (
-      navigationOptions?.navigationUiEnabledPreference == NavigationUIEnabledPreference.AUTOMATIC
+      navigationOptions?.navigationUiEnabledPreference == NavigationUIEnabledPreference.AUTOMATIC && SharedNavigatorHolder.getNavigator() != null
     ) {
-      val plugin = GoogleMapsNavigationPlugin.getInstance()
-      val navigatorInitialized = plugin?.sessionManager?.isInitialized() ?: false
-      if (navigatorInitialized) {
-        navigationViewEnabled = true
-      }
+      navigationViewEnabled = true
     }
     _navigationView.isNavigationUiEnabled = navigationViewEnabled
 

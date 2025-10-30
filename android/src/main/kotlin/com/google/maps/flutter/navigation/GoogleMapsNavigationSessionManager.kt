@@ -105,7 +105,6 @@ constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
     var navigationReadyListener: NavigationReadyListener? = null
   }
 
-  private var isNavigationSessionInitialized = false
   private var arrivalListener: Navigator.ArrivalListener? = null
   private var routeChangedListener: Navigator.RouteChangedListener? = null
   private var reroutingListener: Navigator.ReroutingListener? = null
@@ -169,12 +168,6 @@ constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
     }
   }
 
-  // Expose the navigator to the google_maps_driver side.
-  // DriverApi initialization requires navigator.
-  fun getNavigatorWithoutError(): Navigator? {
-    return SharedNavigatorHolder.getNavigator()
-  }
-
   /** Creates Navigator instance. */
   fun createNavigationSession(
     abnormalTerminationReportingEnabled: Boolean,
@@ -184,7 +177,6 @@ constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
     if (SharedNavigatorHolder.getNavigator() != null) {
       // Navigator is already initialized, just re-register listeners.
       registerNavigationListeners()
-      isNavigationSessionInitialized = true
       navigationReadyListener?.onNavigationReady(true)
       callback(Result.success(Unit))
       return
@@ -196,7 +188,6 @@ constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
       val queuedListener = object : NavigatorListener {
         override fun onNavigatorReady(newNavigator: Navigator) {
           registerNavigationListeners()
-          isNavigationSessionInitialized = true
           navigationReadyListener?.onNavigationReady(true)
           callback(Result.success(Unit))
         }
@@ -237,7 +228,6 @@ constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
           SharedNavigatorHolder.setNavigator(newNavigator)
           newNavigator.setTaskRemovedBehavior(taskRemovedBehavior)
           registerNavigationListeners()
-          isNavigationSessionInitialized = true
           navigationReadyListener?.onNavigationReady(true)
           
           // Mark initialization as complete
@@ -334,13 +324,13 @@ constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
 
     // As unregisterListeners() is removing all listeners, we need to re-register them when
     // navigator is re-initialized. This is done in createNavigationSession() method.
-    isNavigationSessionInitialized = false
+    SharedNavigatorHolder.setNavigator(null)
     navigationReadyListener?.onNavigationReady(false)
   }
 
   private fun unregisterListeners() {
-    if (isInitialized()) {
-      val navigator = getNavigator()
+    val navigator = SharedNavigatorHolder.getNavigator()
+    if (navigator != null) {
       if (remainingTimeOrDistanceChangedListener != null) {
         navigator.removeRemainingTimeOrDistanceChangedListener(
           remainingTimeOrDistanceChangedListener
@@ -595,15 +585,6 @@ constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
         callback(Result.success(accepted))
       }
     }
-  }
-
-  /**
-   * Check if navigation session is already created.
-   *
-   * @return true if session is already created.
-   */
-  fun isInitialized(): Boolean {
-    return SharedNavigatorHolder.getNavigator() != null && isNavigationSessionInitialized
   }
 
   /**

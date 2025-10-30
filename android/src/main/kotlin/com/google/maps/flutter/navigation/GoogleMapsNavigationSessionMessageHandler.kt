@@ -23,24 +23,21 @@ import com.google.android.libraries.navigation.SimulationOptions
 class GoogleMapsNavigationSessionMessageHandler(
   private val sessionManager: GoogleMapsNavigationSessionManager
 ) : NavigationSessionApi {
-  private fun manager(): GoogleMapsNavigationSessionManager {
-    return sessionManager
-  }
 
   override fun createNavigationSession(
     abnormalTerminationReportingEnabled: Boolean,
     behavior: TaskRemovedBehaviorDto,
     callback: (Result<Unit>) -> Unit,
   ) {
-    manager().createNavigationSession(abnormalTerminationReportingEnabled, behavior, callback)
+    sessionManager.createNavigationSession(abnormalTerminationReportingEnabled, behavior, callback)
   }
 
   override fun isInitialized(): Boolean {
-    return manager().isInitialized()
+    return SharedNavigatorHolder.getNavigator() != null
   }
 
   override fun cleanup() {
-    manager().cleanup()
+    sessionManager.cleanup()
   }
 
   override fun showTermsAndConditionsDialog(
@@ -49,7 +46,7 @@ class GoogleMapsNavigationSessionMessageHandler(
     shouldOnlyShowDriverAwarenessDisclaimer: Boolean,
     callback: (Result<Boolean>) -> Unit,
   ) {
-    manager()
+    sessionManager
       .showTermsAndConditionsDialog(
         title,
         companyName,
@@ -59,27 +56,27 @@ class GoogleMapsNavigationSessionMessageHandler(
   }
 
   override fun areTermsAccepted(): Boolean {
-    return manager().areTermsAccepted()
+    return sessionManager.areTermsAccepted()
   }
 
   override fun resetTermsAccepted() {
-    manager().resetTermsAccepted()
+    sessionManager.resetTermsAccepted()
   }
 
   override fun getNavSDKVersion(): String {
-    return manager().getNavSDKVersion()
+    return sessionManager.getNavSDKVersion()
   }
 
   override fun isGuidanceRunning(): Boolean {
-    return manager().isGuidanceRunning()
+    return sessionManager.isGuidanceRunning()
   }
 
   override fun startGuidance() {
-    manager().startGuidance()
+    sessionManager.startGuidance()
   }
 
   override fun stopGuidance() {
-    manager().stopGuidance()
+    sessionManager.stopGuidance()
   }
 
   override fun setDestinations(
@@ -95,7 +92,7 @@ class GoogleMapsNavigationSessionMessageHandler(
       } else {
         RoutingOptions()
       }
-    manager().setDestinations(
+    sessionManager.setDestinations(
       waypoints,
       routingOptions,
       displayOptions,
@@ -113,11 +110,11 @@ class GoogleMapsNavigationSessionMessageHandler(
   }
 
   override fun clearDestinations() {
-    manager().clearDestinations()
+    sessionManager.clearDestinations()
   }
 
   override fun continueToNextDestination(): NavigationWaypointDto? {
-    val waypoint = manager().continueToNextDestination()
+    val waypoint = sessionManager.continueToNextDestination()
     return if (waypoint != null) {
       Convert.convertWaypointToDto(waypoint)
     } else {
@@ -126,32 +123,32 @@ class GoogleMapsNavigationSessionMessageHandler(
   }
 
   override fun getCurrentTimeAndDistance(): NavigationTimeAndDistanceDto {
-    val timeAndDistance = manager().getCurrentTimeAndDistance()
+    val timeAndDistance = sessionManager.getCurrentTimeAndDistance()
     return Convert.convertTimeAndDistanceToDto(timeAndDistance)
   }
 
   override fun setAudioGuidance(settings: NavigationAudioGuidanceSettingsDto) {
     val audioGuidanceSettings = Convert.convertAudioGuidanceSettingsToDto(settings)
-    manager().setAudioGuidance(audioGuidanceSettings)
+    sessionManager.setAudioGuidance(audioGuidanceSettings)
   }
 
   override fun setSpeedAlertOptions(options: SpeedAlertOptionsDto) {
     val newOptions = Convert.convertSpeedAlertOptionsFromDto(options)
-    manager().setSpeedAlertOptions(newOptions)
+    sessionManager.setSpeedAlertOptions(newOptions)
   }
 
   override fun getRouteSegments(): List<RouteSegmentDto> {
-    val routeSegments = manager().getRouteSegments()
+    val routeSegments = sessionManager.getRouteSegments()
     return routeSegments.map { Convert.convertRouteSegmentToDto(it) }
   }
 
   override fun getTraveledRoute(): List<LatLngDto> {
-    val traveledRoute = manager().getTraveledRoute()
+    val traveledRoute = sessionManager.getTraveledRoute()
     return traveledRoute.map { LatLngDto(it.latitude, it.longitude) }
   }
 
   override fun getCurrentRouteSegment(): RouteSegmentDto? {
-    val currentRouteSegment = manager().getCurrentRouteSegment()
+    val currentRouteSegment = sessionManager.getCurrentRouteSegment()
     if (currentRouteSegment != null) {
       return Convert.convertRouteSegmentToDto(currentRouteSegment)
     }
@@ -159,19 +156,19 @@ class GoogleMapsNavigationSessionMessageHandler(
   }
 
   override fun setUserLocation(location: LatLngDto) {
-    manager().setUserLocation(LatLng(location.latitude, location.longitude))
+    sessionManager.setUserLocation(LatLng(location.latitude, location.longitude))
   }
 
   override fun removeUserLocation() {
-    manager().removeUserLocation()
+    sessionManager.removeUserLocation()
   }
 
   override fun simulateLocationsAlongExistingRoute() {
-    manager().simulateLocationsAlongExistingRoute()
+    sessionManager.simulateLocationsAlongExistingRoute()
   }
 
   override fun simulateLocationsAlongExistingRouteWithOptions(options: SimulationOptionsDto) {
-    manager()
+    sessionManager
       .simulateLocationsAlongExistingRouteWithOptions(
         SimulationOptions().speedMultiplier(options.speedMultiplier.toFloat())
       )
@@ -182,7 +179,7 @@ class GoogleMapsNavigationSessionMessageHandler(
     callback: (Result<RouteStatusDto>) -> Unit,
   ) {
     val convertedWaypoints = waypoints.map { Convert.convertWaypointFromDto(it) }
-    manager().simulateLocationsAlongNewRoute(convertedWaypoints) {
+    sessionManager.simulateLocationsAlongNewRoute(convertedWaypoints) {
       if (it.isSuccess) {
         callback(Result.success(Convert.convertRouteStatusToDto(it.getOrThrow())))
       } else {
@@ -200,7 +197,7 @@ class GoogleMapsNavigationSessionMessageHandler(
     callback: (Result<RouteStatusDto>) -> Unit,
   ) {
     val convertedWaypoints = waypoints.map { Convert.convertWaypointFromDto(it) }
-    manager().simulateLocationsAlongNewRouteWithRoutingOptions(
+    sessionManager.simulateLocationsAlongNewRouteWithRoutingOptions(
       convertedWaypoints,
       Convert.convertRoutingOptionsFromDto(routingOptions),
     ) {
@@ -222,7 +219,7 @@ class GoogleMapsNavigationSessionMessageHandler(
     callback: (Result<RouteStatusDto>) -> Unit,
   ) {
     val convertedWaypoints = waypoints.map { Convert.convertWaypointFromDto(it) }
-    manager().simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
+    sessionManager.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
       convertedWaypoints,
       Convert.convertRoutingOptionsFromDto(routingOptions),
       SimulationOptions().speedMultiplier(simulationOptions.speedMultiplier.toFloat()),
@@ -239,11 +236,11 @@ class GoogleMapsNavigationSessionMessageHandler(
   }
 
   override fun pauseSimulation() {
-    manager().pauseSimulation()
+    sessionManager.pauseSimulation()
   }
 
   override fun resumeSimulation() {
-    manager().resumeSimulation()
+    sessionManager.resumeSimulation()
   }
 
   override fun allowBackgroundLocationUpdates(allow: Boolean) {
@@ -251,26 +248,26 @@ class GoogleMapsNavigationSessionMessageHandler(
   }
 
   override fun enableRoadSnappedLocationUpdates() {
-    manager().enableRoadSnappedLocationUpdates()
+    sessionManager.enableRoadSnappedLocationUpdates()
   }
 
   override fun disableRoadSnappedLocationUpdates() {
-    manager().disableRoadSnappedLocationUpdates()
+    sessionManager.disableRoadSnappedLocationUpdates()
   }
 
   override fun enableTurnByTurnNavigationEvents(numNextStepsToPreview: Long?) {
-    manager().enableTurnByTurnNavigationEvents(numNextStepsToPreview?.toInt() ?: Int.MAX_VALUE)
+    sessionManager.enableTurnByTurnNavigationEvents(numNextStepsToPreview?.toInt() ?: Int.MAX_VALUE)
   }
 
   override fun disableTurnByTurnNavigationEvents() {
-    manager().disableTurnByTurnNavigationEvents()
+    sessionManager.disableTurnByTurnNavigationEvents()
   }
 
   override fun registerRemainingTimeOrDistanceChangedListener(
     remainingTimeThresholdSeconds: Long,
     remainingDistanceThresholdMeters: Long,
   ) {
-    manager()
+    sessionManager
       .registerRemainingTimeOrDistanceChangedListener(
         remainingTimeThresholdSeconds,
         remainingDistanceThresholdMeters,
