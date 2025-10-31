@@ -33,7 +33,7 @@ class GoogleMapsNavigationSessionMessageHandler(
   }
 
   override fun isInitialized(): Boolean {
-    return SharedNavigatorHolder.getNavigator() != null
+    return GoogleMapsNavigatorHolder.getNavigator() != null
   }
 
   override fun cleanup() {

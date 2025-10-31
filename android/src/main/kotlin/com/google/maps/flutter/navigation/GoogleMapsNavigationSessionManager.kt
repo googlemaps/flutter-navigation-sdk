@@ -51,63 +51,6 @@ interface NavigationReadyListener {
   fun onNavigationReady(ready: Boolean)
 }
 
-/**
- * Singleton holder for the shared Navigator instance.
- * Multiple GoogleMapsNavigationSessionManager instances share the same Navigator.
- */
-enum class GoogleNavigatorInitializationState {
-  NOT_INITIALIZED,
-  INITIALIZING,
-  INITIALIZED,
-}
-
-object SharedNavigatorHolder {
-  @Volatile
-  private var navigator: Navigator? = null
-  var initializationState = GoogleNavigatorInitializationState.NOT_INITIALIZED
-  private val initializationCallbacks = mutableListOf<NavigatorListener>()
-  
-  @Synchronized
-  fun getNavigator(): Navigator? = navigator
-  
-  @Synchronized
-  fun setNavigator(nav: Navigator?) {
-    navigator = nav
-    initializationState = if (nav != null) {
-      GoogleNavigatorInitializationState.INITIALIZED
-    } else {
-      GoogleNavigatorInitializationState.NOT_INITIALIZED
-    }
-  }
-  
-  @Synchronized
-  fun getInitializationState(): GoogleNavigatorInitializationState = initializationState
-  
-  @Synchronized
-  fun setInitializationState(state: GoogleNavigatorInitializationState) {
-    initializationState = state
-  }
-  
-  @Synchronized
-  fun addInitializationCallback(callback: NavigatorListener) {
-    initializationCallbacks.add(callback)
-  }
-  
-  @Synchronized
-  fun getAndClearInitializationCallbacks(): List<NavigatorListener> {
-    val callbacks = initializationCallbacks.toList()
-    initializationCallbacks.clear()
-    return callbacks
-  }
-  
-  @Synchronized
-  fun reset() {
-    navigator = null
-    initializationState = GoogleNavigatorInitializationState.NOT_INITIALIZED
-    initializationCallbacks.clear()
-  }
-}
-
 /** This class handles creation of navigation session and other navigation related tasks. */
 class GoogleMapsNavigationSessionManager
 constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
@@ -168,7 +111,7 @@ constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
 
   @Throws(FlutterError::class)
   fun getNavigator(): Navigator {
-    val nav = SharedNavigatorHolder.getNavigator()
+    val nav = GoogleMapsNavigatorHolder.getNavigator()
     if (nav != null) {
       return nav
     } else {
@@ -185,7 +128,7 @@ constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
     behavior: TaskRemovedBehaviorDto,
     callback: (Result<Unit>) -> Unit,
   ) {
-    val currentState = SharedNavigatorHolder.getInitializationState()
+    val currentState = GoogleMapsNavigatorHolder.getInitializationState()
     
     if (currentState == GoogleNavigatorInitializationState.INITIALIZED) {
       // Navigator is already initialized, just re-register listeners.
@@ -209,7 +152,7 @@ constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
           callback(Result.failure(convertNavigatorErrorToFlutterError(errorCode)))
         }
       }
-      SharedNavigatorHolder.addInitializationCallback(queuedListener)
+      GoogleMapsNavigatorHolder.addInitializationCallback(queuedListener)
       return
     }
     
@@ -233,22 +176,22 @@ constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
     NavigationApi.setAbnormalTerminationReportingEnabled(abnormalTerminationReportingEnabled)
 
     // Mark initialization as in progress
-    SharedNavigatorHolder.setInitializationState(GoogleNavigatorInitializationState.INITIALIZING)
+    GoogleMapsNavigatorHolder.setInitializationState(GoogleNavigatorInitializationState.INITIALIZING)
 
     val listener =
       object : NavigatorListener {
         override fun onNavigatorReady(newNavigator: Navigator) {
-          if (SharedNavigatorHolder.initializationState != GoogleNavigatorInitializationState.INITIALIZING) {
-            SharedNavigatorHolder.setNavigator(null);
+          if (GoogleMapsNavigatorHolder.getInitializationState() != GoogleNavigatorInitializationState.INITIALIZING) {
+            GoogleMapsNavigatorHolder.setNavigator(null);
             return
           }
-          SharedNavigatorHolder.setNavigator(newNavigator)
+          GoogleMapsNavigatorHolder.setNavigator(newNavigator)
           newNavigator.setTaskRemovedBehavior(taskRemovedBehavior)
           registerNavigationListeners()
           navigationReadyListener?.onNavigationReady(true)
           
           // Notify all queued callbacks
-          val queuedCallbacks = SharedNavigatorHolder.getAndClearInitializationCallbacks()
+          val queuedCallbacks = GoogleMapsNavigatorHolder.getAndClearInitializationCallbacks()
           for (queuedCallback in queuedCallbacks) {
             queuedCallback.onNavigatorReady(newNavigator)
           }
@@ -257,12 +200,12 @@ constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
         }
 
         override fun onError(@NavigationApi.ErrorCode errorCode: Int) {
-          SharedNavigatorHolder.setInitializationState(GoogleNavigatorInitializationState.NOT_INITIALIZED)
+          GoogleMapsNavigatorHolder.setInitializationState(GoogleNavigatorInitializationState.NOT_INITIALIZED)
           
           val error = convertNavigatorErrorToFlutterError(errorCode)
           
           // Notify all queued callbacks about the error
-          val queuedCallbacks = SharedNavigatorHolder.getAndClearInitializationCallbacks()
+          val queuedCallbacks = GoogleMapsNavigatorHolder.getAndClearInitializationCallbacks()
           for (queuedCallback in queuedCallbacks) {
             queuedCallback.onError(errorCode)
           }
@@ -338,12 +281,12 @@ constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
 
     // As unregisterListeners() is removing all listeners, we need to re-register them when
     // navigator is re-initialized. This is done in createNavigationSession() method.
-    SharedNavigatorHolder.setNavigator(null)
+    GoogleMapsNavigatorHolder.setNavigator(null)
     navigationReadyListener?.onNavigationReady(false)
   }
 
   private fun unregisterListeners() {
-    val navigator = SharedNavigatorHolder.getNavigator()
+    val navigator = GoogleMapsNavigatorHolder.getNavigator()
     if (navigator != null) {
       if (remainingTimeOrDistanceChangedListener != null) {
         navigator.removeRemainingTimeOrDistanceChangedListener(

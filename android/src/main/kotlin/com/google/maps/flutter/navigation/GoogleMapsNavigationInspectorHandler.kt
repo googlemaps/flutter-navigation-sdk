@@ -20,7 +20,7 @@ class GoogleMapsNavigationInspectorHandler(
   override fun isViewAttachedToSession(viewId: Long): Boolean {
     /// Is session exists, it's automatically attached to any existing view.
     if (viewRegistry.getNavigationView(viewId.toInt()) != null) {
-      return SharedNavigatorHolder.getNavigator() != null
+      return GoogleMapsNavigatorHolder.getNavigator() != null
     }
     return false
   }

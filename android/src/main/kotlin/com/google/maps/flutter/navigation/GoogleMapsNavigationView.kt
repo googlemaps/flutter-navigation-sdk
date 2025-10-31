@@ -65,7 +65,7 @@ internal constructor(
     // Initialize navigation view with given navigation view options
     var navigationViewEnabled = false
     if (
-      navigationOptions?.navigationUiEnabledPreference == NavigationUIEnabledPreference.AUTOMATIC && SharedNavigatorHolder.getNavigator() != null
+      navigationOptions?.navigationUiEnabledPreference == NavigationUIEnabledPreference.AUTOMATIC && GoogleMapsNavigatorHolder.getNavigator() != null
     ) {
       navigationViewEnabled = true
     }
