@@ -55,10 +55,16 @@ interface NavigationReadyListener {
  * Singleton holder for the shared Navigator instance.
  * Multiple GoogleMapsNavigationSessionManager instances share the same Navigator.
  */
+enum class GoogleNavigatorInitializationState {
+  NOT_INITIALIZED,
+  INITIALIZING,
+  INITIALIZED,
+}
+
 object SharedNavigatorHolder {
   @Volatile
   private var navigator: Navigator? = null
-  private var initializationInProgress = false
+  var initializationState = GoogleNavigatorInitializationState.NOT_INITIALIZED
   private val initializationCallbacks = mutableListOf<NavigatorListener>()
   
   @Synchronized
@@ -67,14 +73,19 @@ object SharedNavigatorHolder {
   @Synchronized
   fun setNavigator(nav: Navigator?) {
     navigator = nav
+    initializationState = if (nav != null) {
+      GoogleNavigatorInitializationState.INITIALIZED
+    } else {
+      GoogleNavigatorInitializationState.NOT_INITIALIZED
+    }
   }
   
   @Synchronized
-  fun isInitializationInProgress(): Boolean = initializationInProgress
+  fun getInitializationState(): GoogleNavigatorInitializationState = initializationState
   
   @Synchronized
-  fun setInitializationInProgress(inProgress: Boolean) {
-    initializationInProgress = inProgress
+  fun setInitializationState(state: GoogleNavigatorInitializationState) {
+    initializationState = state
   }
   
   @Synchronized
@@ -92,7 +103,7 @@ object SharedNavigatorHolder {
   @Synchronized
   fun reset() {
     navigator = null
-    initializationInProgress = false
+    initializationState = GoogleNavigatorInitializationState.NOT_INITIALIZED
     initializationCallbacks.clear()
   }
 }
@@ -174,7 +185,9 @@ constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
     behavior: TaskRemovedBehaviorDto,
     callback: (Result<Unit>) -> Unit,
   ) {
-    if (SharedNavigatorHolder.getNavigator() != null) {
+    val currentState = SharedNavigatorHolder.getInitializationState()
+    
+    if (currentState == GoogleNavigatorInitializationState.INITIALIZED) {
       // Navigator is already initialized, just re-register listeners.
       registerNavigationListeners()
       navigationReadyListener?.onNavigationReady(true)
@@ -183,7 +196,7 @@ constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
     }
     
     // Check if initialization is already in progress by another instance
-    if (SharedNavigatorHolder.isInitializationInProgress()) {
+    if (currentState == GoogleNavigatorInitializationState.INITIALIZING) {
       // Add this callback to the queue to be called when initialization completes
       val queuedListener = object : NavigatorListener {
         override fun onNavigatorReady(newNavigator: Navigator) {
@@ -220,18 +233,19 @@ constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
     NavigationApi.setAbnormalTerminationReportingEnabled(abnormalTerminationReportingEnabled)
 
     // Mark initialization as in progress
-    SharedNavigatorHolder.setInitializationInProgress(true)
+    SharedNavigatorHolder.setInitializationState(GoogleNavigatorInitializationState.INITIALIZING)
 
     val listener =
       object : NavigatorListener {
         override fun onNavigatorReady(newNavigator: Navigator) {
+          if (SharedNavigatorHolder.initializationState != GoogleNavigatorInitializationState.INITIALIZING) {
+            SharedNavigatorHolder.setNavigator(null);
+            return
+          }
           SharedNavigatorHolder.setNavigator(newNavigator)
           newNavigator.setTaskRemovedBehavior(taskRemovedBehavior)
           registerNavigationListeners()
           navigationReadyListener?.onNavigationReady(true)
-          
-          // Mark initialization as complete
-          SharedNavigatorHolder.setInitializationInProgress(false)
           
           // Notify all queued callbacks
           val queuedCallbacks = SharedNavigatorHolder.getAndClearInitializationCallbacks()
@@ -243,7 +257,7 @@ constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
         }
 
         override fun onError(@NavigationApi.ErrorCode errorCode: Int) {
-          SharedNavigatorHolder.setInitializationInProgress(false)
+          SharedNavigatorHolder.setInitializationState(GoogleNavigatorInitializationState.NOT_INITIALIZED)
           
           val error = convertNavigatorErrorToFlutterError(errorCode)
           
