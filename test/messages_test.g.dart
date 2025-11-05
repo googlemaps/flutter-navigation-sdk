@@ -4975,7 +4975,7 @@ abstract class TestNavigationSessionApi {
 
   bool isInitialized();
 
-  void cleanup();
+  void cleanup(bool resetSession);
 
   Future<bool> showTermsAndConditionsDialog(
     String title,
@@ -5163,8 +5163,18 @@ abstract class TestNavigationSessionApi {
             .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
               Object? message,
             ) async {
+              assert(
+                message != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.cleanup was null.',
+              );
+              final List<Object?> args = (message as List<Object?>?)!;
+              final bool? arg_resetSession = (args[0] as bool?);
+              assert(
+                arg_resetSession != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.cleanup was null, expected non-null bool.',
+              );
               try {
-                api.cleanup();
+                api.cleanup(arg_resetSession!);
                 return wrapResponse(empty: true);
               } on PlatformException catch (e) {
                 return wrapResponse(error: e);

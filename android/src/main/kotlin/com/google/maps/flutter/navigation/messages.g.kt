@@ -5702,7 +5702,7 @@ interface NavigationSessionApi {
 
   fun isInitialized(): Boolean
 
-  fun cleanup()
+  fun cleanup(resetSession: Boolean)
 
   fun showTermsAndConditionsDialog(
     title: String,
@@ -5862,10 +5862,12 @@ interface NavigationSessionApi {
             codec,
           )
         if (api != null) {
-          channel.setMessageHandler { _, reply ->
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val resetSessionArg = args[0] as Boolean
             val wrapped: List<Any?> =
               try {
-                api.cleanup()
+                api.cleanup(resetSessionArg)
                 listOf(null)
               } catch (exception: Throwable) {
                 MessagesPigeonUtils.wrapError(exception)

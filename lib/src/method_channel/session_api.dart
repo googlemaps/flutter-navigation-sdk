@@ -86,9 +86,17 @@ class NavigationSessionAPIImpl {
   }
 
   /// Cleanup navigation session.
-  Future<void> cleanup() async {
+  ///
+  /// If [resetSession] is true, clears listeners, any existing route waypoints
+  /// and stops ongoing navigation guidance and simulation.
+  ///
+  /// If [resetSession] is false, only unregisters native event listeners without
+  /// clearing the navigation session. This is useful for background/foreground
+  /// service implementations where you want to stop receiving events but keep
+  /// the navigation session active.
+  Future<void> cleanup({bool resetSession = true}) async {
     try {
-      return await _sessionApi.cleanup();
+      return await _sessionApi.cleanup(resetSession);
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'sessionNotInitialized':

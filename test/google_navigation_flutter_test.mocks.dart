@@ -105,8 +105,8 @@ class MockTestNavigationSessionApi extends _i1.Mock
           as bool);
 
   @override
-  void cleanup() => super.noSuchMethod(
-    Invocation.method(#cleanup, []),
+  void cleanup(bool? resetSession) => super.noSuchMethod(
+    Invocation.method(#cleanup, [resetSession]),
     returnValueForMissingStub: null,
   );
 

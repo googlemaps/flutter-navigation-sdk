@@ -24,6 +24,8 @@ dependencies:
   device_info_plus: ^11.3.0
   flutter:
     sdk: flutter
+  flutter_background_service: 5.1.0
+  flutter_local_notifications: 18.0.1
   google_navigation_flutter:
     path: ../
   http: ^1.1.2

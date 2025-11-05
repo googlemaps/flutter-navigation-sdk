@@ -16,6 +16,7 @@
 
 package com.google.maps.flutter.navigation
 
+import android.app.Application
 import androidx.lifecycle.Lifecycle
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -40,14 +41,15 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
   private var viewMessageHandler: GoogleMapsViewMessageHandler? = null
   private var imageRegistryMessageHandler: GoogleMapsImageRegistryMessageHandler? = null
   private var autoViewMessageHandler: GoogleMapsAutoViewMessageHandler? = null
-  
+
   // Instance-level session manager instead of singleton
   internal var sessionManager: GoogleMapsNavigationSessionManager? = null
 
   private var lifecycle: Lifecycle? = null
 
   override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-    // Store first instance of the plugin so that Android Auto will get access to the correct object instances.
+    // Store first instance of the plugin so that Android Auto will get access to the correct object
+    // instances.
     if (instance == null) {
       instance = this
     }
@@ -68,19 +70,20 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
     AutoMapViewApi.setUp(binding.binaryMessenger, autoViewMessageHandler)
     autoViewEventApi = AutoViewEventApi(binding.binaryMessenger)
 
-    // Setup navigation session manager (instance-level, not singleton)
+    // Setup navigation session manager
+    val app = binding.applicationContext as Application
     val navigationSessionEventApi = NavigationSessionEventApi(binding.binaryMessenger)
-    sessionManager = GoogleMapsNavigationSessionManager(navigationSessionEventApi)
+    sessionManager = GoogleMapsNavigationSessionManager(navigationSessionEventApi, app)
 
     // Setup platform view factory and its method channel handlers
     viewEventApi = ViewEventApi(binding.binaryMessenger)
     val factory = GoogleMapsViewFactory(viewRegistry!!, viewEventApi!!, imageRegistry!!)
     binding.platformViewRegistry.registerViewFactory("google_navigation_flutter", factory)
-    
+
     // Setup navigation session message handler with this instance's session manager
     val sessionMessageHandler = GoogleMapsNavigationSessionMessageHandler(sessionManager!!)
     NavigationSessionApi.setUp(binding.binaryMessenger, sessionMessageHandler)
-    
+
     val inspectorHandler = GoogleMapsNavigationInspectorHandler(viewRegistry!!)
     NavigationInspector.setUp(binding.binaryMessenger, inspectorHandler)
   }

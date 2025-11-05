@@ -27,6 +27,7 @@ import 'widgets/widgets.dart';
 /// The list of pages to show in the Google Maps Navigation demo.
 final List<ExamplePage> _allPages = <ExamplePage>[
   const NavigationPage(),
+  const BackgroundNavigationPage(),
   const BasicMapPage(),
   const CameraPage(),
   const MarkersPage(),

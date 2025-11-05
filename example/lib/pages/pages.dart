@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+export 'background_navigation.dart';
 export 'camera.dart';
 export 'map.dart';
 export 'markers.dart';
