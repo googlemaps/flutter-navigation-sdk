@@ -14,13 +14,13 @@
 
 package com.google.maps.flutter.navigation
 
-class GoogleMapsNavigationInspectorHandler(
-  private val viewRegistry: GoogleMapsViewRegistry
-) : NavigationInspector {
+class GoogleMapsNavigationInspectorHandler(private val viewRegistry: GoogleMapsViewRegistry) :
+  NavigationInspector {
   override fun isViewAttachedToSession(viewId: Long): Boolean {
     /// Is session exists, it's automatically attached to any existing view.
     if (viewRegistry.getNavigationView(viewId.toInt()) != null) {
-      return GoogleMapsNavigatorHolder.getInitializationState() == GoogleNavigatorInitializationState.INITIALIZED
+      return GoogleMapsNavigatorHolder.getInitializationState() ==
+        GoogleNavigatorInitializationState.INITIALIZED
     }
     return false
   }

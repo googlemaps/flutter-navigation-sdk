@@ -33,7 +33,8 @@ class GoogleMapsNavigationSessionMessageHandler(
   }
 
   override fun isInitialized(): Boolean {
-    return GoogleMapsNavigatorHolder.getInitializationState() == GoogleNavigatorInitializationState.INITIALIZED
+    return GoogleMapsNavigatorHolder.getInitializationState() ==
+      GoogleNavigatorInitializationState.INITIALIZED
   }
 
   override fun cleanup() {
@@ -46,13 +47,12 @@ class GoogleMapsNavigationSessionMessageHandler(
     shouldOnlyShowDriverAwarenessDisclaimer: Boolean,
     callback: (Result<Boolean>) -> Unit,
   ) {
-    sessionManager
-      .showTermsAndConditionsDialog(
-        title,
-        companyName,
-        shouldOnlyShowDriverAwarenessDisclaimer,
-        callback,
-      )
+    sessionManager.showTermsAndConditionsDialog(
+      title,
+      companyName,
+      shouldOnlyShowDriverAwarenessDisclaimer,
+      callback,
+    )
   }
 
   override fun areTermsAccepted(): Boolean {
@@ -168,10 +168,9 @@ class GoogleMapsNavigationSessionMessageHandler(
   }
 
   override fun simulateLocationsAlongExistingRouteWithOptions(options: SimulationOptionsDto) {
-    sessionManager
-      .simulateLocationsAlongExistingRouteWithOptions(
-        SimulationOptions().speedMultiplier(options.speedMultiplier.toFloat())
-      )
+    sessionManager.simulateLocationsAlongExistingRouteWithOptions(
+      SimulationOptions().speedMultiplier(options.speedMultiplier.toFloat())
+    )
   }
 
   override fun simulateLocationsAlongNewRoute(
@@ -267,10 +266,9 @@ class GoogleMapsNavigationSessionMessageHandler(
     remainingTimeThresholdSeconds: Long,
     remainingDistanceThresholdMeters: Long,
   ) {
-    sessionManager
-      .registerRemainingTimeOrDistanceChangedListener(
-        remainingTimeThresholdSeconds,
-        remainingDistanceThresholdMeters,
-      )
+    sessionManager.registerRemainingTimeOrDistanceChangedListener(
+      remainingTimeThresholdSeconds,
+      remainingDistanceThresholdMeters,
+    )
   }
 }

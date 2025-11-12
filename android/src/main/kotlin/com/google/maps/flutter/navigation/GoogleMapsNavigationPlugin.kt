@@ -40,14 +40,15 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
   private var viewMessageHandler: GoogleMapsViewMessageHandler? = null
   private var imageRegistryMessageHandler: GoogleMapsImageRegistryMessageHandler? = null
   private var autoViewMessageHandler: GoogleMapsAutoViewMessageHandler? = null
-  
+
   // Instance-level session manager instead of singleton
   internal var sessionManager: GoogleMapsNavigationSessionManager? = null
 
   private var lifecycle: Lifecycle? = null
 
   override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-    // Store first instance of the plugin so that Android Auto will get access to the correct object instances.
+    // Store first instance of the plugin so that Android Auto will get access to the correct object
+    // instances.
     if (instance == null) {
       instance = this
     }
@@ -76,11 +77,11 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
     viewEventApi = ViewEventApi(binding.binaryMessenger)
     val factory = GoogleMapsViewFactory(viewRegistry!!, viewEventApi!!, imageRegistry!!)
     binding.platformViewRegistry.registerViewFactory("google_navigation_flutter", factory)
-    
+
     // Setup navigation session message handler with this instance's session manager
     val sessionMessageHandler = GoogleMapsNavigationSessionMessageHandler(sessionManager!!)
     NavigationSessionApi.setUp(binding.binaryMessenger, sessionMessageHandler)
-    
+
     val inspectorHandler = GoogleMapsNavigationInspectorHandler(viewRegistry!!)
     NavigationInspector.setUp(binding.binaryMessenger, inspectorHandler)
   }

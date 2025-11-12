@@ -44,7 +44,6 @@ import com.google.android.libraries.navigation.TermsAndConditionsUIParams
 import com.google.android.libraries.navigation.TimeAndDistance
 import com.google.android.libraries.navigation.Waypoint
 import com.google.maps.flutter.navigation.Convert.convertTravelModeFromDto
-import io.flutter.plugin.common.BinaryMessenger
 import java.lang.ref.WeakReference
 
 interface NavigationReadyListener {
@@ -129,7 +128,7 @@ constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
     callback: (Result<Unit>) -> Unit,
   ) {
     val currentState = GoogleMapsNavigatorHolder.getInitializationState()
-    
+
     if (currentState == GoogleNavigatorInitializationState.INITIALIZED) {
       // Navigator is already initialized, just re-register listeners.
       registerNavigationListeners()
@@ -137,25 +136,26 @@ constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
       callback(Result.success(Unit))
       return
     }
-    
+
     // Check if initialization is already in progress by another instance
     if (currentState == GoogleNavigatorInitializationState.INITIALIZING) {
       // Add this callback to the queue to be called when initialization completes
-      val queuedListener = object : NavigatorListener {
-        override fun onNavigatorReady(newNavigator: Navigator) {
-          registerNavigationListeners()
-          navigationReadyListener?.onNavigationReady(true)
-          callback(Result.success(Unit))
-        }
+      val queuedListener =
+        object : NavigatorListener {
+          override fun onNavigatorReady(newNavigator: Navigator) {
+            registerNavigationListeners()
+            navigationReadyListener?.onNavigationReady(true)
+            callback(Result.success(Unit))
+          }
 
-        override fun onError(@NavigationApi.ErrorCode errorCode: Int) {
-          callback(Result.failure(convertNavigatorErrorToFlutterError(errorCode)))
+          override fun onError(@NavigationApi.ErrorCode errorCode: Int) {
+            callback(Result.failure(convertNavigatorErrorToFlutterError(errorCode)))
+          }
         }
-      }
       GoogleMapsNavigatorHolder.addInitializationCallback(queuedListener)
       return
     }
-    
+
     taskRemovedBehavior = Convert.taskRemovedBehaviorDtoToTaskRemovedBehavior(behavior)
 
     // Align API behavior with iOS:
@@ -176,48 +176,57 @@ constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
     NavigationApi.setAbnormalTerminationReportingEnabled(abnormalTerminationReportingEnabled)
 
     // Mark initialization as in progress
-    GoogleMapsNavigatorHolder.setInitializationState(GoogleNavigatorInitializationState.INITIALIZING)
+    GoogleMapsNavigatorHolder.setInitializationState(
+      GoogleNavigatorInitializationState.INITIALIZING
+    )
 
     val listener =
       object : NavigatorListener {
         override fun onNavigatorReady(newNavigator: Navigator) {
-          if (GoogleMapsNavigatorHolder.getInitializationState() != GoogleNavigatorInitializationState.INITIALIZING) {
-            GoogleMapsNavigatorHolder.setNavigator(null);
+          if (
+            GoogleMapsNavigatorHolder.getInitializationState() !=
+              GoogleNavigatorInitializationState.INITIALIZING
+          ) {
+            GoogleMapsNavigatorHolder.setNavigator(null)
             return
           }
           GoogleMapsNavigatorHolder.setNavigator(newNavigator)
           newNavigator.setTaskRemovedBehavior(taskRemovedBehavior)
           registerNavigationListeners()
           navigationReadyListener?.onNavigationReady(true)
-          
+
           // Notify all queued callbacks
           val queuedCallbacks = GoogleMapsNavigatorHolder.getAndClearInitializationCallbacks()
           for (queuedCallback in queuedCallbacks) {
             queuedCallback.onNavigatorReady(newNavigator)
           }
-          
+
           callback(Result.success(Unit))
         }
 
         override fun onError(@NavigationApi.ErrorCode errorCode: Int) {
-          GoogleMapsNavigatorHolder.setInitializationState(GoogleNavigatorInitializationState.NOT_INITIALIZED)
-          
+          GoogleMapsNavigatorHolder.setInitializationState(
+            GoogleNavigatorInitializationState.NOT_INITIALIZED
+          )
+
           val error = convertNavigatorErrorToFlutterError(errorCode)
-          
+
           // Notify all queued callbacks about the error
           val queuedCallbacks = GoogleMapsNavigatorHolder.getAndClearInitializationCallbacks()
           for (queuedCallback in queuedCallbacks) {
             queuedCallback.onError(errorCode)
           }
-          
+
           callback(Result.failure(error))
         }
       }
 
     NavigationApi.getNavigator(getActivity(), listener)
   }
-  
-  private fun convertNavigatorErrorToFlutterError(@NavigationApi.ErrorCode errorCode: Int): FlutterError {
+
+  private fun convertNavigatorErrorToFlutterError(
+    @NavigationApi.ErrorCode errorCode: Int
+  ): FlutterError {
     // Keep in sync with GoogleMapsNavigationSessionManager.swift
     return when (errorCode) {
       NavigationApi.ErrorCode.NOT_AUTHORIZED -> {
@@ -245,10 +254,7 @@ constructor(private val navigationSessionEventApi: NavigationSessionEventApi) :
         )
       }
       else -> {
-        FlutterError(
-          "unknownError",
-          "The session initialization failed with an unknown error.",
-        )
+        FlutterError("unknownError", "The session initialization failed with an unknown error.")
       }
     }
   }
