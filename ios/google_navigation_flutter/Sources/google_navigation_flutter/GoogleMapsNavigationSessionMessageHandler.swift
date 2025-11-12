@@ -80,8 +80,8 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
     GoogleMapsNavigationSessionManager.shared.isInitialized()
   }
 
-  func cleanup() throws {
-    try GoogleMapsNavigationSessionManager.shared.cleanup()
+  func cleanup(resetSession: Bool) throws {
+    try GoogleMapsNavigationSessionManager.shared.cleanup(resetSession: resetSession)
   }
 
   /// Navigation actions

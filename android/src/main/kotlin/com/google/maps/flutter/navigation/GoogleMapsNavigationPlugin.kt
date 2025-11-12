@@ -16,6 +16,7 @@
 
 package com.google.maps.flutter.navigation
 
+import android.app.Application
 import androidx.lifecycle.Lifecycle
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -69,9 +70,10 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
     AutoMapViewApi.setUp(binding.binaryMessenger, autoViewMessageHandler)
     autoViewEventApi = AutoViewEventApi(binding.binaryMessenger)
 
-    // Setup navigation session manager (instance-level, not singleton)
+    // Setup navigation session manager
+    val app = binding.applicationContext as Application
     val navigationSessionEventApi = NavigationSessionEventApi(binding.binaryMessenger)
-    sessionManager = GoogleMapsNavigationSessionManager(navigationSessionEventApi)
+    sessionManager = GoogleMapsNavigationSessionManager(navigationSessionEventApi, app)
 
     // Setup platform view factory and its method channel handlers
     viewEventApi = ViewEventApi(binding.binaryMessenger)
