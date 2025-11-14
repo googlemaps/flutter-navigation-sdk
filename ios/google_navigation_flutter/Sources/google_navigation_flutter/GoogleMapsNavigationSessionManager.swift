@@ -148,16 +148,20 @@ class GoogleMapsNavigationSessionManager: NSObject {
     _session?.navigator != nil
   }
 
-  func cleanup() throws {
+  func cleanup(resetSession: Bool = true) throws {
     if _session == nil {
       throw GoogleMapsNavigationSessionManagerError.sessionNotInitialized
     }
-    _session?.locationSimulator?.stopSimulation()
-    _session?.navigator?.clearDestinations()
+
     _session?.roadSnappedLocationProvider?.remove(self)
-    _session?.navigator?.isGuidanceActive = false
-    _session?.isStarted = false
-    _session = nil
+
+    if resetSession {
+      _session?.locationSimulator?.stopSimulation()
+      _session?.navigator?.clearDestinations()
+      _session?.navigator?.isGuidanceActive = false
+      _session?.isStarted = false
+      _session = nil
+    }
   }
 
   func attachNavigationSessionToMapView(mapId: Int64) throws {

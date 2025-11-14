@@ -37,8 +37,8 @@ class GoogleMapsNavigationSessionMessageHandler(
       GoogleNavigatorInitializationState.INITIALIZED
   }
 
-  override fun cleanup() {
-    sessionManager.cleanup()
+  override fun cleanup(resetSession: Boolean) {
+    sessionManager.cleanup(resetSession)
   }
 
   override fun showTermsAndConditionsDialog(
