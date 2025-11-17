@@ -70,14 +70,14 @@ android {
     }
 
     defaultConfig {
-        minSdk = 23
+        minSdk = 24
         consumerProguardFiles 'proguard.txt'
     }
 
     dependencies {
         implementation 'androidx.car.app:app:1.4.0'
         implementation 'androidx.car.app:app-projected:1.4.0'
-        implementation 'com.google.android.libraries.navigation:navigation:6.3.3'
+        implementation 'com.google.android.libraries.navigation:navigation:7.1.0'
         testImplementation 'org.jetbrains.kotlin:kotlin-test'
         testImplementation 'io.mockk:mockk:1.13.8'
         testImplementation 'junit:junit:4.13.2'
