@@ -132,18 +132,20 @@ enum Convert {
 
   static func convertStepInfo(_ stepInfo: GMSNavigationStepInfo) -> StepInfoDto {
     .init(
-      distanceFromPrevStepMeters: Int64(stepInfo.distanceFromPrevStepMeters),
-      timeFromPrevStepSeconds: Int64(stepInfo.timeFromPrevStepSeconds),
+      distanceFromPrevStepMeters: stepInfo.distanceFromPrevStepMeters > 0
+        ? Int64(stepInfo.distanceFromPrevStepMeters) : nil,
+      timeFromPrevStepSeconds: stepInfo.timeFromPrevStepSeconds > 0
+        ? Int64(stepInfo.timeFromPrevStepSeconds) : nil,
       drivingSide: convertDrivingSide(side: stepInfo.drivingSide),
       exitNumber: stepInfo.exitNumber,
       fullInstructions: stepInfo.fullInstructionText,
       fullRoadName: stepInfo.fullRoadName,
       simpleRoadName: stepInfo.simpleRoadName,
       roundaboutTurnNumber: stepInfo
-        .roundaboutTurnNumber >= 0 ? Int64(stepInfo.roundaboutTurnNumber) : 0,
-      lanes: [],
+        .roundaboutTurnNumber >= 0 ? Int64(stepInfo.roundaboutTurnNumber) : nil,
+      lanes: nil,
       maneuver: convertManeuver(maneuver: stepInfo.maneuver),
-      stepNumber: Int64(stepInfo.stepNumber)
+      stepNumber: stepInfo.stepNumber >= 0 ? Int64(stepInfo.stepNumber) : nil
     )
   }
 

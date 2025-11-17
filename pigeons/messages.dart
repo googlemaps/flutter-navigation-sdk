@@ -669,7 +669,17 @@ class NavigationDisplayOptionsDto {
   );
 
   final bool? showDestinationMarkers;
+
+  /// Deprecated: This option now defaults to true.
+  @Deprecated(
+    'This option now defaults to true and will be removed in Navigation SDK 8.0',
+  )
   final bool? showStopSigns;
+
+  /// Deprecated: This option now defaults to true.
+  @Deprecated(
+    'This option now defaults to true and will be removed in Navigation SDK 8.0',
+  )
   final bool? showTrafficLights;
 }
 
@@ -1122,11 +1132,11 @@ class StepInfoDto {
     required this.maneuver,
   });
 
-  /// Distance in meters from the previous step to this step.
-  final int distanceFromPrevStepMeters;
+  /// Distance in meters from the previous step to this step if available, otherwise null.
+  final int? distanceFromPrevStepMeters;
 
-  /// Time in seconds from the previous step to this step.
-  final int timeFromPrevStepSeconds;
+  /// Time in seconds from the previous step to this step if available, otherwise null.
+  final int? timeFromPrevStepSeconds;
 
   /// Whether this step is on a drive-on-right or drive-on-left route.
   final DrivingSideDto drivingSide;
@@ -1134,27 +1144,27 @@ class StepInfoDto {
   /// The exit number if it exists.
   final String? exitNumber;
 
-  /// The full text of the instruction for this step.
-  final String fullInstructions;
+  /// The full text of the instruction for this step if available, otherwise null.
+  final String? fullInstructions;
 
-  /// The full road name for this step.
-  final String fullRoadName;
+  /// The full road name for this step if available, otherwise null.
+  final String? fullRoadName;
 
-  /// The simplified version of the road name.
-  final String simpleRoadName;
+  /// The simplified version of the road name if available, otherwise null.
+  final String? simpleRoadName;
 
   /// The counted number of the exit to take relative to the location where the
-  /// roundabout was entered.
-  final int roundaboutTurnNumber;
+  /// roundabout was entered if available, otherwise null.
+  final int? roundaboutTurnNumber;
 
-  /// The list of available lanes at the end of this route step.
-  final List<LaneDto?> lanes;
+  /// The list of available lanes at the end of this route step if available, otherwise null.
+  final List<LaneDto>? lanes;
 
   /// The maneuver for this step.
   final ManeuverDto maneuver;
 
-  /// The index of the step in the list of all steps in the route.
-  final int stepNumber;
+  /// The index of the step in the list of all steps in the route if available, otherwise null.
+  final int? stepNumber;
 }
 
 /// Contains information about the state of navigation, the current nav step if

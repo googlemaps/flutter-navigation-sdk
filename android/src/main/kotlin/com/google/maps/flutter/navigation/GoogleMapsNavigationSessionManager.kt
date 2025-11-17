@@ -342,10 +342,17 @@ constructor(
       remainingTimeOrDistanceChangedListener =
         Navigator.RemainingTimeOrDistanceChangedListener {
           val timeAndDistance = getNavigator().currentTimeAndDistance
-          navigationSessionEventApi.onRemainingTimeOrDistanceChanged(
-            timeAndDistance.seconds.toDouble(),
-            timeAndDistance.meters.toDouble(),
-          ) {}
+          // Only send event if we have valid time and distance data
+          if (
+            timeAndDistance != null &&
+              timeAndDistance.seconds != null &&
+              timeAndDistance.meters != null
+          ) {
+            navigationSessionEventApi.onRemainingTimeOrDistanceChanged(
+              timeAndDistance.seconds.toDouble(),
+              timeAndDistance.meters.toDouble(),
+            ) {}
+          }
         }
     }
 
@@ -495,7 +502,7 @@ constructor(
    * @return [TimeAndDistance] object.
    */
   fun getCurrentTimeAndDistance(): TimeAndDistance {
-    return getNavigator().currentTimeAndDistance
+    return getNavigator().currentTimeAndDistance!!
   }
 
   /**

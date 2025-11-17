@@ -321,7 +321,7 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      'Step #${stepInfo.stepNumber}',
+                      'Step #${stepInfo.stepNumber ?? "?"}',
                       style: navInfoTextStyle,
                     ),
                     const SizedBox(height: 10),
@@ -333,12 +333,12 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
                             text: 'Road: ',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          TextSpan(text: stepInfo.fullRoadName),
+                          TextSpan(text: stepInfo.fullRoadName ?? ''),
                           const TextSpan(
                             text: '\nInstructions: ',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          TextSpan(text: stepInfo.fullInstructions),
+                          TextSpan(text: stepInfo.fullInstructions ?? ''),
                         ],
                       ),
                     ),

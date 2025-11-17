@@ -1704,8 +1704,10 @@ class NavigationDisplayOptionsDto {
 
   bool? showDestinationMarkers;
 
+  /// Deprecated: This option now defaults to true.
   bool? showStopSigns;
 
+  /// Deprecated: This option now defaults to true.
   bool? showTrafficLights;
 
   List<Object?> _toList() {
@@ -2385,24 +2387,24 @@ class LaneDto {
 /// Information about a single step along a navigation route.
 class StepInfoDto {
   StepInfoDto({
-    required this.distanceFromPrevStepMeters,
-    required this.timeFromPrevStepSeconds,
+    this.distanceFromPrevStepMeters,
+    this.timeFromPrevStepSeconds,
     required this.drivingSide,
     this.exitNumber,
-    required this.fullInstructions,
-    required this.fullRoadName,
-    required this.simpleRoadName,
-    required this.roundaboutTurnNumber,
-    required this.lanes,
+    this.fullInstructions,
+    this.fullRoadName,
+    this.simpleRoadName,
+    this.roundaboutTurnNumber,
+    this.lanes,
     required this.maneuver,
-    required this.stepNumber,
+    this.stepNumber,
   });
 
-  /// Distance in meters from the previous step to this step.
-  int distanceFromPrevStepMeters;
+  /// Distance in meters from the previous step to this step if available, otherwise null.
+  int? distanceFromPrevStepMeters;
 
-  /// Time in seconds from the previous step to this step.
-  int timeFromPrevStepSeconds;
+  /// Time in seconds from the previous step to this step if available, otherwise null.
+  int? timeFromPrevStepSeconds;
 
   /// Whether this step is on a drive-on-right or drive-on-left route.
   DrivingSideDto drivingSide;
@@ -2410,27 +2412,27 @@ class StepInfoDto {
   /// The exit number if it exists.
   String? exitNumber;
 
-  /// The full text of the instruction for this step.
-  String fullInstructions;
+  /// The full text of the instruction for this step if available, otherwise null.
+  String? fullInstructions;
 
-  /// The full road name for this step.
-  String fullRoadName;
+  /// The full road name for this step if available, otherwise null.
+  String? fullRoadName;
 
-  /// The simplified version of the road name.
-  String simpleRoadName;
+  /// The simplified version of the road name if available, otherwise null.
+  String? simpleRoadName;
 
   /// The counted number of the exit to take relative to the location where the
-  /// roundabout was entered.
-  int roundaboutTurnNumber;
+  /// roundabout was entered if available, otherwise null.
+  int? roundaboutTurnNumber;
 
-  /// The list of available lanes at the end of this route step.
-  List<LaneDto?> lanes;
+  /// The list of available lanes at the end of this route step if available, otherwise null.
+  List<LaneDto>? lanes;
 
   /// The maneuver for this step.
   ManeuverDto maneuver;
 
-  /// The index of the step in the list of all steps in the route.
-  int stepNumber;
+  /// The index of the step in the list of all steps in the route if available, otherwise null.
+  int? stepNumber;
 
   List<Object?> _toList() {
     return <Object?>[
@@ -2455,17 +2457,17 @@ class StepInfoDto {
   static StepInfoDto decode(Object result) {
     result as List<Object?>;
     return StepInfoDto(
-      distanceFromPrevStepMeters: result[0]! as int,
-      timeFromPrevStepSeconds: result[1]! as int,
+      distanceFromPrevStepMeters: result[0] as int?,
+      timeFromPrevStepSeconds: result[1] as int?,
       drivingSide: result[2]! as DrivingSideDto,
       exitNumber: result[3] as String?,
-      fullInstructions: result[4]! as String,
-      fullRoadName: result[5]! as String,
-      simpleRoadName: result[6]! as String,
-      roundaboutTurnNumber: result[7]! as int,
-      lanes: (result[8] as List<Object?>?)!.cast<LaneDto?>(),
+      fullInstructions: result[4] as String?,
+      fullRoadName: result[5] as String?,
+      simpleRoadName: result[6] as String?,
+      roundaboutTurnNumber: result[7] as int?,
+      lanes: (result[8] as List<Object?>?)?.cast<LaneDto>(),
       maneuver: result[9]! as ManeuverDto,
-      stepNumber: result[10]! as int,
+      stepNumber: result[10] as int?,
     );
   }
 

@@ -15,7 +15,7 @@ This repository contains a Flutter plugin that provides a [Google Navigation](ht
 
 |                                 | Android       | iOS       |
 | ------------------------------- | ------------- | --------- |
-| **Minimum mobile OS supported** | API level 23+ | iOS 16.0+ |
+| **Minimum mobile OS supported** | API level 24+ | iOS 16.0+ |
 
 * A Flutter project
 * A Google Cloud project
@@ -43,7 +43,7 @@ Set the `minSdk` in `android/app/build.gradle`:
 ```groovy
 android {
     defaultConfig {
-        minSdk 23
+        minSdk 24
     }
 }
 ```

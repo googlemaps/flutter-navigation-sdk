@@ -1395,7 +1395,9 @@ struct RoutingOptionsDto: Hashable {
 /// Generated class from Pigeon that represents data sent in messages.
 struct NavigationDisplayOptionsDto: Hashable {
   var showDestinationMarkers: Bool? = nil
+  /// Deprecated: This option now defaults to true.
   var showStopSigns: Bool? = nil
+  /// Deprecated: This option now defaults to true.
   var showTrafficLights: Bool? = nil
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -1876,43 +1878,43 @@ struct LaneDto: Hashable {
 ///
 /// Generated class from Pigeon that represents data sent in messages.
 struct StepInfoDto: Hashable {
-  /// Distance in meters from the previous step to this step.
-  var distanceFromPrevStepMeters: Int64
-  /// Time in seconds from the previous step to this step.
-  var timeFromPrevStepSeconds: Int64
+  /// Distance in meters from the previous step to this step if available, otherwise null.
+  var distanceFromPrevStepMeters: Int64? = nil
+  /// Time in seconds from the previous step to this step if available, otherwise null.
+  var timeFromPrevStepSeconds: Int64? = nil
   /// Whether this step is on a drive-on-right or drive-on-left route.
   var drivingSide: DrivingSideDto
   /// The exit number if it exists.
   var exitNumber: String? = nil
-  /// The full text of the instruction for this step.
-  var fullInstructions: String
-  /// The full road name for this step.
-  var fullRoadName: String
-  /// The simplified version of the road name.
-  var simpleRoadName: String
+  /// The full text of the instruction for this step if available, otherwise null.
+  var fullInstructions: String? = nil
+  /// The full road name for this step if available, otherwise null.
+  var fullRoadName: String? = nil
+  /// The simplified version of the road name if available, otherwise null.
+  var simpleRoadName: String? = nil
   /// The counted number of the exit to take relative to the location where the
-  /// roundabout was entered.
-  var roundaboutTurnNumber: Int64
-  /// The list of available lanes at the end of this route step.
-  var lanes: [LaneDto?]
+  /// roundabout was entered if available, otherwise null.
+  var roundaboutTurnNumber: Int64? = nil
+  /// The list of available lanes at the end of this route step if available, otherwise null.
+  var lanes: [LaneDto]? = nil
   /// The maneuver for this step.
   var maneuver: ManeuverDto
-  /// The index of the step in the list of all steps in the route.
-  var stepNumber: Int64
+  /// The index of the step in the list of all steps in the route if available, otherwise null.
+  var stepNumber: Int64? = nil
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> StepInfoDto? {
-    let distanceFromPrevStepMeters = pigeonVar_list[0] as! Int64
-    let timeFromPrevStepSeconds = pigeonVar_list[1] as! Int64
+    let distanceFromPrevStepMeters: Int64? = nilOrValue(pigeonVar_list[0])
+    let timeFromPrevStepSeconds: Int64? = nilOrValue(pigeonVar_list[1])
     let drivingSide = pigeonVar_list[2] as! DrivingSideDto
     let exitNumber: String? = nilOrValue(pigeonVar_list[3])
-    let fullInstructions = pigeonVar_list[4] as! String
-    let fullRoadName = pigeonVar_list[5] as! String
-    let simpleRoadName = pigeonVar_list[6] as! String
-    let roundaboutTurnNumber = pigeonVar_list[7] as! Int64
-    let lanes = pigeonVar_list[8] as! [LaneDto?]
+    let fullInstructions: String? = nilOrValue(pigeonVar_list[4])
+    let fullRoadName: String? = nilOrValue(pigeonVar_list[5])
+    let simpleRoadName: String? = nilOrValue(pigeonVar_list[6])
+    let roundaboutTurnNumber: Int64? = nilOrValue(pigeonVar_list[7])
+    let lanes: [LaneDto]? = nilOrValue(pigeonVar_list[8])
     let maneuver = pigeonVar_list[9] as! ManeuverDto
-    let stepNumber = pigeonVar_list[10] as! Int64
+    let stepNumber: Int64? = nilOrValue(pigeonVar_list[10])
 
     return StepInfoDto(
       distanceFromPrevStepMeters: distanceFromPrevStepMeters,

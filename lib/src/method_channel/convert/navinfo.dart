@@ -51,11 +51,7 @@ extension ConvertStepInfoDto on StepInfoDto {
     simpleRoadName: simpleRoadName,
     roundaboutTurnNumber: roundaboutTurnNumber,
     stepNumber: stepNumber,
-    lanes:
-        lanes
-            .whereType<LaneDto>()
-            .map<Lane>((LaneDto lane) => lane.toLane())
-            .toList(),
+    lanes: lanes?.map<Lane>((LaneDto lane) => lane.toLane()).toList(),
     maneuver: maneuver.toManeuver(),
   );
 }
