@@ -276,6 +276,17 @@ jobs:
         run: flutter pub global activate patrol_cli ${{ env.patrol_cli_version }}
       - name: Run flutter pub get
         run: flutter pub get
+      - name: Clean up runner disk space (if needed)
+        run: |
+          echo "Running cleanup..."
+
+          # Remove large, unneeded packages
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/local/share/boost
+
+          echo "Cleanup complete. Free space after cleanup:"
+          df -h
       - name: Create and start emulator
         run: |
           echo "Installing system image"
