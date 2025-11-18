@@ -1217,7 +1217,6 @@ enum TaskRemovedBehaviorDto {
 
 @HostApi(dartHostTestHandler: 'TestNavigationSessionApi')
 abstract class NavigationSessionApi {
-  /// General.
   @async
   void createNavigationSession(
     bool abnormalTerminationReportingEnabled,
@@ -1235,7 +1234,6 @@ abstract class NavigationSessionApi {
   void resetTermsAccepted();
   String getNavSDKVersion();
 
-  /// Navigation.
   bool isGuidanceRunning();
   void startGuidance();
   void stopGuidance();
@@ -1250,7 +1248,9 @@ abstract class NavigationSessionApi {
   List<LatLngDto> getTraveledRoute();
   RouteSegmentDto? getCurrentRouteSegment();
 
-  /// Simulation
+  void setGuidanceNotificationsEnabled(bool enabled);
+  bool getGuidanceNotificationsEnabled();
+
   void setUserLocation(LatLngDto location);
   void removeUserLocation();
   void simulateLocationsAlongExistingRoute();
@@ -1275,14 +1275,12 @@ abstract class NavigationSessionApi {
   void pauseSimulation();
   void resumeSimulation();
 
-  /// Simulation (iOS only)
+  /// iOS-only method.
   void allowBackgroundLocationUpdates(bool allow);
 
-  /// Road snapped location updates.
   void enableRoadSnappedLocationUpdates();
   void disableRoadSnappedLocationUpdates();
 
-  /// Enable Turn-by-Turn navigation events.
   void enableTurnByTurnNavigationEvents(int? numNextStepsToPreview);
   void disableTurnByTurnNavigationEvents();
 
@@ -1315,6 +1313,10 @@ abstract class NavigationSessionEventApi {
 
   /// Turn-by-Turn navigation events.
   void onNavInfo(NavInfoDto navInfo);
+
+  /// Navigation session event. Called when a new navigation
+  /// session starts with active guidance.
+  void onNewNavigationSession();
 }
 
 @HostApi()

@@ -59,21 +59,11 @@ void main() {
     PatrolIntegrationTester $,
   ) async {
     final Completer<void> hasArrived = Completer<void>();
+    final Completer<void> newSessionFired = Completer<void>();
 
     /// Set up navigation view and controller.
     final GoogleNavigationViewController viewController =
         await startNavigationWithoutDestination($);
-
-    /// Set audio guidance settings.
-    /// Cannot be verified, because native SDK lacks getter methods,
-    /// but exercise the API for basic sanity testing
-    final NavigationAudioGuidanceSettings settings =
-        NavigationAudioGuidanceSettings(
-          isBluetoothAudioEnabled: true,
-          isVibrationEnabled: true,
-          guidanceType: NavigationAudioGuidanceType.alertsAndGuidance,
-        );
-    await GoogleMapsNavigator.setAudioGuidance(settings);
 
     /// Specify tolerance and navigation end coordinates.
     const double tolerance = 0.001;
@@ -86,7 +76,26 @@ void main() {
       await GoogleMapsNavigator.stopGuidance();
     }
 
+    /// Set up listener for new navigation session event.
+    Future<void> onNewNavigationSession() async {
+      newSessionFired.complete();
+
+      /// Sets audio guidance settings for the current navigation session.
+      /// Cannot be verified, because native SDK lacks getter methods,
+      /// but exercise the API for basic sanity testing.
+      await GoogleMapsNavigator.setAudioGuidance(
+        NavigationAudioGuidanceSettings(
+          isBluetoothAudioEnabled: true,
+          isVibrationEnabled: true,
+          guidanceType: NavigationAudioGuidanceType.alertsAndGuidance,
+        ),
+      );
+    }
+
     GoogleMapsNavigator.setOnArrivalListener(onArrivalEvent);
+    GoogleMapsNavigator.setOnNewNavigationSessionListener(
+      onNewNavigationSession,
+    );
 
     /// Simulate location and test it.
     await setSimulatedUserLocationWithCheck(
@@ -140,6 +149,18 @@ void main() {
     await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
 
     expect(await GoogleMapsNavigator.isGuidanceRunning(), true);
+
+    /// Wait for new navigation session event.
+    await newSessionFired.future.timeout(
+      const Duration(seconds: 30),
+      onTimeout:
+          () =>
+              throw TimeoutException(
+                'New navigation session event was not fired',
+              ),
+    );
+    expect(newSessionFired.isCompleted, true);
+
     await hasArrived.future;
     expect(await GoogleMapsNavigator.isGuidanceRunning(), false);
 
@@ -150,23 +171,13 @@ void main() {
     'Test navigating to multiple destinations',
     (PatrolIntegrationTester $) async {
       final Completer<void> navigationFinished = Completer<void>();
+      final Completer<void> newSessionFired = Completer<void>();
       int arrivalEventCount = 0;
       List<NavigationWaypoint> waypoints = <NavigationWaypoint>[];
 
       /// Set up navigation view and controller.
       final GoogleNavigationViewController viewController =
           await startNavigationWithoutDestination($);
-
-      /// Set audio guidance settings.
-      /// Cannot be verified, because native SDK lacks getter methods,
-      /// but exercise the API for basic sanity testing
-      final NavigationAudioGuidanceSettings settings =
-          NavigationAudioGuidanceSettings(
-            isBluetoothAudioEnabled: false,
-            isVibrationEnabled: false,
-            guidanceType: NavigationAudioGuidanceType.alertsOnly,
-          );
-      await GoogleMapsNavigator.setAudioGuidance(settings);
 
       /// Specify tolerance and navigation destination coordinates.
       const double tolerance = 0.001;
@@ -228,7 +239,26 @@ void main() {
         }
       }
 
+      /// Set up listener for new navigation session event.
+      Future<void> onNewNavigationSession() async {
+        newSessionFired.complete();
+
+        /// Sets audio guidance settings for the current navigation session.
+        /// Cannot be verified, because native SDK lacks getter methods,
+        /// but exercise the API for basic sanity testing.
+        await GoogleMapsNavigator.setAudioGuidance(
+          NavigationAudioGuidanceSettings(
+            isBluetoothAudioEnabled: true,
+            isVibrationEnabled: true,
+            guidanceType: NavigationAudioGuidanceType.alertsAndGuidance,
+          ),
+        );
+      }
+
       GoogleMapsNavigator.setOnArrivalListener(onArrivalEvent);
+      GoogleMapsNavigator.setOnNewNavigationSessionListener(
+        onNewNavigationSession,
+      );
 
       /// Simulate location and test it.
       await setSimulatedUserLocationWithCheck(
@@ -308,6 +338,18 @@ void main() {
       );
 
       expect(await GoogleMapsNavigator.isGuidanceRunning(), true);
+
+      /// Wait for new navigation session event.
+      await newSessionFired.future.timeout(
+        const Duration(seconds: 30),
+        onTimeout:
+            () =>
+                throw TimeoutException(
+                  'New navigation session event was not fired',
+                ),
+      );
+      expect(newSessionFired.isCompleted, true);
+
       await navigationFinished.future;
       expect(await GoogleMapsNavigator.isGuidanceRunning(), false);
 

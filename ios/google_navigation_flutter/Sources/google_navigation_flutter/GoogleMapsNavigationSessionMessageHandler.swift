@@ -123,6 +123,14 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
     try GoogleMapsNavigationSessionManager.shared.setAudioGuidance(settings: settings)
   }
 
+  func setGuidanceNotificationsEnabled(enabled: Bool) throws {
+    try GoogleMapsNavigationSessionManager.shared.setGuidanceNotificationsEnabled(enabled: enabled)
+  }
+
+  func getGuidanceNotificationsEnabled() throws -> Bool {
+    try GoogleMapsNavigationSessionManager.shared.getGuidanceNotificationsEnabled()
+  }
+
   /// Simulation
   func simulateLocationsAlongExistingRoute() throws {
     try GoogleMapsNavigationSessionManager.shared.simulateLocationsAlongExistingRoute()

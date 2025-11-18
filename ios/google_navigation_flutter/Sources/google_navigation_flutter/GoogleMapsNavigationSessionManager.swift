@@ -64,6 +64,8 @@ class GoogleMapsNavigationSessionManager: NSObject {
 
   private var _numTurnByTurnNextStepsToPreview = Int64.max
 
+  private var _isNewNavigationSessionDetected = false
+
   func getNavigator() throws -> GMSNavigator {
     guard let _session else { throw GoogleMapsNavigationSessionManagerError.sessionNotInitialized }
     guard let navigator = _session.navigator
@@ -217,6 +219,7 @@ class GoogleMapsNavigationSessionManager: NSObject {
 
   func stopGuidance() throws {
     try getNavigator().isGuidanceActive = false
+    _isNewNavigationSessionDetected = false
   }
 
   func isGuidanceRunning() throws -> Bool {
@@ -243,6 +246,11 @@ class GoogleMapsNavigationSessionManager: NSObject {
     completion: @escaping (Result<RouteStatusDto, Error>) -> Void
   ) {
     do {
+      // Reset session detection state to allow onNewNavigationSession to fire again
+      // This mimics Android's behavior where the event fires each time setDestinations
+      // is called while guidance is running
+      _isNewNavigationSessionDetected = false
+      
       // If the session has view attached, enable given display options.
       handleDisplayOptionsIfNeeded(options: destinations.displayOptions)
 
@@ -290,6 +298,7 @@ class GoogleMapsNavigationSessionManager: NSObject {
 
   func clearDestinations() throws {
     try getNavigator().clearDestinations()
+    _isNewNavigationSessionDetected = false
   }
 
   func continueToNextDestination() throws -> NavigationWaypointDto? {
@@ -318,6 +327,22 @@ class GoogleMapsNavigationSessionManager: NSObject {
     if let guidanceType = settings.guidanceType {
       try getNavigator().voiceGuidance = Convert.convertNavigationAudioGuidanceType(guidanceType)
     }
+  }
+
+  /// Sets whether guidance notifications should be sent when the app is in the background.
+  /// On iOS, this controls background notifications containing guidance information.
+  /// On Android, this controls heads-up notifications for guidance events.
+  ///
+  /// Wraps GMSNavigator.sendsBackgroundNotifications on iOS.
+  func setGuidanceNotificationsEnabled(enabled: Bool) throws {
+    try getNavigator().sendsBackgroundNotifications = enabled
+  }
+
+  /// Gets whether guidance notifications are enabled.
+  /// On iOS, returns the state of background notifications.
+  /// On Android, returns the state of heads-up notifications.
+  func getGuidanceNotificationsEnabled() throws -> Bool {
+    try getNavigator().sendsBackgroundNotifications
   }
 
   /// Simulation
@@ -585,6 +610,15 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
     _ navigator: GMSNavigator,
     didUpdate navInfo: GMSNavigationNavInfo
   ) {
+    // Detect new navigation session start
+    // This callback only fires when guidance is actively running, making it the ideal place
+    // to detect session starts and match Android's behavior where NavigationSessionListener
+    // fires when guidance begins
+    if !_isNewNavigationSessionDetected {
+      _isNewNavigationSessionDetected = true
+      _navigationSessionEventApi?.onNewNavigationSession(completion: { _ in })
+    }
+
     if _sendTurnByTurnNavigationEvents {
       _navigationSessionEventApi?.onNavInfo(
         navInfo: Convert.convertNavInfo(
