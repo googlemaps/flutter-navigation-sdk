@@ -60,6 +60,7 @@ class GoogleMapsNavigationView extends GoogleMapsBaseMapView {
     super.initialZoomControlsEnabled = true,
     super.initialCameraTargetBounds,
     super.initialPadding,
+    super.mapId,
     this.initialNavigationUIEnabledPreference =
         NavigationUIEnabledPreference.automatic,
     super.layoutDirection,
@@ -174,6 +175,7 @@ class GoogleMapsNavigationViewState
           zoomControlsEnabled: widget.initialZoomControlsEnabled,
           cameraTargetBounds: widget.initialCameraTargetBounds,
           padding: widget.initialPadding,
+          mapId: widget.mapId,
         ),
         navigationViewOptions: NavigationViewOptions(
           navigationUIEnabledPreference:

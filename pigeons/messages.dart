@@ -53,6 +53,7 @@ class MapOptionsDto {
     required this.zoomControlsEnabled,
     required this.cameraTargetBounds,
     required this.padding,
+    required this.mapId,
   });
 
   /// The initial positioning of the camera in the map view.
@@ -97,6 +98,10 @@ class MapOptionsDto {
 
   /// Specifies the padding for the map.
   final MapPaddingDto? padding;
+
+  /// The map ID for advanced map options eg. cloud-based map styling.
+  /// This value can only be set on map initialization and cannot be changed afterwards.
+  final String? mapId;
 }
 
 /// Determines the initial visibility of the navigation UI on map initialization.

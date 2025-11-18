@@ -594,6 +594,11 @@ data class MapOptionsDto(
   val cameraTargetBounds: LatLngBoundsDto? = null,
   /** Specifies the padding for the map. */
   val padding: MapPaddingDto? = null,
+  /**
+   * The map ID for advanced map options eg. cloud-based map styling. This value can only be set on
+   * map initialization and cannot be changed afterwards.
+   */
+  val mapId: String? = null,
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): MapOptionsDto {
@@ -611,6 +616,7 @@ data class MapOptionsDto(
       val zoomControlsEnabled = pigeonVar_list[11] as Boolean
       val cameraTargetBounds = pigeonVar_list[12] as LatLngBoundsDto?
       val padding = pigeonVar_list[13] as MapPaddingDto?
+      val mapId = pigeonVar_list[14] as String?
       return MapOptionsDto(
         cameraPosition,
         mapType,
@@ -626,6 +632,7 @@ data class MapOptionsDto(
         zoomControlsEnabled,
         cameraTargetBounds,
         padding,
+        mapId,
       )
     }
   }
@@ -646,6 +653,7 @@ data class MapOptionsDto(
       zoomControlsEnabled,
       cameraTargetBounds,
       padding,
+      mapId,
     )
   }
 

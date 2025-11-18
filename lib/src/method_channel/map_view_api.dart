@@ -131,6 +131,7 @@ class MapViewAPIImpl {
                 right: mapOptions.padding!.right.toInt(),
               )
               : null,
+      mapId: mapOptions.mapId,
     );
 
     // Initialize navigation view options if given

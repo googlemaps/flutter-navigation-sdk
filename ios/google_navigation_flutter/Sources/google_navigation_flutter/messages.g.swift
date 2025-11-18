@@ -497,6 +497,9 @@ struct MapOptionsDto: Hashable {
   var cameraTargetBounds: LatLngBoundsDto? = nil
   /// Specifies the padding for the map.
   var padding: MapPaddingDto? = nil
+  /// The map ID for advanced map options eg. cloud-based map styling.
+  /// This value can only be set on map initialization and cannot be changed afterwards.
+  var mapId: String? = nil
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> MapOptionsDto? {
@@ -514,6 +517,7 @@ struct MapOptionsDto: Hashable {
     let zoomControlsEnabled = pigeonVar_list[11] as! Bool
     let cameraTargetBounds: LatLngBoundsDto? = nilOrValue(pigeonVar_list[12])
     let padding: MapPaddingDto? = nilOrValue(pigeonVar_list[13])
+    let mapId: String? = nilOrValue(pigeonVar_list[14])
 
     return MapOptionsDto(
       cameraPosition: cameraPosition,
@@ -529,7 +533,8 @@ struct MapOptionsDto: Hashable {
       maxZoomPreference: maxZoomPreference,
       zoomControlsEnabled: zoomControlsEnabled,
       cameraTargetBounds: cameraTargetBounds,
-      padding: padding
+      padding: padding,
+      mapId: mapId
     )
   }
   func toList() -> [Any?] {
@@ -548,6 +553,7 @@ struct MapOptionsDto: Hashable {
       zoomControlsEnabled,
       cameraTargetBounds,
       padding,
+      mapId,
     ]
   }
   static func == (lhs: MapOptionsDto, rhs: MapOptionsDto) -> Bool {
