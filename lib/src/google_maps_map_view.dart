@@ -44,6 +44,7 @@ abstract class GoogleMapsBaseMapView extends StatefulWidget {
     this.initialZoomControlsEnabled = true,
     this.initialCameraTargetBounds,
     this.initialPadding,
+    this.mapId,
     this.layoutDirection,
     this.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
     this.onRecenterButtonClicked,
@@ -153,6 +154,19 @@ abstract class GoogleMapsBaseMapView extends StatefulWidget {
   /// Null by default (no padding).
   final EdgeInsets? initialPadding;
 
+  /// The map ID for enabling various Google Maps Platform features.
+  ///
+  /// A map ID is a unique identifier that represents a single map instance.
+  /// This value can only be set once during map initialization and cannot be changed afterwards.
+  /// Map IDs are created in Google Cloud Console and can be used to enable various features
+  /// such as cloud-based map styling, among others.
+  ///
+  /// See https://developers.google.com/maps/documentation/get-map-id
+  /// for more information about map IDs and how to create them.
+  ///
+  /// Null by default (no map ID).
+  final String? mapId;
+
   /// Which gestures should be forwarded to the PlatformView.
   ///
   /// When this set is empty, the map will only handle pointer events for gestures that
@@ -259,6 +273,7 @@ class GoogleMapsMapView extends GoogleMapsBaseMapView {
     super.initialZoomControlsEnabled = true,
     super.initialCameraTargetBounds,
     super.initialPadding,
+    super.mapId,
     super.layoutDirection,
     super.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
     super.onRecenterButtonClicked,
@@ -440,6 +455,7 @@ class GoogleMapsMapViewState extends MapViewState<GoogleMapsMapView> {
           zoomControlsEnabled: widget.initialZoomControlsEnabled,
           cameraTargetBounds: widget.initialCameraTargetBounds,
           padding: widget.initialPadding,
+          mapId: widget.mapId,
         ),
       ),
       onPlatformViewCreated: _onPlatformViewCreated,

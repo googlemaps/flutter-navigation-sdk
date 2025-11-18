@@ -82,6 +82,7 @@ object Convert {
     options.minZoomPreference?.let { googleMapOptions.minZoomPreference(it.toFloat()) }
     options.maxZoomPreference?.let { googleMapOptions.maxZoomPreference(it.toFloat()) }
     googleMapOptions.zoomControlsEnabled(options.zoomControlsEnabled)
+    options.mapId?.let { googleMapOptions.mapId(it) }
 
     return MapOptions(googleMapOptions, options.padding)
   }

@@ -16,6 +16,7 @@ export 'camera_position_editor.dart';
 export 'dropdown_button.dart';
 export 'latlng_bound_editor.dart';
 export 'latlng_editor.dart';
+export 'map_id_dialog.dart';
 export 'page.dart';
 export 'slider_editor.dart';
 export 'switch.dart';

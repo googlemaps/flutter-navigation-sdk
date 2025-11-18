@@ -1193,6 +1193,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                                   ? NavigationUIEnabledPreference.automatic
                                   : NavigationUIEnabledPreference.disabled,
                           initialPadding: const EdgeInsets.all(0),
+                          mapId: MapIdManager.instance.mapId,
                         )
                         : const Center(
                           child: Column(

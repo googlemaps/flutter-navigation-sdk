@@ -430,6 +430,7 @@ class MapOptionsDto {
     required this.zoomControlsEnabled,
     this.cameraTargetBounds,
     this.padding,
+    this.mapId,
   });
 
   /// The initial positioning of the camera in the map view.
@@ -475,6 +476,10 @@ class MapOptionsDto {
   /// Specifies the padding for the map.
   MapPaddingDto? padding;
 
+  /// The map ID for advanced map options eg. cloud-based map styling.
+  /// This value can only be set on map initialization and cannot be changed afterwards.
+  String? mapId;
+
   List<Object?> _toList() {
     return <Object?>[
       cameraPosition,
@@ -491,6 +496,7 @@ class MapOptionsDto {
       zoomControlsEnabled,
       cameraTargetBounds,
       padding,
+      mapId,
     ];
   }
 
@@ -515,6 +521,7 @@ class MapOptionsDto {
       zoomControlsEnabled: result[11]! as bool,
       cameraTargetBounds: result[12] as LatLngBoundsDto?,
       padding: result[13] as MapPaddingDto?,
+      mapId: result[14] as String?,
     );
   }
 
