@@ -26,10 +26,11 @@ import io.flutter.embedding.engine.plugins.lifecycle.FlutterLifecycleAdapter
 /** GoogleMapsNavigationPlugin */
 class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
   companion object {
-    private var instance: GoogleMapsNavigationPlugin? = null
+    private val instances = mutableListOf<GoogleMapsNavigationPlugin>()
 
+    /** Returns the first instance, which should always be the main Flutter engine. */
     fun getInstance(): GoogleMapsNavigationPlugin? {
-      return instance
+      return instances.firstOrNull()
     }
   }
 
@@ -46,11 +47,7 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
   private var lifecycle: Lifecycle? = null
 
   override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-    // Store first instance of the plugin so that Android Auto will get access to the correct object
-    // instances.
-    if (instance == null) {
-      instance = this
-    }
+    synchronized(instances) { instances.add(this) }
 
     // Init view registry and its method channel handlers
     viewRegistry = GoogleMapsViewRegistry()
@@ -104,7 +101,8 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
     imageRegistry = null
     autoViewMessageHandler = null
     autoViewEventApi = null
-    instance = null
+
+    synchronized(instances) { instances.remove(this) }
   }
 
   private fun attachActivity(binding: ActivityPluginBinding) {
