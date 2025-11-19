@@ -113,6 +113,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   bool _termsAndConditionsAccepted = false;
   bool _locationPermissionsAccepted = false;
   bool _turnByTurnNavigationEventEnabled = false;
+  bool _guidanceNotificationsEnabled = true;
 
   bool _isAutoScreenAvailable = false;
 
@@ -232,6 +233,11 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       await _updateNavigatorInitializationState();
       await _restorePossibleNavigatorState();
       unawaited(_setDefaultUserLocationAfterDelay());
+
+      // Get the current guidance notifications state
+      _guidanceNotificationsEnabled =
+          await GoogleMapsNavigator.getGuidanceNotificationsEnabled();
+
       debugPrint('Navigator has been initialized: $_navigatorInitialized');
     }
     setState(() {});
@@ -1577,6 +1583,18 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                       }
                       setState(() {
                         _turnByTurnNavigationEventEnabled = newValue;
+                      });
+                    },
+                  ),
+                  ExampleSwitch(
+                    title: 'Guidance notifications',
+                    initialValue: _guidanceNotificationsEnabled,
+                    onChanged: (bool newValue) async {
+                      await GoogleMapsNavigator.setGuidanceNotificationsEnabled(
+                        newValue,
+                      );
+                      setState(() {
+                        _guidanceNotificationsEnabled = newValue;
                       });
                     },
                   ),

@@ -4967,7 +4967,6 @@ abstract class TestNavigationSessionApi {
       TestDefaultBinaryMessengerBinding.instance;
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
 
-  /// General.
   Future<void> createNavigationSession(
     bool abnormalTerminationReportingEnabled,
     TaskRemovedBehaviorDto behavior,
@@ -4989,7 +4988,6 @@ abstract class TestNavigationSessionApi {
 
   String getNavSDKVersion();
 
-  /// Navigation.
   bool isGuidanceRunning();
 
   void startGuidance();
@@ -5014,7 +5012,10 @@ abstract class TestNavigationSessionApi {
 
   RouteSegmentDto? getCurrentRouteSegment();
 
-  /// Simulation
+  void setGuidanceNotificationsEnabled(bool enabled);
+
+  bool getGuidanceNotificationsEnabled();
+
   void setUserLocation(LatLngDto location);
 
   void removeUserLocation();
@@ -5045,15 +5046,13 @@ abstract class TestNavigationSessionApi {
 
   void resumeSimulation();
 
-  /// Simulation (iOS only)
+  /// iOS-only method.
   void allowBackgroundLocationUpdates(bool allow);
 
-  /// Road snapped location updates.
   void enableRoadSnappedLocationUpdates();
 
   void disableRoadSnappedLocationUpdates();
 
-  /// Enable Turn-by-Turn navigation events.
   void enableTurnByTurnNavigationEvents(int? numNextStepsToPreview);
 
   void disableTurnByTurnNavigationEvents();
@@ -5729,6 +5728,78 @@ abstract class TestNavigationSessionApi {
             ) async {
               try {
                 final RouteSegmentDto? output = api.getCurrentRouteSegment();
+                return <Object?>[output];
+              } on PlatformException catch (e) {
+                return wrapResponse(error: e);
+              } catch (e) {
+                return wrapResponse(
+                  error: PlatformException(
+                    code: 'error',
+                    message: e.toString(),
+                  ),
+                );
+              }
+            });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setGuidanceNotificationsEnabled$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
+              Object? message,
+            ) async {
+              assert(
+                message != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setGuidanceNotificationsEnabled was null.',
+              );
+              final List<Object?> args = (message as List<Object?>?)!;
+              final bool? arg_enabled = (args[0] as bool?);
+              assert(
+                arg_enabled != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setGuidanceNotificationsEnabled was null, expected non-null bool.',
+              );
+              try {
+                api.setGuidanceNotificationsEnabled(arg_enabled!);
+                return wrapResponse(empty: true);
+              } on PlatformException catch (e) {
+                return wrapResponse(error: e);
+              } catch (e) {
+                return wrapResponse(
+                  error: PlatformException(
+                    code: 'error',
+                    message: e.toString(),
+                  ),
+                );
+              }
+            });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getGuidanceNotificationsEnabled$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
+              Object? message,
+            ) async {
+              try {
+                final bool output = api.getGuidanceNotificationsEnabled();
                 return <Object?>[output];
               } on PlatformException catch (e) {
                 return wrapResponse(error: e);

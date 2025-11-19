@@ -324,6 +324,16 @@ class GoogleMapsNavigationSessionManager: NSObject {
     }
   }
 
+  /// Sets whether guidance notifications should be sent when the app is in the background.
+  func setGuidanceNotificationsEnabled(enabled: Bool) throws {
+    try getNavigator().sendsBackgroundNotifications = enabled
+  }
+
+  /// Gets whether guidance notifications are enabled.
+  func getGuidanceNotificationsEnabled() throws -> Bool {
+    try getNavigator().sendsBackgroundNotifications
+  }
+
   /// Simulation
   func setUserLocation(location: LatLngDto) throws {
     try getSimulator().simulateLocation(

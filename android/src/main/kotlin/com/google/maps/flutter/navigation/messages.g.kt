@@ -5693,7 +5693,6 @@ class ViewEventApi(
 
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface NavigationSessionApi {
-  /** General. */
   fun createNavigationSession(
     abnormalTerminationReportingEnabled: Boolean,
     behavior: TaskRemovedBehaviorDto,
@@ -5717,7 +5716,6 @@ interface NavigationSessionApi {
 
   fun getNavSDKVersion(): String
 
-  /** Navigation. */
   fun isGuidanceRunning(): Boolean
 
   fun startGuidance()
@@ -5742,7 +5740,10 @@ interface NavigationSessionApi {
 
   fun getCurrentRouteSegment(): RouteSegmentDto?
 
-  /** Simulation */
+  fun setGuidanceNotificationsEnabled(enabled: Boolean)
+
+  fun getGuidanceNotificationsEnabled(): Boolean
+
   fun setUserLocation(location: LatLngDto)
 
   fun removeUserLocation()
@@ -5773,15 +5774,13 @@ interface NavigationSessionApi {
 
   fun resumeSimulation()
 
-  /** Simulation (iOS only) */
+  /** iOS-only method. */
   fun allowBackgroundLocationUpdates(allow: Boolean)
 
-  /** Road snapped location updates. */
   fun enableRoadSnappedLocationUpdates()
 
   fun disableRoadSnappedLocationUpdates()
 
-  /** Enable Turn-by-Turn navigation events. */
   fun enableTurnByTurnNavigationEvents(numNextStepsToPreview: Long?)
 
   fun disableTurnByTurnNavigationEvents()
@@ -6229,6 +6228,51 @@ interface NavigationSessionApi {
             val wrapped: List<Any?> =
               try {
                 listOf(api.getCurrentRouteSegment())
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setGuidanceNotificationsEnabled$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            val wrapped: List<Any?> =
+              try {
+                api.setGuidanceNotificationsEnabled(enabledArg)
+                listOf(null)
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getGuidanceNotificationsEnabled$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> =
+              try {
+                listOf(api.getGuidanceNotificationsEnabled())
               } catch (exception: Throwable) {
                 MessagesPigeonUtils.wrapError(exception)
               }

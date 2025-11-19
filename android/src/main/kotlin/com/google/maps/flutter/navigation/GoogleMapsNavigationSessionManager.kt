@@ -74,6 +74,7 @@ constructor(
   private var navInfoObserver: Observer<NavInfo>? = null
   private var weakLifecycleOwner: WeakReference<LifecycleOwner>? = null
   private var taskRemovedBehavior: @TaskRemovedBehavior Int = 0
+  private var isGuidanceNotificationsEnabled: Boolean = true
 
   override fun onCreate(owner: LifecycleOwner) {
     weakLifecycleOwner = WeakReference(owner)
@@ -493,6 +494,32 @@ constructor(
    */
   fun setAudioGuidance(audioGuidanceSettings: Int) {
     getNavigator().setAudioGuidance(audioGuidanceSettings)
+  }
+
+  /**
+   * Sets whether guidance notifications should be shown when the app is not in the foreground. On
+   * Android, this controls heads-up notifications for guidance events (turns, etc.). On iOS, this
+   * controls background notifications containing guidance information.
+   *
+   * This method must be called on the UI thread. Wraps [Navigator.setHeadsUpNotificationEnabled].
+   * See
+   * [Google Navigation SDK for Android](https://developers.google.com/maps/documentation/navigation/android-sdk/reference/com/google/android/libraries/navigation/Navigator#setHeadsUpNotificationEnabled(boolean)).
+   */
+  @Throws(FlutterError::class)
+  fun setGuidanceNotificationsEnabled(enabled: Boolean) {
+    isGuidanceNotificationsEnabled = enabled
+    val activity = getActivity()
+    activity.runOnUiThread { getNavigator().setHeadsUpNotificationEnabled(enabled) }
+  }
+
+  /**
+   * Gets whether guidance notifications are enabled. On Android, returns the state of heads-up
+   * notifications. On iOS, returns the state of background notifications.
+   *
+   * @return true if guidance notifications are enabled, false otherwise.
+   */
+  fun getGuidanceNotificationsEnabled(): Boolean {
+    return isGuidanceNotificationsEnabled
   }
 
   fun setSpeedAlertOptions(options: SpeedAlertOptions) {

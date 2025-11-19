@@ -231,6 +231,20 @@ class MockTestNavigationSessionApi extends _i1.Mock
           as List<_i2.LatLngDto>);
 
   @override
+  void setGuidanceNotificationsEnabled(bool? enabled) => super.noSuchMethod(
+    Invocation.method(#setGuidanceNotificationsEnabled, [enabled]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  bool getGuidanceNotificationsEnabled() =>
+      (super.noSuchMethod(
+            Invocation.method(#getGuidanceNotificationsEnabled, []),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
   void setUserLocation(_i2.LatLngDto? location) => super.noSuchMethod(
     Invocation.method(#setUserLocation, [location]),
     returnValueForMissingStub: null,
