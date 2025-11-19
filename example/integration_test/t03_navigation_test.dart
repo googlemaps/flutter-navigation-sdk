@@ -86,7 +86,8 @@ void main() {
       await GoogleMapsNavigator.stopGuidance();
     }
 
-    GoogleMapsNavigator.setOnArrivalListener(onArrivalEvent);
+    final StreamSubscription<OnArrivalEvent> onArrivalSubscription =
+        GoogleMapsNavigator.setOnArrivalListener(onArrivalEvent);
 
     /// Simulate location and test it.
     await setSimulatedUserLocationWithCheck(
@@ -132,9 +133,11 @@ void main() {
       expectSync(msg.location.longitude, lessThanOrEqualTo(endLng + tolerance));
     }
 
-    await GoogleMapsNavigator.setRoadSnappedLocationUpdatedListener(
-      onLocationEvent,
-    );
+    final StreamSubscription<RoadSnappedLocationUpdatedEvent>
+    roadSnappedSubscription =
+        await GoogleMapsNavigator.setRoadSnappedLocationUpdatedListener(
+          onLocationEvent,
+        );
 
     /// Start simulation.
     await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
@@ -143,6 +146,9 @@ void main() {
     await hasArrived.future;
     expect(await GoogleMapsNavigator.isGuidanceRunning(), false);
 
+    // Cancel subscriptions before cleanup
+    await onArrivalSubscription.cancel();
+    await roadSnappedSubscription.cancel();
     await GoogleMapsNavigator.cleanup();
   });
 
@@ -228,7 +234,8 @@ void main() {
         }
       }
 
-      GoogleMapsNavigator.setOnArrivalListener(onArrivalEvent);
+      final StreamSubscription<OnArrivalEvent> onArrivalSubscription =
+          GoogleMapsNavigator.setOnArrivalListener(onArrivalEvent);
 
       /// Simulate location and test it.
       await setSimulatedUserLocationWithCheck(
@@ -291,9 +298,11 @@ void main() {
         }
       }
 
-      await GoogleMapsNavigator.setRoadSnappedLocationUpdatedListener(
-        onLocationEvent,
-      );
+      final StreamSubscription<RoadSnappedLocationUpdatedEvent>
+      roadSnappedSubscription =
+          await GoogleMapsNavigator.setRoadSnappedLocationUpdatedListener(
+            onLocationEvent,
+          );
 
       /// Start simulation.
       $.log('Starting simulation with speedMultiplier: 5');
@@ -311,6 +320,9 @@ void main() {
       await navigationFinished.future;
       expect(await GoogleMapsNavigator.isGuidanceRunning(), false);
 
+      // Cancel subscriptions before cleanup
+      await onArrivalSubscription.cancel();
+      await roadSnappedSubscription.cancel();
       await GoogleMapsNavigator.cleanup();
     },
     variant: multipleDestinationsVariants,
@@ -471,8 +483,8 @@ void main() {
       await finishTest.future;
       $.log('Loop with simulator$loopIteration finished.');
 
-      await GoogleMapsNavigator.cleanup();
       await subscription.cancel();
+      await GoogleMapsNavigator.cleanup();
       await $.pumpAndSettle();
     }
   });
@@ -630,7 +642,13 @@ void main() {
       expect(GoogleMapsNavigator.isGuidanceRunning(), false);
     }
 
-    GoogleMapsNavigator.setOnArrivalListener(onArrivalEvent);
+    final StreamSubscription<OnArrivalEvent> onArrivalSubscription =
+        GoogleMapsNavigator.setOnArrivalListener(onArrivalEvent);
+
+    // The subscription will be automatically cleaned up when the test ends.
+    addTearDown(() async {
+      await onArrivalSubscription.cancel();
+    });
   });
 
   patrol('Test error during navigation if no network connection', (
@@ -753,7 +771,8 @@ void main() {
       hasArrived.complete();
     }
 
-    GoogleMapsNavigator.setOnArrivalListener(onArrivalEvent);
+    final StreamSubscription<OnArrivalEvent> onArrivalSubscription =
+        GoogleMapsNavigator.setOnArrivalListener(onArrivalEvent);
 
     /// Simulate location (1298 California St)
     const double tolerance = 0.001;
@@ -850,6 +869,9 @@ void main() {
 
     /// Check that the last segment is near target destination.
     expect(endSegment!.destinationLatLng.longitude, closeTo(-122.412, 0.002));
+
+    // Cancel subscription before test ends
+    await onArrivalSubscription.cancel();
   });
 
   patrol('Test that the navigation session is attached to existing map', (
