@@ -4867,7 +4867,7 @@ protocol NavigationSessionApi {
     abnormalTerminationReportingEnabled: Bool, behavior: TaskRemovedBehaviorDto,
     completion: @escaping (Result<Void, Error>) -> Void)
   func isInitialized() throws -> Bool
-  func cleanup() throws
+  func cleanup(resetSession: Bool) throws
   func showTermsAndConditionsDialog(
     title: String, companyName: String, shouldOnlyShowDriverAwarenessDisclaimer: Bool,
     completion: @escaping (Result<Bool, Error>) -> Void)
@@ -4972,9 +4972,11 @@ class NavigationSessionApiSetup {
         "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.cleanup\(channelSuffix)",
       binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      cleanupChannel.setMessageHandler { _, reply in
+      cleanupChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let resetSessionArg = args[0] as! Bool
         do {
-          try api.cleanup()
+          try api.cleanup(resetSession: resetSessionArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))

@@ -1224,7 +1224,7 @@ abstract class NavigationSessionApi {
     TaskRemovedBehaviorDto behavior,
   );
   bool isInitialized();
-  void cleanup();
+  void cleanup(bool resetSession);
   @async
   bool showTermsAndConditionsDialog(
     String title,

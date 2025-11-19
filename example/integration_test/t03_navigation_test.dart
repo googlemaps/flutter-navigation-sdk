@@ -418,12 +418,9 @@ void main() {
       $.log('Starting loop with simulator$loopIteration.');
       loopIteration += 1;
 
-      /// Initialize navigation if iOS.
-      /// On iOS .cleanup() destroys the initialization.
-      if (Platform.isIOS) {
-        await GoogleMapsNavigator.initializeNavigationSession();
-        await $.pumpAndSettle();
-      }
+      /// Initialize navigation as .cleanup() destroys the initialization.
+      await GoogleMapsNavigator.initializeNavigationSession();
+      await $.pumpAndSettle();
 
       /// Simulate location and test it.
       await setSimulatedUserLocationWithCheck(

@@ -6693,7 +6693,7 @@ class NavigationSessionApi {
     }
   }
 
-  Future<void> cleanup() async {
+  Future<void> cleanup(bool resetSession) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.cleanup$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -6702,7 +6702,9 @@ class NavigationSessionApi {
           pigeonChannelCodec,
           binaryMessenger: pigeonVar_binaryMessenger,
         );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[resetSession],
+    );
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {

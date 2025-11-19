@@ -441,17 +441,24 @@ class GoogleMapsNavigator {
 
   /// Cleans up the navigation session.
   ///
-  /// Cleans up the navigator's internal state, clearing
-  /// listeners, any existing route waypoints and stopping ongoing
-  /// navigation guidance and simulation.
+  /// By default ([resetSession] is true), cleans up the navigator's internal
+  /// state, clearing listeners, any existing route waypoints and stopping
+  /// ongoing navigation guidance and simulation.
   ///
-  /// On iOS the session is fully deleted and needs to be recreated
-  /// by calling [GoogleMapsNavigator.initializeNavigationSession].
+  /// When [resetSession] is set to false, only unregisters native event
+  /// listeners without stopping guidance or clearing destinations. This is
+  /// useful for background/foreground service implementations where you want to
+  /// stop receiving events but keep the navigation session active.
   ///
-  /// On Android the session is cleaned up, but never destroyed after the
-  /// first initialization.
-  static Future<void> cleanup() async {
-    await GoogleMapsNavigationPlatform.instance.navigationSessionAPI.cleanup();
+  /// The session is fully deleted when [resetSession] is true and needs to be
+  /// recreated by calling [GoogleMapsNavigator.initializeNavigationSession].
+  ///
+  /// Note: When [resetSession] is false, you'll need to re-enable listeners
+  /// by calling [initializeNavigationSession] again to resume receiving events.
+  static Future<void> cleanup({bool resetSession = true}) async {
+    await GoogleMapsNavigationPlatform.instance.navigationSessionAPI.cleanup(
+      resetSession: resetSession,
+    );
   }
 
   /// Shows terms and conditions dialog.

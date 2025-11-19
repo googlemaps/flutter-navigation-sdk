@@ -56,12 +56,8 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
   private fun initializeNavigationListener() {
     GoogleMapsNavigationSessionManager.navigationReadyListener = this
     mIsNavigationReady =
-      try {
-        GoogleMapsNavigationSessionManager.getInstance().isInitialized()
-      } catch (exception: RuntimeException) {
-        // If GoogleMapsNavigationSessionManager is not initialized navigation is not ready.
-        false
-      }
+      GoogleMapsNavigatorHolder.getInitializationState() ==
+        GoogleNavigatorInitializationState.INITIALIZED
   }
 
   private fun initializeSurfaceCallback() {
