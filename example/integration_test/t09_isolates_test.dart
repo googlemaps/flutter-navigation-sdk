@@ -32,44 +32,56 @@ void main() {
       final RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
       const int numIsolates = 3;
       final List<ReceivePort> receivePorts = [];
+      final List<Isolate> isolates = [];
 
-      for (int i = 0; i < numIsolates; i++) {
-        final ReceivePort receivePort = ReceivePort();
-        receivePorts.add(receivePort);
+      try {
+        for (int i = 0; i < numIsolates; i++) {
+          final ReceivePort receivePort = ReceivePort();
+          receivePorts.add(receivePort);
 
-        await Isolate.spawn(
-          _isolateVersionCheckMain,
-          _IsolateData(
-            rootIsolateToken: rootIsolateToken,
-            sendPort: receivePort.sendPort,
-          ),
-        );
-      }
+          final Isolate isolate = await Isolate.spawn(
+            _isolateVersionCheckMain,
+            _IsolateData(
+              rootIsolateToken: rootIsolateToken,
+              sendPort: receivePort.sendPort,
+            ),
+          );
+          isolates.add(isolate);
+        }
 
-      final List<_IsolateResult> results = [];
-      for (final receivePort in receivePorts) {
-        final dynamic result = await receivePort.first;
-        expect(result, isA<_IsolateResult>());
-        results.add(result as _IsolateResult);
-      }
+        final List<_IsolateResult> results = [];
+        for (final receivePort in receivePorts) {
+          final dynamic result = await receivePort.first;
+          expect(result, isA<_IsolateResult>());
+          results.add(result as _IsolateResult);
+        }
 
-      for (int i = 0; i < results.length; i++) {
-        expect(
-          results[i].error,
-          isNull,
-          reason: 'Isolate $i should not throw an error',
-        );
-        expect(results[i].version, isNotNull);
-        expect(results[i].version!.length, greaterThan(0));
-      }
+        for (int i = 0; i < results.length; i++) {
+          expect(
+            results[i].error,
+            isNull,
+            reason: 'Isolate $i should not throw an error',
+          );
+          expect(results[i].version, isNotNull);
+          expect(results[i].version!.length, greaterThan(0));
+        }
 
-      final String firstVersion = results[0].version!;
-      for (int i = 1; i < results.length; i++) {
-        expect(
-          results[i].version,
-          equals(firstVersion),
-          reason: 'All isolates should return the same SDK version',
-        );
+        final String firstVersion = results[0].version!;
+        for (int i = 1; i < results.length; i++) {
+          expect(
+            results[i].version,
+            equals(firstVersion),
+            reason: 'All isolates should return the same SDK version',
+          );
+        }
+      } finally {
+        // Clean up resources
+        for (final receivePort in receivePorts) {
+          receivePort.close();
+        }
+        for (final isolate in isolates) {
+          isolate.kill(priority: Isolate.immediate);
+        }
       }
     },
   );
