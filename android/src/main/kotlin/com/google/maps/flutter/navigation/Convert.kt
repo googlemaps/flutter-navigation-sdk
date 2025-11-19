@@ -363,6 +363,7 @@ object Convert {
    */
   fun convertDisplayOptionsFromDto(displayOptions: NavigationDisplayOptionsDto): DisplayOptions {
     return DisplayOptions().apply {
+      // Only set if explicitly provided, otherwise SDK defaults are used.
       if (displayOptions.showDestinationMarkers != null) {
         this.hideDestinationMarkers(!displayOptions.showDestinationMarkers)
       }
