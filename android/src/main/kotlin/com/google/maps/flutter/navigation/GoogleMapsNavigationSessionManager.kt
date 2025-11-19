@@ -74,7 +74,6 @@ constructor(
   private var navInfoObserver: Observer<NavInfo>? = null
   private var weakLifecycleOwner: WeakReference<LifecycleOwner>? = null
   private var taskRemovedBehavior: @TaskRemovedBehavior Int = 0
-  private var isGuidanceNotificationsEnabled: Boolean = true
 
   override fun onCreate(owner: LifecycleOwner) {
     weakLifecycleOwner = WeakReference(owner)
@@ -507,9 +506,8 @@ constructor(
    */
   @Throws(FlutterError::class)
   fun setGuidanceNotificationsEnabled(enabled: Boolean) {
-    isGuidanceNotificationsEnabled = enabled
     val activity = getActivity()
-    activity.runOnUiThread { getNavigator().setHeadsUpNotificationEnabled(enabled) }
+    activity.runOnUiThread { GoogleMapsNavigatorHolder.setGuidanceNotificationsEnabled(enabled) }
   }
 
   /**
@@ -519,7 +517,7 @@ constructor(
    * @return true if guidance notifications are enabled, false otherwise.
    */
   fun getGuidanceNotificationsEnabled(): Boolean {
-    return isGuidanceNotificationsEnabled
+    return GoogleMapsNavigatorHolder.getGuidanceNotificationsEnabled()
   }
 
   fun setSpeedAlertOptions(options: SpeedAlertOptions) {
