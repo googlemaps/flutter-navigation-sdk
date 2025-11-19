@@ -306,6 +306,10 @@ class GoogleMapsNavigationSessionManager: NSObject {
   }
 
   func continueToNextDestination() throws -> NavigationWaypointDto? {
+    // Reset session detection state to allow onNewNavigationSession to fire again
+    // This mimics Android's behavior where the event fires when continuing to next destination
+    _isNewNavigationSessionDetected = false
+
     guard let nextWaypoint = try getNavigator().continueToNextDestination() else { return nil }
     return Convert.convertNavigationWayPoint(nextWaypoint)
   }

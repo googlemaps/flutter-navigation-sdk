@@ -197,6 +197,9 @@ void main() {
       Future<void> onArrivalEvent(OnArrivalEvent msg) async {
         arrivalEventCount += 1;
         if (arrivalEventCount < 2) {
+          // Reset the completer to test that new session event fires again
+          newSessionFired = Completer<void>();
+
           if (multipleDestinationsVariants.currentValue ==
               'continueToNextDestination') {
             // Note: continueToNextDestination is deprecated.
@@ -210,9 +213,6 @@ void main() {
                   SimulationOptions(speedMultiplier: 5),
                 );
           } else {
-            // Reset the completer to test that new session event fires again
-            newSessionFired = Completer<void>();
-
             // Find and remove the waypoint that matches the arrived waypoint
             int waypointIndex = -1;
             for (int i = 0; i < waypoints.length; i++) {
@@ -237,22 +237,22 @@ void main() {
               );
               await GoogleMapsNavigator.setDestinations(updatedDestinations);
 
-              // Wait for new session event after updating destinations
-              await newSessionFired.future.timeout(
-                const Duration(seconds: 10),
-                onTimeout:
-                    () =>
-                        throw TimeoutException(
-                          'New navigation session event was not fired after updating destinations',
-                        ),
-              );
-
               await GoogleMapsNavigator.simulator
                   .simulateLocationsAlongExistingRouteWithOptions(
                     SimulationOptions(speedMultiplier: 5),
                   );
             }
           }
+
+          // Wait for new session event after updating destinations
+          await newSessionFired.future.timeout(
+            const Duration(seconds: 10),
+            onTimeout:
+                () =>
+                    throw TimeoutException(
+                      'New navigation session event was not fired after updating destinations',
+                    ),
+          );
         } else {
           $.log('Got second arrival event, stopping guidance');
           // Stop guidance after the last destination
