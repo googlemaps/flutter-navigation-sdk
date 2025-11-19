@@ -668,6 +668,13 @@ class NavigationSessionAPIImpl {
   Stream<NavInfoEvent> getNavInfoStream() {
     return _sessionEventStreamController.stream.whereType<NavInfoEvent>();
   }
+
+  /// Get new navigation session event stream from the navigation session.
+  Stream<void> getNewNavigationSessionEventStream() {
+    return _sessionEventStreamController.stream
+        .whereType<_NewNavigationSessionEvent>()
+        .map((_NewNavigationSessionEvent event) => ());
+  }
 }
 
 /// Implementation for navigation session event API event handling.
@@ -748,6 +755,11 @@ class NavigationSessionEventApiImpl implements NavigationSessionEventApi {
       NavInfoEvent(navInfo: navInfo.toNavInfo()),
     );
   }
+
+  @override
+  void onNewNavigationSession() {
+    sessionEventStreamController.add(_NewNavigationSessionEvent());
+  }
 }
 
 /// Event wrapper for a route update events.
@@ -758,3 +770,6 @@ class _ReroutingEvent {}
 
 /// Event wrapper for a traffic updated events.
 class _TrafficUpdatedEvent {}
+
+/// Event wrapper for a new navigation session event.
+class _NewNavigationSessionEvent {}

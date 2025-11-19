@@ -64,6 +64,8 @@ class GoogleMapsNavigationSessionManager: NSObject {
 
   private var _numTurnByTurnNextStepsToPreview = Int64.max
 
+  private var _isNewNavigationSessionDetected = false
+
   func getNavigator() throws -> GMSNavigator {
     guard let _session else { throw GoogleMapsNavigationSessionManagerError.sessionNotInitialized }
     guard let navigator = _session.navigator
@@ -221,6 +223,7 @@ class GoogleMapsNavigationSessionManager: NSObject {
 
   func stopGuidance() throws {
     try getNavigator().isGuidanceActive = false
+    _isNewNavigationSessionDetected = false
   }
 
   func isGuidanceRunning() throws -> Bool {
@@ -247,6 +250,11 @@ class GoogleMapsNavigationSessionManager: NSObject {
     completion: @escaping (Result<RouteStatusDto, Error>) -> Void
   ) {
     do {
+      // Reset session detection state to allow onNewNavigationSession to fire again
+      // This mimics Android's behavior where the event fires each time setDestinations
+      // is called while guidance is running
+      _isNewNavigationSessionDetected = false
+
       // If the session has view attached, enable given display options.
       handleDisplayOptionsIfNeeded(options: destinations.displayOptions)
 
@@ -294,6 +302,7 @@ class GoogleMapsNavigationSessionManager: NSObject {
 
   func clearDestinations() throws {
     try getNavigator().clearDestinations()
+    _isNewNavigationSessionDetected = false
   }
 
   func continueToNextDestination() throws -> NavigationWaypointDto? {
@@ -589,6 +598,15 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
     _ navigator: GMSNavigator,
     didUpdate navInfo: GMSNavigationNavInfo
   ) {
+    // Detect new navigation session start
+    // This callback only fires when guidance is actively running, making it the ideal place
+    // to detect session starts and match Android's behavior where NavigationSessionListener
+    // fires when guidance begins
+    if !_isNewNavigationSessionDetected {
+      _isNewNavigationSessionDetected = true
+      _navigationSessionEventApi?.onNewNavigationSession(completion: { _ in })
+    }
+
     if _sendTurnByTurnNavigationEvents {
       _navigationSessionEventApi?.onNavInfo(
         navInfo: Convert.convertNavInfo(

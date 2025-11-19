@@ -6632,7 +6632,6 @@ class NavigationSessionApi {
 
   final String pigeonVar_messageChannelSuffix;
 
-  /// General.
   Future<void> createNavigationSession(
     bool abnormalTerminationReportingEnabled,
     TaskRemovedBehaviorDto behavior,
@@ -6841,7 +6840,6 @@ class NavigationSessionApi {
     }
   }
 
-  /// Navigation.
   Future<bool> isGuidanceRunning() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.isGuidanceRunning$pigeonVar_messageChannelSuffix';
@@ -7176,7 +7174,6 @@ class NavigationSessionApi {
     }
   }
 
-  /// Simulation
   Future<void> setUserLocation(LatLngDto location) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setUserLocation$pigeonVar_messageChannelSuffix';
@@ -7439,7 +7436,7 @@ class NavigationSessionApi {
     }
   }
 
-  /// Simulation (iOS only)
+  /// iOS-only method.
   Future<void> allowBackgroundLocationUpdates(bool allow) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.allowBackgroundLocationUpdates$pigeonVar_messageChannelSuffix';
@@ -7467,7 +7464,6 @@ class NavigationSessionApi {
     }
   }
 
-  /// Road snapped location updates.
   Future<void> enableRoadSnappedLocationUpdates() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.enableRoadSnappedLocationUpdates$pigeonVar_messageChannelSuffix';
@@ -7518,7 +7514,6 @@ class NavigationSessionApi {
     }
   }
 
-  /// Enable Turn-by-Turn navigation events.
   Future<void> enableTurnByTurnNavigationEvents(
     int? numNextStepsToPreview,
   ) async {
@@ -7636,6 +7631,10 @@ abstract class NavigationSessionEventApi {
 
   /// Turn-by-Turn navigation events.
   void onNavInfo(NavInfoDto navInfo);
+
+  /// Navigation session event. Called when a new navigation
+  /// session starts with active guidance.
+  void onNewNavigationSession();
 
   static void setUp(
     NavigationSessionEventApi? api, {
@@ -7953,6 +7952,30 @@ abstract class NavigationSessionEventApi {
           );
           try {
             api.onNavInfo(arg_navInfo!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onNewNavigationSession$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        pigeonVar_channel.setMessageHandler(null);
+      } else {
+        pigeonVar_channel.setMessageHandler((Object? message) async {
+          try {
+            api.onNewNavigationSession();
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

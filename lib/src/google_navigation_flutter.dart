@@ -68,6 +68,9 @@ typedef OnRemainingTimeOrDistanceChangedEventCallback =
 /// Called on navigation info event.
 typedef OnNavInfoEventCallback = void Function(NavInfoEvent onNavInfo);
 
+/// Called on new navigation session event.
+typedef OnNewNavigationSessionCallback = void Function();
+
 /// Called during marker click event.
 typedef OnMarkerClicked = void Function(String markerId);
 

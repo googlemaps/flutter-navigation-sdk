@@ -70,6 +70,7 @@ constructor(
     RoadSnappedLocationProvider.GpsAvailabilityEnhancedLocationListener? =
     null
   private var speedingListener: SpeedingListener? = null
+  private var navigationSessionListener: Navigator.NavigationSessionListener? = null
   private var weakActivity: WeakReference<Activity>? = null
   private var navInfoObserver: Observer<NavInfo>? = null
   private var weakLifecycleOwner: WeakReference<LifecycleOwner>? = null
@@ -315,6 +316,10 @@ constructor(
         navigator.setSpeedingListener(null)
         speedingListener = null
       }
+      if (navigationSessionListener != null) {
+        navigator.removeNavigationSessionListener(navigationSessionListener)
+        navigationSessionListener = null
+      }
     }
     if (roadSnappedLocationListener != null) {
       disableRoadSnappedLocationUpdates()
@@ -390,6 +395,12 @@ constructor(
           ) {}
         }
       navigator.setSpeedingListener(speedingListener)
+    }
+
+    if (navigationSessionListener == null) {
+      navigationSessionListener =
+        Navigator.NavigationSessionListener { navigationSessionEventApi.onNewNavigationSession {} }
+      navigator.addNavigationSessionListener(navigationSessionListener)
     }
   }
 

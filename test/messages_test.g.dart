@@ -4967,7 +4967,6 @@ abstract class TestNavigationSessionApi {
       TestDefaultBinaryMessengerBinding.instance;
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
 
-  /// General.
   Future<void> createNavigationSession(
     bool abnormalTerminationReportingEnabled,
     TaskRemovedBehaviorDto behavior,
@@ -4989,7 +4988,6 @@ abstract class TestNavigationSessionApi {
 
   String getNavSDKVersion();
 
-  /// Navigation.
   bool isGuidanceRunning();
 
   void startGuidance();
@@ -5014,7 +5012,6 @@ abstract class TestNavigationSessionApi {
 
   RouteSegmentDto? getCurrentRouteSegment();
 
-  /// Simulation
   void setUserLocation(LatLngDto location);
 
   void removeUserLocation();
@@ -5045,15 +5042,13 @@ abstract class TestNavigationSessionApi {
 
   void resumeSimulation();
 
-  /// Simulation (iOS only)
+  /// iOS-only method.
   void allowBackgroundLocationUpdates(bool allow);
 
-  /// Road snapped location updates.
   void enableRoadSnappedLocationUpdates();
 
   void disableRoadSnappedLocationUpdates();
 
-  /// Enable Turn-by-Turn navigation events.
   void enableTurnByTurnNavigationEvents(int? numNextStepsToPreview);
 
   void disableTurnByTurnNavigationEvents();
