@@ -6632,7 +6632,6 @@ class NavigationSessionApi {
 
   final String pigeonVar_messageChannelSuffix;
 
-  /// General.
   Future<void> createNavigationSession(
     bool abnormalTerminationReportingEnabled,
     TaskRemovedBehaviorDto behavior,
@@ -6841,7 +6840,6 @@ class NavigationSessionApi {
     }
   }
 
-  /// Navigation.
   Future<bool> isGuidanceRunning() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.isGuidanceRunning$pigeonVar_messageChannelSuffix';
@@ -7176,7 +7174,63 @@ class NavigationSessionApi {
     }
   }
 
-  /// Simulation
+  Future<void> setGuidanceNotificationsEnabled(bool enabled) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setGuidanceNotificationsEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[enabled],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<bool> getGuidanceNotificationsEnabled() async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getGuidanceNotificationsEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
   Future<void> setUserLocation(LatLngDto location) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setUserLocation$pigeonVar_messageChannelSuffix';
@@ -7439,7 +7493,7 @@ class NavigationSessionApi {
     }
   }
 
-  /// Simulation (iOS only)
+  /// iOS-only method.
   Future<void> allowBackgroundLocationUpdates(bool allow) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.allowBackgroundLocationUpdates$pigeonVar_messageChannelSuffix';
@@ -7467,7 +7521,6 @@ class NavigationSessionApi {
     }
   }
 
-  /// Road snapped location updates.
   Future<void> enableRoadSnappedLocationUpdates() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.enableRoadSnappedLocationUpdates$pigeonVar_messageChannelSuffix';
@@ -7518,7 +7571,6 @@ class NavigationSessionApi {
     }
   }
 
-  /// Enable Turn-by-Turn navigation events.
   Future<void> enableTurnByTurnNavigationEvents(
     int? numNextStepsToPreview,
   ) async {

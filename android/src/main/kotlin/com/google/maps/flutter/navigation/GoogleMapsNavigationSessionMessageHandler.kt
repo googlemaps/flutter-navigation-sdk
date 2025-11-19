@@ -132,6 +132,14 @@ class GoogleMapsNavigationSessionMessageHandler(
     sessionManager.setAudioGuidance(audioGuidanceSettings)
   }
 
+  override fun setGuidanceNotificationsEnabled(enabled: Boolean) {
+    manager().setGuidanceNotificationsEnabled(enabled)
+  }
+
+  override fun getGuidanceNotificationsEnabled(): Boolean {
+    return manager().getGuidanceNotificationsEnabled()
+  }
+
   override fun setSpeedAlertOptions(options: SpeedAlertOptionsDto) {
     val newOptions = Convert.convertSpeedAlertOptionsFromDto(options)
     sessionManager.setSpeedAlertOptions(newOptions)

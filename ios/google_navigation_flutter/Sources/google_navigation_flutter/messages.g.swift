@@ -4862,7 +4862,6 @@ class ViewEventApi: ViewEventApiProtocol {
 }
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol NavigationSessionApi {
-  /// General.
   func createNavigationSession(
     abnormalTerminationReportingEnabled: Bool, behavior: TaskRemovedBehaviorDto,
     completion: @escaping (Result<Void, Error>) -> Void)
@@ -4874,7 +4873,6 @@ protocol NavigationSessionApi {
   func areTermsAccepted() throws -> Bool
   func resetTermsAccepted() throws
   func getNavSDKVersion() throws -> String
-  /// Navigation.
   func isGuidanceRunning() throws -> Bool
   func startGuidance() throws
   func stopGuidance() throws
@@ -4888,7 +4886,8 @@ protocol NavigationSessionApi {
   func getRouteSegments() throws -> [RouteSegmentDto]
   func getTraveledRoute() throws -> [LatLngDto]
   func getCurrentRouteSegment() throws -> RouteSegmentDto?
-  /// Simulation
+  func setGuidanceNotificationsEnabled(enabled: Bool) throws
+  func getGuidanceNotificationsEnabled() throws -> Bool
   func setUserLocation(location: LatLngDto) throws
   func removeUserLocation() throws
   func simulateLocationsAlongExistingRoute() throws
@@ -4905,12 +4904,10 @@ protocol NavigationSessionApi {
     completion: @escaping (Result<RouteStatusDto, Error>) -> Void)
   func pauseSimulation() throws
   func resumeSimulation() throws
-  /// Simulation (iOS only)
+  /// iOS-only method.
   func allowBackgroundLocationUpdates(allow: Bool) throws
-  /// Road snapped location updates.
   func enableRoadSnappedLocationUpdates() throws
   func disableRoadSnappedLocationUpdates() throws
-  /// Enable Turn-by-Turn navigation events.
   func enableTurnByTurnNavigationEvents(numNextStepsToPreview: Int64?) throws
   func disableTurnByTurnNavigationEvents() throws
   func registerRemainingTimeOrDistanceChangedListener(
@@ -4926,7 +4923,6 @@ class NavigationSessionApiSetup {
     messageChannelSuffix: String = ""
   ) {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    /// General.
     let createNavigationSessionChannel = FlutterBasicMessageChannel(
       name:
         "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession\(channelSuffix)",
@@ -5058,7 +5054,6 @@ class NavigationSessionApiSetup {
     } else {
       getNavSDKVersionChannel.setMessageHandler(nil)
     }
-    /// Navigation.
     let isGuidanceRunningChannel = FlutterBasicMessageChannel(
       name:
         "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.isGuidanceRunning\(channelSuffix)",
@@ -5259,7 +5254,40 @@ class NavigationSessionApiSetup {
     } else {
       getCurrentRouteSegmentChannel.setMessageHandler(nil)
     }
-    /// Simulation
+    let setGuidanceNotificationsEnabledChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setGuidanceNotificationsEnabled\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setGuidanceNotificationsEnabledChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let enabledArg = args[0] as! Bool
+        do {
+          try api.setGuidanceNotificationsEnabled(enabled: enabledArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setGuidanceNotificationsEnabledChannel.setMessageHandler(nil)
+    }
+    let getGuidanceNotificationsEnabledChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getGuidanceNotificationsEnabled\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getGuidanceNotificationsEnabledChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.getGuidanceNotificationsEnabled()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getGuidanceNotificationsEnabledChannel.setMessageHandler(nil)
+    }
     let setUserLocationChannel = FlutterBasicMessageChannel(
       name:
         "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setUserLocation\(channelSuffix)",
@@ -5430,7 +5458,7 @@ class NavigationSessionApiSetup {
     } else {
       resumeSimulationChannel.setMessageHandler(nil)
     }
-    /// Simulation (iOS only)
+    /// iOS-only method.
     let allowBackgroundLocationUpdatesChannel = FlutterBasicMessageChannel(
       name:
         "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.allowBackgroundLocationUpdates\(channelSuffix)",
@@ -5449,7 +5477,6 @@ class NavigationSessionApiSetup {
     } else {
       allowBackgroundLocationUpdatesChannel.setMessageHandler(nil)
     }
-    /// Road snapped location updates.
     let enableRoadSnappedLocationUpdatesChannel = FlutterBasicMessageChannel(
       name:
         "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.enableRoadSnappedLocationUpdates\(channelSuffix)",
@@ -5482,7 +5509,6 @@ class NavigationSessionApiSetup {
     } else {
       disableRoadSnappedLocationUpdatesChannel.setMessageHandler(nil)
     }
-    /// Enable Turn-by-Turn navigation events.
     let enableTurnByTurnNavigationEventsChannel = FlutterBasicMessageChannel(
       name:
         "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.enableTurnByTurnNavigationEvents\(channelSuffix)",

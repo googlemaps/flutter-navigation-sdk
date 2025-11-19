@@ -44,6 +44,9 @@ object GoogleMapsNavigatorHolder {
   private var turnByTurnServiceRegistered = false
   private val navInfoObservers = mutableListOf<Observer<NavInfo>>()
 
+  // Guidance notifications management
+  private var isGuidanceNotificationsEnabled = true
+
   @Synchronized fun getNavigator(): Navigator? = navigator
 
   @Synchronized
@@ -138,6 +141,23 @@ object GoogleMapsNavigatorHolder {
     return true
   }
 
+  /** Sets whether guidance notifications should be shown when the app is not in the foreground. */
+  @Synchronized
+  fun setGuidanceNotificationsEnabled(enabled: Boolean) {
+    isGuidanceNotificationsEnabled = enabled
+    navigator?.setHeadsUpNotificationEnabled(enabled)
+  }
+
+  /**
+   * Gets whether guidance notifications are enabled. Returns the state of heads-up notifications.
+   *
+   * @return true if guidance notifications are enabled, false otherwise.
+   */
+  @Synchronized
+  fun getGuidanceNotificationsEnabled(): Boolean {
+    return isGuidanceNotificationsEnabled
+  }
+
   @Synchronized
   fun reset() {
     // Clean up turn-by-turn service
@@ -148,6 +168,11 @@ object GoogleMapsNavigatorHolder {
       navInfoObservers.clear()
       navigator?.unregisterServiceForNavUpdates()
       turnByTurnServiceRegistered = false
+    }
+
+    if (isGuidanceNotificationsEnabled == false) {
+      navigator?.setHeadsUpNotificationEnabled(true)
+      isGuidanceNotificationsEnabled = true
     }
 
     navigator = null
