@@ -155,7 +155,7 @@ jobs:
         with:
           melos-version: "6.3.2"
       - name: Download Build Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: ${{ runner.os }}-build-artifact
       - name: "Run build for Android"
@@ -200,7 +200,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pods-
       - name: Download Build Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: ${{ runner.os }}-build-artifact
       - name: Select XCode 16.4
@@ -264,7 +264,7 @@ jobs:
           channel: "stable"
           cache: true
       - name: Download Build Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: ${{ runner.os }}-build-artifact
       - name: Cache pub global packages
@@ -369,7 +369,7 @@ jobs:
           # Save DEVICE_ID for later use
           echo "DEVICE_ID=$DEVICE_ID" >> $GITHUB_ENV
       - name: Download Build Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: ${{ runner.os }}-build-artifact
       - name: Cache podfiles
