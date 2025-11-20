@@ -26,6 +26,8 @@ import 'package:flutter/material.dart';
 
 import 'shared.dart';
 
+const String testMapId = 'DEMO_MAP_ID';
+
 void main() {
   final mapTypeVariants = getMapTypeVariants();
   patrol('Test map types', (PatrolIntegrationTester $) async {
@@ -123,6 +125,48 @@ void main() {
       expect(await controller.settings.isZoomControlsEnabled(), false);
       expect(await controller.settings.isMapToolbarEnabled(), false);
     }
+
+    // Test that view can be created with a mapID.
+    // Note: mapID cannot be fetched back from the map, so we only test
+    // that creation succeeds.
+    final ControllerCompleter<GoogleMapViewController>
+    controllerCompleterWithMapId =
+        ControllerCompleter<GoogleMapViewController>();
+
+    switch (mapTypeVariants.currentValue!) {
+      case TestMapType.mapView:
+        final Key key = GlobalKey();
+        await pumpMapView(
+          $,
+          GoogleMapsMapView(
+            key: key,
+            mapId: testMapId,
+            onViewCreated: (GoogleMapViewController viewController) {
+              controllerCompleterWithMapId.complete(viewController);
+            },
+          ),
+        );
+        break;
+      case TestMapType.navigationView:
+        final Key key = GlobalKey();
+        await pumpNavigationView(
+          $,
+          GoogleMapsNavigationView(
+            key: key,
+            mapId: testMapId,
+            onViewCreated: (GoogleNavigationViewController viewController) {
+              controllerCompleterWithMapId.complete(viewController);
+            },
+          ),
+        );
+        break;
+    }
+
+    final GoogleMapViewController controllerWithMapId =
+        await controllerCompleterWithMapId.future;
+
+    // Verify the controller was created successfully
+    expect(controllerWithMapId, isNotNull);
   }, variant: mapTypeVariants);
 
   patrol('Test map UI settings', (PatrolIntegrationTester $) async {

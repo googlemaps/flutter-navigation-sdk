@@ -113,6 +113,7 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
             onViewCreated: _onViewCreated,
             onMyLocationClicked: _onMyLocationClicked,
             onMyLocationButtonClicked: _onMyLocationButtonClicked,
+            mapId: MapIdManager.instance.mapId,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -165,17 +166,26 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
                   children: <Widget>[
                     ElevatedButton(
                       style: mapTypeStyle,
-                      onPressed: () => setMapStyleDefault(),
+                      onPressed:
+                          MapIdManager.instance.mapId != null
+                              ? null
+                              : () => setMapStyleDefault(),
                       child: const Text('Default style'),
                     ),
                     ElevatedButton(
                       style: mapTypeStyle,
-                      onPressed: () => setMapStyleNight(),
+                      onPressed:
+                          MapIdManager.instance.mapId != null
+                              ? null
+                              : () => setMapStyleNight(),
                       child: const Text('Night style'),
                     ),
                     ElevatedButton(
                       style: mapTypeStyle,
-                      onPressed: () => setMapStyleSepia(),
+                      onPressed:
+                          MapIdManager.instance.mapId != null
+                              ? null
+                              : () => setMapStyleSepia(),
                       child: const Text('Sepia style'),
                     ),
                   ],

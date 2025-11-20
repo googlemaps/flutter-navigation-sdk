@@ -237,7 +237,10 @@ class _MultiplexState extends ExamplePageState<MultipleMapViewsPage> {
         children: <Widget>[
           SizedBox(
             height: 200,
-            child: GoogleMapsMapView(onViewCreated: _onViewCreated),
+            child: GoogleMapsMapView(
+              onViewCreated: _onViewCreated,
+              mapId: MapIdManager.instance.mapId,
+            ),
           ),
           const SizedBox(height: 20),
           SizedBox(
@@ -251,6 +254,7 @@ class _MultiplexState extends ExamplePageState<MultipleMapViewsPage> {
                         target: _userLocation!,
                         zoom: 15,
                       ),
+                      mapId: MapIdManager.instance.mapId,
                     )
                     : const Center(
                       child: Column(

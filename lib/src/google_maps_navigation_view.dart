@@ -60,6 +60,7 @@ class GoogleMapsNavigationView extends GoogleMapsBaseMapView {
     super.initialZoomControlsEnabled = true,
     super.initialCameraTargetBounds,
     super.initialPadding,
+    super.mapId,
     this.initialNavigationUIEnabledPreference =
         NavigationUIEnabledPreference.automatic,
     super.layoutDirection,
@@ -78,6 +79,7 @@ class GoogleMapsNavigationView extends GoogleMapsBaseMapView {
     super.onPolylineClicked,
     super.onCircleClicked,
     this.onNavigationUIEnabledChanged,
+    this.onPromptVisibilityChanged,
     super.onMyLocationClicked,
     super.onMyLocationButtonClicked,
     super.onCameraMoveStarted,
@@ -136,6 +138,9 @@ class GoogleMapsNavigationView extends GoogleMapsBaseMapView {
   /// On navigation UI enabled changed callback.
   final OnNavigationUIEnabledChanged? onNavigationUIEnabledChanged;
 
+  /// On prompt visibility changed callback.
+  final OnPromptVisibilityChanged? onPromptVisibilityChanged;
+
   /// Creates a [State] for this [GoogleMapsNavigationView].
   @override
   State createState() => GoogleMapsNavigationViewState();
@@ -170,6 +175,7 @@ class GoogleMapsNavigationViewState
           zoomControlsEnabled: widget.initialZoomControlsEnabled,
           cameraTargetBounds: widget.initialCameraTargetBounds,
           padding: widget.initialPadding,
+          mapId: widget.mapId,
         ),
         navigationViewOptions: NavigationViewOptions(
           navigationUIEnabledPreference:
@@ -212,6 +218,13 @@ class GoogleMapsNavigationViewState
             widget.onNavigationUIEnabledChanged?.call(
               event.navigationUIEnabled,
             );
+          });
+    }
+    if (widget.onPromptVisibilityChanged != null) {
+      GoogleMapsNavigationPlatform.instance.viewAPI
+          .getPromptVisibilityChangedEventStream(viewId: viewId)
+          .listen((PromptVisibilityChangedEvent event) {
+            widget.onPromptVisibilityChanged?.call(event.promptVisible);
           });
     }
     if (widget.onMyLocationButtonClicked != null) {

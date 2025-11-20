@@ -497,6 +497,9 @@ struct MapOptionsDto: Hashable {
   var cameraTargetBounds: LatLngBoundsDto? = nil
   /// Specifies the padding for the map.
   var padding: MapPaddingDto? = nil
+  /// The map ID for advanced map options eg. cloud-based map styling.
+  /// This value can only be set on map initialization and cannot be changed afterwards.
+  var mapId: String? = nil
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> MapOptionsDto? {
@@ -514,6 +517,7 @@ struct MapOptionsDto: Hashable {
     let zoomControlsEnabled = pigeonVar_list[11] as! Bool
     let cameraTargetBounds: LatLngBoundsDto? = nilOrValue(pigeonVar_list[12])
     let padding: MapPaddingDto? = nilOrValue(pigeonVar_list[13])
+    let mapId: String? = nilOrValue(pigeonVar_list[14])
 
     return MapOptionsDto(
       cameraPosition: cameraPosition,
@@ -529,7 +533,8 @@ struct MapOptionsDto: Hashable {
       maxZoomPreference: maxZoomPreference,
       zoomControlsEnabled: zoomControlsEnabled,
       cameraTargetBounds: cameraTargetBounds,
-      padding: padding
+      padding: padding,
+      mapId: mapId
     )
   }
   func toList() -> [Any?] {
@@ -548,6 +553,7 @@ struct MapOptionsDto: Hashable {
       zoomControlsEnabled,
       cameraTargetBounds,
       padding,
+      mapId,
     ]
   }
   static func == (lhs: MapOptionsDto, rhs: MapOptionsDto) -> Bool {
@@ -1395,7 +1401,9 @@ struct RoutingOptionsDto: Hashable {
 /// Generated class from Pigeon that represents data sent in messages.
 struct NavigationDisplayOptionsDto: Hashable {
   var showDestinationMarkers: Bool? = nil
+  /// Deprecated: This option now defaults to true.
   var showStopSigns: Bool? = nil
+  /// Deprecated: This option now defaults to true.
   var showTrafficLights: Bool? = nil
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -1876,43 +1884,43 @@ struct LaneDto: Hashable {
 ///
 /// Generated class from Pigeon that represents data sent in messages.
 struct StepInfoDto: Hashable {
-  /// Distance in meters from the previous step to this step.
-  var distanceFromPrevStepMeters: Int64
-  /// Time in seconds from the previous step to this step.
-  var timeFromPrevStepSeconds: Int64
+  /// Distance in meters from the previous step to this step if available, otherwise null.
+  var distanceFromPrevStepMeters: Int64? = nil
+  /// Time in seconds from the previous step to this step if available, otherwise null.
+  var timeFromPrevStepSeconds: Int64? = nil
   /// Whether this step is on a drive-on-right or drive-on-left route.
   var drivingSide: DrivingSideDto
   /// The exit number if it exists.
   var exitNumber: String? = nil
-  /// The full text of the instruction for this step.
-  var fullInstructions: String
-  /// The full road name for this step.
-  var fullRoadName: String
-  /// The simplified version of the road name.
-  var simpleRoadName: String
+  /// The full text of the instruction for this step if available, otherwise null.
+  var fullInstructions: String? = nil
+  /// The full road name for this step if available, otherwise null.
+  var fullRoadName: String? = nil
+  /// The simplified version of the road name if available, otherwise null.
+  var simpleRoadName: String? = nil
   /// The counted number of the exit to take relative to the location where the
-  /// roundabout was entered.
-  var roundaboutTurnNumber: Int64
-  /// The list of available lanes at the end of this route step.
-  var lanes: [LaneDto?]
+  /// roundabout was entered if available, otherwise null.
+  var roundaboutTurnNumber: Int64? = nil
+  /// The list of available lanes at the end of this route step if available, otherwise null.
+  var lanes: [LaneDto]? = nil
   /// The maneuver for this step.
   var maneuver: ManeuverDto
-  /// The index of the step in the list of all steps in the route.
-  var stepNumber: Int64
+  /// The index of the step in the list of all steps in the route if available, otherwise null.
+  var stepNumber: Int64? = nil
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> StepInfoDto? {
-    let distanceFromPrevStepMeters = pigeonVar_list[0] as! Int64
-    let timeFromPrevStepSeconds = pigeonVar_list[1] as! Int64
+    let distanceFromPrevStepMeters: Int64? = nilOrValue(pigeonVar_list[0])
+    let timeFromPrevStepSeconds: Int64? = nilOrValue(pigeonVar_list[1])
     let drivingSide = pigeonVar_list[2] as! DrivingSideDto
     let exitNumber: String? = nilOrValue(pigeonVar_list[3])
-    let fullInstructions = pigeonVar_list[4] as! String
-    let fullRoadName = pigeonVar_list[5] as! String
-    let simpleRoadName = pigeonVar_list[6] as! String
-    let roundaboutTurnNumber = pigeonVar_list[7] as! Int64
-    let lanes = pigeonVar_list[8] as! [LaneDto?]
+    let fullInstructions: String? = nilOrValue(pigeonVar_list[4])
+    let fullRoadName: String? = nilOrValue(pigeonVar_list[5])
+    let simpleRoadName: String? = nilOrValue(pigeonVar_list[6])
+    let roundaboutTurnNumber: Int64? = nilOrValue(pigeonVar_list[7])
+    let lanes: [LaneDto]? = nilOrValue(pigeonVar_list[8])
     let maneuver = pigeonVar_list[9] as! ManeuverDto
-    let stepNumber = pigeonVar_list[10] as! Int64
+    let stepNumber: Int64? = nilOrValue(pigeonVar_list[10])
 
     return StepInfoDto(
       distanceFromPrevStepMeters: distanceFromPrevStepMeters,
@@ -2554,6 +2562,10 @@ protocol MapViewApi {
   func setTrafficPromptsEnabled(viewId: Int64, enabled: Bool) throws
   func isReportIncidentButtonEnabled(viewId: Int64) throws -> Bool
   func setReportIncidentButtonEnabled(viewId: Int64, enabled: Bool) throws
+  func isIncidentReportingAvailable(viewId: Int64) throws -> Bool
+  func showReportIncidentsPanel(viewId: Int64) throws
+  func isBuildingsEnabled(viewId: Int64) throws -> Bool
+  func setBuildingsEnabled(viewId: Int64, enabled: Bool) throws
   func getCameraPosition(viewId: Int64) throws -> CameraPositionDto
   func getVisibleRegion(viewId: Int64) throws -> LatLngBoundsDto
   func followMyLocation(viewId: Int64, perspective: CameraPerspectiveDto, zoomLevel: Double?) throws
@@ -3528,6 +3540,79 @@ class MapViewApiSetup {
       }
     } else {
       setReportIncidentButtonEnabledChannel.setMessageHandler(nil)
+    }
+    let isIncidentReportingAvailableChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIncidentReportingAvailable\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      isIncidentReportingAvailableChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] as! Int64
+        do {
+          let result = try api.isIncidentReportingAvailable(viewId: viewIdArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      isIncidentReportingAvailableChannel.setMessageHandler(nil)
+    }
+    let showReportIncidentsPanelChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showReportIncidentsPanel\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      showReportIncidentsPanelChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] as! Int64
+        do {
+          try api.showReportIncidentsPanel(viewId: viewIdArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      showReportIncidentsPanelChannel.setMessageHandler(nil)
+    }
+    let isBuildingsEnabledChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isBuildingsEnabled\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      isBuildingsEnabledChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] as! Int64
+        do {
+          let result = try api.isBuildingsEnabled(viewId: viewIdArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      isBuildingsEnabledChannel.setMessageHandler(nil)
+    }
+    let setBuildingsEnabledChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setBuildingsEnabled\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setBuildingsEnabledChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] as! Int64
+        let enabledArg = args[1] as! Bool
+        do {
+          try api.setBuildingsEnabled(viewId: viewIdArg, enabled: enabledArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setBuildingsEnabledChannel.setMessageHandler(nil)
     }
     let getCameraPositionChannel = FlutterBasicMessageChannel(
       name:
@@ -4564,6 +4649,9 @@ protocol ViewEventApiProtocol {
   func onNavigationUIEnabledChanged(
     viewId viewIdArg: Int64, navigationUIEnabled navigationUIEnabledArg: Bool,
     completion: @escaping (Result<Void, PigeonError>) -> Void)
+  func onPromptVisibilityChanged(
+    viewId viewIdArg: Int64, promptVisible promptVisibleArg: Bool,
+    completion: @escaping (Result<Void, PigeonError>) -> Void)
   func onMyLocationClicked(
     viewId viewIdArg: Int64, completion: @escaping (Result<Void, PigeonError>) -> Void)
   func onMyLocationButtonClicked(
@@ -4777,6 +4865,29 @@ class ViewEventApi: ViewEventApiProtocol {
     let channel = FlutterBasicMessageChannel(
       name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage([viewIdArg, navigationUIEnabledArg] as [Any?]) { response in
+      guard let listResponse = response as? [Any?] else {
+        completion(.failure(createConnectionError(withChannelName: channelName)))
+        return
+      }
+      if listResponse.count > 1 {
+        let code: String = listResponse[0] as! String
+        let message: String? = nilOrValue(listResponse[1])
+        let details: String? = nilOrValue(listResponse[2])
+        completion(.failure(PigeonError(code: code, message: message, details: details)))
+      } else {
+        completion(.success(()))
+      }
+    }
+  }
+  func onPromptVisibilityChanged(
+    viewId viewIdArg: Int64, promptVisible promptVisibleArg: Bool,
+    completion: @escaping (Result<Void, PigeonError>) -> Void
+  ) {
+    let channelName: String =
+      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged\(messageChannelSuffix)"
+    let channel = FlutterBasicMessageChannel(
+      name: channelName, binaryMessenger: binaryMessenger, codec: codec)
+    channel.sendMessage([viewIdArg, promptVisibleArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return

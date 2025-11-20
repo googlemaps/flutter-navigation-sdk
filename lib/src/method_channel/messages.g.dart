@@ -430,6 +430,7 @@ class MapOptionsDto {
     required this.zoomControlsEnabled,
     this.cameraTargetBounds,
     this.padding,
+    this.mapId,
   });
 
   /// The initial positioning of the camera in the map view.
@@ -475,6 +476,10 @@ class MapOptionsDto {
   /// Specifies the padding for the map.
   MapPaddingDto? padding;
 
+  /// The map ID for advanced map options eg. cloud-based map styling.
+  /// This value can only be set on map initialization and cannot be changed afterwards.
+  String? mapId;
+
   List<Object?> _toList() {
     return <Object?>[
       cameraPosition,
@@ -491,6 +496,7 @@ class MapOptionsDto {
       zoomControlsEnabled,
       cameraTargetBounds,
       padding,
+      mapId,
     ];
   }
 
@@ -515,6 +521,7 @@ class MapOptionsDto {
       zoomControlsEnabled: result[11]! as bool,
       cameraTargetBounds: result[12] as LatLngBoundsDto?,
       padding: result[13] as MapPaddingDto?,
+      mapId: result[14] as String?,
     );
   }
 
@@ -1704,8 +1711,10 @@ class NavigationDisplayOptionsDto {
 
   bool? showDestinationMarkers;
 
+  /// Deprecated: This option now defaults to true.
   bool? showStopSigns;
 
+  /// Deprecated: This option now defaults to true.
   bool? showTrafficLights;
 
   List<Object?> _toList() {
@@ -2385,24 +2394,24 @@ class LaneDto {
 /// Information about a single step along a navigation route.
 class StepInfoDto {
   StepInfoDto({
-    required this.distanceFromPrevStepMeters,
-    required this.timeFromPrevStepSeconds,
+    this.distanceFromPrevStepMeters,
+    this.timeFromPrevStepSeconds,
     required this.drivingSide,
     this.exitNumber,
-    required this.fullInstructions,
-    required this.fullRoadName,
-    required this.simpleRoadName,
-    required this.roundaboutTurnNumber,
-    required this.lanes,
+    this.fullInstructions,
+    this.fullRoadName,
+    this.simpleRoadName,
+    this.roundaboutTurnNumber,
+    this.lanes,
     required this.maneuver,
-    required this.stepNumber,
+    this.stepNumber,
   });
 
-  /// Distance in meters from the previous step to this step.
-  int distanceFromPrevStepMeters;
+  /// Distance in meters from the previous step to this step if available, otherwise null.
+  int? distanceFromPrevStepMeters;
 
-  /// Time in seconds from the previous step to this step.
-  int timeFromPrevStepSeconds;
+  /// Time in seconds from the previous step to this step if available, otherwise null.
+  int? timeFromPrevStepSeconds;
 
   /// Whether this step is on a drive-on-right or drive-on-left route.
   DrivingSideDto drivingSide;
@@ -2410,27 +2419,27 @@ class StepInfoDto {
   /// The exit number if it exists.
   String? exitNumber;
 
-  /// The full text of the instruction for this step.
-  String fullInstructions;
+  /// The full text of the instruction for this step if available, otherwise null.
+  String? fullInstructions;
 
-  /// The full road name for this step.
-  String fullRoadName;
+  /// The full road name for this step if available, otherwise null.
+  String? fullRoadName;
 
-  /// The simplified version of the road name.
-  String simpleRoadName;
+  /// The simplified version of the road name if available, otherwise null.
+  String? simpleRoadName;
 
   /// The counted number of the exit to take relative to the location where the
-  /// roundabout was entered.
-  int roundaboutTurnNumber;
+  /// roundabout was entered if available, otherwise null.
+  int? roundaboutTurnNumber;
 
-  /// The list of available lanes at the end of this route step.
-  List<LaneDto?> lanes;
+  /// The list of available lanes at the end of this route step if available, otherwise null.
+  List<LaneDto>? lanes;
 
   /// The maneuver for this step.
   ManeuverDto maneuver;
 
-  /// The index of the step in the list of all steps in the route.
-  int stepNumber;
+  /// The index of the step in the list of all steps in the route if available, otherwise null.
+  int? stepNumber;
 
   List<Object?> _toList() {
     return <Object?>[
@@ -2455,17 +2464,17 @@ class StepInfoDto {
   static StepInfoDto decode(Object result) {
     result as List<Object?>;
     return StepInfoDto(
-      distanceFromPrevStepMeters: result[0]! as int,
-      timeFromPrevStepSeconds: result[1]! as int,
+      distanceFromPrevStepMeters: result[0] as int?,
+      timeFromPrevStepSeconds: result[1] as int?,
       drivingSide: result[2]! as DrivingSideDto,
       exitNumber: result[3] as String?,
-      fullInstructions: result[4]! as String,
-      fullRoadName: result[5]! as String,
-      simpleRoadName: result[6]! as String,
-      roundaboutTurnNumber: result[7]! as int,
-      lanes: (result[8] as List<Object?>?)!.cast<LaneDto?>(),
+      fullInstructions: result[4] as String?,
+      fullRoadName: result[5] as String?,
+      simpleRoadName: result[6] as String?,
+      roundaboutTurnNumber: result[7] as int?,
+      lanes: (result[8] as List<Object?>?)?.cast<LaneDto>(),
       maneuver: result[9]! as ManeuverDto,
-      stepNumber: result[10]! as int,
+      stepNumber: result[10] as int?,
     );
   }
 
@@ -4470,6 +4479,124 @@ class MapViewApi {
     }
   }
 
+  Future<bool> isIncidentReportingAvailable(int viewId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIncidentReportingAvailable$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  Future<void> showReportIncidentsPanel(int viewId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showReportIncidentsPanel$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<bool> isBuildingsEnabled(int viewId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isBuildingsEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  Future<void> setBuildingsEnabled(int viewId, bool enabled) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setBuildingsEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
   Future<CameraPositionDto> getCameraPosition(int viewId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCameraPosition$pigeonVar_messageChannelSuffix';
@@ -6111,6 +6238,8 @@ abstract class ViewEventApi {
 
   void onNavigationUIEnabledChanged(int viewId, bool navigationUIEnabled);
 
+  void onPromptVisibilityChanged(int viewId, bool promptVisible);
+
   void onMyLocationClicked(int viewId);
 
   void onMyLocationButtonClicked(int viewId);
@@ -6488,6 +6617,45 @@ abstract class ViewEventApi {
               arg_viewId!,
               arg_navigationUIEnabled!,
             );
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        pigeonVar_channel.setMessageHandler(null);
+      } else {
+        pigeonVar_channel.setMessageHandler((Object? message) async {
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged was null.',
+          );
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged was null, expected non-null int.',
+          );
+          final bool? arg_promptVisible = (args[1] as bool?);
+          assert(
+            arg_promptVisible != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged was null, expected non-null bool.',
+          );
+          try {
+            api.onPromptVisibilityChanged(arg_viewId!, arg_promptVisible!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

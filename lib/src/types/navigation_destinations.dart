@@ -200,9 +200,21 @@ class NavigationDisplayOptions {
   final bool? showDestinationMarkers;
 
   /// Show stop signs.
+  ///
+  /// Deprecated: This option now defaults to true and will be removed in future
+  /// versions.
+  @Deprecated(
+    'This option now defaults to true and will be removed in future versions.',
+  )
   final bool? showStopSigns;
 
   /// Show traffic lights.
+  ///
+  /// Deprecated: This option now defaults to true and will be removed in future
+  /// versions.
+  @Deprecated(
+    'This option now defaults to true and will be removed in future versions.',
+  )
   final bool? showTrafficLights;
 
   @override

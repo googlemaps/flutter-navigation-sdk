@@ -38,6 +38,7 @@ struct MapConfiguration {
   var minZoomPreference: Float?
   var maxZoomPreference: Float?
   var padding: UIEdgeInsets?
+  var mapId: String?
 }
 
 extension MapConfiguration {
@@ -70,6 +71,9 @@ extension MapConfiguration {
   func apply(to mapViewOptions: GMSMapViewOptions, withFrame frame: CGRect) {
     mapViewOptions.camera = cameraPosition
     mapViewOptions.frame = frame
+    if let mapId {
+      mapViewOptions.mapID = GMSMapID(identifier: mapId)
+    }
   }
 
   // Applies camera position from the configuration to the given GMSMapView.

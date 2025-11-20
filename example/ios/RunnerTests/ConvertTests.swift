@@ -551,7 +551,8 @@ class ConvertTests: XCTestCase {
       zoomGesturesEnabled: false,
       scrollGesturesEnabledDuringRotateOrZoom: false,
       mapToolbarEnabled: false,
-      zoomControlsEnabled: false
+      zoomControlsEnabled: false,
+      mapId: "test-map-id"
     )
 
     let navigationViewOptions =
@@ -584,6 +585,7 @@ class ConvertTests: XCTestCase {
       mapOptions.scrollGesturesEnabledDuringRotateOrZoom,
       configuration.scrollGesturesEnabledDuringRotateOrZoom
     )
+    XCTAssertEqual(mapOptions.mapId, configuration.mapId)
   }
 
   func testConvertPath() {

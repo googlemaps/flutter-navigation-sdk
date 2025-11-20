@@ -110,6 +110,7 @@ class MapOptions {
     this.zoomControlsEnabled = true,
     this.cameraTargetBounds,
     this.padding,
+    this.mapId,
   }) : assert(
          minZoomPreference == null ||
              maxZoomPreference == null ||
@@ -200,6 +201,19 @@ class MapOptions {
   /// Null by default (no padding).
   final EdgeInsets? padding;
 
+  /// The map ID for cloud-based map styling.
+  ///
+  /// A map ID is a unique identifier that represents a single map instance.
+  /// This value can only be set at map initialization and cannot be changed afterwards.
+  /// Map IDs are created in Google Cloud Console and can be used to configure
+  /// advanced features like cloud-based map styling.
+  ///
+  /// See https://developers.google.com/maps/documentation/get-map-id
+  /// for more information about map IDs and how to create them.
+  ///
+  /// Null by default (no map ID).
+  final String? mapId;
+
   @override
   String toString() =>
       'MapOptions('
@@ -216,7 +230,8 @@ class MapOptions {
       'maxZoomPreference: $maxZoomPreference, '
       'zoomControlsEnabled: $zoomControlsEnabled, '
       'cameraTargetBounds: $cameraTargetBounds, '
-      'padding: $padding'
+      'padding: $padding, '
+      'mapId: $mapId'
       ')';
 }
 

@@ -17,6 +17,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:meta/meta.dart';
 
 import '../../google_navigation_flutter.dart';
 import '../google_navigation_flutter_platform_interface.dart';
@@ -130,6 +131,7 @@ class MapViewAPIImpl {
                 right: mapOptions.padding!.right.toInt(),
               )
               : null,
+      mapId: mapOptions.mapId,
     );
 
     // Initialize navigation view options if given
@@ -583,7 +585,7 @@ class MapViewAPIImpl {
     return _viewApi.followMyLocation(viewId, perspective.toDto(), zoomLevel);
   }
 
-  /// Is the navigation trip progress bar enabled.
+  /// Checks if the navigation trip progress bar is enabled.
   Future<bool> isNavigationTripProgressBarEnabled({required int viewId}) {
     return _viewApi.isNavigationTripProgressBarEnabled(viewId);
   }
@@ -596,7 +598,7 @@ class MapViewAPIImpl {
     return _viewApi.setNavigationTripProgressBarEnabled(viewId, enabled);
   }
 
-  /// Is the navigation header enabled.
+  /// Checks if the navigation header is enabled.
   Future<bool> isNavigationHeaderEnabled({required int viewId}) {
     return _viewApi.isNavigationHeaderEnabled(viewId);
   }
@@ -609,7 +611,7 @@ class MapViewAPIImpl {
     return _viewApi.setNavigationHeaderEnabled(viewId, enabled);
   }
 
-  /// Is the navigation footer enabled.
+  /// Checks if the navigation footer is enabled.
   Future<bool> isNavigationFooterEnabled({required int viewId}) {
     return _viewApi.isNavigationFooterEnabled(viewId);
   }
@@ -622,7 +624,7 @@ class MapViewAPIImpl {
     return _viewApi.setNavigationFooterEnabled(viewId, enabled);
   }
 
-  /// Is the recenter button enabled.
+  /// Checks if the recenter button is enabled.
   Future<bool> isRecenterButtonEnabled({required int viewId}) {
     return _viewApi.isRecenterButtonEnabled(viewId);
   }
@@ -635,7 +637,7 @@ class MapViewAPIImpl {
     return _viewApi.setRecenterButtonEnabled(viewId, enabled);
   }
 
-  /// Is the speed limit displayed.
+  /// Checks if the speed limit icon is displayed.
   Future<bool> isSpeedLimitIconEnabled({required int viewId}) {
     return _viewApi.isSpeedLimitIconEnabled(viewId);
   }
@@ -648,7 +650,7 @@ class MapViewAPIImpl {
     return _viewApi.setSpeedLimitIconEnabled(viewId, enabled);
   }
 
-  /// Is speedometer displayed.
+  /// Checks if the speedometer is displayed.
   Future<bool> isSpeedometerEnabled({required int viewId}) {
     return _viewApi.isSpeedometerEnabled(viewId);
   }
@@ -661,7 +663,7 @@ class MapViewAPIImpl {
     return _viewApi.setSpeedometerEnabled(viewId, enabled);
   }
 
-  /// Is incident cards displayed.
+  /// Checks if incident cards are displayed.
   Future<bool> isTrafficIncidentCardsEnabled({required int viewId}) {
     return _viewApi.isTrafficIncidentCardsEnabled(viewId);
   }
@@ -674,7 +676,7 @@ class MapViewAPIImpl {
     return _viewApi.setTrafficIncidentCardsEnabled(viewId, enabled);
   }
 
-  /// Is the report incident button displayed.
+  /// Checks if the report incident button displayed.
   Future<bool> isReportIncidentButtonEnabled({required int viewId}) {
     return _viewApi.isReportIncidentButtonEnabled(viewId);
   }
@@ -685,6 +687,31 @@ class MapViewAPIImpl {
     required bool enabled,
   }) {
     return _viewApi.setReportIncidentButtonEnabled(viewId, enabled);
+  }
+
+  /// Checks if incident reporting is currently available.
+  @experimental
+  Future<bool> isIncidentReportingAvailable({required int viewId}) {
+    return _viewApi.isIncidentReportingAvailable(viewId);
+  }
+
+  /// Presents a panel allowing users to report an incident.
+  @experimental
+  Future<void> showReportIncidentsPanel({required int viewId}) {
+    return _viewApi.showReportIncidentsPanel(viewId);
+  }
+
+  /// Checks if 3D buildings layer is enabled.
+  Future<bool> isBuildingsEnabled({required int viewId}) {
+    return _viewApi.isBuildingsEnabled(viewId);
+  }
+
+  /// Turns the 3D buildings layer on or off.
+  Future<void> setBuildingsEnabled({
+    required int viewId,
+    required bool enabled,
+  }) {
+    return _viewApi.setBuildingsEnabled(viewId, enabled);
   }
 
   /// Are the traffic prompts displayed.
@@ -700,7 +727,7 @@ class MapViewAPIImpl {
     return _viewApi.setTrafficPromptsEnabled(viewId, enabled);
   }
 
-  /// Is navigation UI enabled.
+  /// Checks if navigation UI is enabled.
   Future<bool> isNavigationUIEnabled({required int viewId}) {
     return _viewApi.isNavigationUIEnabled(viewId);
   }
@@ -1224,6 +1251,13 @@ class MapViewAPIImpl {
     return _unwrapEventStream<NavigationUIEnabledChangedEvent>(viewId: viewId);
   }
 
+  /// Get prompt visibility changed event stream from the navigation view.
+  Stream<PromptVisibilityChangedEvent> getPromptVisibilityChangedEventStream({
+    required int viewId,
+  }) {
+    return _unwrapEventStream<PromptVisibilityChangedEvent>(viewId: viewId);
+  }
+
   /// Get navigation view my location clicked event stream from the navigation view.
   Stream<MyLocationClickedEvent> getMyLocationClickedEventStream({
     required int viewId,
@@ -1328,6 +1362,13 @@ class ViewEventApiImpl implements ViewEventApi {
   void onNavigationUIEnabledChanged(int viewId, bool enabled) {
     _viewEventStreamController.add(
       _ViewIdEventWrapper(viewId, NavigationUIEnabledChangedEvent(enabled)),
+    );
+  }
+
+  @override
+  void onPromptVisibilityChanged(int viewId, bool promptVisible) {
+    _viewEventStreamController.add(
+      _ViewIdEventWrapper(viewId, PromptVisibilityChangedEvent(promptVisible)),
     );
   }
 

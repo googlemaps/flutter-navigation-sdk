@@ -82,6 +82,7 @@ object Convert {
     options.minZoomPreference?.let { googleMapOptions.minZoomPreference(it.toFloat()) }
     options.maxZoomPreference?.let { googleMapOptions.maxZoomPreference(it.toFloat()) }
     googleMapOptions.zoomControlsEnabled(options.zoomControlsEnabled)
+    options.mapId?.let { googleMapOptions.mapId(it) }
 
     return MapOptions(googleMapOptions, options.padding)
   }
@@ -310,8 +311,8 @@ object Convert {
    */
   fun convertWaypointToDto(waypoint: Waypoint): NavigationWaypointDto {
     return NavigationWaypointDto(
-      waypoint.title,
-      convertLatLngToDto(waypoint.position),
+      waypoint.title ?: "",
+      waypoint.position?.let { convertLatLngToDto(it) },
       waypoint.placeId,
       waypoint.preferSameSideOfRoad,
       waypoint.preferredHeading.takeIf { it != -1 }?.toLong(),
@@ -362,6 +363,7 @@ object Convert {
    */
   fun convertDisplayOptionsFromDto(displayOptions: NavigationDisplayOptionsDto): DisplayOptions {
     return DisplayOptions().apply {
+      // Only set if explicitly provided, otherwise SDK defaults are used.
       if (displayOptions.showDestinationMarkers != null) {
         this.hideDestinationMarkers(!displayOptions.showDestinationMarkers)
       }
@@ -474,6 +476,7 @@ object Convert {
       Navigator.RouteStatus.OK -> RouteStatusDto.STATUS_OK
       Navigator.RouteStatus.QUOTA_CHECK_FAILED -> RouteStatusDto.QUOTA_CHECK_FAILED
       Navigator.RouteStatus.WAYPOINT_ERROR -> RouteStatusDto.WAYPOINT_ERROR
+      Navigator.RouteStatus.DUPLICATE_WAYPOINTS_ERROR -> RouteStatusDto.DUPLICATE_WAYPOINTS_ERROR
     }
   }
 
@@ -802,17 +805,17 @@ object Convert {
 
   private fun convertNavInfoStepInfo(stepInfo: StepInfo): StepInfoDto {
     return StepInfoDto(
-      distanceFromPrevStepMeters = stepInfo.distanceFromPrevStepMeters.toLong(),
-      timeFromPrevStepSeconds = stepInfo.timeFromPrevStepSeconds.toLong(),
+      distanceFromPrevStepMeters = stepInfo.distanceFromPrevStepMeters?.toLong() ?: 0L,
+      timeFromPrevStepSeconds = stepInfo.timeFromPrevStepSeconds?.toLong() ?: 0L,
       drivingSide = convertDrivingSide(stepInfo.drivingSide),
       exitNumber = stepInfo.exitNumber,
-      fullInstructions = stepInfo.fullInstructionText,
-      fullRoadName = stepInfo.fullRoadName,
-      simpleRoadName = stepInfo.simpleRoadName,
-      roundaboutTurnNumber = stepInfo.roundaboutTurnNumber.toLong(),
-      stepNumber = stepInfo.stepNumber.toLong(),
+      fullInstructions = stepInfo.fullInstructionText ?: "",
+      fullRoadName = stepInfo.fullRoadName ?: "",
+      simpleRoadName = stepInfo.simpleRoadName ?: "",
+      roundaboutTurnNumber = stepInfo.roundaboutTurnNumber?.toLong() ?: 0L,
+      stepNumber = stepInfo.stepNumber?.toLong() ?: 0L,
       lanes =
-        stepInfo.lanes.map { lane ->
+        stepInfo.lanes?.map { lane ->
           LaneDto(
             laneDirections =
               lane.laneDirections().map { laneDirection ->

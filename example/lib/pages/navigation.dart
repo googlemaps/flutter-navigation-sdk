@@ -98,6 +98,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   int _onRecenterButtonClickedEventCallCount = 0;
   int _onRemainingTimeOrDistanceChangedEventCallCount = 0;
   int _onNavigationUIEnabledChangedEventCallCount = 0;
+  int _onPromptVisibilityChangedEventCallCount = 0;
 
   bool _navigationHeaderEnabled = true;
   bool _navigationFooterEnabled = true;
@@ -109,6 +110,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   bool _trafficIndicentCardsEnabled = false;
   bool _trafficPromptsEnabled = true;
   bool _reportIncidentButtonEnabled = true;
+  bool _buildingsEnabled = true;
 
   bool _termsAndConditionsAccepted = false;
   bool _locationPermissionsAccepted = false;
@@ -540,6 +542,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
           await _navigationViewController!.isTrafficPromptsEnabled();
       final bool reportIncidentButtonEnabled =
           await _navigationViewController!.isReportIncidentButtonEnabled();
+      final bool buildingsEnabled =
+          await _navigationViewController!.isBuildingsEnabled();
 
       setState(() {
         _navigationHeaderEnabled = navigationHeaderEnabled;
@@ -552,6 +556,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         _trafficIndicentCardsEnabled = trafficIndicentCardsEnabled;
         _trafficPromptsEnabled = trafficPromptsEnabled;
         _reportIncidentButtonEnabled = reportIncidentButtonEnabled;
+        _buildingsEnabled = buildingsEnabled;
       });
     }
   }
@@ -570,6 +575,15 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         _navigationUIEnabled = enabled;
         _onNavigationUIEnabledChangedEventCallCount += 1;
       });
+    }
+  }
+
+  void _onPromptVisibilityChanged(bool promptVisible) {
+    if (mounted) {
+      setState(() {
+        _onPromptVisibilityChangedEventCallCount += 1;
+      });
+      showMessage('Prompt visibility changed: $promptVisible');
     }
   }
 
@@ -1168,6 +1182,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                               _onRecenterButtonClickedEvent,
                           onNavigationUIEnabledChanged:
                               _onNavigationUIEnabledChanged,
+                          onPromptVisibilityChanged: _onPromptVisibilityChanged,
                           initialCameraPosition: CameraPosition(
                             // Initialize map to user location.
                             target: _userLocation!,
@@ -1178,6 +1193,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                                   ? NavigationUIEnabledPreference.automatic
                                   : NavigationUIEnabledPreference.disabled,
                           initialPadding: const EdgeInsets.all(0),
+                          mapId: MapIdManager.instance.mapId,
                         )
                         : const Center(
                           child: Column(
@@ -1442,6 +1458,16 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   ),
                   trailing: Text(
                     _onNavigationUIEnabledChangedEventCallCount.toString(),
+                  ),
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  title: const Text(
+                    'On prompt visibility changed event call count',
+                  ),
+                  trailing: Text(
+                    _onPromptVisibilityChangedEventCallCount.toString(),
                   ),
                 ),
               ),
@@ -1750,6 +1776,18 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     });
                   },
                 ),
+                ExampleSwitch(
+                  title: 'Show 3D buildings',
+                  initialValue: _buildingsEnabled,
+                  onChanged: (bool newValue) async {
+                    await _navigationViewController!.setBuildingsEnabled(
+                      newValue,
+                    );
+                    setState(() {
+                      _buildingsEnabled = newValue;
+                    });
+                  },
+                ),
                 Text(
                   'Map left padding: ${_mapPadding.left.toStringAsFixed(0)}',
                 ),
@@ -1957,6 +1995,33 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                             CameraPerspective.tilted,
                           ),
                       child: const Text('Follow my location'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        final bool available =
+                            await _navigationViewController!
+                                .isIncidentReportingAvailable();
+                        if (available) {
+                          await _navigationViewController!
+                              .showReportIncidentsPanel();
+                        } else {
+                          if (context.mounted) {
+                            showMessage('Incident reporting is not available');
+                          }
+                        }
+                      },
+                      child: const Text('Report Incident'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        final bool available =
+                            await _navigationViewController!
+                                .isIncidentReportingAvailable();
+                        showMessage('Incident reporting available: $available');
+                      },
+                      child: const Text(
+                        'Check incident reporting availability',
+                      ),
                     ),
                   ],
                 ),
