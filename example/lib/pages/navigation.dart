@@ -98,6 +98,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   int _onRecenterButtonClickedEventCallCount = 0;
   int _onRemainingTimeOrDistanceChangedEventCallCount = 0;
   int _onNavigationUIEnabledChangedEventCallCount = 0;
+  int _onNewNavigationSessionEventCallCount = 0;
 
   bool _navigationHeaderEnabled = true;
   bool _navigationFooterEnabled = true;
@@ -147,6 +148,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   _roadSnappedLocationUpdatedSubscription;
   StreamSubscription<RoadSnappedRawLocationUpdatedEvent>?
   _roadSnappedRawLocationUpdatedSubscription;
+  StreamSubscription<void>? _newNavigationSessionSubscription;
 
   int _nextWaypointIndex = 0;
 
@@ -379,6 +381,11 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         await GoogleMapsNavigator.setRoadSnappedRawLocationUpdatedListener(
           _onRoadSnappedRawLocationUpdatedEvent,
         );
+
+    _newNavigationSessionSubscription =
+        GoogleMapsNavigator.setOnNewNavigationSessionListener(
+          _onNewNavigationSessionEvent,
+        );
   }
 
   void _clearListeners() {
@@ -408,6 +415,24 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
     _roadSnappedRawLocationUpdatedSubscription?.cancel();
     _roadSnappedRawLocationUpdatedSubscription = null;
+
+    _newNavigationSessionSubscription?.cancel();
+    _newNavigationSessionSubscription = null;
+  }
+
+  void _onNewNavigationSessionEvent() {
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _onNewNavigationSessionEventCallCount += 1;
+    });
+
+    showMessage('New navigation session started');
+
+    // Set audio guidance settings for the new navigation session.
+    unawaited(_setAudioGuidance());
   }
 
   void _onRoadSnappedLocationUpdatedEvent(
@@ -515,6 +540,16 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     }
 
     await _getInitialViewStates();
+  }
+
+  Future<void> _setAudioGuidance() async {
+    await GoogleMapsNavigator.setAudioGuidance(
+      NavigationAudioGuidanceSettings(
+        isBluetoothAudioEnabled: true,
+        isVibrationEnabled: true,
+        guidanceType: NavigationAudioGuidanceType.alertsAndGuidance,
+      ),
+    );
   }
 
   Future<void> _getInitialViewStates() async {
@@ -1442,6 +1477,14 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   ),
                   trailing: Text(
                     _onNavigationUIEnabledChangedEventCallCount.toString(),
+                  ),
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  title: const Text('New navigation session event call count'),
+                  trailing: Text(
+                    _onNewNavigationSessionEventCallCount.toString(),
                   ),
                 ),
               ),

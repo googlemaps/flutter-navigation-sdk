@@ -126,6 +126,41 @@ class GoogleMapsNavigator {
         .listen(listener);
   }
 
+  /// Sets the event channel listener for new navigation session events.
+  ///
+  /// This event is triggered when a new navigation session starts with guidance active.
+  /// On both Android and iOS, this fires when:
+  /// - A route has been set via [setDestinations]
+  /// - Guidance is started with [startGuidance]
+  ///
+  /// On Android, this wraps Navigator.NavigationSessionListener.onNewNavigationSession.
+  /// On iOS, this is detected internally when a route is set and guidance becomes active.
+  ///
+  /// Returns a [StreamSubscription] for new navigation session events.
+  /// This subscription must be canceled using `cancel()` when it is no longer
+  /// needed to stop receiving events and allow the stream to perform necessary
+  /// cleanup, such as releasing resources or shutting down event sources. The
+  /// cleanup is asynchronous, and the `cancel()` method returns a Future that
+  /// completes once the cleanup is done.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final subscription = setOnNewNavigationSessionListener(() {
+  ///   print('New navigation session started');
+  /// });
+  /// // When done with the subscription
+  /// await subscription.cancel();
+  /// ```
+  static StreamSubscription<void> setOnNewNavigationSessionListener(
+    OnNewNavigationSessionCallback listener,
+  ) {
+    return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
+        .getNewNavigationSessionEventStream()
+        .listen((void event) {
+          listener.call();
+        });
+  }
+
   /// Sets the event channel listener for the rerouting events. (Android only)
   ///
   /// Returns a [StreamSubscription] for rerouting events.
