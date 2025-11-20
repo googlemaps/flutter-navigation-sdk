@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.7.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.6.5...0.7.0) (2025-11-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* native state issues on Android when multiple engines are used ([#525](https://github.com/googlemaps/flutter-navigation-sdk/issues/525))
+
+### Features
+
+* add interface for listening new navigation sessions ([#530](https://github.com/googlemaps/flutter-navigation-sdk/issues/530)) ([6128cc6](https://github.com/googlemaps/flutter-navigation-sdk/commit/6128cc69e40b8d218e4a79927294452e4bbbbd6c))
+
+
+### Bug Fixes
+
+* native state issues on Android when multiple engines are used ([#525](https://github.com/googlemaps/flutter-navigation-sdk/issues/525)) ([cb7d61e](https://github.com/googlemaps/flutter-navigation-sdk/commit/cb7d61e29da29e2cc873a4b514dcad2a1e0e1045))
+
 ## [0.6.5](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.6.4...0.6.5) (2025-10-14)
 
 
