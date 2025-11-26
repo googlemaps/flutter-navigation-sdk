@@ -740,11 +740,13 @@ class NavigationSessionEventApiImpl implements NavigationSessionEventApi {
   void onRemainingTimeOrDistanceChanged(
     double remainingTime,
     double remainingDistance,
+    TrafficDelaySeverityDto delaySeverity,
   ) {
     sessionEventStreamController.add(
       RemainingTimeOrDistanceChangedEvent(
         remainingTime: remainingTime,
         remainingDistance: remainingDistance,
+        delaySeverity: delaySeverity.toTrafficDelaySeverity(),
       ),
     );
   }

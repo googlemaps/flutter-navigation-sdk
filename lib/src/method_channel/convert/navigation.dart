@@ -84,12 +84,34 @@ extension ConvertRouteStatusDto on RouteStatusDto {
   }
 }
 
+/// [TrafficDelaySeverityDto] convert extension.
+/// @nodoc
+extension ConvertTrafficDelaySeverityDto on TrafficDelaySeverityDto {
+  /// Converts [TrafficDelaySeverityDto] to [TrafficDelaySeverity]
+  TrafficDelaySeverity toTrafficDelaySeverity() {
+    switch (this) {
+      case TrafficDelaySeverityDto.light:
+        return TrafficDelaySeverity.light;
+      case TrafficDelaySeverityDto.medium:
+        return TrafficDelaySeverity.medium;
+      case TrafficDelaySeverityDto.heavy:
+        return TrafficDelaySeverity.heavy;
+      case TrafficDelaySeverityDto.noData:
+        return TrafficDelaySeverity.noData;
+    }
+  }
+}
+
 /// [NavigationTimeAndDistanceDto] convert extension.
 /// @nodoc
 extension ConvertNavigationTimeAndDistanceDto on NavigationTimeAndDistanceDto {
   /// Converts [NavigationTimeAndDistanceDto] to [NavigationTimeAndDistance]
   NavigationTimeAndDistance toNavigationTimeAndDistance() =>
-      NavigationTimeAndDistance(time: time, distance: distance);
+      NavigationTimeAndDistance(
+        time: time,
+        distance: distance,
+        delaySeverity: delaySeverity.toTrafficDelaySeverity(),
+      );
 }
 
 /// [NavigationAudioGuidanceSettings] convert extension.
