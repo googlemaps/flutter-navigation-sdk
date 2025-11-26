@@ -330,8 +330,8 @@ object Convert {
       TimeAndDistance.DELAY_LIGHT -> TrafficDelaySeverityDto.LIGHT
       TimeAndDistance.DELAY_MEDIUM -> TrafficDelaySeverityDto.MEDIUM
       TimeAndDistance.DELAY_HEAVY -> TrafficDelaySeverityDto.HEAVY
-      TimeAndDistance.DELAY_NODATA -> TrafficDelaySeverityDto.NODATA
-      else -> TrafficDelaySeverityDto.NODATA
+      TimeAndDistance.DELAY_NODATA -> TrafficDelaySeverityDto.NO_DATA
+      else -> TrafficDelaySeverityDto.NO_DATA
     }
   }
 
