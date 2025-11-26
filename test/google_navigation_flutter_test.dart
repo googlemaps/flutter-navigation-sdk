@@ -1123,7 +1123,11 @@ void main() {
 
           // Get current time and distance.
           final NavigationTimeAndDistanceDto timeAndDistanceIn =
-              NavigationTimeAndDistanceDto(time: 5.0, distance: 6.0);
+              NavigationTimeAndDistanceDto(
+            time: 5.0,
+            distance: 6.0,
+            delaySeverity: TrafficDelaySeverityDto.light,
+          );
           when(
             sessionMockApi.getCurrentTimeAndDistance(),
           ).thenReturn(timeAndDistanceIn);
