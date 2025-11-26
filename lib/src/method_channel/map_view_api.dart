@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -425,12 +424,7 @@ class MapViewAPIImpl {
                 cameraUpdate.cameraPosition!.toCameraPosition(),
                 duration,
               )
-              .then(
-                (bool success) =>
-                    onFinished != null && Platform.isAndroid
-                        ? onFinished(success)
-                        : null,
-              ),
+              .then((bool success) => onFinished?.call(success)),
         );
       case CameraUpdateType.latLng:
         unawaited(
@@ -440,12 +434,7 @@ class MapViewAPIImpl {
                 cameraUpdate.latLng!.toDto(),
                 duration,
               )
-              .then(
-                (bool success) =>
-                    onFinished != null && Platform.isAndroid
-                        ? onFinished(success)
-                        : null,
-              ),
+              .then((bool success) => onFinished?.call(success)),
         );
       case CameraUpdateType.latLngBounds:
         unawaited(
@@ -456,12 +445,7 @@ class MapViewAPIImpl {
                 cameraUpdate.padding!,
                 duration,
               )
-              .then(
-                (bool success) =>
-                    onFinished != null && Platform.isAndroid
-                        ? onFinished(success)
-                        : null,
-              ),
+              .then((bool success) => onFinished?.call(success)),
         );
       case CameraUpdateType.latLngZoom:
         unawaited(
@@ -472,12 +456,7 @@ class MapViewAPIImpl {
                 cameraUpdate.zoom!,
                 duration,
               )
-              .then(
-                (bool success) =>
-                    onFinished != null && Platform.isAndroid
-                        ? onFinished(success)
-                        : null,
-              ),
+              .then((bool success) => onFinished?.call(success)),
         );
       case CameraUpdateType.scrollBy:
         unawaited(
@@ -488,12 +467,7 @@ class MapViewAPIImpl {
                 cameraUpdate.scrollByDy!,
                 duration,
               )
-              .then(
-                (bool success) =>
-                    onFinished != null && Platform.isAndroid
-                        ? onFinished(success)
-                        : null,
-              ),
+              .then((bool success) => onFinished?.call(success)),
         );
       case CameraUpdateType.zoomBy:
         unawaited(
@@ -505,23 +479,13 @@ class MapViewAPIImpl {
                 cameraUpdate.focus?.dy,
                 duration,
               )
-              .then(
-                (bool success) =>
-                    onFinished != null && Platform.isAndroid
-                        ? onFinished(success)
-                        : null,
-              ),
+              .then((bool success) => onFinished?.call(success)),
         );
       case CameraUpdateType.zoomTo:
         unawaited(
           _viewApi
               .animateCameraToZoom(viewId, cameraUpdate.zoom!, duration)
-              .then(
-                (bool success) =>
-                    onFinished != null && Platform.isAndroid
-                        ? onFinished(success)
-                        : null,
-              ),
+              .then((bool success) => onFinished?.call(success)),
         );
     }
   }
