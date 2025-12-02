@@ -39,7 +39,7 @@ fun findDartDefineValue(key: String): String? {
 android {
     namespace = "com.google.maps.flutter.navigation_example"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "27.0.12077973"
+    ndkVersion = "28.2.13676358"
 
     compileOptions {        
         // Flag to enable support for the new language APIs
@@ -103,7 +103,7 @@ flutter {
 dependencies {
     implementation("androidx.car.app:app:1.7.0")
     implementation("androidx.car.app:app-projected:1.7.0")
-    implementation("com.google.android.libraries.navigation:navigation:7.1.0")
+    implementation("com.google.android.libraries.navigation:navigation:7.2.0")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
     androidTestUtil("androidx.test:orchestrator:1.5.1")
 }

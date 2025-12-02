@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.mapsplatform.turnbyturn.model.NavInfo
 import com.google.android.libraries.navigation.CustomRoutesOptions
 import com.google.android.libraries.navigation.DisplayOptions
+import com.google.android.libraries.navigation.GpsAvailabilityChangeEvent
 import com.google.android.libraries.navigation.NavigationApi
 import com.google.android.libraries.navigation.NavigationApi.NavigatorListener
 import com.google.android.libraries.navigation.Navigator
@@ -755,6 +756,10 @@ constructor(
 
           override fun onGpsAvailabilityUpdate(isGpsAvailable: Boolean) {
             navigationSessionEventApi.onGpsAvailabilityUpdate(isGpsAvailable) {}
+          }
+
+          override fun onGpsAvailabilityChange(p0: GpsAvailabilityChangeEvent?) {
+            TODO("Not yet implemented")
           }
         }
       getRoadSnappedLocationProvider()?.addLocationListener(roadSnappedLocationListener)
