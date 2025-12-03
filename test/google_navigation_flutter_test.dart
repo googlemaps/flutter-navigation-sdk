@@ -132,8 +132,8 @@ void main() {
 
           // Get camera position
 
-          final CameraPosition positionOut =
-              await controller.getCameraPosition();
+          final CameraPosition positionOut = await controller
+              .getCameraPosition();
           final VerificationResult result = verify(
             viewMockApi.getCameraPosition(captureAny),
           );
@@ -876,8 +876,8 @@ void main() {
           when(viewMockApi.isBuildingsEnabled(any)).thenReturn(false);
 
           // Test isIncidentReportingAvailable
-          final bool isAvailable =
-              await controller.isIncidentReportingAvailable();
+          final bool isAvailable = await controller
+              .isIncidentReportingAvailable();
           expect(isAvailable, true);
 
           // Verify the API was called
@@ -887,8 +887,8 @@ void main() {
           expect(availabilityResult.captured[0] as int, viewId);
 
           // Test isReportIncidentButtonEnabled
-          final bool isButtonEnabled =
-              await controller.isReportIncidentButtonEnabled();
+          final bool isButtonEnabled = await controller
+              .isReportIncidentButtonEnabled();
           expect(isButtonEnabled, false);
 
           // Verify the API was called

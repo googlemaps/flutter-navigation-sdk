@@ -122,15 +122,14 @@ class MapViewAPIImpl {
       maxZoomPreference: mapOptions.maxZoomPreference,
       zoomControlsEnabled: mapOptions.zoomControlsEnabled,
       cameraTargetBounds: mapOptions.cameraTargetBounds?.toDto(),
-      padding:
-          mapOptions.padding != null
-              ? MapPaddingDto(
-                top: mapOptions.padding!.top.toInt(),
-                left: mapOptions.padding!.left.toInt(),
-                bottom: mapOptions.padding!.bottom.toInt(),
-                right: mapOptions.padding!.right.toInt(),
-              )
-              : null,
+      padding: mapOptions.padding != null
+          ? MapPaddingDto(
+              top: mapOptions.padding!.top.toInt(),
+              left: mapOptions.padding!.left.toInt(),
+              bottom: mapOptions.padding!.bottom.toInt(),
+              right: mapOptions.padding!.right.toInt(),
+            )
+          : null,
       mapId: mapOptions.mapId,
     );
 
@@ -155,10 +154,9 @@ class MapViewAPIImpl {
 
     // Build ViewCreationMessage
     return ViewCreationOptionsDto(
-      mapViewType:
-          mapViewType == MapViewType.navigation
-              ? MapViewTypeDto.navigation
-              : MapViewTypeDto.map,
+      mapViewType: mapViewType == MapViewType.navigation
+          ? MapViewTypeDto.navigation
+          : MapViewTypeDto.map,
       mapOptions: mapOptionsMessage,
       navigationViewOptions: navigationOptionsMessage,
     );
@@ -428,10 +426,9 @@ class MapViewAPIImpl {
                 duration,
               )
               .then(
-                (bool success) =>
-                    onFinished != null && Platform.isAndroid
-                        ? onFinished(success)
-                        : null,
+                (bool success) => onFinished != null && Platform.isAndroid
+                    ? onFinished(success)
+                    : null,
               ),
         );
       case CameraUpdateType.latLng:
@@ -443,10 +440,9 @@ class MapViewAPIImpl {
                 duration,
               )
               .then(
-                (bool success) =>
-                    onFinished != null && Platform.isAndroid
-                        ? onFinished(success)
-                        : null,
+                (bool success) => onFinished != null && Platform.isAndroid
+                    ? onFinished(success)
+                    : null,
               ),
         );
       case CameraUpdateType.latLngBounds:
@@ -459,10 +455,9 @@ class MapViewAPIImpl {
                 duration,
               )
               .then(
-                (bool success) =>
-                    onFinished != null && Platform.isAndroid
-                        ? onFinished(success)
-                        : null,
+                (bool success) => onFinished != null && Platform.isAndroid
+                    ? onFinished(success)
+                    : null,
               ),
         );
       case CameraUpdateType.latLngZoom:
@@ -475,10 +470,9 @@ class MapViewAPIImpl {
                 duration,
               )
               .then(
-                (bool success) =>
-                    onFinished != null && Platform.isAndroid
-                        ? onFinished(success)
-                        : null,
+                (bool success) => onFinished != null && Platform.isAndroid
+                    ? onFinished(success)
+                    : null,
               ),
         );
       case CameraUpdateType.scrollBy:
@@ -491,10 +485,9 @@ class MapViewAPIImpl {
                 duration,
               )
               .then(
-                (bool success) =>
-                    onFinished != null && Platform.isAndroid
-                        ? onFinished(success)
-                        : null,
+                (bool success) => onFinished != null && Platform.isAndroid
+                    ? onFinished(success)
+                    : null,
               ),
         );
       case CameraUpdateType.zoomBy:
@@ -508,10 +501,9 @@ class MapViewAPIImpl {
                 duration,
               )
               .then(
-                (bool success) =>
-                    onFinished != null && Platform.isAndroid
-                        ? onFinished(success)
-                        : null,
+                (bool success) => onFinished != null && Platform.isAndroid
+                    ? onFinished(success)
+                    : null,
               ),
         );
       case CameraUpdateType.zoomTo:
@@ -519,10 +511,9 @@ class MapViewAPIImpl {
           _viewApi
               .animateCameraToZoom(viewId, cameraUpdate.zoom!, duration)
               .then(
-                (bool success) =>
-                    onFinished != null && Platform.isAndroid
-                        ? onFinished(success)
-                        : null,
+                (bool success) => onFinished != null && Platform.isAndroid
+                    ? onFinished(success)
+                    : null,
               ),
         );
     }
@@ -815,17 +806,17 @@ class MapViewAPIImpl {
     required List<MarkerOptions> markerOptions,
   }) async {
     // Convert options to pigeon format
-    final List<MarkerOptionsDto> options =
-        markerOptions.map((MarkerOptions opt) => opt.toDto()).toList();
+    final List<MarkerOptionsDto> options = markerOptions
+        .map((MarkerOptions opt) => opt.toDto())
+        .toList();
 
     // Create marker objects with new ID's
-    final List<MarkerDto> markersToAdd =
-        options
-            .map(
-              (MarkerOptionsDto options) =>
-                  MarkerDto(markerId: _createMarkerId(), options: options),
-            )
-            .toList();
+    final List<MarkerDto> markersToAdd = options
+        .map(
+          (MarkerOptionsDto options) =>
+              MarkerDto(markerId: _createMarkerId(), options: options),
+        )
+        .toList();
 
     // Add markers to map
     final List<MarkerDto?> markersAdded = await _viewApi.addMarkers(
@@ -849,8 +840,9 @@ class MapViewAPIImpl {
     required List<Marker> markers,
   }) async {
     try {
-      final List<MarkerDto> markerDtos =
-          markers.map((Marker marker) => marker.toDto()).toList();
+      final List<MarkerDto> markerDtos = markers
+          .map((Marker marker) => marker.toDto())
+          .toList();
       final List<MarkerDto?> updatedMarkers = await _viewApi.updateMarkers(
         viewId,
         markerDtos,
@@ -874,8 +866,9 @@ class MapViewAPIImpl {
     required List<Marker> markers,
   }) async {
     try {
-      final List<MarkerDto> markerDtos =
-          markers.map((Marker marker) => marker.toDto()).toList();
+      final List<MarkerDto> markerDtos = markers
+          .map((Marker marker) => marker.toDto())
+          .toList();
       return await _viewApi.removeMarkers(viewId, markerDtos);
     } on PlatformException catch (error) {
       if (error.code == 'markerNotFound') {
@@ -912,17 +905,17 @@ class MapViewAPIImpl {
     required List<PolygonOptions> polygonOptions,
   }) async {
     // Convert options to pigeon format
-    final List<PolygonOptionsDto> options =
-        polygonOptions.map((PolygonOptions opt) => opt.toDto()).toList();
+    final List<PolygonOptionsDto> options = polygonOptions
+        .map((PolygonOptions opt) => opt.toDto())
+        .toList();
 
     // Create polygon objects with new ID's
-    final List<PolygonDto> polygonsToAdd =
-        options
-            .map(
-              (PolygonOptionsDto options) =>
-                  PolygonDto(polygonId: _createPolygonId(), options: options),
-            )
-            .toList();
+    final List<PolygonDto> polygonsToAdd = options
+        .map(
+          (PolygonOptionsDto options) =>
+              PolygonDto(polygonId: _createPolygonId(), options: options),
+        )
+        .toList();
 
     // Add polygons to map
     final List<PolygonDto?> polygonsAdded = await _viewApi.addPolygons(
@@ -946,8 +939,9 @@ class MapViewAPIImpl {
     required List<Polygon> polygons,
   }) async {
     try {
-      final List<PolygonDto> navigationViewPolygons =
-          polygons.map((Polygon polygon) => polygon.toDto()).toList();
+      final List<PolygonDto> navigationViewPolygons = polygons
+          .map((Polygon polygon) => polygon.toDto())
+          .toList();
       final List<PolygonDto?> updatedPolygons = await _viewApi.updatePolygons(
         viewId,
         navigationViewPolygons,
@@ -971,8 +965,9 @@ class MapViewAPIImpl {
     required List<Polygon> polygons,
   }) async {
     try {
-      final List<PolygonDto> navigationViewPolygons =
-          polygons.map((Polygon polygon) => polygon.toDto()).toList();
+      final List<PolygonDto> navigationViewPolygons = polygons
+          .map((Polygon polygon) => polygon.toDto())
+          .toList();
       return await _viewApi.removePolygons(viewId, navigationViewPolygons);
     } on PlatformException catch (error) {
       if (error.code == 'polygonNotFound') {
@@ -1004,19 +999,17 @@ class MapViewAPIImpl {
     required List<PolylineOptions> polylineOptions,
   }) async {
     // Convert options to pigeon format
-    final List<PolylineOptionsDto> options =
-        polylineOptions.map((PolylineOptions opt) => opt.toDto()).toList();
+    final List<PolylineOptionsDto> options = polylineOptions
+        .map((PolylineOptions opt) => opt.toDto())
+        .toList();
 
     // Create polyline objects with new ID's
-    final List<PolylineDto> polylinesToAdd =
-        options
-            .map(
-              (PolylineOptionsDto options) => PolylineDto(
-                polylineId: _createPolylineId(),
-                options: options,
-              ),
-            )
-            .toList();
+    final List<PolylineDto> polylinesToAdd = options
+        .map(
+          (PolylineOptionsDto options) =>
+              PolylineDto(polylineId: _createPolylineId(), options: options),
+        )
+        .toList();
 
     // Add polylines to map
     final List<PolylineDto?> polylinesAdded = await _viewApi.addPolylines(
@@ -1040,10 +1033,9 @@ class MapViewAPIImpl {
     required List<Polyline> polylines,
   }) async {
     try {
-      final List<PolylineDto> navigationViewPolylines =
-          polylines
-              .map((Polyline polyline) => polyline.toNavigationViewPolyline())
-              .toList();
+      final List<PolylineDto> navigationViewPolylines = polylines
+          .map((Polyline polyline) => polyline.toNavigationViewPolyline())
+          .toList();
       final List<PolylineDto?> updatedPolylines = await _viewApi
           .updatePolylines(viewId, navigationViewPolylines);
       return updatedPolylines
@@ -1065,10 +1057,9 @@ class MapViewAPIImpl {
     required List<Polyline> polylines,
   }) async {
     try {
-      final List<PolylineDto> navigationViewPolylines =
-          polylines
-              .map((Polyline polyline) => polyline.toNavigationViewPolyline())
-              .toList();
+      final List<PolylineDto> navigationViewPolylines = polylines
+          .map((Polyline polyline) => polyline.toNavigationViewPolyline())
+          .toList();
       return await _viewApi.removePolylines(viewId, navigationViewPolylines);
     } on PlatformException catch (error) {
       if (error.code == 'polylineNotFound') {
@@ -1100,17 +1091,17 @@ class MapViewAPIImpl {
     required List<CircleOptions> options,
   }) async {
     // Convert options to pigeon format
-    final List<CircleOptionsDto> optionsDto =
-        options.map((CircleOptions opt) => opt.toDto()).toList();
+    final List<CircleOptionsDto> optionsDto = options
+        .map((CircleOptions opt) => opt.toDto())
+        .toList();
 
     // Create circle objects with new ID's
-    final List<CircleDto> circlesToAdd =
-        optionsDto
-            .map(
-              (CircleOptionsDto options) =>
-                  CircleDto(circleId: _createCircleId(), options: options),
-            )
-            .toList();
+    final List<CircleDto> circlesToAdd = optionsDto
+        .map(
+          (CircleOptionsDto options) =>
+              CircleDto(circleId: _createCircleId(), options: options),
+        )
+        .toList();
 
     // Add circles to map
     final List<CircleDto?> circlesAdded = await _viewApi.addCircles(
@@ -1134,8 +1125,9 @@ class MapViewAPIImpl {
     required List<Circle> circles,
   }) async {
     try {
-      final List<CircleDto> navigationViewCircles =
-          circles.map((Circle circle) => circle.toDto()).toList();
+      final List<CircleDto> navigationViewCircles = circles
+          .map((Circle circle) => circle.toDto())
+          .toList();
       final List<CircleDto?> updatedCircles = await _viewApi.updateCircles(
         viewId,
         navigationViewCircles,
@@ -1160,8 +1152,9 @@ class MapViewAPIImpl {
     required List<Circle> circles,
   }) async {
     try {
-      final List<CircleDto> navigationViewCircles =
-          circles.map((Circle circle) => circle.toDto()).toList();
+      final List<CircleDto> navigationViewCircles = circles
+          .map((Circle circle) => circle.toDto())
+          .toList();
       return await _viewApi.removeCircles(viewId, navigationViewCircles);
     } on PlatformException catch (error) {
       if (error.code == 'circleNotFound') {
