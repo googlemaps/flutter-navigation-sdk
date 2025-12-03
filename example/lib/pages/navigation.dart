@@ -92,7 +92,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   int _onRoadSnappedRawLocationUpdatedEventCallCount = 0;
   int _onTrafficUpdatedEventCallCount = 0;
   int _onReroutingEventCallCount = 0;
-  int _onGpsAvailabilityEventCallCount = 0;
+  int _onGpsAvailabilityChangeEventCallCount = 0;
   int _onArrivalEventCallCount = 0;
   int _onSpeedingUpdatedEventCallCount = 0;
   int _onRecenterButtonClickedEventCallCount = 0;
@@ -141,7 +141,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   StreamSubscription<SpeedingUpdatedEvent>? _speedUpdatedSubscription;
   StreamSubscription<OnArrivalEvent>? _onArrivalSubscription;
   StreamSubscription<void>? _onReRoutingSubscription;
-  StreamSubscription<void>? _onGpsAvailabilitySubscription;
+  StreamSubscription<GpsAvailabilityChangeEvent>?
+  _onGpsAvailabilityChangeSubscription;
   StreamSubscription<void>? _trafficUpdatedSubscription;
   StreamSubscription<void>? _onRouteChangedSubscription;
   StreamSubscription<RemainingTimeOrDistanceChangedEvent>?
@@ -359,9 +360,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     _onReRoutingSubscription = GoogleMapsNavigator.setOnReroutingListener(
       _onReroutingEvent,
     );
-    _onGpsAvailabilitySubscription =
-        await GoogleMapsNavigator.setOnGpsAvailabilityListener(
-          _onGpsAvailabilityEvent,
+    _onGpsAvailabilityChangeSubscription =
+        await GoogleMapsNavigator.setOnGpsAvailabilityChangeListener(
+          _onGpsAvailabilityChangeEvent,
         );
     _trafficUpdatedSubscription = GoogleMapsNavigator.setTrafficUpdatedListener(
       _onTrafficUpdatedEvent,
@@ -400,8 +401,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     _onReRoutingSubscription?.cancel();
     _onReRoutingSubscription = null;
 
-    _onGpsAvailabilitySubscription?.cancel();
-    _onGpsAvailabilitySubscription = null;
+    _onGpsAvailabilityChangeSubscription?.cancel();
+    _onGpsAvailabilityChangeSubscription = null;
 
     _trafficUpdatedSubscription?.cancel();
     _trafficUpdatedSubscription = null;
@@ -505,9 +506,10 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     });
   }
 
-  void _onGpsAvailabilityEvent(GpsAvailabilityUpdatedEvent event) {
+  void _onGpsAvailabilityChangeEvent(GpsAvailabilityChangeEvent event) {
+    debugPrint('GPS availability change event: $event');
     setState(() {
-      _onGpsAvailabilityEventCallCount += 1;
+      _onGpsAvailabilityChangeEventCallCount += 1;
     });
   }
 
@@ -1450,8 +1452,12 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
               if (Platform.isAndroid)
                 Card(
                   child: ListTile(
-                    title: const Text('On GPS availability event call count'),
-                    trailing: Text(_onGpsAvailabilityEventCallCount.toString()),
+                    title: const Text(
+                      'On GPS availability change event call count',
+                    ),
+                    trailing: Text(
+                      _onGpsAvailabilityChangeEventCallCount.toString(),
+                    ),
                   ),
                 ),
               Card(

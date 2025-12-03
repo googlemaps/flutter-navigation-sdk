@@ -758,8 +758,15 @@ constructor(
             navigationSessionEventApi.onGpsAvailabilityUpdate(isGpsAvailable) {}
           }
 
-          override fun onGpsAvailabilityChange(p0: GpsAvailabilityChangeEvent?) {
-            TODO("Not yet implemented")
+          override fun onGpsAvailabilityChange(event: GpsAvailabilityChangeEvent?) {
+            if (event != null) {
+              navigationSessionEventApi.onGpsAvailabilityChange(
+                GpsAvailabilityChangeEventDto(
+                  isGpsLost = event.isGpsLost,
+                  isGpsValidForNavigation = event.isGpsValidForNavigation,
+                )
+              ) {}
+            }
           }
         }
       getRoadSnappedLocationProvider()?.addLocationListener(roadSnappedLocationListener)

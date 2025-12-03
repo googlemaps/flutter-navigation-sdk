@@ -1651,6 +1651,35 @@ struct SpeedingUpdatedEventDto: Hashable {
 }
 
 /// Generated class from Pigeon that represents data sent in messages.
+struct GpsAvailabilityChangeEventDto: Hashable {
+  var isGpsLost: Bool
+  var isGpsValidForNavigation: Bool
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> GpsAvailabilityChangeEventDto? {
+    let isGpsLost = pigeonVar_list[0] as! Bool
+    let isGpsValidForNavigation = pigeonVar_list[1] as! Bool
+
+    return GpsAvailabilityChangeEventDto(
+      isGpsLost: isGpsLost,
+      isGpsValidForNavigation: isGpsValidForNavigation
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      isGpsLost,
+      isGpsValidForNavigation,
+    ]
+  }
+  static func == (lhs: GpsAvailabilityChangeEventDto, rhs: GpsAvailabilityChangeEventDto) -> Bool {
+    return deepEqualsmessages(lhs.toList(), rhs.toList())
+  }
+  func hash(into hasher: inout Hasher) {
+    deepHashmessages(value: toList(), hasher: &hasher)
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
 struct SpeedAlertOptionsThresholdPercentageDto: Hashable {
   var percentage: Double
   var severity: SpeedAlertSeverityDto
@@ -2239,23 +2268,25 @@ private class MessagesPigeonCodecReader: FlutterStandardReader {
     case 181:
       return SpeedingUpdatedEventDto.fromList(self.readValue() as! [Any?])
     case 182:
-      return SpeedAlertOptionsThresholdPercentageDto.fromList(self.readValue() as! [Any?])
+      return GpsAvailabilityChangeEventDto.fromList(self.readValue() as! [Any?])
     case 183:
-      return SpeedAlertOptionsDto.fromList(self.readValue() as! [Any?])
+      return SpeedAlertOptionsThresholdPercentageDto.fromList(self.readValue() as! [Any?])
     case 184:
+      return SpeedAlertOptionsDto.fromList(self.readValue() as! [Any?])
+    case 185:
       return RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(
         self.readValue() as! [Any?])
-    case 185:
-      return RouteSegmentTrafficDataDto.fromList(self.readValue() as! [Any?])
     case 186:
-      return RouteSegmentDto.fromList(self.readValue() as! [Any?])
+      return RouteSegmentTrafficDataDto.fromList(self.readValue() as! [Any?])
     case 187:
-      return LaneDirectionDto.fromList(self.readValue() as! [Any?])
+      return RouteSegmentDto.fromList(self.readValue() as! [Any?])
     case 188:
-      return LaneDto.fromList(self.readValue() as! [Any?])
+      return LaneDirectionDto.fromList(self.readValue() as! [Any?])
     case 189:
-      return StepInfoDto.fromList(self.readValue() as! [Any?])
+      return LaneDto.fromList(self.readValue() as! [Any?])
     case 190:
+      return StepInfoDto.fromList(self.readValue() as! [Any?])
+    case 191:
       return NavInfoDto.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -2424,32 +2455,35 @@ private class MessagesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? SpeedingUpdatedEventDto {
       super.writeByte(181)
       super.writeValue(value.toList())
-    } else if let value = value as? SpeedAlertOptionsThresholdPercentageDto {
+    } else if let value = value as? GpsAvailabilityChangeEventDto {
       super.writeByte(182)
       super.writeValue(value.toList())
-    } else if let value = value as? SpeedAlertOptionsDto {
+    } else if let value = value as? SpeedAlertOptionsThresholdPercentageDto {
       super.writeByte(183)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteSegmentTrafficDataRoadStretchRenderingDataDto {
+    } else if let value = value as? SpeedAlertOptionsDto {
       super.writeByte(184)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteSegmentTrafficDataDto {
+    } else if let value = value as? RouteSegmentTrafficDataRoadStretchRenderingDataDto {
       super.writeByte(185)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteSegmentDto {
+    } else if let value = value as? RouteSegmentTrafficDataDto {
       super.writeByte(186)
       super.writeValue(value.toList())
-    } else if let value = value as? LaneDirectionDto {
+    } else if let value = value as? RouteSegmentDto {
       super.writeByte(187)
       super.writeValue(value.toList())
-    } else if let value = value as? LaneDto {
+    } else if let value = value as? LaneDirectionDto {
       super.writeByte(188)
       super.writeValue(value.toList())
-    } else if let value = value as? StepInfoDto {
+    } else if let value = value as? LaneDto {
       super.writeByte(189)
       super.writeValue(value.toList())
-    } else if let value = value as? NavInfoDto {
+    } else if let value = value as? StepInfoDto {
       super.writeByte(190)
+      super.writeValue(value.toList())
+    } else if let value = value as? NavInfoDto {
+      super.writeByte(191)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -5663,6 +5697,10 @@ protocol NavigationSessionEventApiProtocol {
   /// Android-only event.
   func onGpsAvailabilityUpdate(
     available availableArg: Bool, completion: @escaping (Result<Void, PigeonError>) -> Void)
+  /// Android-only event.
+  func onGpsAvailabilityChange(
+    event eventArg: GpsAvailabilityChangeEventDto,
+    completion: @escaping (Result<Void, PigeonError>) -> Void)
   /// Turn-by-Turn navigation events.
   func onNavInfo(
     navInfo navInfoArg: NavInfoDto, completion: @escaping (Result<Void, PigeonError>) -> Void)
@@ -5863,6 +5901,30 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
     let channel = FlutterBasicMessageChannel(
       name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage([availableArg] as [Any?]) { response in
+      guard let listResponse = response as? [Any?] else {
+        completion(.failure(createConnectionError(withChannelName: channelName)))
+        return
+      }
+      if listResponse.count > 1 {
+        let code: String = listResponse[0] as! String
+        let message: String? = nilOrValue(listResponse[1])
+        let details: String? = nilOrValue(listResponse[2])
+        completion(.failure(PigeonError(code: code, message: message, details: details)))
+      } else {
+        completion(.success(()))
+      }
+    }
+  }
+  /// Android-only event.
+  func onGpsAvailabilityChange(
+    event eventArg: GpsAvailabilityChangeEventDto,
+    completion: @escaping (Result<Void, PigeonError>) -> Void
+  ) {
+    let channelName: String =
+      "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityChange\(messageChannelSuffix)"
+    let channel = FlutterBasicMessageChannel(
+      name: channelName, binaryMessenger: binaryMessenger, codec: codec)
+    channel.sendMessage([eventArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return

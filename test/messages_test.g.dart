@@ -191,32 +191,35 @@ class _PigeonCodec extends StandardMessageCodec {
     } else if (value is SpeedingUpdatedEventDto) {
       buffer.putUint8(181);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
+    } else if (value is GpsAvailabilityChangeEventDto) {
       buffer.putUint8(182);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsDto) {
+    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
       buffer.putUint8(183);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
+    } else if (value is SpeedAlertOptionsDto) {
       buffer.putUint8(184);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataDto) {
+    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
       buffer.putUint8(185);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentDto) {
+    } else if (value is RouteSegmentTrafficDataDto) {
       buffer.putUint8(186);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDirectionDto) {
+    } else if (value is RouteSegmentDto) {
       buffer.putUint8(187);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDto) {
+    } else if (value is LaneDirectionDto) {
       buffer.putUint8(188);
       writeValue(buffer, value.encode());
-    } else if (value is StepInfoDto) {
+    } else if (value is LaneDto) {
       buffer.putUint8(189);
       writeValue(buffer, value.encode());
-    } else if (value is NavInfoDto) {
+    } else if (value is StepInfoDto) {
       buffer.putUint8(190);
+      writeValue(buffer, value.encode());
+    } else if (value is NavInfoDto) {
+      buffer.putUint8(191);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -362,26 +365,28 @@ class _PigeonCodec extends StandardMessageCodec {
       case 181:
         return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
       case 182:
+        return GpsAvailabilityChangeEventDto.decode(readValue(buffer)!);
+      case 183:
         return SpeedAlertOptionsThresholdPercentageDto.decode(
           readValue(buffer)!,
         );
-      case 183:
-        return SpeedAlertOptionsDto.decode(readValue(buffer)!);
       case 184:
+        return SpeedAlertOptionsDto.decode(readValue(buffer)!);
+      case 185:
         return RouteSegmentTrafficDataRoadStretchRenderingDataDto.decode(
           readValue(buffer)!,
         );
-      case 185:
-        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
       case 186:
-        return RouteSegmentDto.decode(readValue(buffer)!);
+        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
       case 187:
-        return LaneDirectionDto.decode(readValue(buffer)!);
+        return RouteSegmentDto.decode(readValue(buffer)!);
       case 188:
-        return LaneDto.decode(readValue(buffer)!);
+        return LaneDirectionDto.decode(readValue(buffer)!);
       case 189:
-        return StepInfoDto.decode(readValue(buffer)!);
+        return LaneDto.decode(readValue(buffer)!);
       case 190:
+        return StepInfoDto.decode(readValue(buffer)!);
+      case 191:
         return NavInfoDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);

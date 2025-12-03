@@ -626,10 +626,19 @@ class NavigationSessionAPIImpl {
   }
 
   /// Get navigation on GPS availability update event stream from the navigation session.
+  @Deprecated('Use getNavigationOnGpsAvailabilityChangeEventStream instead')
   Stream<GpsAvailabilityUpdatedEvent>
   getNavigationOnGpsAvailabilityUpdateEventStream() {
     return _sessionEventStreamController.stream
         .whereType<GpsAvailabilityUpdatedEvent>();
+  }
+
+  /// Get navigation on GPS availability change event stream from the navigation session.
+  /// Android only.
+  Stream<GpsAvailabilityChangeEvent>
+  getNavigationOnGpsAvailabilityChangeEventStream() {
+    return _sessionEventStreamController.stream
+        .whereType<GpsAvailabilityChangeEvent>();
   }
 
   /// Get navigation traffic updated event stream from the navigation session.
@@ -708,6 +717,16 @@ class NavigationSessionEventApiImpl implements NavigationSessionEventApi {
   void onGpsAvailabilityUpdate(bool available) {
     sessionEventStreamController.add(
       GpsAvailabilityUpdatedEvent(available: available),
+    );
+  }
+
+  @override
+  void onGpsAvailabilityChange(GpsAvailabilityChangeEventDto event) {
+    sessionEventStreamController.add(
+      GpsAvailabilityChangeEvent(
+        isGpsLost: event.isGpsLost,
+        isGpsValidForNavigation: event.isGpsValidForNavigation,
+      ),
     );
   }
 

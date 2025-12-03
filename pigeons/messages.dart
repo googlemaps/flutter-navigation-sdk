@@ -774,6 +774,16 @@ class SpeedingUpdatedEventDto {
   final SpeedAlertSeverityDto severity;
 }
 
+class GpsAvailabilityChangeEventDto {
+  GpsAvailabilityChangeEventDto({
+    required this.isGpsLost,
+    required this.isGpsValidForNavigation,
+  });
+
+  final bool isGpsLost;
+  final bool isGpsValidForNavigation;
+}
+
 class SpeedAlertOptionsThresholdPercentageDto {
   SpeedAlertOptionsThresholdPercentageDto({
     required this.percentage,
@@ -1329,6 +1339,9 @@ abstract class NavigationSessionEventApi {
 
   /// Android-only event.
   void onGpsAvailabilityUpdate(bool available);
+
+  /// Android-only event.
+  void onGpsAvailabilityChange(GpsAvailabilityChangeEventDto event);
 
   /// Turn-by-Turn navigation events.
   void onNavInfo(NavInfoDto navInfo);

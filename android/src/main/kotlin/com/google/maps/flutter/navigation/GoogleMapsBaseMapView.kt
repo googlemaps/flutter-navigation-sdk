@@ -544,7 +544,10 @@ abstract class GoogleMapsBaseMapView(
     // [GoogleMapsNavigationSessionManager] to fetch the location
     // using the [FusedLocationProviderApi].
     @Suppress("DEPRECATION")
-    return getMap().myLocation
+    val location = getMap().myLocation
+    // Return null explicitly if location is not available to avoid NullPointerException
+    // when the platform channel tries to serialize the Location object
+    return if (location != null && location.provider != null) location else null
   }
 
   fun getCameraPosition(): CameraPosition {

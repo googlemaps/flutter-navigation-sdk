@@ -2060,6 +2060,50 @@ class SpeedingUpdatedEventDto {
   int get hashCode => Object.hashAll(_toList());
 }
 
+class GpsAvailabilityChangeEventDto {
+  GpsAvailabilityChangeEventDto({
+    required this.isGpsLost,
+    required this.isGpsValidForNavigation,
+  });
+
+  bool isGpsLost;
+
+  bool isGpsValidForNavigation;
+
+  List<Object?> _toList() {
+    return <Object?>[isGpsLost, isGpsValidForNavigation];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static GpsAvailabilityChangeEventDto decode(Object result) {
+    result as List<Object?>;
+    return GpsAvailabilityChangeEventDto(
+      isGpsLost: result[0]! as bool,
+      isGpsValidForNavigation: result[1]! as bool,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! GpsAvailabilityChangeEventDto ||
+        other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(encode(), other.encode());
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
 class SpeedAlertOptionsThresholdPercentageDto {
   SpeedAlertOptionsThresholdPercentageDto({
     required this.percentage,
@@ -2768,32 +2812,35 @@ class _PigeonCodec extends StandardMessageCodec {
     } else if (value is SpeedingUpdatedEventDto) {
       buffer.putUint8(181);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
+    } else if (value is GpsAvailabilityChangeEventDto) {
       buffer.putUint8(182);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsDto) {
+    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
       buffer.putUint8(183);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
+    } else if (value is SpeedAlertOptionsDto) {
       buffer.putUint8(184);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataDto) {
+    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
       buffer.putUint8(185);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentDto) {
+    } else if (value is RouteSegmentTrafficDataDto) {
       buffer.putUint8(186);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDirectionDto) {
+    } else if (value is RouteSegmentDto) {
       buffer.putUint8(187);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDto) {
+    } else if (value is LaneDirectionDto) {
       buffer.putUint8(188);
       writeValue(buffer, value.encode());
-    } else if (value is StepInfoDto) {
+    } else if (value is LaneDto) {
       buffer.putUint8(189);
       writeValue(buffer, value.encode());
-    } else if (value is NavInfoDto) {
+    } else if (value is StepInfoDto) {
       buffer.putUint8(190);
+      writeValue(buffer, value.encode());
+    } else if (value is NavInfoDto) {
+      buffer.putUint8(191);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -2939,26 +2986,28 @@ class _PigeonCodec extends StandardMessageCodec {
       case 181:
         return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
       case 182:
+        return GpsAvailabilityChangeEventDto.decode(readValue(buffer)!);
+      case 183:
         return SpeedAlertOptionsThresholdPercentageDto.decode(
           readValue(buffer)!,
         );
-      case 183:
-        return SpeedAlertOptionsDto.decode(readValue(buffer)!);
       case 184:
+        return SpeedAlertOptionsDto.decode(readValue(buffer)!);
+      case 185:
         return RouteSegmentTrafficDataRoadStretchRenderingDataDto.decode(
           readValue(buffer)!,
         );
-      case 185:
-        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
       case 186:
-        return RouteSegmentDto.decode(readValue(buffer)!);
+        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
       case 187:
-        return LaneDirectionDto.decode(readValue(buffer)!);
+        return RouteSegmentDto.decode(readValue(buffer)!);
       case 188:
-        return LaneDto.decode(readValue(buffer)!);
+        return LaneDirectionDto.decode(readValue(buffer)!);
       case 189:
-        return StepInfoDto.decode(readValue(buffer)!);
+        return LaneDto.decode(readValue(buffer)!);
       case 190:
+        return StepInfoDto.decode(readValue(buffer)!);
+      case 191:
         return NavInfoDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -7797,6 +7846,9 @@ abstract class NavigationSessionEventApi {
   /// Android-only event.
   void onGpsAvailabilityUpdate(bool available);
 
+  /// Android-only event.
+  void onGpsAvailabilityChange(GpsAvailabilityChangeEventDto event);
+
   /// Turn-by-Turn navigation events.
   void onNavInfo(NavInfoDto navInfo);
 
@@ -8086,6 +8138,41 @@ abstract class NavigationSessionEventApi {
           );
           try {
             api.onGpsAvailabilityUpdate(arg_available!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityChange$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        pigeonVar_channel.setMessageHandler(null);
+      } else {
+        pigeonVar_channel.setMessageHandler((Object? message) async {
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityChange was null.',
+          );
+          final List<Object?> args = (message as List<Object?>?)!;
+          final GpsAvailabilityChangeEventDto? arg_event =
+              (args[0] as GpsAvailabilityChangeEventDto?);
+          assert(
+            arg_event != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityChange was null, expected non-null GpsAvailabilityChangeEventDto.',
+          );
+          try {
+            api.onGpsAvailabilityChange(arg_event!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

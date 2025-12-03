@@ -1766,6 +1766,36 @@ data class SpeedingUpdatedEventDto(
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
+data class GpsAvailabilityChangeEventDto(
+  val isGpsLost: Boolean,
+  val isGpsValidForNavigation: Boolean,
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): GpsAvailabilityChangeEventDto {
+      val isGpsLost = pigeonVar_list[0] as Boolean
+      val isGpsValidForNavigation = pigeonVar_list[1] as Boolean
+      return GpsAvailabilityChangeEventDto(isGpsLost, isGpsValidForNavigation)
+    }
+  }
+
+  fun toList(): List<Any?> {
+    return listOf(isGpsLost, isGpsValidForNavigation)
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (other !is GpsAvailabilityChangeEventDto) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
 data class SpeedAlertOptionsThresholdPercentageDto(
   val percentage: Double,
   val severity: SpeedAlertSeverityDto,
@@ -2364,33 +2394,38 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
       }
       182.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          SpeedAlertOptionsThresholdPercentageDto.fromList(it)
+          GpsAvailabilityChangeEventDto.fromList(it)
         }
       }
       183.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { SpeedAlertOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          SpeedAlertOptionsThresholdPercentageDto.fromList(it)
+        }
       }
       184.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { SpeedAlertOptionsDto.fromList(it) }
+      }
+      185.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(it)
         }
       }
-      185.toByte() -> {
+      186.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentTrafficDataDto.fromList(it) }
       }
-      186.toByte() -> {
+      187.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentDto.fromList(it) }
       }
-      187.toByte() -> {
+      188.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LaneDirectionDto.fromList(it) }
       }
-      188.toByte() -> {
+      189.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LaneDto.fromList(it) }
       }
-      189.toByte() -> {
+      190.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { StepInfoDto.fromList(it) }
       }
-      190.toByte() -> {
+      191.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavInfoDto.fromList(it) }
       }
       else -> super.readValueOfType(type, buffer)
@@ -2611,40 +2646,44 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
         stream.write(181)
         writeValue(stream, value.toList())
       }
-      is SpeedAlertOptionsThresholdPercentageDto -> {
+      is GpsAvailabilityChangeEventDto -> {
         stream.write(182)
         writeValue(stream, value.toList())
       }
-      is SpeedAlertOptionsDto -> {
+      is SpeedAlertOptionsThresholdPercentageDto -> {
         stream.write(183)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentTrafficDataRoadStretchRenderingDataDto -> {
+      is SpeedAlertOptionsDto -> {
         stream.write(184)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentTrafficDataDto -> {
+      is RouteSegmentTrafficDataRoadStretchRenderingDataDto -> {
         stream.write(185)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentDto -> {
+      is RouteSegmentTrafficDataDto -> {
         stream.write(186)
         writeValue(stream, value.toList())
       }
-      is LaneDirectionDto -> {
+      is RouteSegmentDto -> {
         stream.write(187)
         writeValue(stream, value.toList())
       }
-      is LaneDto -> {
+      is LaneDirectionDto -> {
         stream.write(188)
         writeValue(stream, value.toList())
       }
-      is StepInfoDto -> {
+      is LaneDto -> {
         stream.write(189)
         writeValue(stream, value.toList())
       }
-      is NavInfoDto -> {
+      is StepInfoDto -> {
         stream.write(190)
+        writeValue(stream, value.toList())
+      }
+      is NavInfoDto -> {
+        stream.write(191)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -6910,6 +6949,29 @@ class NavigationSessionEventApi(
       "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityUpdate$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(availableArg)) {
+      if (it is List<*>) {
+        if (it.size > 1) {
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+        } else {
+          callback(Result.success(Unit))
+        }
+      } else {
+        callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
+      }
+    }
+  }
+
+  /** Android-only event. */
+  fun onGpsAvailabilityChange(
+    eventArg: GpsAvailabilityChangeEventDto,
+    callback: (Result<Unit>) -> Unit,
+  ) {
+    val separatedMessageChannelSuffix =
+      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName =
+      "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityChange$separatedMessageChannelSuffix"
+    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
+    channel.send(listOf(eventArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))

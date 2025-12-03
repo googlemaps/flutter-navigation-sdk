@@ -398,9 +398,12 @@ void main() {
   });
 
   patrol(
-    'Test navigation onRerouting and onGpsAvailability event listeners',
+    'Test navigation onRerouting, onGpsAvailability and onGpsAvailabilityChange event listeners',
     (PatrolIntegrationTester $) async {
-      final Completer<void> eventReceived = Completer<void>();
+      final Completer<void> reroutingEventReceived = Completer<void>();
+      final Completer<void> gpsAvailabilityEventReceived = Completer<void>();
+      final Completer<void> gpsAvailabilityChangeEventReceived =
+          Completer<void>();
 
       /// Set up navigation.
       await startNavigationWithoutDestination($);
@@ -409,24 +412,44 @@ void main() {
       final StreamSubscription<void> onReroutingSubscription =
           GoogleMapsNavigator.setOnReroutingListener(
             expectAsync0(() {
+              $.log('Rerouting event received');
+
               /// Complete the eventReceived completer only once.
-              if (!eventReceived.isCompleted) {
-                eventReceived.complete();
+              if (!reroutingEventReceived.isCompleted) {
+                reroutingEventReceived.complete();
               }
             }, max: -1),
           );
       await $.pumpAndSettle();
 
-      /// The events are not tested because there's currently no reliable way to trigger them.
+      /// Set up GPS availability listeners with completers.
       void onGpsAvailability(GpsAvailabilityUpdatedEvent event) {
-        $.log('GpsAvailabilityEvent: $event');
+        $.log('GpsAvailabilityEvent (deprecated): $event');
+        if (!gpsAvailabilityEventReceived.isCompleted) {
+          gpsAvailabilityEventReceived.complete();
+        }
       }
 
-      /// Set up the gpsAvailability listener with the test.
+      void onGpsAvailabilityChange(GpsAvailabilityChangeEvent event) {
+        $.log(
+          'GpsAvailabilityChangeEvent: isGpsLost=${event.isGpsLost}, isGpsValidForNavigation=${event.isGpsValidForNavigation}',
+        );
+        if (!gpsAvailabilityChangeEventReceived.isCompleted) {
+          gpsAvailabilityChangeEventReceived.complete();
+        }
+      }
+
+      /// Set up both the old (deprecated) and new gpsAvailability listeners.
       final StreamSubscription<GpsAvailabilityUpdatedEvent>
       onGpsAvailabilitySubscription =
           await GoogleMapsNavigator.setOnGpsAvailabilityListener(
             onGpsAvailability,
+          );
+
+      final StreamSubscription<GpsAvailabilityChangeEvent>
+      onGpsAvailabilityChangeSubscription =
+          await GoogleMapsNavigator.setOnGpsAvailabilityChangeListener(
+            onGpsAvailabilityChange,
           );
 
       /// Simulate location.
@@ -463,6 +486,7 @@ void main() {
 
       /// Start guidance.
       await GoogleMapsNavigator.startGuidance();
+
       await $.pumpAndSettle();
 
       /// Start simulation to a different destination.
@@ -474,10 +498,43 @@ void main() {
           );
       await $.pumpAndSettle();
 
-      /// Wait until the event is received and then test cancelling the subscriptions.
-      await eventReceived.future;
-      await onReroutingSubscription.cancel();
-      await onGpsAvailabilitySubscription.cancel();
+      Future<void> cancelSubscriptionsAndResetState() async {
+        await $.native.enableLocation();
+        await onReroutingSubscription.cancel();
+        await onGpsAvailabilitySubscription.cancel();
+        await onGpsAvailabilityChangeSubscription.cancel();
+      }
+
+      /// Wait for rerouting event (this should fire reliably).
+      await reroutingEventReceived.future.timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          cancelSubscriptionsAndResetState();
+          fail('Rerouting event timed out');
+        },
+      );
+
+      await $.native.disableLocation();
+
+      /// Wait for GPS availability events with timeout.
+      await gpsAvailabilityEventReceived.future.timeout(
+        const Duration(seconds: 20),
+        onTimeout: () {
+          cancelSubscriptionsAndResetState();
+          fail('GpsAvailabilityEvent timed out');
+        },
+      );
+
+      await gpsAvailabilityChangeEventReceived.future.timeout(
+        const Duration(seconds: 20),
+        onTimeout: () {
+          cancelSubscriptionsAndResetState();
+          fail('GpsAvailabilityChangeEvent timed out');
+        },
+      );
+
+      /// Cancel all subscriptions.
+      await cancelSubscriptionsAndResetState();
     },
     skip: !Platform.isAndroid,
   );

@@ -82,6 +82,9 @@ class RoadSnappedRawLocationUpdatedEvent {
 
 /// GpsAvailabilityUpdated event message (Android only).
 /// {@category Navigation}
+@Deprecated(
+  'Use getNavigationOnGpsAvailabilityChangeEventStream and GpsAvailabilityChangeEvent instead',
+)
 class GpsAvailabilityUpdatedEvent {
   /// Initialize GPS availability updated event message.
   GpsAvailabilityUpdatedEvent({required this.available});
@@ -91,6 +94,35 @@ class GpsAvailabilityUpdatedEvent {
 
   @override
   String toString() => 'GpsAvailabilityUpdatedEvent(available: $available)';
+}
+
+/// GpsAvailabilityChange event message (Android only).
+/// {@category Navigation}
+class GpsAvailabilityChangeEvent {
+  /// Initialize GPS availability change event message.
+  GpsAvailabilityChangeEvent({
+    required this.isGpsLost,
+    required this.isGpsValidForNavigation,
+  });
+
+  /// Indicates a GPS signal or other sensors good enough for a reasonably certain location have been lost.
+  ///
+  /// This state is triggered after a short timeout (10 seconds) and serves as an early warning of potential signal issues.
+  /// For example, the "Searching for GPS" UI message may be shown when this value is true.
+  final bool isGpsLost;
+
+  /// Indicates a GPS signal or other sensors are in general good enough for use in navigation.
+  ///
+  /// Note that this value takes into account the frequent failure of GPS at the start of nav,
+  /// and doesn't become true until some time later.
+  final bool isGpsValidForNavigation;
+
+  @override
+  String toString() =>
+      'GpsAvailabilityChangeEvent('
+      'isGpsLost: $isGpsLost, '
+      'isGpsValidForNavigation: $isGpsValidForNavigation'
+      ')';
 }
 
 /// Navigation simulation options.
