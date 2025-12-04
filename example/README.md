@@ -17,6 +17,11 @@ Run the app with the API key as a Dart define.
 flutter run --dart-define MAPS_API_KEY=YOUR_API_KEY
 ```
 
+You can also optionally provide a Map ID with another Dart define:
+```bash
+flutter run --dart-define MAPS_API_KEY=YOUR_API_KEY --dart-define MAP_ID=YOUR_MAP_ID
+```
+
 The example app demonstrates multiple ways to provide the Maps API key for platforms.
 
 ### Android specific API key

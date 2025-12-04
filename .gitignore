@@ -48,6 +48,7 @@ ServiceDefinitions.json
 xcuserdata/
 .swiftpm/
 .last_build_id
+.build/
 
 # Android
 local.properties

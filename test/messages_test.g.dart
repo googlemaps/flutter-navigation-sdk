@@ -191,32 +191,35 @@ class _PigeonCodec extends StandardMessageCodec {
     } else if (value is SpeedingUpdatedEventDto) {
       buffer.putUint8(181);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
+    } else if (value is GpsAvailabilityChangeEventDto) {
       buffer.putUint8(182);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsDto) {
+    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
       buffer.putUint8(183);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
+    } else if (value is SpeedAlertOptionsDto) {
       buffer.putUint8(184);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataDto) {
+    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
       buffer.putUint8(185);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentDto) {
+    } else if (value is RouteSegmentTrafficDataDto) {
       buffer.putUint8(186);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDirectionDto) {
+    } else if (value is RouteSegmentDto) {
       buffer.putUint8(187);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDto) {
+    } else if (value is LaneDirectionDto) {
       buffer.putUint8(188);
       writeValue(buffer, value.encode());
-    } else if (value is StepInfoDto) {
+    } else if (value is LaneDto) {
       buffer.putUint8(189);
       writeValue(buffer, value.encode());
-    } else if (value is NavInfoDto) {
+    } else if (value is StepInfoDto) {
       buffer.putUint8(190);
+      writeValue(buffer, value.encode());
+    } else if (value is NavInfoDto) {
+      buffer.putUint8(191);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -283,7 +286,7 @@ class _PigeonCodec extends StandardMessageCodec {
         return value == null
             ? null
             : RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
-                .values[value];
+                  .values[value];
       case 146:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : ManeuverDto.values[value];
@@ -362,26 +365,28 @@ class _PigeonCodec extends StandardMessageCodec {
       case 181:
         return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
       case 182:
+        return GpsAvailabilityChangeEventDto.decode(readValue(buffer)!);
+      case 183:
         return SpeedAlertOptionsThresholdPercentageDto.decode(
           readValue(buffer)!,
         );
-      case 183:
-        return SpeedAlertOptionsDto.decode(readValue(buffer)!);
       case 184:
+        return SpeedAlertOptionsDto.decode(readValue(buffer)!);
+      case 185:
         return RouteSegmentTrafficDataRoadStretchRenderingDataDto.decode(
           readValue(buffer)!,
         );
-      case 185:
-        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
       case 186:
-        return RouteSegmentDto.decode(readValue(buffer)!);
+        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
       case 187:
-        return LaneDirectionDto.decode(readValue(buffer)!);
+        return RouteSegmentDto.decode(readValue(buffer)!);
       case 188:
-        return LaneDto.decode(readValue(buffer)!);
+        return LaneDirectionDto.decode(readValue(buffer)!);
       case 189:
-        return StepInfoDto.decode(readValue(buffer)!);
+        return LaneDto.decode(readValue(buffer)!);
       case 190:
+        return StepInfoDto.decode(readValue(buffer)!);
+      case 191:
         return NavInfoDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -491,6 +496,14 @@ abstract class TestMapViewApi {
   bool isReportIncidentButtonEnabled(int viewId);
 
   void setReportIncidentButtonEnabled(int viewId, bool enabled);
+
+  bool isIncidentReportingAvailable(int viewId);
+
+  void showReportIncidentsPanel(int viewId);
+
+  bool isBuildingsEnabled(int viewId);
+
+  void setBuildingsEnabled(int viewId, bool enabled);
 
   CameraPositionDto getCameraPosition(int viewId);
 
@@ -633,8 +646,9 @@ abstract class TestMapViewApi {
     BinaryMessenger? binaryMessenger,
     String messageChannelSuffix = '',
   }) {
-    messageChannelSuffix =
-        messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+    messageChannelSuffix = messageChannelSuffix.isNotEmpty
+        ? '.$messageChannelSuffix'
+        : '';
     {
       final BasicMessageChannel<Object?>
       pigeonVar_channel = BasicMessageChannel<Object?>(
@@ -2685,6 +2699,173 @@ abstract class TestMapViewApi {
     {
       final BasicMessageChannel<Object?>
       pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIncidentReportingAvailable$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
+              Object? message,
+            ) async {
+              assert(
+                message != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIncidentReportingAvailable was null.',
+              );
+              final List<Object?> args = (message as List<Object?>?)!;
+              final int? arg_viewId = (args[0] as int?);
+              assert(
+                arg_viewId != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIncidentReportingAvailable was null, expected non-null int.',
+              );
+              try {
+                final bool output = api.isIncidentReportingAvailable(
+                  arg_viewId!,
+                );
+                return <Object?>[output];
+              } on PlatformException catch (e) {
+                return wrapResponse(error: e);
+              } catch (e) {
+                return wrapResponse(
+                  error: PlatformException(
+                    code: 'error',
+                    message: e.toString(),
+                  ),
+                );
+              }
+            });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showReportIncidentsPanel$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
+              Object? message,
+            ) async {
+              assert(
+                message != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showReportIncidentsPanel was null.',
+              );
+              final List<Object?> args = (message as List<Object?>?)!;
+              final int? arg_viewId = (args[0] as int?);
+              assert(
+                arg_viewId != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showReportIncidentsPanel was null, expected non-null int.',
+              );
+              try {
+                api.showReportIncidentsPanel(arg_viewId!);
+                return wrapResponse(empty: true);
+              } on PlatformException catch (e) {
+                return wrapResponse(error: e);
+              } catch (e) {
+                return wrapResponse(
+                  error: PlatformException(
+                    code: 'error',
+                    message: e.toString(),
+                  ),
+                );
+              }
+            });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isBuildingsEnabled$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
+              Object? message,
+            ) async {
+              assert(
+                message != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isBuildingsEnabled was null.',
+              );
+              final List<Object?> args = (message as List<Object?>?)!;
+              final int? arg_viewId = (args[0] as int?);
+              assert(
+                arg_viewId != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isBuildingsEnabled was null, expected non-null int.',
+              );
+              try {
+                final bool output = api.isBuildingsEnabled(arg_viewId!);
+                return <Object?>[output];
+              } on PlatformException catch (e) {
+                return wrapResponse(error: e);
+              } catch (e) {
+                return wrapResponse(
+                  error: PlatformException(
+                    code: 'error',
+                    message: e.toString(),
+                  ),
+                );
+              }
+            });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setBuildingsEnabled$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
+          Object?
+        >(pigeonVar_channel, (Object? message) async {
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setBuildingsEnabled was null.',
+          );
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setBuildingsEnabled was null, expected non-null int.',
+          );
+          final bool? arg_enabled = (args[1] as bool?);
+          assert(
+            arg_enabled != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setBuildingsEnabled was null, expected non-null bool.',
+          );
+          try {
+            api.setBuildingsEnabled(arg_viewId!, arg_enabled!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCameraPosition$messageChannelSuffix',
         pigeonChannelCodec,
         binaryMessenger: binaryMessenger,
@@ -3802,8 +3983,8 @@ abstract class TestMapViewApi {
             arg_viewId != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addMarkers was null, expected non-null int.',
           );
-          final List<MarkerDto>? arg_markers =
-              (args[1] as List<Object?>?)?.cast<MarkerDto>();
+          final List<MarkerDto>? arg_markers = (args[1] as List<Object?>?)
+              ?.cast<MarkerDto>();
           assert(
             arg_markers != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addMarkers was null, expected non-null List<MarkerDto>.',
@@ -3848,8 +4029,8 @@ abstract class TestMapViewApi {
             arg_viewId != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateMarkers was null, expected non-null int.',
           );
-          final List<MarkerDto>? arg_markers =
-              (args[1] as List<Object?>?)?.cast<MarkerDto>();
+          final List<MarkerDto>? arg_markers = (args[1] as List<Object?>?)
+              ?.cast<MarkerDto>();
           assert(
             arg_markers != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateMarkers was null, expected non-null List<MarkerDto>.',
@@ -3894,8 +4075,8 @@ abstract class TestMapViewApi {
             arg_viewId != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeMarkers was null, expected non-null int.',
           );
-          final List<MarkerDto>? arg_markers =
-              (args[1] as List<Object?>?)?.cast<MarkerDto>();
+          final List<MarkerDto>? arg_markers = (args[1] as List<Object?>?)
+              ?.cast<MarkerDto>();
           assert(
             arg_markers != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeMarkers was null, expected non-null List<MarkerDto>.',
@@ -4060,8 +4241,8 @@ abstract class TestMapViewApi {
             arg_viewId != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolygons was null, expected non-null int.',
           );
-          final List<PolygonDto>? arg_polygons =
-              (args[1] as List<Object?>?)?.cast<PolygonDto>();
+          final List<PolygonDto>? arg_polygons = (args[1] as List<Object?>?)
+              ?.cast<PolygonDto>();
           assert(
             arg_polygons != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolygons was null, expected non-null List<PolygonDto>.',
@@ -4106,8 +4287,8 @@ abstract class TestMapViewApi {
             arg_viewId != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolygons was null, expected non-null int.',
           );
-          final List<PolygonDto>? arg_polygons =
-              (args[1] as List<Object?>?)?.cast<PolygonDto>();
+          final List<PolygonDto>? arg_polygons = (args[1] as List<Object?>?)
+              ?.cast<PolygonDto>();
           assert(
             arg_polygons != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolygons was null, expected non-null List<PolygonDto>.',
@@ -4152,8 +4333,8 @@ abstract class TestMapViewApi {
             arg_viewId != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolygons was null, expected non-null int.',
           );
-          final List<PolygonDto>? arg_polygons =
-              (args[1] as List<Object?>?)?.cast<PolygonDto>();
+          final List<PolygonDto>? arg_polygons = (args[1] as List<Object?>?)
+              ?.cast<PolygonDto>();
           assert(
             arg_polygons != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolygons was null, expected non-null List<PolygonDto>.',
@@ -4277,8 +4458,8 @@ abstract class TestMapViewApi {
             arg_viewId != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolylines was null, expected non-null int.',
           );
-          final List<PolylineDto>? arg_polylines =
-              (args[1] as List<Object?>?)?.cast<PolylineDto>();
+          final List<PolylineDto>? arg_polylines = (args[1] as List<Object?>?)
+              ?.cast<PolylineDto>();
           assert(
             arg_polylines != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolylines was null, expected non-null List<PolylineDto>.',
@@ -4323,8 +4504,8 @@ abstract class TestMapViewApi {
             arg_viewId != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolylines was null, expected non-null int.',
           );
-          final List<PolylineDto>? arg_polylines =
-              (args[1] as List<Object?>?)?.cast<PolylineDto>();
+          final List<PolylineDto>? arg_polylines = (args[1] as List<Object?>?)
+              ?.cast<PolylineDto>();
           assert(
             arg_polylines != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolylines was null, expected non-null List<PolylineDto>.',
@@ -4369,8 +4550,8 @@ abstract class TestMapViewApi {
             arg_viewId != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolylines was null, expected non-null int.',
           );
-          final List<PolylineDto>? arg_polylines =
-              (args[1] as List<Object?>?)?.cast<PolylineDto>();
+          final List<PolylineDto>? arg_polylines = (args[1] as List<Object?>?)
+              ?.cast<PolylineDto>();
           assert(
             arg_polylines != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolylines was null, expected non-null List<PolylineDto>.',
@@ -4494,8 +4675,8 @@ abstract class TestMapViewApi {
             arg_viewId != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addCircles was null, expected non-null int.',
           );
-          final List<CircleDto>? arg_circles =
-              (args[1] as List<Object?>?)?.cast<CircleDto>();
+          final List<CircleDto>? arg_circles = (args[1] as List<Object?>?)
+              ?.cast<CircleDto>();
           assert(
             arg_circles != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addCircles was null, expected non-null List<CircleDto>.',
@@ -4540,8 +4721,8 @@ abstract class TestMapViewApi {
             arg_viewId != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateCircles was null, expected non-null int.',
           );
-          final List<CircleDto>? arg_circles =
-              (args[1] as List<Object?>?)?.cast<CircleDto>();
+          final List<CircleDto>? arg_circles = (args[1] as List<Object?>?)
+              ?.cast<CircleDto>();
           assert(
             arg_circles != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateCircles was null, expected non-null List<CircleDto>.',
@@ -4586,8 +4767,8 @@ abstract class TestMapViewApi {
             arg_viewId != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeCircles was null, expected non-null int.',
           );
-          final List<CircleDto>? arg_circles =
-              (args[1] as List<Object?>?)?.cast<CircleDto>();
+          final List<CircleDto>? arg_circles = (args[1] as List<Object?>?)
+              ?.cast<CircleDto>();
           assert(
             arg_circles != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeCircles was null, expected non-null List<CircleDto>.',
@@ -4797,8 +4978,9 @@ abstract class TestImageRegistryApi {
     BinaryMessenger? binaryMessenger,
     String messageChannelSuffix = '',
   }) {
-    messageChannelSuffix =
-        messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+    messageChannelSuffix = messageChannelSuffix.isNotEmpty
+        ? '.$messageChannelSuffix'
+        : '';
     {
       final BasicMessageChannel<Object?>
       pigeonVar_channel = BasicMessageChannel<Object?>(
@@ -4912,8 +5094,8 @@ abstract class TestImageRegistryApi {
               Object? message,
             ) async {
               try {
-                final List<ImageDescriptorDto> output =
-                    api.getRegisteredImages();
+                final List<ImageDescriptorDto> output = api
+                    .getRegisteredImages();
                 return <Object?>[output];
               } on PlatformException catch (e) {
                 return wrapResponse(error: e);
@@ -5063,8 +5245,9 @@ abstract class TestNavigationSessionApi {
     BinaryMessenger? binaryMessenger,
     String messageChannelSuffix = '',
   }) {
-    messageChannelSuffix =
-        messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+    messageChannelSuffix = messageChannelSuffix.isNotEmpty
+        ? '.$messageChannelSuffix'
+        : '';
     {
       final BasicMessageChannel<Object?>
       pigeonVar_channel = BasicMessageChannel<Object?>(
@@ -5513,8 +5696,8 @@ abstract class TestNavigationSessionApi {
               Object? message,
             ) async {
               try {
-                final NavigationWaypointDto? output =
-                    api.continueToNextDestination();
+                final NavigationWaypointDto? output = api
+                    .continueToNextDestination();
                 return <Object?>[output];
               } on PlatformException catch (e) {
                 return wrapResponse(error: e);
@@ -5545,8 +5728,8 @@ abstract class TestNavigationSessionApi {
               Object? message,
             ) async {
               try {
-                final NavigationTimeAndDistanceDto output =
-                    api.getCurrentTimeAndDistance();
+                final NavigationTimeAndDistanceDto output = api
+                    .getCurrentTimeAndDistance();
                 return <Object?>[output];
               } on PlatformException catch (e) {
                 return wrapResponse(error: e);

@@ -15,7 +15,7 @@ This repository contains a Flutter plugin that provides a [Google Navigation](ht
 
 |                                 | Android       | iOS       |
 | ------------------------------- | ------------- | --------- |
-| **Minimum mobile OS supported** | API level 23+ | iOS 16.0+ |
+| **Minimum mobile OS supported** | API level 24+ | iOS 16.0+ |
 
 * A Flutter project
 * A Google Cloud project
@@ -43,7 +43,7 @@ Set the `minSdk` in `android/app/build.gradle`:
 ```groovy
 android {
     defaultConfig {
-        minSdk 23
+        minSdk 24
     }
 }
 ```
@@ -198,6 +198,32 @@ This parameter has only an effect on Android.
   }
 
 ```
+
+#### Using Map IDs
+You can configure your map by providing a `mapId` parameter during map initialization. Map IDs are created in the [Google Cloud Console](https://console.cloud.google.com/google/maps-apis/studio/maps) and allow you to [enable various Google Maps Platform features](https://developers.google.com/maps/documentation/android-sdk/map-ids/mapid-over#features-available), such as cloud-based map styling.
+
+> [!NOTE]
+> The `mapId` can only be set once during map initialization and cannot be changed afterwards. Both `GoogleMapsMapView` and `GoogleMapsNavigationView` support the `mapId` parameter.
+
+For `GoogleMapsMapView`:
+
+```dart
+GoogleMapsMapView(
+  mapId: 'YOUR_MAP_ID', // Can only be set during initialization
+  ...
+)
+```
+
+For `GoogleMapsNavigationView`:
+
+```dart
+GoogleMapsNavigationView(
+  mapId: 'YOUR_MAP_ID', // Can only be set during initialization
+  ...
+)
+```
+
+For more information about map IDs and how to create them, see the [Google Maps Platform documentation](https://developers.google.com/maps/documentation/get-map-id).
 
 See the [example](./example) directory for a complete navigation sample app.
 

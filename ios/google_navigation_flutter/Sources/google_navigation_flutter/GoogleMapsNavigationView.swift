@@ -338,6 +338,14 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     _mapView.isTrafficEnabled
   }
 
+  func isBuildingsEnabled() -> Bool {
+    _mapView.isBuildingsEnabled
+  }
+
+  func setBuildingsEnabled(_ enabled: Bool) {
+    _mapView.isBuildingsEnabled = enabled
+  }
+
   func showRouteOverview() {
     _mapView.cameraMode = .overview
   }
@@ -536,6 +544,20 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
 
   func setReportIncidentButtonEnabled(_ enabled: Bool) {
     _mapView.settings.isNavigationReportIncidentButtonEnabled = enabled
+  }
+
+  func isIncidentReportingAvailable() -> Bool {
+    return _mapView.isIncidentReportingAvailable
+  }
+
+  func showReportIncidentsPanel() throws {
+    Task {
+      do {
+        try await _mapView.presentReportIncidentsPanel(nil)
+      } catch {
+        // Handle error silently
+      }
+    }
   }
 
   func isTrafficPromptsEnabled() -> Bool {
@@ -1024,6 +1046,14 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
         completion: { _ in }
       )
     }
+  }
+
+  func sendPromptVisibilityChangedEvent(promptVisible: Bool) {
+    getViewEventApi()?.onPromptVisibilityChanged(
+      viewId: _viewId!,
+      promptVisible: promptVisible,
+      completion: { _ in }
+    )
   }
 }
 

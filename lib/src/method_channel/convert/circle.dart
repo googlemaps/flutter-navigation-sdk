@@ -47,11 +47,10 @@ extension ConvertCircleOptionsDto on CircleOptionsDto {
       fillColor: Color(fillColor),
       strokeColor: Color(strokeColor),
       strokeWidth: strokeWidth,
-      strokePattern:
-          strokePattern
-              .map((PatternItemDto? e) => e?.toPatternItem())
-              .whereType<PatternItem>()
-              .toList(),
+      strokePattern: strokePattern
+          .map((PatternItemDto? e) => e?.toPatternItem())
+          .whereType<PatternItem>()
+          .toList(),
       visible: visible,
       zIndex: zIndex,
     );

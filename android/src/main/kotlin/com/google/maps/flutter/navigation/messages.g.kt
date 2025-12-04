@@ -594,6 +594,11 @@ data class MapOptionsDto(
   val cameraTargetBounds: LatLngBoundsDto? = null,
   /** Specifies the padding for the map. */
   val padding: MapPaddingDto? = null,
+  /**
+   * The map ID for advanced map options eg. cloud-based map styling. This value can only be set on
+   * map initialization and cannot be changed afterwards.
+   */
+  val mapId: String? = null,
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): MapOptionsDto {
@@ -611,6 +616,7 @@ data class MapOptionsDto(
       val zoomControlsEnabled = pigeonVar_list[11] as Boolean
       val cameraTargetBounds = pigeonVar_list[12] as LatLngBoundsDto?
       val padding = pigeonVar_list[13] as MapPaddingDto?
+      val mapId = pigeonVar_list[14] as String?
       return MapOptionsDto(
         cameraPosition,
         mapType,
@@ -626,6 +632,7 @@ data class MapOptionsDto(
         zoomControlsEnabled,
         cameraTargetBounds,
         padding,
+        mapId,
       )
     }
   }
@@ -646,6 +653,7 @@ data class MapOptionsDto(
       zoomControlsEnabled,
       cameraTargetBounds,
       padding,
+      mapId,
     )
   }
 
@@ -1511,7 +1519,9 @@ data class RoutingOptionsDto(
 /** Generated class from Pigeon that represents data sent in messages. */
 data class NavigationDisplayOptionsDto(
   val showDestinationMarkers: Boolean? = null,
+  /** Deprecated: This option now defaults to true. */
   val showStopSigns: Boolean? = null,
+  /** Deprecated: This option now defaults to true. */
   val showTrafficLights: Boolean? = null,
 ) {
   companion object {
@@ -1744,6 +1754,36 @@ data class SpeedingUpdatedEventDto(
 
   override fun equals(other: Any?): Boolean {
     if (other !is SpeedingUpdatedEventDto) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class GpsAvailabilityChangeEventDto(
+  val isGpsLost: Boolean,
+  val isGpsValidForNavigation: Boolean,
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): GpsAvailabilityChangeEventDto {
+      val isGpsLost = pigeonVar_list[0] as Boolean
+      val isGpsValidForNavigation = pigeonVar_list[1] as Boolean
+      return GpsAvailabilityChangeEventDto(isGpsLost, isGpsValidForNavigation)
+    }
+  }
+
+  fun toList(): List<Any?> {
+    return listOf(isGpsLost, isGpsValidForNavigation)
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (other !is GpsAvailabilityChangeEventDto) {
       return false
     }
     if (this === other) {
@@ -2001,45 +2041,45 @@ data class LaneDto(
  * Generated class from Pigeon that represents data sent in messages.
  */
 data class StepInfoDto(
-  /** Distance in meters from the previous step to this step. */
-  val distanceFromPrevStepMeters: Long,
-  /** Time in seconds from the previous step to this step. */
-  val timeFromPrevStepSeconds: Long,
+  /** Distance in meters from the previous step to this step if available, otherwise null. */
+  val distanceFromPrevStepMeters: Long? = null,
+  /** Time in seconds from the previous step to this step if available, otherwise null. */
+  val timeFromPrevStepSeconds: Long? = null,
   /** Whether this step is on a drive-on-right or drive-on-left route. */
   val drivingSide: DrivingSideDto,
   /** The exit number if it exists. */
   val exitNumber: String? = null,
-  /** The full text of the instruction for this step. */
-  val fullInstructions: String,
-  /** The full road name for this step. */
-  val fullRoadName: String,
-  /** The simplified version of the road name. */
-  val simpleRoadName: String,
+  /** The full text of the instruction for this step if available, otherwise null. */
+  val fullInstructions: String? = null,
+  /** The full road name for this step if available, otherwise null. */
+  val fullRoadName: String? = null,
+  /** The simplified version of the road name if available, otherwise null. */
+  val simpleRoadName: String? = null,
   /**
    * The counted number of the exit to take relative to the location where the roundabout was
-   * entered.
+   * entered if available, otherwise null.
    */
-  val roundaboutTurnNumber: Long,
-  /** The list of available lanes at the end of this route step. */
-  val lanes: List<LaneDto?>,
+  val roundaboutTurnNumber: Long? = null,
+  /** The list of available lanes at the end of this route step if available, otherwise null. */
+  val lanes: List<LaneDto>? = null,
   /** The maneuver for this step. */
   val maneuver: ManeuverDto,
-  /** The index of the step in the list of all steps in the route. */
-  val stepNumber: Long,
+  /** The index of the step in the list of all steps in the route if available, otherwise null. */
+  val stepNumber: Long? = null,
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): StepInfoDto {
-      val distanceFromPrevStepMeters = pigeonVar_list[0] as Long
-      val timeFromPrevStepSeconds = pigeonVar_list[1] as Long
+      val distanceFromPrevStepMeters = pigeonVar_list[0] as Long?
+      val timeFromPrevStepSeconds = pigeonVar_list[1] as Long?
       val drivingSide = pigeonVar_list[2] as DrivingSideDto
       val exitNumber = pigeonVar_list[3] as String?
-      val fullInstructions = pigeonVar_list[4] as String
-      val fullRoadName = pigeonVar_list[5] as String
-      val simpleRoadName = pigeonVar_list[6] as String
-      val roundaboutTurnNumber = pigeonVar_list[7] as Long
-      val lanes = pigeonVar_list[8] as List<LaneDto?>
+      val fullInstructions = pigeonVar_list[4] as String?
+      val fullRoadName = pigeonVar_list[5] as String?
+      val simpleRoadName = pigeonVar_list[6] as String?
+      val roundaboutTurnNumber = pigeonVar_list[7] as Long?
+      val lanes = pigeonVar_list[8] as List<LaneDto>?
       val maneuver = pigeonVar_list[9] as ManeuverDto
-      val stepNumber = pigeonVar_list[10] as Long
+      val stepNumber = pigeonVar_list[10] as Long?
       return StepInfoDto(
         distanceFromPrevStepMeters,
         timeFromPrevStepSeconds,
@@ -2354,33 +2394,38 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
       }
       182.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          SpeedAlertOptionsThresholdPercentageDto.fromList(it)
+          GpsAvailabilityChangeEventDto.fromList(it)
         }
       }
       183.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { SpeedAlertOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          SpeedAlertOptionsThresholdPercentageDto.fromList(it)
+        }
       }
       184.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { SpeedAlertOptionsDto.fromList(it) }
+      }
+      185.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(it)
         }
       }
-      185.toByte() -> {
+      186.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentTrafficDataDto.fromList(it) }
       }
-      186.toByte() -> {
+      187.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentDto.fromList(it) }
       }
-      187.toByte() -> {
+      188.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LaneDirectionDto.fromList(it) }
       }
-      188.toByte() -> {
+      189.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LaneDto.fromList(it) }
       }
-      189.toByte() -> {
+      190.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { StepInfoDto.fromList(it) }
       }
-      190.toByte() -> {
+      191.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavInfoDto.fromList(it) }
       }
       else -> super.readValueOfType(type, buffer)
@@ -2601,40 +2646,44 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
         stream.write(181)
         writeValue(stream, value.toList())
       }
-      is SpeedAlertOptionsThresholdPercentageDto -> {
+      is GpsAvailabilityChangeEventDto -> {
         stream.write(182)
         writeValue(stream, value.toList())
       }
-      is SpeedAlertOptionsDto -> {
+      is SpeedAlertOptionsThresholdPercentageDto -> {
         stream.write(183)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentTrafficDataRoadStretchRenderingDataDto -> {
+      is SpeedAlertOptionsDto -> {
         stream.write(184)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentTrafficDataDto -> {
+      is RouteSegmentTrafficDataRoadStretchRenderingDataDto -> {
         stream.write(185)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentDto -> {
+      is RouteSegmentTrafficDataDto -> {
         stream.write(186)
         writeValue(stream, value.toList())
       }
-      is LaneDirectionDto -> {
+      is RouteSegmentDto -> {
         stream.write(187)
         writeValue(stream, value.toList())
       }
-      is LaneDto -> {
+      is LaneDirectionDto -> {
         stream.write(188)
         writeValue(stream, value.toList())
       }
-      is StepInfoDto -> {
+      is LaneDto -> {
         stream.write(189)
         writeValue(stream, value.toList())
       }
-      is NavInfoDto -> {
+      is StepInfoDto -> {
         stream.write(190)
+        writeValue(stream, value.toList())
+      }
+      is NavInfoDto -> {
+        stream.write(191)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -2796,6 +2845,14 @@ interface MapViewApi {
   fun isReportIncidentButtonEnabled(viewId: Long): Boolean
 
   fun setReportIncidentButtonEnabled(viewId: Long, enabled: Boolean)
+
+  fun isIncidentReportingAvailable(viewId: Long): Boolean
+
+  fun showReportIncidentsPanel(viewId: Long)
+
+  fun isBuildingsEnabled(viewId: Long): Boolean
+
+  fun setBuildingsEnabled(viewId: Long, enabled: Boolean)
 
   fun getCameraPosition(viewId: Long): CameraPositionDto
 
@@ -4110,6 +4167,101 @@ interface MapViewApi {
             val wrapped: List<Any?> =
               try {
                 api.setReportIncidentButtonEnabled(viewIdArg, enabledArg)
+                listOf(null)
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIncidentReportingAvailable$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val wrapped: List<Any?> =
+              try {
+                listOf(api.isIncidentReportingAvailable(viewIdArg))
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showReportIncidentsPanel$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val wrapped: List<Any?> =
+              try {
+                api.showReportIncidentsPanel(viewIdArg)
+                listOf(null)
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isBuildingsEnabled$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val wrapped: List<Any?> =
+              try {
+                listOf(api.isBuildingsEnabled(viewIdArg))
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setBuildingsEnabled$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val enabledArg = args[1] as Boolean
+            val wrapped: List<Any?> =
+              try {
+                api.setBuildingsEnabled(viewIdArg, enabledArg)
                 listOf(null)
               } catch (exception: Throwable) {
                 MessagesPigeonUtils.wrapError(exception)
@@ -5628,6 +5780,29 @@ class ViewEventApi(
     }
   }
 
+  fun onPromptVisibilityChanged(
+    viewIdArg: Long,
+    promptVisibleArg: Boolean,
+    callback: (Result<Unit>) -> Unit,
+  ) {
+    val separatedMessageChannelSuffix =
+      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName =
+      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged$separatedMessageChannelSuffix"
+    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
+    channel.send(listOf(viewIdArg, promptVisibleArg)) {
+      if (it is List<*>) {
+        if (it.size > 1) {
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+        } else {
+          callback(Result.success(Unit))
+        }
+      } else {
+        callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
+      }
+    }
+  }
+
   fun onMyLocationClicked(viewIdArg: Long, callback: (Result<Unit>) -> Unit) {
     val separatedMessageChannelSuffix =
       if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
@@ -6774,6 +6949,29 @@ class NavigationSessionEventApi(
       "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityUpdate$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(availableArg)) {
+      if (it is List<*>) {
+        if (it.size > 1) {
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+        } else {
+          callback(Result.success(Unit))
+        }
+      } else {
+        callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
+      }
+    }
+  }
+
+  /** Android-only event. */
+  fun onGpsAvailabilityChange(
+    eventArg: GpsAvailabilityChangeEventDto,
+    callback: (Result<Unit>) -> Unit,
+  ) {
+    val separatedMessageChannelSuffix =
+      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName =
+      "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityChange$separatedMessageChannelSuffix"
+    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
+    channel.send(listOf(eventArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))

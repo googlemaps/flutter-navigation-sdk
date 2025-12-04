@@ -132,8 +132,8 @@ void main() {
 
           // Get camera position
 
-          final CameraPosition positionOut =
-              await controller.getCameraPosition();
+          final CameraPosition positionOut = await controller
+              .getCameraPosition();
           final VerificationResult result = verify(
             viewMockApi.getCameraPosition(captureAny),
           );
@@ -673,6 +673,8 @@ void main() {
           when(viewMockApi.isMapToolbarEnabled(any)).thenReturn(true);
           when(viewMockApi.isTrafficPromptsEnabled(any)).thenReturn(true);
           when(viewMockApi.isReportIncidentButtonEnabled(any)).thenReturn(true);
+          when(viewMockApi.isIncidentReportingAvailable(any)).thenReturn(true);
+          when(viewMockApi.isBuildingsEnabled(any)).thenReturn(false);
           when(viewMockApi.isNavigationHeaderEnabled(any)).thenReturn(true);
           when(viewMockApi.isNavigationFooterEnabled(any)).thenReturn(true);
           when(viewMockApi.isSpeedLimitIconEnabled(any)).thenReturn(true);
@@ -697,6 +699,7 @@ void main() {
           expect(await controller.settings.isMapToolbarEnabled(), true);
           expect(await controller.isTrafficPromptsEnabled(), true);
           expect(await controller.isReportIncidentButtonEnabled(), true);
+          expect(await controller.isIncidentReportingAvailable(), true);
           expect(await controller.isNavigationHeaderEnabled(), true);
           expect(await controller.isNavigationFooterEnabled(), true);
           expect(await controller.isSpeedLimitIconEnabled(), true);
@@ -719,6 +722,7 @@ void main() {
           verify(viewMockApi.isMapToolbarEnabled(captureAny));
           verify(viewMockApi.isTrafficPromptsEnabled(captureAny));
           verify(viewMockApi.isReportIncidentButtonEnabled(captureAny));
+          verify(viewMockApi.isIncidentReportingAvailable(captureAny));
           verify(viewMockApi.isNavigationHeaderEnabled(captureAny));
           verify(viewMockApi.isNavigationFooterEnabled(captureAny));
           verify(viewMockApi.isSpeedLimitIconEnabled(captureAny));
@@ -741,6 +745,8 @@ void main() {
           await controller.settings.setMapToolbarEnabled(true);
           await controller.setTrafficPromptsEnabled(true);
           await controller.setReportIncidentButtonEnabled(true);
+          await controller.showReportIncidentsPanel();
+          await controller.setBuildingsEnabled(true);
           await controller.setNavigationHeaderEnabled(true);
           await controller.setNavigationFooterEnabled(true);
           await controller.setSpeedLimitIconEnabled(true);
@@ -815,6 +821,11 @@ void main() {
             ),
             true,
           );
+          verify(viewMockApi.showReportIncidentsPanel(captureAny));
+          verifyEnabled(
+            verify(viewMockApi.setBuildingsEnabled(captureAny, captureAny)),
+            true,
+          );
           verifyEnabled(
             verify(
               viewMockApi.setNavigationHeaderEnabled(captureAny, captureAny),
@@ -850,6 +861,101 @@ void main() {
             verify(viewMockApi.setNavigationUIEnabled(captureAny, captureAny)),
             true,
           );
+        });
+
+        test('Test incident reporting APIs', () async {
+          const int viewId = 1;
+          final GoogleNavigationViewController controller =
+              GoogleNavigationViewController(viewId);
+
+          // Mock incident reporting availability and button enabled state
+          when(viewMockApi.isIncidentReportingAvailable(any)).thenReturn(true);
+          when(
+            viewMockApi.isReportIncidentButtonEnabled(any),
+          ).thenReturn(false);
+          when(viewMockApi.isBuildingsEnabled(any)).thenReturn(false);
+
+          // Test isIncidentReportingAvailable
+          final bool isAvailable = await controller
+              .isIncidentReportingAvailable();
+          expect(isAvailable, true);
+
+          // Verify the API was called
+          final VerificationResult availabilityResult = verify(
+            viewMockApi.isIncidentReportingAvailable(captureAny),
+          );
+          expect(availabilityResult.captured[0] as int, viewId);
+
+          // Test isReportIncidentButtonEnabled
+          final bool isButtonEnabled = await controller
+              .isReportIncidentButtonEnabled();
+          expect(isButtonEnabled, false);
+
+          // Verify the API was called
+          final VerificationResult buttonEnabledResult = verify(
+            viewMockApi.isReportIncidentButtonEnabled(captureAny),
+          );
+          expect(buttonEnabledResult.captured[0] as int, viewId);
+
+          // Test setReportIncidentButtonEnabled
+          await controller.setReportIncidentButtonEnabled(true);
+
+          // Verify the API was called with correct parameters
+          final VerificationResult setButtonEnabledResult = verify(
+            viewMockApi.setReportIncidentButtonEnabled(captureAny, captureAny),
+          );
+          expect(setButtonEnabledResult.captured[0] as int, viewId);
+          expect(setButtonEnabledResult.captured[1] as bool, true);
+
+          // Test isBuildingsEnabled
+          final bool isBuildingsEnabled = await controller.isBuildingsEnabled();
+          expect(isBuildingsEnabled, false);
+
+          // Verify the API was called
+          final VerificationResult buildingsEnabledResult = verify(
+            viewMockApi.isBuildingsEnabled(captureAny),
+          );
+          expect(buildingsEnabledResult.captured[0] as int, viewId);
+
+          // Test setBuildingsEnabled
+          await controller.setBuildingsEnabled(true);
+
+          // Verify the API was called with correct parameters
+          final VerificationResult setBuildingsEnabledResult = verify(
+            viewMockApi.setBuildingsEnabled(captureAny, captureAny),
+          );
+          expect(setBuildingsEnabledResult.captured[0] as int, viewId);
+          expect(setBuildingsEnabledResult.captured[1] as bool, true);
+
+          // Test showReportIncidentsPanel
+          await controller.showReportIncidentsPanel();
+
+          // Verify the API was called
+          final VerificationResult showPanelResult = verify(
+            viewMockApi.showReportIncidentsPanel(captureAny),
+          );
+          expect(showPanelResult.captured[0] as int, viewId);
+        });
+
+        test('Test prompt visibility changed event stream', () async {
+          const int viewId = 1;
+
+          // Test the event stream
+          final Stream<PromptVisibilityChangedEvent> eventStream =
+              GoogleMapsNavigationPlatform.instance.viewAPI
+                  .getPromptVisibilityChangedEventStream(viewId: viewId);
+
+          // Verify the stream is not null
+          expect(eventStream, isNotNull);
+
+          // Test that the event can be created
+          const PromptVisibilityChangedEvent event =
+              PromptVisibilityChangedEvent(true);
+          expect(event.promptVisible, true);
+
+          const PromptVisibilityChangedEvent event2 =
+              PromptVisibilityChangedEvent(false);
+          expect(event2.promptVisible, false);
         });
 
         test('set padding for map', () async {

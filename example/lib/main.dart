@@ -22,6 +22,7 @@ import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'pages/circles.dart';
 import 'pages/pages.dart';
+import 'utils/utils.dart';
 import 'widgets/widgets.dart';
 
 /// The list of pages to show in the Google Maps Navigation demo.
@@ -106,33 +107,51 @@ class _NavigationDemoState extends State<NavigationBody> {
       body: SafeArea(
         top: false,
         minimum: const EdgeInsets.all(8.0),
-        child: ListView.builder(
-          itemCount: _allPages.length + 1,
-          itemBuilder: (_, int index) {
-            if (index == 0) {
-              return Card(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  alignment: Alignment.center,
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        Platform.isIOS
-                            ? 'Location ${_locationPermitted ? 'granted' : 'denied'} • Notifications ${_notificationsPermitted ? 'granted' : 'denied'}'
-                            : 'Location ${_locationPermitted ? 'granted' : 'denied'} ',
-                      ),
-                      Text('Navigation SDK version: $_navSDKVersion'),
-                    ],
-                  ),
+        child: Column(
+          children: <Widget>[
+            Card(
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                alignment: Alignment.center,
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      Platform.isIOS
+                          ? 'Location ${_locationPermitted ? 'granted' : 'denied'} • Notifications ${_notificationsPermitted ? 'granted' : 'denied'}'
+                          : 'Location ${_locationPermitted ? 'granted' : 'denied'} ',
+                    ),
+                    Text('Navigation SDK version: $_navSDKVersion'),
+                    Text(
+                      'Current map ID: ${MapIdManager.instance.mapIdDisplay}',
+                    ),
+                  ],
                 ),
-              );
-            }
-            return ListTile(
-              leading: _allPages[index - 1].leading,
-              title: Text(_allPages[index - 1].title),
-              onTap: () => _pushPage(context, _allPages[index - 1]),
-            );
-          },
+              ),
+            ),
+            Expanded(
+              child: Scrollbar(
+                thumbVisibility: true,
+                child: ListView.builder(
+                  itemCount: _allPages.length,
+                  itemBuilder: (_, int index) {
+                    return ListTile(
+                      leading: _allPages[index].leading,
+                      title: Text(_allPages[index].title),
+                      onTap: () => _pushPage(context, _allPages[index]),
+                    );
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed:
+                    () => showMapIdDialog(context, () => setState(() {})),
+                child: const Text('Set Map ID'),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -140,6 +159,8 @@ class _NavigationDemoState extends State<NavigationBody> {
 }
 
 void main() {
+  MapIdManager.instance.initialize();
+
   final ElevatedButtonThemeData exampleButtonDefaultTheme =
       ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(minimumSize: const Size(160, 36)),

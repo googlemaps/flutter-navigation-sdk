@@ -14,6 +14,7 @@
 
 export 'constants.dart';
 export 'location_permissions.dart';
+export 'map_id_manager.dart';
 export 'overlay_options.dart';
 export 'remaining_distance.dart';
 export 'remaining_time.dart';

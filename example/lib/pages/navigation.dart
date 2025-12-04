@@ -92,13 +92,14 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   int _onRoadSnappedRawLocationUpdatedEventCallCount = 0;
   int _onTrafficUpdatedEventCallCount = 0;
   int _onReroutingEventCallCount = 0;
-  int _onGpsAvailabilityEventCallCount = 0;
+  int _onGpsAvailabilityChangeEventCallCount = 0;
   int _onArrivalEventCallCount = 0;
   int _onSpeedingUpdatedEventCallCount = 0;
   int _onRecenterButtonClickedEventCallCount = 0;
   int _onRemainingTimeOrDistanceChangedEventCallCount = 0;
   int _onNavigationUIEnabledChangedEventCallCount = 0;
   int _onNewNavigationSessionEventCallCount = 0;
+  int _onPromptVisibilityChangedEventCallCount = 0;
 
   bool _navigationHeaderEnabled = true;
   bool _navigationFooterEnabled = true;
@@ -110,6 +111,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   bool _trafficIndicentCardsEnabled = false;
   bool _trafficPromptsEnabled = true;
   bool _reportIncidentButtonEnabled = true;
+  bool _buildingsEnabled = true;
 
   bool _termsAndConditionsAccepted = false;
   bool _locationPermissionsAccepted = false;
@@ -139,7 +141,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   StreamSubscription<SpeedingUpdatedEvent>? _speedUpdatedSubscription;
   StreamSubscription<OnArrivalEvent>? _onArrivalSubscription;
   StreamSubscription<void>? _onReRoutingSubscription;
-  StreamSubscription<void>? _onGpsAvailabilitySubscription;
+  StreamSubscription<GpsAvailabilityChangeEvent>?
+  _onGpsAvailabilityChangeSubscription;
   StreamSubscription<void>? _trafficUpdatedSubscription;
   StreamSubscription<void>? _onRouteChangedSubscription;
   StreamSubscription<RemainingTimeOrDistanceChangedEvent>?
@@ -357,9 +360,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     _onReRoutingSubscription = GoogleMapsNavigator.setOnReroutingListener(
       _onReroutingEvent,
     );
-    _onGpsAvailabilitySubscription =
-        await GoogleMapsNavigator.setOnGpsAvailabilityListener(
-          _onGpsAvailabilityEvent,
+    _onGpsAvailabilityChangeSubscription =
+        await GoogleMapsNavigator.setOnGpsAvailabilityChangeListener(
+          _onGpsAvailabilityChangeEvent,
         );
     _trafficUpdatedSubscription = GoogleMapsNavigator.setTrafficUpdatedListener(
       _onTrafficUpdatedEvent,
@@ -398,8 +401,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     _onReRoutingSubscription?.cancel();
     _onReRoutingSubscription = null;
 
-    _onGpsAvailabilitySubscription?.cancel();
-    _onGpsAvailabilitySubscription = null;
+    _onGpsAvailabilityChangeSubscription?.cancel();
+    _onGpsAvailabilityChangeSubscription = null;
 
     _trafficUpdatedSubscription?.cancel();
     _trafficUpdatedSubscription = null;
@@ -503,9 +506,10 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     });
   }
 
-  void _onGpsAvailabilityEvent(GpsAvailabilityUpdatedEvent event) {
+  void _onGpsAvailabilityChangeEvent(GpsAvailabilityChangeEvent event) {
+    debugPrint('GPS availability change event: $event');
     setState(() {
-      _onGpsAvailabilityEventCallCount += 1;
+      _onGpsAvailabilityChangeEventCallCount += 1;
     });
   }
 
@@ -575,6 +579,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
           await _navigationViewController!.isTrafficPromptsEnabled();
       final bool reportIncidentButtonEnabled =
           await _navigationViewController!.isReportIncidentButtonEnabled();
+      final bool buildingsEnabled =
+          await _navigationViewController!.isBuildingsEnabled();
 
       setState(() {
         _navigationHeaderEnabled = navigationHeaderEnabled;
@@ -587,6 +593,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         _trafficIndicentCardsEnabled = trafficIndicentCardsEnabled;
         _trafficPromptsEnabled = trafficPromptsEnabled;
         _reportIncidentButtonEnabled = reportIncidentButtonEnabled;
+        _buildingsEnabled = buildingsEnabled;
       });
     }
   }
@@ -605,6 +612,15 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         _navigationUIEnabled = enabled;
         _onNavigationUIEnabledChangedEventCallCount += 1;
       });
+    }
+  }
+
+  void _onPromptVisibilityChanged(bool promptVisible) {
+    if (mounted) {
+      setState(() {
+        _onPromptVisibilityChangedEventCallCount += 1;
+      });
+      showMessage('Prompt visibility changed: $promptVisible');
     }
   }
 
@@ -1203,6 +1219,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                               _onRecenterButtonClickedEvent,
                           onNavigationUIEnabledChanged:
                               _onNavigationUIEnabledChanged,
+                          onPromptVisibilityChanged: _onPromptVisibilityChanged,
                           initialCameraPosition: CameraPosition(
                             // Initialize map to user location.
                             target: _userLocation!,
@@ -1213,6 +1230,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                                   ? NavigationUIEnabledPreference.automatic
                                   : NavigationUIEnabledPreference.disabled,
                           initialPadding: const EdgeInsets.all(0),
+                          mapId: MapIdManager.instance.mapId,
                         )
                         : const Center(
                           child: Column(
@@ -1434,8 +1452,12 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
               if (Platform.isAndroid)
                 Card(
                   child: ListTile(
-                    title: const Text('On GPS availability event call count'),
-                    trailing: Text(_onGpsAvailabilityEventCallCount.toString()),
+                    title: const Text(
+                      'On GPS availability change event call count',
+                    ),
+                    trailing: Text(
+                      _onGpsAvailabilityChangeEventCallCount.toString(),
+                    ),
                   ),
                 ),
               Card(
@@ -1485,6 +1507,16 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   title: const Text('New navigation session event call count'),
                   trailing: Text(
                     _onNewNavigationSessionEventCallCount.toString(),
+                  ),
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  title: const Text(
+                    'On prompt visibility changed event call count',
+                  ),
+                  trailing: Text(
+                    _onPromptVisibilityChangedEventCallCount.toString(),
                   ),
                 ),
               ),
@@ -1793,6 +1825,18 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     });
                   },
                 ),
+                ExampleSwitch(
+                  title: 'Show 3D buildings',
+                  initialValue: _buildingsEnabled,
+                  onChanged: (bool newValue) async {
+                    await _navigationViewController!.setBuildingsEnabled(
+                      newValue,
+                    );
+                    setState(() {
+                      _buildingsEnabled = newValue;
+                    });
+                  },
+                ),
                 Text(
                   'Map left padding: ${_mapPadding.left.toStringAsFixed(0)}',
                 ),
@@ -2000,6 +2044,33 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                             CameraPerspective.tilted,
                           ),
                       child: const Text('Follow my location'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        final bool available =
+                            await _navigationViewController!
+                                .isIncidentReportingAvailable();
+                        if (available) {
+                          await _navigationViewController!
+                              .showReportIncidentsPanel();
+                        } else {
+                          if (context.mounted) {
+                            showMessage('Incident reporting is not available');
+                          }
+                        }
+                      },
+                      child: const Text('Report Incident'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        final bool available =
+                            await _navigationViewController!
+                                .isIncidentReportingAvailable();
+                        showMessage('Incident reporting available: $available');
+                      },
+                      child: const Text(
+                        'Check incident reporting availability',
+                      ),
                     ),
                   ],
                 ),

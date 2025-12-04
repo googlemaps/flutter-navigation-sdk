@@ -64,8 +64,8 @@ class ImageRegistryAPIImpl {
 
   /// Get all registered bitmaps from image registry.
   Future<List<ImageDescriptor>> getRegisteredImages() async {
-    final List<ImageDescriptorDto?> registeredImages =
-        await _imageApi.getRegisteredImages();
+    final List<ImageDescriptorDto?> registeredImages = await _imageApi
+        .getRegisteredImages();
     return registeredImages
         .whereType<ImageDescriptorDto>()
         .map((ImageDescriptorDto e) => e.toImageDescriptor())

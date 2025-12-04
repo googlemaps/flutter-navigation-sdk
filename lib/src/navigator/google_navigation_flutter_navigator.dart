@@ -63,7 +63,8 @@ class GoogleMapsNavigator {
     // Enable road-snapped location updates if there are subscriptions to them.
     if ((_roadSnappedLocationUpdatedController?.hasListener ?? false) ||
         (_roadSnappedRawLocationUpdatedController?.hasListener ?? false) ||
-        (_gpsAvailabilityUpdatedController?.hasListener ?? false)) {
+        (_gpsAvailabilityUpdatedController?.hasListener ?? false) ||
+        (_gpsAvailabilityChangeController?.hasListener ?? false)) {
       await GoogleMapsNavigationPlatform.instance.navigationSessionAPI
           .enableRoadSnappedLocationUpdates();
     }
@@ -208,6 +209,7 @@ class GoogleMapsNavigator {
   /// // When done with the subscription
   /// await subscription.cancel();
   /// ```
+  @Deprecated('Use setOnGpsAvailabilityChangeListener instead')
   static Future<StreamSubscription<GpsAvailabilityUpdatedEvent>>
   setOnGpsAvailabilityListener(OnGpsAvailabilityEventCallback listener) async {
     if (_gpsAvailabilityUpdatedController == null) {
@@ -234,6 +236,57 @@ class GoogleMapsNavigator {
 
   static StreamController<GpsAvailabilityUpdatedEvent>?
   _gpsAvailabilityUpdatedController;
+
+  /// Sets the event channel listener for the GPS availability change events.
+  /// (Android only).
+  ///
+  /// Setting this listener will also register road snapped location listener
+  /// on native side.
+  ///
+  /// DISCLAIMER: This is an EXPERIMENTAL API and its behaviors may be subject
+  /// to removal or breaking changes in future releases.
+  ///
+  /// Returns a [StreamSubscription] for GPS availability change events.
+  /// This subscription must be canceled using `cancel()` when it is no longer
+  /// needed to stop receiving events and allow the stream to perform necessary
+  /// cleanup, such as releasing resources or shutting down event sources. The
+  /// cleanup is asynchronous, and the `cancel()` method returns a Future that
+  /// completes once the cleanup is done.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final subscription = setOnGpsAvailabilityChangeListener(yourEventHandler);
+  /// // When done with the subscription
+  /// await subscription.cancel();
+  /// ```
+  static Future<StreamSubscription<GpsAvailabilityChangeEvent>>
+  setOnGpsAvailabilityChangeListener(
+    OnGpsAvailabilityChangeEventCallback listener,
+  ) async {
+    if (_gpsAvailabilityChangeController == null) {
+      _gpsAvailabilityChangeController =
+          StreamController<GpsAvailabilityChangeEvent>.broadcast(
+            onCancel: () {
+              _disableRoadSnappedLocationUpdatesIfNoActiveListeners();
+            },
+            onListen: () {
+              GoogleMapsNavigationPlatform.instance.navigationSessionAPI
+                  .enableRoadSnappedLocationUpdates();
+            },
+          );
+      unawaited(
+        _gpsAvailabilityChangeController!.addStream(
+          GoogleMapsNavigationPlatform.instance.navigationSessionAPI
+              .getNavigationOnGpsAvailabilityChangeEventStream(),
+        ),
+      );
+    }
+
+    return _gpsAvailabilityChangeController!.stream.listen(listener);
+  }
+
+  static StreamController<GpsAvailabilityChangeEvent>?
+  _gpsAvailabilityChangeController;
 
   /// Sets the event channel listener for the traffic updated events. (Android only)
   ///
@@ -468,7 +521,8 @@ class GoogleMapsNavigator {
   static void _disableRoadSnappedLocationUpdatesIfNoActiveListeners() {
     if (!(_roadSnappedLocationUpdatedController?.hasListener ?? false) &&
         !(_roadSnappedRawLocationUpdatedController?.hasListener ?? false) &&
-        !(_gpsAvailabilityUpdatedController?.hasListener ?? false)) {
+        !(_gpsAvailabilityUpdatedController?.hasListener ?? false) &&
+        !(_gpsAvailabilityChangeController?.hasListener ?? false)) {
       GoogleMapsNavigationPlatform.instance.navigationSessionAPI
           .disableRoadSnappedLocationUpdates();
     }

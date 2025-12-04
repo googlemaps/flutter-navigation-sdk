@@ -53,6 +53,7 @@ class MapOptionsDto {
     required this.zoomControlsEnabled,
     required this.cameraTargetBounds,
     required this.padding,
+    required this.mapId,
   });
 
   /// The initial positioning of the camera in the map view.
@@ -97,6 +98,10 @@ class MapOptionsDto {
 
   /// Specifies the padding for the map.
   final MapPaddingDto? padding;
+
+  /// The map ID for advanced map options eg. cloud-based map styling.
+  /// This value can only be set on map initialization and cannot be changed afterwards.
+  final String? mapId;
 }
 
 /// Determines the initial visibility of the navigation UI on map initialization.
@@ -466,6 +471,12 @@ abstract class MapViewApi {
   bool isReportIncidentButtonEnabled(int viewId);
   void setReportIncidentButtonEnabled(int viewId, bool enabled);
 
+  bool isIncidentReportingAvailable(int viewId);
+  void showReportIncidentsPanel(int viewId);
+
+  bool isBuildingsEnabled(int viewId);
+  void setBuildingsEnabled(int viewId, bool enabled);
+
   CameraPositionDto getCameraPosition(int viewId);
   LatLngBoundsDto getVisibleRegion(int viewId);
 
@@ -597,6 +608,7 @@ abstract class ViewEventApi {
   void onPolylineClicked(int viewId, String polylineId);
   void onCircleClicked(int viewId, String circleId);
   void onNavigationUIEnabledChanged(int viewId, bool navigationUIEnabled);
+  void onPromptVisibilityChanged(int viewId, bool promptVisible);
   void onMyLocationClicked(int viewId);
   void onMyLocationButtonClicked(int viewId);
   void onCameraChanged(
@@ -662,7 +674,17 @@ class NavigationDisplayOptionsDto {
   );
 
   final bool? showDestinationMarkers;
+
+  /// Deprecated: This option now defaults to true.
+  @Deprecated(
+    'This option now defaults to true and will be removed in Navigation SDK 8.0',
+  )
   final bool? showStopSigns;
+
+  /// Deprecated: This option now defaults to true.
+  @Deprecated(
+    'This option now defaults to true and will be removed in Navigation SDK 8.0',
+  )
   final bool? showTrafficLights;
 }
 
@@ -750,6 +772,16 @@ class SpeedingUpdatedEventDto {
 
   final double percentageAboveLimit;
   final SpeedAlertSeverityDto severity;
+}
+
+class GpsAvailabilityChangeEventDto {
+  GpsAvailabilityChangeEventDto({
+    required this.isGpsLost,
+    required this.isGpsValidForNavigation,
+  });
+
+  final bool isGpsLost;
+  final bool isGpsValidForNavigation;
 }
 
 class SpeedAlertOptionsThresholdPercentageDto {
@@ -1115,11 +1147,11 @@ class StepInfoDto {
     required this.maneuver,
   });
 
-  /// Distance in meters from the previous step to this step.
-  final int distanceFromPrevStepMeters;
+  /// Distance in meters from the previous step to this step if available, otherwise null.
+  final int? distanceFromPrevStepMeters;
 
-  /// Time in seconds from the previous step to this step.
-  final int timeFromPrevStepSeconds;
+  /// Time in seconds from the previous step to this step if available, otherwise null.
+  final int? timeFromPrevStepSeconds;
 
   /// Whether this step is on a drive-on-right or drive-on-left route.
   final DrivingSideDto drivingSide;
@@ -1127,27 +1159,27 @@ class StepInfoDto {
   /// The exit number if it exists.
   final String? exitNumber;
 
-  /// The full text of the instruction for this step.
-  final String fullInstructions;
+  /// The full text of the instruction for this step if available, otherwise null.
+  final String? fullInstructions;
 
-  /// The full road name for this step.
-  final String fullRoadName;
+  /// The full road name for this step if available, otherwise null.
+  final String? fullRoadName;
 
-  /// The simplified version of the road name.
-  final String simpleRoadName;
+  /// The simplified version of the road name if available, otherwise null.
+  final String? simpleRoadName;
 
   /// The counted number of the exit to take relative to the location where the
-  /// roundabout was entered.
-  final int roundaboutTurnNumber;
+  /// roundabout was entered if available, otherwise null.
+  final int? roundaboutTurnNumber;
 
-  /// The list of available lanes at the end of this route step.
-  final List<LaneDto?> lanes;
+  /// The list of available lanes at the end of this route step if available, otherwise null.
+  final List<LaneDto>? lanes;
 
   /// The maneuver for this step.
   final ManeuverDto maneuver;
 
-  /// The index of the step in the list of all steps in the route.
-  final int stepNumber;
+  /// The index of the step in the list of all steps in the route if available, otherwise null.
+  final int? stepNumber;
 }
 
 /// Contains information about the state of navigation, the current nav step if
@@ -1307,6 +1339,9 @@ abstract class NavigationSessionEventApi {
 
   /// Android-only event.
   void onGpsAvailabilityUpdate(bool available);
+
+  /// Android-only event.
+  void onGpsAvailabilityChange(GpsAvailabilityChangeEventDto event);
 
   /// Turn-by-Turn navigation events.
   void onNavInfo(NavInfoDto navInfo);
