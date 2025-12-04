@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.8.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.7.0...0.8.0) (2025-12-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* Most fields in StepInfo are now nullable. Null checks for these properties must be handled.
+
+### Features
+
+* upgrade to latest native SDK's ([#526](https://github.com/googlemaps/flutter-navigation-sdk/issues/526)) ([0c358cb](https://github.com/googlemaps/flutter-navigation-sdk/commit/0c358cb98bc25c91d9af23b7333f633c98ebd376))
+
 ## [0.7.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.6.5...0.7.0) (2025-11-20)
 
 
