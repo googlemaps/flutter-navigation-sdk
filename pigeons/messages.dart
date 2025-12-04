@@ -700,11 +700,18 @@ enum RouteStatusDto {
   unknown,
 }
 
+enum TrafficDelaySeverityDto { light, medium, heavy, noData }
+
 class NavigationTimeAndDistanceDto {
-  NavigationTimeAndDistanceDto({required this.time, required this.distance});
+  NavigationTimeAndDistanceDto({
+    required this.time,
+    required this.distance,
+    required this.delaySeverity,
+  });
 
   final double time;
   final double distance;
+  final TrafficDelaySeverityDto delaySeverity;
 }
 
 enum AudioGuidanceTypeDto { silent, alertsOnly, alertsAndGuidance }
@@ -1297,6 +1304,7 @@ abstract class NavigationSessionEventApi {
   void onRemainingTimeOrDistanceChanged(
     double remainingTime,
     double remainingDistance,
+    TrafficDelaySeverityDto delaySeverity,
   );
 
   /// Android-only event.

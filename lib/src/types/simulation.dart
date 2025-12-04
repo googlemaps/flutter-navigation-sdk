@@ -106,13 +106,30 @@ class SimulationOptions {
   String toString() => 'SimulationOptions(speedMultiplier: $speedMultiplier)';
 }
 
+/// Traffic delay severity.
+/// {@category Navigation}
+enum TrafficDelaySeverity {
+  /// Light traffic or no delays.
+  light,
+
+  /// Medium traffic delays.
+  medium,
+
+  /// Heavy traffic delays.
+  heavy,
+
+  /// No traffic data available.
+  noData,
+}
+
 /// Remaining time or distance change event message.
 /// {@category Navigation}
 class RemainingTimeOrDistanceChangedEvent {
-  /// Initialize with remaining distance in meters and remaining time in seconds.
+  /// Initialize with remaining distance in meters, remaining time in seconds, and delay severity.
   RemainingTimeOrDistanceChangedEvent({
     required this.remainingDistance,
     required this.remainingTime,
+    required this.delaySeverity,
   });
 
   /// Remaining distance in meters.
@@ -121,11 +138,15 @@ class RemainingTimeOrDistanceChangedEvent {
   /// Remaining time in seconds.
   final double remainingTime;
 
+  /// Traffic delay severity.
+  final TrafficDelaySeverity delaySeverity;
+
   @override
   String toString() =>
       'RemainingTimeOrDistanceChangedEvent('
       'remainingDistance: $remainingDistance, '
-      'remainingTime: $remainingTime'
+      'remainingTime: $remainingTime, '
+      'delaySeverity: $delaySeverity'
       ')';
 }
 
