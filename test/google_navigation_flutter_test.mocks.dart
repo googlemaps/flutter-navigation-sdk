@@ -1219,6 +1219,38 @@ class MockTestMapViewApi extends _i1.Mock implements _i3.TestMapViewApi {
             ),
           )
           as _i2.MapPaddingDto);
+
+  @override
+  _i2.MapColorSchemeDto getMapColorScheme(int? viewId) =>
+      (super.noSuchMethod(
+            Invocation.method(#getMapColorScheme, [viewId]),
+            returnValue: _i2.MapColorSchemeDto.followSystem,
+          )
+          as _i2.MapColorSchemeDto);
+
+  @override
+  void setMapColorScheme(int? viewId, _i2.MapColorSchemeDto? mapColorScheme) =>
+      super.noSuchMethod(
+        Invocation.method(#setMapColorScheme, [viewId, mapColorScheme]),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i2.NavigationForceNightModeDto getForceNightMode(int? viewId) =>
+      (super.noSuchMethod(
+            Invocation.method(#getForceNightMode, [viewId]),
+            returnValue: _i2.NavigationForceNightModeDto.auto,
+          )
+          as _i2.NavigationForceNightModeDto);
+
+  @override
+  void setForceNightMode(
+    int? viewId,
+    _i2.NavigationForceNightModeDto? forceNightMode,
+  ) => super.noSuchMethod(
+    Invocation.method(#setForceNightMode, [viewId, forceNightMode]),
+    returnValueForMissingStub: null,
+  );
 }
 
 /// A class which mocks [TestImageRegistryApi].

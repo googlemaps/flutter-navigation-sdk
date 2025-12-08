@@ -58,6 +58,10 @@ class GoogleMapsNavigationViewFactory: NSObject, FlutterPlatformViewFactory {
         .convertNavigationUIEnabledPreference(
           preference: params.navigationViewOptions?
             .navigationUIEnabledPreference),
+      forceNightMode:
+        Convert
+        .convertNavigationForceNightMode(
+          forceNightMode: params.navigationViewOptions?.forceNightMode ?? .auto),
       mapConfiguration: mapConfiguration,
       imageRegistry: imageRegistry,
       isCarPlayView: false

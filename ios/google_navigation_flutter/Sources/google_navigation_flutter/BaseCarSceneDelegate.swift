@@ -86,6 +86,7 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
           viewRegistry: viewRegistry,
           viewEventApi: nil,
           navigationUIEnabledPreference: NavigationUIEnabledPreference.automatic,
+          forceNightMode: nil,
           mapConfiguration: MapConfiguration(
             cameraPosition: nil,
             mapType: .normal,
@@ -94,7 +95,8 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
             scrollGesturesEnabled: true,
             tiltGesturesEnabled: false,
             zoomGesturesEnabled: true,
-            scrollGesturesEnabledDuringRotateOrZoom: false
+            scrollGesturesEnabledDuringRotateOrZoom: false,
+            mapColorScheme: .unspecified
           ),
           imageRegistry: imageRegistry,
           isCarPlayView: true

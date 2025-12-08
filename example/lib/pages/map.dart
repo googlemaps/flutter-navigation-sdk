@@ -50,6 +50,7 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
   late bool isTiltGesturesEnabled = true;
   late bool isTrafficEnabled = false;
   late MapType mapType = MapType.normal;
+  late MapColorScheme mapColorScheme = MapColorScheme.followSystem;
 
   Future<void> setMapType(MapType type) async {
     mapType = type;
@@ -75,10 +76,29 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
     await _mapViewController.setMapStyle(jsonString);
   }
 
+  Future<void> getMapColorScheme() async {
+    final MapColorScheme colorScheme =
+        await _mapViewController.getMapColorScheme();
+    setState(() {
+      mapColorScheme = colorScheme;
+    });
+  }
+
+  Future<void> setMapColorScheme(MapColorScheme scheme) async {
+    await _mapViewController.setMapColorScheme(scheme);
+    await getMapColorScheme();
+  }
+
   // ignore: use_setters_to_change_properties
   Future<void> _onViewCreated(GoogleMapViewController controller) async {
     _mapViewController = controller;
     setState(() {});
+  }
+
+  // Adds day/night mode toggle button to app bar.
+  @override
+  List<Widget>? getAppBarActions() {
+    return <Widget>[_colorSchemeToggle];
   }
 
   void _showMessage(String message) {
@@ -196,6 +216,51 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
         ],
       ),
     );
+  }
+
+  Widget get _colorSchemeToggle => Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+    child: InkWell(
+      onTap: _cycleColorScheme,
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        child: Icon(
+          _getColorSchemeIcon(),
+          size: 30,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      ),
+    ),
+  );
+
+  IconData _getColorSchemeIcon() {
+    switch (mapColorScheme) {
+      case MapColorScheme.light:
+        return Icons.brightness_7;
+      case MapColorScheme.dark:
+        return Icons.brightness_3;
+      case MapColorScheme.followSystem:
+        return Icons.brightness_auto;
+    }
+  }
+
+  Future<void> _cycleColorScheme() async {
+    setState(() {
+      switch (mapColorScheme) {
+        case MapColorScheme.followSystem:
+          mapColorScheme = MapColorScheme.light;
+        case MapColorScheme.light:
+          mapColorScheme = MapColorScheme.dark;
+        case MapColorScheme.dark:
+          mapColorScheme = MapColorScheme.followSystem;
+      }
+    });
+
+    try {
+      await setMapColorScheme(mapColorScheme);
+    } catch (e) {
+      _showMessage('Failed to update color scheme: $e');
+    }
   }
 
   @override
@@ -358,7 +423,42 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
           title: const Text('Enable traffic'),
           value: isTrafficEnabled,
         ),
+        const Divider(),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const Text(
+                'Map Color Scheme:',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                children: <Widget>[
+                  _buildColorSchemeChip(MapColorScheme.followSystem, 'Auto'),
+                  _buildColorSchemeChip(MapColorScheme.light, 'Light'),
+                  _buildColorSchemeChip(MapColorScheme.dark, 'Dark'),
+                ],
+              ),
+            ],
+          ),
+        ),
       ],
+    );
+  }
+
+  Widget _buildColorSchemeChip(MapColorScheme scheme, String label) {
+    final bool isSelected = mapColorScheme == scheme;
+    return FilterChip(
+      label: Text(label),
+      selected: isSelected,
+      onSelected: (bool selected) async {
+        if (selected) {
+          await setMapColorScheme(scheme);
+        }
+      },
     );
   }
 }

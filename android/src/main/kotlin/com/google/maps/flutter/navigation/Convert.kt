@@ -28,6 +28,7 @@ import com.google.android.gms.maps.model.Gap
 import com.google.android.gms.maps.model.JointType
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.MapColorScheme
 import com.google.android.gms.maps.model.PatternItem
 import com.google.android.gms.maps.model.Polygon
 import com.google.android.gms.maps.model.Polyline
@@ -41,6 +42,7 @@ import com.google.android.libraries.mapsplatform.turnbyturn.model.NavState
 import com.google.android.libraries.mapsplatform.turnbyturn.model.StepInfo
 import com.google.android.libraries.navigation.AlternateRoutesStrategy
 import com.google.android.libraries.navigation.DisplayOptions
+import com.google.android.libraries.navigation.ForceNightMode
 import com.google.android.libraries.navigation.NavigationRoadStretchRenderingData
 import com.google.android.libraries.navigation.NavigationTrafficData
 import com.google.android.libraries.navigation.Navigator
@@ -82,6 +84,7 @@ object Convert {
     options.minZoomPreference?.let { googleMapOptions.minZoomPreference(it.toFloat()) }
     options.maxZoomPreference?.let { googleMapOptions.maxZoomPreference(it.toFloat()) }
     googleMapOptions.zoomControlsEnabled(options.zoomControlsEnabled)
+    googleMapOptions.mapColorScheme(convertMapColorSchemeFromDto(options.mapColorScheme))
     options.mapId?.let { googleMapOptions.mapId(it) }
 
     return MapOptions(googleMapOptions, options.padding)
@@ -114,7 +117,8 @@ object Convert {
 
     return NavigationViewOptions(
       navigationUiEnabledPreference =
-        convertNavigationUIEnabledPreferenceFromDto(options.navigationUIEnabledPreference)
+        convertNavigationUIEnabledPreferenceFromDto(options.navigationUIEnabledPreference),
+      forceNightMode = convertNavigationForceNightModeFromDto(options.forceNightMode),
     )
   }
 
@@ -276,6 +280,62 @@ object Convert {
       else -> {
         MapTypeDto.NONE
       }
+    }
+  }
+
+  /**
+   * Converts pigeon [MapColorSchemeDto] to [MapColorScheme].
+   *
+   * @param mapColorScheme pigeon [MapColorSchemeDto].
+   * @return [MapColorScheme].
+   */
+  fun convertMapColorSchemeFromDto(mapColorScheme: MapColorSchemeDto): Int {
+    return when (mapColorScheme) {
+      MapColorSchemeDto.FOLLOW_SYSTEM -> MapColorScheme.FOLLOW_SYSTEM
+      MapColorSchemeDto.LIGHT -> MapColorScheme.LIGHT
+      MapColorSchemeDto.DARK -> MapColorScheme.DARK
+    }
+  }
+
+  /**
+   * Converts [MapColorScheme] to pigeon [MapColorSchemeDto].
+   *
+   * @param mapColorScheme [MapColorScheme].
+   * @return pigeon [MapColorSchemeDto].
+   */
+  fun convertMapColorSchemeToDto(mapColorScheme: Int): MapColorSchemeDto {
+    return when (mapColorScheme) {
+      MapColorScheme.LIGHT -> MapColorSchemeDto.LIGHT
+      MapColorScheme.DARK -> MapColorSchemeDto.DARK
+      else -> MapColorSchemeDto.FOLLOW_SYSTEM
+    }
+  }
+
+  /**
+   * Converts pigeon [NavigationForceNightModeDto] to [ForceNightMode].
+   *
+   * @param forceNightMode pigeon [NavigationForceNightModeDto].
+   * @return [ForceNightMode].
+   */
+  fun convertNavigationForceNightModeFromDto(forceNightMode: NavigationForceNightModeDto): Int {
+    return when (forceNightMode) {
+      NavigationForceNightModeDto.AUTO -> ForceNightMode.AUTO
+      NavigationForceNightModeDto.FORCE_DAY -> ForceNightMode.FORCE_DAY
+      NavigationForceNightModeDto.FORCE_NIGHT -> ForceNightMode.FORCE_NIGHT
+    }
+  }
+
+  /**
+   * Converts [ForceNightMode] to pigeon [NavigationForceNightModeDto].
+   *
+   * @param forceNightMode [ForceNightMode].
+   * @return pigeon [NavigationForceNightModeDto].
+   */
+  fun convertNavigationForceNightModeToDto(forceNightMode: Int): NavigationForceNightModeDto {
+    return when (forceNightMode) {
+      ForceNightMode.FORCE_DAY -> NavigationForceNightModeDto.FORCE_DAY
+      ForceNightMode.FORCE_NIGHT -> NavigationForceNightModeDto.FORCE_NIGHT
+      else -> NavigationForceNightModeDto.AUTO
     }
   }
 

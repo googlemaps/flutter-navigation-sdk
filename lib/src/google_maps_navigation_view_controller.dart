@@ -204,4 +204,45 @@ class GoogleNavigationViewController extends GoogleMapViewController {
       viewId: getViewId(),
     );
   }
+
+  /// Gets the current force night mode setting from the navigation view.
+  ///
+  /// Returns the current [NavigationForceNightMode] setting which controls
+  /// the navigation UI lighting mode.
+  Future<NavigationForceNightMode> getForceNightMode() async {
+    return GoogleMapsNavigationPlatform.instance.viewAPI.getForceNightMode(
+      viewId: getViewId(),
+    );
+  }
+
+  /// Sets the force night mode for the navigation UI and map tiles.
+  ///
+  /// **When navigation UI is enabled:** This setting controls both the
+  /// navigation UI elements (turn-by-turn guidance, route preview, etc.) and
+  /// the map tile colors. Using [GoogleMapViewController.setMapColorScheme]
+  /// will have no effect.
+  ///
+  /// **When navigation UI is disabled:** This setting has no effect. Use
+  /// [GoogleMapViewController.setMapColorScheme] to control the map tile colors
+  /// instead.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// // Force night mode (when navigation UI is enabled)
+  /// await controller.setForceNightMode(NavigationForceNightMode.forceNight);
+  ///
+  /// // Let SDK automatically determine day or night
+  /// await controller.setForceNightMode(NavigationForceNightMode.auto);
+  /// ```
+  ///
+  /// See also:
+  /// - [NavigationForceNightMode] for available options
+  /// - [GoogleMapViewController.setMapColorScheme] for controlling map tile
+  ///   colors when navigation UI is disabled
+  Future<void> setForceNightMode(NavigationForceNightMode forceNightMode) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI.setForceNightMode(
+      viewId: getViewId(),
+      forceNightMode: forceNightMode,
+    );
+  }
 }
