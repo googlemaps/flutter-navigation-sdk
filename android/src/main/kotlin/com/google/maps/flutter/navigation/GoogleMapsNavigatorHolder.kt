@@ -78,7 +78,7 @@ object GoogleMapsNavigatorHolder {
   }
 
   @Synchronized
-  fun registerTurnByTurnService(application: Application, numNextStepsToPreview: Int): Boolean {
+  fun registerTurnByTurnService(application: Application, numNextStepsToPreview: Int, type: @NavigationUpdatesOptions.GeneratedStepImagesType Int): Boolean {
     val nav = navigator ?: return false
 
     if (!turnByTurnServiceRegistered) {
@@ -90,7 +90,7 @@ object GoogleMapsNavigatorHolder {
       val options =
         NavigationUpdatesOptions.builder()
           .setNumNextStepsToPreview(numNextStepsToPreview)
-          .setGeneratedStepImagesType(GeneratedStepImagesType.NONE)
+          .setGeneratedStepImagesType(type)
           .setDisplayMetrics(displayMetrics)
           .build()
 
