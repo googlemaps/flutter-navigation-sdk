@@ -125,7 +125,7 @@ enum TrafficDelaySeverity {
 /// Remaining time or distance change event message.
 /// {@category Navigation}
 class RemainingTimeOrDistanceChangedEvent {
-  /// Initialize with remaining distance in meters, remaining time in seconds, and delay severity.
+  /// Initialize with remaining distance in meters, remaining time in seconds and delay severity.
   RemainingTimeOrDistanceChangedEvent({
     required this.remainingDistance,
     required this.remainingTime,
