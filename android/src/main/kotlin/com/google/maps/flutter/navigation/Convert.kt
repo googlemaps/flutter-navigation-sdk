@@ -1071,7 +1071,9 @@ object Convert {
     }
   }
 
-  fun generatedStepImagesTypeDtoToGeneratesStepImages(type: GeneratedStepImagesTypeDto?): @NavigationUpdatesOptions.GeneratedStepImagesType Int {
+  fun generatedStepImagesTypeDtoToGeneratesStepImages(
+    type: GeneratedStepImagesTypeDto?
+  ): @NavigationUpdatesOptions.GeneratedStepImagesType Int {
     return when (type) {
       GeneratedStepImagesTypeDto.NONE -> NavigationUpdatesOptions.GeneratedStepImagesType.NONE
       GeneratedStepImagesTypeDto.BITMAP -> NavigationUpdatesOptions.GeneratedStepImagesType.BITMAP

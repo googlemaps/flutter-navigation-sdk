@@ -255,12 +255,13 @@ class GoogleMapsNavigationSessionMessageHandler(
   }
 
   override fun enableTurnByTurnNavigationEvents(
-      numNextStepsToPreview: Long?,
-      type: GeneratedStepImagesTypeDto?
+    numNextStepsToPreview: Long?,
+    type: GeneratedStepImagesTypeDto?,
   ) {
     sessionManager.enableTurnByTurnNavigationEvents(
       numNextStepsToPreview?.toInt() ?: Int.MAX_VALUE,
-      Convert.generatedStepImagesTypeDtoToGeneratesStepImages(type))
+      Convert.generatedStepImagesTypeDtoToGeneratesStepImages(type),
+    )
   }
 
   override fun disableTurnByTurnNavigationEvents() {

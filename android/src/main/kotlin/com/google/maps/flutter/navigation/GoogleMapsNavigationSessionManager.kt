@@ -704,11 +704,18 @@ constructor(
   }
 
   @Throws(FlutterError::class)
-  fun enableTurnByTurnNavigationEvents(numNextStepsToPreview: Int, type: @NavigationUpdatesOptions.GeneratedStepImagesType Int) {
+  fun enableTurnByTurnNavigationEvents(
+    numNextStepsToPreview: Int,
+    type: @NavigationUpdatesOptions.GeneratedStepImagesType Int,
+  ) {
     if (navInfoObserver == null) {
       // Register the service centrally (if not already registered)
       val success =
-        GoogleMapsNavigatorHolder.registerTurnByTurnService(application, numNextStepsToPreview, type)
+        GoogleMapsNavigatorHolder.registerTurnByTurnService(
+          application,
+          numNextStepsToPreview,
+          type,
+        )
 
       if (!success) {
         throw FlutterError(

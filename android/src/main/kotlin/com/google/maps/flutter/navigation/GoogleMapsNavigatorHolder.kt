@@ -78,7 +78,11 @@ object GoogleMapsNavigatorHolder {
   }
 
   @Synchronized
-  fun registerTurnByTurnService(application: Application, numNextStepsToPreview: Int, type: @NavigationUpdatesOptions.GeneratedStepImagesType Int): Boolean {
+  fun registerTurnByTurnService(
+    application: Application,
+    numNextStepsToPreview: Int,
+    type: @NavigationUpdatesOptions.GeneratedStepImagesType Int,
+  ): Boolean {
     val nav = navigator ?: return false
 
     if (!turnByTurnServiceRegistered) {
