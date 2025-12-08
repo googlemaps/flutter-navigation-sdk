@@ -172,7 +172,7 @@ class GoogleMapViewController {
     );
   }
 
-  /// Is the recenter button enabled.
+  /// Checks if the recenter button is enabled.
   Future<bool> isRecenterButtonEnabled() {
     return GoogleMapsNavigationPlatform.instance.viewAPI
         .isRecenterButtonEnabled(viewId: _viewId);
@@ -184,6 +184,23 @@ class GoogleMapViewController {
   Future<void> setRecenterButtonEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance.viewAPI
         .setRecenterButtonEnabled(viewId: _viewId, enabled: enabled);
+  }
+
+  /// Checks if the 3D buildings layer is enabled.
+  Future<bool> isBuildingsEnabled() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI.isBuildingsEnabled(
+      viewId: _viewId,
+    );
+  }
+
+  /// Enable or disable the 3D buildings layer.
+  ///
+  /// By default, the 3D buildings layer is enabled.
+  Future<void> setBuildingsEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI.setBuildingsEnabled(
+      viewId: _viewId,
+      enabled: enabled,
+    );
   }
 
   /// Returns the minimum zoom level preference from the map view.

@@ -17,6 +17,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:meta/meta.dart';
 
 import '../../google_navigation_flutter.dart';
 import '../google_navigation_flutter_platform_interface.dart';
@@ -121,15 +122,15 @@ class MapViewAPIImpl {
       maxZoomPreference: mapOptions.maxZoomPreference,
       zoomControlsEnabled: mapOptions.zoomControlsEnabled,
       cameraTargetBounds: mapOptions.cameraTargetBounds?.toDto(),
-      padding:
-          mapOptions.padding != null
-              ? MapPaddingDto(
-                top: mapOptions.padding!.top.toInt(),
-                left: mapOptions.padding!.left.toInt(),
-                bottom: mapOptions.padding!.bottom.toInt(),
-                right: mapOptions.padding!.right.toInt(),
-              )
-              : null,
+      padding: mapOptions.padding != null
+          ? MapPaddingDto(
+              top: mapOptions.padding!.top.toInt(),
+              left: mapOptions.padding!.left.toInt(),
+              bottom: mapOptions.padding!.bottom.toInt(),
+              right: mapOptions.padding!.right.toInt(),
+            )
+          : null,
+      mapId: mapOptions.mapId,
     );
 
     // Initialize navigation view options if given
@@ -153,10 +154,9 @@ class MapViewAPIImpl {
 
     // Build ViewCreationMessage
     return ViewCreationOptionsDto(
-      mapViewType:
-          mapViewType == MapViewType.navigation
-              ? MapViewTypeDto.navigation
-              : MapViewTypeDto.map,
+      mapViewType: mapViewType == MapViewType.navigation
+          ? MapViewTypeDto.navigation
+          : MapViewTypeDto.map,
       mapOptions: mapOptionsMessage,
       navigationViewOptions: navigationOptionsMessage,
     );
@@ -426,10 +426,9 @@ class MapViewAPIImpl {
                 duration,
               )
               .then(
-                (bool success) =>
-                    onFinished != null && Platform.isAndroid
-                        ? onFinished(success)
-                        : null,
+                (bool success) => onFinished != null && Platform.isAndroid
+                    ? onFinished(success)
+                    : null,
               ),
         );
       case CameraUpdateType.latLng:
@@ -441,10 +440,9 @@ class MapViewAPIImpl {
                 duration,
               )
               .then(
-                (bool success) =>
-                    onFinished != null && Platform.isAndroid
-                        ? onFinished(success)
-                        : null,
+                (bool success) => onFinished != null && Platform.isAndroid
+                    ? onFinished(success)
+                    : null,
               ),
         );
       case CameraUpdateType.latLngBounds:
@@ -457,10 +455,9 @@ class MapViewAPIImpl {
                 duration,
               )
               .then(
-                (bool success) =>
-                    onFinished != null && Platform.isAndroid
-                        ? onFinished(success)
-                        : null,
+                (bool success) => onFinished != null && Platform.isAndroid
+                    ? onFinished(success)
+                    : null,
               ),
         );
       case CameraUpdateType.latLngZoom:
@@ -473,10 +470,9 @@ class MapViewAPIImpl {
                 duration,
               )
               .then(
-                (bool success) =>
-                    onFinished != null && Platform.isAndroid
-                        ? onFinished(success)
-                        : null,
+                (bool success) => onFinished != null && Platform.isAndroid
+                    ? onFinished(success)
+                    : null,
               ),
         );
       case CameraUpdateType.scrollBy:
@@ -489,10 +485,9 @@ class MapViewAPIImpl {
                 duration,
               )
               .then(
-                (bool success) =>
-                    onFinished != null && Platform.isAndroid
-                        ? onFinished(success)
-                        : null,
+                (bool success) => onFinished != null && Platform.isAndroid
+                    ? onFinished(success)
+                    : null,
               ),
         );
       case CameraUpdateType.zoomBy:
@@ -506,10 +501,9 @@ class MapViewAPIImpl {
                 duration,
               )
               .then(
-                (bool success) =>
-                    onFinished != null && Platform.isAndroid
-                        ? onFinished(success)
-                        : null,
+                (bool success) => onFinished != null && Platform.isAndroid
+                    ? onFinished(success)
+                    : null,
               ),
         );
       case CameraUpdateType.zoomTo:
@@ -517,10 +511,9 @@ class MapViewAPIImpl {
           _viewApi
               .animateCameraToZoom(viewId, cameraUpdate.zoom!, duration)
               .then(
-                (bool success) =>
-                    onFinished != null && Platform.isAndroid
-                        ? onFinished(success)
-                        : null,
+                (bool success) => onFinished != null && Platform.isAndroid
+                    ? onFinished(success)
+                    : null,
               ),
         );
     }
@@ -583,7 +576,7 @@ class MapViewAPIImpl {
     return _viewApi.followMyLocation(viewId, perspective.toDto(), zoomLevel);
   }
 
-  /// Is the navigation trip progress bar enabled.
+  /// Checks if the navigation trip progress bar is enabled.
   Future<bool> isNavigationTripProgressBarEnabled({required int viewId}) {
     return _viewApi.isNavigationTripProgressBarEnabled(viewId);
   }
@@ -596,7 +589,7 @@ class MapViewAPIImpl {
     return _viewApi.setNavigationTripProgressBarEnabled(viewId, enabled);
   }
 
-  /// Is the navigation header enabled.
+  /// Checks if the navigation header is enabled.
   Future<bool> isNavigationHeaderEnabled({required int viewId}) {
     return _viewApi.isNavigationHeaderEnabled(viewId);
   }
@@ -609,7 +602,7 @@ class MapViewAPIImpl {
     return _viewApi.setNavigationHeaderEnabled(viewId, enabled);
   }
 
-  /// Is the navigation footer enabled.
+  /// Checks if the navigation footer is enabled.
   Future<bool> isNavigationFooterEnabled({required int viewId}) {
     return _viewApi.isNavigationFooterEnabled(viewId);
   }
@@ -622,7 +615,7 @@ class MapViewAPIImpl {
     return _viewApi.setNavigationFooterEnabled(viewId, enabled);
   }
 
-  /// Is the recenter button enabled.
+  /// Checks if the recenter button is enabled.
   Future<bool> isRecenterButtonEnabled({required int viewId}) {
     return _viewApi.isRecenterButtonEnabled(viewId);
   }
@@ -635,7 +628,7 @@ class MapViewAPIImpl {
     return _viewApi.setRecenterButtonEnabled(viewId, enabled);
   }
 
-  /// Is the speed limit displayed.
+  /// Checks if the speed limit icon is displayed.
   Future<bool> isSpeedLimitIconEnabled({required int viewId}) {
     return _viewApi.isSpeedLimitIconEnabled(viewId);
   }
@@ -648,7 +641,7 @@ class MapViewAPIImpl {
     return _viewApi.setSpeedLimitIconEnabled(viewId, enabled);
   }
 
-  /// Is speedometer displayed.
+  /// Checks if the speedometer is displayed.
   Future<bool> isSpeedometerEnabled({required int viewId}) {
     return _viewApi.isSpeedometerEnabled(viewId);
   }
@@ -661,7 +654,7 @@ class MapViewAPIImpl {
     return _viewApi.setSpeedometerEnabled(viewId, enabled);
   }
 
-  /// Is incident cards displayed.
+  /// Checks if incident cards are displayed.
   Future<bool> isTrafficIncidentCardsEnabled({required int viewId}) {
     return _viewApi.isTrafficIncidentCardsEnabled(viewId);
   }
@@ -674,7 +667,7 @@ class MapViewAPIImpl {
     return _viewApi.setTrafficIncidentCardsEnabled(viewId, enabled);
   }
 
-  /// Is the report incident button displayed.
+  /// Checks if the report incident button displayed.
   Future<bool> isReportIncidentButtonEnabled({required int viewId}) {
     return _viewApi.isReportIncidentButtonEnabled(viewId);
   }
@@ -685,6 +678,31 @@ class MapViewAPIImpl {
     required bool enabled,
   }) {
     return _viewApi.setReportIncidentButtonEnabled(viewId, enabled);
+  }
+
+  /// Checks if incident reporting is currently available.
+  @experimental
+  Future<bool> isIncidentReportingAvailable({required int viewId}) {
+    return _viewApi.isIncidentReportingAvailable(viewId);
+  }
+
+  /// Presents a panel allowing users to report an incident.
+  @experimental
+  Future<void> showReportIncidentsPanel({required int viewId}) {
+    return _viewApi.showReportIncidentsPanel(viewId);
+  }
+
+  /// Checks if 3D buildings layer is enabled.
+  Future<bool> isBuildingsEnabled({required int viewId}) {
+    return _viewApi.isBuildingsEnabled(viewId);
+  }
+
+  /// Turns the 3D buildings layer on or off.
+  Future<void> setBuildingsEnabled({
+    required int viewId,
+    required bool enabled,
+  }) {
+    return _viewApi.setBuildingsEnabled(viewId, enabled);
   }
 
   /// Are the traffic prompts displayed.
@@ -700,7 +718,7 @@ class MapViewAPIImpl {
     return _viewApi.setTrafficPromptsEnabled(viewId, enabled);
   }
 
-  /// Is navigation UI enabled.
+  /// Checks if navigation UI is enabled.
   Future<bool> isNavigationUIEnabled({required int viewId}) {
     return _viewApi.isNavigationUIEnabled(viewId);
   }
@@ -788,17 +806,17 @@ class MapViewAPIImpl {
     required List<MarkerOptions> markerOptions,
   }) async {
     // Convert options to pigeon format
-    final List<MarkerOptionsDto> options =
-        markerOptions.map((MarkerOptions opt) => opt.toDto()).toList();
+    final List<MarkerOptionsDto> options = markerOptions
+        .map((MarkerOptions opt) => opt.toDto())
+        .toList();
 
     // Create marker objects with new ID's
-    final List<MarkerDto> markersToAdd =
-        options
-            .map(
-              (MarkerOptionsDto options) =>
-                  MarkerDto(markerId: _createMarkerId(), options: options),
-            )
-            .toList();
+    final List<MarkerDto> markersToAdd = options
+        .map(
+          (MarkerOptionsDto options) =>
+              MarkerDto(markerId: _createMarkerId(), options: options),
+        )
+        .toList();
 
     // Add markers to map
     final List<MarkerDto?> markersAdded = await _viewApi.addMarkers(
@@ -822,8 +840,9 @@ class MapViewAPIImpl {
     required List<Marker> markers,
   }) async {
     try {
-      final List<MarkerDto> markerDtos =
-          markers.map((Marker marker) => marker.toDto()).toList();
+      final List<MarkerDto> markerDtos = markers
+          .map((Marker marker) => marker.toDto())
+          .toList();
       final List<MarkerDto?> updatedMarkers = await _viewApi.updateMarkers(
         viewId,
         markerDtos,
@@ -847,8 +866,9 @@ class MapViewAPIImpl {
     required List<Marker> markers,
   }) async {
     try {
-      final List<MarkerDto> markerDtos =
-          markers.map((Marker marker) => marker.toDto()).toList();
+      final List<MarkerDto> markerDtos = markers
+          .map((Marker marker) => marker.toDto())
+          .toList();
       return await _viewApi.removeMarkers(viewId, markerDtos);
     } on PlatformException catch (error) {
       if (error.code == 'markerNotFound') {
@@ -885,17 +905,17 @@ class MapViewAPIImpl {
     required List<PolygonOptions> polygonOptions,
   }) async {
     // Convert options to pigeon format
-    final List<PolygonOptionsDto> options =
-        polygonOptions.map((PolygonOptions opt) => opt.toDto()).toList();
+    final List<PolygonOptionsDto> options = polygonOptions
+        .map((PolygonOptions opt) => opt.toDto())
+        .toList();
 
     // Create polygon objects with new ID's
-    final List<PolygonDto> polygonsToAdd =
-        options
-            .map(
-              (PolygonOptionsDto options) =>
-                  PolygonDto(polygonId: _createPolygonId(), options: options),
-            )
-            .toList();
+    final List<PolygonDto> polygonsToAdd = options
+        .map(
+          (PolygonOptionsDto options) =>
+              PolygonDto(polygonId: _createPolygonId(), options: options),
+        )
+        .toList();
 
     // Add polygons to map
     final List<PolygonDto?> polygonsAdded = await _viewApi.addPolygons(
@@ -919,8 +939,9 @@ class MapViewAPIImpl {
     required List<Polygon> polygons,
   }) async {
     try {
-      final List<PolygonDto> navigationViewPolygons =
-          polygons.map((Polygon polygon) => polygon.toDto()).toList();
+      final List<PolygonDto> navigationViewPolygons = polygons
+          .map((Polygon polygon) => polygon.toDto())
+          .toList();
       final List<PolygonDto?> updatedPolygons = await _viewApi.updatePolygons(
         viewId,
         navigationViewPolygons,
@@ -944,8 +965,9 @@ class MapViewAPIImpl {
     required List<Polygon> polygons,
   }) async {
     try {
-      final List<PolygonDto> navigationViewPolygons =
-          polygons.map((Polygon polygon) => polygon.toDto()).toList();
+      final List<PolygonDto> navigationViewPolygons = polygons
+          .map((Polygon polygon) => polygon.toDto())
+          .toList();
       return await _viewApi.removePolygons(viewId, navigationViewPolygons);
     } on PlatformException catch (error) {
       if (error.code == 'polygonNotFound') {
@@ -977,19 +999,17 @@ class MapViewAPIImpl {
     required List<PolylineOptions> polylineOptions,
   }) async {
     // Convert options to pigeon format
-    final List<PolylineOptionsDto> options =
-        polylineOptions.map((PolylineOptions opt) => opt.toDto()).toList();
+    final List<PolylineOptionsDto> options = polylineOptions
+        .map((PolylineOptions opt) => opt.toDto())
+        .toList();
 
     // Create polyline objects with new ID's
-    final List<PolylineDto> polylinesToAdd =
-        options
-            .map(
-              (PolylineOptionsDto options) => PolylineDto(
-                polylineId: _createPolylineId(),
-                options: options,
-              ),
-            )
-            .toList();
+    final List<PolylineDto> polylinesToAdd = options
+        .map(
+          (PolylineOptionsDto options) =>
+              PolylineDto(polylineId: _createPolylineId(), options: options),
+        )
+        .toList();
 
     // Add polylines to map
     final List<PolylineDto?> polylinesAdded = await _viewApi.addPolylines(
@@ -1013,10 +1033,9 @@ class MapViewAPIImpl {
     required List<Polyline> polylines,
   }) async {
     try {
-      final List<PolylineDto> navigationViewPolylines =
-          polylines
-              .map((Polyline polyline) => polyline.toNavigationViewPolyline())
-              .toList();
+      final List<PolylineDto> navigationViewPolylines = polylines
+          .map((Polyline polyline) => polyline.toNavigationViewPolyline())
+          .toList();
       final List<PolylineDto?> updatedPolylines = await _viewApi
           .updatePolylines(viewId, navigationViewPolylines);
       return updatedPolylines
@@ -1038,10 +1057,9 @@ class MapViewAPIImpl {
     required List<Polyline> polylines,
   }) async {
     try {
-      final List<PolylineDto> navigationViewPolylines =
-          polylines
-              .map((Polyline polyline) => polyline.toNavigationViewPolyline())
-              .toList();
+      final List<PolylineDto> navigationViewPolylines = polylines
+          .map((Polyline polyline) => polyline.toNavigationViewPolyline())
+          .toList();
       return await _viewApi.removePolylines(viewId, navigationViewPolylines);
     } on PlatformException catch (error) {
       if (error.code == 'polylineNotFound') {
@@ -1073,17 +1091,17 @@ class MapViewAPIImpl {
     required List<CircleOptions> options,
   }) async {
     // Convert options to pigeon format
-    final List<CircleOptionsDto> optionsDto =
-        options.map((CircleOptions opt) => opt.toDto()).toList();
+    final List<CircleOptionsDto> optionsDto = options
+        .map((CircleOptions opt) => opt.toDto())
+        .toList();
 
     // Create circle objects with new ID's
-    final List<CircleDto> circlesToAdd =
-        optionsDto
-            .map(
-              (CircleOptionsDto options) =>
-                  CircleDto(circleId: _createCircleId(), options: options),
-            )
-            .toList();
+    final List<CircleDto> circlesToAdd = optionsDto
+        .map(
+          (CircleOptionsDto options) =>
+              CircleDto(circleId: _createCircleId(), options: options),
+        )
+        .toList();
 
     // Add circles to map
     final List<CircleDto?> circlesAdded = await _viewApi.addCircles(
@@ -1107,8 +1125,9 @@ class MapViewAPIImpl {
     required List<Circle> circles,
   }) async {
     try {
-      final List<CircleDto> navigationViewCircles =
-          circles.map((Circle circle) => circle.toDto()).toList();
+      final List<CircleDto> navigationViewCircles = circles
+          .map((Circle circle) => circle.toDto())
+          .toList();
       final List<CircleDto?> updatedCircles = await _viewApi.updateCircles(
         viewId,
         navigationViewCircles,
@@ -1133,8 +1152,9 @@ class MapViewAPIImpl {
     required List<Circle> circles,
   }) async {
     try {
-      final List<CircleDto> navigationViewCircles =
-          circles.map((Circle circle) => circle.toDto()).toList();
+      final List<CircleDto> navigationViewCircles = circles
+          .map((Circle circle) => circle.toDto())
+          .toList();
       return await _viewApi.removeCircles(viewId, navigationViewCircles);
     } on PlatformException catch (error) {
       if (error.code == 'circleNotFound') {
@@ -1222,6 +1242,13 @@ class MapViewAPIImpl {
   Stream<NavigationUIEnabledChangedEvent>
   getNavigationUIEnabledChangedEventStream({required int viewId}) {
     return _unwrapEventStream<NavigationUIEnabledChangedEvent>(viewId: viewId);
+  }
+
+  /// Get prompt visibility changed event stream from the navigation view.
+  Stream<PromptVisibilityChangedEvent> getPromptVisibilityChangedEventStream({
+    required int viewId,
+  }) {
+    return _unwrapEventStream<PromptVisibilityChangedEvent>(viewId: viewId);
   }
 
   /// Get navigation view my location clicked event stream from the navigation view.
@@ -1328,6 +1355,13 @@ class ViewEventApiImpl implements ViewEventApi {
   void onNavigationUIEnabledChanged(int viewId, bool enabled) {
     _viewEventStreamController.add(
       _ViewIdEventWrapper(viewId, NavigationUIEnabledChangedEvent(enabled)),
+    );
+  }
+
+  @override
+  void onPromptVisibilityChanged(int viewId, bool promptVisible) {
+    _viewEventStreamController.add(
+      _ViewIdEventWrapper(viewId, PromptVisibilityChangedEvent(promptVisible)),
     );
   }
 

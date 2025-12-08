@@ -158,6 +158,18 @@ class _ViewInitializationPageState
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     children: <Widget>[
+                      ListTile(
+                        title: const Text('Map ID'),
+                        subtitle: Text(MapIdManager.instance.mapIdDisplay),
+                        trailing: ElevatedButton(
+                          onPressed:
+                              () => showMapIdDialog(
+                                context,
+                                () => setState(() {}),
+                              ),
+                          child: const Text('Set'),
+                        ),
+                      ),
                       ExampleDropdownButton<MapType>(
                         title: 'Map Type',
                         value: _initialMapType,
@@ -474,6 +486,7 @@ class _InitializedViewPage extends StatelessWidget {
         initialPadding: initialPadding,
         initialNavigationUIEnabledPreference:
             initialNavigationUIEnabledPreference,
+        mapId: MapIdManager.instance.mapId,
       ),
     );
   }

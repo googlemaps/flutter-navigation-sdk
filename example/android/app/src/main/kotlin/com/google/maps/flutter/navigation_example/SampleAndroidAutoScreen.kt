@@ -59,11 +59,11 @@ class SampleAndroidAutoScreen(carContext: CarContext): AndroidAutoBaseScreen(car
          * Converts data received from the Navigation data feed into Android-Auto compatible data
          * structures.
          */
-        val currentStep: Step = buildStepFromStepInfo(navInfo.currentStep)
+        val currentStep: Step = buildStepFromStepInfo(navInfo.currentStep!!)
         val distanceToStep =
             Distance.create(
                 java.lang.Double.max(
-                    navInfo.distanceToCurrentStepMeters.toDouble(),
+                    navInfo.distanceToCurrentStepMeters?.toDouble() ?: 0.0,
                     0.0
                 ), Distance.UNIT_METERS
             )
@@ -78,14 +78,14 @@ class SampleAndroidAutoScreen(carContext: CarContext): AndroidAutoBaseScreen(car
         val maneuver: Int = ManeuverConverter.getAndroidAutoManeuverType(stepInfo.maneuver)
         val maneuverBuilder = Maneuver.Builder(maneuver)
         if (stepInfo.maneuverBitmap != null) {
-            val maneuverIcon = IconCompat.createWithBitmap(stepInfo.maneuverBitmap)
+            val maneuverIcon = IconCompat.createWithBitmap(stepInfo.maneuverBitmap!!)
             val maneuverCarIcon = CarIcon.Builder(maneuverIcon).build()
             maneuverBuilder.setIcon(maneuverCarIcon)
         }
         val stepBuilder =
             Step.Builder()
-                .setRoad(stepInfo.fullRoadName)
-                .setCue(stepInfo.fullInstructionText)
+                .setRoad(stepInfo.fullRoadName ?: "")
+                .setCue(stepInfo.fullInstructionText ?: "")
                 .setManeuver(maneuverBuilder.build())
         return stepBuilder.build()
     }

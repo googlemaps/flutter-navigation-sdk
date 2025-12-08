@@ -28,6 +28,11 @@ void main() {
   patrol('Test terms and conditions (TOS) dialog acceptance', (
     PatrolIntegrationTester $,
   ) async {
+    if (!Platform.isIOS) {
+      // Be sure location is enabled.
+      await $.native.enableLocation();
+    }
+
     // Grant the location permission.
     await checkLocationDialogAcceptance($);
 

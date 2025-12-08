@@ -32,6 +32,9 @@ void main() {
     /// For testing NavigationUIEnabledChanged
     bool navigationUIisEnabled = false;
 
+    /// For testing PromptVisibilityChanged
+    bool? promptVisible;
+
     await checkLocationDialogAndTosAcceptance($);
 
     /// The events are not tested because there's no reliable way to trigger them currently.
@@ -39,6 +42,12 @@ void main() {
       NavigationViewRecenterButtonClickedEvent event,
     ) {
       $.log('Re-center button clicked event: $event.');
+    }
+
+    /// For testing PromptVisibilityChanged
+    void onPromptVisibilityChanged(bool promptVisible_) {
+      $.log('Prompt visibility changed event: $promptVisible_.');
+      promptVisible = promptVisible_;
     }
 
     /// Display navigation view.
@@ -54,6 +63,7 @@ void main() {
           navigationUIisEnabled = isEnabled;
         },
         onRecenterButtonClicked: onRecenterButtonClicked,
+        onPromptVisibilityChanged: onPromptVisibilityChanged,
       ),
     );
 
@@ -254,6 +264,53 @@ void main() {
         isEnabled,
         result,
         reason: buildReasonForToggle('TrafficPromptsEnabled', result),
+      );
+    }
+
+    /// Test enabling and disabling the 3D buildings layer.
+    for (final bool result in results) {
+      await viewController.setBuildingsEnabled(result);
+      final bool isEnabled = await viewController.isBuildingsEnabled();
+      expect(
+        isEnabled,
+        result,
+        reason: buildReasonForToggle('BuildingsEnabled', result),
+      );
+    }
+
+    /// Test incident reporting availability.
+    final bool isIncidentReportingAvailable =
+        await viewController.isIncidentReportingAvailable();
+    $.log('Incident reporting available: $isIncidentReportingAvailable');
+    expect(
+      isIncidentReportingAvailable,
+      true,
+      reason:
+          'Incident reporting should be available during navigation on tests.',
+    );
+
+    /// Test prompt visibility and incident reporting panel.
+    if (isIncidentReportingAvailable) {
+      // Reset prompt visibility state
+      promptVisible = null;
+
+      $.log('Opening incident reporting panel...');
+      await viewController.showReportIncidentsPanel();
+      await $.pumpAndSettle(timeout: const Duration(seconds: 2));
+
+      /// Check if prompt visibility event was triggered
+      waitForValueMatchingPredicate<bool?>(
+        $,
+        () async => promptVisible,
+        (bool? value) => value == true,
+        maxTries: 50, // Wait up to 5 seconds (50 * 100ms)
+      );
+
+      expect(
+        promptVisible,
+        true,
+        reason:
+            'Prompt visibility should be true when incident panel is shown.',
       );
     }
 

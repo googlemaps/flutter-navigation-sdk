@@ -39,7 +39,7 @@ fun findDartDefineValue(key: String): String? {
 android {
     namespace = "com.google.maps.flutter.navigation_example"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "27.0.12077973"
+    ndkVersion = "28.2.13676358"
 
     compileOptions {        
         // Flag to enable support for the new language APIs
@@ -53,6 +53,12 @@ android {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
+    // Set this to the languages you actually use, otherwise you'll include resource strings
+    // for all languages supported by the Navigation SDK.
+    androidResources {
+        localeFilters.add("en")
+    }
+
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.google.maps.flutter.navigation_example"
@@ -63,8 +69,6 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
 
-        // Set this to the languages you actually use, otherwise you'll include resource strings
-        // for all languages supported by the Navigation SDK.
         multiDexEnabled = true
 
         testInstrumentationRunner = "pl.leancode.patrol.PatrolJUnitRunner"
@@ -72,8 +76,6 @@ android {
         // TODO(jokerttu): Upgrade integration tests to initialize the application state for each
         // test case and uncomment the following line to clear the package data before running tests.
         // testInstrumentationRunnerArguments["clearPackageData"] = "true"
-
-        resourceConfigurations.add("en")
 
         // Extract MAPS_API_KEY from Dart defines or environment variables
         // and use it as manifest placeholder.
@@ -99,9 +101,9 @@ flutter {
 }
 
 dependencies {
-    implementation("androidx.car.app:app:1.4.0")
-    implementation("androidx.car.app:app-projected:1.4.0")
-    implementation("com.google.android.libraries.navigation:navigation:6.2.2")
+    implementation("androidx.car.app:app:1.7.0")
+    implementation("androidx.car.app:app-projected:1.7.0")
+    implementation("com.google.android.libraries.navigation:navigation:7.2.0")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
     androidTestUtil("androidx.test:orchestrator:1.5.1")
 }

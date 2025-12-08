@@ -248,8 +248,8 @@ class NavigationSessionAPIImpl {
   @Deprecated('Use setDestinations with an updated list of waypoints instead')
   Future<NavigationWaypoint?> continueToNextDestination() async {
     try {
-      final NavigationWaypointDto? waypointDto =
-          await _sessionApi.continueToNextDestination();
+      final NavigationWaypointDto? waypointDto = await _sessionApi
+          .continueToNextDestination();
       if (waypointDto == null) {
         return null;
       }
@@ -267,8 +267,8 @@ class NavigationSessionAPIImpl {
   /// Gets current time and distance left.
   Future<NavigationTimeAndDistance> getCurrentTimeAndDistance() async {
     try {
-      final NavigationTimeAndDistanceDto timeAndDistance =
-          await _sessionApi.getCurrentTimeAndDistance();
+      final NavigationTimeAndDistanceDto timeAndDistance = await _sessionApi
+          .getCurrentTimeAndDistance();
       return timeAndDistance.toNavigationTimeAndDistance();
     } on PlatformException catch (e) {
       switch (e.code) {
@@ -535,8 +535,8 @@ class NavigationSessionAPIImpl {
   /// Get route segments.
   Future<List<RouteSegment>> getRouteSegments() async {
     try {
-      final List<RouteSegmentDto?> routeSegments =
-          await _sessionApi.getRouteSegments();
+      final List<RouteSegmentDto?> routeSegments = await _sessionApi
+          .getRouteSegments();
       return routeSegments
           .where((RouteSegmentDto? p) => p != null)
           .cast<RouteSegmentDto>()
@@ -555,8 +555,8 @@ class NavigationSessionAPIImpl {
   /// Get traveled route.
   Future<List<LatLng>> getTraveledRoute() async {
     try {
-      final List<LatLngDto?> traveledRoute =
-          await _sessionApi.getTraveledRoute();
+      final List<LatLngDto?> traveledRoute = await _sessionApi
+          .getTraveledRoute();
       return traveledRoute
           .where((LatLngDto? p) => p != null)
           .cast<LatLngDto>()
@@ -578,8 +578,8 @@ class NavigationSessionAPIImpl {
   /// Get current route segment.
   Future<RouteSegment?> getCurrentRouteSegment() async {
     try {
-      final RouteSegmentDto? currentRouteSegment =
-          await _sessionApi.getCurrentRouteSegment();
+      final RouteSegmentDto? currentRouteSegment = await _sessionApi
+          .getCurrentRouteSegment();
       return currentRouteSegment?.toRouteSegment();
     } on PlatformException catch (e) {
       switch (e.code) {
@@ -626,10 +626,19 @@ class NavigationSessionAPIImpl {
   }
 
   /// Get navigation on GPS availability update event stream from the navigation session.
+  @Deprecated('Use getNavigationOnGpsAvailabilityChangeEventStream instead')
   Stream<GpsAvailabilityUpdatedEvent>
   getNavigationOnGpsAvailabilityUpdateEventStream() {
     return _sessionEventStreamController.stream
         .whereType<GpsAvailabilityUpdatedEvent>();
+  }
+
+  /// Get navigation on GPS availability change event stream from the navigation session.
+  /// Android only.
+  Stream<GpsAvailabilityChangeEvent>
+  getNavigationOnGpsAvailabilityChangeEventStream() {
+    return _sessionEventStreamController.stream
+        .whereType<GpsAvailabilityChangeEvent>();
   }
 
   /// Get navigation traffic updated event stream from the navigation session.
@@ -708,6 +717,16 @@ class NavigationSessionEventApiImpl implements NavigationSessionEventApi {
   void onGpsAvailabilityUpdate(bool available) {
     sessionEventStreamController.add(
       GpsAvailabilityUpdatedEvent(available: available),
+    );
+  }
+
+  @override
+  void onGpsAvailabilityChange(GpsAvailabilityChangeEventDto event) {
+    sessionEventStreamController.add(
+      GpsAvailabilityChangeEvent(
+        isGpsLost: event.isGpsLost,
+        isGpsValidForNavigation: event.isGpsValidForNavigation,
+      ),
     );
   }
 

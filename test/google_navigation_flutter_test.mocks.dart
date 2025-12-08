@@ -742,6 +742,34 @@ class MockTestMapViewApi extends _i1.Mock implements _i3.TestMapViewApi {
       );
 
   @override
+  bool isIncidentReportingAvailable(int? viewId) =>
+      (super.noSuchMethod(
+            Invocation.method(#isIncidentReportingAvailable, [viewId]),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  void showReportIncidentsPanel(int? viewId) => super.noSuchMethod(
+    Invocation.method(#showReportIncidentsPanel, [viewId]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  bool isBuildingsEnabled(int? viewId) =>
+      (super.noSuchMethod(
+            Invocation.method(#isBuildingsEnabled, [viewId]),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  void setBuildingsEnabled(int? viewId, bool? enabled) => super.noSuchMethod(
+    Invocation.method(#setBuildingsEnabled, [viewId, enabled]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
   _i2.CameraPositionDto getCameraPosition(int? viewId) =>
       (super.noSuchMethod(
             Invocation.method(#getCameraPosition, [viewId]),

@@ -183,18 +183,17 @@ extension ConvertRouteSegmentTrafficDataDto on RouteSegmentTrafficDataDto {
               return RouteSegmentTrafficDataStatus.unavailable;
           }
         }(),
-        roadStretchRenderingDataList:
-            roadStretchRenderingDataList
-                .where(
-                  (RouteSegmentTrafficDataRoadStretchRenderingDataDto? d) =>
-                      d != null,
-                )
-                .cast<RouteSegmentTrafficDataRoadStretchRenderingDataDto>()
-                .map(
-                  (RouteSegmentTrafficDataRoadStretchRenderingDataDto d) =>
-                      d.toRouteSegmentTrafficDataRoadStretchRenderingData(),
-                )
-                .toList(),
+        roadStretchRenderingDataList: roadStretchRenderingDataList
+            .where(
+              (RouteSegmentTrafficDataRoadStretchRenderingDataDto? d) =>
+                  d != null,
+            )
+            .cast<RouteSegmentTrafficDataRoadStretchRenderingDataDto>()
+            .map(
+              (RouteSegmentTrafficDataRoadStretchRenderingDataDto d) =>
+                  d.toRouteSegmentTrafficDataRoadStretchRenderingData(),
+            )
+            .toList(),
       );
 }
 
@@ -208,15 +207,13 @@ extension ConvertRouteSegmentDto on RouteSegmentDto {
       longitude: destinationLatLng.longitude,
     ),
     destinationWaypoint: destinationWaypoint?.toNavigationWaypoint(),
-    latLngs:
-        latLngs
-            ?.where((LatLngDto? p) => p != null)
-            .cast<LatLngDto>()
-            .map(
-              (LatLngDto p) =>
-                  LatLng(latitude: p.latitude, longitude: p.longitude),
-            )
-            .toList(),
+    latLngs: latLngs
+        ?.where((LatLngDto? p) => p != null)
+        .cast<LatLngDto>()
+        .map(
+          (LatLngDto p) => LatLng(latitude: p.latitude, longitude: p.longitude),
+        )
+        .toList(),
     trafficData: trafficData?.toRouteSegmentTrafficData(),
   );
 }

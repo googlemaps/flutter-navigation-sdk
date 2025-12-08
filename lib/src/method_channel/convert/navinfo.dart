@@ -21,11 +21,10 @@ extension ConvertNavInfoDto on NavInfoDto {
   /// Converts [NavInfoDto] to [NavInfo]
   NavInfo toNavInfo() => NavInfo(
     currentStep: currentStep?.toStepInfo(),
-    remainingSteps:
-        remainingSteps
-            .whereType<StepInfoDto>()
-            .map<StepInfo>((StepInfoDto stepinfo) => stepinfo.toStepInfo())
-            .toList(),
+    remainingSteps: remainingSteps
+        .whereType<StepInfoDto>()
+        .map<StepInfo>((StepInfoDto stepinfo) => stepinfo.toStepInfo())
+        .toList(),
     routeChanged: routeChanged,
     distanceToCurrentStepMeters: distanceToCurrentStepMeters,
     distanceToNextDestinationMeters: distanceToNextDestinationMeters,
@@ -51,11 +50,7 @@ extension ConvertStepInfoDto on StepInfoDto {
     simpleRoadName: simpleRoadName,
     roundaboutTurnNumber: roundaboutTurnNumber,
     stepNumber: stepNumber,
-    lanes:
-        lanes
-            .whereType<LaneDto>()
-            .map<Lane>((LaneDto lane) => lane.toLane())
-            .toList(),
+    lanes: lanes?.map<Lane>((LaneDto lane) => lane.toLane()).toList(),
     maneuver: maneuver.toManeuver(),
   );
 }
@@ -241,14 +236,12 @@ extension ConvertManeuverDto on ManeuverDto {
 extension ConvertLaneDto on LaneDto {
   /// Converts [LaneDto] to [Lane]
   Lane toLane() => Lane(
-    laneDirections:
-        laneDirections
-            .whereType<LaneDirectionDto>()
-            .map<LaneDirection>(
-              (LaneDirectionDto laneDirection) =>
-                  laneDirection.toLaneDirection(),
-            )
-            .toList(),
+    laneDirections: laneDirections
+        .whereType<LaneDirectionDto>()
+        .map<LaneDirection>(
+          (LaneDirectionDto laneDirection) => laneDirection.toLaneDirection(),
+        )
+        .toList(),
   );
 }
 

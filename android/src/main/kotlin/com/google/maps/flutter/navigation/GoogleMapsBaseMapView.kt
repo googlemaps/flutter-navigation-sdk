@@ -530,13 +530,23 @@ abstract class GoogleMapsBaseMapView(
     return getMap().isTrafficEnabled
   }
 
+  fun isBuildingsEnabled(): Boolean {
+    return getMap().isBuildingsEnabled
+  }
+
+  fun setBuildingsEnabled(enabled: Boolean) {
+    getMap().isBuildingsEnabled = enabled
+  }
+
   fun getMyLocation(): Location? {
     // Remove this functionality and either guide users to use separate flutter
     // library for geolocation or implement separate method under
     // [GoogleMapsNavigationSessionManager] to fetch the location
     // using the [FusedLocationProviderApi].
-    @Suppress("DEPRECATION")
-    return getMap().myLocation
+    @Suppress("DEPRECATION") val location = getMap().myLocation
+    // Return null explicitly if location is not available to avoid NullPointerException
+    // when the platform channel tries to serialize the Location object
+    return if (location != null && location.provider != null) location else null
   }
 
   fun getCameraPosition(): CameraPosition {

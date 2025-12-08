@@ -153,8 +153,9 @@ internal class ConvertTest {
       )
 
     val convertedNone = Convert.convertDisplayOptionsFromDto(none)
-    assertEquals(false, convertedNone.showStopSigns)
-    assertEquals(false, convertedNone.showTrafficLights)
+    // When not specified, SDK defaults are used: stop signs and traffic lights are shown
+    assertEquals(true, convertedNone.showStopSigns)
+    assertEquals(true, convertedNone.showTrafficLights)
     assertEquals(false, convertedNone.hideDestinationMarkers)
 
     val convertedAllFalse = Convert.convertDisplayOptionsFromDto(allFalse)

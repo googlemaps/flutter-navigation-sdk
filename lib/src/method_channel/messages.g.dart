@@ -432,6 +432,7 @@ class MapOptionsDto {
     required this.zoomControlsEnabled,
     this.cameraTargetBounds,
     this.padding,
+    this.mapId,
   });
 
   /// The initial positioning of the camera in the map view.
@@ -477,6 +478,10 @@ class MapOptionsDto {
   /// Specifies the padding for the map.
   MapPaddingDto? padding;
 
+  /// The map ID for advanced map options eg. cloud-based map styling.
+  /// This value can only be set on map initialization and cannot be changed afterwards.
+  String? mapId;
+
   List<Object?> _toList() {
     return <Object?>[
       cameraPosition,
@@ -493,6 +498,7 @@ class MapOptionsDto {
       zoomControlsEnabled,
       cameraTargetBounds,
       padding,
+      mapId,
     ];
   }
 
@@ -517,6 +523,7 @@ class MapOptionsDto {
       zoomControlsEnabled: result[11]! as bool,
       cameraTargetBounds: result[12] as LatLngBoundsDto?,
       padding: result[13] as MapPaddingDto?,
+      mapId: result[14] as String?,
     );
   }
 
@@ -1706,8 +1713,10 @@ class NavigationDisplayOptionsDto {
 
   bool? showDestinationMarkers;
 
+  /// Deprecated: This option now defaults to true.
   bool? showStopSigns;
 
+  /// Deprecated: This option now defaults to true.
   bool? showTrafficLights;
 
   List<Object?> _toList() {
@@ -2060,6 +2069,50 @@ class SpeedingUpdatedEventDto {
   int get hashCode => Object.hashAll(_toList());
 }
 
+class GpsAvailabilityChangeEventDto {
+  GpsAvailabilityChangeEventDto({
+    required this.isGpsLost,
+    required this.isGpsValidForNavigation,
+  });
+
+  bool isGpsLost;
+
+  bool isGpsValidForNavigation;
+
+  List<Object?> _toList() {
+    return <Object?>[isGpsLost, isGpsValidForNavigation];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static GpsAvailabilityChangeEventDto decode(Object result) {
+    result as List<Object?>;
+    return GpsAvailabilityChangeEventDto(
+      isGpsLost: result[0]! as bool,
+      isGpsValidForNavigation: result[1]! as bool,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! GpsAvailabilityChangeEventDto ||
+        other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(encode(), other.encode());
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
 class SpeedAlertOptionsThresholdPercentageDto {
   SpeedAlertOptionsThresholdPercentageDto({
     required this.percentage,
@@ -2229,9 +2282,8 @@ class RouteSegmentTrafficDataDto {
     result as List<Object?>;
     return RouteSegmentTrafficDataDto(
       status: result[0]! as RouteSegmentTrafficDataStatusDto,
-      roadStretchRenderingDataList:
-          (result[1] as List<Object?>?)!
-              .cast<RouteSegmentTrafficDataRoadStretchRenderingDataDto?>(),
+      roadStretchRenderingDataList: (result[1] as List<Object?>?)!
+          .cast<RouteSegmentTrafficDataRoadStretchRenderingDataDto?>(),
     );
   }
 
@@ -2394,24 +2446,24 @@ class LaneDto {
 /// Information about a single step along a navigation route.
 class StepInfoDto {
   StepInfoDto({
-    required this.distanceFromPrevStepMeters,
-    required this.timeFromPrevStepSeconds,
+    this.distanceFromPrevStepMeters,
+    this.timeFromPrevStepSeconds,
     required this.drivingSide,
     this.exitNumber,
-    required this.fullInstructions,
-    required this.fullRoadName,
-    required this.simpleRoadName,
-    required this.roundaboutTurnNumber,
-    required this.lanes,
+    this.fullInstructions,
+    this.fullRoadName,
+    this.simpleRoadName,
+    this.roundaboutTurnNumber,
+    this.lanes,
     required this.maneuver,
-    required this.stepNumber,
+    this.stepNumber,
   });
 
-  /// Distance in meters from the previous step to this step.
-  int distanceFromPrevStepMeters;
+  /// Distance in meters from the previous step to this step if available, otherwise null.
+  int? distanceFromPrevStepMeters;
 
-  /// Time in seconds from the previous step to this step.
-  int timeFromPrevStepSeconds;
+  /// Time in seconds from the previous step to this step if available, otherwise null.
+  int? timeFromPrevStepSeconds;
 
   /// Whether this step is on a drive-on-right or drive-on-left route.
   DrivingSideDto drivingSide;
@@ -2419,27 +2471,27 @@ class StepInfoDto {
   /// The exit number if it exists.
   String? exitNumber;
 
-  /// The full text of the instruction for this step.
-  String fullInstructions;
+  /// The full text of the instruction for this step if available, otherwise null.
+  String? fullInstructions;
 
-  /// The full road name for this step.
-  String fullRoadName;
+  /// The full road name for this step if available, otherwise null.
+  String? fullRoadName;
 
-  /// The simplified version of the road name.
-  String simpleRoadName;
+  /// The simplified version of the road name if available, otherwise null.
+  String? simpleRoadName;
 
   /// The counted number of the exit to take relative to the location where the
-  /// roundabout was entered.
-  int roundaboutTurnNumber;
+  /// roundabout was entered if available, otherwise null.
+  int? roundaboutTurnNumber;
 
-  /// The list of available lanes at the end of this route step.
-  List<LaneDto?> lanes;
+  /// The list of available lanes at the end of this route step if available, otherwise null.
+  List<LaneDto>? lanes;
 
   /// The maneuver for this step.
   ManeuverDto maneuver;
 
-  /// The index of the step in the list of all steps in the route.
-  int stepNumber;
+  /// The index of the step in the list of all steps in the route if available, otherwise null.
+  int? stepNumber;
 
   List<Object?> _toList() {
     return <Object?>[
@@ -2464,17 +2516,17 @@ class StepInfoDto {
   static StepInfoDto decode(Object result) {
     result as List<Object?>;
     return StepInfoDto(
-      distanceFromPrevStepMeters: result[0]! as int,
-      timeFromPrevStepSeconds: result[1]! as int,
+      distanceFromPrevStepMeters: result[0] as int?,
+      timeFromPrevStepSeconds: result[1] as int?,
       drivingSide: result[2]! as DrivingSideDto,
       exitNumber: result[3] as String?,
-      fullInstructions: result[4]! as String,
-      fullRoadName: result[5]! as String,
-      simpleRoadName: result[6]! as String,
-      roundaboutTurnNumber: result[7]! as int,
-      lanes: (result[8] as List<Object?>?)!.cast<LaneDto?>(),
+      fullInstructions: result[4] as String?,
+      fullRoadName: result[5] as String?,
+      simpleRoadName: result[6] as String?,
+      roundaboutTurnNumber: result[7] as int?,
+      lanes: (result[8] as List<Object?>?)?.cast<LaneDto>(),
       maneuver: result[9]! as ManeuverDto,
-      stepNumber: result[10]! as int,
+      stepNumber: result[10] as int?,
     );
   }
 
@@ -2771,32 +2823,35 @@ class _PigeonCodec extends StandardMessageCodec {
     } else if (value is SpeedingUpdatedEventDto) {
       buffer.putUint8(182);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
+    } else if (value is GpsAvailabilityChangeEventDto) {
       buffer.putUint8(183);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsDto) {
+    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
       buffer.putUint8(184);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
+    } else if (value is SpeedAlertOptionsDto) {
       buffer.putUint8(185);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataDto) {
+    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
       buffer.putUint8(186);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentDto) {
+    } else if (value is RouteSegmentTrafficDataDto) {
       buffer.putUint8(187);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDirectionDto) {
+    } else if (value is RouteSegmentDto) {
       buffer.putUint8(188);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDto) {
+    } else if (value is LaneDirectionDto) {
       buffer.putUint8(189);
       writeValue(buffer, value.encode());
-    } else if (value is StepInfoDto) {
+    } else if (value is LaneDto) {
       buffer.putUint8(190);
       writeValue(buffer, value.encode());
-    } else if (value is NavInfoDto) {
+    } else if (value is StepInfoDto) {
       buffer.putUint8(191);
+      writeValue(buffer, value.encode());
+    } else if (value is NavInfoDto) {
+      buffer.putUint8(192);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -2866,7 +2921,7 @@ class _PigeonCodec extends StandardMessageCodec {
         return value == null
             ? null
             : RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
-                .values[value];
+                  .values[value];
       case 147:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : ManeuverDto.values[value];
@@ -2945,26 +3000,28 @@ class _PigeonCodec extends StandardMessageCodec {
       case 182:
         return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
       case 183:
+        return GpsAvailabilityChangeEventDto.decode(readValue(buffer)!);
+      case 184:
         return SpeedAlertOptionsThresholdPercentageDto.decode(
           readValue(buffer)!,
         );
-      case 184:
-        return SpeedAlertOptionsDto.decode(readValue(buffer)!);
       case 185:
+        return SpeedAlertOptionsDto.decode(readValue(buffer)!);
+      case 186:
         return RouteSegmentTrafficDataRoadStretchRenderingDataDto.decode(
           readValue(buffer)!,
         );
-      case 186:
-        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
       case 187:
-        return RouteSegmentDto.decode(readValue(buffer)!);
+        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
       case 188:
-        return LaneDirectionDto.decode(readValue(buffer)!);
+        return RouteSegmentDto.decode(readValue(buffer)!);
       case 189:
-        return LaneDto.decode(readValue(buffer)!);
+        return LaneDirectionDto.decode(readValue(buffer)!);
       case 190:
-        return StepInfoDto.decode(readValue(buffer)!);
+        return LaneDto.decode(readValue(buffer)!);
       case 191:
+        return StepInfoDto.decode(readValue(buffer)!);
+      case 192:
         return NavInfoDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -2986,8 +3043,9 @@ class ViewCreationApi {
     BinaryMessenger? binaryMessenger,
     String messageChannelSuffix = '',
   }) : pigeonVar_binaryMessenger = binaryMessenger,
-       pigeonVar_messageChannelSuffix =
-           messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
@@ -3030,8 +3088,9 @@ class MapViewApi {
     BinaryMessenger? binaryMessenger,
     String messageChannelSuffix = '',
   }) : pigeonVar_binaryMessenger = binaryMessenger,
-       pigeonVar_messageChannelSuffix =
-           messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
@@ -4461,6 +4520,124 @@ class MapViewApi {
   Future<void> setReportIncidentButtonEnabled(int viewId, bool enabled) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setReportIncidentButtonEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<bool> isIncidentReportingAvailable(int viewId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIncidentReportingAvailable$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  Future<void> showReportIncidentsPanel(int viewId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showReportIncidentsPanel$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<bool> isBuildingsEnabled(int viewId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isBuildingsEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  Future<void> setBuildingsEnabled(int viewId, bool enabled) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setBuildingsEnabled$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
           pigeonVar_channelName,
@@ -5970,8 +6147,9 @@ class ImageRegistryApi {
     BinaryMessenger? binaryMessenger,
     String messageChannelSuffix = '',
   }) : pigeonVar_binaryMessenger = binaryMessenger,
-       pigeonVar_messageChannelSuffix =
-           messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
@@ -6126,6 +6304,8 @@ abstract class ViewEventApi {
 
   void onNavigationUIEnabledChanged(int viewId, bool navigationUIEnabled);
 
+  void onPromptVisibilityChanged(int viewId, bool promptVisible);
+
   void onMyLocationClicked(int viewId);
 
   void onMyLocationButtonClicked(int viewId);
@@ -6141,8 +6321,9 @@ abstract class ViewEventApi {
     BinaryMessenger? binaryMessenger,
     String messageChannelSuffix = '',
   }) {
-    messageChannelSuffix =
-        messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+    messageChannelSuffix = messageChannelSuffix.isNotEmpty
+        ? '.$messageChannelSuffix'
+        : '';
     {
       final BasicMessageChannel<Object?>
       pigeonVar_channel = BasicMessageChannel<Object?>(
@@ -6517,6 +6698,45 @@ abstract class ViewEventApi {
     {
       final BasicMessageChannel<Object?>
       pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        pigeonVar_channel.setMessageHandler(null);
+      } else {
+        pigeonVar_channel.setMessageHandler((Object? message) async {
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged was null.',
+          );
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged was null, expected non-null int.',
+          );
+          final bool? arg_promptVisible = (args[1] as bool?);
+          assert(
+            arg_promptVisible != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged was null, expected non-null bool.',
+          );
+          try {
+            api.onPromptVisibilityChanged(arg_viewId!, arg_promptVisible!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationClicked$messageChannelSuffix',
         pigeonChannelCodec,
         binaryMessenger: binaryMessenger,
@@ -6639,8 +6859,9 @@ class NavigationSessionApi {
     BinaryMessenger? binaryMessenger,
     String messageChannelSuffix = '',
   }) : pigeonVar_binaryMessenger = binaryMessenger,
-       pigeonVar_messageChannelSuffix =
-           messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
@@ -7645,6 +7866,9 @@ abstract class NavigationSessionEventApi {
   /// Android-only event.
   void onGpsAvailabilityUpdate(bool available);
 
+  /// Android-only event.
+  void onGpsAvailabilityChange(GpsAvailabilityChangeEventDto event);
+
   /// Turn-by-Turn navigation events.
   void onNavInfo(NavInfoDto navInfo);
 
@@ -7657,8 +7881,9 @@ abstract class NavigationSessionEventApi {
     BinaryMessenger? binaryMessenger,
     String messageChannelSuffix = '',
   }) {
-    messageChannelSuffix =
-        messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+    messageChannelSuffix = messageChannelSuffix.isNotEmpty
+        ? '.$messageChannelSuffix'
+        : '';
     {
       final BasicMessageChannel<Object?>
       pigeonVar_channel = BasicMessageChannel<Object?>(
@@ -7955,6 +8180,41 @@ abstract class NavigationSessionEventApi {
     {
       final BasicMessageChannel<Object?>
       pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityChange$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        pigeonVar_channel.setMessageHandler(null);
+      } else {
+        pigeonVar_channel.setMessageHandler((Object? message) async {
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityChange was null.',
+          );
+          final List<Object?> args = (message as List<Object?>?)!;
+          final GpsAvailabilityChangeEventDto? arg_event =
+              (args[0] as GpsAvailabilityChangeEventDto?);
+          assert(
+            arg_event != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityChange was null, expected non-null GpsAvailabilityChangeEventDto.',
+          );
+          try {
+            api.onGpsAvailabilityChange(arg_event!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onNavInfo$messageChannelSuffix',
         pigeonChannelCodec,
         binaryMessenger: binaryMessenger,
@@ -8021,8 +8281,9 @@ class AutoMapViewApi {
     BinaryMessenger? binaryMessenger,
     String messageChannelSuffix = '',
   }) : pigeonVar_binaryMessenger = binaryMessenger,
-       pigeonVar_messageChannelSuffix =
-           messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
@@ -10229,8 +10490,9 @@ abstract class AutoViewEventApi {
     BinaryMessenger? binaryMessenger,
     String messageChannelSuffix = '',
   }) {
-    messageChannelSuffix =
-        messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+    messageChannelSuffix = messageChannelSuffix.isNotEmpty
+        ? '.$messageChannelSuffix'
+        : '';
     {
       final BasicMessageChannel<Object?>
       pigeonVar_channel = BasicMessageChannel<Object?>(
@@ -10315,8 +10577,9 @@ class NavigationInspector {
     BinaryMessenger? binaryMessenger,
     String messageChannelSuffix = '',
   }) : pigeonVar_binaryMessenger = binaryMessenger,
-       pigeonVar_messageChannelSuffix =
-           messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();

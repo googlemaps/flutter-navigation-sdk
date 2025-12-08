@@ -626,4 +626,14 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
       )
     }
   }
+
+  func navigatorWillPresentPrompt(_ navigator: GMSNavigator) {
+    // Notify all navigation views about prompt visibility change
+    _viewRegistry?.sendPromptVisibilityChangedToAllViews(promptVisible: true)
+  }
+
+  func navigatorDidDismissPrompt(_ navigator: GMSNavigator) {
+    // Notify all navigation views about prompt visibility change
+    _viewRegistry?.sendPromptVisibilityChangedToAllViews(promptVisible: false)
+  }
 }
