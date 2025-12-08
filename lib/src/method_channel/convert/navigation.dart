@@ -247,3 +247,17 @@ extension ConvertTaskRemovedBehavior on TaskRemovedBehavior {
     }
   }
 }
+
+/// [GeneratedStepImagesTypeDto] convert extension.
+/// @nodoc
+extension ConvertGeneratedStepImagesType on GeneratedStepImagesType {
+  /// Converts [GeneratedStepImagesType] to [GeneratedStepImagesTypeDto]
+  GeneratedStepImagesTypeDto toDto() {
+    switch (this) {
+      case GeneratedStepImagesType.none:
+        return GeneratedStepImagesTypeDto.none;
+      case GeneratedStepImagesType.bitmap:
+        return GeneratedStepImagesTypeDto.bitmap;
+    }
+  }
+}

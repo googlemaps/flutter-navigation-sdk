@@ -45,6 +45,7 @@ import com.google.android.libraries.navigation.DisplayOptions
 import com.google.android.libraries.navigation.ForceNightMode
 import com.google.android.libraries.navigation.NavigationRoadStretchRenderingData
 import com.google.android.libraries.navigation.NavigationTrafficData
+import com.google.android.libraries.navigation.NavigationUpdatesOptions
 import com.google.android.libraries.navigation.Navigator
 import com.google.android.libraries.navigation.Navigator.AudioGuidance
 import com.google.android.libraries.navigation.Navigator.TaskRemovedBehavior
@@ -1146,6 +1147,16 @@ object Convert {
       TaskRemovedBehaviorDto.CONTINUE_SERVICE -> TaskRemovedBehavior.CONTINUE_SERVICE
       TaskRemovedBehaviorDto.QUIT_SERVICE -> TaskRemovedBehavior.QUIT_SERVICE
       else -> TaskRemovedBehavior.CONTINUE_SERVICE
+    }
+  }
+
+  fun generatedStepImagesTypeDtoToGeneratesStepImages(
+    type: GeneratedStepImagesTypeDto?
+  ): @NavigationUpdatesOptions.GeneratedStepImagesType Int {
+    return when (type) {
+      GeneratedStepImagesTypeDto.NONE -> NavigationUpdatesOptions.GeneratedStepImagesType.NONE
+      GeneratedStepImagesTypeDto.BITMAP -> NavigationUpdatesOptions.GeneratedStepImagesType.BITMAP
+      else -> NavigationUpdatesOptions.GeneratedStepImagesType.NONE
     }
   }
 }
