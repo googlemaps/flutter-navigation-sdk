@@ -29,6 +29,7 @@ import com.google.android.libraries.navigation.DisplayOptions
 import com.google.android.libraries.navigation.GpsAvailabilityChangeEvent
 import com.google.android.libraries.navigation.NavigationApi
 import com.google.android.libraries.navigation.NavigationApi.NavigatorListener
+import com.google.android.libraries.navigation.NavigationUpdatesOptions
 import com.google.android.libraries.navigation.Navigator
 import com.google.android.libraries.navigation.Navigator.TaskRemovedBehavior
 import com.google.android.libraries.navigation.RoadSnappedLocationProvider
@@ -721,11 +722,18 @@ constructor(
   }
 
   @Throws(FlutterError::class)
-  fun enableTurnByTurnNavigationEvents(numNextStepsToPreview: Int) {
+  fun enableTurnByTurnNavigationEvents(
+    numNextStepsToPreview: Int,
+    type: @NavigationUpdatesOptions.GeneratedStepImagesType Int,
+  ) {
     if (navInfoObserver == null) {
       // Register the service centrally (if not already registered)
       val success =
-        GoogleMapsNavigatorHolder.registerTurnByTurnService(application, numNextStepsToPreview)
+        GoogleMapsNavigatorHolder.registerTurnByTurnService(
+          application,
+          numNextStepsToPreview,
+          type,
+        )
 
       if (!success) {
         throw FlutterError(

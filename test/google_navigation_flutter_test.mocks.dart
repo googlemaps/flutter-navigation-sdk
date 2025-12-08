@@ -338,13 +338,16 @@ class MockTestNavigationSessionApi extends _i1.Mock
   );
 
   @override
-  void enableTurnByTurnNavigationEvents(int? numNextStepsToPreview) =>
-      super.noSuchMethod(
-        Invocation.method(#enableTurnByTurnNavigationEvents, [
-          numNextStepsToPreview,
-        ]),
-        returnValueForMissingStub: null,
-      );
+  void enableTurnByTurnNavigationEvents(
+    int? numNextStepsToPreview,
+    _i2.GeneratedStepImagesTypeDto? type,
+  ) => super.noSuchMethod(
+    Invocation.method(#enableTurnByTurnNavigationEvents, [
+      numNextStepsToPreview,
+      type,
+    ]),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void disableTurnByTurnNavigationEvents() => super.noSuchMethod(

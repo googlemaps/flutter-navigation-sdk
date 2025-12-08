@@ -256,8 +256,14 @@ class GoogleMapsNavigationSessionMessageHandler(
     sessionManager.disableRoadSnappedLocationUpdates()
   }
 
-  override fun enableTurnByTurnNavigationEvents(numNextStepsToPreview: Long?) {
-    sessionManager.enableTurnByTurnNavigationEvents(numNextStepsToPreview?.toInt() ?: Int.MAX_VALUE)
+  override fun enableTurnByTurnNavigationEvents(
+    numNextStepsToPreview: Long?,
+    type: GeneratedStepImagesTypeDto?,
+  ) {
+    sessionManager.enableTurnByTurnNavigationEvents(
+      numNextStepsToPreview?.toInt() ?: Int.MAX_VALUE,
+      Convert.generatedStepImagesTypeDtoToGeneratesStepImages(type),
+    )
   }
 
   override fun disableTurnByTurnNavigationEvents() {

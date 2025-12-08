@@ -1339,6 +1339,11 @@ enum TaskRemovedBehaviorDto {
   quitService,
 }
 
+/// The type of generated step images for turn-by-turn navigation events.
+///
+/// Android only.
+enum GeneratedStepImagesTypeDto { none, bitmap }
+
 @HostApi(dartHostTestHandler: 'TestNavigationSessionApi')
 abstract class NavigationSessionApi {
   @async
@@ -1403,7 +1408,10 @@ abstract class NavigationSessionApi {
   void enableRoadSnappedLocationUpdates();
   void disableRoadSnappedLocationUpdates();
 
-  void enableTurnByTurnNavigationEvents(int? numNextStepsToPreview);
+  void enableTurnByTurnNavigationEvents(
+    int? numNextStepsToPreview,
+    GeneratedStepImagesTypeDto? type,
+  );
   void disableTurnByTurnNavigationEvents();
 
   void registerRemainingTimeOrDistanceChangedListener(

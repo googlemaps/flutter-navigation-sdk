@@ -386,11 +386,15 @@ class GoogleMapsNavigator {
   /// number of next steps to preview. If set to null, all available steps will
   /// be returned in the [NavInfo.remainingSteps].
   ///
+  /// Optional parameter [generatedStepImagesType] can be used to set the type of
+  /// generated step images for the turn-by-turn events.
+  ///
   /// Example usage:
   /// ```dart
   /// final subscription = setNavInfoListener(
   ///   yourEventHandler,
   ///   numNextStepsToPreview: 5,
+  ///   generatedStepImagesType: GeneratedStepImagesType.bitmap,
   /// );
   /// // When done with the subscription
   /// await subscription.cancel();
@@ -398,6 +402,7 @@ class GoogleMapsNavigator {
   static StreamSubscription<NavInfoEvent> setNavInfoListener(
     OnNavInfoEventCallback listener, {
     int? numNextStepsToPreview,
+    GeneratedStepImagesType? generatedStepImagesType,
   }) {
     assert(
       numNextStepsToPreview == null || numNextStepsToPreview >= 0,
@@ -421,7 +426,10 @@ class GoogleMapsNavigator {
     }
 
     GoogleMapsNavigationPlatform.instance.navigationSessionAPI
-        .enableTurnByTurnNavigationEvents(numNextStepsToPreview);
+        .enableTurnByTurnNavigationEvents(
+          numNextStepsToPreview,
+          generatedStepImagesType,
+        );
 
     return _navInfoEventStreamController!.stream.listen(listener);
   }
@@ -694,10 +702,11 @@ class GoogleMapsNavigator {
   }
 
   static Future<void> enableTurnByTurnNavigationEvents(
-    int? numNextStepsToPreview,
-  ) {
+    int? numNextStepsToPreview, {
+    GeneratedStepImagesType? type = GeneratedStepImagesType.none,
+  }) {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
-        .enableTurnByTurnNavigationEvents(numNextStepsToPreview);
+        .enableTurnByTurnNavigationEvents(numNextStepsToPreview, type);
   }
 
   static Future<void> disableTurnByTurnNavigationEvents() {

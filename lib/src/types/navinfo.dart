@@ -455,3 +455,5 @@ class NavInfoEvent {
   @override
   String toString() => 'NavInfoEvent(navInfo: $navInfo)';
 }
+
+enum GeneratedStepImagesType { none, bitmap }
