@@ -95,7 +95,7 @@ in an unbounded widget will cause the application to throw a Flutter exception.
 
 You can also add a bare GoogleMapsMapView that works as a normal map view without navigation functionality.
 
-### Add a navigation view
+### Add a navigation view and start a navigation session
 
 ```dart
 import 'package:flutter/material.dart';
@@ -199,7 +199,7 @@ This parameter has only an effect on Android.
 
 ```
 
-#### Using Map IDs
+### Using Map IDs
 You can configure your map by providing a `mapId` parameter during map initialization. Map IDs are created in the [Google Cloud Console](https://console.cloud.google.com/google/maps-apis/studio/maps) and allow you to [enable various Google Maps Platform features](https://developers.google.com/maps/documentation/android-sdk/map-ids/mapid-over#features-available), such as cloud-based map styling.
 
 > [!NOTE]
@@ -261,6 +261,89 @@ Widget build(BuildContext context) {
   ...
 }
 ```
+
+### Controlling Light and Dark Mode
+
+The SDK provides two different settings to control the appearance of maps and navigation UI: `mapColorScheme` and `forceNightMode`. Which setting to use depends on whether navigation UI is enabled or disabled.
+
+These settings can be configured both during initialization and dynamically changed after initialization using the view controllers.
+
+#### For Navigation Views (GoogleMapsNavigationView)
+
+**When navigation UI is enabled:**
+- Use `forceNightMode` (or `initialForceNightMode` during initialization) to control both the navigation UI elements and the map tile colors.
+- The `mapColorScheme` setting is ignored when navigation UI is enabled.
+
+> [!TIP]
+> When navigation guidance is running, it's recommended to use `NavigationForceNightMode.auto` (the default). This allows the Navigation SDK to automatically determine the appropriate day or night mode based on the user's location and local time, which may differ from the device's system settings.
+
+```dart
+GoogleMapsNavigationView(
+  initialForceNightMode: NavigationForceNightMode.auto,
+  initialMapColorScheme: MapColorScheme.dark, // IGNORED when navigation UI is enabled
+)
+```
+
+To manually force a specific mode:
+```dart
+GoogleMapsNavigationView(
+  initialForceNightMode: NavigationForceNightMode.forceNight,
+)
+```
+
+You can also change the setting dynamically after initialization:
+
+```dart
+// Change after initialization when navigation UI is enabled
+await navigationViewController.setForceNightMode(NavigationForceNightMode.forceNight);
+```
+
+**When navigation UI is disabled:**
+- Use `mapColorScheme` (or `initialMapColorScheme` during initialization) to control the map tile colors.
+- The `forceNightMode` setting has no effect when navigation UI is disabled.
+
+```dart
+GoogleMapsNavigationView(
+  initialNavigationUIEnabledPreference: NavigationUIEnabledPreference.disabled,
+  initialMapColorScheme: MapColorScheme.dark, 
+  initialForceNightMode: NavigationForceNightMode.forceDay // IGNORED when navigation UI is disabled
+)
+```
+
+You can also change the setting dynamically after initialization:
+
+```dart
+// Change after initialization when navigation UI is disabled
+await navigationViewController.setMapColorScheme(MapColorScheme.dark);
+```
+
+#### For Map Views (GoogleMapsMapView)
+
+Map views only support `mapColorScheme` to control the map tile colors:
+
+```dart
+GoogleMapsMapView(
+  initialMapColorScheme: MapColorScheme.dark,
+)
+```
+
+You can also change the setting dynamically after initialization:
+
+```dart
+// Change after initialization
+await mapViewController.setMapColorScheme(MapColorScheme.dark);
+```
+
+#### Available Options
+
+- `NavigationForceNightMode`: 
+  - `auto` (default and recommended) - SDK determines day/night mode based on user's location and local time
+  - `forceDay` - Force day mode regardless of time or location
+  - `forceNight` - Force night mode regardless of time or location
+- `MapColorScheme`: 
+  - `followSystem` (default) - Follow device system settings
+  - `light` - Force light color scheme
+  - `dark` - Force dark color scheme
 
 ## Support for Android Auto and Apple CarPlay
 This plugin is compatible with both Android Auto and Apple CarPlay infotainment systems. For more details, please refer to the respective platform documentation:

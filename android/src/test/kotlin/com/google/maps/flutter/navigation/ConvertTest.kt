@@ -374,6 +374,7 @@ internal class ConvertTest {
         minZoomPreference = 1.1,
         maxZoomPreference = 2.2,
         zoomControlsEnabled = false,
+        mapColorScheme = MapColorSchemeDto.DARK,
       )
 
     val mapOptions = Convert.convertMapOptionsFromDto(testOptions)

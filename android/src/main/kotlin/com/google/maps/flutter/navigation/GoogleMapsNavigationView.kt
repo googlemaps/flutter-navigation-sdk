@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.view.View
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.libraries.navigation.ForceNightMode
 import com.google.android.libraries.navigation.NavigationView
 import com.google.android.libraries.navigation.OnNavigationUiChangedListener
 import com.google.android.libraries.navigation.PromptVisibilityChangedListener
@@ -38,6 +39,7 @@ internal constructor(
   private val _navigationView: NavigationView = NavigationView(context, mapOptions.googleMapOptions)
 
   /// Default values for UI features.
+  private var _forceNightMode: Int = ForceNightMode.AUTO
   private var _isNavigationTripProgressBarEnabled: Boolean = false
   private var _isNavigationHeaderEnabled: Boolean = true
   private var _isNavigationFooterEnabled: Boolean = true
@@ -75,6 +77,12 @@ internal constructor(
       navigationViewEnabled = true
     }
     _navigationView.isNavigationUiEnabled = navigationViewEnabled
+
+    // Initialize force night mode if provided
+    navigationOptions?.forceNightMode?.let { forceNightMode ->
+      _forceNightMode = forceNightMode
+      _navigationView.setForceNightMode(forceNightMode)
+    }
 
     viewRegistry.registerNavigationView(viewId, this)
 
@@ -287,5 +295,14 @@ internal constructor(
 
   fun showRouteOverview() {
     _navigationView.showRouteOverview()
+  }
+
+  fun getForceNightMode(): Int {
+    return _forceNightMode
+  }
+
+  fun setForceNightMode(forceNightMode: Int) {
+    _forceNightMode = forceNightMode
+    _navigationView.setForceNightMode(forceNightMode)
   }
 }

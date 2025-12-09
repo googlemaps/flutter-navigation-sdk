@@ -462,4 +462,36 @@ class GoogleMapViewController {
       viewId: _viewId,
     );
   }
+
+  /// Gets the current map color scheme from the map view.
+  ///
+  /// Returns the current [MapColorScheme] setting which controls whether
+  /// the map uses light, dark, or system-following color scheme.
+  Future<MapColorScheme> getMapColorScheme() async {
+    return GoogleMapsNavigationPlatform.instance.viewAPI.getMapColorScheme(
+      viewId: _viewId,
+    );
+  }
+
+  /// Sets the map color scheme for the map view.
+  ///
+  /// Controls whether the map should use light, dark, or system-following
+  /// color scheme. This affects the map tiles and basic map styling.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// // Force dark mode
+  /// await controller.setMapColorScheme(MapColorScheme.dark);
+  ///
+  /// // Follow system settings
+  /// await controller.setMapColorScheme(MapColorScheme.followSystem);
+  /// ```
+  ///
+  /// See also [MapColorScheme] for available options.
+  Future<void> setMapColorScheme(MapColorScheme mapColorScheme) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI.setMapColorScheme(
+      viewId: _viewId,
+      mapColorScheme: mapColorScheme,
+    );
+  }
 }

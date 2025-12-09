@@ -137,6 +137,38 @@ enum class MapTypeDto(val raw: Int) {
   }
 }
 
+/** Map color scheme mode. */
+enum class MapColorSchemeDto(val raw: Int) {
+  /** Follow system or SDK default (automatic). */
+  FOLLOW_SYSTEM(0),
+  /** Force light color scheme. */
+  LIGHT(1),
+  /** Force dark color scheme. */
+  DARK(2);
+
+  companion object {
+    fun ofRaw(raw: Int): MapColorSchemeDto? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** Navigation night mode. */
+enum class NavigationForceNightModeDto(val raw: Int) {
+  /** Let the SDK automatically determine day or night. */
+  AUTO(0),
+  /** Force day mode regardless of time or location. */
+  FORCE_DAY(1),
+  /** Force night mode regardless of time or location. */
+  FORCE_NIGHT(2);
+
+  companion object {
+    fun ofRaw(raw: Int): NavigationForceNightModeDto? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
 enum class CameraPerspectiveDto(val raw: Int) {
   TILTED(0),
   TOP_DOWN_HEADING_UP(1),
@@ -599,6 +631,8 @@ data class MapOptionsDto(
    * map initialization and cannot be changed afterwards.
    */
   val mapId: String? = null,
+  /** The map color scheme mode for the map view. */
+  val mapColorScheme: MapColorSchemeDto,
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): MapOptionsDto {
@@ -617,6 +651,7 @@ data class MapOptionsDto(
       val cameraTargetBounds = pigeonVar_list[12] as LatLngBoundsDto?
       val padding = pigeonVar_list[13] as MapPaddingDto?
       val mapId = pigeonVar_list[14] as String?
+      val mapColorScheme = pigeonVar_list[15] as MapColorSchemeDto
       return MapOptionsDto(
         cameraPosition,
         mapType,
@@ -633,6 +668,7 @@ data class MapOptionsDto(
         cameraTargetBounds,
         padding,
         mapId,
+        mapColorScheme,
       )
     }
   }
@@ -654,6 +690,7 @@ data class MapOptionsDto(
       cameraTargetBounds,
       padding,
       mapId,
+      mapColorScheme,
     )
   }
 
@@ -677,17 +714,20 @@ data class MapOptionsDto(
  */
 data class NavigationViewOptionsDto(
   /** Determines the initial visibility of the navigation UI on map initialization. */
-  val navigationUIEnabledPreference: NavigationUIEnabledPreferenceDto
+  val navigationUIEnabledPreference: NavigationUIEnabledPreferenceDto,
+  /** Controls the navigation night mode for Navigation UI. */
+  val forceNightMode: NavigationForceNightModeDto,
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): NavigationViewOptionsDto {
       val navigationUIEnabledPreference = pigeonVar_list[0] as NavigationUIEnabledPreferenceDto
-      return NavigationViewOptionsDto(navigationUIEnabledPreference)
+      val forceNightMode = pigeonVar_list[1] as NavigationForceNightModeDto
+      return NavigationViewOptionsDto(navigationUIEnabledPreference, forceNightMode)
     }
   }
 
   fun toList(): List<Any?> {
-    return listOf(navigationUIEnabledPreference)
+    return listOf(navigationUIEnabledPreference, forceNightMode)
   }
 
   override fun equals(other: Any?): Boolean {
@@ -2237,195 +2277,201 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
         return (readValue(buffer) as Long?)?.let { MapTypeDto.ofRaw(it.toInt()) }
       }
       132.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { CameraPerspectiveDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let { MapColorSchemeDto.ofRaw(it.toInt()) }
       }
       133.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { MarkerEventTypeDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let { NavigationForceNightModeDto.ofRaw(it.toInt()) }
       }
       134.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { MarkerDragEventTypeDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let { CameraPerspectiveDto.ofRaw(it.toInt()) }
       }
       135.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { StrokeJointTypeDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let { MarkerEventTypeDto.ofRaw(it.toInt()) }
       }
       136.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { PatternTypeDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let { MarkerDragEventTypeDto.ofRaw(it.toInt()) }
       }
       137.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { CameraEventTypeDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let { StrokeJointTypeDto.ofRaw(it.toInt()) }
       }
       138.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { AlternateRoutesStrategyDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let { PatternTypeDto.ofRaw(it.toInt()) }
       }
       139.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { RoutingStrategyDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let { CameraEventTypeDto.ofRaw(it.toInt()) }
       }
       140.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { TravelModeDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let { AlternateRoutesStrategyDto.ofRaw(it.toInt()) }
       }
       141.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { RouteStatusDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let { RoutingStrategyDto.ofRaw(it.toInt()) }
       }
       142.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { AudioGuidanceTypeDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let { TravelModeDto.ofRaw(it.toInt()) }
       }
       143.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { SpeedAlertSeverityDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let { RouteStatusDto.ofRaw(it.toInt()) }
       }
       144.toByte() -> {
+        return (readValue(buffer) as Long?)?.let { AudioGuidanceTypeDto.ofRaw(it.toInt()) }
+      }
+      145.toByte() -> {
+        return (readValue(buffer) as Long?)?.let { SpeedAlertSeverityDto.ofRaw(it.toInt()) }
+      }
+      146.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
           RouteSegmentTrafficDataStatusDto.ofRaw(it.toInt())
         }
       }
-      145.toByte() -> {
+      147.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
           RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto.ofRaw(it.toInt())
         }
       }
-      146.toByte() -> {
+      148.toByte() -> {
         return (readValue(buffer) as Long?)?.let { ManeuverDto.ofRaw(it.toInt()) }
       }
-      147.toByte() -> {
+      149.toByte() -> {
         return (readValue(buffer) as Long?)?.let { DrivingSideDto.ofRaw(it.toInt()) }
       }
-      148.toByte() -> {
+      150.toByte() -> {
         return (readValue(buffer) as Long?)?.let { NavStateDto.ofRaw(it.toInt()) }
       }
-      149.toByte() -> {
+      151.toByte() -> {
         return (readValue(buffer) as Long?)?.let { LaneShapeDto.ofRaw(it.toInt()) }
       }
-      150.toByte() -> {
+      152.toByte() -> {
         return (readValue(buffer) as Long?)?.let { TaskRemovedBehaviorDto.ofRaw(it.toInt()) }
       }
-      151.toByte() -> {
+      153.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { MapOptionsDto.fromList(it) }
       }
-      152.toByte() -> {
+      154.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavigationViewOptionsDto.fromList(it) }
       }
-      153.toByte() -> {
+      155.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { ViewCreationOptionsDto.fromList(it) }
       }
-      154.toByte() -> {
+      156.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { CameraPositionDto.fromList(it) }
       }
-      155.toByte() -> {
+      157.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { MarkerDto.fromList(it) }
       }
-      156.toByte() -> {
+      158.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { MarkerOptionsDto.fromList(it) }
       }
-      157.toByte() -> {
+      159.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { ImageDescriptorDto.fromList(it) }
       }
-      158.toByte() -> {
+      160.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { InfoWindowDto.fromList(it) }
       }
-      159.toByte() -> {
+      161.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { MarkerAnchorDto.fromList(it) }
       }
-      160.toByte() -> {
+      162.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { PolygonDto.fromList(it) }
       }
-      161.toByte() -> {
+      163.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { PolygonOptionsDto.fromList(it) }
       }
-      162.toByte() -> {
+      164.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { PolygonHoleDto.fromList(it) }
       }
-      163.toByte() -> {
+      165.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { StyleSpanStrokeStyleDto.fromList(it) }
       }
-      164.toByte() -> {
+      166.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { StyleSpanDto.fromList(it) }
       }
-      165.toByte() -> {
+      167.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { PolylineDto.fromList(it) }
       }
-      166.toByte() -> {
+      168.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { PatternItemDto.fromList(it) }
       }
-      167.toByte() -> {
+      169.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { PolylineOptionsDto.fromList(it) }
       }
-      168.toByte() -> {
+      170.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { CircleDto.fromList(it) }
       }
-      169.toByte() -> {
+      171.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { CircleOptionsDto.fromList(it) }
       }
-      170.toByte() -> {
+      172.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { MapPaddingDto.fromList(it) }
       }
-      171.toByte() -> {
+      173.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteTokenOptionsDto.fromList(it) }
       }
-      172.toByte() -> {
+      174.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { DestinationsDto.fromList(it) }
       }
-      173.toByte() -> {
+      175.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RoutingOptionsDto.fromList(it) }
       }
-      174.toByte() -> {
+      176.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavigationDisplayOptionsDto.fromList(it) }
       }
-      175.toByte() -> {
+      177.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavigationWaypointDto.fromList(it) }
       }
-      176.toByte() -> {
+      178.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavigationTimeAndDistanceDto.fromList(it) }
       }
-      177.toByte() -> {
+      179.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           NavigationAudioGuidanceSettingsDto.fromList(it)
         }
       }
-      178.toByte() -> {
+      180.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SimulationOptionsDto.fromList(it) }
       }
-      179.toByte() -> {
+      181.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LatLngDto.fromList(it) }
       }
-      180.toByte() -> {
+      182.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LatLngBoundsDto.fromList(it) }
       }
-      181.toByte() -> {
+      183.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SpeedingUpdatedEventDto.fromList(it) }
       }
-      182.toByte() -> {
+      184.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           GpsAvailabilityChangeEventDto.fromList(it)
         }
       }
-      183.toByte() -> {
+      185.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           SpeedAlertOptionsThresholdPercentageDto.fromList(it)
         }
       }
-      184.toByte() -> {
+      186.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SpeedAlertOptionsDto.fromList(it) }
       }
-      185.toByte() -> {
+      187.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(it)
         }
       }
-      186.toByte() -> {
+      188.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentTrafficDataDto.fromList(it) }
       }
-      187.toByte() -> {
+      189.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentDto.fromList(it) }
       }
-      188.toByte() -> {
+      190.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LaneDirectionDto.fromList(it) }
       }
-      189.toByte() -> {
+      191.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LaneDto.fromList(it) }
       }
-      190.toByte() -> {
+      192.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { StepInfoDto.fromList(it) }
       }
-      191.toByte() -> {
+      193.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavInfoDto.fromList(it) }
       }
       else -> super.readValueOfType(type, buffer)
@@ -2446,244 +2492,252 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
         stream.write(131)
         writeValue(stream, value.raw)
       }
-      is CameraPerspectiveDto -> {
+      is MapColorSchemeDto -> {
         stream.write(132)
         writeValue(stream, value.raw)
       }
-      is MarkerEventTypeDto -> {
+      is NavigationForceNightModeDto -> {
         stream.write(133)
         writeValue(stream, value.raw)
       }
-      is MarkerDragEventTypeDto -> {
+      is CameraPerspectiveDto -> {
         stream.write(134)
         writeValue(stream, value.raw)
       }
-      is StrokeJointTypeDto -> {
+      is MarkerEventTypeDto -> {
         stream.write(135)
         writeValue(stream, value.raw)
       }
-      is PatternTypeDto -> {
+      is MarkerDragEventTypeDto -> {
         stream.write(136)
         writeValue(stream, value.raw)
       }
-      is CameraEventTypeDto -> {
+      is StrokeJointTypeDto -> {
         stream.write(137)
         writeValue(stream, value.raw)
       }
-      is AlternateRoutesStrategyDto -> {
+      is PatternTypeDto -> {
         stream.write(138)
         writeValue(stream, value.raw)
       }
-      is RoutingStrategyDto -> {
+      is CameraEventTypeDto -> {
         stream.write(139)
         writeValue(stream, value.raw)
       }
-      is TravelModeDto -> {
+      is AlternateRoutesStrategyDto -> {
         stream.write(140)
         writeValue(stream, value.raw)
       }
-      is RouteStatusDto -> {
+      is RoutingStrategyDto -> {
         stream.write(141)
         writeValue(stream, value.raw)
       }
-      is AudioGuidanceTypeDto -> {
+      is TravelModeDto -> {
         stream.write(142)
         writeValue(stream, value.raw)
       }
-      is SpeedAlertSeverityDto -> {
+      is RouteStatusDto -> {
         stream.write(143)
         writeValue(stream, value.raw)
       }
-      is RouteSegmentTrafficDataStatusDto -> {
+      is AudioGuidanceTypeDto -> {
         stream.write(144)
         writeValue(stream, value.raw)
       }
-      is RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto -> {
+      is SpeedAlertSeverityDto -> {
         stream.write(145)
         writeValue(stream, value.raw)
       }
-      is ManeuverDto -> {
+      is RouteSegmentTrafficDataStatusDto -> {
         stream.write(146)
         writeValue(stream, value.raw)
       }
-      is DrivingSideDto -> {
+      is RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto -> {
         stream.write(147)
         writeValue(stream, value.raw)
       }
-      is NavStateDto -> {
+      is ManeuverDto -> {
         stream.write(148)
         writeValue(stream, value.raw)
       }
-      is LaneShapeDto -> {
+      is DrivingSideDto -> {
         stream.write(149)
         writeValue(stream, value.raw)
       }
-      is TaskRemovedBehaviorDto -> {
+      is NavStateDto -> {
         stream.write(150)
         writeValue(stream, value.raw)
       }
-      is MapOptionsDto -> {
+      is LaneShapeDto -> {
         stream.write(151)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.raw)
       }
-      is NavigationViewOptionsDto -> {
+      is TaskRemovedBehaviorDto -> {
         stream.write(152)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.raw)
       }
-      is ViewCreationOptionsDto -> {
+      is MapOptionsDto -> {
         stream.write(153)
         writeValue(stream, value.toList())
       }
-      is CameraPositionDto -> {
+      is NavigationViewOptionsDto -> {
         stream.write(154)
         writeValue(stream, value.toList())
       }
-      is MarkerDto -> {
+      is ViewCreationOptionsDto -> {
         stream.write(155)
         writeValue(stream, value.toList())
       }
-      is MarkerOptionsDto -> {
+      is CameraPositionDto -> {
         stream.write(156)
         writeValue(stream, value.toList())
       }
-      is ImageDescriptorDto -> {
+      is MarkerDto -> {
         stream.write(157)
         writeValue(stream, value.toList())
       }
-      is InfoWindowDto -> {
+      is MarkerOptionsDto -> {
         stream.write(158)
         writeValue(stream, value.toList())
       }
-      is MarkerAnchorDto -> {
+      is ImageDescriptorDto -> {
         stream.write(159)
         writeValue(stream, value.toList())
       }
-      is PolygonDto -> {
+      is InfoWindowDto -> {
         stream.write(160)
         writeValue(stream, value.toList())
       }
-      is PolygonOptionsDto -> {
+      is MarkerAnchorDto -> {
         stream.write(161)
         writeValue(stream, value.toList())
       }
-      is PolygonHoleDto -> {
+      is PolygonDto -> {
         stream.write(162)
         writeValue(stream, value.toList())
       }
-      is StyleSpanStrokeStyleDto -> {
+      is PolygonOptionsDto -> {
         stream.write(163)
         writeValue(stream, value.toList())
       }
-      is StyleSpanDto -> {
+      is PolygonHoleDto -> {
         stream.write(164)
         writeValue(stream, value.toList())
       }
-      is PolylineDto -> {
+      is StyleSpanStrokeStyleDto -> {
         stream.write(165)
         writeValue(stream, value.toList())
       }
-      is PatternItemDto -> {
+      is StyleSpanDto -> {
         stream.write(166)
         writeValue(stream, value.toList())
       }
-      is PolylineOptionsDto -> {
+      is PolylineDto -> {
         stream.write(167)
         writeValue(stream, value.toList())
       }
-      is CircleDto -> {
+      is PatternItemDto -> {
         stream.write(168)
         writeValue(stream, value.toList())
       }
-      is CircleOptionsDto -> {
+      is PolylineOptionsDto -> {
         stream.write(169)
         writeValue(stream, value.toList())
       }
-      is MapPaddingDto -> {
+      is CircleDto -> {
         stream.write(170)
         writeValue(stream, value.toList())
       }
-      is RouteTokenOptionsDto -> {
+      is CircleOptionsDto -> {
         stream.write(171)
         writeValue(stream, value.toList())
       }
-      is DestinationsDto -> {
+      is MapPaddingDto -> {
         stream.write(172)
         writeValue(stream, value.toList())
       }
-      is RoutingOptionsDto -> {
+      is RouteTokenOptionsDto -> {
         stream.write(173)
         writeValue(stream, value.toList())
       }
-      is NavigationDisplayOptionsDto -> {
+      is DestinationsDto -> {
         stream.write(174)
         writeValue(stream, value.toList())
       }
-      is NavigationWaypointDto -> {
+      is RoutingOptionsDto -> {
         stream.write(175)
         writeValue(stream, value.toList())
       }
-      is NavigationTimeAndDistanceDto -> {
+      is NavigationDisplayOptionsDto -> {
         stream.write(176)
         writeValue(stream, value.toList())
       }
-      is NavigationAudioGuidanceSettingsDto -> {
+      is NavigationWaypointDto -> {
         stream.write(177)
         writeValue(stream, value.toList())
       }
-      is SimulationOptionsDto -> {
+      is NavigationTimeAndDistanceDto -> {
         stream.write(178)
         writeValue(stream, value.toList())
       }
-      is LatLngDto -> {
+      is NavigationAudioGuidanceSettingsDto -> {
         stream.write(179)
         writeValue(stream, value.toList())
       }
-      is LatLngBoundsDto -> {
+      is SimulationOptionsDto -> {
         stream.write(180)
         writeValue(stream, value.toList())
       }
-      is SpeedingUpdatedEventDto -> {
+      is LatLngDto -> {
         stream.write(181)
         writeValue(stream, value.toList())
       }
-      is GpsAvailabilityChangeEventDto -> {
+      is LatLngBoundsDto -> {
         stream.write(182)
         writeValue(stream, value.toList())
       }
-      is SpeedAlertOptionsThresholdPercentageDto -> {
+      is SpeedingUpdatedEventDto -> {
         stream.write(183)
         writeValue(stream, value.toList())
       }
-      is SpeedAlertOptionsDto -> {
+      is GpsAvailabilityChangeEventDto -> {
         stream.write(184)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentTrafficDataRoadStretchRenderingDataDto -> {
+      is SpeedAlertOptionsThresholdPercentageDto -> {
         stream.write(185)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentTrafficDataDto -> {
+      is SpeedAlertOptionsDto -> {
         stream.write(186)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentDto -> {
+      is RouteSegmentTrafficDataRoadStretchRenderingDataDto -> {
         stream.write(187)
         writeValue(stream, value.toList())
       }
-      is LaneDirectionDto -> {
+      is RouteSegmentTrafficDataDto -> {
         stream.write(188)
         writeValue(stream, value.toList())
       }
-      is LaneDto -> {
+      is RouteSegmentDto -> {
         stream.write(189)
         writeValue(stream, value.toList())
       }
-      is StepInfoDto -> {
+      is LaneDirectionDto -> {
         stream.write(190)
         writeValue(stream, value.toList())
       }
-      is NavInfoDto -> {
+      is LaneDto -> {
         stream.write(191)
+        writeValue(stream, value.toList())
+      }
+      is StepInfoDto -> {
+        stream.write(192)
+        writeValue(stream, value.toList())
+      }
+      is NavInfoDto -> {
+        stream.write(193)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -2987,6 +3041,14 @@ interface MapViewApi {
   fun setPadding(viewId: Long, padding: MapPaddingDto)
 
   fun getPadding(viewId: Long): MapPaddingDto
+
+  fun getMapColorScheme(viewId: Long): MapColorSchemeDto
+
+  fun setMapColorScheme(viewId: Long, mapColorScheme: MapColorSchemeDto)
+
+  fun getForceNightMode(viewId: Long): NavigationForceNightModeDto
+
+  fun setForceNightMode(viewId: Long, forceNightMode: NavigationForceNightModeDto)
 
   companion object {
     /** The codec used by MapViewApi. */
@@ -5434,6 +5496,102 @@ interface MapViewApi {
             val wrapped: List<Any?> =
               try {
                 listOf(api.getPadding(viewIdArg))
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapColorScheme$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val wrapped: List<Any?> =
+              try {
+                listOf(api.getMapColorScheme(viewIdArg))
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapColorScheme$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val mapColorSchemeArg = args[1] as MapColorSchemeDto
+            val wrapped: List<Any?> =
+              try {
+                api.setMapColorScheme(viewIdArg, mapColorSchemeArg)
+                listOf(null)
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getForceNightMode$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val wrapped: List<Any?> =
+              try {
+                listOf(api.getForceNightMode(viewIdArg))
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setForceNightMode$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val forceNightModeArg = args[1] as NavigationForceNightModeDto
+            val wrapped: List<Any?> =
+              try {
+                api.setForceNightMode(viewIdArg, forceNightModeArg)
+                listOf(null)
               } catch (exception: Throwable) {
                 MessagesPigeonUtils.wrapError(exception)
               }

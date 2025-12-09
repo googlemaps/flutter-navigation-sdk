@@ -54,6 +54,9 @@ class _ViewInitializationPageState
   EdgeInsets? _initialPadding;
   NavigationUIEnabledPreference _initialNavigationUIEnabledPreference =
       NavigationUIEnabledPreference.automatic;
+  MapColorScheme _initialMapColorScheme = MapColorScheme.followSystem;
+  NavigationForceNightMode _initialForceNightMode =
+      NavigationForceNightMode.auto;
   TextDirection? _layoutDirection;
   bool _isMinZoomPreferenceEnabled = false;
   bool _isMaxZoomPreferenceEnabled = false;
@@ -115,6 +118,8 @@ class _ViewInitializationPageState
               initialPadding: _initialPadding,
               initialNavigationUIEnabledPreference:
                   _initialNavigationUIEnabledPreference,
+              initialMapColorScheme: _initialMapColorScheme,
+              initialForceNightMode: _initialForceNightMode,
               layoutDirection: _layoutDirection,
             ),
       ),
@@ -137,6 +142,11 @@ class _ViewInitializationPageState
       );
     }
     await GoogleMapsNavigator.initializeNavigationSession();
+    await _updateNavigationInitializationState();
+  }
+
+  Future<void> _disposeNavigation() async {
+    await GoogleMapsNavigator.cleanup();
     await _updateNavigationInitializationState();
   }
 
@@ -195,6 +205,17 @@ class _ViewInitializationPageState
                         onChanged: (bool value) {
                           setState(() {
                             _initialMapToolbarEnabled = value;
+                          });
+                        },
+                      ),
+                      ExampleDropdownButton<MapColorScheme>(
+                        title: 'Map Color Scheme',
+                        value: _initialMapColorScheme,
+                        items: MapColorScheme.values,
+                        onChanged: (MapColorScheme? newValue) {
+                          setState(() {
+                            _initialMapColorScheme =
+                                newValue ?? MapColorScheme.followSystem;
                           });
                         },
                       ),
@@ -386,6 +407,17 @@ class _ViewInitializationPageState
                           });
                         },
                       ),
+                      ExampleDropdownButton<NavigationForceNightMode>(
+                        title: 'Navigation Force Night Mode',
+                        value: _initialForceNightMode,
+                        items: NavigationForceNightMode.values,
+                        onChanged: (NavigationForceNightMode? newValue) {
+                          setState(() {
+                            _initialForceNightMode =
+                                newValue ?? NavigationForceNightMode.auto;
+                          });
+                        },
+                      ),
                     ],
                   ),
                 ],
@@ -400,9 +432,14 @@ class _ViewInitializationPageState
             spacing: 10,
             children: <Widget>[
               ElevatedButton(
-                onPressed: !_navigationInitialized ? _startNavigation : null,
+                onPressed:
+                    _navigationInitialized
+                        ? _disposeNavigation
+                        : _startNavigation,
                 child: Text(
-                  _navigationInitialized ? 'Initialized' : 'Init navigation',
+                  _navigationInitialized
+                      ? 'Dispose navigation'
+                      : 'Init navigation',
                 ),
               ),
               ElevatedButton(
@@ -434,6 +471,8 @@ class _InitializedViewPage extends StatelessWidget {
     required this.initialCameraTargetBounds,
     required this.initialPadding,
     required this.initialNavigationUIEnabledPreference,
+    required this.initialMapColorScheme,
+    required this.initialForceNightMode,
     required this.layoutDirection,
   });
 
@@ -453,6 +492,8 @@ class _InitializedViewPage extends StatelessWidget {
   final LatLngBounds? initialCameraTargetBounds;
   final EdgeInsets? initialPadding;
   final NavigationUIEnabledPreference initialNavigationUIEnabledPreference;
+  final MapColorScheme initialMapColorScheme;
+  final NavigationForceNightMode initialForceNightMode;
 
   @override
   Widget build(BuildContext context) {
@@ -486,6 +527,8 @@ class _InitializedViewPage extends StatelessWidget {
         initialPadding: initialPadding,
         initialNavigationUIEnabledPreference:
             initialNavigationUIEnabledPreference,
+        initialMapColorScheme: initialMapColorScheme,
+        initialForceNightMode: initialForceNightMode,
         mapId: MapIdManager.instance.mapId,
       ),
     );

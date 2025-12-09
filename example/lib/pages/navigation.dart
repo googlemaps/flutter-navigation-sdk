@@ -127,6 +127,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   SimulationState _simulationState = SimulationState.notRunning;
   NavigationTravelMode _travelMode = NavigationTravelMode.driving;
   final List<NavigationWaypoint> _waypoints = <NavigationWaypoint>[];
+  MapColorScheme _mapColorScheme = MapColorScheme.followSystem;
+  NavigationForceNightMode _forceNightMode = NavigationForceNightMode.auto;
 
   /// If true, route tokens and Routes API are used to calculate the route.
   bool _routeTokensEnabled = false;
@@ -176,6 +178,12 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     GoogleMapsNavigator.cleanup();
     clearRegisteredImages();
     super.dispose();
+  }
+
+  // Adds day/night mode toggle button to app bar.
+  @override
+  List<Widget>? getAppBarActions() {
+    return <Widget>[_colorSchemeToggle];
   }
 
   Future<void> _initialize() async {
@@ -1207,7 +1215,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         children: <Widget>[
           Column(
             children: <Widget>[
-              _travelModeSelection,
+              _topBarControls,
               Expanded(
                 child:
                     _navigatorInitializedAtLeastOnce && _userLocation != null
@@ -1231,6 +1239,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                                   : NavigationUIEnabledPreference.disabled,
                           initialPadding: const EdgeInsets.all(0),
                           mapId: MapIdManager.instance.mapId,
+                          initialMapColorScheme: _mapColorScheme,
+                          initialForceNightMode: _forceNightMode,
                         )
                         : const Center(
                           child: Column(
@@ -1837,6 +1847,66 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     });
                   },
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const Text(
+                        'Map Color Scheme:',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        children: <Widget>[
+                          _buildColorSchemeChip(
+                            MapColorScheme.followSystem,
+                            'Auto',
+                          ),
+                          _buildColorSchemeChip(MapColorScheme.light, 'Light'),
+                          _buildColorSchemeChip(MapColorScheme.dark, 'Dark'),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const Text(
+                        'Navigation Night Mode:',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        children: <Widget>[
+                          _buildNightModeChip(
+                            NavigationForceNightMode.auto,
+                            'Auto',
+                          ),
+                          _buildNightModeChip(
+                            NavigationForceNightMode.forceDay,
+                            'Day',
+                          ),
+                          _buildNightModeChip(
+                            NavigationForceNightMode.forceNight,
+                            'Night',
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
                 Text(
                   'Map left padding: ${_mapPadding.left.toStringAsFixed(0)}',
                 ),
@@ -2083,7 +2153,56 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     );
   }
 
-  Widget get _travelModeSelection => Row(
+  Widget get _colorSchemeToggle => Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+    child: InkWell(
+      onTap: _cycleColorScheme,
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        child: Icon(
+          _getColorSchemeIcon(),
+          size: 30,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      ),
+    ),
+  );
+
+  IconData _getColorSchemeIcon() {
+    switch (_mapColorScheme) {
+      case MapColorScheme.light:
+        return Icons.brightness_7;
+      case MapColorScheme.dark:
+        return Icons.brightness_3;
+      case MapColorScheme.followSystem:
+        return Icons.brightness_auto;
+    }
+  }
+
+  Future<void> _cycleColorScheme() async {
+    setState(() {
+      switch (_mapColorScheme) {
+        case MapColorScheme.followSystem:
+          _mapColorScheme = MapColorScheme.light;
+          _forceNightMode = NavigationForceNightMode.forceDay;
+        case MapColorScheme.light:
+          _mapColorScheme = MapColorScheme.dark;
+          _forceNightMode = NavigationForceNightMode.forceNight;
+        case MapColorScheme.dark:
+          _mapColorScheme = MapColorScheme.followSystem;
+          _forceNightMode = NavigationForceNightMode.auto;
+      }
+    });
+
+    try {
+      await _navigationViewController?.setMapColorScheme(_mapColorScheme);
+      await _navigationViewController?.setForceNightMode(_forceNightMode);
+    } catch (e) {
+      showMessage('Failed to update color scheme: $e');
+    }
+  }
+
+  Widget get _topBarControls => Row(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: <Widget>[
       _buildTravelModeChoice(
@@ -2150,6 +2269,46 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         _validRoute = true;
       });
     }
+  }
+
+  Widget _buildColorSchemeChip(MapColorScheme scheme, String label) {
+    final bool isSelected = _mapColorScheme == scheme;
+    return FilterChip(
+      label: Text(label),
+      selected: isSelected,
+      onSelected: (bool selected) async {
+        if (selected) {
+          setState(() {
+            _mapColorScheme = scheme;
+          });
+          try {
+            await _navigationViewController?.setMapColorScheme(scheme);
+          } catch (e) {
+            showMessage('Failed to set map color scheme: $e');
+          }
+        }
+      },
+    );
+  }
+
+  Widget _buildNightModeChip(NavigationForceNightMode mode, String label) {
+    final bool isSelected = _forceNightMode == mode;
+    return FilterChip(
+      label: Text(label),
+      selected: isSelected,
+      onSelected: (bool selected) async {
+        if (selected) {
+          setState(() {
+            _forceNightMode = mode;
+          });
+          try {
+            await _navigationViewController?.setForceNightMode(mode);
+          } catch (e) {
+            showMessage('Failed to set force night mode: $e');
+          }
+        }
+      },
+    );
   }
 
   void showMessage(String message) {

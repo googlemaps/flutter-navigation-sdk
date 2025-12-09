@@ -41,6 +41,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   private var _gmsCircles: [GMSCircle] = []
   private var _mapConfiguration: MapConfiguration!
   private var _navigationUIEnabledPreference: NavigationUIEnabledPreference!
+  private var _forceNightMode: GMSNavigationLightingMode?
 
   private var _mapViewReady: Bool = false
   private var _mapReadyCallback: ((Result<Void, Error>) -> Void)?
@@ -74,6 +75,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     viewRegistry registry: GoogleMapsNavigationViewRegistry,
     viewEventApi: ViewEventApi?,
     navigationUIEnabledPreference: NavigationUIEnabledPreference,
+    forceNightMode: GMSNavigationLightingMode?,
     mapConfiguration: MapConfiguration,
     imageRegistry: ImageRegistry,
     isCarPlayView: Bool
@@ -89,6 +91,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     _mapConfiguration = mapConfiguration
     _imageRegistry = imageRegistry
     _isCarPlayView = isCarPlayView
+    _forceNightMode = forceNightMode
 
     let mapViewOptions = GMSMapViewOptions()
     _mapConfiguration.apply(to: mapViewOptions, withFrame: frame)
@@ -103,6 +106,11 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
 
     _navigationUIEnabledPreference = navigationUIEnabledPreference
     applyNavigationUIEnabledPreference()
+
+    // Apply force night mode if this is a navigation view
+    if _isNavigationView {
+      applyForceNightMode()
+    }
   }
 
   deinit {
@@ -164,6 +172,34 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
       }
     }
     setNavigationUIEnabled(navigationUIEnabled)
+  }
+
+  func applyForceNightMode() {
+    guard _isNavigationView else { return }
+    if let mode = _forceNightMode {
+      _mapView.lightingMode = mode
+    } else {
+      // Allow the SDK to determine the lighting mode automatically.
+      // Use perform selector to call setLightingMode: with nil (Objective-C style)
+      if _mapView.responds(to: Selector(("setLightingMode:"))) {
+        _mapView.perform(Selector(("setLightingMode:")), with: nil)
+      }
+    }
+  }
+
+  func getForceNightMode() throws -> GMSNavigationLightingMode? {
+    guard _isNavigationView else {
+      throw GoogleMapsNavigationViewError.notSupported
+    }
+    return _forceNightMode
+  }
+
+  func setForceNightMode(_ mode: GMSNavigationLightingMode?) throws {
+    guard _isNavigationView else {
+      throw GoogleMapsNavigationViewError.notSupported
+    }
+    _forceNightMode = mode
+    applyForceNightMode()
   }
 
   func awaitMapReady(callback: @escaping (Result<Void, Error>) -> Void) {
@@ -239,6 +275,14 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
 
   public func setMapType(mapType: GMSMapViewType) throws {
     _mapView.mapType = mapType
+  }
+
+  public func getMapColorScheme() -> UIUserInterfaceStyle {
+    _mapView.overrideUserInterfaceStyle
+  }
+
+  public func setMapColorScheme(colorScheme: UIUserInterfaceStyle) {
+    _mapView.overrideUserInterfaceStyle = colorScheme
   }
 
   func setMapStyle(styleJson: String) throws {

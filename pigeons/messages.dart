@@ -54,6 +54,7 @@ class MapOptionsDto {
     required this.cameraTargetBounds,
     required this.padding,
     required this.mapId,
+    required this.mapColorScheme,
   });
 
   /// The initial positioning of the camera in the map view.
@@ -102,6 +103,9 @@ class MapOptionsDto {
   /// The map ID for advanced map options eg. cloud-based map styling.
   /// This value can only be set on map initialization and cannot be changed afterwards.
   final String? mapId;
+
+  /// The map color scheme mode for the map view.
+  final MapColorSchemeDto mapColorScheme;
 }
 
 /// Determines the initial visibility of the navigation UI on map initialization.
@@ -116,10 +120,16 @@ enum NavigationUIEnabledPreferenceDto {
 
 /// Object containing navigation options used to initialize Google Navigation view.
 class NavigationViewOptionsDto {
-  NavigationViewOptionsDto({required this.navigationUIEnabledPreference});
+  NavigationViewOptionsDto({
+    required this.navigationUIEnabledPreference,
+    required this.forceNightMode,
+  });
 
   /// Determines the initial visibility of the navigation UI on map initialization.
   final NavigationUIEnabledPreferenceDto navigationUIEnabledPreference;
+
+  /// Controls the navigation night mode for Navigation UI.
+  final NavigationForceNightModeDto forceNightMode;
 }
 
 /// A message for creating a new navigation view.
@@ -149,6 +159,30 @@ abstract class ViewCreationApi {
 }
 
 enum MapTypeDto { none, normal, satellite, terrain, hybrid }
+
+/// Map color scheme mode.
+enum MapColorSchemeDto {
+  /// Follow system or SDK default (automatic).
+  followSystem,
+
+  /// Force light color scheme.
+  light,
+
+  /// Force dark color scheme.
+  dark,
+}
+
+/// Navigation night mode.
+enum NavigationForceNightModeDto {
+  /// Let the SDK automatically determine day or night.
+  auto,
+
+  /// Force day mode regardless of time or location.
+  forceDay,
+
+  /// Force night mode regardless of time or location.
+  forceNight,
+}
 
 class CameraPositionDto {
   CameraPositionDto({
@@ -576,6 +610,15 @@ abstract class MapViewApi {
   void enableOnCameraChangedEvents(int viewId);
   void setPadding(int viewId, MapPaddingDto padding);
   MapPaddingDto getPadding(int viewId);
+
+  MapColorSchemeDto getMapColorScheme(int viewId);
+  void setMapColorScheme(int viewId, MapColorSchemeDto mapColorScheme);
+
+  NavigationForceNightModeDto getForceNightMode(int viewId);
+  void setForceNightMode(
+    int viewId,
+    NavigationForceNightModeDto forceNightMode,
+  );
 }
 
 @HostApi(dartHostTestHandler: 'TestImageRegistryApi')

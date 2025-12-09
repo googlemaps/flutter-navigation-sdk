@@ -278,6 +278,41 @@ void main() {
       );
     }
 
+    /// Test map color scheme getter and setter.
+    final List<MapColorScheme> mapColorSchemes = <MapColorScheme>[
+      MapColorScheme.followSystem,
+      MapColorScheme.light,
+      MapColorScheme.dark,
+      MapColorScheme.followSystem,
+    ];
+    for (final MapColorScheme scheme in mapColorSchemes) {
+      await viewController.setMapColorScheme(scheme);
+      await $.pumpAndSettle();
+      final MapColorScheme currentScheme =
+          await viewController.getMapColorScheme();
+      expect(currentScheme, scheme, reason: 'MapColorScheme should be $scheme');
+    }
+
+    /// Test force night mode getter and setter (navigation view only).
+    final List<NavigationForceNightMode> nightModes =
+        <NavigationForceNightMode>[
+          NavigationForceNightMode.auto,
+          NavigationForceNightMode.forceDay,
+          NavigationForceNightMode.forceNight,
+          NavigationForceNightMode.auto,
+        ];
+    for (final NavigationForceNightMode mode in nightModes) {
+      await viewController.setForceNightMode(mode);
+      await $.pumpAndSettle();
+      final NavigationForceNightMode currentMode =
+          await viewController.getForceNightMode();
+      expect(
+        currentMode,
+        mode,
+        reason: 'NavigationForceNightMode should be $mode',
+      );
+    }
+
     /// Test incident reporting availability.
     final bool isIncidentReportingAvailable =
         await viewController.isIncidentReportingAvailable();

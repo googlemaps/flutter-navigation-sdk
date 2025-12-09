@@ -61,8 +61,10 @@ class GoogleMapsNavigationView extends GoogleMapsBaseMapView {
     super.initialCameraTargetBounds,
     super.initialPadding,
     super.mapId,
+    super.initialMapColorScheme = MapColorScheme.followSystem,
     this.initialNavigationUIEnabledPreference =
         NavigationUIEnabledPreference.automatic,
+    this.initialForceNightMode = NavigationForceNightMode.auto,
     super.layoutDirection,
     super.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
     super.onRecenterButtonClicked,
@@ -135,6 +137,20 @@ class GoogleMapsNavigationView extends GoogleMapsBaseMapView {
   /// the terms and conditions is enough.
   final NavigationUIEnabledPreference initialNavigationUIEnabledPreference;
 
+  /// Controls the initial navigation night mode for Navigation UI and map tiles.
+  ///
+  /// **When navigation UI is enabled:** This setting controls both the
+  /// navigation UI elements (turn-by-turn guidance, route preview, etc.) and
+  /// the map tile colors. The [initialMapColorScheme] setting is ignored in
+  /// this case.
+  ///
+  /// **When navigation UI is disabled:** This setting has no effect. Use
+  /// [initialMapColorScheme] to control the map tile colors instead.
+  ///
+  /// Defaults to [NavigationForceNightMode.auto], which lets the SDK
+  /// automatically determine day or night mode based on time and location.
+  final NavigationForceNightMode initialForceNightMode;
+
   /// On navigation UI enabled changed callback.
   final OnNavigationUIEnabledChanged? onNavigationUIEnabledChanged;
 
@@ -176,10 +192,12 @@ class GoogleMapsNavigationViewState
           cameraTargetBounds: widget.initialCameraTargetBounds,
           padding: widget.initialPadding,
           mapId: widget.mapId,
+          mapColorScheme: widget.initialMapColorScheme,
         ),
         navigationViewOptions: NavigationViewOptions(
           navigationUIEnabledPreference:
               widget.initialNavigationUIEnabledPreference,
+          forceNightMode: widget.initialForceNightMode,
         ),
       ),
       onPlatformViewCreated: _onPlatformViewCreated,
