@@ -171,6 +171,26 @@ enum MapTypeDto: Int {
   case hybrid = 4
 }
 
+/// Map color scheme mode.
+enum MapColorSchemeDto: Int {
+  /// Follow system or SDK default (automatic).
+  case followSystem = 0
+  /// Force light color scheme.
+  case light = 1
+  /// Force dark color scheme.
+  case dark = 2
+}
+
+/// Navigation night mode.
+enum NavigationForceNightModeDto: Int {
+  /// Let the SDK automatically determine day or night.
+  case auto = 0
+  /// Force day mode regardless of time or location.
+  case forceDay = 1
+  /// Force night mode regardless of time or location.
+  case forceNight = 2
+}
+
 enum CameraPerspectiveDto: Int {
   case tilted = 0
   case topDownHeadingUp = 1
@@ -507,6 +527,8 @@ struct MapOptionsDto: Hashable {
   /// The map ID for advanced map options eg. cloud-based map styling.
   /// This value can only be set on map initialization and cannot be changed afterwards.
   var mapId: String? = nil
+  /// The map color scheme mode for the map view.
+  var mapColorScheme: MapColorSchemeDto
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> MapOptionsDto? {
@@ -525,6 +547,7 @@ struct MapOptionsDto: Hashable {
     let cameraTargetBounds: LatLngBoundsDto? = nilOrValue(pigeonVar_list[12])
     let padding: MapPaddingDto? = nilOrValue(pigeonVar_list[13])
     let mapId: String? = nilOrValue(pigeonVar_list[14])
+    let mapColorScheme = pigeonVar_list[15] as! MapColorSchemeDto
 
     return MapOptionsDto(
       cameraPosition: cameraPosition,
@@ -541,7 +564,8 @@ struct MapOptionsDto: Hashable {
       zoomControlsEnabled: zoomControlsEnabled,
       cameraTargetBounds: cameraTargetBounds,
       padding: padding,
-      mapId: mapId
+      mapId: mapId,
+      mapColorScheme: mapColorScheme
     )
   }
   func toList() -> [Any?] {
@@ -561,6 +585,7 @@ struct MapOptionsDto: Hashable {
       cameraTargetBounds,
       padding,
       mapId,
+      mapColorScheme,
     ]
   }
   static func == (lhs: MapOptionsDto, rhs: MapOptionsDto) -> Bool {
@@ -577,18 +602,23 @@ struct MapOptionsDto: Hashable {
 struct NavigationViewOptionsDto: Hashable {
   /// Determines the initial visibility of the navigation UI on map initialization.
   var navigationUIEnabledPreference: NavigationUIEnabledPreferenceDto
+  /// Controls the navigation night mode for Navigation UI.
+  var forceNightMode: NavigationForceNightModeDto
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> NavigationViewOptionsDto? {
     let navigationUIEnabledPreference = pigeonVar_list[0] as! NavigationUIEnabledPreferenceDto
+    let forceNightMode = pigeonVar_list[1] as! NavigationForceNightModeDto
 
     return NavigationViewOptionsDto(
-      navigationUIEnabledPreference: navigationUIEnabledPreference
+      navigationUIEnabledPreference: navigationUIEnabledPreference,
+      forceNightMode: forceNightMode
     )
   }
   func toList() -> [Any?] {
     return [
-      navigationUIEnabledPreference
+      navigationUIEnabledPreference,
+      forceNightMode,
     ]
   }
   static func == (lhs: NavigationViewOptionsDto, rhs: NavigationViewOptionsDto) -> Bool {
@@ -2105,205 +2135,217 @@ private class MessagesPigeonCodecReader: FlutterStandardReader {
     case 132:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return CameraPerspectiveDto(rawValue: enumResultAsInt)
+        return MapColorSchemeDto(rawValue: enumResultAsInt)
       }
       return nil
     case 133:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return MarkerEventTypeDto(rawValue: enumResultAsInt)
+        return NavigationForceNightModeDto(rawValue: enumResultAsInt)
       }
       return nil
     case 134:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return MarkerDragEventTypeDto(rawValue: enumResultAsInt)
+        return CameraPerspectiveDto(rawValue: enumResultAsInt)
       }
       return nil
     case 135:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return StrokeJointTypeDto(rawValue: enumResultAsInt)
+        return MarkerEventTypeDto(rawValue: enumResultAsInt)
       }
       return nil
     case 136:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return PatternTypeDto(rawValue: enumResultAsInt)
+        return MarkerDragEventTypeDto(rawValue: enumResultAsInt)
       }
       return nil
     case 137:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return CameraEventTypeDto(rawValue: enumResultAsInt)
+        return StrokeJointTypeDto(rawValue: enumResultAsInt)
       }
       return nil
     case 138:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return AlternateRoutesStrategyDto(rawValue: enumResultAsInt)
+        return PatternTypeDto(rawValue: enumResultAsInt)
       }
       return nil
     case 139:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return RoutingStrategyDto(rawValue: enumResultAsInt)
+        return CameraEventTypeDto(rawValue: enumResultAsInt)
       }
       return nil
     case 140:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return TravelModeDto(rawValue: enumResultAsInt)
+        return AlternateRoutesStrategyDto(rawValue: enumResultAsInt)
       }
       return nil
     case 141:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return RouteStatusDto(rawValue: enumResultAsInt)
+        return RoutingStrategyDto(rawValue: enumResultAsInt)
       }
       return nil
     case 142:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return TrafficDelaySeverityDto(rawValue: enumResultAsInt)
+        return TravelModeDto(rawValue: enumResultAsInt)
       }
       return nil
     case 143:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return AudioGuidanceTypeDto(rawValue: enumResultAsInt)
+        return RouteStatusDto(rawValue: enumResultAsInt)
       }
       return nil
     case 144:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return SpeedAlertSeverityDto(rawValue: enumResultAsInt)
+        return TrafficDelaySeverityDto(rawValue: enumResultAsInt)
       }
       return nil
     case 145:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return RouteSegmentTrafficDataStatusDto(rawValue: enumResultAsInt)
+        return AudioGuidanceTypeDto(rawValue: enumResultAsInt)
       }
       return nil
     case 146:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto(rawValue: enumResultAsInt)
+        return SpeedAlertSeverityDto(rawValue: enumResultAsInt)
       }
       return nil
     case 147:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return ManeuverDto(rawValue: enumResultAsInt)
+        return RouteSegmentTrafficDataStatusDto(rawValue: enumResultAsInt)
       }
       return nil
     case 148:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return DrivingSideDto(rawValue: enumResultAsInt)
+        return RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto(rawValue: enumResultAsInt)
       }
       return nil
     case 149:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return NavStateDto(rawValue: enumResultAsInt)
+        return ManeuverDto(rawValue: enumResultAsInt)
       }
       return nil
     case 150:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return LaneShapeDto(rawValue: enumResultAsInt)
+        return DrivingSideDto(rawValue: enumResultAsInt)
       }
       return nil
     case 151:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return TaskRemovedBehaviorDto(rawValue: enumResultAsInt)
+        return NavStateDto(rawValue: enumResultAsInt)
       }
       return nil
     case 152:
-      return MapOptionsDto.fromList(self.readValue() as! [Any?])
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return LaneShapeDto(rawValue: enumResultAsInt)
+      }
+      return nil
     case 153:
-      return NavigationViewOptionsDto.fromList(self.readValue() as! [Any?])
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return TaskRemovedBehaviorDto(rawValue: enumResultAsInt)
+      }
+      return nil
     case 154:
-      return ViewCreationOptionsDto.fromList(self.readValue() as! [Any?])
+      return MapOptionsDto.fromList(self.readValue() as! [Any?])
     case 155:
-      return CameraPositionDto.fromList(self.readValue() as! [Any?])
+      return NavigationViewOptionsDto.fromList(self.readValue() as! [Any?])
     case 156:
-      return MarkerDto.fromList(self.readValue() as! [Any?])
+      return ViewCreationOptionsDto.fromList(self.readValue() as! [Any?])
     case 157:
-      return MarkerOptionsDto.fromList(self.readValue() as! [Any?])
+      return CameraPositionDto.fromList(self.readValue() as! [Any?])
     case 158:
-      return ImageDescriptorDto.fromList(self.readValue() as! [Any?])
+      return MarkerDto.fromList(self.readValue() as! [Any?])
     case 159:
-      return InfoWindowDto.fromList(self.readValue() as! [Any?])
+      return MarkerOptionsDto.fromList(self.readValue() as! [Any?])
     case 160:
-      return MarkerAnchorDto.fromList(self.readValue() as! [Any?])
+      return ImageDescriptorDto.fromList(self.readValue() as! [Any?])
     case 161:
-      return PolygonDto.fromList(self.readValue() as! [Any?])
+      return InfoWindowDto.fromList(self.readValue() as! [Any?])
     case 162:
-      return PolygonOptionsDto.fromList(self.readValue() as! [Any?])
+      return MarkerAnchorDto.fromList(self.readValue() as! [Any?])
     case 163:
-      return PolygonHoleDto.fromList(self.readValue() as! [Any?])
+      return PolygonDto.fromList(self.readValue() as! [Any?])
     case 164:
-      return StyleSpanStrokeStyleDto.fromList(self.readValue() as! [Any?])
+      return PolygonOptionsDto.fromList(self.readValue() as! [Any?])
     case 165:
-      return StyleSpanDto.fromList(self.readValue() as! [Any?])
+      return PolygonHoleDto.fromList(self.readValue() as! [Any?])
     case 166:
-      return PolylineDto.fromList(self.readValue() as! [Any?])
+      return StyleSpanStrokeStyleDto.fromList(self.readValue() as! [Any?])
     case 167:
-      return PatternItemDto.fromList(self.readValue() as! [Any?])
+      return StyleSpanDto.fromList(self.readValue() as! [Any?])
     case 168:
-      return PolylineOptionsDto.fromList(self.readValue() as! [Any?])
+      return PolylineDto.fromList(self.readValue() as! [Any?])
     case 169:
-      return CircleDto.fromList(self.readValue() as! [Any?])
+      return PatternItemDto.fromList(self.readValue() as! [Any?])
     case 170:
-      return CircleOptionsDto.fromList(self.readValue() as! [Any?])
+      return PolylineOptionsDto.fromList(self.readValue() as! [Any?])
     case 171:
-      return MapPaddingDto.fromList(self.readValue() as! [Any?])
+      return CircleDto.fromList(self.readValue() as! [Any?])
     case 172:
-      return RouteTokenOptionsDto.fromList(self.readValue() as! [Any?])
+      return CircleOptionsDto.fromList(self.readValue() as! [Any?])
     case 173:
-      return DestinationsDto.fromList(self.readValue() as! [Any?])
+      return MapPaddingDto.fromList(self.readValue() as! [Any?])
     case 174:
-      return RoutingOptionsDto.fromList(self.readValue() as! [Any?])
+      return RouteTokenOptionsDto.fromList(self.readValue() as! [Any?])
     case 175:
-      return NavigationDisplayOptionsDto.fromList(self.readValue() as! [Any?])
+      return DestinationsDto.fromList(self.readValue() as! [Any?])
     case 176:
-      return NavigationWaypointDto.fromList(self.readValue() as! [Any?])
+      return RoutingOptionsDto.fromList(self.readValue() as! [Any?])
     case 177:
-      return NavigationTimeAndDistanceDto.fromList(self.readValue() as! [Any?])
+      return NavigationDisplayOptionsDto.fromList(self.readValue() as! [Any?])
     case 178:
-      return NavigationAudioGuidanceSettingsDto.fromList(self.readValue() as! [Any?])
+      return NavigationWaypointDto.fromList(self.readValue() as! [Any?])
     case 179:
-      return SimulationOptionsDto.fromList(self.readValue() as! [Any?])
+      return NavigationTimeAndDistanceDto.fromList(self.readValue() as! [Any?])
     case 180:
-      return LatLngDto.fromList(self.readValue() as! [Any?])
+      return NavigationAudioGuidanceSettingsDto.fromList(self.readValue() as! [Any?])
     case 181:
-      return LatLngBoundsDto.fromList(self.readValue() as! [Any?])
+      return SimulationOptionsDto.fromList(self.readValue() as! [Any?])
     case 182:
-      return SpeedingUpdatedEventDto.fromList(self.readValue() as! [Any?])
+      return LatLngDto.fromList(self.readValue() as! [Any?])
     case 183:
-      return GpsAvailabilityChangeEventDto.fromList(self.readValue() as! [Any?])
+      return LatLngBoundsDto.fromList(self.readValue() as! [Any?])
     case 184:
-      return SpeedAlertOptionsThresholdPercentageDto.fromList(self.readValue() as! [Any?])
+      return SpeedingUpdatedEventDto.fromList(self.readValue() as! [Any?])
     case 185:
-      return SpeedAlertOptionsDto.fromList(self.readValue() as! [Any?])
+      return GpsAvailabilityChangeEventDto.fromList(self.readValue() as! [Any?])
     case 186:
+      return SpeedAlertOptionsThresholdPercentageDto.fromList(self.readValue() as! [Any?])
+    case 187:
+      return SpeedAlertOptionsDto.fromList(self.readValue() as! [Any?])
+    case 188:
       return RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(
         self.readValue() as! [Any?])
-    case 187:
-      return RouteSegmentTrafficDataDto.fromList(self.readValue() as! [Any?])
-    case 188:
-      return RouteSegmentDto.fromList(self.readValue() as! [Any?])
     case 189:
-      return LaneDirectionDto.fromList(self.readValue() as! [Any?])
+      return RouteSegmentTrafficDataDto.fromList(self.readValue() as! [Any?])
     case 190:
-      return LaneDto.fromList(self.readValue() as! [Any?])
+      return RouteSegmentDto.fromList(self.readValue() as! [Any?])
     case 191:
-      return StepInfoDto.fromList(self.readValue() as! [Any?])
+      return LaneDirectionDto.fromList(self.readValue() as! [Any?])
     case 192:
+      return LaneDto.fromList(self.readValue() as! [Any?])
+    case 193:
+      return StepInfoDto.fromList(self.readValue() as! [Any?])
+    case 194:
       return NavInfoDto.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -2322,188 +2364,194 @@ private class MessagesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? MapTypeDto {
       super.writeByte(131)
       super.writeValue(value.rawValue)
-    } else if let value = value as? CameraPerspectiveDto {
+    } else if let value = value as? MapColorSchemeDto {
       super.writeByte(132)
       super.writeValue(value.rawValue)
-    } else if let value = value as? MarkerEventTypeDto {
+    } else if let value = value as? NavigationForceNightModeDto {
       super.writeByte(133)
       super.writeValue(value.rawValue)
-    } else if let value = value as? MarkerDragEventTypeDto {
+    } else if let value = value as? CameraPerspectiveDto {
       super.writeByte(134)
       super.writeValue(value.rawValue)
-    } else if let value = value as? StrokeJointTypeDto {
+    } else if let value = value as? MarkerEventTypeDto {
       super.writeByte(135)
       super.writeValue(value.rawValue)
-    } else if let value = value as? PatternTypeDto {
+    } else if let value = value as? MarkerDragEventTypeDto {
       super.writeByte(136)
       super.writeValue(value.rawValue)
-    } else if let value = value as? CameraEventTypeDto {
+    } else if let value = value as? StrokeJointTypeDto {
       super.writeByte(137)
       super.writeValue(value.rawValue)
-    } else if let value = value as? AlternateRoutesStrategyDto {
+    } else if let value = value as? PatternTypeDto {
       super.writeByte(138)
       super.writeValue(value.rawValue)
-    } else if let value = value as? RoutingStrategyDto {
+    } else if let value = value as? CameraEventTypeDto {
       super.writeByte(139)
       super.writeValue(value.rawValue)
-    } else if let value = value as? TravelModeDto {
+    } else if let value = value as? AlternateRoutesStrategyDto {
       super.writeByte(140)
       super.writeValue(value.rawValue)
-    } else if let value = value as? RouteStatusDto {
+    } else if let value = value as? RoutingStrategyDto {
       super.writeByte(141)
       super.writeValue(value.rawValue)
-    } else if let value = value as? TrafficDelaySeverityDto {
+    } else if let value = value as? TravelModeDto {
       super.writeByte(142)
       super.writeValue(value.rawValue)
-    } else if let value = value as? AudioGuidanceTypeDto {
+    } else if let value = value as? RouteStatusDto {
       super.writeByte(143)
       super.writeValue(value.rawValue)
-    } else if let value = value as? SpeedAlertSeverityDto {
+    } else if let value = value as? TrafficDelaySeverityDto {
       super.writeByte(144)
       super.writeValue(value.rawValue)
-    } else if let value = value as? RouteSegmentTrafficDataStatusDto {
+    } else if let value = value as? AudioGuidanceTypeDto {
       super.writeByte(145)
       super.writeValue(value.rawValue)
-    } else if let value = value as? RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto {
+    } else if let value = value as? SpeedAlertSeverityDto {
       super.writeByte(146)
       super.writeValue(value.rawValue)
-    } else if let value = value as? ManeuverDto {
+    } else if let value = value as? RouteSegmentTrafficDataStatusDto {
       super.writeByte(147)
       super.writeValue(value.rawValue)
-    } else if let value = value as? DrivingSideDto {
+    } else if let value = value as? RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto {
       super.writeByte(148)
       super.writeValue(value.rawValue)
-    } else if let value = value as? NavStateDto {
+    } else if let value = value as? ManeuverDto {
       super.writeByte(149)
       super.writeValue(value.rawValue)
-    } else if let value = value as? LaneShapeDto {
+    } else if let value = value as? DrivingSideDto {
       super.writeByte(150)
       super.writeValue(value.rawValue)
-    } else if let value = value as? TaskRemovedBehaviorDto {
+    } else if let value = value as? NavStateDto {
       super.writeByte(151)
       super.writeValue(value.rawValue)
-    } else if let value = value as? MapOptionsDto {
+    } else if let value = value as? LaneShapeDto {
       super.writeByte(152)
-      super.writeValue(value.toList())
-    } else if let value = value as? NavigationViewOptionsDto {
+      super.writeValue(value.rawValue)
+    } else if let value = value as? TaskRemovedBehaviorDto {
       super.writeByte(153)
-      super.writeValue(value.toList())
-    } else if let value = value as? ViewCreationOptionsDto {
+      super.writeValue(value.rawValue)
+    } else if let value = value as? MapOptionsDto {
       super.writeByte(154)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraPositionDto {
+    } else if let value = value as? NavigationViewOptionsDto {
       super.writeByte(155)
       super.writeValue(value.toList())
-    } else if let value = value as? MarkerDto {
+    } else if let value = value as? ViewCreationOptionsDto {
       super.writeByte(156)
       super.writeValue(value.toList())
-    } else if let value = value as? MarkerOptionsDto {
+    } else if let value = value as? CameraPositionDto {
       super.writeByte(157)
       super.writeValue(value.toList())
-    } else if let value = value as? ImageDescriptorDto {
+    } else if let value = value as? MarkerDto {
       super.writeByte(158)
       super.writeValue(value.toList())
-    } else if let value = value as? InfoWindowDto {
+    } else if let value = value as? MarkerOptionsDto {
       super.writeByte(159)
       super.writeValue(value.toList())
-    } else if let value = value as? MarkerAnchorDto {
+    } else if let value = value as? ImageDescriptorDto {
       super.writeByte(160)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonDto {
+    } else if let value = value as? InfoWindowDto {
       super.writeByte(161)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonOptionsDto {
+    } else if let value = value as? MarkerAnchorDto {
       super.writeByte(162)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonHoleDto {
+    } else if let value = value as? PolygonDto {
       super.writeByte(163)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleSpanStrokeStyleDto {
+    } else if let value = value as? PolygonOptionsDto {
       super.writeByte(164)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleSpanDto {
+    } else if let value = value as? PolygonHoleDto {
       super.writeByte(165)
       super.writeValue(value.toList())
-    } else if let value = value as? PolylineDto {
+    } else if let value = value as? StyleSpanStrokeStyleDto {
       super.writeByte(166)
       super.writeValue(value.toList())
-    } else if let value = value as? PatternItemDto {
+    } else if let value = value as? StyleSpanDto {
       super.writeByte(167)
       super.writeValue(value.toList())
-    } else if let value = value as? PolylineOptionsDto {
+    } else if let value = value as? PolylineDto {
       super.writeByte(168)
       super.writeValue(value.toList())
-    } else if let value = value as? CircleDto {
+    } else if let value = value as? PatternItemDto {
       super.writeByte(169)
       super.writeValue(value.toList())
-    } else if let value = value as? CircleOptionsDto {
+    } else if let value = value as? PolylineOptionsDto {
       super.writeByte(170)
       super.writeValue(value.toList())
-    } else if let value = value as? MapPaddingDto {
+    } else if let value = value as? CircleDto {
       super.writeByte(171)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteTokenOptionsDto {
+    } else if let value = value as? CircleOptionsDto {
       super.writeByte(172)
       super.writeValue(value.toList())
-    } else if let value = value as? DestinationsDto {
+    } else if let value = value as? MapPaddingDto {
       super.writeByte(173)
       super.writeValue(value.toList())
-    } else if let value = value as? RoutingOptionsDto {
+    } else if let value = value as? RouteTokenOptionsDto {
       super.writeByte(174)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationDisplayOptionsDto {
+    } else if let value = value as? DestinationsDto {
       super.writeByte(175)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationWaypointDto {
+    } else if let value = value as? RoutingOptionsDto {
       super.writeByte(176)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationTimeAndDistanceDto {
+    } else if let value = value as? NavigationDisplayOptionsDto {
       super.writeByte(177)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationAudioGuidanceSettingsDto {
+    } else if let value = value as? NavigationWaypointDto {
       super.writeByte(178)
       super.writeValue(value.toList())
-    } else if let value = value as? SimulationOptionsDto {
+    } else if let value = value as? NavigationTimeAndDistanceDto {
       super.writeByte(179)
       super.writeValue(value.toList())
-    } else if let value = value as? LatLngDto {
+    } else if let value = value as? NavigationAudioGuidanceSettingsDto {
       super.writeByte(180)
       super.writeValue(value.toList())
-    } else if let value = value as? LatLngBoundsDto {
+    } else if let value = value as? SimulationOptionsDto {
       super.writeByte(181)
       super.writeValue(value.toList())
-    } else if let value = value as? SpeedingUpdatedEventDto {
+    } else if let value = value as? LatLngDto {
       super.writeByte(182)
       super.writeValue(value.toList())
-    } else if let value = value as? GpsAvailabilityChangeEventDto {
+    } else if let value = value as? LatLngBoundsDto {
       super.writeByte(183)
       super.writeValue(value.toList())
-    } else if let value = value as? SpeedAlertOptionsThresholdPercentageDto {
+    } else if let value = value as? SpeedingUpdatedEventDto {
       super.writeByte(184)
       super.writeValue(value.toList())
-    } else if let value = value as? SpeedAlertOptionsDto {
+    } else if let value = value as? GpsAvailabilityChangeEventDto {
       super.writeByte(185)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteSegmentTrafficDataRoadStretchRenderingDataDto {
+    } else if let value = value as? SpeedAlertOptionsThresholdPercentageDto {
       super.writeByte(186)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteSegmentTrafficDataDto {
+    } else if let value = value as? SpeedAlertOptionsDto {
       super.writeByte(187)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteSegmentDto {
+    } else if let value = value as? RouteSegmentTrafficDataRoadStretchRenderingDataDto {
       super.writeByte(188)
       super.writeValue(value.toList())
-    } else if let value = value as? LaneDirectionDto {
+    } else if let value = value as? RouteSegmentTrafficDataDto {
       super.writeByte(189)
       super.writeValue(value.toList())
-    } else if let value = value as? LaneDto {
+    } else if let value = value as? RouteSegmentDto {
       super.writeByte(190)
       super.writeValue(value.toList())
-    } else if let value = value as? StepInfoDto {
+    } else if let value = value as? LaneDirectionDto {
       super.writeByte(191)
       super.writeValue(value.toList())
-    } else if let value = value as? NavInfoDto {
+    } else if let value = value as? LaneDto {
       super.writeByte(192)
+      super.writeValue(value.toList())
+    } else if let value = value as? StepInfoDto {
+      super.writeByte(193)
+      super.writeValue(value.toList())
+    } else if let value = value as? NavInfoDto {
+      super.writeByte(194)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -2681,6 +2729,10 @@ protocol MapViewApi {
   func enableOnCameraChangedEvents(viewId: Int64) throws
   func setPadding(viewId: Int64, padding: MapPaddingDto) throws
   func getPadding(viewId: Int64) throws -> MapPaddingDto
+  func getMapColorScheme(viewId: Int64) throws -> MapColorSchemeDto
+  func setMapColorScheme(viewId: Int64, mapColorScheme: MapColorSchemeDto) throws
+  func getForceNightMode(viewId: Int64) throws -> NavigationForceNightModeDto
+  func setForceNightMode(viewId: Int64, forceNightMode: NavigationForceNightModeDto) throws
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -4574,6 +4626,80 @@ class MapViewApiSetup {
       }
     } else {
       getPaddingChannel.setMessageHandler(nil)
+    }
+    let getMapColorSchemeChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapColorScheme\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getMapColorSchemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] as! Int64
+        do {
+          let result = try api.getMapColorScheme(viewId: viewIdArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getMapColorSchemeChannel.setMessageHandler(nil)
+    }
+    let setMapColorSchemeChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapColorScheme\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setMapColorSchemeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] as! Int64
+        let mapColorSchemeArg = args[1] as! MapColorSchemeDto
+        do {
+          try api.setMapColorScheme(viewId: viewIdArg, mapColorScheme: mapColorSchemeArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setMapColorSchemeChannel.setMessageHandler(nil)
+    }
+    let getForceNightModeChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getForceNightMode\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getForceNightModeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] as! Int64
+        do {
+          let result = try api.getForceNightMode(viewId: viewIdArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getForceNightModeChannel.setMessageHandler(nil)
+    }
+    let setForceNightModeChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setForceNightMode\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setForceNightModeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] as! Int64
+        let forceNightModeArg = args[1] as! NavigationForceNightModeDto
+        do {
+          try api.setForceNightMode(viewId: viewIdArg, forceNightMode: forceNightModeArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setForceNightModeChannel.setMessageHandler(nil)
     }
   }
 }
