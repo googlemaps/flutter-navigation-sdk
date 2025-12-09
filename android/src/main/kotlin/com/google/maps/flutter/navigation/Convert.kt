@@ -333,9 +333,10 @@ object Convert {
    */
   fun convertNavigationForceNightModeToDto(forceNightMode: Int): NavigationForceNightModeDto {
     return when (forceNightMode) {
+      ForceNightMode.AUTO -> NavigationForceNightModeDto.AUTO
       ForceNightMode.FORCE_DAY -> NavigationForceNightModeDto.FORCE_DAY
       ForceNightMode.FORCE_NIGHT -> NavigationForceNightModeDto.FORCE_NIGHT
-      else -> NavigationForceNightModeDto.AUTO
+      else -> throw FlutterError("convertError", "Unknown ForceNightMode: $forceNightMode")
     }
   }
 
