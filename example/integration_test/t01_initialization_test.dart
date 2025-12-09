@@ -212,6 +212,9 @@ void main() {
     const double maxZoomPreference = 18.0;
     const NavigationUIEnabledPreference navigationUiEnabledPreference =
         NavigationUIEnabledPreference.disabled;
+    const MapColorScheme mapColorScheme = MapColorScheme.dark;
+    const NavigationForceNightMode forceNightMode =
+        NavigationForceNightMode.forceNight;
 
     /// Display navigation view.
     final Key key = GlobalKey();
@@ -247,6 +250,8 @@ void main() {
             initialMaxZoomPreference: maxZoomPreference,
             // ignore: avoid_redundant_argument_values
             initialNavigationUIEnabledPreference: navigationUiEnabledPreference,
+            initialMapColorScheme: mapColorScheme,
+            initialForceNightMode: forceNightMode,
           ),
         );
       case TestMapType.mapView:
@@ -270,6 +275,7 @@ void main() {
             initialZoomControlsEnabled: zoomControlsEnabled,
             initialMinZoomPreference: minZoomPreference,
             initialMaxZoomPreference: maxZoomPreference,
+            initialMapColorScheme: mapColorScheme,
           ),
         );
     }
@@ -349,6 +355,13 @@ void main() {
       maxZoomPreference,
       reason: 'Max zoom preference mismatch',
     );
+    // Test map color scheme initial value
+    expect(
+      await controller.getMapColorScheme(),
+      mapColorScheme,
+      reason: 'Map color scheme mismatch',
+    );
+
     if (mapTypeVariants.currentValue == TestMapType.navigationView) {
       expect(controller, isA<GoogleNavigationViewController>());
       var navViewController = controller as GoogleNavigationViewController;
@@ -356,6 +369,12 @@ void main() {
         await navViewController.isNavigationUIEnabled(),
         false,
         reason: 'Navigation UI enabled mismatch',
+      );
+      // Test force night mode initial value (navigation view only)
+      expect(
+        await navViewController.getForceNightMode(),
+        forceNightMode,
+        reason: 'Force night mode mismatch',
       );
     }
   }, variant: mapTypeVariants);

@@ -628,4 +628,80 @@ void main() {
       expect(lonSpan, 20.0);
     });
   });
+
+  group('MapColorScheme tests', () {
+    test('tests MapColorScheme conversion to DTO', () {
+      expect(
+        MapColorScheme.followSystem.toDto(),
+        MapColorSchemeDto.followSystem,
+      );
+      expect(MapColorScheme.light.toDto(), MapColorSchemeDto.light);
+      expect(MapColorScheme.dark.toDto(), MapColorSchemeDto.dark);
+    });
+
+    test('tests MapColorScheme conversion from DTO', () {
+      expect(
+        MapColorSchemeDto.followSystem.toMapColorScheme(),
+        MapColorScheme.followSystem,
+      );
+      expect(MapColorSchemeDto.light.toMapColorScheme(), MapColorScheme.light);
+      expect(MapColorSchemeDto.dark.toMapColorScheme(), MapColorScheme.dark);
+    });
+
+    test('tests MapColorScheme enum values', () {
+      expect(MapColorScheme.values.length, 3);
+      expect(
+        MapColorScheme.values,
+        containsAll(<MapColorScheme>[
+          MapColorScheme.followSystem,
+          MapColorScheme.light,
+          MapColorScheme.dark,
+        ]),
+      );
+    });
+  });
+
+  group('NavigationForceNightMode tests', () {
+    test('tests NavigationForceNightMode conversion to DTO', () {
+      expect(
+        NavigationForceNightMode.auto.toDto(),
+        NavigationForceNightModeDto.auto,
+      );
+      expect(
+        NavigationForceNightMode.forceDay.toDto(),
+        NavigationForceNightModeDto.forceDay,
+      );
+      expect(
+        NavigationForceNightMode.forceNight.toDto(),
+        NavigationForceNightModeDto.forceNight,
+      );
+    });
+
+    test('tests NavigationForceNightMode conversion from DTO', () {
+      expect(
+        NavigationForceNightModeDto.auto.toNavigationForceNightMode(),
+        NavigationForceNightMode.auto,
+      );
+      expect(
+        NavigationForceNightModeDto.forceDay.toNavigationForceNightMode(),
+        NavigationForceNightMode.forceDay,
+      );
+      expect(
+        NavigationForceNightModeDto.forceNight.toNavigationForceNightMode(),
+        NavigationForceNightMode.forceNight,
+      );
+    });
+
+    test('tests NavigationForceNightMode enum values', () {
+      expect(NavigationForceNightMode.values.length, 3);
+      expect(
+        NavigationForceNightMode.values,
+        containsAll(<NavigationForceNightMode>[
+          NavigationForceNightMode.auto,
+          NavigationForceNightMode.forceDay,
+          NavigationForceNightMode.forceNight,
+        ]),
+      );
+    });
+  });
 }

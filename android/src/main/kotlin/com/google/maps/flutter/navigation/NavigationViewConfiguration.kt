@@ -26,4 +26,7 @@ enum class NavigationUIEnabledPreference {
 }
 
 /** Class for navigation view configuration options. */
-data class NavigationViewOptions(val navigationUiEnabledPreference: NavigationUIEnabledPreference?)
+data class NavigationViewOptions(
+  val navigationUiEnabledPreference: NavigationUIEnabledPreference?,
+  val forceNightMode: Int?,
+)

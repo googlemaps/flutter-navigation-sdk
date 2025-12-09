@@ -131,26 +131,12 @@ class MapViewAPIImpl {
             )
           : null,
       mapId: mapOptions.mapId,
+      mapColorScheme: mapOptions.mapColorScheme.toDto(),
     );
 
     // Initialize navigation view options if given
-    NavigationViewOptionsDto? navigationOptionsMessage;
-    final NavigationViewOptions? navigationViewOptions =
-        initializationSettings.navigationViewOptions;
-    if (navigationViewOptions != null) {
-      switch (navigationViewOptions.navigationUIEnabledPreference) {
-        case NavigationUIEnabledPreference.automatic:
-          navigationOptionsMessage = NavigationViewOptionsDto(
-            navigationUIEnabledPreference:
-                NavigationUIEnabledPreferenceDto.automatic,
-          );
-        case NavigationUIEnabledPreference.disabled:
-          navigationOptionsMessage = NavigationViewOptionsDto(
-            navigationUIEnabledPreference:
-                NavigationUIEnabledPreferenceDto.disabled,
-          );
-      }
-    }
+    final NavigationViewOptionsDto? navigationOptionsMessage =
+        initializationSettings.navigationViewOptions?.toDto();
 
     // Build ViewCreationMessage
     return ViewCreationOptionsDto(
@@ -1196,6 +1182,39 @@ class MapViewAPIImpl {
       bottom: padding.bottom.toDouble(),
       right: padding.right.toDouble(),
     );
+  }
+
+  /// Gets the current map color scheme from the map view.
+  Future<MapColorScheme> getMapColorScheme({required int viewId}) async {
+    final MapColorSchemeDto colorScheme = await _viewApi.getMapColorScheme(
+      viewId,
+    );
+    return colorScheme.toMapColorScheme();
+  }
+
+  /// Sets the map color scheme for the map view.
+  Future<void> setMapColorScheme({
+    required int viewId,
+    required MapColorScheme mapColorScheme,
+  }) {
+    return _viewApi.setMapColorScheme(viewId, mapColorScheme.toDto());
+  }
+
+  /// Gets the current force night mode from the navigation view.
+  Future<NavigationForceNightMode> getForceNightMode({
+    required int viewId,
+  }) async {
+    final NavigationForceNightModeDto forceNightMode = await _viewApi
+        .getForceNightMode(viewId);
+    return forceNightMode.toNavigationForceNightMode();
+  }
+
+  /// Sets the force night mode for the navigation view.
+  Future<void> setForceNightMode({
+    required int viewId,
+    required NavigationForceNightMode forceNightMode,
+  }) {
+    return _viewApi.setForceNightMode(viewId, forceNightMode.toDto());
   }
 
   Stream<MapClickEvent> getMapClickEventStream({required int viewId}) {

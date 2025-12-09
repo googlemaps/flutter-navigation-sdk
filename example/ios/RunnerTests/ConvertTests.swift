@@ -552,13 +552,15 @@ class ConvertTests: XCTestCase {
       scrollGesturesEnabledDuringRotateOrZoom: false,
       mapToolbarEnabled: false,
       zoomControlsEnabled: false,
-      mapId: "test-map-id"
+      mapId: "test-map-id",
+      mapColorScheme: MapColorSchemeDto.dark
     )
 
     let navigationViewOptions =
       NavigationViewOptionsDto(
         navigationUIEnabledPreference: NavigationUIEnabledPreferenceDto
-          .automatic)
+          .automatic,
+        forceNightMode: NavigationForceNightModeDto.forceNight)
 
     let configuration = Convert.convertMapOptions(mapOptions)
 
@@ -586,6 +588,11 @@ class ConvertTests: XCTestCase {
       configuration.scrollGesturesEnabledDuringRotateOrZoom
     )
     XCTAssertEqual(mapOptions.mapId, configuration.mapId)
+    XCTAssertEqual(configuration.mapColorScheme, UIUserInterfaceStyle.dark)
+    let convertedNightMode = Convert.convertNavigationForceNightMode(
+      forceNightMode: navigationViewOptions.forceNightMode
+    )
+    XCTAssertEqual(convertedNightMode, GMSNavigationLightingMode.lowLight)
   }
 
   func testConvertPath() {

@@ -231,7 +231,10 @@ extension ConvertNavigationViewOptions on NavigationViewOptions {
         preference = NavigationUIEnabledPreferenceDto.disabled;
     }
 
-    return NavigationViewOptionsDto(navigationUIEnabledPreference: preference);
+    return NavigationViewOptionsDto(
+      navigationUIEnabledPreference: preference,
+      forceNightMode: forceNightMode.toDto(),
+    );
   }
 }
 

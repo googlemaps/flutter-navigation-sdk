@@ -519,4 +519,24 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
   override fun getPadding(viewId: Long): MapPaddingDto {
     return getView(viewId.toInt()).getPadding()
   }
+
+  override fun getMapColorScheme(viewId: Long): MapColorSchemeDto {
+    val colorScheme = getView(viewId.toInt()).getMapColorScheme()
+    return Convert.convertMapColorSchemeToDto(colorScheme)
+  }
+
+  override fun setMapColorScheme(viewId: Long, mapColorScheme: MapColorSchemeDto) {
+    val colorScheme = Convert.convertMapColorSchemeFromDto(mapColorScheme)
+    getView(viewId.toInt()).setMapColorScheme(colorScheme)
+  }
+
+  override fun getForceNightMode(viewId: Long): NavigationForceNightModeDto {
+    val forceNightMode = getNavigationView(viewId.toInt()).getForceNightMode()
+    return Convert.convertNavigationForceNightModeToDto(forceNightMode)
+  }
+
+  override fun setForceNightMode(viewId: Long, forceNightMode: NavigationForceNightModeDto) {
+    val nightMode = Convert.convertNavigationForceNightModeFromDto(forceNightMode)
+    getNavigationView(viewId.toInt()).setForceNightMode(nightMode)
+  }
 }

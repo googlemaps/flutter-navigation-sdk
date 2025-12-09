@@ -49,6 +49,60 @@ enum Convert {
     }
   }
 
+  static func convertMapColorScheme(mapColorScheme: MapColorSchemeDto) -> UIUserInterfaceStyle {
+    switch mapColorScheme {
+    case .followSystem:
+      return .unspecified
+    case .light:
+      return .light
+    case .dark:
+      return .dark
+    }
+  }
+
+  static func convertMapColorScheme(uiUserInterfaceStyle: UIUserInterfaceStyle) -> MapColorSchemeDto
+  {
+    switch uiUserInterfaceStyle {
+    case .light:
+      return .light
+    case .dark:
+      return .dark
+    case .unspecified:
+      return .followSystem
+    @unknown default:
+      return .followSystem
+    }
+  }
+
+  static func convertNavigationForceNightMode(forceNightMode: NavigationForceNightModeDto)
+    -> GMSNavigationLightingMode?
+  {
+    switch forceNightMode {
+    case .auto:
+      return nil
+    case .forceDay:
+      return .normal
+    case .forceNight:
+      return .lowLight
+    }
+  }
+
+  static func convertNavigationForceNightMode(gmsNavigationLightingMode: GMSNavigationLightingMode?)
+    -> NavigationForceNightModeDto
+  {
+    guard let gmsNavigationLightingMode else {
+      return .auto
+    }
+    switch gmsNavigationLightingMode {
+    case .normal:
+      return .forceDay
+    case .lowLight:
+      return .forceNight
+    @unknown default:
+      return .auto
+    }
+  }
+
   static func convertCameraPosition(position: GMSCameraPosition) -> CameraPositionDto {
     let target = LatLngDto(
       latitude: position.target.latitude,

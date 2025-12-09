@@ -1055,4 +1055,12 @@ abstract class GoogleMapsBaseMapView(
   fun getPadding(): MapPaddingDto {
     return _mapOptions?.padding ?: MapPaddingDto(0, 0, 0, 0)
   }
+
+  fun getMapColorScheme(): Int {
+    return getMap().mapColorScheme
+  }
+
+  fun setMapColorScheme(mapColorScheme: Int) {
+    getMap().mapColorScheme = mapColorScheme
+  }
 }

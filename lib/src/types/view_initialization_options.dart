@@ -111,6 +111,7 @@ class MapOptions {
     this.cameraTargetBounds,
     this.padding,
     this.mapId,
+    this.mapColorScheme = MapColorScheme.followSystem,
   }) : assert(
          minZoomPreference == null ||
              maxZoomPreference == null ||
@@ -214,6 +215,22 @@ class MapOptions {
   /// Null by default (no map ID).
   final String? mapId;
 
+  /// The map color scheme mode for the map view.
+  ///
+  /// Controls whether the map should use light, dark, or system-following color
+  /// scheme. This setting affects the map tiles and basic map styling.
+  ///
+  /// **Important:** For navigation views, this setting only controls the map
+  /// tile colors when navigation UI is **disabled**. When navigation UI is
+  /// enabled, use [NavigationViewOptions.forceNightMode] to control both the
+  /// navigation UI and map tile colors.
+  ///
+  /// For map-only views (GoogleMapsMapView), this setting always controls the
+  /// map tile colors.
+  ///
+  /// Defaults to [MapColorScheme.followSystem].
+  final MapColorScheme mapColorScheme;
+
   @override
   String toString() =>
       'MapOptions('
@@ -231,7 +248,8 @@ class MapOptions {
       'zoomControlsEnabled: $zoomControlsEnabled, '
       'cameraTargetBounds: $cameraTargetBounds, '
       'padding: $padding, '
-      'mapId: $mapId'
+      'mapId: $mapId, '
+      'mapColorScheme: $mapColorScheme'
       ')';
 }
 
@@ -257,6 +275,7 @@ class NavigationViewOptions {
   const NavigationViewOptions({
     this.navigationUIEnabledPreference =
         NavigationUIEnabledPreference.automatic,
+    this.forceNightMode = NavigationForceNightMode.auto,
   });
 
   /// Determines the initial visibility of the navigation UI on map initialization.
@@ -269,9 +288,24 @@ class NavigationViewOptions {
   /// initially displays a classic map view.
   final NavigationUIEnabledPreference navigationUIEnabledPreference;
 
+  /// Controls the navigation night mode for Navigation UI and map tiles.
+  ///
+  /// **When navigation UI is enabled:** This setting controls both the
+  /// navigation UI elements (turn-by-turn guidance, route preview, etc.) and
+  /// the map tile colors. The [MapOptions.mapColorScheme] setting is ignored
+  /// in this case.
+  ///
+  /// **When navigation UI is disabled:** This setting has no effect. Use
+  /// [MapOptions.mapColorScheme] to control the map tile colors instead.
+  ///
+  /// Defaults to [NavigationForceNightMode.auto], which lets the SDK automatically
+  /// determine day or night mode based on time and location.
+  final NavigationForceNightMode forceNightMode;
+
   @override
   String toString() =>
       'NavigationViewOptions('
-      'navigationUIEnabledPreference: $navigationUIEnabledPreference'
+      'navigationUIEnabledPreference: $navigationUIEnabledPreference, '
+      'forceNightMode: $forceNightMode'
       ')';
 }

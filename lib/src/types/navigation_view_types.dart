@@ -40,6 +40,39 @@ enum MapType {
   hybrid,
 }
 
+/// Map color scheme mode.
+/// {@category Navigation View}
+/// {@category Map View}
+enum MapColorScheme {
+  /// Follow system or SDK default (automatic).
+  followSystem,
+
+  /// Force light color scheme.
+  light,
+
+  /// Force dark color scheme.
+  dark,
+}
+
+/// Navigation night mode.
+///
+/// Controls the navigation UI lighting mode for Navigation views.
+/// This affects the color scheme and visibility of navigation UI elements.
+///
+/// Android ref: https://developers.google.com/maps/documentation/navigation/android-sdk/reference/com/google/android/libraries/navigation/ForceNightMode
+/// iOS ref: https://developers.google.com/maps/documentation/navigation/ios-sdk/reference/objc/Enums/GMSNavigationLightingMode
+/// {@category Navigation View}
+enum NavigationForceNightMode {
+  /// Let the SDK automatically determine day or night mode based on time and location.
+  auto,
+
+  /// Force day mode regardless of time or location.
+  forceDay,
+
+  /// Force night mode regardless of time or location.
+  forceNight,
+}
+
 /// Represents the camera position in a Google Maps view.
 /// {@category Navigation View}
 /// {@category Map View}

@@ -90,13 +90,23 @@ abstract class ExamplePageState<T extends ExamplePage> extends State<T>
     throw UnimplementedError();
   }
 
+  /// Returns custom actions for the AppBar.
+  /// Override this method to add custom actions to the AppBar.
+  @protected
+  List<Widget>? getAppBarActions() {
+    return null;
+  }
+
   /// Wraps page content with scaffold and overlay.
   @protected
   Widget buildPage(BuildContext context, WidgetBuilder builder) {
     return Stack(
       children: <Widget>[
         Scaffold(
-          appBar: AppBar(title: Text(widget.title)),
+          appBar: AppBar(
+            title: Text(widget.title),
+            actions: getAppBarActions(),
+          ),
           body: Builder(builder: (BuildContext context) => builder(context)),
         ),
         if (_isOverlayVisible) _buildOverlay(),

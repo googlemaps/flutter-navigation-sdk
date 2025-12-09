@@ -39,6 +39,7 @@ struct MapConfiguration {
   var maxZoomPreference: Float?
   var padding: UIEdgeInsets?
   var mapId: String?
+  var mapColorScheme: UIUserInterfaceStyle
 }
 
 extension MapConfiguration {
@@ -47,6 +48,7 @@ extension MapConfiguration {
   // - Parameter to: The GMSMapView to configure.
   func apply(to mapView: GMSMapView) {
     mapView.mapType = mapType
+    mapView.overrideUserInterfaceStyle = mapColorScheme
     mapView.settings.compassButton = compassEnabled
     mapView.settings.rotateGestures = rotateGesturesEnabled
     mapView.settings.scrollGestures = scrollGesturesEnabled

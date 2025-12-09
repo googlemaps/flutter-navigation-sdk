@@ -41,7 +41,7 @@ jobs:
       - uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         name: Setup flutter
         with:
-          flutter-version: "3.32.x"
+          flutter-version: "3.38.x"
           channel: "stable"
           cache: true
       - uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
@@ -67,7 +67,7 @@ jobs:
       - name: Setup flutter
         uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
-          flutter-version: "3.32.x"
+          flutter-version: "3.38.x"
           channel: "stable"
           cache: true
       - name: Setup melos
@@ -97,7 +97,7 @@ jobs:
       - name: Setup flutter
         uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
-          flutter-version: "3.32.x"
+          flutter-version: "3.38.x"
           channel: "stable"
           cache: true
       - name: Setup melos
@@ -147,7 +147,7 @@ jobs:
       - name: Setup flutter
         uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
-          flutter-version: "3.32.x"
+          flutter-version: "3.38.x"
           channel: "stable"
           cache: true
       - name: Setup melos
@@ -184,7 +184,7 @@ jobs:
       - name: Setup flutter
         uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
-          flutter-version: "3.32.x"
+          flutter-version: "3.38.x"
           channel: "stable"
           cache: true
           architecture: x64
@@ -260,7 +260,7 @@ jobs:
       - name: Setup flutter
         uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
-          flutter-version: "3.32.x"
+          flutter-version: "3.38.x"
           channel: "stable"
           cache: true
       - name: Download Build Artifact
@@ -340,7 +340,7 @@ jobs:
       - name: Setup flutter
         uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
-          flutter-version: "3.32.x"
+          flutter-version: "3.38.x"
           channel: "stable"
           cache: true
       - name: Select XCode 16.4

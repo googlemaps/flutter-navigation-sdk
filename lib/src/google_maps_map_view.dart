@@ -45,6 +45,7 @@ abstract class GoogleMapsBaseMapView extends StatefulWidget {
     this.initialCameraTargetBounds,
     this.initialPadding,
     this.mapId,
+    this.initialMapColorScheme = MapColorScheme.followSystem,
     this.layoutDirection,
     this.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
     this.onRecenterButtonClicked,
@@ -167,6 +168,14 @@ abstract class GoogleMapsBaseMapView extends StatefulWidget {
   /// Null by default (no map ID).
   final String? mapId;
 
+  /// The map color scheme mode for the map view.
+  ///
+  /// Controls whether the map should use light, dark, or system-following color scheme.
+  /// This setting affects the map tiles and basic map styling.
+  ///
+  /// Defaults to [MapColorScheme.followSystem].
+  final MapColorScheme initialMapColorScheme;
+
   /// Which gestures should be forwarded to the PlatformView.
   ///
   /// When this set is empty, the map will only handle pointer events for gestures that
@@ -274,6 +283,7 @@ class GoogleMapsMapView extends GoogleMapsBaseMapView {
     super.initialCameraTargetBounds,
     super.initialPadding,
     super.mapId,
+    super.initialMapColorScheme = MapColorScheme.followSystem,
     super.layoutDirection,
     super.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
     super.onRecenterButtonClicked,
@@ -456,6 +466,7 @@ class GoogleMapsMapViewState extends MapViewState<GoogleMapsMapView> {
           cameraTargetBounds: widget.initialCameraTargetBounds,
           padding: widget.initialPadding,
           mapId: widget.mapId,
+          mapColorScheme: widget.initialMapColorScheme,
         ),
       ),
       onPlatformViewCreated: _onPlatformViewCreated,

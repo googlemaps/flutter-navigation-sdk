@@ -577,4 +577,24 @@ class GoogleMapsNavigationViewMessageHandler: MapViewApi {
   func getPadding(viewId: Int64) throws -> MapPaddingDto {
     try getView(viewId).getPadding()
   }
+
+  func getMapColorScheme(viewId: Int64) throws -> MapColorSchemeDto {
+    let colorScheme = try getView(viewId).getMapColorScheme()
+    return Convert.convertMapColorScheme(uiUserInterfaceStyle: colorScheme)
+  }
+
+  func setMapColorScheme(viewId: Int64, mapColorScheme: MapColorSchemeDto) throws {
+    let colorScheme = Convert.convertMapColorScheme(mapColorScheme: mapColorScheme)
+    try getView(viewId).setMapColorScheme(colorScheme: colorScheme)
+  }
+
+  func getForceNightMode(viewId: Int64) throws -> NavigationForceNightModeDto {
+    let mode = try getView(viewId).getForceNightMode()
+    return Convert.convertNavigationForceNightMode(gmsNavigationLightingMode: mode)
+  }
+
+  func setForceNightMode(viewId: Int64, forceNightMode: NavigationForceNightModeDto) throws {
+    let mode = Convert.convertNavigationForceNightMode(forceNightMode: forceNightMode)
+    try getView(viewId).setForceNightMode(mode)
+  }
 }

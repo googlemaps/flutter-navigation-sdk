@@ -33,7 +33,7 @@ jobs:
       - name: Setup flutter
         uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
-          flutter-version: "3.32.x"
+          flutter-version: "3.38.x"
           channel: "stable"
           cache: true
       - name: Setup melos
@@ -57,7 +57,7 @@ jobs:
       - name: Setup flutter
         uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
-          flutter-version: "3.32.x"
+          flutter-version: "3.38.x"
           channel: "stable"
           cache: true
       - name: Setup melos
