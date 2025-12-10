@@ -133,7 +133,8 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
       _viewRegistry.unregisterCarPlayView()
     } else {
       if let _viewId {
-        _viewRegistry.unregisterView(viewId: _viewId)
+        let viewInstanceId = ObjectIdentifier(self)
+        _viewRegistry.unregisterView(viewId: _viewId, viewIdToUnregister: viewInstanceId)
       }
     }
   }
