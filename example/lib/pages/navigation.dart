@@ -87,6 +87,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   int _remainingTime = 0;
   int _remainingDistance = 0;
+  TrafficDelaySeverity _delaySeverity = TrafficDelaySeverity.noData;
   int _onRouteChangedEventCallCount = 0;
   int _onRoadSnappedLocationUpdatedEventCallCount = 0;
   int _onRoadSnappedRawLocationUpdatedEventCallCount = 0;
@@ -482,6 +483,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     setState(() {
       _remainingDistance = event.remainingDistance.toInt();
       _remainingTime = event.remainingTime.toInt();
+      _delaySeverity = event.delaySeverity;
       _onRemainingTimeOrDistanceChangedEventCallCount += 1;
     });
   }
@@ -680,6 +682,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       _nextWaypointIndex = 0;
       _remainingDistance = 0;
       _remainingTime = 0;
+      _delaySeverity = TrafficDelaySeverity.noData;
       _waitingForUserToContinue = false;
       _arrivedWaypoint = null;
     });
@@ -1401,6 +1404,10 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                 ),
                 Text(
                   'Remaining distance: ${formatRemainingDistance(_remainingDistance)}',
+                  style: const TextStyle(fontSize: 15),
+                ),
+                Text(
+                  'Traffic delay severity: ${_delaySeverity.toString().split('.').last}',
                   style: const TextStyle(fontSize: 15),
                 ),
               ],

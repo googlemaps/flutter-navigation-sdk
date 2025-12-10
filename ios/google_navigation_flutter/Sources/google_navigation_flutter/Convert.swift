@@ -509,6 +509,18 @@ enum Convert {
     }
   }
 
+  static func convertDelaySeverity(
+    _ delayCategory: GMSNavigationDelayCategory
+  ) -> TrafficDelaySeverityDto {
+    switch delayCategory {
+    case .light: return .light
+    case .medium: return .medium
+    case .heavy: return .heavy
+    case .noData: return .noData
+    @unknown default: return .noData
+    }
+  }
+
   static func convertPath(_ path: GMSPath) -> [LatLngDto] {
     var coordinates = [LatLngDto]()
     guard path.count() != 0 else { return coordinates }

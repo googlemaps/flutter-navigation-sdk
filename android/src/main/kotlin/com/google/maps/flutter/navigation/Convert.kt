@@ -381,6 +381,23 @@ object Convert {
   }
 
   /**
+   * Converts Google Navigation [TimeAndDistance] delay severity to pigeon
+   * [TrafficDelaySeverityDto].
+   *
+   * @param delaySeverity Google Navigation TimeAndDistance delay severity [Int].
+   * @return pigeon [TrafficDelaySeverityDto].
+   */
+  fun convertDelaySeverityToDto(delaySeverity: Int): TrafficDelaySeverityDto {
+    return when (delaySeverity) {
+      TimeAndDistance.DELAY_LIGHT -> TrafficDelaySeverityDto.LIGHT
+      TimeAndDistance.DELAY_MEDIUM -> TrafficDelaySeverityDto.MEDIUM
+      TimeAndDistance.DELAY_HEAVY -> TrafficDelaySeverityDto.HEAVY
+      TimeAndDistance.DELAY_NODATA -> TrafficDelaySeverityDto.NO_DATA
+      else -> TrafficDelaySeverityDto.NO_DATA
+    }
+  }
+
+  /**
    * Converts Google Navigation [TimeAndDistance] to pigeon [NavigationTimeAndDistanceDto].
    *
    * @param timeAndDistance Google Navigation [TimeAndDistance].
@@ -390,6 +407,7 @@ object Convert {
     return NavigationTimeAndDistanceDto(
       timeAndDistance.seconds.toDouble(),
       timeAndDistance.meters.toDouble(),
+      convertDelaySeverityToDto(timeAndDistance.delaySeverity),
     )
   }
 

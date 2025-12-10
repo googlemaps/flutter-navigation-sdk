@@ -352,6 +352,7 @@ constructor(
             navigationSessionEventApi.onRemainingTimeOrDistanceChanged(
               timeAndDistance.seconds.toDouble(),
               timeAndDistance.meters.toDouble(),
+              Convert.convertDelaySeverityToDto(timeAndDistance.delaySeverity),
             ) {}
           }
         }

@@ -358,18 +358,25 @@ enum NavigationRouteStatus {
 /// Time and distance to next waypoint.
 /// {@category Navigation}
 class NavigationTimeAndDistance {
-  /// Initialize with time and distance.
-  NavigationTimeAndDistance({required this.time, required this.distance});
+  /// Initialize with time, distance, and delay severity.
+  NavigationTimeAndDistance({
+    required this.time,
+    required this.distance,
+    required this.delaySeverity,
+  });
 
-  /// Time to destination.
+  /// Time to destination in seconds.
   final double time;
 
-  /// Distance to destination.
+  /// Distance to destination in meters.
   final double distance;
+
+  /// Traffic delay severity.
+  final TrafficDelaySeverity delaySeverity;
 
   @override
   String toString() =>
-      'NavigationTimeAndDistance(time: $time, distance: $distance)';
+      'NavigationTimeAndDistance(time: $time, distance: $distance, delaySeverity: $delaySeverity)';
 }
 
 /// Navigation audio guidance type.

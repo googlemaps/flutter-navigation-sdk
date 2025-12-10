@@ -271,10 +271,12 @@ void main() {
       final NavigationTimeAndDistance td = NavigationTimeAndDistanceDto(
         time: 5.0,
         distance: 6.0,
+        delaySeverity: TrafficDelaySeverityDto.medium,
       ).toNavigationTimeAndDistance();
 
       expect(td.time, 5.0);
       expect(td.distance, 6.0);
+      expect(td.delaySeverity, TrafficDelaySeverity.medium);
     });
 
     test('Navigation audio guidance conversion to Pigeon DTO', () {
@@ -312,6 +314,25 @@ void main() {
       expect(
         SpeedAlertSeverity.unknown,
         SpeedAlertSeverityDto.unknown.toSpeedAlertSeverity(),
+      );
+    });
+
+    test('Traffic delay severity conversion from Pigeon DTO', () {
+      expect(
+        TrafficDelaySeverity.light,
+        TrafficDelaySeverityDto.light.toTrafficDelaySeverity(),
+      );
+      expect(
+        TrafficDelaySeverity.medium,
+        TrafficDelaySeverityDto.medium.toTrafficDelaySeverity(),
+      );
+      expect(
+        TrafficDelaySeverity.heavy,
+        TrafficDelaySeverityDto.heavy.toTrafficDelaySeverity(),
+      );
+      expect(
+        TrafficDelaySeverity.noData,
+        TrafficDelaySeverityDto.noData.toTrafficDelaySeverity(),
       );
     });
 

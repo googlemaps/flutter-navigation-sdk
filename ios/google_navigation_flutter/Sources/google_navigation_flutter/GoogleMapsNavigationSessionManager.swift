@@ -315,11 +315,14 @@ class GoogleMapsNavigationSessionManager: NSObject {
   }
 
   func getCurrentTimeAndDistance() throws -> NavigationTimeAndDistanceDto {
-    let time = try getNavigator().timeToNextDestination
-    let distance = try getNavigator().distanceToNextDestination
+    let navigator = try getNavigator()
+    let time = navigator.timeToNextDestination
+    let distance = navigator.distanceToNextDestination
+    let delaySeverity = Convert.convertDelaySeverity(navigator.delayCategoryToNextDestination)
     return .init(
       time: time,
-      distance: distance
+      distance: distance,
+      delaySeverity: delaySeverity
     )
   }
 
@@ -583,6 +586,7 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
     _navigationSessionEventApi?.onRemainingTimeOrDistanceChanged(
       remainingTime: time,
       remainingDistance: navigator.distanceToNextDestination,
+      delaySeverity: Convert.convertDelaySeverity(navigator.delayCategoryToNextDestination),
       completion: { _ in }
     )
   }
@@ -594,6 +598,7 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
     _navigationSessionEventApi?.onRemainingTimeOrDistanceChanged(
       remainingTime: navigator.timeToNextDestination,
       remainingDistance: distance,
+      delaySeverity: Convert.convertDelaySeverity(navigator.delayCategoryToNextDestination),
       completion: { _ in }
     )
   }
