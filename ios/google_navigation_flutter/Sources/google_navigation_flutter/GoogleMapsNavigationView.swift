@@ -134,7 +134,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     } else {
       if let _viewId {
         let viewInstanceId = ObjectIdentifier(self)
-        _viewRegistry.unregisterView(viewId: _viewId, viewIdToUnregister: viewInstanceId)
+        _viewRegistry.unregisterView(viewId: _viewId, viewInstanceIdToUnregister: viewInstanceId)
       }
     }
   }
