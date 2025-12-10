@@ -38,7 +38,7 @@ class GoogleMapsNavigationViewRegistry {
     }
   }
 
-  func unregisterView(viewId: Int64, viewIdToUnregister: ObjectIdentifier) {
+  func unregisterView(viewId: Int64, viewInstanceIdToUnregister: ObjectIdentifier) {
     queue.async(flags: .barrier) { [weak self] in
       if let registeredView = self?.views[viewId], ObjectIdentifier(registeredView) == viewIdToUnregister {
         self?.views.removeValue(forKey: viewId)
