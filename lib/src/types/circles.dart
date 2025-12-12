@@ -21,6 +21,8 @@ import '../utils/color.dart';
 /// Circle that has beed added to map.
 /// {@category Navigation View}
 /// {@category Map View}
+/// {@category Android Auto}
+/// {@category Carplay}
 @immutable
 class Circle {
   /// Construct [Circle].

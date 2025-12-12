@@ -21,6 +21,8 @@ import '../utils/color.dart';
 /// Polyline that has beed added to map.
 /// {@category Navigation View}
 /// {@category Map View}
+/// {@category Android Auto}
+/// {@category Carplay}
 @immutable
 class Polyline {
   /// Construct [Polyline].

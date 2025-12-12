@@ -23,6 +23,8 @@ class NavigationViewRecenterButtonClickedEvent {}
 /// Map type.
 /// {@category Navigation View}
 /// {@category Map View}
+/// {@category Android Auto}
+/// {@category Carplay}
 enum MapType {
   /// No type set.
   none,
@@ -76,6 +78,8 @@ enum NavigationForceNightMode {
 /// Represents the camera position in a Google Maps view.
 /// {@category Navigation View}
 /// {@category Map View}
+/// {@category Android Auto}
+/// {@category Carplay}
 class CameraPosition {
   /// Creates a [CameraPosition] object with map centered
   /// to the [target] with the given [bearing], [tilt] and [zoom] level.
@@ -123,6 +127,8 @@ class CameraPosition {
 /// to specify the orientation of the camera.
 /// {@category Navigation View}
 /// {@category Map View}
+/// {@category Android Auto}
+/// {@category Carplay}
 enum CameraPerspective {
   /// A tilted perspective facing in the same direction as the user.
   tilted,
@@ -134,6 +140,9 @@ enum CameraPerspective {
   topDownNorthUp,
 }
 
+/// {@category Navigation}
+/// {@category Android Auto}
+/// {@category Carplay}
 class CustomNavigationAutoEvent {
   final String? event;
   final Object? data;
@@ -144,6 +153,9 @@ class CustomNavigationAutoEvent {
   String toString() => 'CustomNavigationAutoEvent(event: $event, data: $data)';
 }
 
+/// {@category Navigation}
+/// {@category Android Auto}
+/// {@category Carplay}
 class AutoScreenAvailabilityChangedEvent {
   final bool isAvailable;
 
@@ -347,6 +359,8 @@ enum CameraUpdateType {
 /// the current position.
 /// {@category Navigation View}
 /// {@category Map View}
+/// {@category Android Auto}
+/// {@category Carplay}
 class CameraUpdate {
   CameraUpdate._(this.type);
 

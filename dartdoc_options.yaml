@@ -26,7 +26,20 @@ dartdoc:
     "Image Registry":
       markdown: doc/image-registry.md
       name: Image Registry
-  categoryOrder: ["Navigation", "Navigation View", "Map View", "Image Registry"]
+    "Android Auto":
+      markdown: doc/android-auto.md
+      name: Android Auto
+    "Carplay":
+      markdown: doc/carplay.md
+      name: Carplay
+  categoryOrder:
+    [
+      "Navigation",
+      "Navigation View",
+      "Map View",
+      "Image Registry",
+      "Android Auto",
+      "Carplay",
+    ]
   showUndocumentedCategories: true
-  nodoc: ['**/*.g.dart']
-
+  nodoc: ["**/*.g.dart"]

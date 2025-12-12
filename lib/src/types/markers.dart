@@ -19,6 +19,8 @@ import '../../google_navigation_flutter.dart';
 /// Marker that has beed added to the map.
 /// {@category Navigation View}
 /// {@category Map View}
+/// {@category Android Auto}
+/// {@category Carplay}
 @immutable
 class Marker {
   /// Construct [Marker]
