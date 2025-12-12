@@ -52,6 +52,7 @@ extension ConvertStepInfoDto on StepInfoDto {
     stepNumber: stepNumber,
     lanes: lanes?.map<Lane>((LaneDto lane) => lane.toLane()).toList(),
     maneuver: maneuver.toManeuver(),
+    image: image?.toImageDescriptor(),
   );
 }
 
@@ -281,6 +282,20 @@ extension ConvertLaneShapeDto on LaneShapeDto {
         return LaneShape.uTurnLeft;
       case LaneShapeDto.uTurnRight:
         return LaneShape.uTurnRight;
+    }
+  }
+}
+
+/// [RegisteredImageType] convert extension.
+/// @nodoc
+extension ConvertRegisteredImageType on RegisteredImageType {
+  /// Converts [RegisteredImageType] to [RegisteredImageTypeDto].
+  RegisteredImageTypeDto toDto() {
+    switch (this) {
+      case RegisteredImageType.regular:
+        return RegisteredImageTypeDto.regular;
+      case RegisteredImageType.maneuverIcon:
+        return RegisteredImageTypeDto.maneuverIcon;
     }
   }
 }

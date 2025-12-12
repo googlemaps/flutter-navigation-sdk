@@ -35,6 +35,8 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
 
   NavInfo? _navInfo;
 
+  Image? _currentStepImage;
+
   // ignore: use_setters_to_change_properties
   Future<void> _onViewCreated(GoogleNavigationViewController controller) async {
     _navigationViewController = controller;
@@ -97,6 +99,7 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
     _navInfoSubscription = GoogleMapsNavigator.setNavInfoListener(
       _onNavInfoEvent,
       numNextStepsToPreview: 100,
+      generatedStepImagesType: GeneratedStepImagesType.bitmap,
     );
   }
 
@@ -105,11 +108,19 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
     _navInfoSubscription = null;
   }
 
-  void _onNavInfoEvent(NavInfoEvent event) {
+  void _onNavInfoEvent(NavInfoEvent event) async {
+    print('NAVINFO IMAGES!');
+    print(event.navInfo.currentStep?.image.hashCode);
+    print(event.navInfo.remainingSteps[0].image.hashCode);
+    print(event.navInfo.remainingSteps.length);
+    final currentStepImage = await getRegisteredImageData(
+      event.navInfo.currentStep!.image!,
+    );
     if (!mounted) {
       return;
     }
     setState(() {
+      _currentStepImage = currentStepImage;
       _navInfo = event.navInfo;
     });
   }
@@ -229,6 +240,14 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
               navInfo.distanceToCurrentStepMeters,
             ),
             const SizedBox(height: 5),
+            if (_currentStepImage != null)
+              SizedBox(
+                height: 100,
+                child: Card(
+                  color: Colors.green.shade400,
+                  child: _currentStepImage!,
+                ),
+              ),
             Card(
               color: Colors.green.shade400,
               child: Padding(

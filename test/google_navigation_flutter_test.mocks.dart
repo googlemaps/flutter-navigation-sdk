@@ -1312,8 +1312,18 @@ class MockTestImageRegistryApi extends _i1.Mock
           as List<_i2.ImageDescriptorDto>);
 
   @override
-  void clearRegisteredImages() => super.noSuchMethod(
-    Invocation.method(#clearRegisteredImages, []),
-    returnValueForMissingStub: null,
-  );
+  void clearRegisteredImages(_i2.RegisteredImageTypeDto? filter) =>
+      super.noSuchMethod(
+        Invocation.method(#clearRegisteredImages, [filter]),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i6.Uint8List? getRegisteredImageData(
+    _i2.ImageDescriptorDto? imageDescriptor,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#getRegisteredImageData, [imageDescriptor]),
+          )
+          as _i6.Uint8List?);
 }

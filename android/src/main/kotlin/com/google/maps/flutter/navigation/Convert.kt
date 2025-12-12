@@ -56,6 +56,7 @@ import com.google.android.libraries.navigation.SpeedAlertOptions
 import com.google.android.libraries.navigation.SpeedAlertSeverity
 import com.google.android.libraries.navigation.TimeAndDistance
 import com.google.android.libraries.navigation.Waypoint
+import java.security.MessageDigest
 
 /** Converters from and to Pigeon generated values. */
 object Convert {
@@ -858,10 +859,16 @@ object Convert {
     }
   }
 
-  fun convertNavInfo(navInfo: NavInfo): NavInfoDto {
+  fun convertNavInfo(
+    navInfo: NavInfo,
+    imageDescriptors: Map<String, ImageDescriptorDto?>,
+  ): NavInfoDto {
     return NavInfoDto(
-      currentStep = navInfo.currentStep?.let { convertNavInfoStepInfo(it) },
-      remainingSteps = navInfo.remainingSteps.map { convertNavInfoStepInfo(it) },
+      currentStep = navInfo.currentStep?.let { convertNavInfoStepInfo(it, imageDescriptors) },
+      remainingSteps =
+        navInfo.remainingSteps.mapIndexed { index, item ->
+          convertNavInfoStepInfo(item, imageDescriptors)
+        },
       routeChanged = navInfo.routeChanged,
       distanceToCurrentStepMeters = navInfo.distanceToCurrentStepMeters?.toLong(),
       distanceToNextDestinationMeters = navInfo.distanceToNextDestinationMeters?.toLong(),
@@ -883,7 +890,17 @@ object Convert {
     }
   }
 
-  private fun convertNavInfoStepInfo(stepInfo: StepInfo): StepInfoDto {
+  fun convertManeuverToHash(maneuver: Int): String {
+    return MessageDigest.getInstance("SHA-256")
+      .digest("maneuver_$maneuver".toByteArray())
+      .joinToString("") { "%02x".format(it) }
+  }
+
+  private fun convertNavInfoStepInfo(
+    stepInfo: StepInfo,
+    imageDescriptors: Map<String, ImageDescriptorDto?>,
+  ): StepInfoDto {
+    val hash = convertManeuverToHash(stepInfo.maneuver)
     return StepInfoDto(
       distanceFromPrevStepMeters = stepInfo.distanceFromPrevStepMeters?.toLong() ?: 0L,
       timeFromPrevStepSeconds = stepInfo.timeFromPrevStepSeconds?.toLong() ?: 0L,
@@ -907,6 +924,7 @@ object Convert {
           )
         },
       maneuver = convertManeuver(stepInfo.maneuver),
+      image = imageDescriptors[hash],
     )
   }
 
@@ -1133,10 +1151,25 @@ object Convert {
         registeredImage.imagePixelRatio,
         registeredImage.width,
         registeredImage.height,
+        registeredImageType(registeredImage.type),
       )
     } else {
       // For default marker icon
-      ImageDescriptorDto()
+      ImageDescriptorDto(type = RegisteredImageTypeDto.REGULAR)
+    }
+  }
+
+  fun registeredImageType(type: RegisteredImageTypeDto): RegisteredImageType {
+    return when (type) {
+      RegisteredImageTypeDto.REGULAR -> RegisteredImageType.REGULAR
+      RegisteredImageTypeDto.MANEUVER_ICON -> RegisteredImageType.MANEUVER_ICON
+    }
+  }
+
+  fun registeredImageType(type: RegisteredImageType): RegisteredImageTypeDto {
+    return when (type) {
+      RegisteredImageType.REGULAR -> RegisteredImageTypeDto.REGULAR
+      RegisteredImageType.MANEUVER_ICON -> RegisteredImageTypeDto.MANEUVER_ICON
     }
   }
 

@@ -24,6 +24,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.mapsplatform.turnbyturn.model.NavInfo
+import com.google.android.libraries.mapsplatform.turnbyturn.model.StepInfo
 import com.google.android.libraries.navigation.CustomRoutesOptions
 import com.google.android.libraries.navigation.DisplayOptions
 import com.google.android.libraries.navigation.GpsAvailabilityChangeEvent
@@ -55,6 +56,7 @@ class GoogleMapsNavigationSessionManager
 constructor(
   private val navigationSessionEventApi: NavigationSessionEventApi,
   private val application: Application,
+  private val imageRegistry: ImageRegistry,
 ) : DefaultLifecycleObserver {
   companion object {
     var navigationReadyListener: NavigationReadyListener? = null
@@ -742,9 +744,43 @@ constructor(
         )
       }
 
+      fun getManeuverIconImageDescriptor(maneuver: Int): ImageDescriptorDto? {
+        val registeredImage =
+          imageRegistry.findRegisteredImage(Convert.convertManeuverToHash(maneuver))
+        if (registeredImage == null) return null
+        return Convert.registeredImageToImageDescriptorDto(registeredImage)
+      }
+
+      fun getImageDescriptorForStepInfo(stepInfo: StepInfo): ImageDescriptorDto? {
+        val bitmap = stepInfo.maneuverBitmap ?: return null
+        val imageDescriptor = getManeuverIconImageDescriptor(stepInfo.maneuver)
+        if (imageDescriptor != null) {
+          return imageDescriptor
+        }
+        return imageRegistry.registerManeuverIcon(
+          Convert.convertManeuverToHash(stepInfo.maneuver),
+          bitmap,
+          bitmap.width.toDouble() / bitmap.height.toDouble(),
+          bitmap.width.toDouble(),
+          bitmap.height.toDouble(),
+        )
+      }
+
       // Create observer for this session manager
       navInfoObserver = Observer { navInfo ->
-        navigationSessionEventApi.onNavInfo(Convert.convertNavInfo(navInfo)) {}
+        // Map to store all the unique images for each maneuver
+        val imageDescriptors: MutableMap<String, ImageDescriptorDto?> = mutableMapOf()
+
+        (navInfo.remainingSteps + navInfo.currentStep).forEach {
+          val hash = Convert.convertManeuverToHash(it.maneuver)
+          val existingImageDescriptor = imageDescriptors[hash]
+          if (existingImageDescriptor == null) {
+            val imageDescriptor = getImageDescriptorForStepInfo(it)
+            imageDescriptors[hash] = imageDescriptor
+          }
+        }
+
+        navigationSessionEventApi.onNavInfo(Convert.convertNavInfo(navInfo, imageDescriptors)) {}
       }
 
       // Add observer using observeForever (works without lifecycle owner)
