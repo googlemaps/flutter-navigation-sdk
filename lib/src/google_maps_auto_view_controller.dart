@@ -17,6 +17,8 @@ import 'package:flutter/widgets.dart';
 import '../google_navigation_flutter.dart';
 import 'google_navigation_flutter_platform_interface.dart';
 
+/// {@category Android Auto}
+/// {@category Carplay}
 class GoogleMapsAutoViewController {
   GoogleMapsAutoViewController() {
     GoogleMapsNavigationPlatform.instance.autoAPI.ensureAutoViewApiSetUp();

@@ -22,6 +22,8 @@ import '../utils/color.dart';
 /// Polygon that has beed added to map.
 /// {@category Navigation View}
 /// {@category Map View}
+/// {@category Android Auto}
+/// {@category Carplay}
 @immutable
 class Polygon {
   /// Construct [Polygon].
