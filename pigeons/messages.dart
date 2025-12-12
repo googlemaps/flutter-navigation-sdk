@@ -238,17 +238,27 @@ class MarkerOptionsDto {
   final ImageDescriptorDto icon;
 }
 
+enum RegisteredImageTypeDto {
+  /// Default type used when custom bitmaps are uploaded to registry
+  regular,
+
+  /// Maneuver icon generated from NavInfo data
+  maneuverIcon,
+}
+
 class ImageDescriptorDto {
   const ImageDescriptorDto({
     this.registeredImageId,
     this.imagePixelRatio,
     this.width,
     this.height,
+    this.type = RegisteredImageTypeDto.regular,
   });
   final String? registeredImageId;
   final double? imagePixelRatio;
   final double? width;
   final double? height;
+  final RegisteredImageTypeDto type;
 }
 
 class InfoWindowDto {
@@ -652,7 +662,8 @@ abstract class ImageRegistryApi {
   );
   void unregisterImage(ImageDescriptorDto imageDescriptor);
   List<ImageDescriptorDto> getRegisteredImages();
-  void clearRegisteredImages();
+  void clearRegisteredImages(RegisteredImageTypeDto? filter);
+  Uint8List? getRegisteredImageData(ImageDescriptorDto imageDescriptor);
 }
 
 @FlutterApi()
@@ -1216,6 +1227,7 @@ class StepInfoDto {
     required this.stepNumber,
     required this.lanes,
     required this.maneuver,
+    required this.image,
   });
 
   /// Distance in meters from the previous step to this step if available, otherwise null.
@@ -1251,6 +1263,9 @@ class StepInfoDto {
 
   /// The index of the step in the list of all steps in the route if available, otherwise null.
   final int? stepNumber;
+
+  /// PNG encoded bytes of the generated step image for the current step if available, otherwise null.
+  ImageDescriptorDto? image;
 }
 
 /// Contains information about the state of navigation, the current nav step if
