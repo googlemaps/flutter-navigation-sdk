@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.8.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.7.0...0.8.0) (2025-12-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* Most fields in StepInfo are now nullable. Null checks for these properties must be handled.
+
+### Features
+
+* add controls for light and dark modes ([#548](https://github.com/googlemaps/flutter-navigation-sdk/issues/548)) ([7ed6692](https://github.com/googlemaps/flutter-navigation-sdk/commit/7ed66920b21b5f2fd2d5524ad6575e4dc7e3ae09))
+* add traffic delay severity ([#543](https://github.com/googlemaps/flutter-navigation-sdk/issues/543)) ([db19ffc](https://github.com/googlemaps/flutter-navigation-sdk/commit/db19ffca035fd34fedcd0a4199af92f09b249702))
+* upgrade to latest native SDK's ([#526](https://github.com/googlemaps/flutter-navigation-sdk/issues/526)) ([0c358cb](https://github.com/googlemaps/flutter-navigation-sdk/commit/0c358cb98bc25c91d9af23b7333f633c98ebd376))
+  - Upgrades Android SDK to version 7.2.0
+  - Upgrades iOS SDK to version 10.6.0
+  - Adds support for Map ID (cloud-based styling)
+  - Adds support for controlling building visibility
+  - Adds support for controlling incident panel visibility and detecting visibility changes
+  - Updates Android minSdkVersion to 24
+  - Updates minimum supported SDK version to Flutter 3.32/Dart 3.8
+  - Deprecates NavigationDisplayOptions.showStopSigns and NavigationDisplayOptions.showTrafficLights
+  - Deprecates Navigator.setOnGpsAvailabilityListener in favor of Navigator.setOnGpsAvailabilityChangeListener
+
+### Bug Fixes
+
+* ios view registration race condition ([#555](https://github.com/googlemaps/flutter-navigation-sdk/issues/555)) ([577d10f](https://github.com/googlemaps/flutter-navigation-sdk/commit/577d10fac474916bdf7b1434ccec3193c758c2f6))
+
 ## [0.7.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.6.5...0.7.0) (2025-11-20)
 
 
