@@ -348,8 +348,8 @@ await mapViewController.setMapColorScheme(MapColorScheme.dark);
 ## Support for Android Auto and Apple CarPlay
 This plugin is compatible with both Android Auto and Apple CarPlay infotainment systems. For more details, please refer to the respective platform documentation:
 
-- [Android Auto documentation](./ANDROIDAUTO.md)
-- [CarPlay documentation](./CARPLAY.md)
+- [Android Auto documentation](./doc/android-auto.md)
+- [CarPlay documentation](./doc/carplay.md)
 
 ## Known issues
 

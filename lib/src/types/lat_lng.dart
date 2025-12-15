@@ -18,6 +18,8 @@ import 'package:flutter/foundation.dart';
 /// {@category Navigation}
 /// {@category Navigation View}
 /// {@category Map View}
+/// {@category Android Auto}
+/// {@category Carplay}
 @immutable
 class LatLng {
   /// Initializes a [LatLng] with the provided latitude and longitude values.
