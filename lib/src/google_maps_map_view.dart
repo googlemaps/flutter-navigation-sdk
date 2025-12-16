@@ -61,6 +61,7 @@ abstract class GoogleMapsBaseMapView extends StatefulWidget {
     this.onPolygonClicked,
     this.onPolylineClicked,
     this.onCircleClicked,
+    this.onPoiClicked,
     this.onMyLocationClicked,
     this.onMyLocationButtonClicked,
     this.onCameraMoveStarted,
@@ -223,6 +224,9 @@ abstract class GoogleMapsBaseMapView extends StatefulWidget {
   /// On circle clicked callback.
   final OnCircleClicked? onCircleClicked;
 
+  /// On POI (Point of Interest) clicked callback.
+  final OnPoiClicked? onPoiClicked;
+
   /// On my location clicked callback.
   final OnMyLocationClicked? onMyLocationClicked;
 
@@ -299,6 +303,7 @@ class GoogleMapsMapView extends GoogleMapsBaseMapView {
     super.onPolygonClicked,
     super.onPolylineClicked,
     super.onCircleClicked,
+    super.onPoiClicked,
     super.onMyLocationClicked,
     super.onMyLocationButtonClicked,
     super.onCameraMoveStarted,
@@ -408,6 +413,14 @@ abstract class MapViewState<T extends GoogleMapsBaseMapView> extends State<T> {
         .listen((CircleClickedEvent event) {
           widget.onCircleClicked?.call(event.circleId);
         });
+
+    if (widget.onPoiClicked != null) {
+      GoogleMapsNavigationPlatform.instance.viewAPI
+          .getPoiClickedEventStream(viewId: viewId)
+          .listen((PoiClickedEvent event) {
+            widget.onPoiClicked?.call(event.pointOfInterest);
+          });
+    }
 
     if (widget.onCameraMoveStarted != null ||
         widget.onCameraMove != null ||

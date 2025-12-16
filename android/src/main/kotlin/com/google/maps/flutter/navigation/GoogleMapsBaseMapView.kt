@@ -243,6 +243,17 @@ abstract class GoogleMapsBaseMapView(
       _consumeMyLocationButtonClickEventsEnabled
     }
 
+    getMap().setOnPoiClickListener { pointOfInterest ->
+      viewEventApi?.onPoiClick(
+        getViewId().toLong(),
+        PointOfInterestDto(
+          placeId = pointOfInterest.placeId,
+          name = pointOfInterest.name,
+          latLng = LatLngDto(pointOfInterest.latLng.latitude, pointOfInterest.latLng.longitude),
+        ),
+      ) {}
+    }
+
     getMap()
       .setOnFollowMyLocationCallback(
         object : GoogleMap.OnCameraFollowLocationCallback {

@@ -34,6 +34,7 @@ final List<ExamplePage> _allPages = <ExamplePage>[
   const PolygonsPage(),
   const PolylinesPage(),
   const CirclesPage(),
+  const PoiClickPage(),
   const TurnByTurnPage(),
   const WidgetInitializationPage(),
   const NavigationWithoutMapPage(),
