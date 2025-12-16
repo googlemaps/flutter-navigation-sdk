@@ -27,7 +27,6 @@ class PoiClickPage extends ExamplePage {
 }
 
 class _PoiClickPageState extends ExamplePageState<PoiClickPage> {
-  GoogleMapViewController? _mapController;
   PointOfInterest? _lastClickedPoi;
 
   @override
@@ -105,7 +104,6 @@ class _PoiClickPageState extends ExamplePageState<PoiClickPage> {
   }
 
   Future<void> _onViewCreated(GoogleMapViewController controller) async {
-    _mapController = controller;
     await controller.setMyLocationEnabled(true);
   }
 
@@ -113,11 +111,5 @@ class _PoiClickPageState extends ExamplePageState<PoiClickPage> {
     setState(() {
       _lastClickedPoi = poi;
     });
-  }
-
-  @override
-  void dispose() {
-    _mapController = null;
-    super.dispose();
   }
 }
