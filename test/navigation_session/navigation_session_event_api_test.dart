@@ -364,5 +364,106 @@ void main() {
 
       await subscription.cancel();
     });
+
+    test('NavInfo event stream delivers events', () async {
+      final List<NavInfoEvent> receivedEvents = <NavInfoEvent>[];
+
+      final StreamSubscription<NavInfoEvent> subscription = testSessionApi
+          .getNavInfoStream()
+          .listen((NavInfoEvent event) {
+            receivedEvents.add(event);
+          });
+
+      // Create test NavInfo DTO
+      final NavInfoDto navInfoDto = NavInfoDto(
+        currentStep: StepInfoDto(
+          distanceFromPrevStepMeters: 100,
+          timeFromPrevStepSeconds: 60,
+          drivingSide: DrivingSideDto.left,
+          exitNumber: '42',
+          fullInstructions: 'Turn left at Main St',
+          fullRoadName: 'Main Street',
+          simpleRoadName: 'Main St',
+          roundaboutTurnNumber: null,
+          stepNumber: 1,
+          lanes: <LaneDto>[],
+          maneuver: ManeuverDto.turnLeft,
+        ),
+        remainingSteps: <StepInfoDto>[],
+        routeChanged: false,
+        distanceToCurrentStepMeters: 50,
+        distanceToFinalDestinationMeters: 5000,
+        distanceToNextDestinationMeters: 2500,
+        timeToCurrentStepSeconds: 30,
+        timeToFinalDestinationSeconds: 600,
+        timeToNextDestinationSeconds: 300,
+        navState: NavStateDto.enroute,
+      );
+
+      // Emit test event via DTO
+      testSessionApi.testEventApi.onNavInfo(navInfoDto);
+
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+
+      expect(receivedEvents.length, 1);
+      expect(receivedEvents[0].navInfo.distanceToFinalDestinationMeters, 5000);
+      expect(receivedEvents[0].navInfo.timeToFinalDestinationSeconds, 600);
+      expect(
+        receivedEvents[0].navInfo.currentStep?.fullInstructions,
+        'Turn left at Main St',
+      );
+      expect(receivedEvents[0].navInfo.navState, NavState.enroute);
+
+      await subscription.cancel();
+    });
+
+    test('NewNavigationSession event stream delivers events', () async {
+      int newSessionCount = 0;
+
+      final StreamSubscription<void> subscription = testSessionApi
+          .getNewNavigationSessionEventStream()
+          .listen((void event) {
+            newSessionCount++;
+          });
+
+      // Emit new session events via testEventApi
+      testSessionApi.testEventApi.onNewNavigationSession();
+      testSessionApi.testEventApi.onNewNavigationSession();
+
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+
+      expect(newSessionCount, 2);
+
+      await subscription.cancel();
+    });
+
+    test(
+      'GpsAvailabilityUpdatedEvent stream delivers events (deprecated)',
+      () async {
+        final List<GpsAvailabilityUpdatedEvent> receivedEvents =
+            <GpsAvailabilityUpdatedEvent>[];
+
+        // ignore: deprecated_member_use_from_same_package
+        final StreamSubscription<GpsAvailabilityUpdatedEvent> subscription =
+            testSessionApi
+                // ignore: deprecated_member_use_from_same_package
+                .getNavigationOnGpsAvailabilityUpdateEventStream()
+                .listen((GpsAvailabilityUpdatedEvent event) {
+                  receivedEvents.add(event);
+                });
+
+        // Emit test events via DTO
+        testSessionApi.testEventApi.onGpsAvailabilityUpdate(true);
+        testSessionApi.testEventApi.onGpsAvailabilityUpdate(false);
+
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+
+        expect(receivedEvents.length, 2);
+        expect(receivedEvents[0].available, true);
+        expect(receivedEvents[1].available, false);
+
+        await subscription.cancel();
+      },
+    );
   });
 }
