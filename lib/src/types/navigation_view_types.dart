@@ -14,6 +14,8 @@
 
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
+
 import '../../google_navigation_flutter.dart';
 
 /// Navigation view recenter clicked event.
@@ -218,6 +220,67 @@ class MapLongClickEvent {
 
   @override
   String toString() => 'MapLongClickEvent(target: $target)';
+}
+
+/// Represents a point of interest (POI) on the map.
+/// POIs include parks, schools, government buildings, and businesses.
+/// {@category Navigation View}
+/// {@category Map View}
+@immutable
+class PointOfInterest {
+  /// Creates a [PointOfInterest] object.
+  const PointOfInterest({
+    required this.placeId,
+    required this.name,
+    required this.latLng,
+  });
+
+  /// The Place ID of this POI, as defined in the Places SDK.
+  /// This identifier can be used to retrieve additional information about the place
+  /// using the Places API.
+  final String placeId;
+
+  /// The name of the POI (e.g., "Central Park", "City Hall").
+  final String name;
+
+  /// The geographical coordinates of the POI.
+  final LatLng latLng;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is PointOfInterest &&
+        placeId == other.placeId &&
+        name == other.name &&
+        latLng == other.latLng;
+  }
+
+  @override
+  int get hashCode => Object.hash(placeId, name, latLng);
+
+  @override
+  String toString() =>
+      'PointOfInterest(placeId: $placeId, name: $name, latLng: $latLng)';
+}
+
+/// Represents a POI click event in a Google Maps view.
+/// {@category Navigation View}
+/// {@category Map View}
+@immutable
+class PoiClickedEvent {
+  /// Creates a [PoiClickedEvent] object.
+  const PoiClickedEvent({required this.pointOfInterest});
+
+  /// The point of interest that was clicked.
+  final PointOfInterest pointOfInterest;
+
+  @override
+  String toString() => 'PoiClickedEvent(pointOfInterest: $pointOfInterest)';
 }
 
 /// Traffic data statuses

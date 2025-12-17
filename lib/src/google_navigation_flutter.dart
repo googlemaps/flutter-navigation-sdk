@@ -112,6 +112,10 @@ typedef OnPolylineClicked = void Function(String polylineId);
 /// Called during circle clicked event.
 typedef OnCircleClicked = void Function(String circleId);
 
+/// Called when a user taps on a point of interest (POI) on the map.
+/// POIs include parks, schools, government buildings, and businesses.
+typedef OnPoiClicked = void Function(PointOfInterest pointOfInterest);
+
 /// Called when the [GoogleNavigationViewController.isNavigationUIEnabled] status changes.
 typedef OnNavigationUIEnabledChanged = void Function(bool navigationUIEnabled);
 

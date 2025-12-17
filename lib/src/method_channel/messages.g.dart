@@ -988,6 +988,59 @@ class MarkerAnchorDto {
   int get hashCode => Object.hashAll(_toList());
 }
 
+/// Represents a point of interest (POI) on the map.
+/// POIs include parks, schools, government buildings, and businesses.
+class PointOfInterestDto {
+  PointOfInterestDto({
+    required this.placeId,
+    required this.name,
+    required this.latLng,
+  });
+
+  /// The Place ID of this POI, as defined in the Places SDK.
+  /// This can be used to retrieve additional information about the place.
+  String placeId;
+
+  /// The name of the POI (e.g., "Central Park", "City Hall").
+  String name;
+
+  /// The geographical coordinates of the POI.
+  LatLngDto latLng;
+
+  List<Object?> _toList() {
+    return <Object?>[placeId, name, latLng];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static PointOfInterestDto decode(Object result) {
+    result as List<Object?>;
+    return PointOfInterestDto(
+      placeId: result[0]! as String,
+      name: result[1]! as String,
+      latLng: result[2]! as LatLngDto,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! PointOfInterestDto || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(encode(), other.encode());
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
 class PolygonDto {
   PolygonDto({required this.polygonId, required this.options});
 
@@ -2800,101 +2853,104 @@ class _PigeonCodec extends StandardMessageCodec {
     } else if (value is MarkerAnchorDto) {
       buffer.putUint8(162);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonDto) {
+    } else if (value is PointOfInterestDto) {
       buffer.putUint8(163);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonOptionsDto) {
+    } else if (value is PolygonDto) {
       buffer.putUint8(164);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonHoleDto) {
+    } else if (value is PolygonOptionsDto) {
       buffer.putUint8(165);
       writeValue(buffer, value.encode());
-    } else if (value is StyleSpanStrokeStyleDto) {
+    } else if (value is PolygonHoleDto) {
       buffer.putUint8(166);
       writeValue(buffer, value.encode());
-    } else if (value is StyleSpanDto) {
+    } else if (value is StyleSpanStrokeStyleDto) {
       buffer.putUint8(167);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineDto) {
+    } else if (value is StyleSpanDto) {
       buffer.putUint8(168);
       writeValue(buffer, value.encode());
-    } else if (value is PatternItemDto) {
+    } else if (value is PolylineDto) {
       buffer.putUint8(169);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineOptionsDto) {
+    } else if (value is PatternItemDto) {
       buffer.putUint8(170);
       writeValue(buffer, value.encode());
-    } else if (value is CircleDto) {
+    } else if (value is PolylineOptionsDto) {
       buffer.putUint8(171);
       writeValue(buffer, value.encode());
-    } else if (value is CircleOptionsDto) {
+    } else if (value is CircleDto) {
       buffer.putUint8(172);
       writeValue(buffer, value.encode());
-    } else if (value is MapPaddingDto) {
+    } else if (value is CircleOptionsDto) {
       buffer.putUint8(173);
       writeValue(buffer, value.encode());
-    } else if (value is RouteTokenOptionsDto) {
+    } else if (value is MapPaddingDto) {
       buffer.putUint8(174);
       writeValue(buffer, value.encode());
-    } else if (value is DestinationsDto) {
+    } else if (value is RouteTokenOptionsDto) {
       buffer.putUint8(175);
       writeValue(buffer, value.encode());
-    } else if (value is RoutingOptionsDto) {
+    } else if (value is DestinationsDto) {
       buffer.putUint8(176);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationDisplayOptionsDto) {
+    } else if (value is RoutingOptionsDto) {
       buffer.putUint8(177);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationWaypointDto) {
+    } else if (value is NavigationDisplayOptionsDto) {
       buffer.putUint8(178);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationTimeAndDistanceDto) {
+    } else if (value is NavigationWaypointDto) {
       buffer.putUint8(179);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationAudioGuidanceSettingsDto) {
+    } else if (value is NavigationTimeAndDistanceDto) {
       buffer.putUint8(180);
       writeValue(buffer, value.encode());
-    } else if (value is SimulationOptionsDto) {
+    } else if (value is NavigationAudioGuidanceSettingsDto) {
       buffer.putUint8(181);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngDto) {
+    } else if (value is SimulationOptionsDto) {
       buffer.putUint8(182);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngBoundsDto) {
+    } else if (value is LatLngDto) {
       buffer.putUint8(183);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedingUpdatedEventDto) {
+    } else if (value is LatLngBoundsDto) {
       buffer.putUint8(184);
       writeValue(buffer, value.encode());
-    } else if (value is GpsAvailabilityChangeEventDto) {
+    } else if (value is SpeedingUpdatedEventDto) {
       buffer.putUint8(185);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
+    } else if (value is GpsAvailabilityChangeEventDto) {
       buffer.putUint8(186);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsDto) {
+    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
       buffer.putUint8(187);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
+    } else if (value is SpeedAlertOptionsDto) {
       buffer.putUint8(188);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataDto) {
+    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
       buffer.putUint8(189);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentDto) {
+    } else if (value is RouteSegmentTrafficDataDto) {
       buffer.putUint8(190);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDirectionDto) {
+    } else if (value is RouteSegmentDto) {
       buffer.putUint8(191);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDto) {
+    } else if (value is LaneDirectionDto) {
       buffer.putUint8(192);
       writeValue(buffer, value.encode());
-    } else if (value is StepInfoDto) {
+    } else if (value is LaneDto) {
       buffer.putUint8(193);
       writeValue(buffer, value.encode());
-    } else if (value is NavInfoDto) {
+    } else if (value is StepInfoDto) {
       buffer.putUint8(194);
+      writeValue(buffer, value.encode());
+    } else if (value is NavInfoDto) {
+      buffer.putUint8(195);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -3005,72 +3061,74 @@ class _PigeonCodec extends StandardMessageCodec {
       case 162:
         return MarkerAnchorDto.decode(readValue(buffer)!);
       case 163:
-        return PolygonDto.decode(readValue(buffer)!);
+        return PointOfInterestDto.decode(readValue(buffer)!);
       case 164:
-        return PolygonOptionsDto.decode(readValue(buffer)!);
+        return PolygonDto.decode(readValue(buffer)!);
       case 165:
-        return PolygonHoleDto.decode(readValue(buffer)!);
+        return PolygonOptionsDto.decode(readValue(buffer)!);
       case 166:
-        return StyleSpanStrokeStyleDto.decode(readValue(buffer)!);
+        return PolygonHoleDto.decode(readValue(buffer)!);
       case 167:
-        return StyleSpanDto.decode(readValue(buffer)!);
+        return StyleSpanStrokeStyleDto.decode(readValue(buffer)!);
       case 168:
-        return PolylineDto.decode(readValue(buffer)!);
+        return StyleSpanDto.decode(readValue(buffer)!);
       case 169:
-        return PatternItemDto.decode(readValue(buffer)!);
+        return PolylineDto.decode(readValue(buffer)!);
       case 170:
-        return PolylineOptionsDto.decode(readValue(buffer)!);
+        return PatternItemDto.decode(readValue(buffer)!);
       case 171:
-        return CircleDto.decode(readValue(buffer)!);
+        return PolylineOptionsDto.decode(readValue(buffer)!);
       case 172:
-        return CircleOptionsDto.decode(readValue(buffer)!);
+        return CircleDto.decode(readValue(buffer)!);
       case 173:
-        return MapPaddingDto.decode(readValue(buffer)!);
+        return CircleOptionsDto.decode(readValue(buffer)!);
       case 174:
-        return RouteTokenOptionsDto.decode(readValue(buffer)!);
+        return MapPaddingDto.decode(readValue(buffer)!);
       case 175:
-        return DestinationsDto.decode(readValue(buffer)!);
+        return RouteTokenOptionsDto.decode(readValue(buffer)!);
       case 176:
-        return RoutingOptionsDto.decode(readValue(buffer)!);
+        return DestinationsDto.decode(readValue(buffer)!);
       case 177:
-        return NavigationDisplayOptionsDto.decode(readValue(buffer)!);
+        return RoutingOptionsDto.decode(readValue(buffer)!);
       case 178:
-        return NavigationWaypointDto.decode(readValue(buffer)!);
+        return NavigationDisplayOptionsDto.decode(readValue(buffer)!);
       case 179:
-        return NavigationTimeAndDistanceDto.decode(readValue(buffer)!);
+        return NavigationWaypointDto.decode(readValue(buffer)!);
       case 180:
-        return NavigationAudioGuidanceSettingsDto.decode(readValue(buffer)!);
+        return NavigationTimeAndDistanceDto.decode(readValue(buffer)!);
       case 181:
-        return SimulationOptionsDto.decode(readValue(buffer)!);
+        return NavigationAudioGuidanceSettingsDto.decode(readValue(buffer)!);
       case 182:
-        return LatLngDto.decode(readValue(buffer)!);
+        return SimulationOptionsDto.decode(readValue(buffer)!);
       case 183:
-        return LatLngBoundsDto.decode(readValue(buffer)!);
+        return LatLngDto.decode(readValue(buffer)!);
       case 184:
-        return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
+        return LatLngBoundsDto.decode(readValue(buffer)!);
       case 185:
-        return GpsAvailabilityChangeEventDto.decode(readValue(buffer)!);
+        return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
       case 186:
+        return GpsAvailabilityChangeEventDto.decode(readValue(buffer)!);
+      case 187:
         return SpeedAlertOptionsThresholdPercentageDto.decode(
           readValue(buffer)!,
         );
-      case 187:
-        return SpeedAlertOptionsDto.decode(readValue(buffer)!);
       case 188:
+        return SpeedAlertOptionsDto.decode(readValue(buffer)!);
+      case 189:
         return RouteSegmentTrafficDataRoadStretchRenderingDataDto.decode(
           readValue(buffer)!,
         );
-      case 189:
-        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
       case 190:
-        return RouteSegmentDto.decode(readValue(buffer)!);
+        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
       case 191:
-        return LaneDirectionDto.decode(readValue(buffer)!);
+        return RouteSegmentDto.decode(readValue(buffer)!);
       case 192:
-        return LaneDto.decode(readValue(buffer)!);
+        return LaneDirectionDto.decode(readValue(buffer)!);
       case 193:
-        return StepInfoDto.decode(readValue(buffer)!);
+        return LaneDto.decode(readValue(buffer)!);
       case 194:
+        return StepInfoDto.decode(readValue(buffer)!);
+      case 195:
         return NavInfoDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -6475,6 +6533,8 @@ abstract class ViewEventApi {
 
   void onCircleClicked(int viewId, String circleId);
 
+  void onPoiClick(int viewId, PointOfInterestDto pointOfInterest);
+
   void onNavigationUIEnabledChanged(int viewId, bool navigationUIEnabled);
 
   void onPromptVisibilityChanged(int viewId, bool promptVisible);
@@ -6815,6 +6875,46 @@ abstract class ViewEventApi {
           );
           try {
             api.onCircleClicked(arg_viewId!, arg_circleId!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPoiClick$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        pigeonVar_channel.setMessageHandler(null);
+      } else {
+        pigeonVar_channel.setMessageHandler((Object? message) async {
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPoiClick was null.',
+          );
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPoiClick was null, expected non-null int.',
+          );
+          final PointOfInterestDto? arg_pointOfInterest =
+              (args[1] as PointOfInterestDto?);
+          assert(
+            arg_pointOfInterest != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPoiClick was null, expected non-null PointOfInterestDto.',
+          );
+          try {
+            api.onPoiClick(arg_viewId!, arg_pointOfInterest!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

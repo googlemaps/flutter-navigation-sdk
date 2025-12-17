@@ -1059,6 +1059,23 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
     return _consumeMyLocationButtonClickEventsEnabled
   }
 
+  public func mapView(
+    _ mapView: GMSMapView,
+    didTapPOIWithPlaceID placeID: String,
+    name: String,
+    location: CLLocationCoordinate2D
+  ) {
+    getViewEventApi()?.onPoiClick(
+      viewId: _viewId!,
+      pointOfInterest: PointOfInterestDto(
+        placeId: placeID,
+        name: name,
+        latLng: LatLngDto(latitude: location.latitude, longitude: location.longitude)
+      ),
+      completion: { _ in }
+    )
+  }
+
   public func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
     if _listenCameraChanges {
       let position = Convert.convertCameraPosition(position: mapView.camera)

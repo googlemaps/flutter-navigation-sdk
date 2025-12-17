@@ -187,6 +187,13 @@ void main() {
       );
     }
 
+    void onPoiClicked(PointOfInterest poi) {
+      $.log(
+        'POI clicked event: placeId=${poi.placeId}, name=${poi.name}, '
+        'lat=${poi.latLng.latitude}, lng=${poi.latLng.longitude}.',
+      );
+    }
+
     /// Set up navigation without initialization to test isMyLocationEnabled
     /// is false before initialization is done. Test the onMapClicked event
     /// and setting the other callback functions.
@@ -203,6 +210,7 @@ void main() {
       onMapLongClicked: onMapLongClicked,
       onMyLocationButtonClicked: onMyLocationButtonClicked,
       onMyLocationClicked: onMyLocationClicked,
+      onPoiClicked: onPoiClicked,
     );
 
     /// Test that the onMapClicked event comes in.

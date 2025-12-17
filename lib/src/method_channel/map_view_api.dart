@@ -1257,6 +1257,11 @@ class MapViewAPIImpl {
     return _unwrapEventStream<CircleClickedEvent>(viewId: viewId);
   }
 
+  /// Get POI (Point of Interest) clicked event stream from the map view.
+  Stream<PoiClickedEvent> getPoiClickedEventStream({required int viewId}) {
+    return _unwrapEventStream<PoiClickedEvent>(viewId: viewId);
+  }
+
   /// Get navigation UI changed event stream from the navigation view.
   Stream<NavigationUIEnabledChangedEvent>
   getNavigationUIEnabledChangedEventStream({required int viewId}) {
@@ -1367,6 +1372,16 @@ class ViewEventApiImpl implements ViewEventApi {
   void onCircleClicked(int viewId, String circleId) {
     _viewEventStreamController.add(
       _ViewIdEventWrapper(viewId, CircleClickedEvent(circleId: circleId)),
+    );
+  }
+
+  @override
+  void onPoiClick(int viewId, PointOfInterestDto pointOfInterest) {
+    _viewEventStreamController.add(
+      _ViewIdEventWrapper(
+        viewId,
+        PoiClickedEvent(pointOfInterest: pointOfInterest.toPointOfInterest()),
+      ),
     );
   }
 

@@ -26,6 +26,7 @@ export 'navigation_force_night_mode.dart';
 export 'navigation_routing_options.dart';
 export 'navinfo.dart';
 export 'pattern.dart';
+export 'poi.dart';
 export 'polygon.dart';
 export 'polyline.dart';
 export 'simulation.dart';

@@ -1,4 +1,4 @@
-// Copyright 2023 Google LLC
+// Copyright 2025 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,14 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'camera.dart';
-export 'map.dart';
-export 'markers.dart';
-export 'multiple_views.dart';
-export 'navigation.dart';
-export 'navigation_without_map.dart';
-export 'poi_click.dart';
-export 'polygons.dart';
-export 'polylines.dart';
-export 'turn_by_turn.dart';
-export 'widget_initialization.dart';
+import '../../types/types.dart';
+import '../method_channel.dart';
+
+/// [PointOfInterestDto] convert extension.
+/// @nodoc
+extension ConvertPointOfInterestDto on PointOfInterestDto {
+  /// Converts [PointOfInterestDto] to [PointOfInterest]
+  PointOfInterest toPointOfInterest() {
+    return PointOfInterest(
+      placeId: placeId,
+      name: name,
+      latLng: latLng.toLatLng(),
+    );
+  }
+}

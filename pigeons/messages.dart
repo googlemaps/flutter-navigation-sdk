@@ -274,6 +274,26 @@ enum MarkerEventTypeDto {
 
 enum MarkerDragEventTypeDto { drag, dragStart, dragEnd }
 
+/// Represents a point of interest (POI) on the map.
+/// POIs include parks, schools, government buildings, and businesses.
+class PointOfInterestDto {
+  const PointOfInterestDto({
+    required this.placeId,
+    required this.name,
+    required this.latLng,
+  });
+
+  /// The Place ID of this POI, as defined in the Places SDK.
+  /// This can be used to retrieve additional information about the place.
+  final String placeId;
+
+  /// The name of the POI (e.g., "Central Park", "City Hall").
+  final String name;
+
+  /// The geographical coordinates of the POI.
+  final LatLngDto latLng;
+}
+
 class PolygonDto {
   const PolygonDto({required this.polygonId, required this.options});
 
@@ -650,6 +670,7 @@ abstract class ViewEventApi {
   void onPolygonClicked(int viewId, String polygonId);
   void onPolylineClicked(int viewId, String polylineId);
   void onCircleClicked(int viewId, String circleId);
+  void onPoiClick(int viewId, PointOfInterestDto pointOfInterest);
   void onNavigationUIEnabledChanged(int viewId, bool navigationUIEnabled);
   void onPromptVisibilityChanged(int viewId, bool promptVisible);
   void onMyLocationClicked(int viewId);
