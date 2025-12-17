@@ -30,6 +30,46 @@ void main() {
     testMapViewApi.ensureViewAPISetUp();
   });
 
+  group('Recenter Button Events', () {
+    const int testViewId = 1;
+
+    test('onRecenterButtonClicked fires', () async {
+      final List<NavigationViewRecenterButtonClickedEvent> receivedEvents =
+          <NavigationViewRecenterButtonClickedEvent>[];
+      final StreamSubscription<NavigationViewRecenterButtonClickedEvent>
+      subscription = testMapViewApi
+          .getNavigationRecenterButtonClickedEventStream(viewId: testViewId)
+          .listen(receivedEvents.add);
+
+      testMapViewApi.testEventApi.onRecenterButtonClicked(testViewId);
+
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+
+      expect(receivedEvents.length, 1);
+
+      await subscription.cancel();
+    });
+
+    test('recenter button events do not fire after listener removal', () async {
+      final List<NavigationViewRecenterButtonClickedEvent> receivedEvents =
+          <NavigationViewRecenterButtonClickedEvent>[];
+      final StreamSubscription<NavigationViewRecenterButtonClickedEvent>
+      subscription = testMapViewApi
+          .getNavigationRecenterButtonClickedEventStream(viewId: testViewId)
+          .listen(receivedEvents.add);
+
+      testMapViewApi.testEventApi.onRecenterButtonClicked(testViewId);
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+      expect(receivedEvents.length, 1);
+
+      await subscription.cancel();
+
+      testMapViewApi.testEventApi.onRecenterButtonClicked(testViewId);
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+      expect(receivedEvents.length, 1);
+    });
+  });
+
   group('Navigation UI Events', () {
     const int testViewId = 1;
 
