@@ -75,7 +75,7 @@ class _PoiClickPageState extends ExamplePageState<PoiClickPage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 4),
-                          child: Text(_lastClickedPoi!.placeId),
+                          child: Text(_lastClickedPoi!.placeID),
                         ),
                       ],
                     ),

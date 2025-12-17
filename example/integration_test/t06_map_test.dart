@@ -189,7 +189,7 @@ void main() {
 
     void onPoiClicked(PointOfInterest poi) {
       $.log(
-        'POI clicked event: placeId=${poi.placeId}, name=${poi.name}, '
+        'POI clicked event: placeId=${poi.placeID}, name=${poi.name}, '
         'lat=${poi.latLng.latitude}, lng=${poi.latLng.longitude}.',
       );
     }

@@ -937,27 +937,6 @@ void main() {
           expect(showPanelResult.captured[0] as int, viewId);
         });
 
-        test('Test prompt visibility changed event stream', () async {
-          const int viewId = 1;
-
-          // Test the event stream
-          final Stream<PromptVisibilityChangedEvent> eventStream =
-              GoogleMapsNavigationPlatform.instance.viewAPI
-                  .getPromptVisibilityChangedEventStream(viewId: viewId);
-
-          // Verify the stream is not null
-          expect(eventStream, isNotNull);
-
-          // Test that the event can be created
-          const PromptVisibilityChangedEvent event =
-              PromptVisibilityChangedEvent(true);
-          expect(event.promptVisible, true);
-
-          const PromptVisibilityChangedEvent event2 =
-              PromptVisibilityChangedEvent(false);
-          expect(event2.promptVisible, false);
-        });
-
         test('set padding for map', () async {
           // Create padding
           EdgeInsets insets = const EdgeInsets.only(

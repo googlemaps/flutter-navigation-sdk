@@ -137,6 +137,22 @@ extension ConvertMarkerEventType on MarkerEventTypeDto {
   }
 }
 
+/// [MarkerDragEventTypeDto] convert extension.
+/// @nodoc
+extension ConvertMarkerDragEventType on MarkerDragEventTypeDto {
+  /// Converts [MarkerDragEventTypeDto] to [MarkerDragEventType]
+  MarkerDragEventType toMarkerDragEventType() {
+    switch (this) {
+      case MarkerDragEventTypeDto.drag:
+        return MarkerDragEventType.drag;
+      case MarkerDragEventTypeDto.dragStart:
+        return MarkerDragEventType.dragStart;
+      case MarkerDragEventTypeDto.dragEnd:
+        return MarkerDragEventType.dragEnd;
+    }
+  }
+}
+
 /// [ImageDescriptor] convert extension.
 /// @nodoc
 extension ConvertImageDescriptor on ImageDescriptor {

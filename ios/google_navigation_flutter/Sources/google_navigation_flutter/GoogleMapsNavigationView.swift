@@ -1068,7 +1068,7 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
     getViewEventApi()?.onPoiClick(
       viewId: _viewId!,
       pointOfInterest: PointOfInterestDto(
-        placeId: placeID,
+        placeID: placeID,
         name: name,
         latLng: LatLngDto(latitude: location.latitude, longitude: location.longitude)
       ),

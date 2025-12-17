@@ -1036,7 +1036,7 @@ data class PointOfInterestDto(
    * The Place ID of this POI, as defined in the Places SDK. This can be used to retrieve additional
    * information about the place.
    */
-  val placeId: String,
+  val placeID: String,
   /** The name of the POI (e.g., "Central Park", "City Hall"). */
   val name: String,
   /** The geographical coordinates of the POI. */
@@ -1044,15 +1044,15 @@ data class PointOfInterestDto(
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PointOfInterestDto {
-      val placeId = pigeonVar_list[0] as String
+      val placeID = pigeonVar_list[0] as String
       val name = pigeonVar_list[1] as String
       val latLng = pigeonVar_list[2] as LatLngDto
-      return PointOfInterestDto(placeId, name, latLng)
+      return PointOfInterestDto(placeID, name, latLng)
     }
   }
 
   fun toList(): List<Any?> {
-    return listOf(placeId, name, latLng)
+    return listOf(placeID, name, latLng)
   }
 
   override fun equals(other: Any?): Boolean {

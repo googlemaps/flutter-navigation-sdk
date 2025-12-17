@@ -247,7 +247,7 @@ abstract class GoogleMapsBaseMapView(
       viewEventApi?.onPoiClick(
         getViewId().toLong(),
         PointOfInterestDto(
-          placeId = pointOfInterest.placeId,
+          placeID = pointOfInterest.placeId,
           name = pointOfInterest.name,
           latLng = LatLngDto(pointOfInterest.latLng.latitude, pointOfInterest.latLng.longitude),
         ),

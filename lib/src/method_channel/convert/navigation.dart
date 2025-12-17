@@ -14,7 +14,6 @@
 
 import '../../../google_navigation_flutter.dart';
 import '../method_channel.dart';
-import 'navigation_waypoint.dart';
 
 /// [SpeedAlertSeverityDto] convert extension.
 /// @nodoc

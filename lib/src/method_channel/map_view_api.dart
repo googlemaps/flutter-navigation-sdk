@@ -28,8 +28,13 @@ import 'method_channel.dart';
 class MapViewAPIImpl {
   final MapViewApi _viewApi = MapViewApi();
   bool _viewApiHasBeenSetUp = false;
+
   final StreamController<_ViewIdEventWrapper> _viewEventStreamController =
       StreamController<_ViewIdEventWrapper>.broadcast();
+
+  @visibleForTesting
+  StreamController<Object> get viewEventStreamControllerForTesting =>
+      _viewEventStreamController;
 
   /// Keep track of marker count, used to generate marker ID's.
   int _markerCounter = 0;
@@ -1334,7 +1339,16 @@ class ViewEventApiImpl implements ViewEventApi {
     MarkerDragEventTypeDto eventType,
     LatLngDto position,
   ) {
-    //   _viewEventStreamController.add(_ViewIdEventWrapper(event.viewId, event));
+    _viewEventStreamController.add(
+      _ViewIdEventWrapper(
+        viewId,
+        MarkerDragEvent(
+          markerId: markerId,
+          eventType: eventType.toMarkerDragEventType(),
+          position: position.toLatLng(),
+        ),
+      ),
+    );
   }
 
   @override
@@ -1431,6 +1445,7 @@ class ViewEventApiImpl implements ViewEventApi {
   }
 }
 
+/// @nodoc
 class _ViewIdEventWrapper {
   _ViewIdEventWrapper(this.viewId, this.event);
 

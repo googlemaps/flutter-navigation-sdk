@@ -21,7 +21,7 @@ extension ConvertPointOfInterestDto on PointOfInterestDto {
   /// Converts [PointOfInterestDto] to [PointOfInterest]
   PointOfInterest toPointOfInterest() {
     return PointOfInterest(
-      placeId: placeId,
+      placeID: placeID,
       name: name,
       latLng: latLng.toLatLng(),
     );
