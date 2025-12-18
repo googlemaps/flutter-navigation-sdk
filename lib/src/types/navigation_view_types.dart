@@ -230,7 +230,7 @@ class MapLongClickEvent {
 class PointOfInterest {
   /// Creates a [PointOfInterest] object.
   const PointOfInterest({
-    required this.placeId,
+    required this.placeID,
     required this.name,
     required this.latLng,
   });
@@ -238,7 +238,7 @@ class PointOfInterest {
   /// The Place ID of this POI, as defined in the Places SDK.
   /// This identifier can be used to retrieve additional information about the place
   /// using the Places API.
-  final String placeId;
+  final String placeID;
 
   /// The name of the POI (e.g., "Central Park", "City Hall").
   final String name;
@@ -255,17 +255,17 @@ class PointOfInterest {
       return false;
     }
     return other is PointOfInterest &&
-        placeId == other.placeId &&
+        placeID == other.placeID &&
         name == other.name &&
         latLng == other.latLng;
   }
 
   @override
-  int get hashCode => Object.hash(placeId, name, latLng);
+  int get hashCode => Object.hash(placeID, name, latLng);
 
   @override
   String toString() =>
-      'PointOfInterest(placeId: $placeId, name: $name, latLng: $latLng)';
+      'PointOfInterest(placeId: $placeID, name: $name, latLng: $latLng)';
 }
 
 /// Represents a POI click event in a Google Maps view.

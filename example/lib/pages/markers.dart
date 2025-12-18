@@ -39,6 +39,7 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
 
   late bool _isMapToolbarEnabled = true;
   late bool _displayMarkerUpdates = false;
+  String _latestMarkerDragUpdate = '';
   final List<double> _zIndexes = <double>[-1, 0, 1];
   final List<double> _alphas = <double>[1.0, 0.3];
 
@@ -215,15 +216,30 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
   }
 
   void _onMarkerDrag(String markerId, LatLng position) {
-    showMessage('Marker drag, position: $position markerId: $markerId');
+    if (_displayMarkerUpdates) {
+      setState(() {
+        _latestMarkerDragUpdate =
+            'Dragging\nMarker: $markerId\nLat: ${position.latitude.toStringAsFixed(4)}\nLng: ${position.longitude.toStringAsFixed(4)}';
+      });
+    }
   }
 
   void _onMarkerDragStart(String markerId, LatLng position) {
-    showMessage('Marker drag, position: $position markerId: $markerId');
+    if (_displayMarkerUpdates) {
+      setState(() {
+        _latestMarkerDragUpdate =
+            'Drag started\nMarker: $markerId\nLat: ${position.latitude.toStringAsFixed(4)}\nLng: ${position.longitude.toStringAsFixed(4)}';
+      });
+    }
   }
 
   void _onMarkerDragEnd(String markerId, LatLng position) {
-    showMessage('Marker drag, position: $position markerId: $markerId');
+    if (_displayMarkerUpdates) {
+      setState(() {
+        _latestMarkerDragUpdate =
+            'Drag ended\nMarker: $markerId\nLat: ${position.latitude.toStringAsFixed(4)}\nLng: ${position.longitude.toStringAsFixed(4)}';
+      });
+    }
     final Marker marker = _markers.firstWhere(
       (Marker marker) => marker.markerId == markerId,
     );
@@ -252,17 +268,47 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
       child: Column(
         children: <Widget>[
           Expanded(
-            child: GoogleMapsNavigationView(
-              onViewCreated: _onViewCreated,
-              initialNavigationUIEnabledPreference:
-                  NavigationUIEnabledPreference.disabled,
-              onMarkerClicked: _onMarkerClicked,
-              onMarkerDrag: _onMarkerDrag,
-              onMarkerDragStart: _onMarkerDragStart,
-              onMarkerDragEnd: _onMarkerDragEnd,
-              onMarkerInfoWindowClicked: _onMarkerInfoWindowClicked,
-              onMarkerInfoWindowClosed: _onMarkerInfoWindowClosed,
-              onMarkerInfoWindowLongClicked: _onMarkerInfoWindowLongClicked,
+            child: Stack(
+              children: <Widget>[
+                GoogleMapsNavigationView(
+                  onViewCreated: _onViewCreated,
+                  initialNavigationUIEnabledPreference:
+                      NavigationUIEnabledPreference.disabled,
+                  onMarkerClicked: _onMarkerClicked,
+                  onMarkerDrag: _onMarkerDrag,
+                  onMarkerDragStart: _onMarkerDragStart,
+                  onMarkerDragEnd: _onMarkerDragEnd,
+                  onMarkerInfoWindowClicked: _onMarkerInfoWindowClicked,
+                  onMarkerInfoWindowClosed: _onMarkerInfoWindowClosed,
+                  onMarkerInfoWindowLongClicked: _onMarkerInfoWindowLongClicked,
+                ),
+                if (_displayMarkerUpdates && _latestMarkerDragUpdate.isNotEmpty)
+                  Positioned(
+                    top: 10,
+                    left: 10,
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 6,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        _latestMarkerDragUpdate,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
           const SizedBox(height: 10),

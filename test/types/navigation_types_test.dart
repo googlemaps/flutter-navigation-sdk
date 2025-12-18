@@ -14,7 +14,6 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_navigation_flutter/google_navigation_flutter.dart';
-import 'package:google_navigation_flutter/src/method_channel/convert/navigation_waypoint.dart';
 import 'package:google_navigation_flutter/src/method_channel/method_channel.dart';
 
 void main() {
@@ -702,6 +701,64 @@ void main() {
           NavigationForceNightMode.forceNight,
         ]),
       );
+    });
+  });
+
+  group('PointOfInterest tests', () {
+    test('tests PointOfInterest conversion from DTO', () {
+      final PointOfInterestDto dto = PointOfInterestDto(
+        placeID: 'place1',
+        name: 'Test Place',
+        latLng: LatLngDto(latitude: 37.4220936, longitude: -122.083922),
+      );
+
+      final PointOfInterest poi = dto.toPointOfInterest();
+
+      expect(poi.placeID, dto.placeID);
+      expect(poi.name, dto.name);
+      expect(poi.latLng.latitude, dto.latLng.latitude);
+      expect(poi.latLng.longitude, dto.latLng.longitude);
+    });
+
+    test('tests PointOfInterest equality', () {
+      final PointOfInterest poi1 = PointOfInterest(
+        placeID: 'test_place_id',
+        name: 'Test Place',
+        latLng: const LatLng(latitude: 37.4220936, longitude: -122.083922),
+      );
+
+      final PointOfInterest poi2 = PointOfInterest(
+        placeID: 'test_place_id',
+        name: 'Test Place',
+        latLng: const LatLng(latitude: 37.4220936, longitude: -122.083922),
+      );
+
+      final PointOfInterest poi3 = PointOfInterest(
+        placeID: 'different_place_id',
+        name: 'Different Place',
+        latLng: const LatLng(latitude: 40.7128, longitude: -74.0060),
+      );
+
+      expect(poi1, poi2);
+      expect(poi1, isNot(poi3));
+      expect(poi1.hashCode, poi2.hashCode);
+      expect(poi1.hashCode, isNot(poi3.hashCode));
+    });
+
+    test('tests PoiClickedEvent creation', () {
+      final PointOfInterest poi = PointOfInterest(
+        placeID: 'test_place_id',
+        name: 'Test Place',
+        latLng: const LatLng(latitude: 37.4220936, longitude: -122.083922),
+      );
+
+      final PoiClickedEvent event = PoiClickedEvent(pointOfInterest: poi);
+
+      expect(event.pointOfInterest, poi);
+      expect(event.pointOfInterest.placeID, 'test_place_id');
+      expect(event.pointOfInterest.name, 'Test Place');
+      expect(event.pointOfInterest.latLng.latitude, 37.4220936);
+      expect(event.pointOfInterest.latLng.longitude, -122.083922);
     });
   });
 }

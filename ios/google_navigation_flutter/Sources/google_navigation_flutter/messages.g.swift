@@ -906,7 +906,7 @@ struct MarkerAnchorDto: Hashable {
 struct PointOfInterestDto: Hashable {
   /// The Place ID of this POI, as defined in the Places SDK.
   /// This can be used to retrieve additional information about the place.
-  var placeId: String
+  var placeID: String
   /// The name of the POI (e.g., "Central Park", "City Hall").
   var name: String
   /// The geographical coordinates of the POI.
@@ -914,19 +914,19 @@ struct PointOfInterestDto: Hashable {
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> PointOfInterestDto? {
-    let placeId = pigeonVar_list[0] as! String
+    let placeID = pigeonVar_list[0] as! String
     let name = pigeonVar_list[1] as! String
     let latLng = pigeonVar_list[2] as! LatLngDto
 
     return PointOfInterestDto(
-      placeId: placeId,
+      placeID: placeID,
       name: name,
       latLng: latLng
     )
   }
   func toList() -> [Any?] {
     return [
-      placeId,
+      placeID,
       name,
       latLng,
     ]

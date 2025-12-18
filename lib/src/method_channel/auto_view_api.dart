@@ -29,6 +29,12 @@ class AutoMapViewAPIImpl {
   final StreamController<_AutoEventWrapper> _autoEventStreamController =
       StreamController<_AutoEventWrapper>.broadcast();
 
+  /// Provides access to the auto event stream controller for testing purposes.
+  /// This allows test subclasses to access the parent's stream controller.
+  @visibleForTesting
+  StreamController<Object> get autoEventStreamControllerForTesting =>
+      _autoEventStreamController;
+
   /// Keep track of marker count, used to generate marker ID's.
   int _markerCounter = 0;
   String _createMarkerId() {

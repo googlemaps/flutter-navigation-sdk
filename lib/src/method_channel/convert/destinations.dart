@@ -15,7 +15,6 @@
 import '../../types/types.dart';
 import '../method_channel.dart';
 import 'navigation_route_token_options.dart';
-import 'navigation_waypoint.dart';
 
 /// [Destinations] convert extension.
 /// @nodoc

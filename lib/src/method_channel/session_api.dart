@@ -15,10 +15,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:meta/meta.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import '../../google_navigation_flutter.dart';
-import 'convert/navigation_waypoint.dart';
 import 'method_channel.dart';
 
 /// @nodoc
@@ -33,6 +33,10 @@ class NavigationSessionAPIImpl {
   /// Stream controllers for events.
   final StreamController<Object> _sessionEventStreamController =
       StreamController<Object>.broadcast();
+
+  @visibleForTesting
+  StreamController<Object> get sessionEventStreamControllerForTesting =>
+      _sessionEventStreamController;
 
   /// This function ensures that the event API has been setup. This should be
   /// called when initializing navigation session.

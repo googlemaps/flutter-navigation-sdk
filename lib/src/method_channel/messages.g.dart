@@ -992,14 +992,14 @@ class MarkerAnchorDto {
 /// POIs include parks, schools, government buildings, and businesses.
 class PointOfInterestDto {
   PointOfInterestDto({
-    required this.placeId,
+    required this.placeID,
     required this.name,
     required this.latLng,
   });
 
   /// The Place ID of this POI, as defined in the Places SDK.
   /// This can be used to retrieve additional information about the place.
-  String placeId;
+  String placeID;
 
   /// The name of the POI (e.g., "Central Park", "City Hall").
   String name;
@@ -1008,7 +1008,7 @@ class PointOfInterestDto {
   LatLngDto latLng;
 
   List<Object?> _toList() {
-    return <Object?>[placeId, name, latLng];
+    return <Object?>[placeID, name, latLng];
   }
 
   Object encode() {
@@ -1018,7 +1018,7 @@ class PointOfInterestDto {
   static PointOfInterestDto decode(Object result) {
     result as List<Object?>;
     return PointOfInterestDto(
-      placeId: result[0]! as String,
+      placeID: result[0]! as String,
       name: result[1]! as String,
       latLng: result[2]! as LatLngDto,
     );

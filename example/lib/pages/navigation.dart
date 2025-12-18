@@ -690,16 +690,26 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   Marker? _newWaypointMarker;
   final List<Marker> _destinationWaypointMarkers = <Marker>[];
+  PointOfInterest? _lastClickedPoi;
 
-  MarkerOptions _buildNewWaypointMarkerOptions(LatLng target) {
+  MarkerOptions _buildNewWaypointMarkerOptions(
+    LatLng target, {
+    String? poiName,
+  }) {
     return MarkerOptions(
-      infoWindow: const InfoWindow(title: 'Destination'),
+      infoWindow: InfoWindow(title: poiName ?? 'Destination'),
       position: LatLng(latitude: target.latitude, longitude: target.longitude),
     );
   }
 
-  Future<void> _updateNewWaypointMarker(LatLng target) async {
-    final MarkerOptions markerOptions = _buildNewWaypointMarkerOptions(target);
+  Future<void> _updateNewWaypointMarker(
+    LatLng target, {
+    String? poiName,
+  }) async {
+    final MarkerOptions markerOptions = _buildNewWaypointMarkerOptions(
+      target,
+      poiName: poiName,
+    );
     if (_newWaypointMarker == null) {
       // Add new marker.
       final List<Marker?> addedMarkers = await _navigationViewController!
@@ -749,7 +759,13 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   }
 
   Future<void> _onMapClicked(LatLng location) async {
+    _lastClickedPoi = null; // Clear POI info when map is clicked
     await _updateNewWaypointMarker(location);
+  }
+
+  Future<void> _onPoiClicked(PointOfInterest poi) async {
+    _lastClickedPoi = poi; // Store POI info for waypoint title
+    await _updateNewWaypointMarker(poi.latLng, poiName: poi.name);
   }
 
   Future<void> _addWaypoint() async {
@@ -758,9 +774,14 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         _validRoute = false;
       });
       _nextWaypointIndex += 1;
+      // Use POI name if available, otherwise use generic waypoint title
+      final String waypointTitle =
+          _lastClickedPoi != null
+              ? '${_lastClickedPoi!.name} (Waypoint $_nextWaypointIndex)'
+              : 'Waypoint $_nextWaypointIndex';
       _waypoints.add(
         NavigationWaypoint.withLatLngTarget(
-          title: 'Waypoint $_nextWaypointIndex',
+          title: waypointTitle,
           target: LatLng(
             latitude: _newWaypointMarker!.options.position.latitude,
             longitude: _newWaypointMarker!.options.position.longitude,
@@ -1226,6 +1247,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                           onViewCreated: _onViewCreated,
                           onMapClicked: _onMapClicked,
                           onMapLongClicked: _onMapClicked,
+                          onPoiClicked: _onPoiClicked,
                           onRecenterButtonClicked:
                               _onRecenterButtonClickedEvent,
                           onNavigationUIEnabledChanged:
