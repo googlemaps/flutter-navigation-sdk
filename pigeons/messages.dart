@@ -1308,6 +1308,27 @@ class NavInfoDto {
   final int? timeToNextDestinationSeconds;
 }
 
+/// UI customization parameters for the Terms and Conditions dialog.
+///
+/// All color values are 32-bit ARGB integers (format: 0xAARRGGBB).
+/// All parameters are optional - if not provided, platform defaults will be used.
+class TermsAndConditionsUIParamsDto {
+  /// Background color of the dialog box.
+  int? backgroundColor;
+
+  /// Text color for the dialog title.
+  int? titleColor;
+
+  /// Text color for the main terms and conditions text.
+  int? mainTextColor;
+
+  /// Text color for the accept button.
+  int? acceptButtonTextColor;
+
+  /// Text color for the cancel button.
+  int? cancelButtonTextColor;
+}
+
 /// Determines how application should behave when a application task is removed.
 enum TaskRemovedBehaviorDto {
   /// The default state, indicating that navigation guidance,
@@ -1332,6 +1353,7 @@ abstract class NavigationSessionApi {
     String title,
     String companyName,
     bool shouldOnlyShowDriverAwarenessDisclaimer,
+    TermsAndConditionsUIParamsDto? uiParams,
   );
   bool areTermsAccepted();
   void resetTermsAccepted();

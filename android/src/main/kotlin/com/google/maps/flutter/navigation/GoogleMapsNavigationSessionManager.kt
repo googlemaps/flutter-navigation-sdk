@@ -539,6 +539,7 @@ constructor(
     title: String,
     companyName: String,
     shouldOnlyShowDriverAwarenessDisclaimer: Boolean,
+    uiParams: Messages.TermsAndConditionsUIParamsDto?,
     callback: (Result<Boolean>) -> Unit,
   ) {
     // Align API behavior with iOS:
@@ -548,20 +549,40 @@ constructor(
       return
     }
 
+    // Build UI customization parameters if provided
+    val uiParams: TermsAndConditionsUIParams =
+      if (uiParams != null) {
+        val builder = TermsAndConditionsUIParams.builder()
+
+        // Apply custom colors if provided (convert from ARGB Long to Android Color Int)
+        uiParams.backgroundColor?.let { builder.setBackgroundColor(it.toInt()) }
+        uiParams.titleColor?.let { builder.setTitleColor(it.toInt()) }
+        uiParams.mainTextColor?.let { builder.setMainTextColor(it.toInt()) }
+        uiParams.acceptButtonTextColor?.let { builder.setAcceptButtonTextColor(it.toInt()) }
+        uiParams.cancelButtonTextColor?.let { builder.setCancelButtonTextColor(it.toInt()) }
+
+        builder.build()
+      } else {
+        TermsAndConditionsUIParams.builder().build()
+      }
+
     if (shouldOnlyShowDriverAwarenessDisclaimer) {
-      val defaultParams: TermsAndConditionsUIParams = TermsAndConditionsUIParams.builder().build()
       NavigationApi.showTermsAndConditionsDialog(
         getActivity(),
         companyName,
         title,
-        defaultParams,
+        uiParams,
         { accepted -> callback(Result.success(accepted)) },
         TermsAndConditionsCheckOption.SKIPPED,
       )
     } else {
-      NavigationApi.showTermsAndConditionsDialog(getActivity(), companyName, title) { accepted ->
-        callback(Result.success(accepted))
-      }
+      NavigationApi.showTermsAndConditionsDialog(
+        getActivity(),
+        companyName,
+        title,
+        uiParams,
+        { accepted -> callback(Result.success(accepted)) },
+      )
     }
   }
 

@@ -233,6 +233,9 @@ class _PigeonCodec extends StandardMessageCodec {
     } else if (value is NavInfoDto) {
       buffer.putUint8(195);
       writeValue(buffer, value.encode());
+    } else if (value is TermsAndConditionsUIParamsDto) {
+      buffer.putUint8(196);
+      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -411,6 +414,8 @@ class _PigeonCodec extends StandardMessageCodec {
         return StepInfoDto.decode(readValue(buffer)!);
       case 195:
         return NavInfoDto.decode(readValue(buffer)!);
+      case 196:
+        return TermsAndConditionsUIParamsDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -5367,6 +5372,7 @@ abstract class TestNavigationSessionApi {
     String title,
     String companyName,
     bool shouldOnlyShowDriverAwarenessDisclaimer,
+    TermsAndConditionsUIParamsDto? uiParams,
   );
 
   bool areTermsAccepted();
@@ -5607,11 +5613,14 @@ abstract class TestNavigationSessionApi {
             arg_shouldOnlyShowDriverAwarenessDisclaimer != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.showTermsAndConditionsDialog was null, expected non-null bool.',
           );
+          final TermsAndConditionsUIParamsDto? arg_uiParams =
+              (args[3] as TermsAndConditionsUIParamsDto?);
           try {
             final bool output = await api.showTermsAndConditionsDialog(
               arg_title!,
               arg_companyName!,
               arg_shouldOnlyShowDriverAwarenessDisclaimer!,
+              arg_uiParams,
             );
             return <Object?>[output];
           } on PlatformException catch (e) {
