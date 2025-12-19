@@ -2323,6 +2323,66 @@ data class NavInfoDto(
   override fun hashCode(): Int = toList().hashCode()
 }
 
+/**
+ * UI customization parameters for the Terms and Conditions dialog.
+ *
+ * All color values are 32-bit ARGB integers (format: 0xAARRGGBB). All parameters are optional - if
+ * not provided, platform defaults will be used.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class TermsAndConditionsUIParamsDto(
+  /** Background color of the dialog box. */
+  val backgroundColor: Long? = null,
+  /** Text color for the dialog title. */
+  val titleColor: Long? = null,
+  /** Text color for the main terms and conditions text. */
+  val mainTextColor: Long? = null,
+  /** Text color for the accept button. */
+  val acceptButtonTextColor: Long? = null,
+  /** Text color for the cancel button. */
+  val cancelButtonTextColor: Long? = null,
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): TermsAndConditionsUIParamsDto {
+      val backgroundColor = pigeonVar_list[0] as Long?
+      val titleColor = pigeonVar_list[1] as Long?
+      val mainTextColor = pigeonVar_list[2] as Long?
+      val acceptButtonTextColor = pigeonVar_list[3] as Long?
+      val cancelButtonTextColor = pigeonVar_list[4] as Long?
+      return TermsAndConditionsUIParamsDto(
+        backgroundColor,
+        titleColor,
+        mainTextColor,
+        acceptButtonTextColor,
+        cancelButtonTextColor,
+      )
+    }
+  }
+
+  fun toList(): List<Any?> {
+    return listOf(
+      backgroundColor,
+      titleColor,
+      mainTextColor,
+      acceptButtonTextColor,
+      cancelButtonTextColor,
+    )
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (other !is TermsAndConditionsUIParamsDto) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
 private open class messagesPigeonCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
@@ -2540,6 +2600,11 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
       }
       195.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavInfoDto.fromList(it) }
+      }
+      196.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          TermsAndConditionsUIParamsDto.fromList(it)
+        }
       }
       else -> super.readValueOfType(type, buffer)
     }
@@ -2813,6 +2878,10 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
       }
       is NavInfoDto -> {
         stream.write(195)
+        writeValue(stream, value.toList())
+      }
+      is TermsAndConditionsUIParamsDto -> {
+        stream.write(196)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -6138,6 +6207,7 @@ interface NavigationSessionApi {
     title: String,
     companyName: String,
     shouldOnlyShowDriverAwarenessDisclaimer: Boolean,
+    uiParams: TermsAndConditionsUIParamsDto?,
     callback: (Result<Boolean>) -> Unit,
   )
 
@@ -6317,10 +6387,12 @@ interface NavigationSessionApi {
             val titleArg = args[0] as String
             val companyNameArg = args[1] as String
             val shouldOnlyShowDriverAwarenessDisclaimerArg = args[2] as Boolean
+            val uiParamsArg = args[3] as TermsAndConditionsUIParamsDto?
             api.showTermsAndConditionsDialog(
               titleArg,
               companyNameArg,
               shouldOnlyShowDriverAwarenessDisclaimerArg,
+              uiParamsArg,
             ) { result: Result<Boolean> ->
               val error = result.exceptionOrNull()
               if (error != null) {

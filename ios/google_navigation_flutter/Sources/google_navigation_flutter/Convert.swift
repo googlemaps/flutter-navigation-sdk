@@ -552,3 +552,15 @@ enum Convert {
     )
   }
 }
+
+// MARK: - Int64 to UIColor Extension
+extension Int64 {
+  /// Converts an ARGB Int64 value (format: 0xAARRGGBB) to UIColor
+  func toUIColor() -> UIColor {
+    let alpha = CGFloat((self >> 24) & 0xFF) / 255.0
+    let red = CGFloat((self >> 16) & 0xFF) / 255.0
+    let green = CGFloat((self >> 8) & 0xFF) / 255.0
+    let blue = CGFloat(self & 0xFF) / 255.0
+    return UIColor(red: red, green: green, blue: blue, alpha: alpha)
+  }
+}

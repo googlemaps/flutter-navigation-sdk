@@ -80,6 +80,13 @@ class _NavigationWithoutMapPageState
           companyName,
           shouldOnlyShowDriverAwarenessDisclaimer:
               shouldOnlyShowDriverAwarenessDisclaimer,
+          uiParams: const TermsAndConditionsUIParams(
+            backgroundColor: Color(0xFFECEFF1),
+            titleColor: Color(0xFF01579B),
+            mainTextColor: Color(0xFF263238),
+            acceptButtonTextColor: Color(0xFF00695C),
+            cancelButtonTextColor: Color(0xFFD32F2F),
+          ),
         );
     showMessage(accepted ? 'Terms accepted' : 'Terms not accepted');
     setState(() {
