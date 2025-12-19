@@ -558,18 +558,23 @@ class GoogleMapsNavigator {
   ///  if only driver awareness disclaimer should be shown (Android only).
   ///  On iOS enabling [shouldOnlyShowDriverAwarenessDisclaimer] throws UnsupportedError.
   ///
+  ///  Optional parameter [uiParams] allows customizing the appearance
+  ///  of the dialog with custom colors. See [TermsAndConditionsUIParams] for details.
+  ///
   ///  Returns true if the user accepts the terms, and false if not. If the terms
   ///  have already been accepted returns true without showing the dialog again.
   static Future<bool> showTermsAndConditionsDialog(
     String title,
     String companyName, {
     bool shouldOnlyShowDriverAwarenessDisclaimer = false,
+    TermsAndConditionsUIParams? uiParams,
   }) async {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .showTermsAndConditionsDialog(
           title,
           companyName,
           shouldOnlyShowDriverAwarenessDisclaimer,
+          uiParams?.toDto(),
         );
   }
 

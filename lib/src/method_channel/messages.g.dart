@@ -2743,6 +2743,77 @@ class NavInfoDto {
   int get hashCode => Object.hashAll(_toList());
 }
 
+/// UI customization parameters for the Terms and Conditions dialog.
+///
+/// All color values are 32-bit ARGB integers (format: 0xAARRGGBB).
+/// All parameters are optional - if not provided, platform defaults will be used.
+class TermsAndConditionsUIParamsDto {
+  TermsAndConditionsUIParamsDto({
+    this.backgroundColor,
+    this.titleColor,
+    this.mainTextColor,
+    this.acceptButtonTextColor,
+    this.cancelButtonTextColor,
+  });
+
+  /// Background color of the dialog box.
+  int? backgroundColor;
+
+  /// Text color for the dialog title.
+  int? titleColor;
+
+  /// Text color for the main terms and conditions text.
+  int? mainTextColor;
+
+  /// Text color for the accept button.
+  int? acceptButtonTextColor;
+
+  /// Text color for the cancel button.
+  int? cancelButtonTextColor;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      backgroundColor,
+      titleColor,
+      mainTextColor,
+      acceptButtonTextColor,
+      cancelButtonTextColor,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static TermsAndConditionsUIParamsDto decode(Object result) {
+    result as List<Object?>;
+    return TermsAndConditionsUIParamsDto(
+      backgroundColor: result[0] as int?,
+      titleColor: result[1] as int?,
+      mainTextColor: result[2] as int?,
+      acceptButtonTextColor: result[3] as int?,
+      cancelButtonTextColor: result[4] as int?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! TermsAndConditionsUIParamsDto ||
+        other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(encode(), other.encode());
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
 class _PigeonCodec extends StandardMessageCodec {
   const _PigeonCodec();
   @override
@@ -2952,6 +3023,9 @@ class _PigeonCodec extends StandardMessageCodec {
     } else if (value is NavInfoDto) {
       buffer.putUint8(195);
       writeValue(buffer, value.encode());
+    } else if (value is TermsAndConditionsUIParamsDto) {
+      buffer.putUint8(196);
+      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -3130,6 +3204,8 @@ class _PigeonCodec extends StandardMessageCodec {
         return StepInfoDto.decode(readValue(buffer)!);
       case 195:
         return NavInfoDto.decode(readValue(buffer)!);
+      case 196:
+        return TermsAndConditionsUIParamsDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -7232,6 +7308,7 @@ class NavigationSessionApi {
     String title,
     String companyName,
     bool shouldOnlyShowDriverAwarenessDisclaimer,
+    TermsAndConditionsUIParamsDto? uiParams,
   ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.showTermsAndConditionsDialog$pigeonVar_messageChannelSuffix';
@@ -7242,7 +7319,12 @@ class NavigationSessionApi {
           binaryMessenger: pigeonVar_binaryMessenger,
         );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
-      <Object?>[title, companyName, shouldOnlyShowDriverAwarenessDisclaimer],
+      <Object?>[
+        title,
+        companyName,
+        shouldOnlyShowDriverAwarenessDisclaimer,
+        uiParams,
+      ],
     );
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
