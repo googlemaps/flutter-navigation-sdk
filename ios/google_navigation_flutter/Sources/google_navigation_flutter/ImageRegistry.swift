@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import UIKit
+import Flutter
 
 enum GoogleMapsImageRegistryError: Error {
   case imageDecodingFailed
@@ -46,13 +47,36 @@ class ImageRegistry {
         image: image,
         imagePixelRatio: imagePixelRatio,
         width: width,
-        height: height
+        height: height,
+        type: .regular
       ))
     return ImageDescriptorDto(
       registeredImageId: imageId,
       imagePixelRatio: imagePixelRatio,
       width: width,
-      height: height
+      height: height,
+      type: RegisteredImageTypeDto.regular
+    )
+  }
+
+  func registerManeuverIcon(imageId: String, image: UIImage, imagePixelRatio: Double, width: Double?,
+                            height: Double?) throws -> ImageDescriptorDto {
+    registeredImages.append(
+      RegisteredImage(
+        imageId: imageId,
+        image: image,
+        imagePixelRatio: imagePixelRatio,
+        width: width,
+        height: height,
+        type: .maneuverIcon
+      )
+    )
+    return ImageDescriptorDto(
+      registeredImageId: imageId,
+      imagePixelRatio: imagePixelRatio,
+      width: width,
+      height: height,
+      type: .maneuverIcon
     )
   }
 
@@ -64,7 +88,20 @@ class ImageRegistry {
     registeredImages.removeAll(where: { $0.imageId == imageId })
   }
 
-  func clearRegisteredImages() {
-    registeredImages.removeAll()
+  func clearRegisteredImages(filter: RegisteredImageTypeDto?) {
+    guard let filter else {
+      registeredImages.removeAll()
+      return
+    }
+    registeredImages.removeAll { image in
+      image.type == Convert.registeredImageType(type: filter)
+    }
+  }
+
+  func getRegisteredImageData(imageDescriptor: ImageDescriptorDto) throws -> FlutterStandardTypedData? {
+    guard let data = findRegisteredImage(imageId: imageDescriptor.registeredImageId ?? "")?.image.pngData() else {
+      return nil
+    }
+    return FlutterStandardTypedData(bytes: data)
   }
 }

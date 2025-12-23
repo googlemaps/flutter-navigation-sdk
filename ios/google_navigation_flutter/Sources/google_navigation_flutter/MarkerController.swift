@@ -26,7 +26,7 @@ class MarkerController {
     self.markerId = markerId
   }
 
-  private let defaultImageDto: ImageDescriptorDto = .init()
+  private let defaultImageDto: ImageDescriptorDto = .init(type: .regular)
 
   /// Update [GMSMarker] instance with values from pigeon [MarkerDto] class
   func update(from markerDto: MarkerDto, imageRegistry: ImageRegistry) {

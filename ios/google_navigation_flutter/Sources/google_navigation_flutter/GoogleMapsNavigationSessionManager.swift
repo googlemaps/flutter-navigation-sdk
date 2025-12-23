@@ -631,10 +631,48 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
     )
   }
 
+  func getManeuverIconImageDescriptor(maneuver: GMSNavigationManeuver) -> ImageDescriptorDto? {
+    guard let registeredImage = GoogleMapsNavigationPlugin.imageRegistry?.findRegisteredImage(imageId: Convert.convertManeuverToHash(maneuver)) else {
+      return nil
+    }
+    return Convert.registeredImageToImageDescriptorDto(registeredImage: registeredImage)
+  }
+
+  func getImageDescriptorForStepInfo(_ step: GMSNavigationStepInfo) -> ImageDescriptorDto? {
+    guard let imageDescriptor = getManeuverIconImageDescriptor(maneuver: step.maneuver) else {
+      let bitmap = step.maneuverImage(with: nil) ?? UIImage()
+      let width = Double(bitmap.size.width)
+      let height = Double(bitmap.size.height)
+      return try? GoogleMapsNavigationPlugin.imageRegistry?.registerManeuverIcon(
+        imageId: Convert.convertManeuverToHash(step.maneuver),
+        image: bitmap,
+        imagePixelRatio: height == 0 ? 0 : width / height,
+        width: width,
+        height: height
+      )
+    }
+    return imageDescriptor
+  }
+
   func navigator(
     _ navigator: GMSNavigator,
     didUpdate navInfo: GMSNavigationNavInfo
   ) {
+    var imageDescriptors: [String : ImageDescriptorDto?] = [:]
+
+    // Separated to help Swift compiler.
+    let steps: [GMSNavigationStepInfo] = (navInfo.remainingSteps  + [navInfo.currentStep])
+      .compactMap { $0 }
+    steps
+      .forEach { step in
+        let hash = Convert.convertManeuverToHash(step.maneuver)
+        let existingImageDescriptor = imageDescriptors[hash]
+        if (existingImageDescriptor == nil) {
+          let imageDescriptor = getImageDescriptorForStepInfo(step)
+          imageDescriptors.updateValue(imageDescriptor, forKey: hash)
+        }
+      }
+
     // Detect new navigation session start
     // This callback only fires when guidance is actively running, making it the ideal place
     // to detect session starts and match Android's behavior where NavigationSessionListener
@@ -648,7 +686,8 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
       _navigationSessionEventApi?.onNavInfo(
         navInfo: Convert.convertNavInfo(
           navInfo,
-          maxAmountOfRemainingSteps: _numTurnByTurnNextStepsToPreview
+          maxAmountOfRemainingSteps: _numTurnByTurnNextStepsToPreview,
+          imageDescriptors: imageDescriptors
         ),
         completion: { _ in }
       )

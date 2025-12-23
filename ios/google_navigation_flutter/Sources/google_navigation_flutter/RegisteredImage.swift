@@ -14,19 +14,35 @@
 
 import UIKit
 
+enum RegisteredImageType: Int {
+  /// Default type used when custom bitmaps are uploaded to registry
+  case regular = 0
+  /// Maneuver icon generated from NavInfo data
+  case maneuverIcon = 1
+}
+
 struct RegisteredImage {
   let imageId: String
   let image: UIImage
   let imagePixelRatio: Double
   let width: Double?
   let height: Double?
+  let type: RegisteredImageType
 
   func toImageDescriptorDto() -> ImageDescriptorDto {
     ImageDescriptorDto(
       registeredImageId: imageId,
       imagePixelRatio: imagePixelRatio,
       width: width,
-      height: height
+      height: height,
+      type: {
+        switch type {
+        case .regular:
+          return .regular
+        case .maneuverIcon:
+          return .maneuverIcon
+        }
+      }()
     )
   }
 }
