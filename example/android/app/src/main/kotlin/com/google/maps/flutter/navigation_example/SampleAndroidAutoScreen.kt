@@ -17,6 +17,7 @@
 package com.google.maps.flutter.navigation_example
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.car.app.CarContext
 import androidx.car.app.model.Action
 import androidx.car.app.model.ActionStrip
@@ -95,6 +96,41 @@ class SampleAndroidAutoScreen(carContext: CarContext): AndroidAutoBaseScreen(car
         // Invalidate template layout because of conditional rendering in the
         // onGetTemplate method.
         invalidate()
+    }
+
+    // Example of handling prompt visibility changes
+    // This is called when traffic prompts appear/disappear on the Android Auto screen
+    override fun onPromptVisibilityChanged(promptVisible: Boolean) {
+        super.onPromptVisibilityChanged(promptVisible) // This sends the event to Flutter
+        Log.d("SampleAndroidAutoScreen", "Prompt visibility changed to: $promptVisible")
+        
+        // You can add custom logic here, such as:
+        // - Hiding/showing custom action buttons when prompts appear
+        // - Adjusting your template layout
+        // - Updating custom UI elements
+        
+        // For example, you might want to refresh the template:
+        // invalidate()
+    }
+
+    // Example of handling custom events from Flutter
+    override fun onCustomNavigationAutoEventFromFlutter(event: String, data: Any) {
+        super.onCustomNavigationAutoEventFromFlutter(event, data)
+        Log.d("SampleAndroidAutoScreen", "Received custom event from Flutter: event=$event, data=$data")
+    }
+
+    // Example of providing custom map options from native code
+    override fun getAutoMapOptions(): AutoMapViewOptions? {
+        // Call super to use Flutter-provided options
+        return super.getAutoMapOptions()
+    
+        // Or provide your own custom options:
+        // return AutoMapViewOptions(
+        //     mapId = "your-custom-map-id",
+        //     mapType = GoogleMap.MAP_TYPE_SATELLITE,
+        //     mapColorScheme = MapColorScheme.DARK,
+        //     forceNightMode = NavigationForceNightMode.FORCE_NIGHT
+        // )
     }
 
     override fun onGetTemplate(): Template {

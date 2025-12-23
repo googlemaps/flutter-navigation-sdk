@@ -105,6 +105,34 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
     try getView().setTrafficEnabled(enabled)
   }
 
+  func setTrafficPromptsEnabled(enabled: Bool) throws {
+    try getView().setTrafficPromptsEnabled(enabled)
+  }
+
+  func setTrafficIncidentCardsEnabled(enabled: Bool) throws {
+    try getView().setTrafficIncidentCardsEnabled(enabled)
+  }
+
+  func setReportIncidentButtonEnabled(enabled: Bool) throws {
+    try getView().setReportIncidentButtonEnabled(enabled)
+  }
+
+  func setAutoMapOptions(mapOptions: AutoMapOptionsDto) throws {
+    // Store the map options in BaseCarSceneDelegate static property
+    let options = AutoMapViewOptions(
+      cameraPosition: mapOptions.cameraPosition != nil
+        ? Convert.convertCameraPosition(position: mapOptions.cameraPosition!) : nil,
+      mapId: mapOptions.mapId,
+      mapType: mapOptions.mapType != nil
+        ? Convert.convertMapType(mapType: mapOptions.mapType!) : nil,
+      mapColorScheme: mapOptions.mapColorScheme != nil
+        ? Convert.convertMapColorScheme(mapColorScheme: mapOptions.mapColorScheme!) : nil,
+      forceNightMode: mapOptions.forceNightMode != nil
+        ? Convert.convertNavigationForceNightMode(forceNightMode: mapOptions.forceNightMode!) : nil
+    )
+    BaseCarSceneDelegate.mapOptions = options
+  }
+
   func isMyLocationEnabled() throws -> Bool {
     try getView().isMyLocationEnabled()
   }
@@ -147,6 +175,18 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
 
   func isTrafficEnabled() throws -> Bool {
     try getView().isTrafficEnabled()
+  }
+
+  func isTrafficPromptsEnabled() throws -> Bool {
+    try getView().isTrafficPromptsEnabled()
+  }
+
+  func isTrafficIncidentCardsEnabled() throws -> Bool {
+    try getView().isTrafficIncidentCardsEnabled()
+  }
+
+  func isReportIncidentButtonEnabled() throws -> Bool {
+    try getView().isReportIncidentButtonEnabled()
   }
 
   func getMyLocation() throws -> LatLngDto? {
@@ -480,5 +520,37 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
 
   func getPadding() throws -> MapPaddingDto {
     try getView().getPadding()
+  }
+
+  func getMapColorScheme() throws -> MapColorSchemeDto {
+    try Convert.convertMapColorScheme(uiUserInterfaceStyle: getView().getMapColorScheme())
+  }
+
+  func setMapColorScheme(mapColorScheme: MapColorSchemeDto) throws {
+    let colorScheme = Convert.convertMapColorScheme(mapColorScheme: mapColorScheme)
+    try getView().setMapColorScheme(colorScheme: colorScheme)
+  }
+
+  func getForceNightMode() throws -> NavigationForceNightModeDto {
+    try Convert.convertNavigationForceNightMode(
+      gmsNavigationLightingMode: getView().getForceNightMode()
+    )
+  }
+
+  func setForceNightMode(forceNightMode: NavigationForceNightModeDto) throws {
+    let nightMode = Convert.convertNavigationForceNightMode(
+      forceNightMode: forceNightMode
+    )
+    try getView().setForceNightMode(nightMode)
+  }
+
+  func sendCustomNavigationAutoEvent(event: String, data: Any) throws {
+    // This method receives custom events from Flutter.
+    // The implementation is left empty by design, as developers should handle
+    // custom events in their BaseCarSceneDelegate subclass by overriding
+    // onCustomNavigationAutoEventFromFlutter method.
+    //
+    // Note: If you need to handle events here, you would need to maintain a reference
+    // to your CarSceneDelegate instance and call a method on it.
   }
 }

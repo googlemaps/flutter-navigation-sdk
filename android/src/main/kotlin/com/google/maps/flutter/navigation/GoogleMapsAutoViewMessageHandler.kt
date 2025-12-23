@@ -31,6 +31,22 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
     }
   }
 
+  override fun setAutoMapOptions(mapOptions: AutoMapOptionsDto) {
+    // Store the map options in AndroidAutoBaseScreen companion object
+    // Convert DTO to a simple data holder
+    val options =
+      AutoMapViewOptions(
+        cameraPosition = mapOptions.cameraPosition,
+        mapId = mapOptions.mapId,
+        mapType = mapOptions.mapType?.let { Convert.convertMapTypeFromDto(it) },
+        mapColorScheme =
+          mapOptions.mapColorScheme?.let { Convert.convertMapColorSchemeFromDto(it) },
+        forceNightMode =
+          mapOptions.forceNightMode?.let { Convert.convertNavigationForceNightModeFromDto(it) },
+      )
+    AndroidAutoBaseScreen.mapOptions = options
+  }
+
   override fun isMyLocationEnabled(): Boolean {
     return getView().isMyLocationEnabled()
   }
@@ -99,6 +115,18 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
     getView().setTrafficEnabled(enabled)
   }
 
+  override fun setTrafficPromptsEnabled(enabled: Boolean) {
+    getView().setTrafficPromptsEnabled(enabled)
+  }
+
+  override fun setTrafficIncidentCardsEnabled(enabled: Boolean) {
+    getView().setTrafficIncidentCardsEnabled(enabled)
+  }
+
+  override fun setReportIncidentButtonEnabled(enabled: Boolean) {
+    getView().setReportIncidentButtonEnabled(enabled)
+  }
+
   override fun isMyLocationButtonEnabled(): Boolean {
     return getView().isMyLocationButtonEnabled()
   }
@@ -141,6 +169,18 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
 
   override fun isTrafficEnabled(): Boolean {
     return getView().isTrafficEnabled()
+  }
+
+  override fun isTrafficPromptsEnabled(): Boolean {
+    return getView().isTrafficPromptsEnabled()
+  }
+
+  override fun isTrafficIncidentCardsEnabled(): Boolean {
+    return getView().isTrafficIncidentCardsEnabled()
+  }
+
+  override fun isReportIncidentButtonEnabled(): Boolean {
+    return getView().isReportIncidentButtonEnabled()
   }
 
   override fun getMyLocation(): LatLngDto? {
@@ -392,5 +432,35 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
 
   override fun getPadding(): MapPaddingDto {
     return getView().getPadding()
+  }
+
+  override fun getMapColorScheme(): MapColorSchemeDto {
+    val colorScheme = getView().getMapColorScheme()
+    return Convert.convertMapColorSchemeToDto(colorScheme)
+  }
+
+  override fun setMapColorScheme(mapColorScheme: MapColorSchemeDto) {
+    val colorScheme = Convert.convertMapColorSchemeFromDto(mapColorScheme)
+    getView().setMapColorScheme(colorScheme)
+  }
+
+  override fun getForceNightMode(): NavigationForceNightModeDto {
+    val forceNightMode = getView().getForceNightMode()
+    return Convert.convertNavigationForceNightModeToDto(forceNightMode)
+  }
+
+  override fun setForceNightMode(forceNightMode: NavigationForceNightModeDto) {
+    val nightMode = Convert.convertNavigationForceNightModeFromDto(forceNightMode)
+    getView().setForceNightMode(nightMode)
+  }
+
+  override fun sendCustomNavigationAutoEvent(event: String, data: Any) {
+    // This method receives custom events from Flutter.
+    // The implementation is left empty by design, as developers should handle
+    // custom events in their AndroidAutoBaseScreen subclass by overriding
+    // onCustomNavigationAutoEventFromFlutter method.
+    //
+    // Note: If you need to handle events here, you would need to maintain a reference
+    // to your AndroidAutoBaseScreen instance and call a method on it.
   }
 }

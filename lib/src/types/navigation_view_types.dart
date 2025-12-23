@@ -200,12 +200,18 @@ class NavigationUIEnabledChangedEvent {
 
 /// Represents prompt visibility changed event in a view.
 /// {@category Navigation View}
+/// {@category Android Auto}
+/// {@category Carplay}
 class PromptVisibilityChangedEvent {
   /// Creates a [PromptVisibilityChangedEvent] object.
   const PromptVisibilityChangedEvent(this.promptVisible);
 
   /// Value representing whether prompts are visible or not.
   final bool promptVisible;
+
+  @override
+  String toString() =>
+      'PromptVisibilityChangedEvent(promptVisible: $promptVisible)';
 }
 
 /// Represents the long click position in a Google Maps view.

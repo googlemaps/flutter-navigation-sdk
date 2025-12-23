@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+export 'auto_map_options.dart';
 export 'circles.dart';
 export 'images.dart';
 export 'lat_lng.dart';

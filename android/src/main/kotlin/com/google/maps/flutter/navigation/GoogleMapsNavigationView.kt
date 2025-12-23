@@ -194,114 +194,114 @@ internal constructor(
     super.initListeners()
   }
 
-  fun isNavigationTripProgressBarEnabled(): Boolean {
+  override fun isNavigationTripProgressBarEnabled(): Boolean {
     return _isNavigationTripProgressBarEnabled
   }
 
-  fun setNavigationTripProgressBarEnabled(enabled: Boolean) {
+  override fun setNavigationTripProgressBarEnabled(enabled: Boolean) {
     _navigationView.setTripProgressBarEnabled(enabled)
     _isNavigationTripProgressBarEnabled = enabled
   }
 
-  fun isNavigationHeaderEnabled(): Boolean {
+  override fun isNavigationHeaderEnabled(): Boolean {
     return _isNavigationHeaderEnabled
   }
 
-  fun setNavigationHeaderEnabled(enabled: Boolean) {
+  override fun setNavigationHeaderEnabled(enabled: Boolean) {
     _navigationView.setHeaderEnabled(enabled)
     _isNavigationHeaderEnabled = enabled
   }
 
-  fun isNavigationFooterEnabled(): Boolean {
+  override fun isNavigationFooterEnabled(): Boolean {
     return _isNavigationFooterEnabled
   }
 
-  fun setNavigationFooterEnabled(enabled: Boolean) {
+  override fun setNavigationFooterEnabled(enabled: Boolean) {
     _navigationView.setEtaCardEnabled(enabled)
     _isNavigationFooterEnabled = enabled
   }
 
-  fun isRecenterButtonEnabled(): Boolean {
+  override fun isRecenterButtonEnabled(): Boolean {
     return _isRecenterButtonEnabled
   }
 
-  fun setRecenterButtonEnabled(enabled: Boolean) {
+  override fun setRecenterButtonEnabled(enabled: Boolean) {
     _navigationView.setRecenterButtonEnabled(enabled)
     _isRecenterButtonEnabled = enabled
   }
 
-  fun isSpeedLimitIconEnabled(): Boolean {
+  override fun isSpeedLimitIconEnabled(): Boolean {
     return _isSpeedLimitIconEnabled
   }
 
-  fun setSpeedLimitIconEnabled(enabled: Boolean) {
+  override fun setSpeedLimitIconEnabled(enabled: Boolean) {
     _navigationView.setSpeedLimitIconEnabled(enabled)
     _isSpeedLimitIconEnabled = enabled
   }
 
-  fun isSpeedometerEnabled(): Boolean {
+  override fun isSpeedometerEnabled(): Boolean {
     return _isSpeedometerEnabled
   }
 
-  fun setSpeedometerEnabled(enabled: Boolean) {
+  override fun setSpeedometerEnabled(enabled: Boolean) {
     _navigationView.setSpeedometerEnabled(enabled)
     _isSpeedometerEnabled = enabled
   }
 
-  fun isTrafficIncidentCardsEnabled(): Boolean {
+  override fun isTrafficIncidentCardsEnabled(): Boolean {
     return _isTrafficIncidentCardsEnabled
   }
 
-  fun setTrafficIncidentCardsEnabled(enabled: Boolean) {
+  override fun setTrafficIncidentCardsEnabled(enabled: Boolean) {
     _navigationView.setTrafficIncidentCardsEnabled(enabled)
     _isTrafficIncidentCardsEnabled = enabled
   }
 
-  fun isReportIncidentButtonEnabled(): Boolean {
+  override fun isReportIncidentButtonEnabled(): Boolean {
     return _isReportIncidentButtonEnabled
   }
 
-  fun setReportIncidentButtonEnabled(enabled: Boolean) {
+  override fun setReportIncidentButtonEnabled(enabled: Boolean) {
     _navigationView.setReportIncidentButtonEnabled(enabled)
     _isReportIncidentButtonEnabled = enabled
   }
 
-  fun isIncidentReportingAvailable(): Boolean {
+  override fun isIncidentReportingAvailable(): Boolean {
     return _navigationView.isIncidentReportingAvailable()
   }
 
-  fun showReportIncidentsPanel() {
+  override fun showReportIncidentsPanel() {
     _navigationView.showReportIncidentsPanel()
   }
 
-  fun isTrafficPromptsEnabled(): Boolean {
+  override fun isTrafficPromptsEnabled(): Boolean {
     return _isTrafficPromptsEnabled
   }
 
-  fun setTrafficPromptsEnabled(enabled: Boolean) {
+  override fun setTrafficPromptsEnabled(enabled: Boolean) {
     _navigationView.setTrafficPromptsEnabled(enabled)
     _isTrafficPromptsEnabled = enabled
   }
 
-  fun isNavigationUIEnabled(): Boolean {
+  override fun isNavigationUIEnabled(): Boolean {
     return _navigationView.isNavigationUiEnabled
   }
 
-  fun setNavigationUIEnabled(enabled: Boolean) {
+  override fun setNavigationUIEnabled(enabled: Boolean) {
     if (_navigationView.isNavigationUiEnabled != enabled) {
       _navigationView.isNavigationUiEnabled = enabled
     }
   }
 
-  fun showRouteOverview() {
+  override fun showRouteOverview() {
     _navigationView.showRouteOverview()
   }
 
-  fun getForceNightMode(): Int {
+  override fun getForceNightMode(): Int {
     return _forceNightMode
   }
 
-  fun setForceNightMode(forceNightMode: Int) {
+  override fun setForceNightMode(forceNightMode: Int) {
     _forceNightMode = forceNightMode
     _navigationView.setForceNightMode(forceNightMode)
   }
