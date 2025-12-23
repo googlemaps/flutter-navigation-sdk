@@ -109,18 +109,21 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
   }
 
   void _onNavInfoEvent(NavInfoEvent event) async {
-    print('NAVINFO IMAGES!');
-    print(event.navInfo.currentStep?.image.hashCode);
-    print(event.navInfo.remainingSteps[0].image.hashCode);
-    print(event.navInfo.remainingSteps.length);
-    final currentStepImage = await getRegisteredImageData(
-      event.navInfo.currentStep!.image!,
-    );
     if (!mounted) {
       return;
     }
+    final shouldChangeManeuverIcon =
+        event.navInfo.currentStep?.maneuver != _navInfo?.currentStep?.maneuver;
+    Image? currentStepImage;
+    if (shouldChangeManeuverIcon) {
+      currentStepImage = await getRegisteredImageData(
+        event.navInfo.currentStep!.image!,
+      );
+    }
     setState(() {
-      _currentStepImage = currentStepImage;
+      if (shouldChangeManeuverIcon) {
+        _currentStepImage = currentStepImage;
+      }
       _navInfo = event.navInfo;
     });
   }
