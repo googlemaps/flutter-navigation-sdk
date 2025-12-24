@@ -249,12 +249,13 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
 
   func enableTurnByTurnNavigationEvents(
     numNextStepsToPreview: Int64?,
-    // type is Android only value and not used on
-    // iOS.
     type: GeneratedStepImagesTypeDto?
   ) throws {
     GoogleMapsNavigationSessionManager.shared
-      .enableTurnByTurnNavigationEvents(numNextStepsToPreview: numNextStepsToPreview)
+      .enableTurnByTurnNavigationEvents(
+        numNextStepsToPreview: numNextStepsToPreview,
+        type: type
+      )
   }
 
   func disableTurnByTurnNavigationEvents() throws {
