@@ -66,6 +66,8 @@ class GoogleMapsNavigationSessionManager: NSObject {
 
   private var _isNewNavigationSessionDetected = false
 
+  private var _sendManeuverImagesWithNavInfoEvents = false
+
   func getNavigator() throws -> GMSNavigator {
     guard let _session else { throw GoogleMapsNavigationSessionManagerError.sessionNotInitialized }
     guard let navigator = _session.navigator
@@ -544,9 +546,10 @@ class GoogleMapsNavigationSessionManager: NSObject {
     _session?.roadSnappedLocationProvider?.stopUpdatingLocation()
   }
 
-  func enableTurnByTurnNavigationEvents(numNextStepsToPreview: Int64?) {
+  func enableTurnByTurnNavigationEvents(numNextStepsToPreview: Int64?, type: GeneratedStepImagesTypeDto?) {
     _numTurnByTurnNextStepsToPreview = numNextStepsToPreview ?? Int64.max
     _sendTurnByTurnNavigationEvents = true
+    _sendManeuverImagesWithNavInfoEvents = type == .bitmap
   }
 
   func disableTurnByTurnNavigationEvents() {
@@ -660,18 +663,20 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
   ) {
     var imageDescriptors: [String : ImageDescriptorDto?] = [:]
 
-    // Separated to help Swift compiler.
-    let steps: [GMSNavigationStepInfo] = (navInfo.remainingSteps  + [navInfo.currentStep])
-      .compactMap { $0 }
-    steps
-      .forEach { step in
-        let hash = Convert.convertManeuverToHash(step.maneuver)
-        let existingImageDescriptor = imageDescriptors[hash]
-        if (existingImageDescriptor == nil) {
-          let imageDescriptor = getImageDescriptorForStepInfo(step)
-          imageDescriptors.updateValue(imageDescriptor, forKey: hash)
+    if (_sendManeuverImagesWithNavInfoEvents) {
+      // Separated to help Swift compiler.
+      let steps: [GMSNavigationStepInfo] = (navInfo.remainingSteps  + [navInfo.currentStep])
+        .compactMap { $0 }
+      steps
+        .forEach { step in
+          let hash = Convert.convertManeuverToHash(step.maneuver)
+          let existingImageDescriptor = imageDescriptors[hash]
+          if (existingImageDescriptor == nil) {
+            let imageDescriptor = getImageDescriptorForStepInfo(step)
+            imageDescriptors.updateValue(imageDescriptor, forKey: hash)
+          }
         }
-      }
+    }
 
     // Detect new navigation session start
     // This callback only fires when guidance is actively running, making it the ideal place
