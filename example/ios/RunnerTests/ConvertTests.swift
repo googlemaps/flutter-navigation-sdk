@@ -31,7 +31,8 @@ class MockImageRegistry: ImageRegistry {
         image: image,
         imagePixelRatio: 1.0,
         width: nil,
-        height: nil
+        height: nil,
+        type: .regular
       )
     }
   }
@@ -240,7 +241,7 @@ class ConvertTests: XCTestCase {
         ),
         visible: false,
         zIndex: 4.0,
-        icon: ImageDescriptorDto(registeredImageId: "default", imagePixelRatio: 1.0)
+        icon: ImageDescriptorDto(registeredImageId: "default", imagePixelRatio: 1.0, type: .regular)
       )
     )
 
@@ -303,7 +304,7 @@ class ConvertTests: XCTestCase {
         ),
         visible: false,
         zIndex: 4.0,
-        icon: ImageDescriptorDto(registeredImageId: "default", imagePixelRatio: 1.0)
+        icon: ImageDescriptorDto(registeredImageId: "default", imagePixelRatio: 1.0, type: .regular)
       )
     )
 
@@ -328,7 +329,7 @@ class ConvertTests: XCTestCase {
         ),
         visible: false,
         zIndex: 4.0,
-        icon: ImageDescriptorDto(registeredImageId: "Image_0", imagePixelRatio: 1.0)
+        icon: ImageDescriptorDto(registeredImageId: "Image_0", imagePixelRatio: 1.0, type: .regular)
       )
     )
 
