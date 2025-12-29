@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:typed_data';
-
 import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 
 /// A set of values that specify the navigation action to take.

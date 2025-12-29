@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import UIKit
 import Flutter
+import UIKit
 
 enum GoogleMapsImageRegistryError: Error {
   case imageDecodingFailed
@@ -59,8 +59,10 @@ class ImageRegistry {
     )
   }
 
-  func registerManeuverIcon(imageId: String, image: UIImage, imagePixelRatio: Double, width: Double?,
-                            height: Double?) throws -> ImageDescriptorDto {
+  func registerManeuverIcon(
+    imageId: String, image: UIImage, imagePixelRatio: Double, width: Double?,
+    height: Double?
+  ) throws -> ImageDescriptorDto {
     registeredImages.append(
       RegisteredImage(
         imageId: imageId,
@@ -98,8 +100,13 @@ class ImageRegistry {
     }
   }
 
-  func getRegisteredImageData(imageDescriptor: ImageDescriptorDto) throws -> FlutterStandardTypedData? {
-    guard let data = findRegisteredImage(imageId: imageDescriptor.registeredImageId ?? "")?.image.pngData() else {
+  func getRegisteredImageData(imageDescriptor: ImageDescriptorDto) throws
+    -> FlutterStandardTypedData?
+  {
+    guard
+      let data = findRegisteredImage(imageId: imageDescriptor.registeredImageId ?? "")?.image
+        .pngData()
+    else {
       return nil
     }
     return FlutterStandardTypedData(bytes: data)

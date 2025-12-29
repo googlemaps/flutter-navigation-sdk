@@ -51,7 +51,9 @@ class GoogleMapsImageRegistryMessageHandler: ImageRegistryApi {
     imageRegistry.clearRegisteredImages(filter: filter)
   }
 
-  func getRegisteredImageData(imageDescriptor: ImageDescriptorDto) throws -> FlutterStandardTypedData? {
+  func getRegisteredImageData(imageDescriptor: ImageDescriptorDto) throws
+    -> FlutterStandardTypedData?
+  {
     try imageRegistry.getRegisteredImageData(imageDescriptor: imageDescriptor)
   }
 }

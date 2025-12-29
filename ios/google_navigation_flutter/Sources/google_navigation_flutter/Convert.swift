@@ -184,7 +184,9 @@ enum Convert {
     return point
   }
 
-  static func convertStepInfo(_ stepInfo: GMSNavigationStepInfo,_ imageDescriptors: [String: ImageDescriptorDto?]) -> StepInfoDto {
+  static func convertStepInfo(
+    _ stepInfo: GMSNavigationStepInfo, _ imageDescriptors: [String: ImageDescriptorDto?]
+  ) -> StepInfoDto {
     let key = convertManeuverToKey(stepInfo.maneuver)
     return .init(
       distanceFromPrevStepMeters: stepInfo.distanceFromPrevStepMeters > 0
@@ -205,7 +207,10 @@ enum Convert {
     )
   }
 
-  static func convertNavInfo(_ gmsNavInfo: GMSNavigationNavInfo, maxAmountOfRemainingSteps: Int64, imageDescriptors: [String: ImageDescriptorDto?])
+  static func convertNavInfo(
+    _ gmsNavInfo: GMSNavigationNavInfo, maxAmountOfRemainingSteps: Int64,
+    imageDescriptors: [String: ImageDescriptorDto?]
+  )
     -> NavInfoDto
   {
     let currentStepDto =
@@ -558,7 +563,9 @@ enum Convert {
     return "maneuver_\(maneuver.rawValue)"
   }
 
-  static func registeredImageToImageDescriptorDto(registeredImage: RegisteredImage?) -> ImageDescriptorDto {
+  static func registeredImageToImageDescriptorDto(registeredImage: RegisteredImage?)
+    -> ImageDescriptorDto
+  {
     guard let registeredImage else {
       return ImageDescriptorDto(type: .regular)
     }
@@ -572,16 +579,16 @@ enum Convert {
   }
 
   static func registeredImageType(type: RegisteredImageTypeDto) -> RegisteredImageType {
-    switch (type) {
-      case .maneuverIcon: return .maneuverIcon
-      case .regular: return .regular
+    switch type {
+    case .maneuverIcon: return .maneuverIcon
+    case .regular: return .regular
     }
   }
 
   static func registeredImageType(type: RegisteredImageType) -> RegisteredImageTypeDto {
-    switch (type) {
-      case .maneuverIcon: return .maneuverIcon
-      case .regular: return .regular
+    switch type {
+    case .maneuverIcon: return .maneuverIcon
+    case .regular: return .regular
     }
   }
 }
