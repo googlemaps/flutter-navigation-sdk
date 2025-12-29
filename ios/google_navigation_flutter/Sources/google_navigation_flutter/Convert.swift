@@ -185,7 +185,7 @@ enum Convert {
   }
 
   static func convertStepInfo(_ stepInfo: GMSNavigationStepInfo,_ imageDescriptors: [String: ImageDescriptorDto?]) -> StepInfoDto {
-    let hash = convertManeuverToHash(stepInfo.maneuver)
+    let key = convertManeuverToKey(stepInfo.maneuver)
     return .init(
       distanceFromPrevStepMeters: stepInfo.distanceFromPrevStepMeters > 0
         ? Int64(stepInfo.distanceFromPrevStepMeters) : nil,
@@ -201,7 +201,7 @@ enum Convert {
       lanes: nil,
       maneuver: convertManeuver(maneuver: stepInfo.maneuver),
       stepNumber: stepInfo.stepNumber >= 0 ? Int64(stepInfo.stepNumber) : nil,
-      image: imageDescriptors[hash] ?? nil
+      image: imageDescriptors[key] ?? nil
     )
   }
 
@@ -554,10 +554,8 @@ enum Convert {
     )
   }
 
-  static func convertManeuverToHash(_ maneuver: GMSNavigationManeuver) -> String {
-    var hasher = Hasher()
-    hasher.combine("maneuver_\(maneuver.rawValue)")
-    return String(hasher.finalize())
+  static func convertManeuverToKey(_ maneuver: GMSNavigationManeuver) -> String {
+    return "maneuver_\(maneuver.rawValue)"
   }
 
   static func registeredImageToImageDescriptorDto(registeredImage: RegisteredImage?) -> ImageDescriptorDto {
