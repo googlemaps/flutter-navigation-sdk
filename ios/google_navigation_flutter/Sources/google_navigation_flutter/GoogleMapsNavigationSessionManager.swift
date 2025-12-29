@@ -66,6 +66,8 @@ class GoogleMapsNavigationSessionManager: NSObject {
 
   private var _isNewNavigationSessionDetected = false
 
+  private var _sendManeuverImagesWithNavInfoEvents = false
+
   func getNavigator() throws -> GMSNavigator {
     guard let _session else { throw GoogleMapsNavigationSessionManagerError.sessionNotInitialized }
     guard let navigator = _session.navigator
@@ -516,9 +518,12 @@ class GoogleMapsNavigationSessionManager: NSObject {
     _session?.roadSnappedLocationProvider?.stopUpdatingLocation()
   }
 
-  func enableTurnByTurnNavigationEvents(numNextStepsToPreview: Int64?) {
+  func enableTurnByTurnNavigationEvents(
+    numNextStepsToPreview: Int64?, type: GeneratedStepImagesTypeDto?
+  ) {
     _numTurnByTurnNextStepsToPreview = numNextStepsToPreview ?? Int64.max
     _sendTurnByTurnNavigationEvents = true
+    _sendManeuverImagesWithNavInfoEvents = type == .bitmap
   }
 
   func disableTurnByTurnNavigationEvents() {
@@ -603,10 +608,53 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
     )
   }
 
+  func getManeuverIconImageDescriptor(maneuver: GMSNavigationManeuver) -> ImageDescriptorDto? {
+    guard
+      let registeredImage = GoogleMapsNavigationPlugin.imageRegistry?.findRegisteredImage(
+        imageId: Convert.convertManeuverToKey(maneuver))
+    else {
+      return nil
+    }
+    return Convert.registeredImageToImageDescriptorDto(registeredImage: registeredImage)
+  }
+
+  func getImageDescriptorForStepInfo(_ step: GMSNavigationStepInfo) -> ImageDescriptorDto? {
+    guard let imageDescriptor = getManeuverIconImageDescriptor(maneuver: step.maneuver) else {
+      let bitmap = step.maneuverImage(with: nil) ?? UIImage()
+      let width = Double(bitmap.size.width)
+      let height = Double(bitmap.size.height)
+      return try? GoogleMapsNavigationPlugin.imageRegistry?.registerManeuverIcon(
+        imageId: Convert.convertManeuverToKey(step.maneuver),
+        image: bitmap,
+        imagePixelRatio: height == 0 ? 0 : width / height,
+        width: width,
+        height: height
+      )
+    }
+    return imageDescriptor
+  }
+
   func navigator(
     _ navigator: GMSNavigator,
     didUpdate navInfo: GMSNavigationNavInfo
   ) {
+    var imageDescriptors: [String: ImageDescriptorDto?] = [:]
+
+    if _sendManeuverImagesWithNavInfoEvents {
+      // Separated to help Swift compiler.
+      let steps: [GMSNavigationStepInfo] = (navInfo.remainingSteps + [navInfo.currentStep])
+        .compactMap { $0 }
+      steps
+        .forEach { step in
+          let key = Convert.convertManeuverToKey(step.maneuver)
+          let existingImageDescriptor = imageDescriptors[key]
+          if existingImageDescriptor == nil {
+            let imageDescriptor = getImageDescriptorForStepInfo(step)
+            imageDescriptors.updateValue(imageDescriptor, forKey: key)
+          }
+        }
+    }
+
     // Detect new navigation session start
     // This callback only fires when guidance is actively running, making it the ideal place
     // to detect session starts and match Android's behavior where NavigationSessionListener
@@ -620,7 +668,8 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
       _navigationSessionEventApi?.onNavInfo(
         navInfo: Convert.convertNavInfo(
           navInfo,
-          maxAmountOfRemainingSteps: _numTurnByTurnNextStepsToPreview
+          maxAmountOfRemainingSteps: _numTurnByTurnNextStepsToPreview,
+          imageDescriptors: imageDescriptors
         ),
         completion: { _ in }
       )

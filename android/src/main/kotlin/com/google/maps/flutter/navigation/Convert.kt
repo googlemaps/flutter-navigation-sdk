@@ -45,6 +45,7 @@ import com.google.android.libraries.navigation.DisplayOptions
 import com.google.android.libraries.navigation.ForceNightMode
 import com.google.android.libraries.navigation.NavigationRoadStretchRenderingData
 import com.google.android.libraries.navigation.NavigationTrafficData
+import com.google.android.libraries.navigation.NavigationUpdatesOptions
 import com.google.android.libraries.navigation.Navigator
 import com.google.android.libraries.navigation.Navigator.AudioGuidance
 import com.google.android.libraries.navigation.Navigator.TaskRemovedBehavior
@@ -857,10 +858,16 @@ object Convert {
     }
   }
 
-  fun convertNavInfo(navInfo: NavInfo): NavInfoDto {
+  fun convertNavInfo(
+    navInfo: NavInfo,
+    imageDescriptors: Map<String, ImageDescriptorDto?>,
+  ): NavInfoDto {
     return NavInfoDto(
-      currentStep = navInfo.currentStep?.let { convertNavInfoStepInfo(it) },
-      remainingSteps = navInfo.remainingSteps.map { convertNavInfoStepInfo(it) },
+      currentStep = navInfo.currentStep?.let { convertNavInfoStepInfo(it, imageDescriptors) },
+      remainingSteps =
+        navInfo.remainingSteps.mapIndexed { index, item ->
+          convertNavInfoStepInfo(item, imageDescriptors)
+        },
       routeChanged = navInfo.routeChanged,
       distanceToCurrentStepMeters = navInfo.distanceToCurrentStepMeters?.toLong(),
       distanceToNextDestinationMeters = navInfo.distanceToNextDestinationMeters?.toLong(),
@@ -882,7 +889,15 @@ object Convert {
     }
   }
 
-  private fun convertNavInfoStepInfo(stepInfo: StepInfo): StepInfoDto {
+  fun convertManeuverToKey(maneuver: Int): String {
+    return "maneuver_$maneuver"
+  }
+
+  private fun convertNavInfoStepInfo(
+    stepInfo: StepInfo,
+    imageDescriptors: Map<String, ImageDescriptorDto?>,
+  ): StepInfoDto {
+    val key = convertManeuverToKey(stepInfo.maneuver)
     return StepInfoDto(
       distanceFromPrevStepMeters = stepInfo.distanceFromPrevStepMeters?.toLong() ?: 0L,
       timeFromPrevStepSeconds = stepInfo.timeFromPrevStepSeconds?.toLong() ?: 0L,
@@ -906,6 +921,7 @@ object Convert {
           )
         },
       maneuver = convertManeuver(stepInfo.maneuver),
+      image = imageDescriptors[key],
     )
   }
 
@@ -1132,10 +1148,25 @@ object Convert {
         registeredImage.imagePixelRatio,
         registeredImage.width,
         registeredImage.height,
+        registeredImageType(registeredImage.type),
       )
     } else {
       // For default marker icon
-      ImageDescriptorDto()
+      ImageDescriptorDto(type = RegisteredImageTypeDto.REGULAR)
+    }
+  }
+
+  fun registeredImageType(type: RegisteredImageTypeDto): RegisteredImageType {
+    return when (type) {
+      RegisteredImageTypeDto.REGULAR -> RegisteredImageType.REGULAR
+      RegisteredImageTypeDto.MANEUVER_ICON -> RegisteredImageType.MANEUVER_ICON
+    }
+  }
+
+  fun registeredImageType(type: RegisteredImageType): RegisteredImageTypeDto {
+    return when (type) {
+      RegisteredImageType.REGULAR -> RegisteredImageTypeDto.REGULAR
+      RegisteredImageType.MANEUVER_ICON -> RegisteredImageTypeDto.MANEUVER_ICON
     }
   }
 
@@ -1146,6 +1177,16 @@ object Convert {
       TaskRemovedBehaviorDto.CONTINUE_SERVICE -> TaskRemovedBehavior.CONTINUE_SERVICE
       TaskRemovedBehaviorDto.QUIT_SERVICE -> TaskRemovedBehavior.QUIT_SERVICE
       else -> TaskRemovedBehavior.CONTINUE_SERVICE
+    }
+  }
+
+  fun generatedStepImagesTypeDtoToGeneratesStepImages(
+    type: GeneratedStepImagesTypeDto?
+  ): @NavigationUpdatesOptions.GeneratedStepImagesType Int {
+    return when (type) {
+      GeneratedStepImagesTypeDto.NONE -> NavigationUpdatesOptions.GeneratedStepImagesType.NONE
+      GeneratedStepImagesTypeDto.BITMAP -> NavigationUpdatesOptions.GeneratedStepImagesType.BITMAP
+      else -> NavigationUpdatesOptions.GeneratedStepImagesType.NONE
     }
   }
 }

@@ -35,6 +35,8 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
 
   NavInfo? _navInfo;
 
+  Image? _currentStepImage;
+
   // ignore: use_setters_to_change_properties
   Future<void> _onViewCreated(GoogleNavigationViewController controller) async {
     _navigationViewController = controller;
@@ -97,6 +99,7 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
     _navInfoSubscription = GoogleMapsNavigator.setNavInfoListener(
       _onNavInfoEvent,
       numNextStepsToPreview: 100,
+      generatedStepImagesType: GeneratedStepImagesType.bitmap,
     );
   }
 
@@ -105,11 +108,22 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
     _navInfoSubscription = null;
   }
 
-  void _onNavInfoEvent(NavInfoEvent event) {
+  void _onNavInfoEvent(NavInfoEvent event) async {
     if (!mounted) {
       return;
     }
+    final shouldChangeManeuverIcon =
+        event.navInfo.currentStep?.maneuver != _navInfo?.currentStep?.maneuver;
+    Image? currentStepImage;
+    if (shouldChangeManeuverIcon) {
+      currentStepImage = await getRegisteredImageData(
+        event.navInfo.currentStep!.image!,
+      );
+    }
     setState(() {
+      if (shouldChangeManeuverIcon) {
+        _currentStepImage = currentStepImage;
+      }
       _navInfo = event.navInfo;
     });
   }
@@ -227,6 +241,7 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
               context,
               navInfo.currentStep!,
               navInfo.distanceToCurrentStepMeters,
+              _currentStepImage,
             ),
             const SizedBox(height: 5),
             Card(
@@ -270,6 +285,7 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
     BuildContext context,
     StepInfo stepInfo,
     int? metersToStep,
+    Image? stepImage,
   ) {
     final double screenWidth = MediaQuery.of(context).size.width;
     const TextStyle navInfoTextStyle = TextStyle(
@@ -346,6 +362,8 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
                 ),
               ),
             ),
+            if (stepImage != null) SizedBox(height: 40, child: stepImage),
+            SizedBox(width: 10),
           ],
         ),
       ),
@@ -378,7 +396,7 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
                       if (navInfo.remainingSteps.isEmpty)
                         const Text('No remaining steps'),
                       for (final StepInfo step in navInfo.remainingSteps)
-                        _getNavInfoWidgetForStep(context, step, null),
+                        _getNavInfoWidgetForStep(context, step, null, null),
                       const SizedBox(height: 20),
                     ],
                   ),

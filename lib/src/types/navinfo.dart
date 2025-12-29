@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:google_navigation_flutter/google_navigation_flutter.dart';
+
 /// A set of values that specify the navigation action to take.
 /// {@category Navigation}
 enum Maneuver {
@@ -316,6 +318,7 @@ class StepInfo {
     required this.stepNumber,
     required this.lanes,
     required this.maneuver,
+    required this.image,
   });
 
   /// Distance in meters from the previous step to this step if available, otherwise null.
@@ -353,6 +356,9 @@ class StepInfo {
 
   /// The index of the step in the list of all steps in the route if available, otherwise null.
   final int? stepNumber;
+
+  /// PNG encoded bytes of the generated step image for the current step if available, otherwise null.
+  final ImageDescriptor? image;
 
   @override
   String toString() =>
@@ -455,3 +461,7 @@ class NavInfoEvent {
   @override
   String toString() => 'NavInfoEvent(navInfo: $navInfo)';
 }
+
+/// Generated step images type.
+/// {@category Navigation}
+enum GeneratedStepImagesType { none, bitmap }

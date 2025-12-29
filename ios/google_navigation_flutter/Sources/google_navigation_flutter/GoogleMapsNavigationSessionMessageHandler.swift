@@ -247,9 +247,15 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
     GoogleMapsNavigationSessionManager.shared.disableRoadSnappedLocationUpdates()
   }
 
-  func enableTurnByTurnNavigationEvents(numNextStepsToPreview: Int64?) throws {
+  func enableTurnByTurnNavigationEvents(
+    numNextStepsToPreview: Int64?,
+    type: GeneratedStepImagesTypeDto?
+  ) throws {
     GoogleMapsNavigationSessionManager.shared
-      .enableTurnByTurnNavigationEvents(numNextStepsToPreview: numNextStepsToPreview)
+      .enableTurnByTurnNavigationEvents(
+        numNextStepsToPreview: numNextStepsToPreview,
+        type: type
+      )
   }
 
   func disableTurnByTurnNavigationEvents() throws {
