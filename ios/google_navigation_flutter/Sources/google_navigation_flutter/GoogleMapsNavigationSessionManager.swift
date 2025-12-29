@@ -635,7 +635,7 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
   }
 
   func getManeuverIconImageDescriptor(maneuver: GMSNavigationManeuver) -> ImageDescriptorDto? {
-    guard let registeredImage = GoogleMapsNavigationPlugin.imageRegistry?.findRegisteredImage(imageId: Convert.convertManeuverToHash(maneuver)) else {
+    guard let registeredImage = GoogleMapsNavigationPlugin.imageRegistry?.findRegisteredImage(imageId: Convert.convertManeuverToKey(maneuver)) else {
       return nil
     }
     return Convert.registeredImageToImageDescriptorDto(registeredImage: registeredImage)
@@ -647,7 +647,7 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
       let width = Double(bitmap.size.width)
       let height = Double(bitmap.size.height)
       return try? GoogleMapsNavigationPlugin.imageRegistry?.registerManeuverIcon(
-        imageId: Convert.convertManeuverToHash(step.maneuver),
+        imageId: Convert.convertManeuverToKey(step.maneuver),
         image: bitmap,
         imagePixelRatio: height == 0 ? 0 : width / height,
         width: width,
@@ -669,11 +669,11 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
         .compactMap { $0 }
       steps
         .forEach { step in
-          let hash = Convert.convertManeuverToHash(step.maneuver)
-          let existingImageDescriptor = imageDescriptors[hash]
+          let key = Convert.convertManeuverToKey(step.maneuver)
+          let existingImageDescriptor = imageDescriptors[key]
           if (existingImageDescriptor == nil) {
             let imageDescriptor = getImageDescriptorForStepInfo(step)
-            imageDescriptors.updateValue(imageDescriptor, forKey: hash)
+            imageDescriptors.updateValue(imageDescriptor, forKey: key)
           }
         }
     }

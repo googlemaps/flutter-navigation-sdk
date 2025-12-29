@@ -746,7 +746,7 @@ constructor(
 
       fun getManeuverIconImageDescriptor(maneuver: Int): ImageDescriptorDto? {
         val registeredImage =
-          imageRegistry.findRegisteredImage(Convert.convertManeuverToHash(maneuver))
+          imageRegistry.findRegisteredImage(Convert.convertManeuverToKey(maneuver))
         if (registeredImage == null) return null
         return Convert.registeredImageToImageDescriptorDto(registeredImage)
       }
@@ -758,7 +758,7 @@ constructor(
           return imageDescriptor
         }
         return imageRegistry.registerManeuverIcon(
-          Convert.convertManeuverToHash(stepInfo.maneuver),
+          Convert.convertManeuverToKey(stepInfo.maneuver),
           bitmap,
           bitmap.width.toDouble() / bitmap.height.toDouble(),
           bitmap.width.toDouble(),
@@ -772,11 +772,11 @@ constructor(
         val imageDescriptors: MutableMap<String, ImageDescriptorDto?> = mutableMapOf()
 
         (navInfo.remainingSteps + navInfo.currentStep).forEach {
-          val hash = Convert.convertManeuverToHash(it.maneuver)
-          val existingImageDescriptor = imageDescriptors[hash]
+          val key = Convert.convertManeuverToKey(it.maneuver)
+          val existingImageDescriptor = imageDescriptors[key]
           if (existingImageDescriptor == null) {
             val imageDescriptor = getImageDescriptorForStepInfo(it)
-            imageDescriptors[hash] = imageDescriptor
+            imageDescriptors[key] = imageDescriptor
           }
         }
 

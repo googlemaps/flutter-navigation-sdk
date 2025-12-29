@@ -890,17 +890,15 @@ object Convert {
     }
   }
 
-  fun convertManeuverToHash(maneuver: Int): String {
-    return MessageDigest.getInstance("SHA-256")
-      .digest("maneuver_$maneuver".toByteArray())
-      .joinToString("") { "%02x".format(it) }
+  fun convertManeuverToKey(maneuver: Int): String {
+    return "maneuver_$maneuver"
   }
 
   private fun convertNavInfoStepInfo(
     stepInfo: StepInfo,
     imageDescriptors: Map<String, ImageDescriptorDto?>,
   ): StepInfoDto {
-    val hash = convertManeuverToHash(stepInfo.maneuver)
+    val key = convertManeuverToKey(stepInfo.maneuver)
     return StepInfoDto(
       distanceFromPrevStepMeters = stepInfo.distanceFromPrevStepMeters?.toLong() ?: 0L,
       timeFromPrevStepSeconds = stepInfo.timeFromPrevStepSeconds?.toLong() ?: 0L,
@@ -924,7 +922,7 @@ object Convert {
           )
         },
       maneuver = convertManeuver(stepInfo.maneuver),
-      image = imageDescriptors[hash],
+      image = imageDescriptors[key],
     )
   }
 
