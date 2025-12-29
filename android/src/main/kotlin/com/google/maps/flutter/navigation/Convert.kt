@@ -56,7 +56,6 @@ import com.google.android.libraries.navigation.SpeedAlertOptions
 import com.google.android.libraries.navigation.SpeedAlertSeverity
 import com.google.android.libraries.navigation.TimeAndDistance
 import com.google.android.libraries.navigation.Waypoint
-import java.security.MessageDigest
 
 /** Converters from and to Pigeon generated values. */
 object Convert {

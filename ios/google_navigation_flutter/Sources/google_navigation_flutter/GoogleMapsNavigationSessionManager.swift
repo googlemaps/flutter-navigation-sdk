@@ -546,7 +546,9 @@ class GoogleMapsNavigationSessionManager: NSObject {
     _session?.roadSnappedLocationProvider?.stopUpdatingLocation()
   }
 
-  func enableTurnByTurnNavigationEvents(numNextStepsToPreview: Int64?, type: GeneratedStepImagesTypeDto?) {
+  func enableTurnByTurnNavigationEvents(
+    numNextStepsToPreview: Int64?, type: GeneratedStepImagesTypeDto?
+  ) {
     _numTurnByTurnNextStepsToPreview = numNextStepsToPreview ?? Int64.max
     _sendTurnByTurnNavigationEvents = true
     _sendManeuverImagesWithNavInfoEvents = type == .bitmap
@@ -635,7 +637,10 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
   }
 
   func getManeuverIconImageDescriptor(maneuver: GMSNavigationManeuver) -> ImageDescriptorDto? {
-    guard let registeredImage = GoogleMapsNavigationPlugin.imageRegistry?.findRegisteredImage(imageId: Convert.convertManeuverToKey(maneuver)) else {
+    guard
+      let registeredImage = GoogleMapsNavigationPlugin.imageRegistry?.findRegisteredImage(
+        imageId: Convert.convertManeuverToKey(maneuver))
+    else {
       return nil
     }
     return Convert.registeredImageToImageDescriptorDto(registeredImage: registeredImage)
@@ -661,17 +666,17 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
     _ navigator: GMSNavigator,
     didUpdate navInfo: GMSNavigationNavInfo
   ) {
-    var imageDescriptors: [String : ImageDescriptorDto?] = [:]
+    var imageDescriptors: [String: ImageDescriptorDto?] = [:]
 
-    if (_sendManeuverImagesWithNavInfoEvents) {
+    if _sendManeuverImagesWithNavInfoEvents {
       // Separated to help Swift compiler.
-      let steps: [GMSNavigationStepInfo] = (navInfo.remainingSteps  + [navInfo.currentStep])
+      let steps: [GMSNavigationStepInfo] = (navInfo.remainingSteps + [navInfo.currentStep])
         .compactMap { $0 }
       steps
         .forEach { step in
           let key = Convert.convertManeuverToKey(step.maneuver)
           let existingImageDescriptor = imageDescriptors[key]
-          if (existingImageDescriptor == nil) {
+          if existingImageDescriptor == nil {
             let imageDescriptor = getImageDescriptorForStepInfo(step)
             imageDescriptors.updateValue(imageDescriptor, forKey: key)
           }
