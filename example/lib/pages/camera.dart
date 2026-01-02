@@ -60,13 +60,6 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
       await GoogleMapsNavigator.showTermsAndConditionsDialog(
         'test_title',
         'test_company_name',
-        uiParams: const TermsAndConditionsUIParams(
-          backgroundColor: Color(0xFFF5F5F5),
-          titleColor: Color(0xFF1976D2),
-          mainTextColor: Color(0xFF212121),
-          acceptButtonTextColor: Color(0xFF4CAF50),
-          cancelButtonTextColor: Color(0xFFF44336),
-        ),
       );
     }
     await GoogleMapsNavigator.initializeNavigationSession();
