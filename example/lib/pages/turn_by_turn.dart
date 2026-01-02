@@ -47,13 +47,6 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
       await GoogleMapsNavigator.showTermsAndConditionsDialog(
         'test_title',
         'test_company_name',
-        uiParams: const TermsAndConditionsUIParams(
-          backgroundColor: Color(0xFFFAFAFA),
-          titleColor: Color(0xFF0D47A1),
-          mainTextColor: Color(0xFF212121),
-          acceptButtonTextColor: Color(0xFF1B5E20),
-          cancelButtonTextColor: Color(0xFFB71C1C),
-        ),
       );
     }
 
