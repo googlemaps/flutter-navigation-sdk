@@ -1016,7 +1016,7 @@ void main() {
           const String companyName = 'Temp co.';
           const bool showDriverAwareness = true;
           when(
-            sessionMockApi.showTermsAndConditionsDialog(any, any, any),
+            sessionMockApi.showTermsAndConditionsDialog(any, any, any, any),
           ).thenAnswer((Invocation _) async => true);
           final bool accepted =
               await GoogleMapsNavigator.showTermsAndConditionsDialog(
@@ -1031,11 +1031,13 @@ void main() {
               captureAny,
               captureAny,
               captureAny,
+              captureAny,
             ),
           );
           expect(result.captured[0] as String, title);
           expect(result.captured[1] as String, companyName);
           expect(result.captured[2] as bool, showDriverAwareness);
+          expect(result.captured[3], null); // uiParams is null by default
 
           // Reset terms and conditions.
           await GoogleMapsNavigator.resetTermsAccepted();

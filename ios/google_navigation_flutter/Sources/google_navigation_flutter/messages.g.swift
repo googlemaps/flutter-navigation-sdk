@@ -2151,6 +2151,57 @@ struct NavInfoDto: Hashable {
   }
 }
 
+/// UI customization parameters for the Terms and Conditions dialog.
+///
+/// All color values are 32-bit ARGB integers (format: 0xAARRGGBB).
+/// All parameters are optional - if not provided, platform defaults will be used.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct TermsAndConditionsUIParamsDto: Hashable {
+  /// Background color of the dialog box.
+  var backgroundColor: Int64? = nil
+  /// Text color for the dialog title.
+  var titleColor: Int64? = nil
+  /// Text color for the main terms and conditions text.
+  var mainTextColor: Int64? = nil
+  /// Text color for the accept button.
+  var acceptButtonTextColor: Int64? = nil
+  /// Text color for the cancel button.
+  var cancelButtonTextColor: Int64? = nil
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> TermsAndConditionsUIParamsDto? {
+    let backgroundColor: Int64? = nilOrValue(pigeonVar_list[0])
+    let titleColor: Int64? = nilOrValue(pigeonVar_list[1])
+    let mainTextColor: Int64? = nilOrValue(pigeonVar_list[2])
+    let acceptButtonTextColor: Int64? = nilOrValue(pigeonVar_list[3])
+    let cancelButtonTextColor: Int64? = nilOrValue(pigeonVar_list[4])
+
+    return TermsAndConditionsUIParamsDto(
+      backgroundColor: backgroundColor,
+      titleColor: titleColor,
+      mainTextColor: mainTextColor,
+      acceptButtonTextColor: acceptButtonTextColor,
+      cancelButtonTextColor: cancelButtonTextColor
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      backgroundColor,
+      titleColor,
+      mainTextColor,
+      acceptButtonTextColor,
+      cancelButtonTextColor,
+    ]
+  }
+  static func == (lhs: TermsAndConditionsUIParamsDto, rhs: TermsAndConditionsUIParamsDto) -> Bool {
+    return deepEqualsmessages(lhs.toList(), rhs.toList())
+  }
+  func hash(into hasher: inout Hasher) {
+    deepHashmessages(value: toList(), hasher: &hasher)
+  }
+}
+
 private class MessagesPigeonCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
@@ -2389,6 +2440,8 @@ private class MessagesPigeonCodecReader: FlutterStandardReader {
       return StepInfoDto.fromList(self.readValue() as! [Any?])
     case 195:
       return NavInfoDto.fromList(self.readValue() as! [Any?])
+    case 196:
+      return TermsAndConditionsUIParamsDto.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -2597,6 +2650,9 @@ private class MessagesPigeonCodecWriter: FlutterStandardWriter {
       super.writeValue(value.toList())
     } else if let value = value as? NavInfoDto {
       super.writeByte(195)
+      super.writeValue(value.toList())
+    } else if let value = value as? TermsAndConditionsUIParamsDto {
+      super.writeByte(196)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -5231,7 +5287,7 @@ protocol NavigationSessionApi {
   func cleanup(resetSession: Bool) throws
   func showTermsAndConditionsDialog(
     title: String, companyName: String, shouldOnlyShowDriverAwarenessDisclaimer: Bool,
-    completion: @escaping (Result<Bool, Error>) -> Void)
+    uiParams: TermsAndConditionsUIParamsDto?, completion: @escaping (Result<Bool, Error>) -> Void)
   func areTermsAccepted() throws -> Bool
   func resetTermsAccepted() throws
   func getNavSDKVersion() throws -> String
@@ -5351,9 +5407,11 @@ class NavigationSessionApiSetup {
         let titleArg = args[0] as! String
         let companyNameArg = args[1] as! String
         let shouldOnlyShowDriverAwarenessDisclaimerArg = args[2] as! Bool
+        let uiParamsArg: TermsAndConditionsUIParamsDto? = nilOrValue(args[3])
         api.showTermsAndConditionsDialog(
           title: titleArg, companyName: companyNameArg,
-          shouldOnlyShowDriverAwarenessDisclaimer: shouldOnlyShowDriverAwarenessDisclaimerArg
+          shouldOnlyShowDriverAwarenessDisclaimer: shouldOnlyShowDriverAwarenessDisclaimerArg,
+          uiParams: uiParamsArg
         ) { result in
           switch result {
           case .success(let res):

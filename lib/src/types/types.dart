@@ -26,4 +26,5 @@ export 'polygons.dart';
 export 'polylines.dart';
 export 'simulation.dart';
 export 'stroke_patterns.dart';
+export 'terms_and_conditions_ui_params.dart';
 export 'view_initialization_options.dart';
