@@ -199,14 +199,14 @@ class GoogleMapsNavigationSessionManager: NSObject {
     if let params = uiParams {
       // Create UI params with custom colors (convert from ARGB Int64 to UIColor)
       let uiParams = GMSNavigationTermsDialogUIParams(
-        backgroundColor: params.backgroundColor?.toUIColor(),
+        backgroundColor: params.backgroundColor.map { UIColor(from: $0) },
         titleFont: nil,
-        titleColor: params.titleColor?.toUIColor(),
+        titleColor: params.titleColor.map { UIColor(from: $0) },
         mainTextFont: nil,
-        mainTextColor: params.mainTextColor?.toUIColor(),
+        mainTextColor: params.mainTextColor.map { UIColor(from: $0) },
         buttonsFont: nil,
-        cancelButtonTextColor: params.cancelButtonTextColor?.toUIColor(),
-        acceptButtonTextColor: params.acceptButtonTextColor?.toUIColor()
+        cancelButtonTextColor: params.cancelButtonTextColor.map { UIColor(from: $0) },
+        acceptButtonTextColor: params.acceptButtonTextColor.map { UIColor(from: $0) }
       )
 
       let options = GMSNavigationTermsAndConditionsOptions(companyName: companyName)

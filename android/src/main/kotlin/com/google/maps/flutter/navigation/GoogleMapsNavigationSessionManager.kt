@@ -539,7 +539,7 @@ constructor(
     title: String,
     companyName: String,
     shouldOnlyShowDriverAwarenessDisclaimer: Boolean,
-    uiParams: Messages.TermsAndConditionsUIParamsDto?,
+    uiParams: TermsAndConditionsUIParamsDto?,
     callback: (Result<Boolean>) -> Unit,
   ) {
     // Align API behavior with iOS:
@@ -550,40 +550,31 @@ constructor(
     }
 
     // Build UI customization parameters if provided
-    val uiParams: TermsAndConditionsUIParams =
-      if (uiParams != null) {
-        val builder = TermsAndConditionsUIParams.builder()
-
-        // Apply custom colors if provided (convert from ARGB Long to Android Color Int)
-        uiParams.backgroundColor?.let { builder.setBackgroundColor(it.toInt()) }
-        uiParams.titleColor?.let { builder.setTitleColor(it.toInt()) }
-        uiParams.mainTextColor?.let { builder.setMainTextColor(it.toInt()) }
-        uiParams.acceptButtonTextColor?.let { builder.setAcceptButtonTextColor(it.toInt()) }
-        uiParams.cancelButtonTextColor?.let { builder.setCancelButtonTextColor(it.toInt()) }
-
-        builder.build()
-      } else {
-        TermsAndConditionsUIParams.builder().build()
+    val termsUiParams: TermsAndConditionsUIParams? =
+      uiParams?.let {
+        TermsAndConditionsUIParams.builder()
+          .apply {
+            it.backgroundColor?.let { color -> setBackgroundColor(color.toInt()) }
+            it.titleColor?.let { color -> setTitleColor(color.toInt()) }
+            it.mainTextColor?.let { color -> setMainTextColor(color.toInt()) }
+            it.acceptButtonTextColor?.let { color -> setAcceptButtonTextColor(color.toInt()) }
+            it.cancelButtonTextColor?.let { color -> setCancelButtonTextColor(color.toInt()) }
+          }
+          .build()
       }
 
-    if (shouldOnlyShowDriverAwarenessDisclaimer) {
-      NavigationApi.showTermsAndConditionsDialog(
-        getActivity(),
-        companyName,
-        title,
-        uiParams,
-        { accepted -> callback(Result.success(accepted)) },
-        TermsAndConditionsCheckOption.SKIPPED,
-      )
-    } else {
-      NavigationApi.showTermsAndConditionsDialog(
-        getActivity(),
-        companyName,
-        title,
-        uiParams,
-        { accepted -> callback(Result.success(accepted)) },
-      )
-    }
+    val checkOption =
+      if (shouldOnlyShowDriverAwarenessDisclaimer) TermsAndConditionsCheckOption.SKIPPED
+      else TermsAndConditionsCheckOption.ENABLED
+
+    NavigationApi.showTermsAndConditionsDialog(
+      getActivity(),
+      companyName,
+      title,
+      termsUiParams,
+      { accepted -> callback(Result.success(accepted)) },
+      checkOption,
+    )
   }
 
   /**
