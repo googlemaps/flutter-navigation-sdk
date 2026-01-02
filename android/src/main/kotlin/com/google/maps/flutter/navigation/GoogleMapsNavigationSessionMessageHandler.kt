@@ -45,7 +45,7 @@ class GoogleMapsNavigationSessionMessageHandler(
     title: String,
     companyName: String,
     shouldOnlyShowDriverAwarenessDisclaimer: Boolean,
-    uiParams: Messages.TermsAndConditionsUIParamsDto?,
+    uiParams: TermsAndConditionsUIParamsDto?,
     callback: (Result<Boolean>) -> Unit,
   ) {
     sessionManager.showTermsAndConditionsDialog(
