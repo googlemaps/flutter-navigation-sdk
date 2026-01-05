@@ -34,7 +34,15 @@ internal class MarkerBuilderTest {
   fun markerBuilder_returnsExpectedValue() {
     every { imageRegistry.findRegisteredImage("default") } returns null
     every { imageRegistry.findRegisteredImage("Image_0") } returns
-      RegisteredImage("Image_0", bitmapDescriptor, 1.0, null, null, RegisteredImageType.REGULAR, null)
+      RegisteredImage(
+        "Image_0",
+        bitmapDescriptor,
+        1.0,
+        null,
+        null,
+        RegisteredImageType.REGULAR,
+        null,
+      )
 
     val optionsIn =
       MarkerOptionsDto(
@@ -71,7 +79,10 @@ internal class MarkerBuilderTest {
     assertEquals(2.0F, optionsOut.zIndex)
     assertEquals(null, optionsOut.icon)
 
-    val optionsWithIcon = optionsIn.copy(icon = ImageDescriptorDto("Image_0", 1.0, null, null, RegisteredImageTypeDto.REGULAR))
+    val optionsWithIcon =
+      optionsIn.copy(
+        icon = ImageDescriptorDto("Image_0", 1.0, null, null, RegisteredImageTypeDto.REGULAR)
+      )
     Convert.sinkMarkerOptions(optionsWithIcon, builder, imageRegistry)
     val optionsOutWithIcon = builder.build()
     assertEquals(bitmapDescriptor, optionsOutWithIcon.icon)
