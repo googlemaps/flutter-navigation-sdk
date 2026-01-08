@@ -115,12 +115,14 @@ class MockTestNavigationSessionApi extends _i1.Mock
     String? title,
     String? companyName,
     bool? shouldOnlyShowDriverAwarenessDisclaimer,
+    _i2.TermsAndConditionsUIParamsDto? uiParams,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#showTermsAndConditionsDialog, [
               title,
               companyName,
               shouldOnlyShowDriverAwarenessDisclaimer,
+              uiParams,
             ]),
             returnValue: _i4.Future<bool>.value(false),
           )

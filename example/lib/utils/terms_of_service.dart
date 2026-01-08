@@ -14,6 +14,7 @@
 
 // ignore_for_file: public_member_api_docs
 
+import 'package:flutter/material.dart';
 import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 
 Future<bool> requestTermsAndConditionsAcceptance() async {
@@ -21,5 +22,12 @@ Future<bool> requestTermsAndConditionsAcceptance() async {
       (await GoogleMapsNavigator.showTermsAndConditionsDialog(
         'Example title',
         'Example company',
+        uiParams: const TermsAndConditionsUIParams(
+          backgroundColor: Color(0xFFFFFFFF),
+          titleColor: Color(0xFF1565C0),
+          mainTextColor: Color(0xFF424242),
+          acceptButtonTextColor: Color(0xFF2E7D32),
+          cancelButtonTextColor: Color(0xFFC62828),
+        ),
       ));
 }
