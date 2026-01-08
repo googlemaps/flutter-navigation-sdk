@@ -413,7 +413,7 @@ class MapViewAPIImpl {
           _viewApi
               .animateCameraToCameraPosition(
                 viewId,
-                cameraUpdate.cameraPosition!.toCameraPosition(),
+                cameraUpdate.cameraPosition!.toDto(),
                 duration,
               )
               .then(
@@ -520,7 +520,7 @@ class MapViewAPIImpl {
         assert(cameraUpdate.cameraPosition != null, 'Camera position is null');
         return _viewApi.moveCameraToCameraPosition(
           viewId,
-          cameraUpdate.cameraPosition!.toCameraPosition(),
+          cameraUpdate.cameraPosition!.toDto(),
         );
       case CameraUpdateType.latLng:
         return _viewApi.moveCameraToLatLng(
