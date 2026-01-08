@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.8.1](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.8.0...0.8.1) (2026-01-08)
+
+
+### Features
+
+* support POI click events ([#564](https://github.com/googlemaps/flutter-navigation-sdk/issues/564)) ([3c48de5](https://github.com/googlemaps/flutter-navigation-sdk/commit/3c48de58b0494d9046ca86698abca0361fd5bbac))
+* upgrade Navigation SDK for Android to 7.3.0 ([#577](https://github.com/googlemaps/flutter-navigation-sdk/issues/577)) ([21911d8](https://github.com/googlemaps/flutter-navigation-sdk/commit/21911d832abaa6ba419455ca3212eb9684bc700d))
+* upgrade Navigation SDK for iOS to 10.7.0 ([#578](https://github.com/googlemaps/flutter-navigation-sdk/issues/578)) ([1f1dcb0](https://github.com/googlemaps/flutter-navigation-sdk/commit/1f1dcb0fc5b27791124cc9a7a1cf6e6f8dcb7569))
+
+
+### Bug Fixes
+
+* marker drag event handling ([#567](https://github.com/googlemaps/flutter-navigation-sdk/issues/567)) ([c165694](https://github.com/googlemaps/flutter-navigation-sdk/commit/c165694c7f03c280c42e5f1e9b59ae4d46c3fe92))
+
 ## [0.8.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.7.0...0.8.0) (2025-12-15)
 
 
