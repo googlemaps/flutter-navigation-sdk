@@ -560,6 +560,11 @@ constructor(
             it.acceptButtonTextColor?.let { color -> setAcceptButtonTextColor(color.toInt()) }
             it.cancelButtonTextColor?.let { color -> setCancelButtonTextColor(color.toInt()) }
           }
+          // TODO: Make text sizes configurable via TermsAndConditionsUIParamsDto.
+          // Currently hardcoded to match the Navigation SDK default values.
+          .setButtonsTextSize(14)
+          .setMainTextTextSize(14)
+          .setTitleTextSize(20)
           .build()
       }
 
