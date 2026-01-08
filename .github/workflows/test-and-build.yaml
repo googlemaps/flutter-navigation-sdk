@@ -249,14 +249,11 @@ jobs:
           sudo udevadm trigger --name-match=kvm
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-      - name: AVD Cache
+      - name: Cache ADB keys
         uses: actions/cache@v4
-        id: avd-cache
         with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: avd
+          path: ~/.android/adb*
+          key: adb-keys
       - name: Setup flutter
         uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
@@ -276,31 +273,34 @@ jobs:
         run: flutter pub global activate patrol_cli ${{ env.patrol_cli_version }}
       - name: Run flutter pub get
         run: flutter pub get
-      - name: Clean up runner disk space (if needed)
+      - name: Free disk space for android emulator
         run: |
-          echo "Running cleanup..."
-
-          # Remove large, unneeded packages
+          echo "Disk space before cleanup:"
+          df -h /
+          # Remove large, unneeded packages to free up disk space
           sudo rm -rf /usr/share/dotnet
           sudo rm -rf /opt/ghc
           sudo rm -rf /usr/local/share/boost
-
-          echo "Cleanup complete. Free space after cleanup:"
-          df -h
+          # Clean docker images
+          sudo docker image prune --all --force || true
+          echo "Disk space after cleanup:"
+          df -h /
       - name: Create and start emulator
         run: |
-          echo "Installing system image"
-          echo "y" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "system-images;android-35;google_apis;x86_64"
+          echo "Installing system image..."
+          echo "y" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "system-images;android-30;google_apis;x86_64"
 
           echo "Setting ANDROID_AVD_HOME"
           export ANDROID_AVD_HOME=$HOME/.config/.android/avd
+          mkdir -p $ANDROID_AVD_HOME
 
-          echo "Creating AVD"
-          echo "no" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/avdmanager create avd -n test_emulator -k "system-images;android-35;google_apis;x86_64" --force
+          echo "Creating AVD..."
+          echo "no" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/avdmanager create avd -n test_emulator -k "system-images;android-30;google_apis;x86_64" --force
 
           echo "Starting emulator"
           $ANDROID_SDK_ROOT/emulator/emulator -avd test_emulator -no-audio -no-boot-anim -no-window -no-snapshot &
           adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
+          adb devices
       - name: Generate gradlew file with flutter build
         working-directory: ${{ env.working_directory }}
         run: flutter build apk --config-only
