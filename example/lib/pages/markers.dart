@@ -380,11 +380,7 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
               ElevatedButton(
                 style: style,
                 onPressed:
-                    _selectedMarker == null
-                        ? null
-                        : _selectedMarker == null
-                        ? null
-                        : () => _toggleCustomIcon(),
+                    _selectedMarker == null ? null : () => _toggleCustomIcon(),
                 child: Text(
                   'Icon: ${_selectedMarker?.options.icon.registeredImageId != null ? 'Custom' : 'Default'}',
                 ),
