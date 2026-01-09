@@ -248,16 +248,30 @@ extension ConvertTaskRemovedBehavior on TaskRemovedBehavior {
   }
 }
 
-/// [GeneratedStepImagesTypeDto] convert extension.
+/// [StepImageGenerationOptionsDto] convert extension.
 /// @nodoc
-extension ConvertGeneratedStepImagesType on GeneratedStepImagesType {
-  /// Converts [GeneratedStepImagesType] to [GeneratedStepImagesTypeDto]
-  GeneratedStepImagesTypeDto toDto() {
+extension ConvertStepImageGenerationOptions on StepImageGenerationOptions {
+  /// Converts [StepImageGenerationOptions] to [StepImageGenerationOptionsDto]
+  StepImageGenerationOptionsDto toDto() {
+    return StepImageGenerationOptionsDto(
+      generateManeuverImages: generateManeuverImages,
+      generateLaneImages: generateLaneImages,
+    );
+  }
+}
+
+/// [RegisteredImageType] convert extension.
+/// @nodoc
+extension ConvertRegisteredImageType on RegisteredImageType {
+  /// Converts [RegisteredImageType] to [RegisteredImageTypeDto].
+  RegisteredImageTypeDto toDto() {
     switch (this) {
-      case GeneratedStepImagesType.none:
-        return GeneratedStepImagesTypeDto.none;
-      case GeneratedStepImagesType.bitmap:
-        return GeneratedStepImagesTypeDto.bitmap;
+      case RegisteredImageType.regular:
+        return RegisteredImageTypeDto.regular;
+      case RegisteredImageType.maneuver:
+        return RegisteredImageTypeDto.maneuver;
+      case RegisteredImageType.lane:
+        return RegisteredImageTypeDto.lane;
     }
   }
 }

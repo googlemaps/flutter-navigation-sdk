@@ -18,6 +18,7 @@ package com.google.maps.flutter.navigation
 
 import android.app.Activity
 import android.app.Application
+import android.content.res.Resources
 import android.location.Location
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -726,8 +727,17 @@ constructor(
   @Throws(FlutterError::class)
   fun enableTurnByTurnNavigationEvents(
     numNextStepsToPreview: Int,
-    type: @NavigationUpdatesOptions.GeneratedStepImagesType Int,
+    generateManeuverImages: Boolean,
+    generateLaneImages: Boolean,
   ) {
+    // Determine the type for the underlying SDK
+    val type =
+      if (generateManeuverImages || generateLaneImages) {
+        NavigationUpdatesOptions.GeneratedStepImagesType.BITMAP
+      } else {
+        NavigationUpdatesOptions.GeneratedStepImagesType.NONE
+      }
+
     if (navInfoObserver == null) {
       // Register the service centrally (if not already registered)
       val success =
@@ -744,23 +754,53 @@ constructor(
         )
       }
 
-      fun getManeuverIconImageDescriptor(maneuver: Int): ImageDescriptorDto? {
+      val shouldGenerateManeuverImages = generateManeuverImages
+
+      fun getManeuverImageDescriptor(maneuver: Int): ImageDescriptorDto? {
         val registeredImage =
           imageRegistry.findRegisteredImage(Convert.convertManeuverToKey(maneuver))
         if (registeredImage == null) return null
         return Convert.registeredImageToImageDescriptorDto(registeredImage)
       }
 
-      fun getImageDescriptorForStepInfo(stepInfo: StepInfo): ImageDescriptorDto? {
+      fun getManeuverImageDescriptorForStepInfo(stepInfo: StepInfo): ImageDescriptorDto? {
         val bitmap = stepInfo.maneuverBitmap ?: return null
-        val imageDescriptor = getManeuverIconImageDescriptor(stepInfo.maneuver)
+        val imageDescriptor = getManeuverImageDescriptor(stepInfo.maneuver)
         if (imageDescriptor != null) {
           return imageDescriptor
         }
-        return imageRegistry.registerManeuverIcon(
+        // Use screen density for pixel ratio (similar to Flutter's MediaQuery.devicePixelRatio)
+        val density = Resources.getSystem().displayMetrics.density
+        return imageRegistry.registerManeuverImage(
           Convert.convertManeuverToKey(stepInfo.maneuver),
           bitmap,
-          bitmap.width.toDouble() / bitmap.height.toDouble(),
+          density.toDouble(),
+          bitmap.width.toDouble(),
+          bitmap.height.toDouble(),
+        )
+      }
+
+      fun getLaneImageDescriptor(stepInfo: StepInfo): ImageDescriptorDto? {
+        val key = Convert.convertLanesToKey(stepInfo)
+        val registeredImage = imageRegistry.findRegisteredImage(key)
+        if (registeredImage != null) {
+          return Convert.registeredImageToImageDescriptorDto(registeredImage)
+        }
+        return null
+      }
+
+      fun getLaneImageDescriptorForStepInfo(stepInfo: StepInfo): ImageDescriptorDto? {
+        val bitmap = stepInfo.lanesBitmap ?: return null
+        val existingDescriptor = getLaneImageDescriptor(stepInfo)
+        if (existingDescriptor != null) {
+          return existingDescriptor
+        }
+        // Use screen density for pixel ratio
+        val density = Resources.getSystem().displayMetrics.density
+        return imageRegistry.registerLaneImage(
+          Convert.convertLanesToKey(stepInfo),
+          bitmap,
+          density.toDouble(),
           bitmap.width.toDouble(),
           bitmap.height.toDouble(),
         )
@@ -768,19 +808,33 @@ constructor(
 
       // Create observer for this session manager
       navInfoObserver = Observer { navInfo ->
-        // Map to store all the unique images for each maneuver
-        val imageDescriptors: MutableMap<String, ImageDescriptorDto?> = mutableMapOf()
+        // Maps to store all the unique images for each maneuver and lane
+        val maneuverImageDescriptors: MutableMap<String, ImageDescriptorDto?> = mutableMapOf()
+        val laneImageDescriptors: MutableMap<String, ImageDescriptorDto?> = mutableMapOf()
 
-        (navInfo.remainingSteps + navInfo.currentStep).forEach {
-          val key = Convert.convertManeuverToKey(it.maneuver)
-          val existingImageDescriptor = imageDescriptors[key]
-          if (existingImageDescriptor == null) {
-            val imageDescriptor = getImageDescriptorForStepInfo(it)
-            imageDescriptors[key] = imageDescriptor
+        (navInfo.remainingSteps + navInfo.currentStep).forEach { stepInfo ->
+          // Handle maneuver images
+          if (shouldGenerateManeuverImages) {
+            val maneuverKey = Convert.convertManeuverToKey(stepInfo.maneuver)
+            if (!maneuverImageDescriptors.containsKey(maneuverKey)) {
+              val imageDescriptor = getManeuverImageDescriptorForStepInfo(stepInfo)
+              maneuverImageDescriptors[maneuverKey] = imageDescriptor
+            }
+          }
+
+          // Handle lane images
+          if (generateLaneImages && !stepInfo.lanes.isNullOrEmpty()) {
+            val laneKey = Convert.convertLanesToKey(stepInfo)
+            if (!laneImageDescriptors.containsKey(laneKey)) {
+              val imageDescriptor = getLaneImageDescriptorForStepInfo(stepInfo)
+              laneImageDescriptors[laneKey] = imageDescriptor
+            }
           }
         }
 
-        navigationSessionEventApi.onNavInfo(Convert.convertNavInfo(navInfo, imageDescriptors)) {}
+        navigationSessionEventApi.onNavInfo(
+          Convert.convertNavInfo(navInfo, maneuverImageDescriptors, laneImageDescriptors)
+        ) {}
       }
 
       // Add observer using observeForever (works without lifecycle owner)

@@ -258,11 +258,14 @@ class GoogleMapsNavigationSessionMessageHandler(
 
   override fun enableTurnByTurnNavigationEvents(
     numNextStepsToPreview: Long?,
-    type: GeneratedStepImagesTypeDto?,
+    options: StepImageGenerationOptionsDto?,
   ) {
+    val generateManeuverImages = options?.generateManeuverImages ?: false
+    val generateLaneImages = options?.generateLaneImages ?: false
     sessionManager.enableTurnByTurnNavigationEvents(
       numNextStepsToPreview?.toInt() ?: Int.MAX_VALUE,
-      Convert.generatedStepImagesTypeDtoToGeneratesStepImages(type),
+      generateManeuverImages,
+      generateLaneImages,
     )
   }
 

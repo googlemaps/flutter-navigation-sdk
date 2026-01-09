@@ -242,8 +242,11 @@ enum RegisteredImageTypeDto {
   /// Default type used when custom bitmaps are uploaded to registry
   regular,
 
-  /// Maneuver icon generated from NavInfo data
-  maneuverIcon,
+  /// Maneuver image generated from StepInfo data
+  maneuver,
+
+  /// Lane guidance image generated from StepInfo data
+  lane,
 }
 
 class ImageDescriptorDto {
@@ -1227,7 +1230,8 @@ class StepInfoDto {
     required this.stepNumber,
     required this.lanes,
     required this.maneuver,
-    required this.image,
+    required this.maneuverImage,
+    required this.laneImage,
   });
 
   /// Distance in meters from the previous step to this step if available, otherwise null.
@@ -1264,8 +1268,13 @@ class StepInfoDto {
   /// The index of the step in the list of all steps in the route if available, otherwise null.
   final int? stepNumber;
 
-  /// PNG encoded bytes of the generated step image for the current step if available, otherwise null.
-  ImageDescriptorDto? image;
+  /// Image descriptor for the generated maneuver image for the current step if available, otherwise null.
+  /// This image is generated only if step image generation option includes maneuver images.
+  ImageDescriptorDto? maneuverImage;
+
+  /// Image descriptor for the generated lane guidance image for the current step if available, otherwise null.
+  /// This image is generated only if step image generation option includes lane images.
+  ImageDescriptorDto? laneImage;
 }
 
 /// Contains information about the state of navigation, the current nav step if
@@ -1354,10 +1363,21 @@ enum TaskRemovedBehaviorDto {
   quitService,
 }
 
-/// The type of generated step images for turn-by-turn navigation events.
-///
-/// Android only.
-enum GeneratedStepImagesTypeDto { none, bitmap }
+/// Options for step image generation in turn-by-turn navigation events.
+class StepImageGenerationOptionsDto {
+  StepImageGenerationOptionsDto({
+    this.generateManeuverImages,
+    this.generateLaneImages,
+  });
+
+  /// Whether to generate maneuver images for navigation steps.
+  /// Defaults to false if not specified.
+  final bool? generateManeuverImages;
+
+  /// Whether to generate lane images for navigation steps.
+  /// Defaults to false if not specified.
+  final bool? generateLaneImages;
+}
 
 @HostApi(dartHostTestHandler: 'TestNavigationSessionApi')
 abstract class NavigationSessionApi {
@@ -1425,7 +1445,7 @@ abstract class NavigationSessionApi {
 
   void enableTurnByTurnNavigationEvents(
     int? numNextStepsToPreview,
-    GeneratedStepImagesTypeDto? type,
+    StepImageGenerationOptionsDto? options,
   );
   void disableTurnByTurnNavigationEvents();
 

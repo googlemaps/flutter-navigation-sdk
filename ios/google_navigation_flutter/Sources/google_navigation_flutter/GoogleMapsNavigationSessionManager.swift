@@ -68,6 +68,8 @@ class GoogleMapsNavigationSessionManager: NSObject {
 
   private var _sendManeuverImagesWithNavInfoEvents = false
 
+  private var _sendLaneImagesWithNavInfoEvents = false
+
   func getNavigator() throws -> GMSNavigator {
     guard let _session else { throw GoogleMapsNavigationSessionManagerError.sessionNotInitialized }
     guard let navigator = _session.navigator
@@ -547,11 +549,14 @@ class GoogleMapsNavigationSessionManager: NSObject {
   }
 
   func enableTurnByTurnNavigationEvents(
-    numNextStepsToPreview: Int64?, type: GeneratedStepImagesTypeDto?
+    numNextStepsToPreview: Int64?,
+    generateManeuverImages: Bool,
+    generateLaneImages: Bool
   ) {
     _numTurnByTurnNextStepsToPreview = numNextStepsToPreview ?? Int64.max
     _sendTurnByTurnNavigationEvents = true
-    _sendManeuverImagesWithNavInfoEvents = type == .bitmap
+    _sendManeuverImagesWithNavInfoEvents = generateManeuverImages
+    _sendLaneImagesWithNavInfoEvents = generateLaneImages
   }
 
   func disableTurnByTurnNavigationEvents() {
@@ -636,7 +641,7 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
     )
   }
 
-  func getManeuverIconImageDescriptor(maneuver: GMSNavigationManeuver) -> ImageDescriptorDto? {
+  func getManeuverImageDescriptor(maneuver: GMSNavigationManeuver) -> ImageDescriptorDto? {
     guard
       let registeredImage = GoogleMapsNavigationPlugin.imageRegistry?.findRegisteredImage(
         imageId: Convert.convertManeuverToKey(maneuver))
@@ -646,41 +651,81 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
     return Convert.registeredImageToImageDescriptorDto(registeredImage: registeredImage)
   }
 
-  func getImageDescriptorForStepInfo(_ step: GMSNavigationStepInfo) -> ImageDescriptorDto? {
-    guard let imageDescriptor = getManeuverIconImageDescriptor(maneuver: step.maneuver) else {
+  func getManeuverImageDescriptorForStepInfo(_ step: GMSNavigationStepInfo) -> ImageDescriptorDto? {
+    // If image is already registered, return it, otherwise register a new one.
+    guard let imageDescriptor = getManeuverImageDescriptor(maneuver: step.maneuver) else {
       let bitmap = step.maneuverImage(with: nil) ?? UIImage()
-      let width = Double(bitmap.size.width)
-      let height = Double(bitmap.size.height)
-      return try? GoogleMapsNavigationPlugin.imageRegistry?.registerManeuverIcon(
+      return try? GoogleMapsNavigationPlugin.imageRegistry?.registerManeuverImage(
         imageId: Convert.convertManeuverToKey(step.maneuver),
         image: bitmap,
-        imagePixelRatio: height == 0 ? 0 : width / height,
-        width: width,
-        height: height
+        imagePixelRatio: Double(bitmap.scale),
+        width: Double(bitmap.size.width),
+        height: Double(bitmap.size.height)
       )
     }
     return imageDescriptor
+  }
+
+  func getLaneImageDescriptor(_ step: GMSNavigationStepInfo) -> ImageDescriptorDto? {
+    let key = Convert.convertLanesToKey(step)
+    guard
+      let registeredImage = GoogleMapsNavigationPlugin.imageRegistry?.findRegisteredImage(
+        imageId: key)
+    else {
+      return nil
+    }
+    return Convert.registeredImageToImageDescriptorDto(registeredImage: registeredImage)
+  }
+
+  func getLaneImageDescriptorForStepInfo(_ step: GMSNavigationStepInfo) -> ImageDescriptorDto? {
+    // If image is already registered, return it, otherwise register a new one.
+    if let existingDescriptor = getLaneImageDescriptor(step) {
+      return existingDescriptor
+    }
+    // Get lane image from step info
+    guard let bitmap = step.lanesImage(with: nil) else {
+      return nil
+    }
+    return try? GoogleMapsNavigationPlugin.imageRegistry?.registerLaneImage(
+      imageId: Convert.convertLanesToKey(step),
+      image: bitmap,
+      imagePixelRatio: Double(bitmap.scale),
+      width: Double(bitmap.size.width),
+      height: Double(bitmap.size.height)
+    )
   }
 
   func navigator(
     _ navigator: GMSNavigator,
     didUpdate navInfo: GMSNavigationNavInfo
   ) {
-    var imageDescriptors: [String: ImageDescriptorDto?] = [:]
+    var maneuverImageDescriptors: [String: ImageDescriptorDto?] = [:]
+    var laneImageDescriptors: [String: ImageDescriptorDto?] = [:]
+
+    // Separated to help Swift compiler.
+    let steps: [GMSNavigationStepInfo] = (navInfo.remainingSteps + [navInfo.currentStep])
+      .compactMap { $0 }
 
     if _sendManeuverImagesWithNavInfoEvents {
-      // Separated to help Swift compiler.
-      let steps: [GMSNavigationStepInfo] = (navInfo.remainingSteps + [navInfo.currentStep])
-        .compactMap { $0 }
-      steps
-        .forEach { step in
-          let key = Convert.convertManeuverToKey(step.maneuver)
-          let existingImageDescriptor = imageDescriptors[key]
-          if existingImageDescriptor == nil {
-            let imageDescriptor = getImageDescriptorForStepInfo(step)
-            imageDescriptors.updateValue(imageDescriptor, forKey: key)
-          }
+      steps.forEach { step in
+        let key = Convert.convertManeuverToKey(step.maneuver)
+        if maneuverImageDescriptors[key] == nil {
+          let imageDescriptor = getManeuverImageDescriptorForStepInfo(step)
+          maneuverImageDescriptors.updateValue(imageDescriptor, forKey: key)
         }
+      }
+    }
+
+    if _sendLaneImagesWithNavInfoEvents {
+      steps.forEach { step in
+        // Only process steps that have lanes
+        guard let lanes = step.lanes, !lanes.isEmpty else { return }
+        let key = Convert.convertLanesToKey(step)
+        if laneImageDescriptors[key] == nil {
+          let imageDescriptor = getLaneImageDescriptorForStepInfo(step)
+          laneImageDescriptors.updateValue(imageDescriptor, forKey: key)
+        }
+      }
     }
 
     // Detect new navigation session start
@@ -697,7 +742,8 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
         navInfo: Convert.convertNavInfo(
           navInfo,
           maxAmountOfRemainingSteps: _numTurnByTurnNextStepsToPreview,
-          imageDescriptors: imageDescriptors
+          maneuverImageDescriptors: maneuverImageDescriptors,
+          laneImageDescriptors: laneImageDescriptors
         ),
         completion: { _ in }
       )

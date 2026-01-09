@@ -13,6 +13,7 @@
 // limitations under the License.
 
 export 'camera_position_editor.dart';
+export 'custom_navigation_ui.dart';
 export 'dropdown_button.dart';
 export 'latlng_bound_editor.dart';
 export 'latlng_editor.dart';

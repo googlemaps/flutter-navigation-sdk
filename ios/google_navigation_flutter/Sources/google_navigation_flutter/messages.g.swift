@@ -200,8 +200,10 @@ enum CameraPerspectiveDto: Int {
 enum RegisteredImageTypeDto: Int {
   /// Default type used when custom bitmaps are uploaded to registry
   case regular = 0
-  /// Maneuver icon generated from NavInfo data
-  case maneuverIcon = 1
+  /// Maneuver image generated from StepInfo data
+  case maneuver = 1
+  /// Lane guidance image generated from StepInfo data
+  case lane = 2
 }
 
 enum MarkerEventTypeDto: Int {
@@ -496,14 +498,6 @@ enum TaskRemovedBehaviorDto: Int {
   case continueService = 0
   /// Indicates that navigation guidance, location updates, and notification should shut down immediately when the user removes the application task.
   case quitService = 1
-}
-
-/// The type of generated step images for turn-by-turn navigation events.
-///
-/// Android only.
-enum GeneratedStepImagesTypeDto: Int {
-  case none = 0
-  case bitmap = 1
 }
 
 /// Object containing map options used to initialize Google Map view.
@@ -2036,8 +2030,12 @@ struct StepInfoDto: Hashable {
   var maneuver: ManeuverDto
   /// The index of the step in the list of all steps in the route if available, otherwise null.
   var stepNumber: Int64? = nil
-  /// PNG encoded bytes of the generated step image for the current step if available, otherwise null.
-  var image: ImageDescriptorDto? = nil
+  /// Image descriptor for the generated maneuver image for the current step if available, otherwise null.
+  /// This image is generated only if step image generation option includes maneuver images.
+  var maneuverImage: ImageDescriptorDto? = nil
+  /// Image descriptor for the generated lane guidance image for the current step if available, otherwise null.
+  /// This image is generated only if step image generation option includes lane images.
+  var laneImage: ImageDescriptorDto? = nil
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> StepInfoDto? {
@@ -2052,7 +2050,8 @@ struct StepInfoDto: Hashable {
     let lanes: [LaneDto]? = nilOrValue(pigeonVar_list[8])
     let maneuver = pigeonVar_list[9] as! ManeuverDto
     let stepNumber: Int64? = nilOrValue(pigeonVar_list[10])
-    let image: ImageDescriptorDto? = nilOrValue(pigeonVar_list[11])
+    let maneuverImage: ImageDescriptorDto? = nilOrValue(pigeonVar_list[11])
+    let laneImage: ImageDescriptorDto? = nilOrValue(pigeonVar_list[12])
 
     return StepInfoDto(
       distanceFromPrevStepMeters: distanceFromPrevStepMeters,
@@ -2066,7 +2065,8 @@ struct StepInfoDto: Hashable {
       lanes: lanes,
       maneuver: maneuver,
       stepNumber: stepNumber,
-      image: image
+      maneuverImage: maneuverImage,
+      laneImage: laneImage
     )
   }
   func toList() -> [Any?] {
@@ -2082,7 +2082,8 @@ struct StepInfoDto: Hashable {
       lanes,
       maneuver,
       stepNumber,
-      image,
+      maneuverImage,
+      laneImage,
     ]
   }
   static func == (lhs: StepInfoDto, rhs: StepInfoDto) -> Bool {
@@ -2219,6 +2220,41 @@ struct TermsAndConditionsUIParamsDto: Hashable {
     ]
   }
   static func == (lhs: TermsAndConditionsUIParamsDto, rhs: TermsAndConditionsUIParamsDto) -> Bool {
+    return deepEqualsmessages(lhs.toList(), rhs.toList())
+  }
+  func hash(into hasher: inout Hasher) {
+    deepHashmessages(value: toList(), hasher: &hasher)
+  }
+}
+
+/// Options for step image generation in turn-by-turn navigation events.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct StepImageGenerationOptionsDto: Hashable {
+  /// Whether to generate maneuver images for navigation steps.
+  /// Defaults to false if not specified.
+  var generateManeuverImages: Bool? = nil
+  /// Whether to generate lane images for navigation steps.
+  /// Defaults to false if not specified.
+  var generateLaneImages: Bool? = nil
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> StepImageGenerationOptionsDto? {
+    let generateManeuverImages: Bool? = nilOrValue(pigeonVar_list[0])
+    let generateLaneImages: Bool? = nilOrValue(pigeonVar_list[1])
+
+    return StepImageGenerationOptionsDto(
+      generateManeuverImages: generateManeuverImages,
+      generateLaneImages: generateLaneImages
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      generateManeuverImages,
+      generateLaneImages,
+    ]
+  }
+  static func == (lhs: StepImageGenerationOptionsDto, rhs: StepImageGenerationOptionsDto) -> Bool {
     return deepEqualsmessages(lhs.toList(), rhs.toList())
   }
   func hash(into hasher: inout Hasher) {
@@ -2386,98 +2422,94 @@ private class MessagesPigeonCodecReader: FlutterStandardReader {
       }
       return nil
     case 155:
-      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
-      if let enumResultAsInt = enumResultAsInt {
-        return GeneratedStepImagesTypeDto(rawValue: enumResultAsInt)
-      }
-      return nil
-    case 156:
       return MapOptionsDto.fromList(self.readValue() as! [Any?])
-    case 157:
+    case 156:
       return NavigationViewOptionsDto.fromList(self.readValue() as! [Any?])
-    case 158:
+    case 157:
       return ViewCreationOptionsDto.fromList(self.readValue() as! [Any?])
-    case 159:
+    case 158:
       return CameraPositionDto.fromList(self.readValue() as! [Any?])
-    case 160:
+    case 159:
       return MarkerDto.fromList(self.readValue() as! [Any?])
-    case 161:
+    case 160:
       return MarkerOptionsDto.fromList(self.readValue() as! [Any?])
-    case 162:
+    case 161:
       return ImageDescriptorDto.fromList(self.readValue() as! [Any?])
-    case 163:
+    case 162:
       return InfoWindowDto.fromList(self.readValue() as! [Any?])
-    case 164:
+    case 163:
       return MarkerAnchorDto.fromList(self.readValue() as! [Any?])
-    case 165:
+    case 164:
       return PointOfInterestDto.fromList(self.readValue() as! [Any?])
-    case 166:
+    case 165:
       return PolygonDto.fromList(self.readValue() as! [Any?])
-    case 167:
+    case 166:
       return PolygonOptionsDto.fromList(self.readValue() as! [Any?])
-    case 168:
+    case 167:
       return PolygonHoleDto.fromList(self.readValue() as! [Any?])
-    case 169:
+    case 168:
       return StyleSpanStrokeStyleDto.fromList(self.readValue() as! [Any?])
-    case 170:
+    case 169:
       return StyleSpanDto.fromList(self.readValue() as! [Any?])
-    case 171:
+    case 170:
       return PolylineDto.fromList(self.readValue() as! [Any?])
-    case 172:
+    case 171:
       return PatternItemDto.fromList(self.readValue() as! [Any?])
-    case 173:
+    case 172:
       return PolylineOptionsDto.fromList(self.readValue() as! [Any?])
-    case 174:
+    case 173:
       return CircleDto.fromList(self.readValue() as! [Any?])
-    case 175:
+    case 174:
       return CircleOptionsDto.fromList(self.readValue() as! [Any?])
-    case 176:
+    case 175:
       return MapPaddingDto.fromList(self.readValue() as! [Any?])
-    case 177:
+    case 176:
       return RouteTokenOptionsDto.fromList(self.readValue() as! [Any?])
-    case 178:
+    case 177:
       return DestinationsDto.fromList(self.readValue() as! [Any?])
-    case 179:
+    case 178:
       return RoutingOptionsDto.fromList(self.readValue() as! [Any?])
-    case 180:
+    case 179:
       return NavigationDisplayOptionsDto.fromList(self.readValue() as! [Any?])
-    case 181:
+    case 180:
       return NavigationWaypointDto.fromList(self.readValue() as! [Any?])
-    case 182:
+    case 181:
       return NavigationTimeAndDistanceDto.fromList(self.readValue() as! [Any?])
-    case 183:
+    case 182:
       return NavigationAudioGuidanceSettingsDto.fromList(self.readValue() as! [Any?])
-    case 184:
+    case 183:
       return SimulationOptionsDto.fromList(self.readValue() as! [Any?])
-    case 185:
+    case 184:
       return LatLngDto.fromList(self.readValue() as! [Any?])
-    case 186:
+    case 185:
       return LatLngBoundsDto.fromList(self.readValue() as! [Any?])
-    case 187:
+    case 186:
       return SpeedingUpdatedEventDto.fromList(self.readValue() as! [Any?])
-    case 188:
+    case 187:
       return GpsAvailabilityChangeEventDto.fromList(self.readValue() as! [Any?])
-    case 189:
+    case 188:
       return SpeedAlertOptionsThresholdPercentageDto.fromList(self.readValue() as! [Any?])
-    case 190:
+    case 189:
       return SpeedAlertOptionsDto.fromList(self.readValue() as! [Any?])
-    case 191:
+    case 190:
       return RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(
         self.readValue() as! [Any?])
-    case 192:
+    case 191:
       return RouteSegmentTrafficDataDto.fromList(self.readValue() as! [Any?])
-    case 193:
+    case 192:
       return RouteSegmentDto.fromList(self.readValue() as! [Any?])
-    case 194:
+    case 193:
       return LaneDirectionDto.fromList(self.readValue() as! [Any?])
-    case 195:
+    case 194:
       return LaneDto.fromList(self.readValue() as! [Any?])
-    case 196:
+    case 195:
       return StepInfoDto.fromList(self.readValue() as! [Any?])
-    case 197:
+    case 196:
       return NavInfoDto.fromList(self.readValue() as! [Any?])
-    case 198:
+    case 197:
       return TermsAndConditionsUIParamsDto.fromList(self.readValue() as! [Any?])
+    case 198:
+      return StepImageGenerationOptionsDto.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -2564,136 +2596,136 @@ private class MessagesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? TaskRemovedBehaviorDto {
       super.writeByte(154)
       super.writeValue(value.rawValue)
-    } else if let value = value as? GeneratedStepImagesTypeDto {
-      super.writeByte(155)
-      super.writeValue(value.rawValue)
     } else if let value = value as? MapOptionsDto {
-      super.writeByte(156)
+      super.writeByte(155)
       super.writeValue(value.toList())
     } else if let value = value as? NavigationViewOptionsDto {
-      super.writeByte(157)
+      super.writeByte(156)
       super.writeValue(value.toList())
     } else if let value = value as? ViewCreationOptionsDto {
-      super.writeByte(158)
+      super.writeByte(157)
       super.writeValue(value.toList())
     } else if let value = value as? CameraPositionDto {
-      super.writeByte(159)
+      super.writeByte(158)
       super.writeValue(value.toList())
     } else if let value = value as? MarkerDto {
-      super.writeByte(160)
+      super.writeByte(159)
       super.writeValue(value.toList())
     } else if let value = value as? MarkerOptionsDto {
-      super.writeByte(161)
+      super.writeByte(160)
       super.writeValue(value.toList())
     } else if let value = value as? ImageDescriptorDto {
-      super.writeByte(162)
+      super.writeByte(161)
       super.writeValue(value.toList())
     } else if let value = value as? InfoWindowDto {
-      super.writeByte(163)
+      super.writeByte(162)
       super.writeValue(value.toList())
     } else if let value = value as? MarkerAnchorDto {
-      super.writeByte(164)
+      super.writeByte(163)
       super.writeValue(value.toList())
     } else if let value = value as? PointOfInterestDto {
-      super.writeByte(165)
+      super.writeByte(164)
       super.writeValue(value.toList())
     } else if let value = value as? PolygonDto {
-      super.writeByte(166)
+      super.writeByte(165)
       super.writeValue(value.toList())
     } else if let value = value as? PolygonOptionsDto {
-      super.writeByte(167)
+      super.writeByte(166)
       super.writeValue(value.toList())
     } else if let value = value as? PolygonHoleDto {
-      super.writeByte(168)
+      super.writeByte(167)
       super.writeValue(value.toList())
     } else if let value = value as? StyleSpanStrokeStyleDto {
-      super.writeByte(169)
+      super.writeByte(168)
       super.writeValue(value.toList())
     } else if let value = value as? StyleSpanDto {
-      super.writeByte(170)
+      super.writeByte(169)
       super.writeValue(value.toList())
     } else if let value = value as? PolylineDto {
-      super.writeByte(171)
+      super.writeByte(170)
       super.writeValue(value.toList())
     } else if let value = value as? PatternItemDto {
-      super.writeByte(172)
+      super.writeByte(171)
       super.writeValue(value.toList())
     } else if let value = value as? PolylineOptionsDto {
-      super.writeByte(173)
+      super.writeByte(172)
       super.writeValue(value.toList())
     } else if let value = value as? CircleDto {
-      super.writeByte(174)
+      super.writeByte(173)
       super.writeValue(value.toList())
     } else if let value = value as? CircleOptionsDto {
-      super.writeByte(175)
+      super.writeByte(174)
       super.writeValue(value.toList())
     } else if let value = value as? MapPaddingDto {
-      super.writeByte(176)
+      super.writeByte(175)
       super.writeValue(value.toList())
     } else if let value = value as? RouteTokenOptionsDto {
-      super.writeByte(177)
+      super.writeByte(176)
       super.writeValue(value.toList())
     } else if let value = value as? DestinationsDto {
-      super.writeByte(178)
+      super.writeByte(177)
       super.writeValue(value.toList())
     } else if let value = value as? RoutingOptionsDto {
-      super.writeByte(179)
+      super.writeByte(178)
       super.writeValue(value.toList())
     } else if let value = value as? NavigationDisplayOptionsDto {
-      super.writeByte(180)
+      super.writeByte(179)
       super.writeValue(value.toList())
     } else if let value = value as? NavigationWaypointDto {
-      super.writeByte(181)
+      super.writeByte(180)
       super.writeValue(value.toList())
     } else if let value = value as? NavigationTimeAndDistanceDto {
-      super.writeByte(182)
+      super.writeByte(181)
       super.writeValue(value.toList())
     } else if let value = value as? NavigationAudioGuidanceSettingsDto {
-      super.writeByte(183)
+      super.writeByte(182)
       super.writeValue(value.toList())
     } else if let value = value as? SimulationOptionsDto {
-      super.writeByte(184)
+      super.writeByte(183)
       super.writeValue(value.toList())
     } else if let value = value as? LatLngDto {
-      super.writeByte(185)
+      super.writeByte(184)
       super.writeValue(value.toList())
     } else if let value = value as? LatLngBoundsDto {
-      super.writeByte(186)
+      super.writeByte(185)
       super.writeValue(value.toList())
     } else if let value = value as? SpeedingUpdatedEventDto {
-      super.writeByte(187)
+      super.writeByte(186)
       super.writeValue(value.toList())
     } else if let value = value as? GpsAvailabilityChangeEventDto {
-      super.writeByte(188)
+      super.writeByte(187)
       super.writeValue(value.toList())
     } else if let value = value as? SpeedAlertOptionsThresholdPercentageDto {
-      super.writeByte(189)
+      super.writeByte(188)
       super.writeValue(value.toList())
     } else if let value = value as? SpeedAlertOptionsDto {
-      super.writeByte(190)
+      super.writeByte(189)
       super.writeValue(value.toList())
     } else if let value = value as? RouteSegmentTrafficDataRoadStretchRenderingDataDto {
-      super.writeByte(191)
+      super.writeByte(190)
       super.writeValue(value.toList())
     } else if let value = value as? RouteSegmentTrafficDataDto {
-      super.writeByte(192)
+      super.writeByte(191)
       super.writeValue(value.toList())
     } else if let value = value as? RouteSegmentDto {
-      super.writeByte(193)
+      super.writeByte(192)
       super.writeValue(value.toList())
     } else if let value = value as? LaneDirectionDto {
-      super.writeByte(194)
+      super.writeByte(193)
       super.writeValue(value.toList())
     } else if let value = value as? LaneDto {
-      super.writeByte(195)
+      super.writeByte(194)
       super.writeValue(value.toList())
     } else if let value = value as? StepInfoDto {
-      super.writeByte(196)
+      super.writeByte(195)
       super.writeValue(value.toList())
     } else if let value = value as? NavInfoDto {
-      super.writeByte(197)
+      super.writeByte(196)
       super.writeValue(value.toList())
     } else if let value = value as? TermsAndConditionsUIParamsDto {
+      super.writeByte(197)
+      super.writeValue(value.toList())
+    } else if let value = value as? StepImageGenerationOptionsDto {
       super.writeByte(198)
       super.writeValue(value.toList())
     } else {
@@ -5389,7 +5421,7 @@ protocol NavigationSessionApi {
   func enableRoadSnappedLocationUpdates() throws
   func disableRoadSnappedLocationUpdates() throws
   func enableTurnByTurnNavigationEvents(
-    numNextStepsToPreview: Int64?, type: GeneratedStepImagesTypeDto?) throws
+    numNextStepsToPreview: Int64?, options: StepImageGenerationOptionsDto?) throws
   func disableTurnByTurnNavigationEvents() throws
   func registerRemainingTimeOrDistanceChangedListener(
     remainingTimeThresholdSeconds: Int64, remainingDistanceThresholdMeters: Int64) throws
@@ -5966,10 +5998,10 @@ class NavigationSessionApiSetup {
       enableTurnByTurnNavigationEventsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let numNextStepsToPreviewArg: Int64? = nilOrValue(args[0])
-        let typeArg: GeneratedStepImagesTypeDto? = nilOrValue(args[1])
+        let optionsArg: StepImageGenerationOptionsDto? = nilOrValue(args[1])
         do {
           try api.enableTurnByTurnNavigationEvents(
-            numNextStepsToPreview: numNextStepsToPreviewArg, type: typeArg)
+            numNextStepsToPreview: numNextStepsToPreviewArg, options: optionsArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))

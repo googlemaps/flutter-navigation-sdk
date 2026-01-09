@@ -110,136 +110,136 @@ class _PigeonCodec extends StandardMessageCodec {
     } else if (value is TaskRemovedBehaviorDto) {
       buffer.putUint8(154);
       writeValue(buffer, value.index);
-    } else if (value is GeneratedStepImagesTypeDto) {
-      buffer.putUint8(155);
-      writeValue(buffer, value.index);
     } else if (value is MapOptionsDto) {
-      buffer.putUint8(156);
+      buffer.putUint8(155);
       writeValue(buffer, value.encode());
     } else if (value is NavigationViewOptionsDto) {
-      buffer.putUint8(157);
+      buffer.putUint8(156);
       writeValue(buffer, value.encode());
     } else if (value is ViewCreationOptionsDto) {
-      buffer.putUint8(158);
+      buffer.putUint8(157);
       writeValue(buffer, value.encode());
     } else if (value is CameraPositionDto) {
-      buffer.putUint8(159);
+      buffer.putUint8(158);
       writeValue(buffer, value.encode());
     } else if (value is MarkerDto) {
-      buffer.putUint8(160);
+      buffer.putUint8(159);
       writeValue(buffer, value.encode());
     } else if (value is MarkerOptionsDto) {
-      buffer.putUint8(161);
+      buffer.putUint8(160);
       writeValue(buffer, value.encode());
     } else if (value is ImageDescriptorDto) {
-      buffer.putUint8(162);
+      buffer.putUint8(161);
       writeValue(buffer, value.encode());
     } else if (value is InfoWindowDto) {
-      buffer.putUint8(163);
+      buffer.putUint8(162);
       writeValue(buffer, value.encode());
     } else if (value is MarkerAnchorDto) {
-      buffer.putUint8(164);
+      buffer.putUint8(163);
       writeValue(buffer, value.encode());
     } else if (value is PointOfInterestDto) {
-      buffer.putUint8(165);
+      buffer.putUint8(164);
       writeValue(buffer, value.encode());
     } else if (value is PolygonDto) {
-      buffer.putUint8(166);
+      buffer.putUint8(165);
       writeValue(buffer, value.encode());
     } else if (value is PolygonOptionsDto) {
-      buffer.putUint8(167);
+      buffer.putUint8(166);
       writeValue(buffer, value.encode());
     } else if (value is PolygonHoleDto) {
-      buffer.putUint8(168);
+      buffer.putUint8(167);
       writeValue(buffer, value.encode());
     } else if (value is StyleSpanStrokeStyleDto) {
-      buffer.putUint8(169);
+      buffer.putUint8(168);
       writeValue(buffer, value.encode());
     } else if (value is StyleSpanDto) {
-      buffer.putUint8(170);
+      buffer.putUint8(169);
       writeValue(buffer, value.encode());
     } else if (value is PolylineDto) {
-      buffer.putUint8(171);
+      buffer.putUint8(170);
       writeValue(buffer, value.encode());
     } else if (value is PatternItemDto) {
-      buffer.putUint8(172);
+      buffer.putUint8(171);
       writeValue(buffer, value.encode());
     } else if (value is PolylineOptionsDto) {
-      buffer.putUint8(173);
+      buffer.putUint8(172);
       writeValue(buffer, value.encode());
     } else if (value is CircleDto) {
-      buffer.putUint8(174);
+      buffer.putUint8(173);
       writeValue(buffer, value.encode());
     } else if (value is CircleOptionsDto) {
-      buffer.putUint8(175);
+      buffer.putUint8(174);
       writeValue(buffer, value.encode());
     } else if (value is MapPaddingDto) {
-      buffer.putUint8(176);
+      buffer.putUint8(175);
       writeValue(buffer, value.encode());
     } else if (value is RouteTokenOptionsDto) {
-      buffer.putUint8(177);
+      buffer.putUint8(176);
       writeValue(buffer, value.encode());
     } else if (value is DestinationsDto) {
-      buffer.putUint8(178);
+      buffer.putUint8(177);
       writeValue(buffer, value.encode());
     } else if (value is RoutingOptionsDto) {
-      buffer.putUint8(179);
+      buffer.putUint8(178);
       writeValue(buffer, value.encode());
     } else if (value is NavigationDisplayOptionsDto) {
-      buffer.putUint8(180);
+      buffer.putUint8(179);
       writeValue(buffer, value.encode());
     } else if (value is NavigationWaypointDto) {
-      buffer.putUint8(181);
+      buffer.putUint8(180);
       writeValue(buffer, value.encode());
     } else if (value is NavigationTimeAndDistanceDto) {
-      buffer.putUint8(182);
+      buffer.putUint8(181);
       writeValue(buffer, value.encode());
     } else if (value is NavigationAudioGuidanceSettingsDto) {
-      buffer.putUint8(183);
+      buffer.putUint8(182);
       writeValue(buffer, value.encode());
     } else if (value is SimulationOptionsDto) {
-      buffer.putUint8(184);
+      buffer.putUint8(183);
       writeValue(buffer, value.encode());
     } else if (value is LatLngDto) {
-      buffer.putUint8(185);
+      buffer.putUint8(184);
       writeValue(buffer, value.encode());
     } else if (value is LatLngBoundsDto) {
-      buffer.putUint8(186);
+      buffer.putUint8(185);
       writeValue(buffer, value.encode());
     } else if (value is SpeedingUpdatedEventDto) {
-      buffer.putUint8(187);
+      buffer.putUint8(186);
       writeValue(buffer, value.encode());
     } else if (value is GpsAvailabilityChangeEventDto) {
-      buffer.putUint8(188);
+      buffer.putUint8(187);
       writeValue(buffer, value.encode());
     } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
-      buffer.putUint8(189);
+      buffer.putUint8(188);
       writeValue(buffer, value.encode());
     } else if (value is SpeedAlertOptionsDto) {
-      buffer.putUint8(190);
+      buffer.putUint8(189);
       writeValue(buffer, value.encode());
     } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
-      buffer.putUint8(191);
+      buffer.putUint8(190);
       writeValue(buffer, value.encode());
     } else if (value is RouteSegmentTrafficDataDto) {
-      buffer.putUint8(192);
+      buffer.putUint8(191);
       writeValue(buffer, value.encode());
     } else if (value is RouteSegmentDto) {
-      buffer.putUint8(193);
+      buffer.putUint8(192);
       writeValue(buffer, value.encode());
     } else if (value is LaneDirectionDto) {
-      buffer.putUint8(194);
+      buffer.putUint8(193);
       writeValue(buffer, value.encode());
     } else if (value is LaneDto) {
-      buffer.putUint8(195);
+      buffer.putUint8(194);
       writeValue(buffer, value.encode());
     } else if (value is StepInfoDto) {
-      buffer.putUint8(196);
+      buffer.putUint8(195);
       writeValue(buffer, value.encode());
     } else if (value is NavInfoDto) {
-      buffer.putUint8(197);
+      buffer.putUint8(196);
       writeValue(buffer, value.encode());
     } else if (value is TermsAndConditionsUIParamsDto) {
+      buffer.putUint8(197);
+      writeValue(buffer, value.encode());
+    } else if (value is StepImageGenerationOptionsDto) {
       buffer.putUint8(198);
       writeValue(buffer, value.encode());
     } else {
@@ -336,98 +336,97 @@ class _PigeonCodec extends StandardMessageCodec {
         final int? value = readValue(buffer) as int?;
         return value == null ? null : TaskRemovedBehaviorDto.values[value];
       case 155:
-        final int? value = readValue(buffer) as int?;
-        return value == null ? null : GeneratedStepImagesTypeDto.values[value];
-      case 156:
         return MapOptionsDto.decode(readValue(buffer)!);
-      case 157:
+      case 156:
         return NavigationViewOptionsDto.decode(readValue(buffer)!);
-      case 158:
+      case 157:
         return ViewCreationOptionsDto.decode(readValue(buffer)!);
-      case 159:
+      case 158:
         return CameraPositionDto.decode(readValue(buffer)!);
-      case 160:
+      case 159:
         return MarkerDto.decode(readValue(buffer)!);
-      case 161:
+      case 160:
         return MarkerOptionsDto.decode(readValue(buffer)!);
-      case 162:
+      case 161:
         return ImageDescriptorDto.decode(readValue(buffer)!);
-      case 163:
+      case 162:
         return InfoWindowDto.decode(readValue(buffer)!);
-      case 164:
+      case 163:
         return MarkerAnchorDto.decode(readValue(buffer)!);
-      case 165:
+      case 164:
         return PointOfInterestDto.decode(readValue(buffer)!);
-      case 166:
+      case 165:
         return PolygonDto.decode(readValue(buffer)!);
-      case 167:
+      case 166:
         return PolygonOptionsDto.decode(readValue(buffer)!);
-      case 168:
+      case 167:
         return PolygonHoleDto.decode(readValue(buffer)!);
-      case 169:
+      case 168:
         return StyleSpanStrokeStyleDto.decode(readValue(buffer)!);
-      case 170:
+      case 169:
         return StyleSpanDto.decode(readValue(buffer)!);
-      case 171:
+      case 170:
         return PolylineDto.decode(readValue(buffer)!);
-      case 172:
+      case 171:
         return PatternItemDto.decode(readValue(buffer)!);
-      case 173:
+      case 172:
         return PolylineOptionsDto.decode(readValue(buffer)!);
-      case 174:
+      case 173:
         return CircleDto.decode(readValue(buffer)!);
-      case 175:
+      case 174:
         return CircleOptionsDto.decode(readValue(buffer)!);
-      case 176:
+      case 175:
         return MapPaddingDto.decode(readValue(buffer)!);
-      case 177:
+      case 176:
         return RouteTokenOptionsDto.decode(readValue(buffer)!);
-      case 178:
+      case 177:
         return DestinationsDto.decode(readValue(buffer)!);
-      case 179:
+      case 178:
         return RoutingOptionsDto.decode(readValue(buffer)!);
-      case 180:
+      case 179:
         return NavigationDisplayOptionsDto.decode(readValue(buffer)!);
-      case 181:
+      case 180:
         return NavigationWaypointDto.decode(readValue(buffer)!);
-      case 182:
+      case 181:
         return NavigationTimeAndDistanceDto.decode(readValue(buffer)!);
-      case 183:
+      case 182:
         return NavigationAudioGuidanceSettingsDto.decode(readValue(buffer)!);
-      case 184:
+      case 183:
         return SimulationOptionsDto.decode(readValue(buffer)!);
-      case 185:
+      case 184:
         return LatLngDto.decode(readValue(buffer)!);
-      case 186:
+      case 185:
         return LatLngBoundsDto.decode(readValue(buffer)!);
-      case 187:
+      case 186:
         return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
-      case 188:
+      case 187:
         return GpsAvailabilityChangeEventDto.decode(readValue(buffer)!);
-      case 189:
+      case 188:
         return SpeedAlertOptionsThresholdPercentageDto.decode(
           readValue(buffer)!,
         );
-      case 190:
+      case 189:
         return SpeedAlertOptionsDto.decode(readValue(buffer)!);
-      case 191:
+      case 190:
         return RouteSegmentTrafficDataRoadStretchRenderingDataDto.decode(
           readValue(buffer)!,
         );
-      case 192:
+      case 191:
         return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
-      case 193:
+      case 192:
         return RouteSegmentDto.decode(readValue(buffer)!);
-      case 194:
+      case 193:
         return LaneDirectionDto.decode(readValue(buffer)!);
-      case 195:
+      case 194:
         return LaneDto.decode(readValue(buffer)!);
-      case 196:
+      case 195:
         return StepInfoDto.decode(readValue(buffer)!);
-      case 197:
+      case 196:
         return NavInfoDto.decode(readValue(buffer)!);
-      case 198:
+      case 197:
         return TermsAndConditionsUIParamsDto.decode(readValue(buffer)!);
+      case 198:
+        return StepImageGenerationOptionsDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -5509,7 +5508,7 @@ abstract class TestNavigationSessionApi {
 
   void enableTurnByTurnNavigationEvents(
     int? numNextStepsToPreview,
-    GeneratedStepImagesTypeDto? type,
+    StepImageGenerationOptionsDto? options,
   );
 
   void disableTurnByTurnNavigationEvents();
@@ -6682,12 +6681,12 @@ abstract class TestNavigationSessionApi {
               );
               final List<Object?> args = (message as List<Object?>?)!;
               final int? arg_numNextStepsToPreview = (args[0] as int?);
-              final GeneratedStepImagesTypeDto? arg_type =
-                  (args[1] as GeneratedStepImagesTypeDto?);
+              final StepImageGenerationOptionsDto? arg_options =
+                  (args[1] as StepImageGenerationOptionsDto?);
               try {
                 api.enableTurnByTurnNavigationEvents(
                   arg_numNextStepsToPreview,
-                  arg_type,
+                  arg_options,
                 );
                 return wrapResponse(empty: true);
               } on PlatformException catch (e) {

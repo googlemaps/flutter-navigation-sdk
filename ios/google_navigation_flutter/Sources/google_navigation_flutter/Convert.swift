@@ -185,9 +185,18 @@ enum Convert {
   }
 
   static func convertStepInfo(
-    _ stepInfo: GMSNavigationStepInfo, _ imageDescriptors: [String: ImageDescriptorDto?]
+    _ stepInfo: GMSNavigationStepInfo,
+    _ maneuverImageDescriptors: [String: ImageDescriptorDto?],
+    _ laneImageDescriptors: [String: ImageDescriptorDto?]
   ) -> StepInfoDto {
-    let key = convertManeuverToKey(stepInfo.maneuver)
+    let maneuverKey = convertManeuverToKey(stepInfo.maneuver)
+    // Only look up lane image if stepInfo has lanes
+    let laneImage: ImageDescriptorDto? =
+      if let lanes = stepInfo.lanes, !lanes.isEmpty {
+        laneImageDescriptors[convertLanesToKey(stepInfo)] ?? nil
+      } else {
+        nil
+      }
     return .init(
       distanceFromPrevStepMeters: stepInfo.distanceFromPrevStepMeters > 0
         ? Int64(stepInfo.distanceFromPrevStepMeters) : nil,
@@ -203,21 +212,42 @@ enum Convert {
       lanes: nil,
       maneuver: convertManeuver(maneuver: stepInfo.maneuver),
       stepNumber: stepInfo.stepNumber >= 0 ? Int64(stepInfo.stepNumber) : nil,
-      image: imageDescriptors[key] ?? nil
+      maneuverImage: maneuverImageDescriptors[maneuverKey] ?? nil,
+      laneImage: laneImage
     )
+  }
+
+  static func convertLanesToKey(_ stepInfo: GMSNavigationStepInfo) -> String {
+    // This method should only be called when lanes exist
+    guard let lanes = stepInfo.lanes, !lanes.isEmpty else {
+      assertionFailure("convertLanesToKey should only be called when stepInfo has lanes")
+      return ""
+    }
+
+    // Build a deterministic string from lane shapes and recommended flags
+    let lanesKey = lanes.map { lane in
+      lane.laneDirections.map { dir in
+        "\(dir.laneShape.rawValue):\(dir.recommended ? 1 : 0)"
+      }.joined(separator: ",")
+    }.joined(separator: "|")
+
+    return "lane_\(lanesKey)"
   }
 
   static func convertNavInfo(
     _ gmsNavInfo: GMSNavigationNavInfo, maxAmountOfRemainingSteps: Int64,
-    imageDescriptors: [String: ImageDescriptorDto?]
+    maneuverImageDescriptors: [String: ImageDescriptorDto?],
+    laneImageDescriptors: [String: ImageDescriptorDto?]
   )
     -> NavInfoDto
   {
     let currentStepDto =
       gmsNavInfo
-        .currentStep != nil ? convertStepInfo(gmsNavInfo.currentStep!, imageDescriptors) : nil
+        .currentStep != nil
+      ? convertStepInfo(gmsNavInfo.currentStep!, maneuverImageDescriptors, laneImageDescriptors)
+      : nil
     let remainingStepsDto = gmsNavInfo.remainingSteps.prefix(Int(maxAmountOfRemainingSteps))
-      .map { convertStepInfo($0, imageDescriptors) }
+      .map { convertStepInfo($0, maneuverImageDescriptors, laneImageDescriptors) }
 
     return NavInfoDto(
       navState: convertNavState(state: gmsNavInfo.navState),
@@ -580,14 +610,16 @@ enum Convert {
 
   static func registeredImageType(type: RegisteredImageTypeDto) -> RegisteredImageType {
     switch type {
-    case .maneuverIcon: return .maneuverIcon
+    case .maneuver: return .maneuver
+    case .lane: return .lane
     case .regular: return .regular
     }
   }
 
   static func registeredImageType(type: RegisteredImageType) -> RegisteredImageTypeDto {
     switch type {
-    case .maneuverIcon: return .maneuverIcon
+    case .maneuver: return .maneuver
+    case .lane: return .lane
     case .regular: return .regular
     }
   }

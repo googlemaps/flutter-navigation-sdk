@@ -340,7 +340,7 @@ class MockTestNavigationSessionApi extends _i1.Mock
   @override
   void enableTurnByTurnNavigationEvents(
     int? numNextStepsToPreview,
-    _i2.GeneratedStepImagesTypeDto? type,
+    _i2.StepImageGenerationOptionDto? type,
   ) => super.noSuchMethod(
     Invocation.method(#enableTurnByTurnNavigationEvents, [
       numNextStepsToPreview,

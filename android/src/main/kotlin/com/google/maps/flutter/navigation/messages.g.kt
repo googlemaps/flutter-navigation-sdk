@@ -184,8 +184,10 @@ enum class CameraPerspectiveDto(val raw: Int) {
 enum class RegisteredImageTypeDto(val raw: Int) {
   /** Default type used when custom bitmaps are uploaded to registry */
   REGULAR(0),
-  /** Maneuver icon generated from NavInfo data */
-  MANEUVER_ICON(1);
+  /** Maneuver image generated from StepInfo data */
+  MANEUVER(1),
+  /** Lane guidance image generated from StepInfo data */
+  LANE(2);
 
   companion object {
     fun ofRaw(raw: Int): RegisteredImageTypeDto? {
@@ -610,22 +612,6 @@ enum class TaskRemovedBehaviorDto(val raw: Int) {
 
   companion object {
     fun ofRaw(raw: Int): TaskRemovedBehaviorDto? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
-/**
- * The type of generated step images for turn-by-turn navigation events.
- *
- * Android only.
- */
-enum class GeneratedStepImagesTypeDto(val raw: Int) {
-  NONE(0),
-  BITMAP(1);
-
-  companion object {
-    fun ofRaw(raw: Int): GeneratedStepImagesTypeDto? {
       return values().firstOrNull { it.raw == raw }
     }
   }
@@ -2199,10 +2185,16 @@ data class StepInfoDto(
   /** The index of the step in the list of all steps in the route if available, otherwise null. */
   val stepNumber: Long? = null,
   /**
-   * PNG encoded bytes of the generated step image for the current step if available, otherwise
-   * null.
+   * Image descriptor for the generated maneuver image for the current step if available, otherwise
+   * null. This image is generated only if step image generation option includes maneuver images.
    */
-  val image: ImageDescriptorDto? = null,
+  val maneuverImage: ImageDescriptorDto? = null,
+  /**
+   * Image descriptor for the generated lane guidance image for the current step if available,
+   * otherwise null. This image is generated only if step image generation option includes lane
+   * images.
+   */
+  val laneImage: ImageDescriptorDto? = null,
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): StepInfoDto {
@@ -2217,7 +2209,8 @@ data class StepInfoDto(
       val lanes = pigeonVar_list[8] as List<LaneDto>?
       val maneuver = pigeonVar_list[9] as ManeuverDto
       val stepNumber = pigeonVar_list[10] as Long?
-      val image = pigeonVar_list[11] as ImageDescriptorDto?
+      val maneuverImage = pigeonVar_list[11] as ImageDescriptorDto?
+      val laneImage = pigeonVar_list[12] as ImageDescriptorDto?
       return StepInfoDto(
         distanceFromPrevStepMeters,
         timeFromPrevStepSeconds,
@@ -2230,7 +2223,8 @@ data class StepInfoDto(
         lanes,
         maneuver,
         stepNumber,
-        image,
+        maneuverImage,
+        laneImage,
       )
     }
   }
@@ -2248,7 +2242,8 @@ data class StepInfoDto(
       lanes,
       maneuver,
       stepNumber,
-      image,
+      maneuverImage,
+      laneImage,
     )
   }
 
@@ -2422,6 +2417,44 @@ data class TermsAndConditionsUIParamsDto(
   override fun hashCode(): Int = toList().hashCode()
 }
 
+/**
+ * Options for step image generation in turn-by-turn navigation events.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class StepImageGenerationOptionsDto(
+  /**
+   * Whether to generate maneuver images for navigation steps. Defaults to false if not specified.
+   */
+  val generateManeuverImages: Boolean? = null,
+  /** Whether to generate lane images for navigation steps. Defaults to false if not specified. */
+  val generateLaneImages: Boolean? = null,
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): StepImageGenerationOptionsDto {
+      val generateManeuverImages = pigeonVar_list[0] as Boolean?
+      val generateLaneImages = pigeonVar_list[1] as Boolean?
+      return StepImageGenerationOptionsDto(generateManeuverImages, generateLaneImages)
+    }
+  }
+
+  fun toList(): List<Any?> {
+    return listOf(generateManeuverImages, generateLaneImages)
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (other !is StepImageGenerationOptionsDto) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
 private open class messagesPigeonCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
@@ -2510,145 +2543,147 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
         return (readValue(buffer) as Long?)?.let { TaskRemovedBehaviorDto.ofRaw(it.toInt()) }
       }
       155.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { GeneratedStepImagesTypeDto.ofRaw(it.toInt()) }
-      }
-      156.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { MapOptionsDto.fromList(it) }
       }
-      157.toByte() -> {
+      156.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavigationViewOptionsDto.fromList(it) }
       }
-      158.toByte() -> {
+      157.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { ViewCreationOptionsDto.fromList(it) }
       }
-      159.toByte() -> {
+      158.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { CameraPositionDto.fromList(it) }
       }
-      160.toByte() -> {
+      159.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { MarkerDto.fromList(it) }
       }
-      161.toByte() -> {
+      160.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { MarkerOptionsDto.fromList(it) }
       }
-      162.toByte() -> {
+      161.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { ImageDescriptorDto.fromList(it) }
       }
-      163.toByte() -> {
+      162.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { InfoWindowDto.fromList(it) }
       }
-      164.toByte() -> {
+      163.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { MarkerAnchorDto.fromList(it) }
       }
-      165.toByte() -> {
+      164.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { PointOfInterestDto.fromList(it) }
       }
-      166.toByte() -> {
+      165.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { PolygonDto.fromList(it) }
       }
-      167.toByte() -> {
+      166.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { PolygonOptionsDto.fromList(it) }
       }
-      168.toByte() -> {
+      167.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { PolygonHoleDto.fromList(it) }
       }
-      169.toByte() -> {
+      168.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { StyleSpanStrokeStyleDto.fromList(it) }
       }
-      170.toByte() -> {
+      169.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { StyleSpanDto.fromList(it) }
       }
-      171.toByte() -> {
+      170.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { PolylineDto.fromList(it) }
       }
-      172.toByte() -> {
+      171.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { PatternItemDto.fromList(it) }
       }
-      173.toByte() -> {
+      172.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { PolylineOptionsDto.fromList(it) }
       }
-      174.toByte() -> {
+      173.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { CircleDto.fromList(it) }
       }
-      175.toByte() -> {
+      174.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { CircleOptionsDto.fromList(it) }
       }
-      176.toByte() -> {
+      175.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { MapPaddingDto.fromList(it) }
       }
-      177.toByte() -> {
+      176.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteTokenOptionsDto.fromList(it) }
       }
-      178.toByte() -> {
+      177.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { DestinationsDto.fromList(it) }
       }
-      179.toByte() -> {
+      178.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RoutingOptionsDto.fromList(it) }
       }
-      180.toByte() -> {
+      179.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavigationDisplayOptionsDto.fromList(it) }
       }
-      181.toByte() -> {
+      180.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavigationWaypointDto.fromList(it) }
       }
-      182.toByte() -> {
+      181.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavigationTimeAndDistanceDto.fromList(it) }
       }
-      183.toByte() -> {
+      182.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           NavigationAudioGuidanceSettingsDto.fromList(it)
         }
       }
-      184.toByte() -> {
+      183.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SimulationOptionsDto.fromList(it) }
       }
-      185.toByte() -> {
+      184.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LatLngDto.fromList(it) }
       }
-      186.toByte() -> {
+      185.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LatLngBoundsDto.fromList(it) }
       }
-      187.toByte() -> {
+      186.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SpeedingUpdatedEventDto.fromList(it) }
       }
-      188.toByte() -> {
+      187.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           GpsAvailabilityChangeEventDto.fromList(it)
         }
       }
-      189.toByte() -> {
+      188.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           SpeedAlertOptionsThresholdPercentageDto.fromList(it)
         }
       }
-      190.toByte() -> {
+      189.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SpeedAlertOptionsDto.fromList(it) }
       }
-      191.toByte() -> {
+      190.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(it)
         }
       }
-      192.toByte() -> {
+      191.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentTrafficDataDto.fromList(it) }
       }
-      193.toByte() -> {
+      192.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentDto.fromList(it) }
       }
-      194.toByte() -> {
+      193.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LaneDirectionDto.fromList(it) }
       }
-      195.toByte() -> {
+      194.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LaneDto.fromList(it) }
       }
-      196.toByte() -> {
+      195.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { StepInfoDto.fromList(it) }
       }
-      197.toByte() -> {
+      196.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavInfoDto.fromList(it) }
+      }
+      197.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          TermsAndConditionsUIParamsDto.fromList(it)
+        }
       }
       198.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TermsAndConditionsUIParamsDto.fromList(it)
+          StepImageGenerationOptionsDto.fromList(it)
         }
       }
       else -> super.readValueOfType(type, buffer)
@@ -2761,179 +2796,179 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
         stream.write(154)
         writeValue(stream, value.raw)
       }
-      is GeneratedStepImagesTypeDto -> {
-        stream.write(155)
-        writeValue(stream, value.raw)
-      }
       is MapOptionsDto -> {
-        stream.write(156)
+        stream.write(155)
         writeValue(stream, value.toList())
       }
       is NavigationViewOptionsDto -> {
-        stream.write(157)
+        stream.write(156)
         writeValue(stream, value.toList())
       }
       is ViewCreationOptionsDto -> {
-        stream.write(158)
+        stream.write(157)
         writeValue(stream, value.toList())
       }
       is CameraPositionDto -> {
-        stream.write(159)
+        stream.write(158)
         writeValue(stream, value.toList())
       }
       is MarkerDto -> {
-        stream.write(160)
+        stream.write(159)
         writeValue(stream, value.toList())
       }
       is MarkerOptionsDto -> {
-        stream.write(161)
+        stream.write(160)
         writeValue(stream, value.toList())
       }
       is ImageDescriptorDto -> {
-        stream.write(162)
+        stream.write(161)
         writeValue(stream, value.toList())
       }
       is InfoWindowDto -> {
-        stream.write(163)
+        stream.write(162)
         writeValue(stream, value.toList())
       }
       is MarkerAnchorDto -> {
-        stream.write(164)
+        stream.write(163)
         writeValue(stream, value.toList())
       }
       is PointOfInterestDto -> {
-        stream.write(165)
+        stream.write(164)
         writeValue(stream, value.toList())
       }
       is PolygonDto -> {
-        stream.write(166)
+        stream.write(165)
         writeValue(stream, value.toList())
       }
       is PolygonOptionsDto -> {
-        stream.write(167)
+        stream.write(166)
         writeValue(stream, value.toList())
       }
       is PolygonHoleDto -> {
-        stream.write(168)
+        stream.write(167)
         writeValue(stream, value.toList())
       }
       is StyleSpanStrokeStyleDto -> {
-        stream.write(169)
+        stream.write(168)
         writeValue(stream, value.toList())
       }
       is StyleSpanDto -> {
-        stream.write(170)
+        stream.write(169)
         writeValue(stream, value.toList())
       }
       is PolylineDto -> {
-        stream.write(171)
+        stream.write(170)
         writeValue(stream, value.toList())
       }
       is PatternItemDto -> {
-        stream.write(172)
+        stream.write(171)
         writeValue(stream, value.toList())
       }
       is PolylineOptionsDto -> {
-        stream.write(173)
+        stream.write(172)
         writeValue(stream, value.toList())
       }
       is CircleDto -> {
-        stream.write(174)
+        stream.write(173)
         writeValue(stream, value.toList())
       }
       is CircleOptionsDto -> {
-        stream.write(175)
+        stream.write(174)
         writeValue(stream, value.toList())
       }
       is MapPaddingDto -> {
-        stream.write(176)
+        stream.write(175)
         writeValue(stream, value.toList())
       }
       is RouteTokenOptionsDto -> {
-        stream.write(177)
+        stream.write(176)
         writeValue(stream, value.toList())
       }
       is DestinationsDto -> {
-        stream.write(178)
+        stream.write(177)
         writeValue(stream, value.toList())
       }
       is RoutingOptionsDto -> {
-        stream.write(179)
+        stream.write(178)
         writeValue(stream, value.toList())
       }
       is NavigationDisplayOptionsDto -> {
-        stream.write(180)
+        stream.write(179)
         writeValue(stream, value.toList())
       }
       is NavigationWaypointDto -> {
-        stream.write(181)
+        stream.write(180)
         writeValue(stream, value.toList())
       }
       is NavigationTimeAndDistanceDto -> {
-        stream.write(182)
+        stream.write(181)
         writeValue(stream, value.toList())
       }
       is NavigationAudioGuidanceSettingsDto -> {
-        stream.write(183)
+        stream.write(182)
         writeValue(stream, value.toList())
       }
       is SimulationOptionsDto -> {
-        stream.write(184)
+        stream.write(183)
         writeValue(stream, value.toList())
       }
       is LatLngDto -> {
-        stream.write(185)
+        stream.write(184)
         writeValue(stream, value.toList())
       }
       is LatLngBoundsDto -> {
-        stream.write(186)
+        stream.write(185)
         writeValue(stream, value.toList())
       }
       is SpeedingUpdatedEventDto -> {
-        stream.write(187)
+        stream.write(186)
         writeValue(stream, value.toList())
       }
       is GpsAvailabilityChangeEventDto -> {
-        stream.write(188)
+        stream.write(187)
         writeValue(stream, value.toList())
       }
       is SpeedAlertOptionsThresholdPercentageDto -> {
-        stream.write(189)
+        stream.write(188)
         writeValue(stream, value.toList())
       }
       is SpeedAlertOptionsDto -> {
-        stream.write(190)
+        stream.write(189)
         writeValue(stream, value.toList())
       }
       is RouteSegmentTrafficDataRoadStretchRenderingDataDto -> {
-        stream.write(191)
+        stream.write(190)
         writeValue(stream, value.toList())
       }
       is RouteSegmentTrafficDataDto -> {
-        stream.write(192)
+        stream.write(191)
         writeValue(stream, value.toList())
       }
       is RouteSegmentDto -> {
-        stream.write(193)
+        stream.write(192)
         writeValue(stream, value.toList())
       }
       is LaneDirectionDto -> {
-        stream.write(194)
+        stream.write(193)
         writeValue(stream, value.toList())
       }
       is LaneDto -> {
-        stream.write(195)
+        stream.write(194)
         writeValue(stream, value.toList())
       }
       is StepInfoDto -> {
-        stream.write(196)
+        stream.write(195)
         writeValue(stream, value.toList())
       }
       is NavInfoDto -> {
-        stream.write(197)
+        stream.write(196)
         writeValue(stream, value.toList())
       }
       is TermsAndConditionsUIParamsDto -> {
+        stream.write(197)
+        writeValue(stream, value.toList())
+      }
+      is StepImageGenerationOptionsDto -> {
         stream.write(198)
         writeValue(stream, value.toList())
       }
@@ -6360,7 +6395,7 @@ interface NavigationSessionApi {
 
   fun enableTurnByTurnNavigationEvents(
     numNextStepsToPreview: Long?,
-    type: GeneratedStepImagesTypeDto?,
+    options: StepImageGenerationOptionsDto?,
   )
 
   fun disableTurnByTurnNavigationEvents()
@@ -7117,10 +7152,10 @@ interface NavigationSessionApi {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val numNextStepsToPreviewArg = args[0] as Long?
-            val typeArg = args[1] as GeneratedStepImagesTypeDto?
+            val optionsArg = args[1] as StepImageGenerationOptionsDto?
             val wrapped: List<Any?> =
               try {
-                api.enableTurnByTurnNavigationEvents(numNextStepsToPreviewArg, typeArg)
+                api.enableTurnByTurnNavigationEvents(numNextStepsToPreviewArg, optionsArg)
                 listOf(null)
               } catch (exception: Throwable) {
                 MessagesPigeonUtils.wrapError(exception)

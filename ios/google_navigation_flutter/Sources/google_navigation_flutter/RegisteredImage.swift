@@ -17,8 +17,10 @@ import UIKit
 enum RegisteredImageType: Int {
   /// Default type used when custom bitmaps are uploaded to registry
   case regular = 0
-  /// Maneuver icon generated from NavInfo data
-  case maneuverIcon = 1
+  /// Maneuver image generated from StepInfo data
+  case maneuver = 1
+  /// Lane guidance image generated from StepInfo data
+  case lane = 2
 }
 
 struct RegisteredImage {
@@ -39,8 +41,10 @@ struct RegisteredImage {
         switch type {
         case .regular:
           return .regular
-        case .maneuverIcon:
-          return .maneuverIcon
+        case .maneuver:
+          return .maneuver
+        case .lane:
+          return .lane
         }
       }()
     )

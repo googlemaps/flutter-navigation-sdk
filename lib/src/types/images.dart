@@ -78,4 +78,4 @@ class ImageDescriptor {
 
 /// Registered image type filter for clearing registered images.
 /// {@category Image Registry}
-enum RegisteredImageType { regular, maneuverIcon }
+enum RegisteredImageType { regular, maneuver, lane }

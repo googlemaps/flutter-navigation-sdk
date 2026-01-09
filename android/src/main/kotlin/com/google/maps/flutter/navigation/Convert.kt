@@ -45,7 +45,6 @@ import com.google.android.libraries.navigation.DisplayOptions
 import com.google.android.libraries.navigation.ForceNightMode
 import com.google.android.libraries.navigation.NavigationRoadStretchRenderingData
 import com.google.android.libraries.navigation.NavigationTrafficData
-import com.google.android.libraries.navigation.NavigationUpdatesOptions
 import com.google.android.libraries.navigation.Navigator
 import com.google.android.libraries.navigation.Navigator.AudioGuidance
 import com.google.android.libraries.navigation.Navigator.TaskRemovedBehavior
@@ -860,13 +859,17 @@ object Convert {
 
   fun convertNavInfo(
     navInfo: NavInfo,
-    imageDescriptors: Map<String, ImageDescriptorDto?>,
+    maneuverImageDescriptors: Map<String, ImageDescriptorDto?>,
+    laneImageDescriptors: Map<String, ImageDescriptorDto?>,
   ): NavInfoDto {
     return NavInfoDto(
-      currentStep = navInfo.currentStep?.let { convertNavInfoStepInfo(it, imageDescriptors) },
+      currentStep =
+        navInfo.currentStep?.let {
+          convertNavInfoStepInfo(it, maneuverImageDescriptors, laneImageDescriptors)
+        },
       remainingSteps =
         navInfo.remainingSteps.mapIndexed { index, item ->
-          convertNavInfoStepInfo(item, imageDescriptors)
+          convertNavInfoStepInfo(item, maneuverImageDescriptors, laneImageDescriptors)
         },
       routeChanged = navInfo.routeChanged,
       distanceToCurrentStepMeters = navInfo.distanceToCurrentStepMeters?.toLong(),
@@ -893,11 +896,36 @@ object Convert {
     return "maneuver_$maneuver"
   }
 
+  fun convertLanesToKey(stepInfo: StepInfo): String {
+    // This method should only be called when lanes exist
+    val lanes = stepInfo.lanes
+    require(!lanes.isNullOrEmpty()) {
+      "convertLanesToKey should only be called when stepInfo has lanes"
+    }
+
+    // Build a deterministic string from lane shapes and recommended flags
+    val lanesKey =
+      lanes.joinToString("|") { lane ->
+        lane.laneDirections().joinToString(",") { dir ->
+          "${dir.laneShape()}:${if (dir.isRecommended) 1 else 0}"
+        }
+      }
+    return "lane_$lanesKey"
+  }
+
   private fun convertNavInfoStepInfo(
     stepInfo: StepInfo,
-    imageDescriptors: Map<String, ImageDescriptorDto?>,
+    maneuverImageDescriptors: Map<String, ImageDescriptorDto?>,
+    laneImageDescriptors: Map<String, ImageDescriptorDto?>,
   ): StepInfoDto {
-    val key = convertManeuverToKey(stepInfo.maneuver)
+    val maneuverKey = convertManeuverToKey(stepInfo.maneuver)
+    // Only look up lane image if stepInfo has lanes
+    val laneImage =
+      if (!stepInfo.lanes.isNullOrEmpty()) {
+        laneImageDescriptors[convertLanesToKey(stepInfo)]
+      } else {
+        null
+      }
     return StepInfoDto(
       distanceFromPrevStepMeters = stepInfo.distanceFromPrevStepMeters?.toLong() ?: 0L,
       timeFromPrevStepSeconds = stepInfo.timeFromPrevStepSeconds?.toLong() ?: 0L,
@@ -921,7 +949,8 @@ object Convert {
           )
         },
       maneuver = convertManeuver(stepInfo.maneuver),
-      image = imageDescriptors[key],
+      maneuverImage = maneuverImageDescriptors[maneuverKey],
+      laneImage = laneImage,
     )
   }
 
@@ -1159,14 +1188,16 @@ object Convert {
   fun registeredImageType(type: RegisteredImageTypeDto): RegisteredImageType {
     return when (type) {
       RegisteredImageTypeDto.REGULAR -> RegisteredImageType.REGULAR
-      RegisteredImageTypeDto.MANEUVER_ICON -> RegisteredImageType.MANEUVER_ICON
+      RegisteredImageTypeDto.MANEUVER -> RegisteredImageType.MANEUVER
+      RegisteredImageTypeDto.LANE -> RegisteredImageType.LANE
     }
   }
 
   fun registeredImageType(type: RegisteredImageType): RegisteredImageTypeDto {
     return when (type) {
       RegisteredImageType.REGULAR -> RegisteredImageTypeDto.REGULAR
-      RegisteredImageType.MANEUVER_ICON -> RegisteredImageTypeDto.MANEUVER_ICON
+      RegisteredImageType.MANEUVER -> RegisteredImageTypeDto.MANEUVER
+      RegisteredImageType.LANE -> RegisteredImageTypeDto.LANE
     }
   }
 
@@ -1177,16 +1208,6 @@ object Convert {
       TaskRemovedBehaviorDto.CONTINUE_SERVICE -> TaskRemovedBehavior.CONTINUE_SERVICE
       TaskRemovedBehaviorDto.QUIT_SERVICE -> TaskRemovedBehavior.QUIT_SERVICE
       else -> TaskRemovedBehavior.CONTINUE_SERVICE
-    }
-  }
-
-  fun generatedStepImagesTypeDtoToGeneratesStepImages(
-    type: GeneratedStepImagesTypeDto?
-  ): @NavigationUpdatesOptions.GeneratedStepImagesType Int {
-    return when (type) {
-      GeneratedStepImagesTypeDto.NONE -> NavigationUpdatesOptions.GeneratedStepImagesType.NONE
-      GeneratedStepImagesTypeDto.BITMAP -> NavigationUpdatesOptions.GeneratedStepImagesType.BITMAP
-      else -> NavigationUpdatesOptions.GeneratedStepImagesType.NONE
     }
   }
 }

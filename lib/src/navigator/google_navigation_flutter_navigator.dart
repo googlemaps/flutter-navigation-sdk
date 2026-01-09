@@ -386,15 +386,20 @@ class GoogleMapsNavigator {
   /// number of next steps to preview. If set to null, all available steps will
   /// be returned in the [NavInfo.remainingSteps].
   ///
-  /// Optional parameter [generatedStepImagesType] can be used to set the type of
-  /// generated step images for the turn-by-turn events.
+  /// Optional parameter [stepImageGenerationOptions] can be used to configure
+  /// step image generation for the turn-by-turn events. Use
+  /// [StepImageGenerationOptions] to specify whether to generate maneuver
+  /// and/or lane images.
   ///
   /// Example usage:
   /// ```dart
   /// final subscription = setNavInfoListener(
   ///   yourEventHandler,
   ///   numNextStepsToPreview: 5,
-  ///   generatedStepImagesType: GeneratedStepImagesType.bitmap,
+  ///   stepImageGenerationOptions: StepImageGenerationOptions(
+  ///     generateManeuverImages: true,
+  ///     generateLaneImages: true,
+  ///   ),
   /// );
   /// // When done with the subscription
   /// await subscription.cancel();
@@ -402,7 +407,7 @@ class GoogleMapsNavigator {
   static StreamSubscription<NavInfoEvent> setNavInfoListener(
     OnNavInfoEventCallback listener, {
     int? numNextStepsToPreview,
-    GeneratedStepImagesType? generatedStepImagesType,
+    StepImageGenerationOptions? stepImageGenerationOptions,
   }) {
     assert(
       numNextStepsToPreview == null || numNextStepsToPreview >= 0,
@@ -428,7 +433,7 @@ class GoogleMapsNavigator {
     GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .enableTurnByTurnNavigationEvents(
           numNextStepsToPreview,
-          generatedStepImagesType,
+          stepImageGenerationOptions,
         );
 
     return _navInfoEventStreamController!.stream.listen(listener);
@@ -703,10 +708,10 @@ class GoogleMapsNavigator {
 
   static Future<void> enableTurnByTurnNavigationEvents(
     int? numNextStepsToPreview, {
-    GeneratedStepImagesType? type = GeneratedStepImagesType.none,
+    StepImageGenerationOptions? options,
   }) {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
-        .enableTurnByTurnNavigationEvents(numNextStepsToPreview, type);
+        .enableTurnByTurnNavigationEvents(numNextStepsToPreview, options);
   }
 
   static Future<void> disableTurnByTurnNavigationEvents() {
