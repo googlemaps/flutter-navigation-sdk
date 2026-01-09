@@ -82,7 +82,11 @@ class _MultiplexState extends ExamplePageState<MultipleMapViewsPage> {
 
   @override
   void dispose() {
-    GoogleMapsNavigator.cleanup();
+    GoogleMapsNavigator.cleanup().catchError((e) {
+      if (e is! SessionNotInitializedException) {
+        debugPrint('Navigator cleanup error: $e');
+      }
+    });
     clearRegisteredImages();
     super.dispose();
   }

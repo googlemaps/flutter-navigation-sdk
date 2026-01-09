@@ -130,7 +130,11 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
   void dispose() {
     _clearListeners();
     if (_navigationRunning) {
-      GoogleMapsNavigator.cleanup();
+      GoogleMapsNavigator.cleanup().catchError((e) {
+        if (e is! SessionNotInitializedException) {
+          debugPrint('Navigator cleanup error: $e');
+        }
+      });
     }
     super.dispose();
   }
