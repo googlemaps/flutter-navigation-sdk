@@ -38,7 +38,15 @@ internal class MarkerControllerTest {
   fun markerController_callsExpectedFunctions() {
     every { imageRegistry.findRegisteredImage("default") } returns null
     every { imageRegistry.findRegisteredImage("Image_0") } returns
-      RegisteredImage("Image_0", bitmapDescriptor, 1.0, null, null)
+      RegisteredImage(
+        "Image_0",
+        bitmapDescriptor,
+        1.0,
+        null,
+        null,
+        RegisteredImageType.REGULAR,
+        null,
+      )
 
     val optionsIn =
       MarkerOptionsDto(
@@ -52,7 +60,7 @@ internal class MarkerControllerTest {
         rotation = 40.0,
         visible = true,
         zIndex = 2.0,
-        icon = ImageDescriptorDto("default", 1.0),
+        icon = ImageDescriptorDto("default", 1.0, null, null, RegisteredImageTypeDto.REGULAR),
       )
     val controller = MarkerController(marker, "Marker_0", true, 0.1F, 0.2F, 0.3F, 0.4F, null)
     Convert.sinkMarkerOptions(optionsIn, controller, imageRegistry)
@@ -75,7 +83,10 @@ internal class MarkerControllerTest {
     assertEquals(0.4F, controller.infoWindowAnchorV)
     verify { marker.setIcon(null) }
 
-    val optionsWithIcon = optionsIn.copy(icon = ImageDescriptorDto("Image_0", 1.0))
+    val optionsWithIcon =
+      optionsIn.copy(
+        icon = ImageDescriptorDto("Image_0", 1.0, null, null, RegisteredImageTypeDto.REGULAR)
+      )
     Convert.sinkMarkerOptions(optionsWithIcon, controller, imageRegistry)
     verify { marker.setIcon(bitmapDescriptor) }
   }
