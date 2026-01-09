@@ -249,12 +249,13 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
 
   func enableTurnByTurnNavigationEvents(
     numNextStepsToPreview: Int64?,
-    type: GeneratedStepImagesTypeDto?
+    options: StepImageGenerationOptionsDto?
   ) throws {
     GoogleMapsNavigationSessionManager.shared
       .enableTurnByTurnNavigationEvents(
         numNextStepsToPreview: numNextStepsToPreview,
-        type: type
+        generateManeuverImages: options?.generateManeuverImages ?? false,
+        generateLaneImages: options?.generateLaneImages ?? false
       )
   }
 

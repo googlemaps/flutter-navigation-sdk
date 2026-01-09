@@ -26,12 +26,15 @@ data class RegisteredImage(
   val width: Double?,
   val height: Double?,
   val type: RegisteredImageType,
-  val maneuverIconBitmap: Bitmap?,
+  /** The original bitmap for maneuver or lane images, used to return image data. */
+  val originalBitmap: Bitmap?,
 )
 
 enum class RegisteredImageType(val raw: Int) {
   /** Default type used when custom bitmaps are uploaded to registry */
   REGULAR(0),
-  /** Maneuver icon generated from NavInfo data */
-  MANEUVER_ICON(1),
+  /** Maneuver image generated from StepInfo data */
+  MANEUVER(1),
+  /** Lane guidance image generated from StepInfo data */
+  LANE(2),
 }

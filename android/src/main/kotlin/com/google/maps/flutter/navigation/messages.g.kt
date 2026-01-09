@@ -21,20 +21,16 @@ package com.google.maps.flutter.navigation
 import android.util.Log
 import io.flutter.plugin.common.BasicMessageChannel
 import io.flutter.plugin.common.BinaryMessenger
+import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MessageCodec
+import io.flutter.plugin.common.StandardMethodCodec
 import io.flutter.plugin.common.StandardMessageCodec
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
-
 private object MessagesPigeonUtils {
 
   fun createConnectionError(channelName: String): FlutterError {
-    return FlutterError(
-      "channel-error",
-      "Unable to establish connection on channel: '$channelName'.",
-      "",
-    )
-  }
+    return FlutterError("channel-error",  "Unable to establish connection on channel: '$channelName'.", "")  }
 
   fun wrapResult(result: Any?): List<Any?> {
     return listOf(result)
@@ -42,62 +38,66 @@ private object MessagesPigeonUtils {
 
   fun wrapError(exception: Throwable): List<Any?> {
     return if (exception is FlutterError) {
-      listOf(exception.code, exception.message, exception.details)
+      listOf(
+        exception.code,
+        exception.message,
+        exception.details
+      )
     } else {
       listOf(
         exception.javaClass.simpleName,
         exception.toString(),
-        "Cause: " + exception.cause + ", Stacktrace: " + Log.getStackTraceString(exception),
+        "Cause: " + exception.cause + ", Stacktrace: " + Log.getStackTraceString(exception)
       )
     }
   }
-
   fun deepEquals(a: Any?, b: Any?): Boolean {
     if (a is ByteArray && b is ByteArray) {
-      return a.contentEquals(b)
+        return a.contentEquals(b)
     }
     if (a is IntArray && b is IntArray) {
-      return a.contentEquals(b)
+        return a.contentEquals(b)
     }
     if (a is LongArray && b is LongArray) {
-      return a.contentEquals(b)
+        return a.contentEquals(b)
     }
     if (a is DoubleArray && b is DoubleArray) {
-      return a.contentEquals(b)
+        return a.contentEquals(b)
     }
     if (a is Array<*> && b is Array<*>) {
-      return a.size == b.size && a.indices.all { deepEquals(a[it], b[it]) }
+      return a.size == b.size &&
+          a.indices.all{ deepEquals(a[it], b[it]) }
     }
     if (a is List<*> && b is List<*>) {
-      return a.size == b.size && a.indices.all { deepEquals(a[it], b[it]) }
+      return a.size == b.size &&
+          a.indices.all{ deepEquals(a[it], b[it]) }
     }
     if (a is Map<*, *> && b is Map<*, *>) {
-      return a.size == b.size &&
-        a.all { (b as Map<Any?, Any?>).containsKey(it.key) && deepEquals(it.value, b[it.key]) }
+      return a.size == b.size && a.all {
+          (b as Map<Any?, Any?>).containsKey(it.key) &&
+          deepEquals(it.value, b[it.key])
+      }
     }
     return a == b
   }
+      
 }
 
 /**
  * Error class for passing custom error details to Flutter via a thrown PlatformException.
- *
  * @property code The error code.
  * @property message The error message.
  * @property details The error details. Must be a datatype supported by the api codec.
  */
-class FlutterError(
+class FlutterError (
   val code: String,
   override val message: String? = null,
-  val details: Any? = null,
+  val details: Any? = null
 ) : Throwable()
 
 /** Describes the type of map to construct. */
 enum class MapViewTypeDto(val raw: Int) {
-  /**
-   * Navigation view supports navigation overlay, and current navigation session is displayed on the
-   * map.
-   */
+  /** Navigation view supports navigation overlay, and current navigation session is displayed on the map. */
   NAVIGATION(0),
   /** Classic map view, without navigation overlay. */
   MAP(1);
@@ -111,7 +111,10 @@ enum class MapViewTypeDto(val raw: Int) {
 
 /** Determines the initial visibility of the navigation UI on map initialization. */
 enum class NavigationUIEnabledPreferenceDto(val raw: Int) {
-  /** Navigation UI gets enabled if the navigation session has already been successfully started. */
+  /**
+   * Navigation UI gets enabled if the navigation
+   * session has already been successfully started.
+   */
   AUTOMATIC(0),
   /** Navigation UI is disabled. */
   DISABLED(1);
@@ -184,8 +187,10 @@ enum class CameraPerspectiveDto(val raw: Int) {
 enum class RegisteredImageTypeDto(val raw: Int) {
   /** Default type used when custom bitmaps are uploaded to registry */
   REGULAR(0),
-  /** Maneuver icon generated from NavInfo data */
-  MANEUVER_ICON(1);
+  /** Maneuver image generated from StepInfo data */
+  MANEUVER(1),
+  /** Lane guidance image generated from StepInfo data */
+  LANE(2);
 
   companion object {
     fun ofRaw(raw: Int): RegisteredImageTypeDto? {
@@ -431,9 +436,7 @@ enum class ManeuverDto(val raw: Int) {
   OFF_RAMP_UTURN_COUNTERCLOCKWISE(22),
   /** Keep to the left side of the road when entering a turnpike or freeway as the road diverges. */
   ON_RAMP_KEEP_LEFT(23),
-  /**
-   * Keep to the right side of the road when entering a turnpike or freeway as the road diverges.
-   */
+  /** Keep to the right side of the road when entering a turnpike or freeway as the road diverges. */
   ON_RAMP_KEEP_RIGHT(24),
   /** Regular left turn to enter a turnpike or freeway. */
   ON_RAMP_LEFT(25),
@@ -489,15 +492,9 @@ enum class ManeuverDto(val raw: Int) {
   ROUNDABOUT_STRAIGHT_CLOCKWISE(50),
   /** Enter a roundabout in the counterclockwise direction and continue straight. */
   ROUNDABOUT_STRAIGHT_COUNTERCLOCKWISE(51),
-  /**
-   * Enter a roundabout in the clockwise direction and turn clockwise onto the opposite side of the
-   * street.
-   */
+  /** Enter a roundabout in the clockwise direction and turn clockwise onto the opposite side of the street. */
   ROUNDABOUT_UTURN_CLOCKWISE(52),
-  /**
-   * Enter a roundabout in the counterclockwise direction and turn counterclockwise onto the
-   * opposite side of the street.
-   */
+  /** Enter a roundabout in the counterclockwise direction and turn counterclockwise onto the opposite side of the street. */
   ROUNDABOUT_UTURN_COUNTERCLOCKWISE(53),
   /** Continue straight. */
   STRAIGHT(54),
@@ -598,14 +595,11 @@ enum class LaneShapeDto(val raw: Int) {
 /** Determines how application should behave when a application task is removed. */
 enum class TaskRemovedBehaviorDto(val raw: Int) {
   /**
-   * The default state, indicating that navigation guidance, location updates, and notification
-   * should persist after user removes the application task.
+   * The default state, indicating that navigation guidance,
+   * location updates, and notification should persist after user removes the application task.
    */
   CONTINUE_SERVICE(0),
-  /**
-   * Indicates that navigation guidance, location updates, and notification should shut down
-   * immediately when the user removes the application task.
-   */
+  /** Indicates that navigation guidance, location updates, and notification should shut down immediately when the user removes the application task. */
   QUIT_SERVICE(1);
 
   companion object {
@@ -616,27 +610,11 @@ enum class TaskRemovedBehaviorDto(val raw: Int) {
 }
 
 /**
- * The type of generated step images for turn-by-turn navigation events.
- *
- * Android only.
- */
-enum class GeneratedStepImagesTypeDto(val raw: Int) {
-  NONE(0),
-  BITMAP(1);
-
-  companion object {
-    fun ofRaw(raw: Int): GeneratedStepImagesTypeDto? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
-/**
  * Object containing map options used to initialize Google Map view.
  *
  * Generated class from Pigeon that represents data sent in messages.
  */
-data class MapOptionsDto(
+data class MapOptionsDto (
   /** The initial positioning of the camera in the map view. */
   val cameraPosition: CameraPositionDto,
   /** The type of map to display (e.g., satellite, terrain, hybrid, etc.). */
@@ -669,13 +647,14 @@ data class MapOptionsDto(
   /** Specifies the padding for the map. */
   val padding: MapPaddingDto? = null,
   /**
-   * The map ID for advanced map options eg. cloud-based map styling. This value can only be set on
-   * map initialization and cannot be changed afterwards.
+   * The map ID for advanced map options eg. cloud-based map styling.
+   * This value can only be set on map initialization and cannot be changed afterwards.
    */
   val mapId: String? = null,
   /** The map color scheme mode for the map view. */
-  val mapColorScheme: MapColorSchemeDto,
-) {
+  val mapColorScheme: MapColorSchemeDto
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): MapOptionsDto {
       val cameraPosition = pigeonVar_list[0] as CameraPositionDto
@@ -694,27 +673,9 @@ data class MapOptionsDto(
       val padding = pigeonVar_list[13] as MapPaddingDto?
       val mapId = pigeonVar_list[14] as String?
       val mapColorScheme = pigeonVar_list[15] as MapColorSchemeDto
-      return MapOptionsDto(
-        cameraPosition,
-        mapType,
-        compassEnabled,
-        rotateGesturesEnabled,
-        scrollGesturesEnabled,
-        tiltGesturesEnabled,
-        zoomGesturesEnabled,
-        scrollGesturesEnabledDuringRotateOrZoom,
-        mapToolbarEnabled,
-        minZoomPreference,
-        maxZoomPreference,
-        zoomControlsEnabled,
-        cameraTargetBounds,
-        padding,
-        mapId,
-        mapColorScheme,
-      )
+      return MapOptionsDto(cameraPosition, mapType, compassEnabled, rotateGesturesEnabled, scrollGesturesEnabled, tiltGesturesEnabled, zoomGesturesEnabled, scrollGesturesEnabledDuringRotateOrZoom, mapToolbarEnabled, minZoomPreference, maxZoomPreference, zoomControlsEnabled, cameraTargetBounds, padding, mapId, mapColorScheme)
     }
   }
-
   fun toList(): List<Any?> {
     return listOf(
       cameraPosition,
@@ -735,7 +696,6 @@ data class MapOptionsDto(
       mapColorScheme,
     )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is MapOptionsDto) {
       return false
@@ -743,8 +703,7 @@ data class MapOptionsDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
@@ -754,12 +713,13 @@ data class MapOptionsDto(
  *
  * Generated class from Pigeon that represents data sent in messages.
  */
-data class NavigationViewOptionsDto(
+data class NavigationViewOptionsDto (
   /** Determines the initial visibility of the navigation UI on map initialization. */
   val navigationUIEnabledPreference: NavigationUIEnabledPreferenceDto,
   /** Controls the navigation night mode for Navigation UI. */
-  val forceNightMode: NavigationForceNightModeDto,
-) {
+  val forceNightMode: NavigationForceNightModeDto
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): NavigationViewOptionsDto {
       val navigationUIEnabledPreference = pigeonVar_list[0] as NavigationUIEnabledPreferenceDto
@@ -767,11 +727,12 @@ data class NavigationViewOptionsDto(
       return NavigationViewOptionsDto(navigationUIEnabledPreference, forceNightMode)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(navigationUIEnabledPreference, forceNightMode)
+    return listOf(
+      navigationUIEnabledPreference,
+      forceNightMode,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is NavigationViewOptionsDto) {
       return false
@@ -779,8 +740,7 @@ data class NavigationViewOptionsDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
@@ -788,15 +748,17 @@ data class NavigationViewOptionsDto(
 /**
  * A message for creating a new navigation view.
  *
- * This message is used to initialize a new navigation view with a specified initial parameters.
+ * This message is used to initialize a new navigation view with a
+ * specified initial parameters.
  *
  * Generated class from Pigeon that represents data sent in messages.
  */
-data class ViewCreationOptionsDto(
+data class ViewCreationOptionsDto (
   val mapViewType: MapViewTypeDto,
   val mapOptions: MapOptionsDto,
-  val navigationViewOptions: NavigationViewOptionsDto? = null,
-) {
+  val navigationViewOptions: NavigationViewOptionsDto? = null
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): ViewCreationOptionsDto {
       val mapViewType = pigeonVar_list[0] as MapViewTypeDto
@@ -805,11 +767,13 @@ data class ViewCreationOptionsDto(
       return ViewCreationOptionsDto(mapViewType, mapOptions, navigationViewOptions)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(mapViewType, mapOptions, navigationViewOptions)
+    return listOf(
+      mapViewType,
+      mapOptions,
+      navigationViewOptions,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is ViewCreationOptionsDto) {
       return false
@@ -817,19 +781,19 @@ data class ViewCreationOptionsDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class CameraPositionDto(
+data class CameraPositionDto (
   val bearing: Double,
   val target: LatLngDto,
   val tilt: Double,
-  val zoom: Double,
-) {
+  val zoom: Double
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): CameraPositionDto {
       val bearing = pigeonVar_list[0] as Double
@@ -839,11 +803,14 @@ data class CameraPositionDto(
       return CameraPositionDto(bearing, target, tilt, zoom)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(bearing, target, tilt, zoom)
+    return listOf(
+      bearing,
+      target,
+      tilt,
+      zoom,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is CameraPositionDto) {
       return false
@@ -851,19 +818,19 @@ data class CameraPositionDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class MarkerDto(
+data class MarkerDto (
   /** Identifies marker */
   val markerId: String,
   /** Options for marker */
-  val options: MarkerOptionsDto,
-) {
+  val options: MarkerOptionsDto
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): MarkerDto {
       val markerId = pigeonVar_list[0] as String
@@ -871,11 +838,12 @@ data class MarkerDto(
       return MarkerDto(markerId, options)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(markerId, options)
+    return listOf(
+      markerId,
+      options,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is MarkerDto) {
       return false
@@ -883,14 +851,13 @@ data class MarkerDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class MarkerOptionsDto(
+data class MarkerOptionsDto (
   val alpha: Double,
   val anchor: MarkerAnchorDto,
   val draggable: Boolean,
@@ -901,8 +868,9 @@ data class MarkerOptionsDto(
   val infoWindow: InfoWindowDto,
   val visible: Boolean,
   val zIndex: Double,
-  val icon: ImageDescriptorDto,
-) {
+  val icon: ImageDescriptorDto
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): MarkerOptionsDto {
       val alpha = pigeonVar_list[0] as Double
@@ -916,22 +884,9 @@ data class MarkerOptionsDto(
       val visible = pigeonVar_list[8] as Boolean
       val zIndex = pigeonVar_list[9] as Double
       val icon = pigeonVar_list[10] as ImageDescriptorDto
-      return MarkerOptionsDto(
-        alpha,
-        anchor,
-        draggable,
-        flat,
-        consumeTapEvents,
-        position,
-        rotation,
-        infoWindow,
-        visible,
-        zIndex,
-        icon,
-      )
+      return MarkerOptionsDto(alpha, anchor, draggable, flat, consumeTapEvents, position, rotation, infoWindow, visible, zIndex, icon)
     }
   }
-
   fun toList(): List<Any?> {
     return listOf(
       alpha,
@@ -947,7 +902,6 @@ data class MarkerOptionsDto(
       icon,
     )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is MarkerOptionsDto) {
       return false
@@ -955,20 +909,20 @@ data class MarkerOptionsDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class ImageDescriptorDto(
+data class ImageDescriptorDto (
   val registeredImageId: String? = null,
   val imagePixelRatio: Double? = null,
   val width: Double? = null,
   val height: Double? = null,
-  val type: RegisteredImageTypeDto,
-) {
+  val type: RegisteredImageTypeDto
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): ImageDescriptorDto {
       val registeredImageId = pigeonVar_list[0] as String?
@@ -979,11 +933,15 @@ data class ImageDescriptorDto(
       return ImageDescriptorDto(registeredImageId, imagePixelRatio, width, height, type)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(registeredImageId, imagePixelRatio, width, height, type)
+    return listOf(
+      registeredImageId,
+      imagePixelRatio,
+      width,
+      height,
+      type,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is ImageDescriptorDto) {
       return false
@@ -991,18 +949,18 @@ data class ImageDescriptorDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class InfoWindowDto(
+data class InfoWindowDto (
   val title: String? = null,
   val snippet: String? = null,
-  val anchor: MarkerAnchorDto,
-) {
+  val anchor: MarkerAnchorDto
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): InfoWindowDto {
       val title = pigeonVar_list[0] as String?
@@ -1011,11 +969,13 @@ data class InfoWindowDto(
       return InfoWindowDto(title, snippet, anchor)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(title, snippet, anchor)
+    return listOf(
+      title,
+      snippet,
+      anchor,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is InfoWindowDto) {
       return false
@@ -1023,14 +983,17 @@ data class InfoWindowDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class MarkerAnchorDto(val u: Double, val v: Double) {
+data class MarkerAnchorDto (
+  val u: Double,
+  val v: Double
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): MarkerAnchorDto {
       val u = pigeonVar_list[0] as Double
@@ -1038,11 +1001,12 @@ data class MarkerAnchorDto(val u: Double, val v: Double) {
       return MarkerAnchorDto(u, v)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(u, v)
+    return listOf(
+      u,
+      v,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is MarkerAnchorDto) {
       return false
@@ -1050,29 +1014,29 @@ data class MarkerAnchorDto(val u: Double, val v: Double) {
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /**
- * Represents a point of interest (POI) on the map. POIs include parks, schools, government
- * buildings, and businesses.
+ * Represents a point of interest (POI) on the map.
+ * POIs include parks, schools, government buildings, and businesses.
  *
  * Generated class from Pigeon that represents data sent in messages.
  */
-data class PointOfInterestDto(
+data class PointOfInterestDto (
   /**
-   * The Place ID of this POI, as defined in the Places SDK. This can be used to retrieve additional
-   * information about the place.
+   * The Place ID of this POI, as defined in the Places SDK.
+   * This can be used to retrieve additional information about the place.
    */
   val placeID: String,
   /** The name of the POI (e.g., "Central Park", "City Hall"). */
   val name: String,
   /** The geographical coordinates of the POI. */
-  val latLng: LatLngDto,
-) {
+  val latLng: LatLngDto
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PointOfInterestDto {
       val placeID = pigeonVar_list[0] as String
@@ -1081,11 +1045,13 @@ data class PointOfInterestDto(
       return PointOfInterestDto(placeID, name, latLng)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(placeID, name, latLng)
+    return listOf(
+      placeID,
+      name,
+      latLng,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is PointOfInterestDto) {
       return false
@@ -1093,14 +1059,17 @@ data class PointOfInterestDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class PolygonDto(val polygonId: String, val options: PolygonOptionsDto) {
+data class PolygonDto (
+  val polygonId: String,
+  val options: PolygonOptionsDto
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PolygonDto {
       val polygonId = pigeonVar_list[0] as String
@@ -1108,11 +1077,12 @@ data class PolygonDto(val polygonId: String, val options: PolygonOptionsDto) {
       return PolygonDto(polygonId, options)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(polygonId, options)
+    return listOf(
+      polygonId,
+      options,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is PolygonDto) {
       return false
@@ -1120,14 +1090,13 @@ data class PolygonDto(val polygonId: String, val options: PolygonOptionsDto) {
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class PolygonOptionsDto(
+data class PolygonOptionsDto (
   val points: List<LatLngDto?>,
   val holes: List<PolygonHoleDto?>,
   val clickable: Boolean,
@@ -1136,8 +1105,9 @@ data class PolygonOptionsDto(
   val strokeColor: Long,
   val strokeWidth: Double,
   val visible: Boolean,
-  val zIndex: Double,
-) {
+  val zIndex: Double
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PolygonOptionsDto {
       val points = pigeonVar_list[0] as List<LatLngDto?>
@@ -1149,20 +1119,9 @@ data class PolygonOptionsDto(
       val strokeWidth = pigeonVar_list[6] as Double
       val visible = pigeonVar_list[7] as Boolean
       val zIndex = pigeonVar_list[8] as Double
-      return PolygonOptionsDto(
-        points,
-        holes,
-        clickable,
-        fillColor,
-        geodesic,
-        strokeColor,
-        strokeWidth,
-        visible,
-        zIndex,
-      )
+      return PolygonOptionsDto(points, holes, clickable, fillColor, geodesic, strokeColor, strokeWidth, visible, zIndex)
     }
   }
-
   fun toList(): List<Any?> {
     return listOf(
       points,
@@ -1176,7 +1135,6 @@ data class PolygonOptionsDto(
       zIndex,
     )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is PolygonOptionsDto) {
       return false
@@ -1184,25 +1142,27 @@ data class PolygonOptionsDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class PolygonHoleDto(val points: List<LatLngDto?>) {
+data class PolygonHoleDto (
+  val points: List<LatLngDto?>
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PolygonHoleDto {
       val points = pigeonVar_list[0] as List<LatLngDto?>
       return PolygonHoleDto(points)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(points)
+    return listOf(
+      points,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is PolygonHoleDto) {
       return false
@@ -1210,18 +1170,18 @@ data class PolygonHoleDto(val points: List<LatLngDto?>) {
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class StyleSpanStrokeStyleDto(
+data class StyleSpanStrokeStyleDto (
   val solidColor: Long? = null,
   val fromColor: Long? = null,
-  val toColor: Long? = null,
-) {
+  val toColor: Long? = null
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): StyleSpanStrokeStyleDto {
       val solidColor = pigeonVar_list[0] as Long?
@@ -1230,11 +1190,13 @@ data class StyleSpanStrokeStyleDto(
       return StyleSpanStrokeStyleDto(solidColor, fromColor, toColor)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(solidColor, fromColor, toColor)
+    return listOf(
+      solidColor,
+      fromColor,
+      toColor,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is StyleSpanStrokeStyleDto) {
       return false
@@ -1242,14 +1204,17 @@ data class StyleSpanStrokeStyleDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class StyleSpanDto(val length: Double, val style: StyleSpanStrokeStyleDto) {
+data class StyleSpanDto (
+  val length: Double,
+  val style: StyleSpanStrokeStyleDto
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): StyleSpanDto {
       val length = pigeonVar_list[0] as Double
@@ -1257,11 +1222,12 @@ data class StyleSpanDto(val length: Double, val style: StyleSpanStrokeStyleDto) 
       return StyleSpanDto(length, style)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(length, style)
+    return listOf(
+      length,
+      style,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is StyleSpanDto) {
       return false
@@ -1269,14 +1235,17 @@ data class StyleSpanDto(val length: Double, val style: StyleSpanStrokeStyleDto) 
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class PolylineDto(val polylineId: String, val options: PolylineOptionsDto) {
+data class PolylineDto (
+  val polylineId: String,
+  val options: PolylineOptionsDto
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PolylineDto {
       val polylineId = pigeonVar_list[0] as String
@@ -1284,11 +1253,12 @@ data class PolylineDto(val polylineId: String, val options: PolylineOptionsDto) 
       return PolylineDto(polylineId, options)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(polylineId, options)
+    return listOf(
+      polylineId,
+      options,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is PolylineDto) {
       return false
@@ -1296,14 +1266,17 @@ data class PolylineDto(val polylineId: String, val options: PolylineOptionsDto) 
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class PatternItemDto(val type: PatternTypeDto, val length: Double? = null) {
+data class PatternItemDto (
+  val type: PatternTypeDto,
+  val length: Double? = null
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PatternItemDto {
       val type = pigeonVar_list[0] as PatternTypeDto
@@ -1311,11 +1284,12 @@ data class PatternItemDto(val type: PatternTypeDto, val length: Double? = null) 
       return PatternItemDto(type, length)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(type, length)
+    return listOf(
+      type,
+      length,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is PatternItemDto) {
       return false
@@ -1323,14 +1297,13 @@ data class PatternItemDto(val type: PatternTypeDto, val length: Double? = null) 
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class PolylineOptionsDto(
+data class PolylineOptionsDto (
   val points: List<LatLngDto?>? = null,
   val clickable: Boolean? = null,
   val geodesic: Boolean? = null,
@@ -1340,8 +1313,9 @@ data class PolylineOptionsDto(
   val strokeWidth: Double? = null,
   val visible: Boolean? = null,
   val zIndex: Double? = null,
-  val spans: List<StyleSpanDto?>,
-) {
+  val spans: List<StyleSpanDto?>
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PolylineOptionsDto {
       val points = pigeonVar_list[0] as List<LatLngDto?>?
@@ -1354,21 +1328,9 @@ data class PolylineOptionsDto(
       val visible = pigeonVar_list[7] as Boolean?
       val zIndex = pigeonVar_list[8] as Double?
       val spans = pigeonVar_list[9] as List<StyleSpanDto?>
-      return PolylineOptionsDto(
-        points,
-        clickable,
-        geodesic,
-        strokeColor,
-        strokeJointType,
-        strokePattern,
-        strokeWidth,
-        visible,
-        zIndex,
-        spans,
-      )
+      return PolylineOptionsDto(points, clickable, geodesic, strokeColor, strokeJointType, strokePattern, strokeWidth, visible, zIndex, spans)
     }
   }
-
   fun toList(): List<Any?> {
     return listOf(
       points,
@@ -1383,7 +1345,6 @@ data class PolylineOptionsDto(
       spans,
     )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is PolylineOptionsDto) {
       return false
@@ -1391,19 +1352,19 @@ data class PolylineOptionsDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class CircleDto(
+data class CircleDto (
   /** Identifies circle. */
   val circleId: String,
   /** Options for circle. */
-  val options: CircleOptionsDto,
-) {
+  val options: CircleOptionsDto
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): CircleDto {
       val circleId = pigeonVar_list[0] as String
@@ -1411,11 +1372,12 @@ data class CircleDto(
       return CircleDto(circleId, options)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(circleId, options)
+    return listOf(
+      circleId,
+      options,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is CircleDto) {
       return false
@@ -1423,14 +1385,13 @@ data class CircleDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class CircleOptionsDto(
+data class CircleOptionsDto (
   val position: LatLngDto,
   val radius: Double,
   val strokeWidth: Double,
@@ -1439,8 +1400,9 @@ data class CircleOptionsDto(
   val fillColor: Long,
   val zIndex: Double,
   val visible: Boolean,
-  val clickable: Boolean,
-) {
+  val clickable: Boolean
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): CircleOptionsDto {
       val position = pigeonVar_list[0] as LatLngDto
@@ -1452,20 +1414,9 @@ data class CircleOptionsDto(
       val zIndex = pigeonVar_list[6] as Double
       val visible = pigeonVar_list[7] as Boolean
       val clickable = pigeonVar_list[8] as Boolean
-      return CircleOptionsDto(
-        position,
-        radius,
-        strokeWidth,
-        strokeColor,
-        strokePattern,
-        fillColor,
-        zIndex,
-        visible,
-        clickable,
-      )
+      return CircleOptionsDto(position, radius, strokeWidth, strokeColor, strokePattern, fillColor, zIndex, visible, clickable)
     }
   }
-
   fun toList(): List<Any?> {
     return listOf(
       position,
@@ -1479,7 +1430,6 @@ data class CircleOptionsDto(
       clickable,
     )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is CircleOptionsDto) {
       return false
@@ -1487,14 +1437,19 @@ data class CircleOptionsDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class MapPaddingDto(val top: Long, val left: Long, val bottom: Long, val right: Long) {
+data class MapPaddingDto (
+  val top: Long,
+  val left: Long,
+  val bottom: Long,
+  val right: Long
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): MapPaddingDto {
       val top = pigeonVar_list[0] as Long
@@ -1504,11 +1459,14 @@ data class MapPaddingDto(val top: Long, val left: Long, val bottom: Long, val ri
       return MapPaddingDto(top, left, bottom, right)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(top, left, bottom, right)
+    return listOf(
+      top,
+      left,
+      bottom,
+      right,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is MapPaddingDto) {
       return false
@@ -1516,14 +1474,17 @@ data class MapPaddingDto(val top: Long, val left: Long, val bottom: Long, val ri
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class RouteTokenOptionsDto(val routeToken: String, val travelMode: TravelModeDto? = null) {
+data class RouteTokenOptionsDto (
+  val routeToken: String,
+  val travelMode: TravelModeDto? = null
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): RouteTokenOptionsDto {
       val routeToken = pigeonVar_list[0] as String
@@ -1531,11 +1492,12 @@ data class RouteTokenOptionsDto(val routeToken: String, val travelMode: TravelMo
       return RouteTokenOptionsDto(routeToken, travelMode)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(routeToken, travelMode)
+    return listOf(
+      routeToken,
+      travelMode,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is RouteTokenOptionsDto) {
       return false
@@ -1543,19 +1505,19 @@ data class RouteTokenOptionsDto(val routeToken: String, val travelMode: TravelMo
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class DestinationsDto(
+data class DestinationsDto (
   val waypoints: List<NavigationWaypointDto?>,
   val displayOptions: NavigationDisplayOptionsDto,
   val routingOptions: RoutingOptionsDto? = null,
-  val routeTokenOptions: RouteTokenOptionsDto? = null,
-) {
+  val routeTokenOptions: RouteTokenOptionsDto? = null
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): DestinationsDto {
       val waypoints = pigeonVar_list[0] as List<NavigationWaypointDto?>
@@ -1565,11 +1527,14 @@ data class DestinationsDto(
       return DestinationsDto(waypoints, displayOptions, routingOptions, routeTokenOptions)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(waypoints, displayOptions, routingOptions, routeTokenOptions)
+    return listOf(
+      waypoints,
+      displayOptions,
+      routingOptions,
+      routeTokenOptions,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is DestinationsDto) {
       return false
@@ -1577,14 +1542,13 @@ data class DestinationsDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class RoutingOptionsDto(
+data class RoutingOptionsDto (
   val alternateRoutesStrategy: AlternateRoutesStrategyDto? = null,
   val routingStrategy: RoutingStrategyDto? = null,
   val targetDistanceMeters: List<Long?>? = null,
@@ -1592,8 +1556,9 @@ data class RoutingOptionsDto(
   val avoidTolls: Boolean? = null,
   val avoidFerries: Boolean? = null,
   val avoidHighways: Boolean? = null,
-  val locationTimeoutMs: Long? = null,
-) {
+  val locationTimeoutMs: Long? = null
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): RoutingOptionsDto {
       val alternateRoutesStrategy = pigeonVar_list[0] as AlternateRoutesStrategyDto?
@@ -1604,19 +1569,9 @@ data class RoutingOptionsDto(
       val avoidFerries = pigeonVar_list[5] as Boolean?
       val avoidHighways = pigeonVar_list[6] as Boolean?
       val locationTimeoutMs = pigeonVar_list[7] as Long?
-      return RoutingOptionsDto(
-        alternateRoutesStrategy,
-        routingStrategy,
-        targetDistanceMeters,
-        travelMode,
-        avoidTolls,
-        avoidFerries,
-        avoidHighways,
-        locationTimeoutMs,
-      )
+      return RoutingOptionsDto(alternateRoutesStrategy, routingStrategy, targetDistanceMeters, travelMode, avoidTolls, avoidFerries, avoidHighways, locationTimeoutMs)
     }
   }
-
   fun toList(): List<Any?> {
     return listOf(
       alternateRoutesStrategy,
@@ -1629,7 +1584,6 @@ data class RoutingOptionsDto(
       locationTimeoutMs,
     )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is RoutingOptionsDto) {
       return false
@@ -1637,20 +1591,20 @@ data class RoutingOptionsDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class NavigationDisplayOptionsDto(
+data class NavigationDisplayOptionsDto (
   val showDestinationMarkers: Boolean? = null,
   /** Deprecated: This option now defaults to true. */
   val showStopSigns: Boolean? = null,
   /** Deprecated: This option now defaults to true. */
-  val showTrafficLights: Boolean? = null,
-) {
+  val showTrafficLights: Boolean? = null
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): NavigationDisplayOptionsDto {
       val showDestinationMarkers = pigeonVar_list[0] as Boolean?
@@ -1659,11 +1613,13 @@ data class NavigationDisplayOptionsDto(
       return NavigationDisplayOptionsDto(showDestinationMarkers, showStopSigns, showTrafficLights)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(showDestinationMarkers, showStopSigns, showTrafficLights)
+    return listOf(
+      showDestinationMarkers,
+      showStopSigns,
+      showTrafficLights,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is NavigationDisplayOptionsDto) {
       return false
@@ -1671,20 +1627,20 @@ data class NavigationDisplayOptionsDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class NavigationWaypointDto(
+data class NavigationWaypointDto (
   val title: String,
   val target: LatLngDto? = null,
   val placeID: String? = null,
   val preferSameSideOfRoad: Boolean? = null,
-  val preferredSegmentHeading: Long? = null,
-) {
+  val preferredSegmentHeading: Long? = null
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): NavigationWaypointDto {
       val title = pigeonVar_list[0] as String
@@ -1692,20 +1648,18 @@ data class NavigationWaypointDto(
       val placeID = pigeonVar_list[2] as String?
       val preferSameSideOfRoad = pigeonVar_list[3] as Boolean?
       val preferredSegmentHeading = pigeonVar_list[4] as Long?
-      return NavigationWaypointDto(
-        title,
-        target,
-        placeID,
-        preferSameSideOfRoad,
-        preferredSegmentHeading,
-      )
+      return NavigationWaypointDto(title, target, placeID, preferSameSideOfRoad, preferredSegmentHeading)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(title, target, placeID, preferSameSideOfRoad, preferredSegmentHeading)
+    return listOf(
+      title,
+      target,
+      placeID,
+      preferSameSideOfRoad,
+      preferredSegmentHeading,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is NavigationWaypointDto) {
       return false
@@ -1713,18 +1667,18 @@ data class NavigationWaypointDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class NavigationTimeAndDistanceDto(
+data class NavigationTimeAndDistanceDto (
   val time: Double,
   val distance: Double,
-  val delaySeverity: TrafficDelaySeverityDto,
-) {
+  val delaySeverity: TrafficDelaySeverityDto
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): NavigationTimeAndDistanceDto {
       val time = pigeonVar_list[0] as Double
@@ -1733,11 +1687,13 @@ data class NavigationTimeAndDistanceDto(
       return NavigationTimeAndDistanceDto(time, distance, delaySeverity)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(time, distance, delaySeverity)
+    return listOf(
+      time,
+      distance,
+      delaySeverity,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is NavigationTimeAndDistanceDto) {
       return false
@@ -1745,35 +1701,33 @@ data class NavigationTimeAndDistanceDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class NavigationAudioGuidanceSettingsDto(
+data class NavigationAudioGuidanceSettingsDto (
   val isBluetoothAudioEnabled: Boolean? = null,
   val isVibrationEnabled: Boolean? = null,
-  val guidanceType: AudioGuidanceTypeDto? = null,
-) {
+  val guidanceType: AudioGuidanceTypeDto? = null
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): NavigationAudioGuidanceSettingsDto {
       val isBluetoothAudioEnabled = pigeonVar_list[0] as Boolean?
       val isVibrationEnabled = pigeonVar_list[1] as Boolean?
       val guidanceType = pigeonVar_list[2] as AudioGuidanceTypeDto?
-      return NavigationAudioGuidanceSettingsDto(
-        isBluetoothAudioEnabled,
-        isVibrationEnabled,
-        guidanceType,
-      )
+      return NavigationAudioGuidanceSettingsDto(isBluetoothAudioEnabled, isVibrationEnabled, guidanceType)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(isBluetoothAudioEnabled, isVibrationEnabled, guidanceType)
+    return listOf(
+      isBluetoothAudioEnabled,
+      isVibrationEnabled,
+      guidanceType,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is NavigationAudioGuidanceSettingsDto) {
       return false
@@ -1781,25 +1735,27 @@ data class NavigationAudioGuidanceSettingsDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class SimulationOptionsDto(val speedMultiplier: Double) {
+data class SimulationOptionsDto (
+  val speedMultiplier: Double
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): SimulationOptionsDto {
       val speedMultiplier = pigeonVar_list[0] as Double
       return SimulationOptionsDto(speedMultiplier)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(speedMultiplier)
+    return listOf(
+      speedMultiplier,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is SimulationOptionsDto) {
       return false
@@ -1807,14 +1763,17 @@ data class SimulationOptionsDto(val speedMultiplier: Double) {
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class LatLngDto(val latitude: Double, val longitude: Double) {
+data class LatLngDto (
+  val latitude: Double,
+  val longitude: Double
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): LatLngDto {
       val latitude = pigeonVar_list[0] as Double
@@ -1822,11 +1781,12 @@ data class LatLngDto(val latitude: Double, val longitude: Double) {
       return LatLngDto(latitude, longitude)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(latitude, longitude)
+    return listOf(
+      latitude,
+      longitude,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is LatLngDto) {
       return false
@@ -1834,14 +1794,17 @@ data class LatLngDto(val latitude: Double, val longitude: Double) {
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class LatLngBoundsDto(val southwest: LatLngDto, val northeast: LatLngDto) {
+data class LatLngBoundsDto (
+  val southwest: LatLngDto,
+  val northeast: LatLngDto
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): LatLngBoundsDto {
       val southwest = pigeonVar_list[0] as LatLngDto
@@ -1849,11 +1812,12 @@ data class LatLngBoundsDto(val southwest: LatLngDto, val northeast: LatLngDto) {
       return LatLngBoundsDto(southwest, northeast)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(southwest, northeast)
+    return listOf(
+      southwest,
+      northeast,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is LatLngBoundsDto) {
       return false
@@ -1861,17 +1825,17 @@ data class LatLngBoundsDto(val southwest: LatLngDto, val northeast: LatLngDto) {
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class SpeedingUpdatedEventDto(
+data class SpeedingUpdatedEventDto (
   val percentageAboveLimit: Double,
-  val severity: SpeedAlertSeverityDto,
-) {
+  val severity: SpeedAlertSeverityDto
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): SpeedingUpdatedEventDto {
       val percentageAboveLimit = pigeonVar_list[0] as Double
@@ -1879,11 +1843,12 @@ data class SpeedingUpdatedEventDto(
       return SpeedingUpdatedEventDto(percentageAboveLimit, severity)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(percentageAboveLimit, severity)
+    return listOf(
+      percentageAboveLimit,
+      severity,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is SpeedingUpdatedEventDto) {
       return false
@@ -1891,17 +1856,17 @@ data class SpeedingUpdatedEventDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class GpsAvailabilityChangeEventDto(
+data class GpsAvailabilityChangeEventDto (
   val isGpsLost: Boolean,
-  val isGpsValidForNavigation: Boolean,
-) {
+  val isGpsValidForNavigation: Boolean
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): GpsAvailabilityChangeEventDto {
       val isGpsLost = pigeonVar_list[0] as Boolean
@@ -1909,11 +1874,12 @@ data class GpsAvailabilityChangeEventDto(
       return GpsAvailabilityChangeEventDto(isGpsLost, isGpsValidForNavigation)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(isGpsLost, isGpsValidForNavigation)
+    return listOf(
+      isGpsLost,
+      isGpsValidForNavigation,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is GpsAvailabilityChangeEventDto) {
       return false
@@ -1921,17 +1887,17 @@ data class GpsAvailabilityChangeEventDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class SpeedAlertOptionsThresholdPercentageDto(
+data class SpeedAlertOptionsThresholdPercentageDto (
   val percentage: Double,
-  val severity: SpeedAlertSeverityDto,
-) {
+  val severity: SpeedAlertSeverityDto
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): SpeedAlertOptionsThresholdPercentageDto {
       val percentage = pigeonVar_list[0] as Double
@@ -1939,11 +1905,12 @@ data class SpeedAlertOptionsThresholdPercentageDto(
       return SpeedAlertOptionsThresholdPercentageDto(percentage, severity)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(percentage, severity)
+    return listOf(
+      percentage,
+      severity,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is SpeedAlertOptionsThresholdPercentageDto) {
       return false
@@ -1951,31 +1918,26 @@ data class SpeedAlertOptionsThresholdPercentageDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class SpeedAlertOptionsDto(
+data class SpeedAlertOptionsDto (
   val severityUpgradeDurationSeconds: Double,
   val minorSpeedAlertThresholdPercentage: Double,
-  val majorSpeedAlertThresholdPercentage: Double,
-) {
+  val majorSpeedAlertThresholdPercentage: Double
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): SpeedAlertOptionsDto {
       val severityUpgradeDurationSeconds = pigeonVar_list[0] as Double
       val minorSpeedAlertThresholdPercentage = pigeonVar_list[1] as Double
       val majorSpeedAlertThresholdPercentage = pigeonVar_list[2] as Double
-      return SpeedAlertOptionsDto(
-        severityUpgradeDurationSeconds,
-        minorSpeedAlertThresholdPercentage,
-        majorSpeedAlertThresholdPercentage,
-      )
+      return SpeedAlertOptionsDto(severityUpgradeDurationSeconds, minorSpeedAlertThresholdPercentage, majorSpeedAlertThresholdPercentage)
     }
   }
-
   fun toList(): List<Any?> {
     return listOf(
       severityUpgradeDurationSeconds,
@@ -1983,7 +1945,6 @@ data class SpeedAlertOptionsDto(
       majorSpeedAlertThresholdPercentage,
     )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is SpeedAlertOptionsDto) {
       return false
@@ -1991,18 +1952,18 @@ data class SpeedAlertOptionsDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class RouteSegmentTrafficDataRoadStretchRenderingDataDto(
+data class RouteSegmentTrafficDataRoadStretchRenderingDataDto (
   val style: RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto,
   val lengthMeters: Long,
-  val offsetMeters: Long,
-) {
+  val offsetMeters: Long
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): RouteSegmentTrafficDataRoadStretchRenderingDataDto {
       val style = pigeonVar_list[0] as RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
@@ -2011,11 +1972,13 @@ data class RouteSegmentTrafficDataRoadStretchRenderingDataDto(
       return RouteSegmentTrafficDataRoadStretchRenderingDataDto(style, lengthMeters, offsetMeters)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(style, lengthMeters, offsetMeters)
+    return listOf(
+      style,
+      lengthMeters,
+      offsetMeters,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
       return false
@@ -2023,30 +1986,30 @@ data class RouteSegmentTrafficDataRoadStretchRenderingDataDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class RouteSegmentTrafficDataDto(
+data class RouteSegmentTrafficDataDto (
   val status: RouteSegmentTrafficDataStatusDto,
-  val roadStretchRenderingDataList: List<RouteSegmentTrafficDataRoadStretchRenderingDataDto?>,
-) {
+  val roadStretchRenderingDataList: List<RouteSegmentTrafficDataRoadStretchRenderingDataDto?>
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): RouteSegmentTrafficDataDto {
       val status = pigeonVar_list[0] as RouteSegmentTrafficDataStatusDto
-      val roadStretchRenderingDataList =
-        pigeonVar_list[1] as List<RouteSegmentTrafficDataRoadStretchRenderingDataDto?>
+      val roadStretchRenderingDataList = pigeonVar_list[1] as List<RouteSegmentTrafficDataRoadStretchRenderingDataDto?>
       return RouteSegmentTrafficDataDto(status, roadStretchRenderingDataList)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(status, roadStretchRenderingDataList)
+    return listOf(
+      status,
+      roadStretchRenderingDataList,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is RouteSegmentTrafficDataDto) {
       return false
@@ -2054,19 +2017,19 @@ data class RouteSegmentTrafficDataDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class RouteSegmentDto(
+data class RouteSegmentDto (
   val trafficData: RouteSegmentTrafficDataDto? = null,
   val destinationLatLng: LatLngDto,
   val latLngs: List<LatLngDto?>? = null,
-  val destinationWaypoint: NavigationWaypointDto? = null,
-) {
+  val destinationWaypoint: NavigationWaypointDto? = null
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): RouteSegmentDto {
       val trafficData = pigeonVar_list[0] as RouteSegmentTrafficDataDto?
@@ -2076,11 +2039,14 @@ data class RouteSegmentDto(
       return RouteSegmentDto(trafficData, destinationLatLng, latLngs, destinationWaypoint)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(trafficData, destinationLatLng, latLngs, destinationWaypoint)
+    return listOf(
+      trafficData,
+      destinationLatLng,
+      latLngs,
+      destinationWaypoint,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is RouteSegmentDto) {
       return false
@@ -2088,24 +2054,23 @@ data class RouteSegmentDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /**
- * One of the possible directions from a lane at the end of a route step, and whether it is on the
- * recommended route.
+ * One of the possible directions from a lane at the end of a route step, and whether it is on the recommended route.
  *
  * Generated class from Pigeon that represents data sent in messages.
  */
-data class LaneDirectionDto(
+data class LaneDirectionDto (
   /** Shape for this lane direction. */
   val laneShape: LaneShapeDto,
   /** Whether this lane is recommended. */
-  val isRecommended: Boolean,
-) {
+  val isRecommended: Boolean
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): LaneDirectionDto {
       val laneShape = pigeonVar_list[0] as LaneShapeDto
@@ -2113,11 +2078,12 @@ data class LaneDirectionDto(
       return LaneDirectionDto(laneShape, isRecommended)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(laneShape, isRecommended)
+    return listOf(
+      laneShape,
+      isRecommended,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is LaneDirectionDto) {
       return false
@@ -2125,8 +2091,7 @@ data class LaneDirectionDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
@@ -2136,24 +2101,22 @@ data class LaneDirectionDto(
  *
  * Generated class from Pigeon that represents data sent in messages.
  */
-data class LaneDto(
-  /**
-   * List of possible directions a driver can follow when using this lane at the end of the
-   * respective route step
-   */
+data class LaneDto (
+  /** List of possible directions a driver can follow when using this lane at the end of the respective route step */
   val laneDirections: List<LaneDirectionDto?>
-) {
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): LaneDto {
       val laneDirections = pigeonVar_list[0] as List<LaneDirectionDto?>
       return LaneDto(laneDirections)
     }
   }
-
   fun toList(): List<Any?> {
-    return listOf(laneDirections)
+    return listOf(
+      laneDirections,
+    )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is LaneDto) {
       return false
@@ -2161,8 +2124,7 @@ data class LaneDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
@@ -2172,7 +2134,7 @@ data class LaneDto(
  *
  * Generated class from Pigeon that represents data sent in messages.
  */
-data class StepInfoDto(
+data class StepInfoDto (
   /** Distance in meters from the previous step to this step if available, otherwise null. */
   val distanceFromPrevStepMeters: Long? = null,
   /** Time in seconds from the previous step to this step if available, otherwise null. */
@@ -2188,8 +2150,8 @@ data class StepInfoDto(
   /** The simplified version of the road name if available, otherwise null. */
   val simpleRoadName: String? = null,
   /**
-   * The counted number of the exit to take relative to the location where the roundabout was
-   * entered if available, otherwise null.
+   * The counted number of the exit to take relative to the location where the
+   * roundabout was entered if available, otherwise null.
    */
   val roundaboutTurnNumber: Long? = null,
   /** The list of available lanes at the end of this route step if available, otherwise null. */
@@ -2199,11 +2161,17 @@ data class StepInfoDto(
   /** The index of the step in the list of all steps in the route if available, otherwise null. */
   val stepNumber: Long? = null,
   /**
-   * PNG encoded bytes of the generated step image for the current step if available, otherwise
-   * null.
+   * Image descriptor for the generated maneuver image for the current step if available, otherwise null.
+   * This image is generated only if step image generation option includes maneuver images.
    */
-  val image: ImageDescriptorDto? = null,
-) {
+  val maneuverImage: ImageDescriptorDto? = null,
+  /**
+   * Image descriptor for the generated lane guidance image for the current step if available, otherwise null.
+   * This image is generated only if step image generation option includes lane images.
+   */
+  val laneImage: ImageDescriptorDto? = null
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): StepInfoDto {
       val distanceFromPrevStepMeters = pigeonVar_list[0] as Long?
@@ -2217,24 +2185,11 @@ data class StepInfoDto(
       val lanes = pigeonVar_list[8] as List<LaneDto>?
       val maneuver = pigeonVar_list[9] as ManeuverDto
       val stepNumber = pigeonVar_list[10] as Long?
-      val image = pigeonVar_list[11] as ImageDescriptorDto?
-      return StepInfoDto(
-        distanceFromPrevStepMeters,
-        timeFromPrevStepSeconds,
-        drivingSide,
-        exitNumber,
-        fullInstructions,
-        fullRoadName,
-        simpleRoadName,
-        roundaboutTurnNumber,
-        lanes,
-        maneuver,
-        stepNumber,
-        image,
-      )
+      val maneuverImage = pigeonVar_list[11] as ImageDescriptorDto?
+      val laneImage = pigeonVar_list[12] as ImageDescriptorDto?
+      return StepInfoDto(distanceFromPrevStepMeters, timeFromPrevStepSeconds, drivingSide, exitNumber, fullInstructions, fullRoadName, simpleRoadName, roundaboutTurnNumber, lanes, maneuver, stepNumber, maneuverImage, laneImage)
     }
   }
-
   fun toList(): List<Any?> {
     return listOf(
       distanceFromPrevStepMeters,
@@ -2248,10 +2203,10 @@ data class StepInfoDto(
       lanes,
       maneuver,
       stepNumber,
-      image,
+      maneuverImage,
+      laneImage,
     )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is StepInfoDto) {
       return false
@@ -2259,19 +2214,18 @@ data class StepInfoDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
 /**
- * Contains information about the state of navigation, the current nav step if available, and
- * remaining steps if available.
+ * Contains information about the state of navigation, the current nav step if
+ * available, and remaining steps if available.
  *
  * Generated class from Pigeon that represents data sent in messages.
  */
-data class NavInfoDto(
+data class NavInfoDto (
   /** The current state of navigation. */
   val navState: NavStateDto,
   /** Information about the upcoming maneuver step. */
@@ -2280,11 +2234,14 @@ data class NavInfoDto(
   val remainingSteps: List<StepInfoDto?>,
   /** Whether the route has changed since the last sent message. */
   val routeChanged: Boolean,
-  /** Estimated remaining distance in meters along the route to the current step. */
+  /**
+   * Estimated remaining distance in meters along the route to the
+   * current step.
+   */
   val distanceToCurrentStepMeters: Long? = null,
   /**
-   * The estimated remaining distance in meters to the final destination which is the last
-   * destination in a multi-destination trip.
+   * The estimated remaining distance in meters to the final destination which
+   * is the last destination in a multi-destination trip.
    */
   val distanceToFinalDestinationMeters: Long? = null,
   /**
@@ -2293,11 +2250,14 @@ data class NavInfoDto(
    * Android only.
    */
   val distanceToNextDestinationMeters: Long? = null,
-  /** The estimated remaining time in seconds along the route to the current step. */
+  /**
+   * The estimated remaining time in seconds along the route to the
+   * current step.
+   */
   val timeToCurrentStepSeconds: Long? = null,
   /**
-   * The estimated remaining time in seconds to the final destination which is the last destination
-   * in a multi-destination trip.
+   * The estimated remaining time in seconds to the final destination which is
+   * the last destination in a multi-destination trip.
    */
   val timeToFinalDestinationSeconds: Long? = null,
   /**
@@ -2305,8 +2265,9 @@ data class NavInfoDto(
    *
    * Android only.
    */
-  val timeToNextDestinationSeconds: Long? = null,
-) {
+  val timeToNextDestinationSeconds: Long? = null
+)
+ {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): NavInfoDto {
       val navState = pigeonVar_list[0] as NavStateDto
@@ -2319,21 +2280,9 @@ data class NavInfoDto(
       val timeToCurrentStepSeconds = pigeonVar_list[7] as Long?
       val timeToFinalDestinationSeconds = pigeonVar_list[8] as Long?
       val timeToNextDestinationSeconds = pigeonVar_list[9] as Long?
-      return NavInfoDto(
-        navState,
-        currentStep,
-        remainingSteps,
-        routeChanged,
-        distanceToCurrentStepMeters,
-        distanceToFinalDestinationMeters,
-        distanceToNextDestinationMeters,
-        timeToCurrentStepSeconds,
-        timeToFinalDestinationSeconds,
-        timeToNextDestinationSeconds,
-      )
+      return NavInfoDto(navState, currentStep, remainingSteps, routeChanged, distanceToCurrentStepMeters, distanceToFinalDestinationMeters, distanceToNextDestinationMeters, timeToCurrentStepSeconds, timeToFinalDestinationSeconds, timeToNextDestinationSeconds)
     }
   }
-
   fun toList(): List<Any?> {
     return listOf(
       navState,
@@ -2348,7 +2297,6 @@ data class NavInfoDto(
       timeToNextDestinationSeconds,
     )
   }
-
   override fun equals(other: Any?): Boolean {
     if (other !is NavInfoDto) {
       return false
@@ -2356,17 +2304,60 @@ data class NavInfoDto(
     if (this === other) {
       return true
     }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
-  }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
 
   override fun hashCode(): Int = toList().hashCode()
 }
 
+/**
+ * Options for step image generation in turn-by-turn navigation events.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class StepImageGenerationOptionsDto (
+  /**
+   * Whether to generate maneuver images for navigation steps.
+   * Defaults to false if not specified.
+   */
+  val generateManeuverImages: Boolean? = null,
+  /**
+   * Whether to generate lane images for navigation steps.
+   * Defaults to false if not specified.
+   */
+  val generateLaneImages: Boolean? = null
+)
+ {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): StepImageGenerationOptionsDto {
+      val generateManeuverImages = pigeonVar_list[0] as Boolean?
+      val generateLaneImages = pigeonVar_list[1] as Boolean?
+      return StepImageGenerationOptionsDto(generateManeuverImages, generateLaneImages)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      generateManeuverImages,
+      generateLaneImages,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is StepImageGenerationOptionsDto) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
 private open class messagesPigeonCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
       129.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { MapViewTypeDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let {
+          MapViewTypeDto.ofRaw(it.toInt())
+        }
       }
       130.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
@@ -2374,55 +2365,89 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
         }
       }
       131.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { MapTypeDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let {
+          MapTypeDto.ofRaw(it.toInt())
+        }
       }
       132.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { MapColorSchemeDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let {
+          MapColorSchemeDto.ofRaw(it.toInt())
+        }
       }
       133.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { NavigationForceNightModeDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let {
+          NavigationForceNightModeDto.ofRaw(it.toInt())
+        }
       }
       134.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { CameraPerspectiveDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let {
+          CameraPerspectiveDto.ofRaw(it.toInt())
+        }
       }
       135.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { RegisteredImageTypeDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let {
+          RegisteredImageTypeDto.ofRaw(it.toInt())
+        }
       }
       136.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { MarkerEventTypeDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let {
+          MarkerEventTypeDto.ofRaw(it.toInt())
+        }
       }
       137.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { MarkerDragEventTypeDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let {
+          MarkerDragEventTypeDto.ofRaw(it.toInt())
+        }
       }
       138.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { StrokeJointTypeDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let {
+          StrokeJointTypeDto.ofRaw(it.toInt())
+        }
       }
       139.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { PatternTypeDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let {
+          PatternTypeDto.ofRaw(it.toInt())
+        }
       }
       140.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { CameraEventTypeDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let {
+          CameraEventTypeDto.ofRaw(it.toInt())
+        }
       }
       141.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { AlternateRoutesStrategyDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let {
+          AlternateRoutesStrategyDto.ofRaw(it.toInt())
+        }
       }
       142.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { RoutingStrategyDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let {
+          RoutingStrategyDto.ofRaw(it.toInt())
+        }
       }
       143.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { TravelModeDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let {
+          TravelModeDto.ofRaw(it.toInt())
+        }
       }
       144.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { RouteStatusDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let {
+          RouteStatusDto.ofRaw(it.toInt())
+        }
       }
       145.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { TrafficDelaySeverityDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let {
+          TrafficDelaySeverityDto.ofRaw(it.toInt())
+        }
       }
       146.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { AudioGuidanceTypeDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let {
+          AudioGuidanceTypeDto.ofRaw(it.toInt())
+        }
       }
       147.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { SpeedAlertSeverityDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let {
+          SpeedAlertSeverityDto.ofRaw(it.toInt())
+        }
       }
       148.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
@@ -2435,162 +2460,249 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
         }
       }
       150.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { ManeuverDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let {
+          ManeuverDto.ofRaw(it.toInt())
+        }
       }
       151.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { DrivingSideDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let {
+          DrivingSideDto.ofRaw(it.toInt())
+        }
       }
       152.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { NavStateDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let {
+          NavStateDto.ofRaw(it.toInt())
+        }
       }
       153.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { LaneShapeDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let {
+          LaneShapeDto.ofRaw(it.toInt())
+        }
       }
       154.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { TaskRemovedBehaviorDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as Long?)?.let {
+          TaskRemovedBehaviorDto.ofRaw(it.toInt())
+        }
       }
       155.toByte() -> {
-        return (readValue(buffer) as Long?)?.let { GeneratedStepImagesTypeDto.ofRaw(it.toInt()) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          MapOptionsDto.fromList(it)
+        }
       }
       156.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MapOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          NavigationViewOptionsDto.fromList(it)
+        }
       }
       157.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { NavigationViewOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          ViewCreationOptionsDto.fromList(it)
+        }
       }
       158.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { ViewCreationOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          CameraPositionDto.fromList(it)
+        }
       }
       159.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { CameraPositionDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          MarkerDto.fromList(it)
+        }
       }
       160.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MarkerDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          MarkerOptionsDto.fromList(it)
+        }
       }
       161.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MarkerOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          ImageDescriptorDto.fromList(it)
+        }
       }
       162.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { ImageDescriptorDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          InfoWindowDto.fromList(it)
+        }
       }
       163.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { InfoWindowDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          MarkerAnchorDto.fromList(it)
+        }
       }
       164.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MarkerAnchorDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PointOfInterestDto.fromList(it)
+        }
       }
       165.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PointOfInterestDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PolygonDto.fromList(it)
+        }
       }
       166.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolygonDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PolygonOptionsDto.fromList(it)
+        }
       }
       167.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolygonOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PolygonHoleDto.fromList(it)
+        }
       }
       168.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolygonHoleDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          StyleSpanStrokeStyleDto.fromList(it)
+        }
       }
       169.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { StyleSpanStrokeStyleDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          StyleSpanDto.fromList(it)
+        }
       }
       170.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { StyleSpanDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PolylineDto.fromList(it)
+        }
       }
       171.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolylineDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PatternItemDto.fromList(it)
+        }
       }
       172.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PatternItemDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PolylineOptionsDto.fromList(it)
+        }
       }
       173.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolylineOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          CircleDto.fromList(it)
+        }
       }
       174.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { CircleDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          CircleOptionsDto.fromList(it)
+        }
       }
       175.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { CircleOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          MapPaddingDto.fromList(it)
+        }
       }
       176.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MapPaddingDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          RouteTokenOptionsDto.fromList(it)
+        }
       }
       177.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { RouteTokenOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          DestinationsDto.fromList(it)
+        }
       }
       178.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { DestinationsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          RoutingOptionsDto.fromList(it)
+        }
       }
       179.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { RoutingOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          NavigationDisplayOptionsDto.fromList(it)
+        }
       }
       180.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { NavigationDisplayOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          NavigationWaypointDto.fromList(it)
+        }
       }
       181.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { NavigationWaypointDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          NavigationTimeAndDistanceDto.fromList(it)
+        }
       }
       182.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { NavigationTimeAndDistanceDto.fromList(it) }
-      }
-      183.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           NavigationAudioGuidanceSettingsDto.fromList(it)
         }
       }
+      183.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          SimulationOptionsDto.fromList(it)
+        }
+      }
       184.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { SimulationOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          LatLngDto.fromList(it)
+        }
       }
       185.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { LatLngDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          LatLngBoundsDto.fromList(it)
+        }
       }
       186.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { LatLngBoundsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          SpeedingUpdatedEventDto.fromList(it)
+        }
       }
       187.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { SpeedingUpdatedEventDto.fromList(it) }
-      }
-      188.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           GpsAvailabilityChangeEventDto.fromList(it)
         }
       }
-      189.toByte() -> {
+      188.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           SpeedAlertOptionsThresholdPercentageDto.fromList(it)
         }
       }
-      190.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { SpeedAlertOptionsDto.fromList(it) }
+      189.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          SpeedAlertOptionsDto.fromList(it)
+        }
       }
-      191.toByte() -> {
+      190.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(it)
         }
       }
+      191.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          RouteSegmentTrafficDataDto.fromList(it)
+        }
+      }
       192.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentTrafficDataDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          RouteSegmentDto.fromList(it)
+        }
       }
       193.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          LaneDirectionDto.fromList(it)
+        }
       }
       194.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { LaneDirectionDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          LaneDto.fromList(it)
+        }
       }
       195.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { LaneDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          StepInfoDto.fromList(it)
+        }
       }
       196.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { StepInfoDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          NavInfoDto.fromList(it)
+        }
       }
       197.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { NavInfoDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          StepImageGenerationOptionsDto.fromList(it)
+        }
       }
       else -> super.readValueOfType(type, buffer)
     }
   }
-
-  override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
+  override fun writeValue(stream: ByteArrayOutputStream, value: Any?)   {
     when (value) {
       is MapViewTypeDto -> {
         stream.write(129)
@@ -2696,175 +2808,175 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
         stream.write(154)
         writeValue(stream, value.raw)
       }
-      is GeneratedStepImagesTypeDto -> {
-        stream.write(155)
-        writeValue(stream, value.raw)
-      }
       is MapOptionsDto -> {
-        stream.write(156)
+        stream.write(155)
         writeValue(stream, value.toList())
       }
       is NavigationViewOptionsDto -> {
-        stream.write(157)
+        stream.write(156)
         writeValue(stream, value.toList())
       }
       is ViewCreationOptionsDto -> {
-        stream.write(158)
+        stream.write(157)
         writeValue(stream, value.toList())
       }
       is CameraPositionDto -> {
-        stream.write(159)
+        stream.write(158)
         writeValue(stream, value.toList())
       }
       is MarkerDto -> {
-        stream.write(160)
+        stream.write(159)
         writeValue(stream, value.toList())
       }
       is MarkerOptionsDto -> {
-        stream.write(161)
+        stream.write(160)
         writeValue(stream, value.toList())
       }
       is ImageDescriptorDto -> {
-        stream.write(162)
+        stream.write(161)
         writeValue(stream, value.toList())
       }
       is InfoWindowDto -> {
-        stream.write(163)
+        stream.write(162)
         writeValue(stream, value.toList())
       }
       is MarkerAnchorDto -> {
-        stream.write(164)
+        stream.write(163)
         writeValue(stream, value.toList())
       }
       is PointOfInterestDto -> {
-        stream.write(165)
+        stream.write(164)
         writeValue(stream, value.toList())
       }
       is PolygonDto -> {
-        stream.write(166)
+        stream.write(165)
         writeValue(stream, value.toList())
       }
       is PolygonOptionsDto -> {
-        stream.write(167)
+        stream.write(166)
         writeValue(stream, value.toList())
       }
       is PolygonHoleDto -> {
-        stream.write(168)
+        stream.write(167)
         writeValue(stream, value.toList())
       }
       is StyleSpanStrokeStyleDto -> {
-        stream.write(169)
+        stream.write(168)
         writeValue(stream, value.toList())
       }
       is StyleSpanDto -> {
-        stream.write(170)
+        stream.write(169)
         writeValue(stream, value.toList())
       }
       is PolylineDto -> {
-        stream.write(171)
+        stream.write(170)
         writeValue(stream, value.toList())
       }
       is PatternItemDto -> {
-        stream.write(172)
+        stream.write(171)
         writeValue(stream, value.toList())
       }
       is PolylineOptionsDto -> {
-        stream.write(173)
+        stream.write(172)
         writeValue(stream, value.toList())
       }
       is CircleDto -> {
-        stream.write(174)
+        stream.write(173)
         writeValue(stream, value.toList())
       }
       is CircleOptionsDto -> {
-        stream.write(175)
+        stream.write(174)
         writeValue(stream, value.toList())
       }
       is MapPaddingDto -> {
-        stream.write(176)
+        stream.write(175)
         writeValue(stream, value.toList())
       }
       is RouteTokenOptionsDto -> {
-        stream.write(177)
+        stream.write(176)
         writeValue(stream, value.toList())
       }
       is DestinationsDto -> {
-        stream.write(178)
+        stream.write(177)
         writeValue(stream, value.toList())
       }
       is RoutingOptionsDto -> {
-        stream.write(179)
+        stream.write(178)
         writeValue(stream, value.toList())
       }
       is NavigationDisplayOptionsDto -> {
-        stream.write(180)
+        stream.write(179)
         writeValue(stream, value.toList())
       }
       is NavigationWaypointDto -> {
-        stream.write(181)
+        stream.write(180)
         writeValue(stream, value.toList())
       }
       is NavigationTimeAndDistanceDto -> {
-        stream.write(182)
+        stream.write(181)
         writeValue(stream, value.toList())
       }
       is NavigationAudioGuidanceSettingsDto -> {
-        stream.write(183)
+        stream.write(182)
         writeValue(stream, value.toList())
       }
       is SimulationOptionsDto -> {
-        stream.write(184)
+        stream.write(183)
         writeValue(stream, value.toList())
       }
       is LatLngDto -> {
-        stream.write(185)
+        stream.write(184)
         writeValue(stream, value.toList())
       }
       is LatLngBoundsDto -> {
-        stream.write(186)
+        stream.write(185)
         writeValue(stream, value.toList())
       }
       is SpeedingUpdatedEventDto -> {
-        stream.write(187)
+        stream.write(186)
         writeValue(stream, value.toList())
       }
       is GpsAvailabilityChangeEventDto -> {
-        stream.write(188)
+        stream.write(187)
         writeValue(stream, value.toList())
       }
       is SpeedAlertOptionsThresholdPercentageDto -> {
-        stream.write(189)
+        stream.write(188)
         writeValue(stream, value.toList())
       }
       is SpeedAlertOptionsDto -> {
-        stream.write(190)
+        stream.write(189)
         writeValue(stream, value.toList())
       }
       is RouteSegmentTrafficDataRoadStretchRenderingDataDto -> {
-        stream.write(191)
+        stream.write(190)
         writeValue(stream, value.toList())
       }
       is RouteSegmentTrafficDataDto -> {
-        stream.write(192)
+        stream.write(191)
         writeValue(stream, value.toList())
       }
       is RouteSegmentDto -> {
-        stream.write(193)
+        stream.write(192)
         writeValue(stream, value.toList())
       }
       is LaneDirectionDto -> {
-        stream.write(194)
+        stream.write(193)
         writeValue(stream, value.toList())
       }
       is LaneDto -> {
-        stream.write(195)
+        stream.write(194)
         writeValue(stream, value.toList())
       }
       is StepInfoDto -> {
-        stream.write(196)
+        stream.write(195)
         writeValue(stream, value.toList())
       }
       is NavInfoDto -> {
+        stream.write(196)
+        writeValue(stream, value.toList())
+      }
+      is StepImageGenerationOptionsDto -> {
         stream.write(197)
         writeValue(stream, value.toList())
       }
@@ -2873,10 +2985,12 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
   }
 }
 
+
 /**
- * Dummy interface to force generation of the platform view creation params. Pigeon only generates
- * messages if the messages are used in API. [ViewCreationOptionsDto] is encoded and decoded
- * directly to generate a PlatformView creation message.
+ * Dummy interface to force generation of the platform view creation params.
+ * Pigeon only generates messages if the messages are used in API.
+ * [ViewCreationOptionsDto] is encoded and decoded directly to generate a
+ * PlatformView creation message.
  *
  * This API should never be used directly.
  *
@@ -2887,37 +3001,25 @@ interface ViewCreationApi {
 
   companion object {
     /** The codec used by ViewCreationApi. */
-    val codec: MessageCodec<Any?> by lazy { messagesPigeonCodec() }
-
-    /**
-     * Sets up an instance of `ViewCreationApi` to handle messages through the `binaryMessenger`.
-     */
+    val codec: MessageCodec<Any?> by lazy {
+      messagesPigeonCodec()
+    }
+    /** Sets up an instance of `ViewCreationApi` to handle messages through the `binaryMessenger`. */
     @JvmOverloads
-    fun setUp(
-      binaryMessenger: BinaryMessenger,
-      api: ViewCreationApi?,
-      messageChannelSuffix: String = "",
-    ) {
-      val separatedMessageChannelSuffix =
-        if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    fun setUp(binaryMessenger: BinaryMessenger, api: ViewCreationApi?, messageChannelSuffix: String = "") {
+      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.ViewCreationApi.create$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.ViewCreationApi.create$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val msgArg = args[0] as ViewCreationOptionsDto
-            val wrapped: List<Any?> =
-              try {
-                api.create(msgArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.create(msgArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -2927,277 +3029,124 @@ interface ViewCreationApi {
     }
   }
 }
-
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface MapViewApi {
   fun awaitMapReady(viewId: Long, callback: (Result<Unit>) -> Unit)
-
   fun isMyLocationEnabled(viewId: Long): Boolean
-
   fun setMyLocationEnabled(viewId: Long, enabled: Boolean)
-
   fun getMyLocation(viewId: Long): LatLngDto?
-
   fun getMapType(viewId: Long): MapTypeDto
-
   fun setMapType(viewId: Long, mapType: MapTypeDto)
-
   fun setMapStyle(viewId: Long, styleJson: String)
-
   fun isNavigationTripProgressBarEnabled(viewId: Long): Boolean
-
   fun setNavigationTripProgressBarEnabled(viewId: Long, enabled: Boolean)
-
   fun isNavigationHeaderEnabled(viewId: Long): Boolean
-
   fun setNavigationHeaderEnabled(viewId: Long, enabled: Boolean)
-
   fun isNavigationFooterEnabled(viewId: Long): Boolean
-
   fun setNavigationFooterEnabled(viewId: Long, enabled: Boolean)
-
   fun isRecenterButtonEnabled(viewId: Long): Boolean
-
   fun setRecenterButtonEnabled(viewId: Long, enabled: Boolean)
-
   fun isSpeedLimitIconEnabled(viewId: Long): Boolean
-
   fun setSpeedLimitIconEnabled(viewId: Long, enabled: Boolean)
-
   fun isSpeedometerEnabled(viewId: Long): Boolean
-
   fun setSpeedometerEnabled(viewId: Long, enabled: Boolean)
-
   fun isNavigationUIEnabled(viewId: Long): Boolean
-
   fun setNavigationUIEnabled(viewId: Long, enabled: Boolean)
-
   fun isMyLocationButtonEnabled(viewId: Long): Boolean
-
   fun setMyLocationButtonEnabled(viewId: Long, enabled: Boolean)
-
   fun isConsumeMyLocationButtonClickEventsEnabled(viewId: Long): Boolean
-
   fun setConsumeMyLocationButtonClickEventsEnabled(viewId: Long, enabled: Boolean)
-
   fun isZoomGesturesEnabled(viewId: Long): Boolean
-
   fun setZoomGesturesEnabled(viewId: Long, enabled: Boolean)
-
   fun isZoomControlsEnabled(viewId: Long): Boolean
-
   fun setZoomControlsEnabled(viewId: Long, enabled: Boolean)
-
   fun isCompassEnabled(viewId: Long): Boolean
-
   fun setCompassEnabled(viewId: Long, enabled: Boolean)
-
   fun isRotateGesturesEnabled(viewId: Long): Boolean
-
   fun setRotateGesturesEnabled(viewId: Long, enabled: Boolean)
-
   fun isScrollGesturesEnabled(viewId: Long): Boolean
-
   fun setScrollGesturesEnabled(viewId: Long, enabled: Boolean)
-
   fun isScrollGesturesEnabledDuringRotateOrZoom(viewId: Long): Boolean
-
   fun setScrollGesturesDuringRotateOrZoomEnabled(viewId: Long, enabled: Boolean)
-
   fun isTiltGesturesEnabled(viewId: Long): Boolean
-
   fun setTiltGesturesEnabled(viewId: Long, enabled: Boolean)
-
   fun isMapToolbarEnabled(viewId: Long): Boolean
-
   fun setMapToolbarEnabled(viewId: Long, enabled: Boolean)
-
   fun isTrafficEnabled(viewId: Long): Boolean
-
   fun setTrafficEnabled(viewId: Long, enabled: Boolean)
-
   fun isTrafficIncidentCardsEnabled(viewId: Long): Boolean
-
   fun setTrafficIncidentCardsEnabled(viewId: Long, enabled: Boolean)
-
   fun isTrafficPromptsEnabled(viewId: Long): Boolean
-
   fun setTrafficPromptsEnabled(viewId: Long, enabled: Boolean)
-
   fun isReportIncidentButtonEnabled(viewId: Long): Boolean
-
   fun setReportIncidentButtonEnabled(viewId: Long, enabled: Boolean)
-
   fun isIncidentReportingAvailable(viewId: Long): Boolean
-
   fun showReportIncidentsPanel(viewId: Long)
-
   fun isBuildingsEnabled(viewId: Long): Boolean
-
   fun setBuildingsEnabled(viewId: Long, enabled: Boolean)
-
   fun getCameraPosition(viewId: Long): CameraPositionDto
-
   fun getVisibleRegion(viewId: Long): LatLngBoundsDto
-
   fun followMyLocation(viewId: Long, perspective: CameraPerspectiveDto, zoomLevel: Double?)
-
-  fun animateCameraToCameraPosition(
-    viewId: Long,
-    cameraPosition: CameraPositionDto,
-    duration: Long?,
-    callback: (Result<Boolean>) -> Unit,
-  )
-
-  fun animateCameraToLatLng(
-    viewId: Long,
-    point: LatLngDto,
-    duration: Long?,
-    callback: (Result<Boolean>) -> Unit,
-  )
-
-  fun animateCameraToLatLngBounds(
-    viewId: Long,
-    bounds: LatLngBoundsDto,
-    padding: Double,
-    duration: Long?,
-    callback: (Result<Boolean>) -> Unit,
-  )
-
-  fun animateCameraToLatLngZoom(
-    viewId: Long,
-    point: LatLngDto,
-    zoom: Double,
-    duration: Long?,
-    callback: (Result<Boolean>) -> Unit,
-  )
-
-  fun animateCameraByScroll(
-    viewId: Long,
-    scrollByDx: Double,
-    scrollByDy: Double,
-    duration: Long?,
-    callback: (Result<Boolean>) -> Unit,
-  )
-
-  fun animateCameraByZoom(
-    viewId: Long,
-    zoomBy: Double,
-    focusDx: Double?,
-    focusDy: Double?,
-    duration: Long?,
-    callback: (Result<Boolean>) -> Unit,
-  )
-
-  fun animateCameraToZoom(
-    viewId: Long,
-    zoom: Double,
-    duration: Long?,
-    callback: (Result<Boolean>) -> Unit,
-  )
-
+  fun animateCameraToCameraPosition(viewId: Long, cameraPosition: CameraPositionDto, duration: Long?, callback: (Result<Boolean>) -> Unit)
+  fun animateCameraToLatLng(viewId: Long, point: LatLngDto, duration: Long?, callback: (Result<Boolean>) -> Unit)
+  fun animateCameraToLatLngBounds(viewId: Long, bounds: LatLngBoundsDto, padding: Double, duration: Long?, callback: (Result<Boolean>) -> Unit)
+  fun animateCameraToLatLngZoom(viewId: Long, point: LatLngDto, zoom: Double, duration: Long?, callback: (Result<Boolean>) -> Unit)
+  fun animateCameraByScroll(viewId: Long, scrollByDx: Double, scrollByDy: Double, duration: Long?, callback: (Result<Boolean>) -> Unit)
+  fun animateCameraByZoom(viewId: Long, zoomBy: Double, focusDx: Double?, focusDy: Double?, duration: Long?, callback: (Result<Boolean>) -> Unit)
+  fun animateCameraToZoom(viewId: Long, zoom: Double, duration: Long?, callback: (Result<Boolean>) -> Unit)
   fun moveCameraToCameraPosition(viewId: Long, cameraPosition: CameraPositionDto)
-
   fun moveCameraToLatLng(viewId: Long, point: LatLngDto)
-
   fun moveCameraToLatLngBounds(viewId: Long, bounds: LatLngBoundsDto, padding: Double)
-
   fun moveCameraToLatLngZoom(viewId: Long, point: LatLngDto, zoom: Double)
-
   fun moveCameraByScroll(viewId: Long, scrollByDx: Double, scrollByDy: Double)
-
   fun moveCameraByZoom(viewId: Long, zoomBy: Double, focusDx: Double?, focusDy: Double?)
-
   fun moveCameraToZoom(viewId: Long, zoom: Double)
-
   fun showRouteOverview(viewId: Long)
-
   fun getMinZoomPreference(viewId: Long): Double
-
   fun getMaxZoomPreference(viewId: Long): Double
-
   fun resetMinMaxZoomPreference(viewId: Long)
-
   fun setMinZoomPreference(viewId: Long, minZoomPreference: Double)
-
   fun setMaxZoomPreference(viewId: Long, maxZoomPreference: Double)
-
   fun getMarkers(viewId: Long): List<MarkerDto>
-
   fun addMarkers(viewId: Long, markers: List<MarkerDto>): List<MarkerDto>
-
   fun updateMarkers(viewId: Long, markers: List<MarkerDto>): List<MarkerDto>
-
   fun removeMarkers(viewId: Long, markers: List<MarkerDto>)
-
   fun clearMarkers(viewId: Long)
-
   fun clear(viewId: Long)
-
   fun getPolygons(viewId: Long): List<PolygonDto>
-
   fun addPolygons(viewId: Long, polygons: List<PolygonDto>): List<PolygonDto>
-
   fun updatePolygons(viewId: Long, polygons: List<PolygonDto>): List<PolygonDto>
-
   fun removePolygons(viewId: Long, polygons: List<PolygonDto>)
-
   fun clearPolygons(viewId: Long)
-
   fun getPolylines(viewId: Long): List<PolylineDto>
-
   fun addPolylines(viewId: Long, polylines: List<PolylineDto>): List<PolylineDto>
-
   fun updatePolylines(viewId: Long, polylines: List<PolylineDto>): List<PolylineDto>
-
   fun removePolylines(viewId: Long, polylines: List<PolylineDto>)
-
   fun clearPolylines(viewId: Long)
-
   fun getCircles(viewId: Long): List<CircleDto>
-
   fun addCircles(viewId: Long, circles: List<CircleDto>): List<CircleDto>
-
   fun updateCircles(viewId: Long, circles: List<CircleDto>): List<CircleDto>
-
   fun removeCircles(viewId: Long, circles: List<CircleDto>)
-
   fun clearCircles(viewId: Long)
-
   fun enableOnCameraChangedEvents(viewId: Long)
-
   fun setPadding(viewId: Long, padding: MapPaddingDto)
-
   fun getPadding(viewId: Long): MapPaddingDto
-
   fun getMapColorScheme(viewId: Long): MapColorSchemeDto
-
   fun setMapColorScheme(viewId: Long, mapColorScheme: MapColorSchemeDto)
-
   fun getForceNightMode(viewId: Long): NavigationForceNightModeDto
-
   fun setForceNightMode(viewId: Long, forceNightMode: NavigationForceNightModeDto)
 
   companion object {
     /** The codec used by MapViewApi. */
-    val codec: MessageCodec<Any?> by lazy { messagesPigeonCodec() }
-
+    val codec: MessageCodec<Any?> by lazy {
+      messagesPigeonCodec()
+    }
     /** Sets up an instance of `MapViewApi` to handle messages through the `binaryMessenger`. */
     @JvmOverloads
-    fun setUp(
-      binaryMessenger: BinaryMessenger,
-      api: MapViewApi?,
-      messageChannelSuffix: String = "",
-    ) {
-      val separatedMessageChannelSuffix =
-        if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    fun setUp(binaryMessenger: BinaryMessenger, api: MapViewApi?, messageChannelSuffix: String = "") {
+      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.awaitMapReady$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.awaitMapReady$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -3216,22 +3165,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isMyLocationEnabled(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isMyLocationEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3239,24 +3182,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val enabledArg = args[1] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setMyLocationEnabled(viewIdArg, enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setMyLocationEnabled(viewIdArg, enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3264,22 +3201,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMyLocation$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMyLocation$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getMyLocation(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getMyLocation(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3287,22 +3218,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapType$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapType$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getMapType(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getMapType(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3310,24 +3235,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapType$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapType$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val mapTypeArg = args[1] as MapTypeDto
-            val wrapped: List<Any?> =
-              try {
-                api.setMapType(viewIdArg, mapTypeArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setMapType(viewIdArg, mapTypeArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3335,24 +3254,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapStyle$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapStyle$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val styleJsonArg = args[1] as String
-            val wrapped: List<Any?> =
-              try {
-                api.setMapStyle(viewIdArg, styleJsonArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setMapStyle(viewIdArg, styleJsonArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3360,22 +3273,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationTripProgressBarEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationTripProgressBarEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isNavigationTripProgressBarEnabled(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isNavigationTripProgressBarEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3383,24 +3290,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationTripProgressBarEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationTripProgressBarEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val enabledArg = args[1] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setNavigationTripProgressBarEnabled(viewIdArg, enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setNavigationTripProgressBarEnabled(viewIdArg, enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3408,22 +3309,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationHeaderEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationHeaderEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isNavigationHeaderEnabled(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isNavigationHeaderEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3431,24 +3326,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationHeaderEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationHeaderEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val enabledArg = args[1] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setNavigationHeaderEnabled(viewIdArg, enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setNavigationHeaderEnabled(viewIdArg, enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3456,22 +3345,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationFooterEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationFooterEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isNavigationFooterEnabled(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isNavigationFooterEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3479,24 +3362,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationFooterEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationFooterEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val enabledArg = args[1] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setNavigationFooterEnabled(viewIdArg, enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setNavigationFooterEnabled(viewIdArg, enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3504,22 +3381,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRecenterButtonEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRecenterButtonEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isRecenterButtonEnabled(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isRecenterButtonEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3527,24 +3398,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRecenterButtonEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRecenterButtonEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val enabledArg = args[1] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setRecenterButtonEnabled(viewIdArg, enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setRecenterButtonEnabled(viewIdArg, enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3552,22 +3417,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedLimitIconEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedLimitIconEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isSpeedLimitIconEnabled(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isSpeedLimitIconEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3575,24 +3434,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedLimitIconEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedLimitIconEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val enabledArg = args[1] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setSpeedLimitIconEnabled(viewIdArg, enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setSpeedLimitIconEnabled(viewIdArg, enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3600,22 +3453,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedometerEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedometerEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isSpeedometerEnabled(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isSpeedometerEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3623,24 +3470,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedometerEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedometerEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val enabledArg = args[1] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setSpeedometerEnabled(viewIdArg, enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setSpeedometerEnabled(viewIdArg, enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3648,22 +3489,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationUIEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationUIEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isNavigationUIEnabled(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isNavigationUIEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3671,24 +3506,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationUIEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationUIEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val enabledArg = args[1] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setNavigationUIEnabled(viewIdArg, enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setNavigationUIEnabled(viewIdArg, enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3696,22 +3525,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationButtonEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationButtonEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isMyLocationButtonEnabled(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isMyLocationButtonEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3719,24 +3542,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationButtonEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationButtonEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val enabledArg = args[1] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setMyLocationButtonEnabled(viewIdArg, enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setMyLocationButtonEnabled(viewIdArg, enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3744,22 +3561,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isConsumeMyLocationButtonClickEventsEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isConsumeMyLocationButtonClickEventsEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isConsumeMyLocationButtonClickEventsEnabled(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isConsumeMyLocationButtonClickEventsEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3767,24 +3578,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setConsumeMyLocationButtonClickEventsEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setConsumeMyLocationButtonClickEventsEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val enabledArg = args[1] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setConsumeMyLocationButtonClickEventsEnabled(viewIdArg, enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setConsumeMyLocationButtonClickEventsEnabled(viewIdArg, enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3792,22 +3597,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomGesturesEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomGesturesEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isZoomGesturesEnabled(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isZoomGesturesEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3815,24 +3614,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomGesturesEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomGesturesEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val enabledArg = args[1] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setZoomGesturesEnabled(viewIdArg, enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setZoomGesturesEnabled(viewIdArg, enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3840,22 +3633,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomControlsEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomControlsEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isZoomControlsEnabled(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isZoomControlsEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3863,24 +3650,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomControlsEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomControlsEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val enabledArg = args[1] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setZoomControlsEnabled(viewIdArg, enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setZoomControlsEnabled(viewIdArg, enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3888,22 +3669,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isCompassEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isCompassEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isCompassEnabled(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isCompassEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3911,24 +3686,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setCompassEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setCompassEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val enabledArg = args[1] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setCompassEnabled(viewIdArg, enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setCompassEnabled(viewIdArg, enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3936,22 +3705,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRotateGesturesEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRotateGesturesEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isRotateGesturesEnabled(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isRotateGesturesEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3959,24 +3722,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRotateGesturesEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRotateGesturesEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val enabledArg = args[1] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setRotateGesturesEnabled(viewIdArg, enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setRotateGesturesEnabled(viewIdArg, enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -3984,22 +3741,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isScrollGesturesEnabled(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isScrollGesturesEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4007,24 +3758,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val enabledArg = args[1] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setScrollGesturesEnabled(viewIdArg, enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setScrollGesturesEnabled(viewIdArg, enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4032,22 +3777,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabledDuringRotateOrZoom$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabledDuringRotateOrZoom$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isScrollGesturesEnabledDuringRotateOrZoom(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isScrollGesturesEnabledDuringRotateOrZoom(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4055,24 +3794,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesDuringRotateOrZoomEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesDuringRotateOrZoomEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val enabledArg = args[1] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setScrollGesturesDuringRotateOrZoomEnabled(viewIdArg, enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setScrollGesturesDuringRotateOrZoomEnabled(viewIdArg, enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4080,22 +3813,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTiltGesturesEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTiltGesturesEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isTiltGesturesEnabled(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isTiltGesturesEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4103,24 +3830,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTiltGesturesEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTiltGesturesEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val enabledArg = args[1] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setTiltGesturesEnabled(viewIdArg, enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setTiltGesturesEnabled(viewIdArg, enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4128,22 +3849,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMapToolbarEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMapToolbarEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isMapToolbarEnabled(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isMapToolbarEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4151,24 +3866,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapToolbarEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapToolbarEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val enabledArg = args[1] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setMapToolbarEnabled(viewIdArg, enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setMapToolbarEnabled(viewIdArg, enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4176,22 +3885,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isTrafficEnabled(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isTrafficEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4199,24 +3902,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val enabledArg = args[1] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setTrafficEnabled(viewIdArg, enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setTrafficEnabled(viewIdArg, enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4224,22 +3921,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficIncidentCardsEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficIncidentCardsEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isTrafficIncidentCardsEnabled(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isTrafficIncidentCardsEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4247,24 +3938,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficIncidentCardsEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficIncidentCardsEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val enabledArg = args[1] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setTrafficIncidentCardsEnabled(viewIdArg, enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setTrafficIncidentCardsEnabled(viewIdArg, enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4272,22 +3957,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficPromptsEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficPromptsEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isTrafficPromptsEnabled(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isTrafficPromptsEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4295,24 +3974,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficPromptsEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficPromptsEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val enabledArg = args[1] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setTrafficPromptsEnabled(viewIdArg, enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setTrafficPromptsEnabled(viewIdArg, enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4320,22 +3993,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isReportIncidentButtonEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isReportIncidentButtonEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isReportIncidentButtonEnabled(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isReportIncidentButtonEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4343,24 +4010,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setReportIncidentButtonEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setReportIncidentButtonEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val enabledArg = args[1] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setReportIncidentButtonEnabled(viewIdArg, enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setReportIncidentButtonEnabled(viewIdArg, enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4368,22 +4029,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIncidentReportingAvailable$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIncidentReportingAvailable$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isIncidentReportingAvailable(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isIncidentReportingAvailable(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4391,23 +4046,17 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showReportIncidentsPanel$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showReportIncidentsPanel$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                api.showReportIncidentsPanel(viewIdArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.showReportIncidentsPanel(viewIdArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4415,22 +4064,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isBuildingsEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isBuildingsEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isBuildingsEnabled(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isBuildingsEnabled(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4438,24 +4081,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setBuildingsEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setBuildingsEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val enabledArg = args[1] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setBuildingsEnabled(viewIdArg, enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setBuildingsEnabled(viewIdArg, enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4463,22 +4100,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCameraPosition$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCameraPosition$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getCameraPosition(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getCameraPosition(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4486,22 +4117,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getVisibleRegion$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getVisibleRegion$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getVisibleRegion(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getVisibleRegion(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4509,25 +4134,19 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.followMyLocation$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.followMyLocation$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val perspectiveArg = args[1] as CameraPerspectiveDto
             val zoomLevelArg = args[2] as Double?
-            val wrapped: List<Any?> =
-              try {
-                api.followMyLocation(viewIdArg, perspectiveArg, zoomLevelArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.followMyLocation(viewIdArg, perspectiveArg, zoomLevelArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4535,20 +4154,14 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToCameraPosition$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToCameraPosition$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val cameraPositionArg = args[1] as CameraPositionDto
             val durationArg = args[2] as Long?
-            api.animateCameraToCameraPosition(viewIdArg, cameraPositionArg, durationArg) {
-              result: Result<Boolean> ->
+            api.animateCameraToCameraPosition(viewIdArg, cameraPositionArg, durationArg) { result: Result<Boolean> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))
@@ -4563,12 +4176,7 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLng$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLng$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -4590,12 +4198,7 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngBounds$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngBounds$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -4603,8 +4206,7 @@ interface MapViewApi {
             val boundsArg = args[1] as LatLngBoundsDto
             val paddingArg = args[2] as Double
             val durationArg = args[3] as Long?
-            api.animateCameraToLatLngBounds(viewIdArg, boundsArg, paddingArg, durationArg) {
-              result: Result<Boolean> ->
+            api.animateCameraToLatLngBounds(viewIdArg, boundsArg, paddingArg, durationArg) { result: Result<Boolean> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))
@@ -4619,12 +4221,7 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngZoom$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngZoom$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -4632,8 +4229,7 @@ interface MapViewApi {
             val pointArg = args[1] as LatLngDto
             val zoomArg = args[2] as Double
             val durationArg = args[3] as Long?
-            api.animateCameraToLatLngZoom(viewIdArg, pointArg, zoomArg, durationArg) {
-              result: Result<Boolean> ->
+            api.animateCameraToLatLngZoom(viewIdArg, pointArg, zoomArg, durationArg) { result: Result<Boolean> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))
@@ -4648,12 +4244,7 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByScroll$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByScroll$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -4661,8 +4252,7 @@ interface MapViewApi {
             val scrollByDxArg = args[1] as Double
             val scrollByDyArg = args[2] as Double
             val durationArg = args[3] as Long?
-            api.animateCameraByScroll(viewIdArg, scrollByDxArg, scrollByDyArg, durationArg) {
-              result: Result<Boolean> ->
+            api.animateCameraByScroll(viewIdArg, scrollByDxArg, scrollByDyArg, durationArg) { result: Result<Boolean> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))
@@ -4677,12 +4267,7 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByZoom$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByZoom$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -4691,8 +4276,7 @@ interface MapViewApi {
             val focusDxArg = args[2] as Double?
             val focusDyArg = args[3] as Double?
             val durationArg = args[4] as Long?
-            api.animateCameraByZoom(viewIdArg, zoomByArg, focusDxArg, focusDyArg, durationArg) {
-              result: Result<Boolean> ->
+            api.animateCameraByZoom(viewIdArg, zoomByArg, focusDxArg, focusDyArg, durationArg) { result: Result<Boolean> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))
@@ -4707,12 +4291,7 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToZoom$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToZoom$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -4734,24 +4313,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToCameraPosition$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToCameraPosition$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val cameraPositionArg = args[1] as CameraPositionDto
-            val wrapped: List<Any?> =
-              try {
-                api.moveCameraToCameraPosition(viewIdArg, cameraPositionArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.moveCameraToCameraPosition(viewIdArg, cameraPositionArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4759,24 +4332,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLng$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLng$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val pointArg = args[1] as LatLngDto
-            val wrapped: List<Any?> =
-              try {
-                api.moveCameraToLatLng(viewIdArg, pointArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.moveCameraToLatLng(viewIdArg, pointArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4784,25 +4351,19 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngBounds$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngBounds$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val boundsArg = args[1] as LatLngBoundsDto
             val paddingArg = args[2] as Double
-            val wrapped: List<Any?> =
-              try {
-                api.moveCameraToLatLngBounds(viewIdArg, boundsArg, paddingArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.moveCameraToLatLngBounds(viewIdArg, boundsArg, paddingArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4810,25 +4371,19 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngZoom$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngZoom$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val pointArg = args[1] as LatLngDto
             val zoomArg = args[2] as Double
-            val wrapped: List<Any?> =
-              try {
-                api.moveCameraToLatLngZoom(viewIdArg, pointArg, zoomArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.moveCameraToLatLngZoom(viewIdArg, pointArg, zoomArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4836,25 +4391,19 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByScroll$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByScroll$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val scrollByDxArg = args[1] as Double
             val scrollByDyArg = args[2] as Double
-            val wrapped: List<Any?> =
-              try {
-                api.moveCameraByScroll(viewIdArg, scrollByDxArg, scrollByDyArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.moveCameraByScroll(viewIdArg, scrollByDxArg, scrollByDyArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4862,12 +4411,7 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByZoom$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByZoom$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -4875,13 +4419,12 @@ interface MapViewApi {
             val zoomByArg = args[1] as Double
             val focusDxArg = args[2] as Double?
             val focusDyArg = args[3] as Double?
-            val wrapped: List<Any?> =
-              try {
-                api.moveCameraByZoom(viewIdArg, zoomByArg, focusDxArg, focusDyArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.moveCameraByZoom(viewIdArg, zoomByArg, focusDxArg, focusDyArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4889,24 +4432,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToZoom$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToZoom$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val zoomArg = args[1] as Double
-            val wrapped: List<Any?> =
-              try {
-                api.moveCameraToZoom(viewIdArg, zoomArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.moveCameraToZoom(viewIdArg, zoomArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4914,23 +4451,17 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showRouteOverview$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showRouteOverview$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                api.showRouteOverview(viewIdArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.showRouteOverview(viewIdArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4938,22 +4469,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMinZoomPreference$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMinZoomPreference$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getMinZoomPreference(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getMinZoomPreference(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4961,22 +4486,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMaxZoomPreference$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMaxZoomPreference$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getMaxZoomPreference(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getMaxZoomPreference(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -4984,23 +4503,17 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.resetMinMaxZoomPreference$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.resetMinMaxZoomPreference$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                api.resetMinMaxZoomPreference(viewIdArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.resetMinMaxZoomPreference(viewIdArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5008,24 +4521,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMinZoomPreference$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMinZoomPreference$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val minZoomPreferenceArg = args[1] as Double
-            val wrapped: List<Any?> =
-              try {
-                api.setMinZoomPreference(viewIdArg, minZoomPreferenceArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setMinZoomPreference(viewIdArg, minZoomPreferenceArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5033,24 +4540,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMaxZoomPreference$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMaxZoomPreference$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val maxZoomPreferenceArg = args[1] as Double
-            val wrapped: List<Any?> =
-              try {
-                api.setMaxZoomPreference(viewIdArg, maxZoomPreferenceArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setMaxZoomPreference(viewIdArg, maxZoomPreferenceArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5058,22 +4559,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMarkers$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMarkers$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getMarkers(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getMarkers(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5081,23 +4576,17 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addMarkers$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addMarkers$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val markersArg = args[1] as List<MarkerDto>
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.addMarkers(viewIdArg, markersArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.addMarkers(viewIdArg, markersArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5105,23 +4594,17 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateMarkers$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateMarkers$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val markersArg = args[1] as List<MarkerDto>
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.updateMarkers(viewIdArg, markersArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.updateMarkers(viewIdArg, markersArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5129,24 +4612,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeMarkers$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeMarkers$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val markersArg = args[1] as List<MarkerDto>
-            val wrapped: List<Any?> =
-              try {
-                api.removeMarkers(viewIdArg, markersArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.removeMarkers(viewIdArg, markersArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5154,23 +4631,17 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearMarkers$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearMarkers$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                api.clearMarkers(viewIdArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.clearMarkers(viewIdArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5178,23 +4649,17 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clear$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clear$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                api.clear(viewIdArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.clear(viewIdArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5202,22 +4667,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolygons$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolygons$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getPolygons(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getPolygons(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5225,23 +4684,17 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolygons$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolygons$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val polygonsArg = args[1] as List<PolygonDto>
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.addPolygons(viewIdArg, polygonsArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.addPolygons(viewIdArg, polygonsArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5249,23 +4702,17 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolygons$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolygons$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val polygonsArg = args[1] as List<PolygonDto>
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.updatePolygons(viewIdArg, polygonsArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.updatePolygons(viewIdArg, polygonsArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5273,24 +4720,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolygons$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolygons$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val polygonsArg = args[1] as List<PolygonDto>
-            val wrapped: List<Any?> =
-              try {
-                api.removePolygons(viewIdArg, polygonsArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.removePolygons(viewIdArg, polygonsArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5298,23 +4739,17 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolygons$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolygons$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                api.clearPolygons(viewIdArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.clearPolygons(viewIdArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5322,22 +4757,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolylines$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolylines$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getPolylines(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getPolylines(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5345,23 +4774,17 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolylines$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolylines$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val polylinesArg = args[1] as List<PolylineDto>
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.addPolylines(viewIdArg, polylinesArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.addPolylines(viewIdArg, polylinesArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5369,23 +4792,17 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolylines$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolylines$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val polylinesArg = args[1] as List<PolylineDto>
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.updatePolylines(viewIdArg, polylinesArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.updatePolylines(viewIdArg, polylinesArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5393,24 +4810,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolylines$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolylines$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val polylinesArg = args[1] as List<PolylineDto>
-            val wrapped: List<Any?> =
-              try {
-                api.removePolylines(viewIdArg, polylinesArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.removePolylines(viewIdArg, polylinesArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5418,23 +4829,17 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolylines$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolylines$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                api.clearPolylines(viewIdArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.clearPolylines(viewIdArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5442,22 +4847,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCircles$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCircles$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getCircles(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getCircles(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5465,23 +4864,17 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addCircles$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addCircles$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val circlesArg = args[1] as List<CircleDto>
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.addCircles(viewIdArg, circlesArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.addCircles(viewIdArg, circlesArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5489,23 +4882,17 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateCircles$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateCircles$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val circlesArg = args[1] as List<CircleDto>
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.updateCircles(viewIdArg, circlesArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.updateCircles(viewIdArg, circlesArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5513,24 +4900,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeCircles$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeCircles$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val circlesArg = args[1] as List<CircleDto>
-            val wrapped: List<Any?> =
-              try {
-                api.removeCircles(viewIdArg, circlesArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.removeCircles(viewIdArg, circlesArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5538,23 +4919,17 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearCircles$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearCircles$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                api.clearCircles(viewIdArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.clearCircles(viewIdArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5562,23 +4937,17 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.enableOnCameraChangedEvents$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.enableOnCameraChangedEvents$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                api.enableOnCameraChangedEvents(viewIdArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.enableOnCameraChangedEvents(viewIdArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5586,24 +4955,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setPadding$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setPadding$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val paddingArg = args[1] as MapPaddingDto
-            val wrapped: List<Any?> =
-              try {
-                api.setPadding(viewIdArg, paddingArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setPadding(viewIdArg, paddingArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5611,22 +4974,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPadding$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPadding$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getPadding(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getPadding(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5634,22 +4991,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapColorScheme$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapColorScheme$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getMapColorScheme(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getMapColorScheme(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5657,24 +5008,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapColorScheme$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapColorScheme$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val mapColorSchemeArg = args[1] as MapColorSchemeDto
-            val wrapped: List<Any?> =
-              try {
-                api.setMapColorScheme(viewIdArg, mapColorSchemeArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setMapColorScheme(viewIdArg, mapColorSchemeArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5682,22 +5027,16 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getForceNightMode$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getForceNightMode$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getForceNightMode(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getForceNightMode(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5705,24 +5044,18 @@ interface MapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setForceNightMode$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setForceNightMode$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
             val forceNightModeArg = args[1] as NavigationForceNightModeDto
-            val wrapped: List<Any?> =
-              try {
-                api.setForceNightMode(viewIdArg, forceNightModeArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setForceNightMode(viewIdArg, forceNightModeArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5732,47 +5065,25 @@ interface MapViewApi {
     }
   }
 }
-
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface ImageRegistryApi {
-  fun registerBitmapImage(
-    imageId: String,
-    bytes: ByteArray,
-    imagePixelRatio: Double,
-    width: Double?,
-    height: Double?,
-  ): ImageDescriptorDto
-
+  fun registerBitmapImage(imageId: String, bytes: ByteArray, imagePixelRatio: Double, width: Double?, height: Double?): ImageDescriptorDto
   fun unregisterImage(imageDescriptor: ImageDescriptorDto)
-
   fun getRegisteredImages(): List<ImageDescriptorDto>
-
   fun clearRegisteredImages(filter: RegisteredImageTypeDto?)
-
   fun getRegisteredImageData(imageDescriptor: ImageDescriptorDto): ByteArray?
 
   companion object {
     /** The codec used by ImageRegistryApi. */
-    val codec: MessageCodec<Any?> by lazy { messagesPigeonCodec() }
-
-    /**
-     * Sets up an instance of `ImageRegistryApi` to handle messages through the `binaryMessenger`.
-     */
+    val codec: MessageCodec<Any?> by lazy {
+      messagesPigeonCodec()
+    }
+    /** Sets up an instance of `ImageRegistryApi` to handle messages through the `binaryMessenger`. */
     @JvmOverloads
-    fun setUp(
-      binaryMessenger: BinaryMessenger,
-      api: ImageRegistryApi?,
-      messageChannelSuffix: String = "",
-    ) {
-      val separatedMessageChannelSuffix =
-        if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    fun setUp(binaryMessenger: BinaryMessenger, api: ImageRegistryApi?, messageChannelSuffix: String = "") {
+      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.registerBitmapImage$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.registerBitmapImage$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -5781,20 +5092,11 @@ interface ImageRegistryApi {
             val imagePixelRatioArg = args[2] as Double
             val widthArg = args[3] as Double?
             val heightArg = args[4] as Double?
-            val wrapped: List<Any?> =
-              try {
-                listOf(
-                  api.registerBitmapImage(
-                    imageIdArg,
-                    bytesArg,
-                    imagePixelRatioArg,
-                    widthArg,
-                    heightArg,
-                  )
-                )
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.registerBitmapImage(imageIdArg, bytesArg, imagePixelRatioArg, widthArg, heightArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5802,23 +5104,17 @@ interface ImageRegistryApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.unregisterImage$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.unregisterImage$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val imageDescriptorArg = args[0] as ImageDescriptorDto
-            val wrapped: List<Any?> =
-              try {
-                api.unregisterImage(imageDescriptorArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.unregisterImage(imageDescriptorArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5826,20 +5122,14 @@ interface ImageRegistryApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.getRegisteredImages$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.getRegisteredImages$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getRegisteredImages())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getRegisteredImages())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5847,23 +5137,17 @@ interface ImageRegistryApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.clearRegisteredImages$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.clearRegisteredImages$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val filterArg = args[0] as RegisteredImageTypeDto?
-            val wrapped: List<Any?> =
-              try {
-                api.clearRegisteredImages(filterArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.clearRegisteredImages(filterArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5871,22 +5155,16 @@ interface ImageRegistryApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.getRegisteredImageData$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.getRegisteredImageData$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val imageDescriptorArg = args[0] as ImageDescriptorDto
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getRegisteredImageData(imageDescriptorArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getRegisteredImageData(imageDescriptorArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -5896,22 +5174,18 @@ interface ImageRegistryApi {
     }
   }
 }
-
 /** Generated class from Pigeon that represents Flutter messages that can be called from Kotlin. */
-class ViewEventApi(
-  private val binaryMessenger: BinaryMessenger,
-  private val messageChannelSuffix: String = "",
-) {
+class ViewEventApi(private val binaryMessenger: BinaryMessenger, private val messageChannelSuffix: String = "") {
   companion object {
     /** The codec used by ViewEventApi. */
-    val codec: MessageCodec<Any?> by lazy { messagesPigeonCodec() }
+    val codec: MessageCodec<Any?> by lazy {
+      messagesPigeonCodec()
+    }
   }
-
-  fun onMapClickEvent(viewIdArg: Long, latLngArg: LatLngDto, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapClickEvent$separatedMessageChannelSuffix"
+  fun onMapClickEvent(viewIdArg: Long, latLngArg: LatLngDto, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapClickEvent$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(viewIdArg, latLngArg)) {
       if (it is List<*>) {
@@ -5922,15 +5196,13 @@ class ViewEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
-  fun onMapLongClickEvent(viewIdArg: Long, latLngArg: LatLngDto, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapLongClickEvent$separatedMessageChannelSuffix"
+  fun onMapLongClickEvent(viewIdArg: Long, latLngArg: LatLngDto, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapLongClickEvent$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(viewIdArg, latLngArg)) {
       if (it is List<*>) {
@@ -5941,15 +5213,13 @@ class ViewEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
-  fun onRecenterButtonClicked(viewIdArg: Long, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onRecenterButtonClicked$separatedMessageChannelSuffix"
+  fun onRecenterButtonClicked(viewIdArg: Long, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onRecenterButtonClicked$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(viewIdArg)) {
       if (it is List<*>) {
@@ -5960,20 +5230,13 @@ class ViewEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
-  fun onMarkerEvent(
-    viewIdArg: Long,
-    markerIdArg: String,
-    eventTypeArg: MarkerEventTypeDto,
-    callback: (Result<Unit>) -> Unit,
-  ) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerEvent$separatedMessageChannelSuffix"
+  fun onMarkerEvent(viewIdArg: Long, markerIdArg: String, eventTypeArg: MarkerEventTypeDto, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerEvent$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(viewIdArg, markerIdArg, eventTypeArg)) {
       if (it is List<*>) {
@@ -5984,21 +5247,13 @@ class ViewEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
-  fun onMarkerDragEvent(
-    viewIdArg: Long,
-    markerIdArg: String,
-    eventTypeArg: MarkerDragEventTypeDto,
-    positionArg: LatLngDto,
-    callback: (Result<Unit>) -> Unit,
-  ) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerDragEvent$separatedMessageChannelSuffix"
+  fun onMarkerDragEvent(viewIdArg: Long, markerIdArg: String, eventTypeArg: MarkerDragEventTypeDto, positionArg: LatLngDto, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerDragEvent$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(viewIdArg, markerIdArg, eventTypeArg, positionArg)) {
       if (it is List<*>) {
@@ -6009,15 +5264,13 @@ class ViewEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
-  fun onPolygonClicked(viewIdArg: Long, polygonIdArg: String, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolygonClicked$separatedMessageChannelSuffix"
+  fun onPolygonClicked(viewIdArg: Long, polygonIdArg: String, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolygonClicked$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(viewIdArg, polygonIdArg)) {
       if (it is List<*>) {
@@ -6028,15 +5281,13 @@ class ViewEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
-  fun onPolylineClicked(viewIdArg: Long, polylineIdArg: String, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolylineClicked$separatedMessageChannelSuffix"
+  fun onPolylineClicked(viewIdArg: Long, polylineIdArg: String, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolylineClicked$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(viewIdArg, polylineIdArg)) {
       if (it is List<*>) {
@@ -6047,15 +5298,13 @@ class ViewEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
-  fun onCircleClicked(viewIdArg: Long, circleIdArg: String, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCircleClicked$separatedMessageChannelSuffix"
+  fun onCircleClicked(viewIdArg: Long, circleIdArg: String, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCircleClicked$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(viewIdArg, circleIdArg)) {
       if (it is List<*>) {
@@ -6066,19 +5315,13 @@ class ViewEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
-  fun onPoiClick(
-    viewIdArg: Long,
-    pointOfInterestArg: PointOfInterestDto,
-    callback: (Result<Unit>) -> Unit,
-  ) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPoiClick$separatedMessageChannelSuffix"
+  fun onPoiClick(viewIdArg: Long, pointOfInterestArg: PointOfInterestDto, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPoiClick$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(viewIdArg, pointOfInterestArg)) {
       if (it is List<*>) {
@@ -6089,19 +5332,13 @@ class ViewEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
-  fun onNavigationUIEnabledChanged(
-    viewIdArg: Long,
-    navigationUIEnabledArg: Boolean,
-    callback: (Result<Unit>) -> Unit,
-  ) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onNavigationUIEnabledChanged$separatedMessageChannelSuffix"
+  fun onNavigationUIEnabledChanged(viewIdArg: Long, navigationUIEnabledArg: Boolean, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onNavigationUIEnabledChanged$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(viewIdArg, navigationUIEnabledArg)) {
       if (it is List<*>) {
@@ -6112,19 +5349,13 @@ class ViewEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
-  fun onPromptVisibilityChanged(
-    viewIdArg: Long,
-    promptVisibleArg: Boolean,
-    callback: (Result<Unit>) -> Unit,
-  ) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged$separatedMessageChannelSuffix"
+  fun onPromptVisibilityChanged(viewIdArg: Long, promptVisibleArg: Boolean, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(viewIdArg, promptVisibleArg)) {
       if (it is List<*>) {
@@ -6135,15 +5366,13 @@ class ViewEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
-  fun onMyLocationClicked(viewIdArg: Long, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationClicked$separatedMessageChannelSuffix"
+  fun onMyLocationClicked(viewIdArg: Long, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationClicked$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(viewIdArg)) {
       if (it is List<*>) {
@@ -6154,15 +5383,13 @@ class ViewEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
-  fun onMyLocationButtonClicked(viewIdArg: Long, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationButtonClicked$separatedMessageChannelSuffix"
+  fun onMyLocationButtonClicked(viewIdArg: Long, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationButtonClicked$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(viewIdArg)) {
       if (it is List<*>) {
@@ -6173,20 +5400,13 @@ class ViewEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
-  fun onCameraChanged(
-    viewIdArg: Long,
-    eventTypeArg: CameraEventTypeDto,
-    positionArg: CameraPositionDto,
-    callback: (Result<Unit>) -> Unit,
-  ) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCameraChanged$separatedMessageChannelSuffix"
+  fun onCameraChanged(viewIdArg: Long, eventTypeArg: CameraEventTypeDto, positionArg: CameraPositionDto, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCameraChanged$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(viewIdArg, eventTypeArg, positionArg)) {
       if (it is List<*>) {
@@ -6197,139 +5417,65 @@ class ViewEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
 }
-
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface NavigationSessionApi {
-  fun createNavigationSession(
-    abnormalTerminationReportingEnabled: Boolean,
-    behavior: TaskRemovedBehaviorDto,
-    callback: (Result<Unit>) -> Unit,
-  )
-
+  fun createNavigationSession(abnormalTerminationReportingEnabled: Boolean, behavior: TaskRemovedBehaviorDto, callback: (Result<Unit>) -> Unit)
   fun isInitialized(): Boolean
-
   fun cleanup(resetSession: Boolean)
-
-  fun showTermsAndConditionsDialog(
-    title: String,
-    companyName: String,
-    shouldOnlyShowDriverAwarenessDisclaimer: Boolean,
-    callback: (Result<Boolean>) -> Unit,
-  )
-
+  fun showTermsAndConditionsDialog(title: String, companyName: String, shouldOnlyShowDriverAwarenessDisclaimer: Boolean, callback: (Result<Boolean>) -> Unit)
   fun areTermsAccepted(): Boolean
-
   fun resetTermsAccepted()
-
   fun getNavSDKVersion(): String
-
   fun isGuidanceRunning(): Boolean
-
   fun startGuidance()
-
   fun stopGuidance()
-
   fun setDestinations(destinations: DestinationsDto, callback: (Result<RouteStatusDto>) -> Unit)
-
   fun clearDestinations()
-
   fun continueToNextDestination(): NavigationWaypointDto?
-
   fun getCurrentTimeAndDistance(): NavigationTimeAndDistanceDto
-
   fun setAudioGuidance(settings: NavigationAudioGuidanceSettingsDto)
-
   fun setSpeedAlertOptions(options: SpeedAlertOptionsDto)
-
   fun getRouteSegments(): List<RouteSegmentDto>
-
   fun getTraveledRoute(): List<LatLngDto>
-
   fun getCurrentRouteSegment(): RouteSegmentDto?
-
   fun setUserLocation(location: LatLngDto)
-
   fun removeUserLocation()
-
   fun simulateLocationsAlongExistingRoute()
-
   fun simulateLocationsAlongExistingRouteWithOptions(options: SimulationOptionsDto)
-
-  fun simulateLocationsAlongNewRoute(
-    waypoints: List<NavigationWaypointDto>,
-    callback: (Result<RouteStatusDto>) -> Unit,
-  )
-
-  fun simulateLocationsAlongNewRouteWithRoutingOptions(
-    waypoints: List<NavigationWaypointDto>,
-    routingOptions: RoutingOptionsDto,
-    callback: (Result<RouteStatusDto>) -> Unit,
-  )
-
-  fun simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
-    waypoints: List<NavigationWaypointDto>,
-    routingOptions: RoutingOptionsDto,
-    simulationOptions: SimulationOptionsDto,
-    callback: (Result<RouteStatusDto>) -> Unit,
-  )
-
+  fun simulateLocationsAlongNewRoute(waypoints: List<NavigationWaypointDto>, callback: (Result<RouteStatusDto>) -> Unit)
+  fun simulateLocationsAlongNewRouteWithRoutingOptions(waypoints: List<NavigationWaypointDto>, routingOptions: RoutingOptionsDto, callback: (Result<RouteStatusDto>) -> Unit)
+  fun simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(waypoints: List<NavigationWaypointDto>, routingOptions: RoutingOptionsDto, simulationOptions: SimulationOptionsDto, callback: (Result<RouteStatusDto>) -> Unit)
   fun pauseSimulation()
-
   fun resumeSimulation()
-
   /** iOS-only method. */
   fun allowBackgroundLocationUpdates(allow: Boolean)
-
   fun enableRoadSnappedLocationUpdates()
-
   fun disableRoadSnappedLocationUpdates()
-
-  fun enableTurnByTurnNavigationEvents(
-    numNextStepsToPreview: Long?,
-    type: GeneratedStepImagesTypeDto?,
-  )
-
+  fun enableTurnByTurnNavigationEvents(numNextStepsToPreview: Long?, options: StepImageGenerationOptionsDto?)
   fun disableTurnByTurnNavigationEvents()
-
-  fun registerRemainingTimeOrDistanceChangedListener(
-    remainingTimeThresholdSeconds: Long,
-    remainingDistanceThresholdMeters: Long,
-  )
+  fun registerRemainingTimeOrDistanceChangedListener(remainingTimeThresholdSeconds: Long, remainingDistanceThresholdMeters: Long)
 
   companion object {
     /** The codec used by NavigationSessionApi. */
-    val codec: MessageCodec<Any?> by lazy { messagesPigeonCodec() }
-
-    /**
-     * Sets up an instance of `NavigationSessionApi` to handle messages through the
-     * `binaryMessenger`.
-     */
+    val codec: MessageCodec<Any?> by lazy {
+      messagesPigeonCodec()
+    }
+    /** Sets up an instance of `NavigationSessionApi` to handle messages through the `binaryMessenger`. */
     @JvmOverloads
-    fun setUp(
-      binaryMessenger: BinaryMessenger,
-      api: NavigationSessionApi?,
-      messageChannelSuffix: String = "",
-    ) {
-      val separatedMessageChannelSuffix =
-        if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    fun setUp(binaryMessenger: BinaryMessenger, api: NavigationSessionApi?, messageChannelSuffix: String = "") {
+      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val abnormalTerminationReportingEnabledArg = args[0] as Boolean
             val behaviorArg = args[1] as TaskRemovedBehaviorDto
-            api.createNavigationSession(abnormalTerminationReportingEnabledArg, behaviorArg) {
-              result: Result<Unit> ->
+            api.createNavigationSession(abnormalTerminationReportingEnabledArg, behaviorArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))
@@ -6343,20 +5489,14 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.isInitialized$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.isInitialized$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isInitialized())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isInitialized())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -6364,23 +5504,17 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.cleanup$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.cleanup$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val resetSessionArg = args[0] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.cleanup(resetSessionArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.cleanup(resetSessionArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -6388,23 +5522,14 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.showTermsAndConditionsDialog$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.showTermsAndConditionsDialog$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val titleArg = args[0] as String
             val companyNameArg = args[1] as String
             val shouldOnlyShowDriverAwarenessDisclaimerArg = args[2] as Boolean
-            api.showTermsAndConditionsDialog(
-              titleArg,
-              companyNameArg,
-              shouldOnlyShowDriverAwarenessDisclaimerArg,
-            ) { result: Result<Boolean> ->
+            api.showTermsAndConditionsDialog(titleArg, companyNameArg, shouldOnlyShowDriverAwarenessDisclaimerArg) { result: Result<Boolean> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))
@@ -6419,20 +5544,14 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.areTermsAccepted$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.areTermsAccepted$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.areTermsAccepted())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.areTermsAccepted())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -6440,21 +5559,15 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.resetTermsAccepted$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.resetTermsAccepted$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.resetTermsAccepted()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.resetTermsAccepted()
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -6462,20 +5575,14 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getNavSDKVersion$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getNavSDKVersion$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getNavSDKVersion())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getNavSDKVersion())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -6483,20 +5590,14 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.isGuidanceRunning$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.isGuidanceRunning$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isGuidanceRunning())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isGuidanceRunning())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -6504,21 +5605,15 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.startGuidance$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.startGuidance$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.startGuidance()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.startGuidance()
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -6526,21 +5621,15 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.stopGuidance$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.stopGuidance$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.stopGuidance()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.stopGuidance()
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -6548,12 +5637,7 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setDestinations$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setDestinations$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -6573,21 +5657,15 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.clearDestinations$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.clearDestinations$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.clearDestinations()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.clearDestinations()
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -6595,20 +5673,14 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.continueToNextDestination$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.continueToNextDestination$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.continueToNextDestination())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.continueToNextDestination())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -6616,20 +5688,14 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getCurrentTimeAndDistance$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getCurrentTimeAndDistance$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getCurrentTimeAndDistance())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getCurrentTimeAndDistance())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -6637,23 +5703,17 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setAudioGuidance$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setAudioGuidance$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val settingsArg = args[0] as NavigationAudioGuidanceSettingsDto
-            val wrapped: List<Any?> =
-              try {
-                api.setAudioGuidance(settingsArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setAudioGuidance(settingsArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -6661,23 +5721,17 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setSpeedAlertOptions$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setSpeedAlertOptions$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val optionsArg = args[0] as SpeedAlertOptionsDto
-            val wrapped: List<Any?> =
-              try {
-                api.setSpeedAlertOptions(optionsArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setSpeedAlertOptions(optionsArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -6685,20 +5739,14 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getRouteSegments$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getRouteSegments$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getRouteSegments())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getRouteSegments())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -6706,20 +5754,14 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getTraveledRoute$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getTraveledRoute$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getTraveledRoute())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getTraveledRoute())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -6727,20 +5769,14 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getCurrentRouteSegment$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getCurrentRouteSegment$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getCurrentRouteSegment())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getCurrentRouteSegment())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -6748,23 +5784,17 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setUserLocation$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setUserLocation$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val locationArg = args[0] as LatLngDto
-            val wrapped: List<Any?> =
-              try {
-                api.setUserLocation(locationArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setUserLocation(locationArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -6772,21 +5802,15 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.removeUserLocation$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.removeUserLocation$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.removeUserLocation()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.removeUserLocation()
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -6794,21 +5818,15 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongExistingRoute$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongExistingRoute$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.simulateLocationsAlongExistingRoute()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.simulateLocationsAlongExistingRoute()
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -6816,23 +5834,17 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongExistingRouteWithOptions$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongExistingRouteWithOptions$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val optionsArg = args[0] as SimulationOptionsDto
-            val wrapped: List<Any?> =
-              try {
-                api.simulateLocationsAlongExistingRouteWithOptions(optionsArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.simulateLocationsAlongExistingRouteWithOptions(optionsArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -6840,12 +5852,7 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRoute$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRoute$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -6865,19 +5872,13 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingOptions$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingOptions$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val waypointsArg = args[0] as List<NavigationWaypointDto>
             val routingOptionsArg = args[1] as RoutingOptionsDto
-            api.simulateLocationsAlongNewRouteWithRoutingOptions(waypointsArg, routingOptionsArg) {
-              result: Result<RouteStatusDto> ->
+            api.simulateLocationsAlongNewRouteWithRoutingOptions(waypointsArg, routingOptionsArg) { result: Result<RouteStatusDto> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))
@@ -6892,23 +5893,14 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val waypointsArg = args[0] as List<NavigationWaypointDto>
             val routingOptionsArg = args[1] as RoutingOptionsDto
             val simulationOptionsArg = args[2] as SimulationOptionsDto
-            api.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
-              waypointsArg,
-              routingOptionsArg,
-              simulationOptionsArg,
-            ) { result: Result<RouteStatusDto> ->
+            api.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(waypointsArg, routingOptionsArg, simulationOptionsArg) { result: Result<RouteStatusDto> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))
@@ -6923,21 +5915,15 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.pauseSimulation$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.pauseSimulation$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.pauseSimulation()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.pauseSimulation()
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -6945,21 +5931,15 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.resumeSimulation$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.resumeSimulation$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.resumeSimulation()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.resumeSimulation()
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -6967,23 +5947,17 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.allowBackgroundLocationUpdates$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.allowBackgroundLocationUpdates$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val allowArg = args[0] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.allowBackgroundLocationUpdates(allowArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.allowBackgroundLocationUpdates(allowArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -6991,21 +5965,15 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.enableRoadSnappedLocationUpdates$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.enableRoadSnappedLocationUpdates$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.enableRoadSnappedLocationUpdates()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.enableRoadSnappedLocationUpdates()
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -7013,21 +5981,15 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.disableRoadSnappedLocationUpdates$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.disableRoadSnappedLocationUpdates$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.disableRoadSnappedLocationUpdates()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.disableRoadSnappedLocationUpdates()
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -7035,24 +5997,18 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.enableTurnByTurnNavigationEvents$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.enableTurnByTurnNavigationEvents$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val numNextStepsToPreviewArg = args[0] as Long?
-            val typeArg = args[1] as GeneratedStepImagesTypeDto?
-            val wrapped: List<Any?> =
-              try {
-                api.enableTurnByTurnNavigationEvents(numNextStepsToPreviewArg, typeArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val optionsArg = args[1] as StepImageGenerationOptionsDto?
+            val wrapped: List<Any?> = try {
+              api.enableTurnByTurnNavigationEvents(numNextStepsToPreviewArg, optionsArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -7060,21 +6016,15 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.disableTurnByTurnNavigationEvents$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.disableTurnByTurnNavigationEvents$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.disableTurnByTurnNavigationEvents()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.disableTurnByTurnNavigationEvents()
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -7082,27 +6032,18 @@ interface NavigationSessionApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.registerRemainingTimeOrDistanceChangedListener$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.registerRemainingTimeOrDistanceChangedListener$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val remainingTimeThresholdSecondsArg = args[0] as Long
             val remainingDistanceThresholdMetersArg = args[1] as Long
-            val wrapped: List<Any?> =
-              try {
-                api.registerRemainingTimeOrDistanceChangedListener(
-                  remainingTimeThresholdSecondsArg,
-                  remainingDistanceThresholdMetersArg,
-                )
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.registerRemainingTimeOrDistanceChangedListener(remainingTimeThresholdSecondsArg, remainingDistanceThresholdMetersArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -7112,22 +6053,18 @@ interface NavigationSessionApi {
     }
   }
 }
-
 /** Generated class from Pigeon that represents Flutter messages that can be called from Kotlin. */
-class NavigationSessionEventApi(
-  private val binaryMessenger: BinaryMessenger,
-  private val messageChannelSuffix: String = "",
-) {
+class NavigationSessionEventApi(private val binaryMessenger: BinaryMessenger, private val messageChannelSuffix: String = "") {
   companion object {
     /** The codec used by NavigationSessionEventApi. */
-    val codec: MessageCodec<Any?> by lazy { messagesPigeonCodec() }
+    val codec: MessageCodec<Any?> by lazy {
+      messagesPigeonCodec()
+    }
   }
-
-  fun onSpeedingUpdated(msgArg: SpeedingUpdatedEventDto, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onSpeedingUpdated$separatedMessageChannelSuffix"
+  fun onSpeedingUpdated(msgArg: SpeedingUpdatedEventDto, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onSpeedingUpdated$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(msgArg)) {
       if (it is List<*>) {
@@ -7138,15 +6075,13 @@ class NavigationSessionEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
-  fun onRoadSnappedLocationUpdated(locationArg: LatLngDto, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRoadSnappedLocationUpdated$separatedMessageChannelSuffix"
+  fun onRoadSnappedLocationUpdated(locationArg: LatLngDto, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRoadSnappedLocationUpdated$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(locationArg)) {
       if (it is List<*>) {
@@ -7157,15 +6092,13 @@ class NavigationSessionEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
-  fun onRoadSnappedRawLocationUpdated(locationArg: LatLngDto, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRoadSnappedRawLocationUpdated$separatedMessageChannelSuffix"
+  fun onRoadSnappedRawLocationUpdated(locationArg: LatLngDto, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRoadSnappedRawLocationUpdated$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(locationArg)) {
       if (it is List<*>) {
@@ -7176,15 +6109,13 @@ class NavigationSessionEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
-  fun onArrival(waypointArg: NavigationWaypointDto, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onArrival$separatedMessageChannelSuffix"
+  fun onArrival(waypointArg: NavigationWaypointDto, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onArrival$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(waypointArg)) {
       if (it is List<*>) {
@@ -7195,15 +6126,13 @@ class NavigationSessionEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
-  fun onRouteChanged(callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRouteChanged$separatedMessageChannelSuffix"
+  fun onRouteChanged(callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRouteChanged$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(null) {
       if (it is List<*>) {
@@ -7214,20 +6143,13 @@ class NavigationSessionEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
-  fun onRemainingTimeOrDistanceChanged(
-    remainingTimeArg: Double,
-    remainingDistanceArg: Double,
-    delaySeverityArg: TrafficDelaySeverityDto,
-    callback: (Result<Unit>) -> Unit,
-  ) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRemainingTimeOrDistanceChanged$separatedMessageChannelSuffix"
+  fun onRemainingTimeOrDistanceChanged(remainingTimeArg: Double, remainingDistanceArg: Double, delaySeverityArg: TrafficDelaySeverityDto, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRemainingTimeOrDistanceChanged$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(remainingTimeArg, remainingDistanceArg, delaySeverityArg)) {
       if (it is List<*>) {
@@ -7238,16 +6160,14 @@ class NavigationSessionEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
   /** Android-only event. */
-  fun onTrafficUpdated(callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onTrafficUpdated$separatedMessageChannelSuffix"
+  fun onTrafficUpdated(callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onTrafficUpdated$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(null) {
       if (it is List<*>) {
@@ -7258,16 +6178,14 @@ class NavigationSessionEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
   /** Android-only event. */
-  fun onRerouting(callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRerouting$separatedMessageChannelSuffix"
+  fun onRerouting(callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRerouting$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(null) {
       if (it is List<*>) {
@@ -7278,16 +6196,14 @@ class NavigationSessionEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
   /** Android-only event. */
-  fun onGpsAvailabilityUpdate(availableArg: Boolean, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityUpdate$separatedMessageChannelSuffix"
+  fun onGpsAvailabilityUpdate(availableArg: Boolean, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityUpdate$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(availableArg)) {
       if (it is List<*>) {
@@ -7298,19 +6214,14 @@ class NavigationSessionEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
   /** Android-only event. */
-  fun onGpsAvailabilityChange(
-    eventArg: GpsAvailabilityChangeEventDto,
-    callback: (Result<Unit>) -> Unit,
-  ) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityChange$separatedMessageChannelSuffix"
+  fun onGpsAvailabilityChange(eventArg: GpsAvailabilityChangeEventDto, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityChange$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(eventArg)) {
       if (it is List<*>) {
@@ -7321,16 +6232,14 @@ class NavigationSessionEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
   /** Turn-by-Turn navigation events. */
-  fun onNavInfo(navInfoArg: NavInfoDto, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onNavInfo$separatedMessageChannelSuffix"
+  fun onNavInfo(navInfoArg: NavInfoDto, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onNavInfo$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(navInfoArg)) {
       if (it is List<*>) {
@@ -7341,16 +6250,17 @@ class NavigationSessionEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
-  /** Navigation session event. Called when a new navigation session starts with active guidance. */
-  fun onNewNavigationSession(callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onNewNavigationSession$separatedMessageChannelSuffix"
+  /**
+   * Navigation session event. Called when a new navigation
+   * session starts with active guidance.
+   */
+  fun onNewNavigationSession(callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onNewNavigationSession$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(null) {
       if (it is List<*>) {
@@ -7361,216 +6271,106 @@ class NavigationSessionEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
 }
-
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface AutoMapViewApi {
   fun isMyLocationEnabled(): Boolean
-
   fun setMyLocationEnabled(enabled: Boolean)
-
   fun getMyLocation(): LatLngDto?
-
   fun getMapType(): MapTypeDto
-
   fun setMapType(mapType: MapTypeDto)
-
   fun setMapStyle(styleJson: String)
-
   fun getCameraPosition(): CameraPositionDto
-
   fun getVisibleRegion(): LatLngBoundsDto
-
   fun followMyLocation(perspective: CameraPerspectiveDto, zoomLevel: Double?)
-
-  fun animateCameraToCameraPosition(
-    cameraPosition: CameraPositionDto,
-    duration: Long?,
-    callback: (Result<Boolean>) -> Unit,
-  )
-
+  fun animateCameraToCameraPosition(cameraPosition: CameraPositionDto, duration: Long?, callback: (Result<Boolean>) -> Unit)
   fun animateCameraToLatLng(point: LatLngDto, duration: Long?, callback: (Result<Boolean>) -> Unit)
-
-  fun animateCameraToLatLngBounds(
-    bounds: LatLngBoundsDto,
-    padding: Double,
-    duration: Long?,
-    callback: (Result<Boolean>) -> Unit,
-  )
-
-  fun animateCameraToLatLngZoom(
-    point: LatLngDto,
-    zoom: Double,
-    duration: Long?,
-    callback: (Result<Boolean>) -> Unit,
-  )
-
-  fun animateCameraByScroll(
-    scrollByDx: Double,
-    scrollByDy: Double,
-    duration: Long?,
-    callback: (Result<Boolean>) -> Unit,
-  )
-
-  fun animateCameraByZoom(
-    zoomBy: Double,
-    focusDx: Double?,
-    focusDy: Double?,
-    duration: Long?,
-    callback: (Result<Boolean>) -> Unit,
-  )
-
+  fun animateCameraToLatLngBounds(bounds: LatLngBoundsDto, padding: Double, duration: Long?, callback: (Result<Boolean>) -> Unit)
+  fun animateCameraToLatLngZoom(point: LatLngDto, zoom: Double, duration: Long?, callback: (Result<Boolean>) -> Unit)
+  fun animateCameraByScroll(scrollByDx: Double, scrollByDy: Double, duration: Long?, callback: (Result<Boolean>) -> Unit)
+  fun animateCameraByZoom(zoomBy: Double, focusDx: Double?, focusDy: Double?, duration: Long?, callback: (Result<Boolean>) -> Unit)
   fun animateCameraToZoom(zoom: Double, duration: Long?, callback: (Result<Boolean>) -> Unit)
-
   fun moveCameraToCameraPosition(cameraPosition: CameraPositionDto)
-
   fun moveCameraToLatLng(point: LatLngDto)
-
   fun moveCameraToLatLngBounds(bounds: LatLngBoundsDto, padding: Double)
-
   fun moveCameraToLatLngZoom(point: LatLngDto, zoom: Double)
-
   fun moveCameraByScroll(scrollByDx: Double, scrollByDy: Double)
-
   fun moveCameraByZoom(zoomBy: Double, focusDx: Double?, focusDy: Double?)
-
   fun moveCameraToZoom(zoom: Double)
-
   fun getMinZoomPreference(): Double
-
   fun getMaxZoomPreference(): Double
-
   fun resetMinMaxZoomPreference()
-
   fun setMinZoomPreference(minZoomPreference: Double)
-
   fun setMaxZoomPreference(maxZoomPreference: Double)
-
   fun setMyLocationButtonEnabled(enabled: Boolean)
-
   fun setConsumeMyLocationButtonClickEventsEnabled(enabled: Boolean)
-
   fun setZoomGesturesEnabled(enabled: Boolean)
-
   fun setZoomControlsEnabled(enabled: Boolean)
-
   fun setCompassEnabled(enabled: Boolean)
-
   fun setRotateGesturesEnabled(enabled: Boolean)
-
   fun setScrollGesturesEnabled(enabled: Boolean)
-
   fun setScrollGesturesDuringRotateOrZoomEnabled(enabled: Boolean)
-
   fun setTiltGesturesEnabled(enabled: Boolean)
-
   fun setMapToolbarEnabled(enabled: Boolean)
-
   fun setTrafficEnabled(enabled: Boolean)
-
   fun isMyLocationButtonEnabled(): Boolean
-
   fun isConsumeMyLocationButtonClickEventsEnabled(): Boolean
-
   fun isZoomGesturesEnabled(): Boolean
-
   fun isZoomControlsEnabled(): Boolean
-
   fun isCompassEnabled(): Boolean
-
   fun isRotateGesturesEnabled(): Boolean
-
   fun isScrollGesturesEnabled(): Boolean
-
   fun isScrollGesturesEnabledDuringRotateOrZoom(): Boolean
-
   fun isTiltGesturesEnabled(): Boolean
-
   fun isMapToolbarEnabled(): Boolean
-
   fun isTrafficEnabled(): Boolean
-
   fun getMarkers(): List<MarkerDto>
-
   fun addMarkers(markers: List<MarkerDto>): List<MarkerDto>
-
   fun updateMarkers(markers: List<MarkerDto>): List<MarkerDto>
-
   fun removeMarkers(markers: List<MarkerDto>)
-
   fun clearMarkers()
-
   fun clear()
-
   fun getPolygons(): List<PolygonDto>
-
   fun addPolygons(polygons: List<PolygonDto>): List<PolygonDto>
-
   fun updatePolygons(polygons: List<PolygonDto>): List<PolygonDto>
-
   fun removePolygons(polygons: List<PolygonDto>)
-
   fun clearPolygons()
-
   fun getPolylines(): List<PolylineDto>
-
   fun addPolylines(polylines: List<PolylineDto>): List<PolylineDto>
-
   fun updatePolylines(polylines: List<PolylineDto>): List<PolylineDto>
-
   fun removePolylines(polylines: List<PolylineDto>)
-
   fun clearPolylines()
-
   fun getCircles(): List<CircleDto>
-
   fun addCircles(circles: List<CircleDto>): List<CircleDto>
-
   fun updateCircles(circles: List<CircleDto>): List<CircleDto>
-
   fun removeCircles(circles: List<CircleDto>)
-
   fun clearCircles()
-
   fun enableOnCameraChangedEvents()
-
   fun isAutoScreenAvailable(): Boolean
-
   fun setPadding(padding: MapPaddingDto)
-
   fun getPadding(): MapPaddingDto
 
   companion object {
     /** The codec used by AutoMapViewApi. */
-    val codec: MessageCodec<Any?> by lazy { messagesPigeonCodec() }
-
+    val codec: MessageCodec<Any?> by lazy {
+      messagesPigeonCodec()
+    }
     /** Sets up an instance of `AutoMapViewApi` to handle messages through the `binaryMessenger`. */
     @JvmOverloads
-    fun setUp(
-      binaryMessenger: BinaryMessenger,
-      api: AutoMapViewApi?,
-      messageChannelSuffix: String = "",
-    ) {
-      val separatedMessageChannelSuffix =
-        if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    fun setUp(binaryMessenger: BinaryMessenger, api: AutoMapViewApi?, messageChannelSuffix: String = "") {
+      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMyLocationEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMyLocationEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isMyLocationEnabled())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isMyLocationEnabled())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -7578,23 +6378,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMyLocationEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMyLocationEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val enabledArg = args[0] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setMyLocationEnabled(enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setMyLocationEnabled(enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -7602,20 +6396,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMyLocation$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMyLocation$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getMyLocation())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getMyLocation())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -7623,20 +6411,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMapType$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMapType$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getMapType())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getMapType())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -7644,23 +6426,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapType$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapType$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val mapTypeArg = args[0] as MapTypeDto
-            val wrapped: List<Any?> =
-              try {
-                api.setMapType(mapTypeArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setMapType(mapTypeArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -7668,23 +6444,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapStyle$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapStyle$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val styleJsonArg = args[0] as String
-            val wrapped: List<Any?> =
-              try {
-                api.setMapStyle(styleJsonArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setMapStyle(styleJsonArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -7692,20 +6462,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getCameraPosition$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getCameraPosition$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getCameraPosition())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getCameraPosition())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -7713,20 +6477,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getVisibleRegion$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getVisibleRegion$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getVisibleRegion())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getVisibleRegion())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -7734,24 +6492,18 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.followMyLocation$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.followMyLocation$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val perspectiveArg = args[0] as CameraPerspectiveDto
             val zoomLevelArg = args[1] as Double?
-            val wrapped: List<Any?> =
-              try {
-                api.followMyLocation(perspectiveArg, zoomLevelArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.followMyLocation(perspectiveArg, zoomLevelArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -7759,19 +6511,13 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToCameraPosition$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToCameraPosition$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val cameraPositionArg = args[0] as CameraPositionDto
             val durationArg = args[1] as Long?
-            api.animateCameraToCameraPosition(cameraPositionArg, durationArg) {
-              result: Result<Boolean> ->
+            api.animateCameraToCameraPosition(cameraPositionArg, durationArg) { result: Result<Boolean> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))
@@ -7786,12 +6532,7 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLng$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLng$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -7812,20 +6553,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngBounds$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngBounds$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val boundsArg = args[0] as LatLngBoundsDto
             val paddingArg = args[1] as Double
             val durationArg = args[2] as Long?
-            api.animateCameraToLatLngBounds(boundsArg, paddingArg, durationArg) {
-              result: Result<Boolean> ->
+            api.animateCameraToLatLngBounds(boundsArg, paddingArg, durationArg) { result: Result<Boolean> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))
@@ -7840,20 +6575,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngZoom$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngZoom$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val pointArg = args[0] as LatLngDto
             val zoomArg = args[1] as Double
             val durationArg = args[2] as Long?
-            api.animateCameraToLatLngZoom(pointArg, zoomArg, durationArg) { result: Result<Boolean>
-              ->
+            api.animateCameraToLatLngZoom(pointArg, zoomArg, durationArg) { result: Result<Boolean> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))
@@ -7868,20 +6597,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByScroll$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByScroll$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val scrollByDxArg = args[0] as Double
             val scrollByDyArg = args[1] as Double
             val durationArg = args[2] as Long?
-            api.animateCameraByScroll(scrollByDxArg, scrollByDyArg, durationArg) {
-              result: Result<Boolean> ->
+            api.animateCameraByScroll(scrollByDxArg, scrollByDyArg, durationArg) { result: Result<Boolean> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))
@@ -7896,12 +6619,7 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByZoom$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByZoom$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -7909,8 +6627,7 @@ interface AutoMapViewApi {
             val focusDxArg = args[1] as Double?
             val focusDyArg = args[2] as Double?
             val durationArg = args[3] as Long?
-            api.animateCameraByZoom(zoomByArg, focusDxArg, focusDyArg, durationArg) {
-              result: Result<Boolean> ->
+            api.animateCameraByZoom(zoomByArg, focusDxArg, focusDyArg, durationArg) { result: Result<Boolean> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))
@@ -7925,12 +6642,7 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToZoom$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToZoom$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -7951,23 +6663,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToCameraPosition$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToCameraPosition$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val cameraPositionArg = args[0] as CameraPositionDto
-            val wrapped: List<Any?> =
-              try {
-                api.moveCameraToCameraPosition(cameraPositionArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.moveCameraToCameraPosition(cameraPositionArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -7975,23 +6681,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLng$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLng$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val pointArg = args[0] as LatLngDto
-            val wrapped: List<Any?> =
-              try {
-                api.moveCameraToLatLng(pointArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.moveCameraToLatLng(pointArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -7999,24 +6699,18 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngBounds$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngBounds$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val boundsArg = args[0] as LatLngBoundsDto
             val paddingArg = args[1] as Double
-            val wrapped: List<Any?> =
-              try {
-                api.moveCameraToLatLngBounds(boundsArg, paddingArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.moveCameraToLatLngBounds(boundsArg, paddingArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8024,24 +6718,18 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngZoom$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngZoom$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val pointArg = args[0] as LatLngDto
             val zoomArg = args[1] as Double
-            val wrapped: List<Any?> =
-              try {
-                api.moveCameraToLatLngZoom(pointArg, zoomArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.moveCameraToLatLngZoom(pointArg, zoomArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8049,24 +6737,18 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByScroll$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByScroll$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val scrollByDxArg = args[0] as Double
             val scrollByDyArg = args[1] as Double
-            val wrapped: List<Any?> =
-              try {
-                api.moveCameraByScroll(scrollByDxArg, scrollByDyArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.moveCameraByScroll(scrollByDxArg, scrollByDyArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8074,25 +6756,19 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByZoom$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByZoom$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val zoomByArg = args[0] as Double
             val focusDxArg = args[1] as Double?
             val focusDyArg = args[2] as Double?
-            val wrapped: List<Any?> =
-              try {
-                api.moveCameraByZoom(zoomByArg, focusDxArg, focusDyArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.moveCameraByZoom(zoomByArg, focusDxArg, focusDyArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8100,23 +6776,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToZoom$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToZoom$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val zoomArg = args[0] as Double
-            val wrapped: List<Any?> =
-              try {
-                api.moveCameraToZoom(zoomArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.moveCameraToZoom(zoomArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8124,20 +6794,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMinZoomPreference$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMinZoomPreference$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getMinZoomPreference())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getMinZoomPreference())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8145,20 +6809,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMaxZoomPreference$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMaxZoomPreference$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getMaxZoomPreference())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getMaxZoomPreference())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8166,21 +6824,15 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.resetMinMaxZoomPreference$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.resetMinMaxZoomPreference$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.resetMinMaxZoomPreference()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.resetMinMaxZoomPreference()
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8188,23 +6840,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMinZoomPreference$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMinZoomPreference$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val minZoomPreferenceArg = args[0] as Double
-            val wrapped: List<Any?> =
-              try {
-                api.setMinZoomPreference(minZoomPreferenceArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setMinZoomPreference(minZoomPreferenceArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8212,23 +6858,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMaxZoomPreference$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMaxZoomPreference$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val maxZoomPreferenceArg = args[0] as Double
-            val wrapped: List<Any?> =
-              try {
-                api.setMaxZoomPreference(maxZoomPreferenceArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setMaxZoomPreference(maxZoomPreferenceArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8236,23 +6876,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMyLocationButtonEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMyLocationButtonEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val enabledArg = args[0] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setMyLocationButtonEnabled(enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setMyLocationButtonEnabled(enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8260,23 +6894,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setConsumeMyLocationButtonClickEventsEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setConsumeMyLocationButtonClickEventsEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val enabledArg = args[0] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setConsumeMyLocationButtonClickEventsEnabled(enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setConsumeMyLocationButtonClickEventsEnabled(enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8284,23 +6912,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setZoomGesturesEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setZoomGesturesEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val enabledArg = args[0] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setZoomGesturesEnabled(enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setZoomGesturesEnabled(enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8308,23 +6930,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setZoomControlsEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setZoomControlsEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val enabledArg = args[0] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setZoomControlsEnabled(enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setZoomControlsEnabled(enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8332,23 +6948,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setCompassEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setCompassEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val enabledArg = args[0] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setCompassEnabled(enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setCompassEnabled(enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8356,23 +6966,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setRotateGesturesEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setRotateGesturesEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val enabledArg = args[0] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setRotateGesturesEnabled(enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setRotateGesturesEnabled(enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8380,23 +6984,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setScrollGesturesEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setScrollGesturesEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val enabledArg = args[0] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setScrollGesturesEnabled(enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setScrollGesturesEnabled(enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8404,23 +7002,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setScrollGesturesDuringRotateOrZoomEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setScrollGesturesDuringRotateOrZoomEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val enabledArg = args[0] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setScrollGesturesDuringRotateOrZoomEnabled(enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setScrollGesturesDuringRotateOrZoomEnabled(enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8428,23 +7020,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTiltGesturesEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTiltGesturesEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val enabledArg = args[0] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setTiltGesturesEnabled(enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setTiltGesturesEnabled(enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8452,23 +7038,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapToolbarEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapToolbarEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val enabledArg = args[0] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setMapToolbarEnabled(enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setMapToolbarEnabled(enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8476,23 +7056,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val enabledArg = args[0] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setTrafficEnabled(enabledArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setTrafficEnabled(enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8500,20 +7074,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMyLocationButtonEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMyLocationButtonEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isMyLocationButtonEnabled())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isMyLocationButtonEnabled())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8521,20 +7089,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isConsumeMyLocationButtonClickEventsEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isConsumeMyLocationButtonClickEventsEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isConsumeMyLocationButtonClickEventsEnabled())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isConsumeMyLocationButtonClickEventsEnabled())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8542,20 +7104,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isZoomGesturesEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isZoomGesturesEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isZoomGesturesEnabled())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isZoomGesturesEnabled())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8563,20 +7119,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isZoomControlsEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isZoomControlsEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isZoomControlsEnabled())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isZoomControlsEnabled())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8584,20 +7134,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isCompassEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isCompassEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isCompassEnabled())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isCompassEnabled())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8605,20 +7149,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isRotateGesturesEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isRotateGesturesEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isRotateGesturesEnabled())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isRotateGesturesEnabled())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8626,20 +7164,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isScrollGesturesEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isScrollGesturesEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isScrollGesturesEnabled())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isScrollGesturesEnabled())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8647,20 +7179,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isScrollGesturesEnabledDuringRotateOrZoom$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isScrollGesturesEnabledDuringRotateOrZoom$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isScrollGesturesEnabledDuringRotateOrZoom())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isScrollGesturesEnabledDuringRotateOrZoom())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8668,20 +7194,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isTiltGesturesEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isTiltGesturesEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isTiltGesturesEnabled())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isTiltGesturesEnabled())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8689,20 +7209,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMapToolbarEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMapToolbarEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isMapToolbarEnabled())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isMapToolbarEnabled())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8710,20 +7224,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isTrafficEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isTrafficEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isTrafficEnabled())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isTrafficEnabled())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8731,20 +7239,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMarkers$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMarkers$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getMarkers())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getMarkers())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8752,22 +7254,16 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addMarkers$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addMarkers$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val markersArg = args[0] as List<MarkerDto>
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.addMarkers(markersArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.addMarkers(markersArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8775,22 +7271,16 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updateMarkers$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updateMarkers$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val markersArg = args[0] as List<MarkerDto>
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.updateMarkers(markersArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.updateMarkers(markersArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8798,23 +7288,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removeMarkers$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removeMarkers$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val markersArg = args[0] as List<MarkerDto>
-            val wrapped: List<Any?> =
-              try {
-                api.removeMarkers(markersArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.removeMarkers(markersArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8822,21 +7306,15 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearMarkers$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearMarkers$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.clearMarkers()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.clearMarkers()
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8844,21 +7322,15 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clear$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clear$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.clear()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.clear()
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8866,20 +7338,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPolygons$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPolygons$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getPolygons())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getPolygons())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8887,22 +7353,16 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addPolygons$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addPolygons$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val polygonsArg = args[0] as List<PolygonDto>
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.addPolygons(polygonsArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.addPolygons(polygonsArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8910,22 +7370,16 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updatePolygons$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updatePolygons$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val polygonsArg = args[0] as List<PolygonDto>
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.updatePolygons(polygonsArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.updatePolygons(polygonsArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8933,23 +7387,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removePolygons$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removePolygons$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val polygonsArg = args[0] as List<PolygonDto>
-            val wrapped: List<Any?> =
-              try {
-                api.removePolygons(polygonsArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.removePolygons(polygonsArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8957,21 +7405,15 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearPolygons$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearPolygons$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.clearPolygons()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.clearPolygons()
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -8979,20 +7421,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPolylines$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPolylines$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getPolylines())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getPolylines())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -9000,22 +7436,16 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addPolylines$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addPolylines$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val polylinesArg = args[0] as List<PolylineDto>
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.addPolylines(polylinesArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.addPolylines(polylinesArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -9023,22 +7453,16 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updatePolylines$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updatePolylines$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val polylinesArg = args[0] as List<PolylineDto>
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.updatePolylines(polylinesArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.updatePolylines(polylinesArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -9046,23 +7470,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removePolylines$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removePolylines$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val polylinesArg = args[0] as List<PolylineDto>
-            val wrapped: List<Any?> =
-              try {
-                api.removePolylines(polylinesArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.removePolylines(polylinesArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -9070,21 +7488,15 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearPolylines$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearPolylines$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.clearPolylines()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.clearPolylines()
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -9092,20 +7504,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getCircles$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getCircles$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getCircles())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getCircles())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -9113,22 +7519,16 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addCircles$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addCircles$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val circlesArg = args[0] as List<CircleDto>
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.addCircles(circlesArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.addCircles(circlesArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -9136,22 +7536,16 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updateCircles$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updateCircles$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val circlesArg = args[0] as List<CircleDto>
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.updateCircles(circlesArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.updateCircles(circlesArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -9159,23 +7553,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removeCircles$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removeCircles$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val circlesArg = args[0] as List<CircleDto>
-            val wrapped: List<Any?> =
-              try {
-                api.removeCircles(circlesArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.removeCircles(circlesArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -9183,21 +7571,15 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearCircles$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearCircles$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.clearCircles()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.clearCircles()
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -9205,21 +7587,15 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.enableOnCameraChangedEvents$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.enableOnCameraChangedEvents$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                api.enableOnCameraChangedEvents()
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.enableOnCameraChangedEvents()
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -9227,20 +7603,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isAutoScreenAvailable$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isAutoScreenAvailable$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isAutoScreenAvailable())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isAutoScreenAvailable())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -9248,23 +7618,17 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setPadding$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setPadding$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val paddingArg = args[0] as MapPaddingDto
-            val wrapped: List<Any?> =
-              try {
-                api.setPadding(paddingArg)
-                listOf(null)
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              api.setPadding(paddingArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -9272,20 +7636,14 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPadding$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPadding$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.getPadding())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.getPadding())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {
@@ -9295,26 +7653,18 @@ interface AutoMapViewApi {
     }
   }
 }
-
 /** Generated class from Pigeon that represents Flutter messages that can be called from Kotlin. */
-class AutoViewEventApi(
-  private val binaryMessenger: BinaryMessenger,
-  private val messageChannelSuffix: String = "",
-) {
+class AutoViewEventApi(private val binaryMessenger: BinaryMessenger, private val messageChannelSuffix: String = "") {
   companion object {
     /** The codec used by AutoViewEventApi. */
-    val codec: MessageCodec<Any?> by lazy { messagesPigeonCodec() }
+    val codec: MessageCodec<Any?> by lazy {
+      messagesPigeonCodec()
+    }
   }
-
-  fun onCustomNavigationAutoEvent(
-    eventArg: String,
-    dataArg: Any,
-    callback: (Result<Unit>) -> Unit,
-  ) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onCustomNavigationAutoEvent$separatedMessageChannelSuffix"
+  fun onCustomNavigationAutoEvent(eventArg: String, dataArg: Any, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onCustomNavigationAutoEvent$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(eventArg, dataArg)) {
       if (it is List<*>) {
@@ -9325,15 +7675,13 @@ class AutoViewEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
-
-  fun onAutoScreenAvailabilityChanged(isAvailableArg: Boolean, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onAutoScreenAvailabilityChanged$separatedMessageChannelSuffix"
+  fun onAutoScreenAvailabilityChanged(isAvailableArg: Boolean, callback: (Result<Unit>) -> Unit)
+{
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onAutoScreenAvailabilityChanged$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(isAvailableArg)) {
       if (it is List<*>) {
@@ -9344,48 +7692,34 @@ class AutoViewEventApi(
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
+      } 
     }
   }
 }
-
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface NavigationInspector {
   fun isViewAttachedToSession(viewId: Long): Boolean
 
   companion object {
     /** The codec used by NavigationInspector. */
-    val codec: MessageCodec<Any?> by lazy { messagesPigeonCodec() }
-
-    /**
-     * Sets up an instance of `NavigationInspector` to handle messages through the
-     * `binaryMessenger`.
-     */
+    val codec: MessageCodec<Any?> by lazy {
+      messagesPigeonCodec()
+    }
+    /** Sets up an instance of `NavigationInspector` to handle messages through the `binaryMessenger`. */
     @JvmOverloads
-    fun setUp(
-      binaryMessenger: BinaryMessenger,
-      api: NavigationInspector?,
-      messageChannelSuffix: String = "",
-    ) {
-      val separatedMessageChannelSuffix =
-        if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    fun setUp(binaryMessenger: BinaryMessenger, api: NavigationInspector?, messageChannelSuffix: String = "") {
+      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
       run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.NavigationInspector.isViewAttachedToSession$separatedMessageChannelSuffix",
-            codec,
-          )
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.NavigationInspector.isViewAttachedToSession$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val viewIdArg = args[0] as Long
-            val wrapped: List<Any?> =
-              try {
-                listOf(api.isViewAttachedToSession(viewIdArg))
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
+            val wrapped: List<Any?> = try {
+              listOf(api.isViewAttachedToSession(viewIdArg))
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
             reply.reply(wrapped)
           }
         } else {

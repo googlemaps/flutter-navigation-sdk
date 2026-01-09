@@ -318,7 +318,8 @@ class StepInfo {
     required this.stepNumber,
     required this.lanes,
     required this.maneuver,
-    required this.image,
+    required this.maneuverImage,
+    required this.laneImage,
   });
 
   /// Distance in meters from the previous step to this step if available, otherwise null.
@@ -357,8 +358,13 @@ class StepInfo {
   /// The index of the step in the list of all steps in the route if available, otherwise null.
   final int? stepNumber;
 
-  /// PNG encoded bytes of the generated step image for the current step if available, otherwise null.
-  final ImageDescriptor? image;
+  /// Image descriptor for the generated maneuver image for the current step if available, otherwise null.
+  ///   /// This image is generated only if step image generation option includes maneuver images.
+  final ImageDescriptor? maneuverImage;
+
+  /// Image descriptor for the generated lane guidance image for the current step if available, otherwise null.
+  ///   /// This image is generated only if step image generation option includes lane images.
+  final ImageDescriptor? laneImage;
 
   @override
   String toString() =>
@@ -462,6 +468,24 @@ class NavInfoEvent {
   String toString() => 'NavInfoEvent(navInfo: $navInfo)';
 }
 
-/// Generated step images type.
+/// Options for step image generation in turn-by-turn navigation events.
 /// {@category Navigation}
-enum GeneratedStepImagesType { none, bitmap }
+class StepImageGenerationOptions {
+  /// Creates step image generation options.
+  const StepImageGenerationOptions({
+    this.generateManeuverImages = false,
+    this.generateLaneImages = false,
+  });
+
+  /// Whether to generate maneuver images for navigation steps.
+  /// Defaults to false.
+  final bool generateManeuverImages;
+
+  /// Whether to generate lane images for navigation steps.
+  /// Defaults to false.
+  final bool generateLaneImages;
+
+  @override
+  String toString() =>
+      'StepImageGenerationOptions(generateManeuverImages: $generateManeuverImages, generateLaneImages: $generateLaneImages)';
+}

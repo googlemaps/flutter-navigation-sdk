@@ -15,14 +15,22 @@
 // ignore_for_file: public_member_api_docs
 
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_navigation_flutter/google_navigation_flutter.dart';
-import '../utils/utils.dart';
+
 import '../widgets/widgets.dart';
+
+const _viewPadding = 8.0;
+const _smallControlsHeight = 80.0;
+const _navigationControlsHeight = 130.0;
 
 class TurnByTurnPage extends ExamplePage {
   const TurnByTurnPage({super.key})
-    : super(leading: const Icon(Icons.roundabout_right), title: 'Turn-by-turn');
+    : super(
+        leading: const Icon(Icons.roundabout_right),
+        title: 'Turn-by-turn NavInfo',
+      );
 
   @override
   ExamplePageState<TurnByTurnPage> createState() => _TurnByTurnPageState();
@@ -30,17 +38,30 @@ class TurnByTurnPage extends ExamplePage {
 
 class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
   bool _navigationRunning = false;
-  late final GoogleNavigationViewController _navigationViewController;
+  bool _isFullscreen = false;
+  bool _showCustomUI = true; // Default to custom UI
+  bool _isPromptVisible = false;
+  GoogleNavigationViewController? _navigationViewController;
   StreamSubscription<NavInfoEvent>? _navInfoSubscription;
 
   NavInfo? _navInfo;
 
-  Image? _currentStepImage;
-
   // ignore: use_setters_to_change_properties
-  Future<void> _onViewCreated(GoogleNavigationViewController controller) async {
+  void _onViewCreated(GoogleNavigationViewController controller) async {
     _navigationViewController = controller;
+    // Sync official UI state with current custom UI toggle
+    await _updateUIState();
     setState(() {});
+  }
+
+  /// Updates the SDK's navigation header/footer visibility based on
+  /// whether custom UI is enabled.
+  Future<void> _updateUIState() async {
+    if (_navigationViewController == null) return;
+    // Hide SDK's header/footer when custom UI is shown
+    _navigationViewController!.setNavigationHeaderEnabled(!_showCustomUI);
+    _navigationViewController!.setNavigationFooterEnabled(!_showCustomUI);
+    _navigationViewController!.setPadding(_getMapPadding());
   }
 
   Future<void> _startNavigation() async {
@@ -76,7 +97,7 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
     if (status == NavigationRouteStatus.statusOk) {
       await GoogleMapsNavigator.startGuidance();
       await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
-      await _navigationViewController.followMyLocation(
+      await _navigationViewController?.followMyLocation(
         CameraPerspective.tilted,
       );
 
@@ -88,6 +109,7 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
       _showMessage('Starting navigation failed.');
       setState(() {});
     }
+    _updateUIState();
   }
 
   Future<void> _setupListeners() async {
@@ -99,7 +121,10 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
     _navInfoSubscription = GoogleMapsNavigator.setNavInfoListener(
       _onNavInfoEvent,
       numNextStepsToPreview: 100,
-      generatedStepImagesType: GeneratedStepImagesType.bitmap,
+      stepImageGenerationOptions: const StepImageGenerationOptions(
+        generateManeuverImages: true,
+        generateLaneImages: true,
+      ),
     );
   }
 
@@ -108,22 +133,11 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
     _navInfoSubscription = null;
   }
 
-  void _onNavInfoEvent(NavInfoEvent event) async {
+  void _onNavInfoEvent(NavInfoEvent event) {
     if (!mounted) {
       return;
     }
-    final shouldChangeManeuverIcon =
-        event.navInfo.currentStep?.maneuver != _navInfo?.currentStep?.maneuver;
-    Image? currentStepImage;
-    if (shouldChangeManeuverIcon) {
-      currentStepImage = await getRegisteredImageData(
-        event.navInfo.currentStep!.image!,
-      );
-    }
     setState(() {
-      if (shouldChangeManeuverIcon) {
-        _currentStepImage = currentStepImage;
-      }
       _navInfo = event.navInfo;
     });
   }
@@ -132,80 +146,237 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
     _clearListeners();
     _navInfo = null;
     if (_navigationRunning) {
+      // Clear registered maneuver and lane images before cleanup
+      await clearRegisteredImages(filter: RegisteredImageType.maneuver);
+      await clearRegisteredImages(filter: RegisteredImageType.lane);
+      await GoogleMapsNavigator.simulator.removeUserLocation();
       await GoogleMapsNavigator.cleanup();
 
       setState(() {
         _navigationRunning = false;
       });
     }
+    _updateUIState();
   }
 
   @override
   void dispose() {
     _clearListeners();
     if (_navigationRunning) {
+      // Clear registered maneuver and lane images before cleanup
+      clearRegisteredImages(filter: RegisteredImageType.maneuver);
+      clearRegisteredImages(filter: RegisteredImageType.lane);
       GoogleMapsNavigator.cleanup();
     }
     super.dispose();
   }
 
+  /// Handles step change when user swipes to a different step.
+  /// When swiping back to current step (index 0), re-enable follow mode.
+  void _onStepChanged(StepInfo step, int stepIndex) async {
+    debugPrint('Step changed to index $stepIndex: ${step.fullRoadName}');
+  }
+
+  void _toggleFullscreen() {
+    setState(() {
+      _isFullscreen = !_isFullscreen;
+    });
+  }
+
+  void _toggleCustomUI() {
+    final enabled = !_showCustomUI;
+
+    setState(() {
+      _showCustomUI = enabled;
+      _isFullscreen = enabled && _isFullscreen;
+    });
+    _updateUIState();
+  }
+
+  double _getControlsHeight() {
+    if (!_isFullscreen) {
+      return 0;
+    }
+    if (!_navigationRunning) {
+      return _smallControlsHeight;
+    }
+    if (_showCustomUI) {
+      return _navigationControlsHeight;
+    }
+    return 0;
+  }
+
+  EdgeInsets _getViewPadding() {
+    if (_isFullscreen) {
+      final safePadding = MediaQuery.of(context).padding;
+
+      return EdgeInsets.only(
+        top: safePadding.top,
+        bottom: safePadding.bottom + _getControlsHeight(),
+        left: _viewPadding,
+        right: _viewPadding,
+      );
+    }
+    return EdgeInsets.all(_viewPadding);
+  }
+
+  EdgeInsets _getMapPadding() {
+    EdgeInsets padding;
+    if (_navigationRunning) {
+      double top = _showCustomUI ? 50 : 0;
+      double bottom = _showCustomUI ? 100 : 0;
+      padding = EdgeInsets.only(
+        top: top,
+        bottom: bottom + _getControlsHeight(),
+      );
+    } else {
+      padding = _getViewPadding();
+    }
+
+    // On Android, scale padding by device pixel ratio
+    if (Platform.isAndroid) {
+      return padding * MediaQuery.of(context).devicePixelRatio;
+    }
+    return padding;
+  }
+
   @override
-  Widget build(BuildContext context) => buildPage(
-    context,
-    (BuildContext context) => SafeArea(
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: GoogleMapsNavigationView(
-              onViewCreated: _onViewCreated,
-              initialNavigationUIEnabledPreference:
-                  NavigationUIEnabledPreference.disabled,
+  Widget build(BuildContext context) {
+    // Fullscreen mode: render without buildPage (edge-to-edge)
+    if (_isFullscreen) {
+      return Scaffold(body: _buildFullscreenContent(context));
+    }
+
+    // Normal mode: use buildPage with app bar, buttons below map
+    return buildPage(
+      context,
+      (BuildContext context) => _buildNormalContent(context),
+    );
+  }
+
+  /// Builds the normal (non-fullscreen) layout with map and buttons in a Column.
+  /// Buttons are below the map, not overlaid. This demonstrates how custom UI
+  /// can have margin at the bottom to sit above the control buttons.
+  Widget _buildNormalContent(BuildContext context) {
+    return Column(
+      children: [
+        // Map area (expands to fill available space)
+        Expanded(child: _buildMapWithOverlays(context, isFullscreen: false)),
+        // Control buttons below the map
+        Container(
+          padding: const EdgeInsets.all(16),
+          child: _buildControlButtons(context),
+        ),
+      ],
+    );
+  }
+
+  /// Builds the fullscreen layout with everything overlaid on the map.
+  Widget _buildFullscreenContent(BuildContext context) {
+    final safePadding = MediaQuery.of(context).padding;
+
+    return Stack(
+      children: [
+        // Map fills entire screen
+        Positioned.fill(
+          child: _buildMapWithOverlays(context, isFullscreen: true),
+        ),
+        // Control buttons overlaid at bottom
+        Positioned(
+          bottom: safePadding.bottom + 16,
+          left: 16,
+          right: 16,
+          child: _buildControlButtons(context),
+        ),
+      ],
+    );
+  }
+
+  /// Builds the map view with custom navigation overlays.
+  Widget _buildMapWithOverlays(
+    BuildContext context, {
+    required bool isFullscreen,
+  }) {
+    final viewPadding = _getViewPadding();
+
+    return Stack(
+      children: [
+        // Map view - fills the entire area
+        Positioned.fill(
+          child: GoogleMapsNavigationView(
+            onViewCreated: _onViewCreated,
+            initialPadding: _getMapPadding(),
+            initialNavigationUIEnabledPreference:
+                NavigationUIEnabledPreference.automatic,
+            onPromptVisibilityChanged: (bool promptVisible) {
+              if (mounted) {
+                setState(() => _isPromptVisible = promptVisible);
+              }
+            },
+          ),
+        ),
+
+        // Custom Navigation Header overlay
+        if (_showCustomUI &&
+            _navInfo != null &&
+            _navInfo!.currentStep != null &&
+            _navInfo!.navState != NavState.stopped) ...[
+          Positioned(
+            top: viewPadding.top,
+            left: 0,
+            right: 0,
+            child: CustomNavigationHeaderExample(
+              navInfo: _navInfo!,
+              onStepChanged: _onStepChanged,
             ),
           ),
-          const SizedBox(height: 10),
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 10,
-            children: <Widget>[
-              ElevatedButton(
-                onPressed:
-                    _navigationRunning
-                        ? () => _stopNavigation()
-                        : () => _startNavigation(),
-                child: Text(
-                  _navigationRunning ? 'Stop navigation' : 'Start navigation',
-                ),
-              ),
-              ElevatedButton(
-                onPressed:
-                    _navigationRunning
-                        ? () async {
-                          await _navigationViewController
-                              .setNavigationHeaderEnabled(
-                                !(await _navigationViewController
-                                    .isNavigationHeaderEnabled()),
-                              );
-                          await _navigationViewController
-                              .setNavigationFooterEnabled(
-                                !(await _navigationViewController
-                                    .isNavigationFooterEnabled()),
-                              );
-                        }
-                        : null,
-                child: const Text('Toggle header/footer'),
-              ),
-            ],
-          ),
-          if (_navInfo != null) _getNavInfoWidgets(context, _navInfo!),
-          if (_navInfo != null)
-            ElevatedButton(
-              onPressed: () => _showSteps(context, _navInfo!),
-              child: const Text('Show all remaining steps'),
+          if (!_isPromptVisible)
+            Positioned(
+              bottom: viewPadding.bottom,
+              left: 0,
+              right: 0,
+              child: CustomNavigationFooterExample(navInfo: _navInfo!),
             ),
         ],
-      ),
-    ),
-  );
+      ],
+    );
+  }
+
+  /// Builds the control buttons (used in both normal and fullscreen modes).
+  Widget _buildControlButtons(BuildContext context) {
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 8,
+      runSpacing: 8,
+      children: <Widget>[
+        ElevatedButton(
+          onPressed:
+              _navigationRunning
+                  ? () => _stopNavigation()
+                  : () => _startNavigation(),
+          child: Text(
+            _navigationRunning ? 'Stop navigation' : 'Start navigation',
+          ),
+        ),
+        if (_navigationRunning)
+          ElevatedButton(
+            onPressed: _toggleCustomUI,
+            child: Text(
+              _showCustomUI ? 'Disable Custom UI' : 'Enable Custom UI',
+            ),
+          ),
+        ElevatedButton(
+          onPressed: _showCustomUI ? _toggleFullscreen : null,
+          child: Text(_isFullscreen ? 'Exit fullscreen' : 'Fullscreen'),
+        ),
+        if (_navInfo != null)
+          ElevatedButton(
+            onPressed: () => _showSteps(context, _navInfo!),
+            child: const Text('Show remaining steps'),
+          ),
+      ],
+    );
+  }
 
   void _showMessage(String message) {
     _hideMessage();
@@ -221,191 +392,45 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
   }
 
-  /// Builds a widget that displays information about the current navigation.
-  ///
-  /// Note: This method does not display all available navigation information.
-  /// Look at the [NavInfo] documentation for more information.
-  Widget _getNavInfoWidgets(BuildContext context, NavInfo navInfo) {
-    const TextStyle navInfoTextStyle = TextStyle(
-      fontSize: 12,
-      color: Colors.white,
-    );
-    return Container(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        children: <Widget>[
-          if (navInfo.navState == NavState.stopped)
-            const Text('Navigation stopped.'),
-          if (navInfo.currentStep != null) ...<Widget>[
-            _getNavInfoWidgetForStep(
-              context,
-              navInfo.currentStep!,
-              navInfo.distanceToCurrentStepMeters,
-              _currentStepImage,
-            ),
-            const SizedBox(height: 5),
-            Card(
-              color: Colors.green.shade400,
-              child: Padding(
-                padding: const EdgeInsets.all(5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        if (navInfo.timeToFinalDestinationSeconds != null &&
-                            navInfo.distanceToFinalDestinationMeters != null)
-                          Text(
-                            '${formatRemainingDuration(Duration(seconds: navInfo.timeToFinalDestinationSeconds!))} and ${formatRemainingDistance(navInfo.distanceToFinalDestinationMeters!)} to final destination.',
-                            style: navInfoTextStyle,
-                          ),
-                        const SizedBox(height: 5),
-                        if (navInfo.timeToCurrentStepSeconds != null)
-                          Text(
-                            '${formatRemainingDuration(Duration(seconds: navInfo.timeToCurrentStepSeconds!))} to current step.',
-                            style: navInfoTextStyle,
-                          ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-
-  /// Builds a card that displays information  about the given step.
-  ///
-  /// Note: This method does not display all available step information.
-  /// Look at the [NavInfo] documentation for more information.
-  Widget _getNavInfoWidgetForStep(
-    BuildContext context,
-    StepInfo stepInfo,
-    int? metersToStep,
-    Image? stepImage,
-  ) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    const TextStyle navInfoTextStyle = TextStyle(
-      fontSize: 12,
-      color: Colors.white,
-    );
-    return Card(
-      color: Colors.green.shade400,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.all(10),
-              margin: const EdgeInsets.only(right: 10),
-              width: screenWidth / 4,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+  void _showSteps(BuildContext context, NavInfo navInfo) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  RichText(
-                    text: TextSpan(
-                      style: navInfoTextStyle,
-                      children: <TextSpan>[
-                        const TextSpan(
-                          text: 'Maneuver\n',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(text: stepInfo.maneuver.name),
-                        if (metersToStep != null)
-                          TextSpan(
-                            text:
-                                '\n\n${formatRemainingDistance(metersToStep)}',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                      ],
-                    ),
+                  const Text('Steps', style: TextStyle(fontSize: 20)),
+                  ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('Close'),
                   ),
                 ],
               ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'Step #${stepInfo.stepNumber ?? "?"}',
-                      style: navInfoTextStyle,
+              SizedBox(
+                height: 300,
+                child: Scrollbar(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        if (navInfo.remainingSteps.isEmpty)
+                          const Text('No remaining steps'),
+                        for (final StepInfo step in navInfo.remainingSteps)
+                          StepCardExample(step: step),
+                        const SizedBox(height: 20),
+                      ],
                     ),
-                    const SizedBox(height: 10),
-                    RichText(
-                      text: TextSpan(
-                        style: navInfoTextStyle,
-                        children: <TextSpan>[
-                          const TextSpan(
-                            text: 'Road: ',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          TextSpan(text: stepInfo.fullRoadName ?? ''),
-                          const TextSpan(
-                            text: '\nInstructions: ',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          TextSpan(text: stepInfo.fullInstructions ?? ''),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            if (stepImage != null) SizedBox(height: 40, child: stepImage),
-            SizedBox(width: 10),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showSteps(BuildContext context, NavInfo navInfo) {
-    Scaffold.of(context).showBottomSheet((BuildContext context) {
-      return Padding(
-        padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                const Text('Steps', style: TextStyle(fontSize: 20)),
-                ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Close'),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 300,
-              child: Scrollbar(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      if (navInfo.remainingSteps.isEmpty)
-                        const Text('No remaining steps'),
-                      for (final StepInfo step in navInfo.remainingSteps)
-                        _getNavInfoWidgetForStep(context, step, null, null),
-                      const SizedBox(height: 20),
-                    ],
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-      );
-    });
+            ],
+          ),
+        );
+      },
+    );
   }
 }

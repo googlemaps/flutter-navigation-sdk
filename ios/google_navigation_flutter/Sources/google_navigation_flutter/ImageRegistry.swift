@@ -59,7 +59,7 @@ class ImageRegistry {
     )
   }
 
-  func registerManeuverIcon(
+  func registerManeuverImage(
     imageId: String, image: UIImage, imagePixelRatio: Double, width: Double?,
     height: Double?
   ) throws -> ImageDescriptorDto {
@@ -70,7 +70,7 @@ class ImageRegistry {
         imagePixelRatio: imagePixelRatio,
         width: width,
         height: height,
-        type: .maneuverIcon
+        type: .maneuver
       )
     )
     return ImageDescriptorDto(
@@ -78,7 +78,30 @@ class ImageRegistry {
       imagePixelRatio: imagePixelRatio,
       width: width,
       height: height,
-      type: .maneuverIcon
+      type: .maneuver
+    )
+  }
+
+  func registerLaneImage(
+    imageId: String, image: UIImage, imagePixelRatio: Double, width: Double?,
+    height: Double?
+  ) throws -> ImageDescriptorDto {
+    registeredImages.append(
+      RegisteredImage(
+        imageId: imageId,
+        image: image,
+        imagePixelRatio: imagePixelRatio,
+        width: width,
+        height: height,
+        type: .lane
+      )
+    )
+    return ImageDescriptorDto(
+      registeredImageId: imageId,
+      imagePixelRatio: imagePixelRatio,
+      width: width,
+      height: height,
+      type: .lane
     )
   }
 

@@ -184,7 +184,7 @@ void main() {
           GoogleMapsNavigator.setNavInfoListener(
             expectAsync1((NavInfoEvent event) {
               expectSync(event.navInfo, isA<NavInfo>());
-              expectSync(event.navInfo.currentStep?.image, isNull);
+              expectSync(event.navInfo.currentStep?.maneuverImage, isNull);
 
               /// Complete the eventReceived completer only once.
               if (!eventReceived.isCompleted) {
@@ -250,12 +250,21 @@ void main() {
           GoogleMapsNavigator.setNavInfoListener(
             expectAsync1((NavInfoEvent event) {
               expectSync(event.navInfo, isA<NavInfo>());
-              expectSync(event.navInfo.currentStep?.image, isNotNull);
+              expectSync(event.navInfo.currentStep?.maneuverImage, isNotNull);
               expectSync(
-                event.navInfo.remainingSteps.lastOrNull?.image,
+                event.navInfo.remainingSteps.lastOrNull?.maneuverImage,
                 isNotNull,
               );
-              currentManeuverImageDescriptor = event.navInfo.currentStep?.image;
+
+              /// Test that laneImage is available if lanes are present.
+              final currentStep = event.navInfo.currentStep;
+              if (currentStep?.lanes != null &&
+                  currentStep!.lanes!.isNotEmpty) {
+                expectSync(currentStep.laneImage, isNotNull);
+              }
+
+              currentManeuverImageDescriptor =
+                  event.navInfo.currentStep?.maneuverImage;
 
               /// Complete the eventReceived completer only once.
               if (!eventReceived.isCompleted) {
@@ -263,7 +272,10 @@ void main() {
               }
             }, max: -1),
             numNextStepsToPreview: null,
-            generatedStepImagesType: GeneratedStepImagesType.bitmap,
+            stepImageGenerationOptions: const StepImageGenerationOptions(
+              generateManeuverImages: true,
+              generateLaneImages: true,
+            ),
           );
 
       /// Start simulation.

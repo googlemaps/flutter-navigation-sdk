@@ -79,7 +79,7 @@ class ImageRegistry {
     )
   }
 
-  fun registerManeuverIcon(
+  fun registerManeuverImage(
     imageId: String,
     bitmap: Bitmap,
     imagePixelRatio: Double,
@@ -92,15 +92,26 @@ class ImageRegistry {
       imagePixelRatio,
       width,
       height,
-      RegisteredImageTypeDto.MANEUVER_ICON,
+      RegisteredImageTypeDto.MANEUVER,
     )
     return ImageDescriptorDto(
       imageId,
       imagePixelRatio,
       width,
       height,
-      RegisteredImageTypeDto.MANEUVER_ICON,
+      RegisteredImageTypeDto.MANEUVER,
     )
+  }
+
+  fun registerLaneImage(
+    imageId: String,
+    bitmap: Bitmap,
+    imagePixelRatio: Double,
+    width: Double?,
+    height: Double?,
+  ): ImageDescriptorDto {
+    addRegisteredImage(imageId, bitmap, imagePixelRatio, width, height, RegisteredImageTypeDto.LANE)
+    return ImageDescriptorDto(imageId, imagePixelRatio, width, height, RegisteredImageTypeDto.LANE)
   }
 
   private fun addRegisteredImage(
@@ -113,6 +124,9 @@ class ImageRegistry {
   ) {
     val imageType = Convert.registeredImageType(type)
     val bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap)
+    // Store original bitmap for maneuver and lane images to return image data
+    val shouldStoreBitmap =
+      imageType == RegisteredImageType.MANEUVER || imageType == RegisteredImageType.LANE
     val registeredImage =
       RegisteredImage(
         imageId,
@@ -121,7 +135,7 @@ class ImageRegistry {
         width,
         height,
         imageType,
-        if (imageType == RegisteredImageType.MANEUVER_ICON) bitmap else null,
+        if (shouldStoreBitmap) bitmap else null,
       )
     registeredImages.add(registeredImage)
   }
@@ -190,7 +204,7 @@ class ImageRegistry {
 
   fun getRegisteredImageData(imageDescriptor: ImageDescriptorDto): ByteArray? {
     return imageDescriptor.registeredImageId?.let {
-      findRegisteredImage(imageDescriptor.registeredImageId)?.maneuverIconBitmap?.let {
+      findRegisteredImage(imageDescriptor.registeredImageId)?.originalBitmap?.let {
         convertBitmapToPNGByteArray(it)
       }
     }
