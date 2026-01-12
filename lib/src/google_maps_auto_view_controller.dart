@@ -24,6 +24,48 @@ class GoogleMapsAutoViewController {
     GoogleMapsNavigationPlatform.instance.autoAPI.ensureAutoViewApiSetUp();
   }
 
+  /// Sets the map options to be used for Android Auto and CarPlay views.
+  ///
+  /// This method should be called before the Android Auto or CarPlay screen is created
+  /// to customize the map appearance.
+  ///
+  /// The [mapOptions] parameter allows you to specify:
+  /// - cameraPosition: The initial positioning of the camera (target, zoom, bearing, tilt)
+  /// - mapId: A cloud-based map ID for custom styling
+  /// - mapType: The type of map to display (normal, satellite, terrain, hybrid)
+  /// - mapColorScheme: Color scheme affecting map colors, roads, and labels (light, dark, or follow system)
+  /// - forceNightMode: Controls light/dark mode for navigation UI when navigation is running
+  ///
+  /// Note: mapColorScheme and forceNightMode are independent settings:
+  /// - mapColorScheme controls the map's visual appearance (roads, labels, terrain colors)
+  /// - forceNightMode controls the navigation UI mode (light/dark) when navigation is active
+  ///
+  /// This is a static configuration that affects all auto/carplay views.
+  /// Gesture controls and other UI elements are not configurable as they are
+  /// handled by the Android Auto and CarPlay systems.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// // Set before Android Auto or CarPlay screen is created
+  /// await GoogleMapsAutoViewController.setAutoMapOptions(
+  ///   AutoMapOptions(
+  ///     cameraPosition: CameraPosition(
+  ///       target: LatLng(37.7749, -122.4194),
+  ///       zoom: 14.0,
+  ///     ),
+  ///     mapId: 'your-cloud-based-map-id',
+  ///     mapType: MapType.hybrid,
+  ///     mapColorScheme: MapColorScheme.dark,
+  ///     forceNightMode: NavigationForceNightMode.forceNight,
+  ///   ),
+  /// );
+  /// ```
+  static Future<void> setAutoMapOptions(AutoMapOptions mapOptions) {
+    return GoogleMapsNavigationPlatform.instance.autoAPI.setAutoMapOptions(
+      mapOptions: mapOptions,
+    );
+  }
+
   /// Change status of my location enabled.
   Future<void> setMyLocationEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance.autoAPI.setMyLocationEnabled(
@@ -364,11 +406,169 @@ class GoogleMapsAutoViewController {
     return GoogleMapsNavigationPlatform.instance.autoAPI.getPadding();
   }
 
+  /// Returns whether the Android Auto or CarPlay map view is currently available.
   Future<bool> isAutoScreenAvailable() {
     return GoogleMapsNavigationPlatform.instance.autoAPI
         .isAutoScreenAvailable();
   }
 
+  /// Enable or disable traffic prompts on the Android Auto or CarPlay map view.
+  ///
+  /// When enabled, traffic prompts are displayed on the map during navigation
+  /// to inform the driver about traffic conditions along the route.
+  ///
+  /// This setting persists across navigation sessions.
+  ///
+  /// Example:
+  /// ```dart
+  /// await autoViewController.setTrafficPromptsEnabled(true);
+  /// ```
+  Future<void> setTrafficPromptsEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .setTrafficPromptsEnabled(enabled: enabled);
+  }
+
+  /// Returns whether traffic prompts are currently enabled on the
+  /// Android Auto or CarPlay map view.
+  Future<bool> isTrafficPromptsEnabled() {
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .isTrafficPromptsEnabled();
+  }
+
+  /// Sets whether traffic incident cards are enabled on the Android Auto or CarPlay view.
+  ///
+  /// Traffic incident cards display information about accidents, construction,
+  /// road closures, and other incidents along the route.
+  ///
+  /// Example:
+  /// ```dart
+  /// await autoViewController.setTrafficIncidentCardsEnabled(true);
+  /// ```
+  Future<void> setTrafficIncidentCardsEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .setTrafficIncidentCardsEnabled(enabled: enabled);
+  }
+
+  /// Returns whether traffic incident cards are currently enabled on the
+  /// Android Auto or CarPlay map view.
+  Future<bool> isTrafficIncidentCardsEnabled() {
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .isTrafficIncidentCardsEnabled();
+  }
+
+  /// Sets whether the report incident button is enabled on the Android Auto or CarPlay view.
+  ///
+  /// The report incident button allows users to report traffic incidents they encounter.
+  ///
+  /// Example:
+  /// ```dart
+  /// await autoViewController.setReportIncidentButtonEnabled(true);
+  /// ```
+  Future<void> setReportIncidentButtonEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .setReportIncidentButtonEnabled(enabled: enabled);
+  }
+
+  /// Returns whether the report incident button is currently enabled on the
+  /// Android Auto or CarPlay map view.
+  Future<bool> isReportIncidentButtonEnabled() {
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .isReportIncidentButtonEnabled();
+  }
+
+  /// Gets the current map color scheme for the Android Auto or CarPlay view.
+  ///
+  /// Returns the map color scheme (light, dark, or follow system).
+  ///
+  /// Example:
+  /// ```dart
+  /// final scheme = await autoViewController.getMapColorScheme();
+  /// print('Current scheme: $scheme');
+  /// ```
+  Future<MapColorScheme> getMapColorScheme() {
+    return GoogleMapsNavigationPlatform.instance.autoAPI.getMapColorScheme();
+  }
+
+  /// Sets the map color scheme for the Android Auto or CarPlay view.
+  ///
+  /// The color scheme affects how map tiles are rendered.
+  ///
+  /// Example:
+  /// ```dart
+  /// await autoViewController.setMapColorScheme(MapColorScheme.dark);
+  /// ```
+  Future<void> setMapColorScheme(MapColorScheme mapColorScheme) {
+    return GoogleMapsNavigationPlatform.instance.autoAPI.setMapColorScheme(
+      mapColorScheme: mapColorScheme,
+    );
+  }
+
+  /// Gets the current force night mode setting for the Android Auto or CarPlay navigation view.
+  ///
+  /// Returns the force night mode setting.
+  ///
+  /// Example:
+  /// ```dart
+  /// final mode = await autoViewController.getForceNightMode();
+  /// print('Current night mode: $mode');
+  /// ```
+  Future<NavigationForceNightMode> getForceNightMode() {
+    return GoogleMapsNavigationPlatform.instance.autoAPI.getForceNightMode();
+  }
+
+  /// Sets the force night mode for the Android Auto or CarPlay navigation view.
+  ///
+  /// This controls whether the navigation UI uses night mode styling.
+  ///
+  /// Example:
+  /// ```dart
+  /// await autoViewController.setForceNightMode(NavigationForceNightMode.forceNight);
+  /// ```
+  Future<void> setForceNightMode(NavigationForceNightMode forceNightMode) {
+    return GoogleMapsNavigationPlatform.instance.autoAPI.setForceNightMode(
+      forceNightMode: forceNightMode,
+    );
+  }
+
+  /// Sends a custom event from Flutter to the native Android Auto or CarPlay implementation.
+  ///
+  /// This allows you to communicate custom data from your Flutter app to your native
+  /// Android Auto screen or CarPlay scene delegate implementations.
+  ///
+  /// The [event] parameter identifies the type of event being sent.
+  /// The [data] parameter contains the event payload, which can be any serializable type.
+  ///
+  /// Note: You must handle this event in your native implementation:
+  /// - Android: Override the event handling in your `AndroidAutoBaseScreen` subclass
+  /// - iOS: Override the event handling in your `BaseCarSceneDelegate` subclass
+  ///
+  /// Example:
+  /// ```dart
+  /// await autoViewController.sendCustomNavigationAutoEvent(
+  ///   'showMenu',
+  ///   {'menuId': 'myMenu'}
+  /// );
+  /// ```
+  Future<void> sendCustomNavigationAutoEvent(String event, Object data) {
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .sendCustomNavigationAutoEvent(event: event, data: data);
+  }
+
+  /// Listens for custom navigation events sent from the native Android Auto or CarPlay code.
+  ///
+  /// This allows your native Android Auto or CarPlay implementation to send
+  /// custom events back to your Flutter application.
+  ///
+  /// The [func] callback will be invoked whenever a custom event is received from
+  /// the native layer.
+  ///
+  /// Example:
+  /// ```dart
+  /// autoViewController.listenForCustomNavigationAutoEvents((event) {
+  ///   print('Received event: ${event.event}');
+  ///   print('Event data: ${event.data}');
+  /// });
+  /// ```
   void listenForCustomNavigationAutoEvents(
     void Function(CustomNavigationAutoEvent event) func,
   ) {
@@ -379,12 +579,62 @@ class GoogleMapsAutoViewController {
         });
   }
 
+  /// Listens for changes in Android Auto or CarPlay screen availability.
+  ///
+  /// The [func] callback will be invoked whenever the auto screen becomes
+  /// available or unavailable (e.g., when user connects/disconnects from
+  /// Android Auto or CarPlay).
+  ///
+  /// Example:
+  /// ```dart
+  /// autoViewController.listenForAutoScreenAvailibilityChangedEvent((event) {
+  ///   if (event.isAvailable) {
+  ///     print('Auto screen is now available');
+  ///   } else {
+  ///     print('Auto screen is no longer available');
+  ///   }
+  /// });
+  /// ```
   void listenForAutoScreenAvailibilityChangedEvent(
     void Function(AutoScreenAvailabilityChangedEvent event) func,
   ) {
     GoogleMapsNavigationPlatform.instance.autoAPI
         .getAutoScreenAvailabilityChangedEventStream()
         .listen((AutoScreenAvailabilityChangedEvent event) {
+          func(event);
+        });
+  }
+
+  /// Listens for prompt visibility changes on Android Auto or CarPlay.
+  ///
+  /// The [func] callback will be invoked whenever traffic prompts become
+  /// visible or hidden on the auto screen. This is useful for adjusting
+  /// your custom UI elements to avoid overlapping with system prompts.
+  ///
+  /// Note: You can also override the prompt visibility detection in your native
+  /// implementation:
+  /// - Android: Override the detection in your `AndroidAutoBaseScreen` subclass
+  /// - iOS: Override the detection in your `BaseCarSceneDelegate` subclass
+  /// This listener provides additional control from the Flutter side.
+  ///
+  /// Example:
+  /// ```dart
+  /// autoViewController.listenForPromptVisibilityChangedEvent((event) {
+  ///   if (event.promptVisible) {
+  ///     // Hide custom buttons or UI elements
+  ///     print('Prompt is now visible, hiding custom UI');
+  ///   } else {
+  ///     // Show custom buttons or UI elements
+  ///     print('Prompt is hidden, showing custom UI');
+  ///   }
+  /// });
+  /// ```
+  void listenForPromptVisibilityChangedEvent(
+    void Function(PromptVisibilityChangedEvent event) func,
+  ) {
+    GoogleMapsNavigationPlatform.instance.autoAPI
+        .getPromptVisibilityChangedEventStream()
+        .listen((PromptVisibilityChangedEvent event) {
           func(event);
         });
   }

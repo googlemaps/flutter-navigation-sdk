@@ -56,6 +56,13 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   // is handled by the view.
   private var _isTrafficPromptsEnabled: Bool = true
 
+  // Track current prompt visibility state
+  private var _isPromptVisible: Bool = false
+
+  // Callback for CarPlay views to handle prompt visibility changes
+  // This allows BaseCarSceneDelegate to intercept and handle the event
+  var promptVisibilityCallback: ((Bool) -> Void)?
+
   public func view() -> UIView {
     _mapView
   }
@@ -618,6 +625,10 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     }
   }
 
+  func isPromptVisible() -> Bool {
+    return _isPromptVisible
+  }
+
   func isNavigationUIEnabled() -> Bool {
     _mapView.isNavigationEnabled
   }
@@ -1111,11 +1122,22 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
   }
 
   func sendPromptVisibilityChangedEvent(promptVisible: Bool) {
-    getViewEventApi()?.onPromptVisibilityChanged(
-      viewId: _viewId!,
-      promptVisible: promptVisible,
-      completion: { _ in }
-    )
+    // Update the prompt visibility state
+    _isPromptVisible = promptVisible
+
+    // For CarPlay views, use callback if set (allows override in BaseCarSceneDelegate)
+    // Otherwise send to regular ViewEventApi
+    if _isCarPlayView {
+      if let callback = promptVisibilityCallback {
+        callback(promptVisible)
+      }
+    } else {
+      getViewEventApi()?.onPromptVisibilityChanged(
+        viewId: _viewId!,
+        promptVisible: promptVisible,
+        completion: { _ in }
+      )
+    }
   }
 }
 

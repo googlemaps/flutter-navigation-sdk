@@ -69,11 +69,27 @@ class _NavigationDemoState extends State<NavigationBody> {
     _requestPermissions();
     super.initState();
     unawaited(_checkSDKVersion());
+    _updateAutoMapOptions();
   }
 
   Future<void> _checkSDKVersion() async {
     // Get the Navigation SDK version.
     _navSDKVersion = await GoogleMapsNavigator.getNavSDKVersion();
+  }
+
+  /// Updates AutoMapOptions for Android Auto and CarPlay views.
+  Future<void> _updateAutoMapOptions() async {
+    final String? mapId = MapIdManager.instance.mapId;
+
+    // Configure AutoMapOptions with current map ID
+    await GoogleMapsAutoViewController.setAutoMapOptions(
+      AutoMapOptions(
+        mapId: mapId,
+        // You can add more options here as needed:
+        // mapType: MapType.normal,
+        // mapColorScheme: MapColorScheme.followSystem,
+      ),
+    );
   }
 
   Future<void> _pushPage(BuildContext context, ExamplePage page) async {
@@ -147,8 +163,13 @@ class _NavigationDemoState extends State<NavigationBody> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
-                onPressed:
-                    () => showMapIdDialog(context, () => setState(() {})),
+                onPressed: () async {
+                  await showMapIdDialog(context, () {
+                    setState(() {});
+                    // Update AutoMapOptions when map ID changes
+                    unawaited(_updateAutoMapOptions());
+                  });
+                },
                 child: const Text('Set Map ID'),
               ),
             ),

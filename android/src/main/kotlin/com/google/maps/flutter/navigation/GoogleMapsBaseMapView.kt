@@ -541,6 +541,152 @@ abstract class GoogleMapsBaseMapView(
     return getMap().isTrafficEnabled
   }
 
+  open fun setTrafficPromptsEnabled(enabled: Boolean) {
+    throw FlutterError(
+      "notSupported",
+      "setTrafficPromptsEnabled is not supported on this view type",
+    )
+  }
+
+  open fun isTrafficPromptsEnabled(): Boolean {
+    throw FlutterError("notSupported", "isTrafficPromptsEnabled is not supported on this view type")
+  }
+
+  // Navigation UI methods - only supported on NavigationView
+  open fun isNavigationTripProgressBarEnabled(): Boolean {
+    throw FlutterError(
+      "notSupported",
+      "isNavigationTripProgressBarEnabled is not supported on this view type",
+    )
+  }
+
+  open fun setNavigationTripProgressBarEnabled(enabled: Boolean) {
+    throw FlutterError(
+      "notSupported",
+      "setNavigationTripProgressBarEnabled is not supported on this view type",
+    )
+  }
+
+  open fun isNavigationHeaderEnabled(): Boolean {
+    throw FlutterError(
+      "notSupported",
+      "isNavigationHeaderEnabled is not supported on this view type",
+    )
+  }
+
+  open fun setNavigationHeaderEnabled(enabled: Boolean) {
+    throw FlutterError(
+      "notSupported",
+      "setNavigationHeaderEnabled is not supported on this view type",
+    )
+  }
+
+  open fun isNavigationFooterEnabled(): Boolean {
+    throw FlutterError(
+      "notSupported",
+      "isNavigationFooterEnabled is not supported on this view type",
+    )
+  }
+
+  open fun setNavigationFooterEnabled(enabled: Boolean) {
+    throw FlutterError(
+      "notSupported",
+      "setNavigationFooterEnabled is not supported on this view type",
+    )
+  }
+
+  open fun isRecenterButtonEnabled(): Boolean {
+    throw FlutterError("notSupported", "isRecenterButtonEnabled is not supported on this view type")
+  }
+
+  open fun setRecenterButtonEnabled(enabled: Boolean) {
+    throw FlutterError(
+      "notSupported",
+      "setRecenterButtonEnabled is not supported on this view type",
+    )
+  }
+
+  open fun isSpeedLimitIconEnabled(): Boolean {
+    throw FlutterError("notSupported", "isSpeedLimitIconEnabled is not supported on this view type")
+  }
+
+  open fun setSpeedLimitIconEnabled(enabled: Boolean) {
+    throw FlutterError(
+      "notSupported",
+      "setSpeedLimitIconEnabled is not supported on this view type",
+    )
+  }
+
+  open fun isSpeedometerEnabled(): Boolean {
+    throw FlutterError("notSupported", "isSpeedometerEnabled is not supported on this view type")
+  }
+
+  open fun setSpeedometerEnabled(enabled: Boolean) {
+    throw FlutterError("notSupported", "setSpeedometerEnabled is not supported on this view type")
+  }
+
+  open fun isTrafficIncidentCardsEnabled(): Boolean {
+    throw FlutterError(
+      "notSupported",
+      "isTrafficIncidentCardsEnabled is not supported on this view type",
+    )
+  }
+
+  open fun setTrafficIncidentCardsEnabled(enabled: Boolean) {
+    throw FlutterError(
+      "notSupported",
+      "setTrafficIncidentCardsEnabled is not supported on this view type",
+    )
+  }
+
+  open fun isReportIncidentButtonEnabled(): Boolean {
+    throw FlutterError(
+      "notSupported",
+      "isReportIncidentButtonEnabled is not supported on this view type",
+    )
+  }
+
+  open fun setReportIncidentButtonEnabled(enabled: Boolean) {
+    throw FlutterError(
+      "notSupported",
+      "setReportIncidentButtonEnabled is not supported on this view type",
+    )
+  }
+
+  open fun isIncidentReportingAvailable(): Boolean {
+    throw FlutterError(
+      "notSupported",
+      "isIncidentReportingAvailable is not supported on this view type",
+    )
+  }
+
+  open fun showReportIncidentsPanel() {
+    throw FlutterError(
+      "notSupported",
+      "showReportIncidentsPanel is not supported on this view type",
+    )
+  }
+
+  open fun isNavigationUIEnabled(): Boolean {
+    throw FlutterError("notSupported", "isNavigationUIEnabled is not supported on this view type")
+  }
+
+  open fun setNavigationUIEnabled(enabled: Boolean) {
+    throw FlutterError("notSupported", "setNavigationUIEnabled is not supported on this view type")
+  }
+
+  open fun showRouteOverview() {
+    throw FlutterError("notSupported", "showRouteOverview is not supported on this view type")
+  }
+
+  open fun getForceNightMode(): Int {
+    throw FlutterError("notSupported", "getForceNightMode is not supported on this view type")
+  }
+
+  open fun setForceNightMode(forceNightMode: Int) {
+    throw FlutterError("notSupported", "setForceNightMode is not supported on this view type")
+  }
+
   fun isBuildingsEnabled(): Boolean {
     return getMap().isBuildingsEnabled
   }

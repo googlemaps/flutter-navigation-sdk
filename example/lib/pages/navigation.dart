@@ -215,6 +215,22 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         _isAutoScreenAvailable = event.isAvailable;
       });
     });
+
+    // Listen for prompt visibility changes on Android Auto / CarPlay
+    _autoViewController.listenForPromptVisibilityChangedEvent((event) {
+      debugPrint(
+        event.promptVisible
+            ? "Traffic prompt is now visible on auto screen"
+            : "Traffic prompt is now hidden on auto screen",
+      );
+
+      // Example: Send a custom event back to native to adjust UI
+      _autoViewController
+          .sendCustomNavigationAutoEvent('PromptVisibilityChanged', {
+            'promptVisible': event.promptVisible,
+            'timestamp': DateTime.now().millisecondsSinceEpoch,
+          });
+    });
   }
 
   Future<void> _setRouteTokensEnabled(bool value) async {

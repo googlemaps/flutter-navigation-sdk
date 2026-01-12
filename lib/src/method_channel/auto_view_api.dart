@@ -87,6 +87,18 @@ class AutoMapViewAPIImpl {
     }
   }
 
+  /// Sets the map options to be used for Android Auto and CarPlay views.
+  Future<void> setAutoMapOptions({required AutoMapOptions mapOptions}) {
+    final AutoMapOptionsDto mapOptionsDto = AutoMapOptionsDto(
+      cameraPosition: mapOptions.cameraPosition?.toDto(),
+      mapId: mapOptions.mapId,
+      mapType: mapOptions.mapType?.toDto(),
+      mapColorScheme: mapOptions.mapColorScheme?.toDto(),
+      forceNightMode: mapOptions.forceNightMode?.toDto(),
+    );
+    return _viewApi.setAutoMapOptions(mapOptionsDto);
+  }
+
   /// Get the preference for whether the my location should be enabled or disabled.
   Future<bool> isMyLocationEnabled() {
     return _viewApi.isMyLocationEnabled();
@@ -312,7 +324,7 @@ class AutoMapViewAPIImpl {
         unawaited(
           _viewApi
               .animateCameraToCameraPosition(
-                cameraUpdate.cameraPosition!.toCameraPosition(),
+                cameraUpdate.cameraPosition!.toDto(),
                 duration,
               )
               .then(
@@ -407,7 +419,7 @@ class AutoMapViewAPIImpl {
       case CameraUpdateType.cameraPosition:
         assert(cameraUpdate.cameraPosition != null, 'Camera position is null');
         return _viewApi.moveCameraToCameraPosition(
-          cameraUpdate.cameraPosition!.toCameraPosition(),
+          cameraUpdate.cameraPosition!.toDto(),
         );
       case CameraUpdateType.latLng:
         return _viewApi.moveCameraToLatLng(cameraUpdate.latLng!.toDto());
@@ -868,6 +880,63 @@ class AutoMapViewAPIImpl {
   getAutoScreenAvailabilityChangedEventStream() {
     return _unwrapEventStream<AutoScreenAvailabilityChangedEvent>();
   }
+
+  /// Get prompt visibility changed event stream from the auto view.
+  Stream<PromptVisibilityChangedEvent> getPromptVisibilityChangedEventStream() {
+    return _unwrapEventStream<PromptVisibilityChangedEvent>();
+  }
+
+  Future<void> setTrafficPromptsEnabled({required bool enabled}) {
+    return _viewApi.setTrafficPromptsEnabled(enabled);
+  }
+
+  Future<bool> isTrafficPromptsEnabled() {
+    return _viewApi.isTrafficPromptsEnabled();
+  }
+
+  Future<void> setTrafficIncidentCardsEnabled({required bool enabled}) {
+    return _viewApi.setTrafficIncidentCardsEnabled(enabled);
+  }
+
+  Future<bool> isTrafficIncidentCardsEnabled() {
+    return _viewApi.isTrafficIncidentCardsEnabled();
+  }
+
+  Future<void> setReportIncidentButtonEnabled({required bool enabled}) {
+    return _viewApi.setReportIncidentButtonEnabled(enabled);
+  }
+
+  Future<bool> isReportIncidentButtonEnabled() {
+    return _viewApi.isReportIncidentButtonEnabled();
+  }
+
+  Future<MapColorScheme> getMapColorScheme() async {
+    final MapColorSchemeDto colorScheme = await _viewApi.getMapColorScheme();
+    return colorScheme.toMapColorScheme();
+  }
+
+  Future<void> setMapColorScheme({required MapColorScheme mapColorScheme}) {
+    return _viewApi.setMapColorScheme(mapColorScheme.toDto());
+  }
+
+  Future<NavigationForceNightMode> getForceNightMode() async {
+    final NavigationForceNightModeDto forceNightMode = await _viewApi
+        .getForceNightMode();
+    return forceNightMode.toNavigationForceNightMode();
+  }
+
+  Future<void> setForceNightMode({
+    required NavigationForceNightMode forceNightMode,
+  }) {
+    return _viewApi.setForceNightMode(forceNightMode.toDto());
+  }
+
+  Future<void> sendCustomNavigationAutoEvent({
+    required String event,
+    required Object data,
+  }) {
+    return _viewApi.sendCustomNavigationAutoEvent(event, data);
+  }
 }
 
 class AutoViewEventApiImpl implements AutoViewEventApi {
@@ -891,6 +960,13 @@ class AutoViewEventApiImpl implements AutoViewEventApi {
       _AutoEventWrapper(
         AutoScreenAvailabilityChangedEvent(isAvailable: isAvailable),
       ),
+    );
+  }
+
+  @override
+  void onPromptVisibilityChanged(bool promptVisible) {
+    _viewEventStreamController.add(
+      _AutoEventWrapper(PromptVisibilityChangedEvent(promptVisible)),
     );
   }
 }

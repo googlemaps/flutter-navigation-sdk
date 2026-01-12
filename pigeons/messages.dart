@@ -36,6 +36,32 @@ enum MapViewTypeDto {
   map,
 }
 
+/// Object containing auto/carplay map options.
+class AutoMapOptionsDto {
+  AutoMapOptionsDto({
+    this.cameraPosition,
+    this.mapId,
+    this.mapType,
+    this.mapColorScheme,
+    this.forceNightMode,
+  });
+
+  /// The initial positioning of the camera in the map view.
+  final CameraPositionDto? cameraPosition;
+
+  /// Cloud-based map ID for custom styling.
+  final String? mapId;
+
+  /// The type of map to display (e.g., satellite, terrain, hybrid, etc.).
+  final MapTypeDto? mapType;
+
+  /// The color scheme for the map (light, dark, or follow system).
+  final MapColorSchemeDto? mapColorScheme;
+
+  /// Forces night mode (dark theme) regardless of system settings.
+  final NavigationForceNightModeDto? forceNightMode;
+}
+
 /// Object containing map options used to initialize Google Map view.
 class MapOptionsDto {
   MapOptionsDto({
@@ -1425,6 +1451,11 @@ abstract class NavigationSessionEventApi {
 
 @HostApi()
 abstract class AutoMapViewApi {
+  /// Sets the map options to be used for Android Auto and CarPlay views.
+  /// Should be called before the Auto/CarPlay screen is created.
+  /// This allows customization of mapId and basic map settings.
+  void setAutoMapOptions(AutoMapOptionsDto mapOptions);
+
   bool isMyLocationEnabled();
   void setMyLocationEnabled(bool enabled);
   LatLngDto? getMyLocation();
@@ -1492,6 +1523,9 @@ abstract class AutoMapViewApi {
   void setTiltGesturesEnabled(bool enabled);
   void setMapToolbarEnabled(bool enabled);
   void setTrafficEnabled(bool enabled);
+  void setTrafficPromptsEnabled(bool enabled);
+  void setTrafficIncidentCardsEnabled(bool enabled);
+  void setReportIncidentButtonEnabled(bool enabled);
 
   bool isMyLocationButtonEnabled();
   bool isConsumeMyLocationButtonClickEventsEnabled();
@@ -1504,6 +1538,9 @@ abstract class AutoMapViewApi {
   bool isTiltGesturesEnabled();
   bool isMapToolbarEnabled();
   bool isTrafficEnabled();
+  bool isTrafficPromptsEnabled();
+  bool isTrafficIncidentCardsEnabled();
+  bool isReportIncidentButtonEnabled();
 
   List<MarkerDto> getMarkers();
   List<MarkerDto> addMarkers(List<MarkerDto> markers);
@@ -1534,12 +1571,20 @@ abstract class AutoMapViewApi {
   bool isAutoScreenAvailable();
   void setPadding(MapPaddingDto padding);
   MapPaddingDto getPadding();
+
+  MapColorSchemeDto getMapColorScheme();
+  void setMapColorScheme(MapColorSchemeDto mapColorScheme);
+  NavigationForceNightModeDto getForceNightMode();
+  void setForceNightMode(NavigationForceNightModeDto forceNightMode);
+
+  void sendCustomNavigationAutoEvent(String event, Object data);
 }
 
 @FlutterApi()
 abstract class AutoViewEventApi {
   void onCustomNavigationAutoEvent(String event, Object data);
   void onAutoScreenAvailabilityChanged(bool isAvailable);
+  void onPromptVisibilityChanged(bool promptVisible);
 }
 
 @HostApi()
