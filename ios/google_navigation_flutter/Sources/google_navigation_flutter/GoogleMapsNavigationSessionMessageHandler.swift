@@ -31,6 +31,7 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
   func showTermsAndConditionsDialog(
     title: String, companyName: String,
     shouldOnlyShowDriverAwarenessDisclaimer: Bool,
+    uiParams: TermsAndConditionsUIParamsDto?,
     completion: @escaping (Result<Bool, Error>) -> Void
   ) {
     if shouldOnlyShowDriverAwarenessDisclaimer {
@@ -42,7 +43,8 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
     GoogleMapsNavigationSessionManager.shared.showTermsAndConditionsDialog(
       title: title,
       companyName: companyName,
-      shouldOnlyShowDriverAwarenessDisclaimer: shouldOnlyShowDriverAwarenessDisclaimer
+      shouldOnlyShowDriverAwarenessDisclaimer: shouldOnlyShowDriverAwarenessDisclaimer,
+      uiParams: uiParams
     ) { termsAccepted in
       completion(Result.success(termsAccepted))
     }

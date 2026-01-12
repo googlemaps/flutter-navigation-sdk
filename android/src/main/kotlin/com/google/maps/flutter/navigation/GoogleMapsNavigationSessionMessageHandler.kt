@@ -45,12 +45,14 @@ class GoogleMapsNavigationSessionMessageHandler(
     title: String,
     companyName: String,
     shouldOnlyShowDriverAwarenessDisclaimer: Boolean,
+    uiParams: TermsAndConditionsUIParamsDto?,
     callback: (Result<Boolean>) -> Unit,
   ) {
     sessionManager.showTermsAndConditionsDialog(
       title,
       companyName,
       shouldOnlyShowDriverAwarenessDisclaimer,
+      uiParams,
       callback,
     )
   }

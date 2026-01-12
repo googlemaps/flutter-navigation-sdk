@@ -146,4 +146,59 @@ void main() {
       fail('Unsupported platform: ${Platform.operatingSystem}');
     }
   });
+
+  patrol('Test terms and conditions dialog with custom UI parameters', (
+    PatrolIntegrationTester $,
+  ) async {
+    if (!Platform.isIOS) {
+      // Be sure location is enabled.
+      await $.native.enableLocation();
+    }
+
+    // Grant the location permission.
+    await checkLocationDialogAcceptance($);
+
+    /// Display navigation view.
+    final Key key = GlobalKey();
+    await pumpNavigationView(
+      $,
+      GoogleMapsNavigationView(
+        key: key,
+        onViewCreated: (GoogleNavigationViewController controller) {},
+      ),
+    );
+
+    /// Reset TOS acceptance.
+    await GoogleMapsNavigator.resetTermsAccepted();
+    expect(await GoogleMapsNavigator.areTermsAccepted(), false);
+
+    /// Request native TOS dialog with custom UI parameters.
+    final Future<bool> tosAccepted =
+        GoogleMapsNavigator.showTermsAndConditionsDialog(
+          'test_title',
+          'test_company_name',
+          uiParams: const TermsAndConditionsUIParams(
+            backgroundColor: Color(0xFFFFFFFF),
+            titleColor: Color(0xFF1565C0),
+            mainTextColor: Color(0xFF424242),
+            acceptButtonTextColor: Color(0xFF2E7D32),
+            cancelButtonTextColor: Color(0xFFC62828),
+          ),
+        );
+
+    // Tap ok.
+    if (Platform.isAndroid) {
+      await $.native.tap(Selector(text: "Got It"));
+    } else if (Platform.isIOS) {
+      await $.native.tap(Selector(text: "OK"));
+    } else {
+      fail('Unsupported platform: ${Platform.operatingSystem}');
+    }
+
+    // Check that the results match.
+    await tosAccepted.then((bool accept) {
+      expect(accept, true);
+    });
+    expect(await GoogleMapsNavigator.areTermsAccepted(), true);
+  });
 }

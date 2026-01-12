@@ -189,14 +189,42 @@ class GoogleMapsNavigationSessionManager: NSObject {
   func showTermsAndConditionsDialog(
     title: String, companyName: String,
     shouldOnlyShowDriverAwarenessDisclaimer: Bool,
+    uiParams: TermsAndConditionsUIParamsDto?,
     completion: @escaping (Bool) -> Void
   ) {
     GMSNavigationServices
       .shouldOnlyShowDriverAwarenesssDisclaimer = shouldOnlyShowDriverAwarenessDisclaimer
-    GMSNavigationServices.showTermsAndConditionsDialogIfNeeded(
-      withTitle: title, companyName: companyName
-    ) { termsAccepted in
-      completion(termsAccepted)
+
+    // If customization params are provided, use the custom dialog
+    if let params = uiParams {
+      // Create UI params with custom colors (convert from ARGB Int64 to UIColor)
+      let uiParams = GMSNavigationTermsDialogUIParams(
+        backgroundColor: params.backgroundColor.map { UIColor(from: $0) },
+        titleFont: nil,
+        titleColor: params.titleColor.map { UIColor(from: $0) },
+        mainTextFont: nil,
+        mainTextColor: params.mainTextColor.map { UIColor(from: $0) },
+        buttonsFont: nil,
+        cancelButtonTextColor: params.cancelButtonTextColor.map { UIColor(from: $0) },
+        acceptButtonTextColor: params.acceptButtonTextColor.map { UIColor(from: $0) }
+      )
+
+      let options = GMSNavigationTermsAndConditionsOptions(companyName: companyName)
+      options.title = title
+      options.uiParams = uiParams
+
+      GMSNavigationServices.showTermsAndConditionsDialogIfNeeded(
+        with: options
+      ) { termsAccepted in
+        completion(termsAccepted)
+      }
+    } else {
+      // Use the simple API without customization
+      GMSNavigationServices.showTermsAndConditionsDialogIfNeeded(
+        withTitle: title, companyName: companyName
+      ) { termsAccepted in
+        completion(termsAccepted)
+      }
     }
   }
 

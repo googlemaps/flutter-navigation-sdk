@@ -116,12 +116,14 @@ class NavigationSessionAPIImpl {
     String title,
     String companyName,
     bool shouldOnlyShowDriverAwarenessDisclaimer,
+    TermsAndConditionsUIParamsDto? uiParams,
   ) async {
     try {
       return await _sessionApi.showTermsAndConditionsDialog(
         title,
         companyName,
         shouldOnlyShowDriverAwarenessDisclaimer,
+        uiParams,
       );
     } on PlatformException catch (e) {
       switch (e.code) {

@@ -539,6 +539,7 @@ constructor(
     title: String,
     companyName: String,
     shouldOnlyShowDriverAwarenessDisclaimer: Boolean,
+    uiParams: TermsAndConditionsUIParamsDto?,
     callback: (Result<Boolean>) -> Unit,
   ) {
     // Align API behavior with iOS:
@@ -548,21 +549,37 @@ constructor(
       return
     }
 
-    if (shouldOnlyShowDriverAwarenessDisclaimer) {
-      val defaultParams: TermsAndConditionsUIParams = TermsAndConditionsUIParams.builder().build()
-      NavigationApi.showTermsAndConditionsDialog(
-        getActivity(),
-        companyName,
-        title,
-        defaultParams,
-        { accepted -> callback(Result.success(accepted)) },
-        TermsAndConditionsCheckOption.SKIPPED,
-      )
-    } else {
-      NavigationApi.showTermsAndConditionsDialog(getActivity(), companyName, title) { accepted ->
-        callback(Result.success(accepted))
+    // Build UI customization parameters if provided
+    val termsUiParams: TermsAndConditionsUIParams? =
+      uiParams?.let {
+        TermsAndConditionsUIParams.builder()
+          .apply {
+            it.backgroundColor?.let { color -> setBackgroundColor(color.toInt()) }
+            it.titleColor?.let { color -> setTitleColor(color.toInt()) }
+            it.mainTextColor?.let { color -> setMainTextColor(color.toInt()) }
+            it.acceptButtonTextColor?.let { color -> setAcceptButtonTextColor(color.toInt()) }
+            it.cancelButtonTextColor?.let { color -> setCancelButtonTextColor(color.toInt()) }
+          }
+          // TODO: Make text sizes configurable via TermsAndConditionsUIParamsDto.
+          // Currently hardcoded to match the Navigation SDK default values.
+          .setButtonsTextSize(14)
+          .setMainTextTextSize(14)
+          .setTitleTextSize(20)
+          .build()
       }
-    }
+
+    val checkOption =
+      if (shouldOnlyShowDriverAwarenessDisclaimer) TermsAndConditionsCheckOption.SKIPPED
+      else TermsAndConditionsCheckOption.ENABLED
+
+    NavigationApi.showTermsAndConditionsDialog(
+      getActivity(),
+      companyName,
+      title,
+      termsUiParams,
+      { accepted -> callback(Result.success(accepted)) },
+      checkOption,
+    )
   }
 
   /**
