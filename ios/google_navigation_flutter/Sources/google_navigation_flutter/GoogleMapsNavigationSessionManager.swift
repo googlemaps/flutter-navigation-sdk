@@ -699,8 +699,8 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
     _ navigator: GMSNavigator,
     didUpdate navInfo: GMSNavigationNavInfo
   ) {
-    var maneuverImageDescriptors: [String: ImageDescriptorDto?] = [:]
-    var laneImageDescriptors: [String: ImageDescriptorDto?] = [:]
+    // Map to store all the unique images for each maneuver and lane
+    var imageDescriptors: [String: ImageDescriptorDto?] = [:]
 
     // Separated to help Swift compiler.
     let steps: [GMSNavigationStepInfo] = (navInfo.remainingSteps + [navInfo.currentStep])
@@ -709,9 +709,9 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
     if _sendManeuverImagesWithNavInfoEvents {
       steps.forEach { step in
         let key = Convert.convertManeuverToKey(step.maneuver)
-        if maneuverImageDescriptors[key] == nil {
+        if imageDescriptors[key] == nil {
           let imageDescriptor = getManeuverImageDescriptorForStepInfo(step)
-          maneuverImageDescriptors.updateValue(imageDescriptor, forKey: key)
+          imageDescriptors.updateValue(imageDescriptor, forKey: key)
         }
       }
     }
@@ -721,9 +721,9 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
         // Only process steps that have lanes
         guard let lanes = step.lanes, !lanes.isEmpty else { return }
         let key = Convert.convertLanesToKey(step)
-        if laneImageDescriptors[key] == nil {
+        if imageDescriptors[key] == nil {
           let imageDescriptor = getLaneImageDescriptorForStepInfo(step)
-          laneImageDescriptors.updateValue(imageDescriptor, forKey: key)
+          imageDescriptors.updateValue(imageDescriptor, forKey: key)
         }
       }
     }
@@ -742,8 +742,7 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
         navInfo: Convert.convertNavInfo(
           navInfo,
           maxAmountOfRemainingSteps: _numTurnByTurnNextStepsToPreview,
-          maneuverImageDescriptors: maneuverImageDescriptors,
-          laneImageDescriptors: laneImageDescriptors
+          imageDescriptors: imageDescriptors
         ),
         completion: { _ in }
       )

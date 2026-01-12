@@ -859,17 +859,16 @@ object Convert {
 
   fun convertNavInfo(
     navInfo: NavInfo,
-    maneuverImageDescriptors: Map<String, ImageDescriptorDto?>,
-    laneImageDescriptors: Map<String, ImageDescriptorDto?>,
+    imageDescriptors: Map<String, ImageDescriptorDto?>,
   ): NavInfoDto {
     return NavInfoDto(
       currentStep =
         navInfo.currentStep?.let {
-          convertNavInfoStepInfo(it, maneuverImageDescriptors, laneImageDescriptors)
+          convertNavInfoStepInfo(it, imageDescriptors)
         },
       remainingSteps =
         navInfo.remainingSteps.mapIndexed { index, item ->
-          convertNavInfoStepInfo(item, maneuverImageDescriptors, laneImageDescriptors)
+          convertNavInfoStepInfo(item, imageDescriptors)
         },
       routeChanged = navInfo.routeChanged,
       distanceToCurrentStepMeters = navInfo.distanceToCurrentStepMeters?.toLong(),
@@ -915,14 +914,13 @@ object Convert {
 
   private fun convertNavInfoStepInfo(
     stepInfo: StepInfo,
-    maneuverImageDescriptors: Map<String, ImageDescriptorDto?>,
-    laneImageDescriptors: Map<String, ImageDescriptorDto?>,
+    imageDescriptors: Map<String, ImageDescriptorDto?>,
   ): StepInfoDto {
     val maneuverKey = convertManeuverToKey(stepInfo.maneuver)
     // Only look up lane image if stepInfo has lanes
     val laneImage =
       if (!stepInfo.lanes.isNullOrEmpty()) {
-        laneImageDescriptors[convertLanesToKey(stepInfo)]
+        imageDescriptors[convertLanesToKey(stepInfo)]
       } else {
         null
       }
@@ -949,7 +947,7 @@ object Convert {
           )
         },
       maneuver = convertManeuver(stepInfo.maneuver),
-      maneuverImage = maneuverImageDescriptors[maneuverKey],
+      maneuverImage = imageDescriptors[maneuverKey],
       laneImage = laneImage,
     )
   }

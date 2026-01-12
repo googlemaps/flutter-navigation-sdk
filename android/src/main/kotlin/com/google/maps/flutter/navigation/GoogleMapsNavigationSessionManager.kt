@@ -754,8 +754,6 @@ constructor(
         )
       }
 
-      val shouldGenerateManeuverImages = generateManeuverImages
-
       fun getManeuverImageDescriptor(maneuver: Int): ImageDescriptorDto? {
         val registeredImage =
           imageRegistry.findRegisteredImage(Convert.convertManeuverToKey(maneuver))
@@ -808,32 +806,31 @@ constructor(
 
       // Create observer for this session manager
       navInfoObserver = Observer { navInfo ->
-        // Maps to store all the unique images for each maneuver and lane
-        val maneuverImageDescriptors: MutableMap<String, ImageDescriptorDto?> = mutableMapOf()
-        val laneImageDescriptors: MutableMap<String, ImageDescriptorDto?> = mutableMapOf()
+        // Map to store all the unique images for each maneuver and lane
+        val imageDescriptors: MutableMap<String, ImageDescriptorDto?> = mutableMapOf()
 
         (navInfo.remainingSteps + navInfo.currentStep).forEach { stepInfo ->
           // Handle maneuver images
-          if (shouldGenerateManeuverImages) {
+          if (generateManeuverImages) {
             val maneuverKey = Convert.convertManeuverToKey(stepInfo.maneuver)
-            if (!maneuverImageDescriptors.containsKey(maneuverKey)) {
+            if (!imageDescriptors.containsKey(maneuverKey)) {
               val imageDescriptor = getManeuverImageDescriptorForStepInfo(stepInfo)
-              maneuverImageDescriptors[maneuverKey] = imageDescriptor
+              imageDescriptors[maneuverKey] = imageDescriptor
             }
           }
 
           // Handle lane images
           if (generateLaneImages && !stepInfo.lanes.isNullOrEmpty()) {
             val laneKey = Convert.convertLanesToKey(stepInfo)
-            if (!laneImageDescriptors.containsKey(laneKey)) {
+            if (!imageDescriptors.containsKey(laneKey)) {
               val imageDescriptor = getLaneImageDescriptorForStepInfo(stepInfo)
-              laneImageDescriptors[laneKey] = imageDescriptor
+              imageDescriptors[laneKey] = imageDescriptor
             }
           }
         }
 
         navigationSessionEventApi.onNavInfo(
-          Convert.convertNavInfo(navInfo, maneuverImageDescriptors, laneImageDescriptors)
+          Convert.convertNavInfo(navInfo, imageDescriptors)
         ) {}
       }
 
