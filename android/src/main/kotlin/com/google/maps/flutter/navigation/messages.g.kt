@@ -2024,6 +2024,33 @@ data class LatLngBoundsDto(val southwest: LatLngDto, val northeast: LatLngDto) {
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
+data class ScreenCoordinateDto(val x: Double, val y: Double) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): ScreenCoordinateDto {
+      val x = pigeonVar_list[0] as Double
+      val y = pigeonVar_list[1] as Double
+      return ScreenCoordinateDto(x, y)
+    }
+  }
+
+  fun toList(): List<Any?> {
+    return listOf(x, y)
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (other !is ScreenCoordinateDto) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
 data class SpeedingUpdatedEventDto(
   val percentageAboveLimit: Double,
   val severity: SpeedAlertSeverityDto,
@@ -2822,50 +2849,53 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
         return (readValue(buffer) as? List<Any?>)?.let { LatLngBoundsDto.fromList(it) }
       }
       190.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { SpeedingUpdatedEventDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { ScreenCoordinateDto.fromList(it) }
       }
       191.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { SpeedingUpdatedEventDto.fromList(it) }
+      }
+      192.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           GpsAvailabilityChangeEventDto.fromList(it)
         }
       }
-      192.toByte() -> {
+      193.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           SpeedAlertOptionsThresholdPercentageDto.fromList(it)
         }
       }
-      193.toByte() -> {
+      194.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SpeedAlertOptionsDto.fromList(it) }
       }
-      194.toByte() -> {
+      195.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(it)
         }
       }
-      195.toByte() -> {
+      196.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentTrafficDataDto.fromList(it) }
       }
-      196.toByte() -> {
+      197.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentDto.fromList(it) }
       }
-      197.toByte() -> {
+      198.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LaneDirectionDto.fromList(it) }
       }
-      198.toByte() -> {
+      199.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LaneDto.fromList(it) }
       }
-      199.toByte() -> {
+      200.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { StepInfoDto.fromList(it) }
       }
-      200.toByte() -> {
+      201.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavInfoDto.fromList(it) }
       }
-      201.toByte() -> {
+      202.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           TermsAndConditionsUIParamsDto.fromList(it)
         }
       }
-      202.toByte() -> {
+      203.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           StepImageGenerationOptionsDto.fromList(it)
         }
@@ -3120,56 +3150,60 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
         stream.write(189)
         writeValue(stream, value.toList())
       }
-      is SpeedingUpdatedEventDto -> {
+      is ScreenCoordinateDto -> {
         stream.write(190)
         writeValue(stream, value.toList())
       }
-      is GpsAvailabilityChangeEventDto -> {
+      is SpeedingUpdatedEventDto -> {
         stream.write(191)
         writeValue(stream, value.toList())
       }
-      is SpeedAlertOptionsThresholdPercentageDto -> {
+      is GpsAvailabilityChangeEventDto -> {
         stream.write(192)
         writeValue(stream, value.toList())
       }
-      is SpeedAlertOptionsDto -> {
+      is SpeedAlertOptionsThresholdPercentageDto -> {
         stream.write(193)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentTrafficDataRoadStretchRenderingDataDto -> {
+      is SpeedAlertOptionsDto -> {
         stream.write(194)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentTrafficDataDto -> {
+      is RouteSegmentTrafficDataRoadStretchRenderingDataDto -> {
         stream.write(195)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentDto -> {
+      is RouteSegmentTrafficDataDto -> {
         stream.write(196)
         writeValue(stream, value.toList())
       }
-      is LaneDirectionDto -> {
+      is RouteSegmentDto -> {
         stream.write(197)
         writeValue(stream, value.toList())
       }
-      is LaneDto -> {
+      is LaneDirectionDto -> {
         stream.write(198)
         writeValue(stream, value.toList())
       }
-      is StepInfoDto -> {
+      is LaneDto -> {
         stream.write(199)
         writeValue(stream, value.toList())
       }
-      is NavInfoDto -> {
+      is StepInfoDto -> {
         stream.write(200)
         writeValue(stream, value.toList())
       }
-      is TermsAndConditionsUIParamsDto -> {
+      is NavInfoDto -> {
         stream.write(201)
         writeValue(stream, value.toList())
       }
-      is StepImageGenerationOptionsDto -> {
+      is TermsAndConditionsUIParamsDto -> {
         stream.write(202)
+        writeValue(stream, value.toList())
+      }
+      is StepImageGenerationOptionsDto -> {
+        stream.write(203)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -3359,6 +3393,10 @@ interface MapViewApi {
   fun getCameraPosition(viewId: Long): CameraPositionDto
 
   fun getVisibleRegion(viewId: Long): LatLngBoundsDto
+
+  fun getScreenCoordinate(viewId: Long, latLng: LatLngDto): ScreenCoordinateDto
+
+  fun getLatLng(viewId: Long, screenCoordinate: ScreenCoordinateDto): LatLngDto
 
   fun followMyLocation(viewId: Long, perspective: CameraPerspectiveDto, zoomLevel: Double?)
 
@@ -4963,6 +5001,54 @@ interface MapViewApi {
             val wrapped: List<Any?> =
               try {
                 listOf(api.getVisibleRegion(viewIdArg))
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getScreenCoordinate$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val latLngArg = args[1] as LatLngDto
+            val wrapped: List<Any?> =
+              try {
+                listOf(api.getScreenCoordinate(viewIdArg, latLngArg))
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getLatLng$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val screenCoordinateArg = args[1] as ScreenCoordinateDto
+            val wrapped: List<Any?> =
+              try {
+                listOf(api.getLatLng(viewIdArg, screenCoordinateArg))
               } catch (exception: Throwable) {
                 MessagesPigeonUtils.wrapError(exception)
               }
@@ -7905,6 +7991,10 @@ interface AutoMapViewApi {
 
   fun getVisibleRegion(): LatLngBoundsDto
 
+  fun getScreenCoordinate(latLng: LatLngDto): ScreenCoordinateDto
+
+  fun getLatLng(screenCoordinate: ScreenCoordinateDto): LatLngDto
+
   fun followMyLocation(perspective: CameraPerspectiveDto, zoomLevel: Double?)
 
   fun animateCameraToCameraPosition(
@@ -8313,6 +8403,52 @@ interface AutoMapViewApi {
             val wrapped: List<Any?> =
               try {
                 listOf(api.getVisibleRegion())
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getScreenCoordinate$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val latLngArg = args[0] as LatLngDto
+            val wrapped: List<Any?> =
+              try {
+                listOf(api.getScreenCoordinate(latLngArg))
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getLatLng$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val screenCoordinateArg = args[0] as ScreenCoordinateDto
+            val wrapped: List<Any?> =
+              try {
+                listOf(api.getLatLng(screenCoordinateArg))
               } catch (exception: Throwable) {
                 MessagesPigeonUtils.wrapError(exception)
               }

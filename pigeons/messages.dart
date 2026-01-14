@@ -623,6 +623,9 @@ abstract class MapViewApi {
   CameraPositionDto getCameraPosition(int viewId);
   LatLngBoundsDto getVisibleRegion(int viewId);
 
+  ScreenCoordinateDto getScreenCoordinate(int viewId, LatLngDto latLng);
+  LatLngDto getLatLng(int viewId, ScreenCoordinateDto screenCoordinate);
+
   void followMyLocation(
     int viewId,
     CameraPerspectiveDto perspective,
@@ -930,6 +933,13 @@ class LatLngBoundsDto {
 
   final LatLngDto southwest;
   final LatLngDto northeast;
+}
+
+class ScreenCoordinateDto {
+  const ScreenCoordinateDto({required this.x, required this.y});
+
+  final double x;
+  final double y;
 }
 
 enum SpeedAlertSeverityDto { unknown, notSpeeding, minor, major }
@@ -1591,6 +1601,9 @@ abstract class AutoMapViewApi {
 
   CameraPositionDto getCameraPosition();
   LatLngBoundsDto getVisibleRegion();
+
+  ScreenCoordinateDto getScreenCoordinate(LatLngDto latLng);
+  LatLngDto getLatLng(ScreenCoordinateDto screenCoordinate);
 
   void followMyLocation(CameraPerspectiveDto perspective, double? zoomLevel);
   @async
