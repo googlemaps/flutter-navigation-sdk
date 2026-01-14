@@ -862,10 +862,7 @@ object Convert {
     imageDescriptors: Map<String, ImageDescriptorDto?>,
   ): NavInfoDto {
     return NavInfoDto(
-      currentStep =
-        navInfo.currentStep?.let {
-          convertNavInfoStepInfo(it, imageDescriptors)
-        },
+      currentStep = navInfo.currentStep?.let { convertNavInfoStepInfo(it, imageDescriptors) },
       remainingSteps =
         navInfo.remainingSteps.mapIndexed { index, item ->
           convertNavInfoStepInfo(item, imageDescriptors)

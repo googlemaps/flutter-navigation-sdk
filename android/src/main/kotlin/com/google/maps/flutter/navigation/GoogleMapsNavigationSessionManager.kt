@@ -829,9 +829,7 @@ constructor(
           }
         }
 
-        navigationSessionEventApi.onNavInfo(
-          Convert.convertNavInfo(navInfo, imageDescriptors)
-        ) {}
+        navigationSessionEventApi.onNavInfo(Convert.convertNavInfo(navInfo, imageDescriptors)) {}
       }
 
       // Add observer using observeForever (works without lifecycle owner)
