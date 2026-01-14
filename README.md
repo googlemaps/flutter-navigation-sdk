@@ -345,6 +345,63 @@ await mapViewController.setMapColorScheme(MapColorScheme.dark);
   - `light` - Force light color scheme
   - `dark` - Force dark color scheme
 
+### Turn-by-Turn Navigation with Step Images
+
+The SDK can generate maneuver icons and lane guidance images for navigation steps. Enable step image generation when setting up the navigation info listener:
+
+```dart
+GoogleMapsNavigator.setNavInfoListener(
+  _onNavInfoEvent,
+  numNextStepsToPreview: 100,
+  stepImageGenerationOptions: const StepImageGenerationOptions(
+    generateManeuverImages: true,  // Enable maneuver icons
+    generateLaneImages: true,       // Enable lane guidance
+  ),
+);
+```
+
+#### Accessing Step Images
+
+Maneuver and lane images are available in the `StepInfo` objects:
+
+```dart
+void _onNavInfoEvent(NavInfoEvent event) {
+  final currentStep = event.navInfo.currentStep;
+  final maneuverImage = currentStep?.maneuverImage;  // Turn icons
+  final laneImage = currentStep?.laneImage;          // Lane guidance
+}
+```
+
+#### Displaying Images
+
+Retrieve and display images directly from the image registry:
+
+```dart
+// Returns an Image widget ready to display
+final image = await getRegisteredImageData(step.maneuverImage!);
+
+// Use in your widget tree
+if (image != null) {
+  SizedBox(
+    width: 50,
+    height: 50,
+    child: image,
+  );
+}
+```
+
+#### Clearing Images
+
+Clear registered images by type when needed:
+
+```dart
+// Clear maneuver and lane images when stopping navigation
+await clearRegisteredImages(filter: RegisteredImageType.maneuver);
+await clearRegisteredImages(filter: RegisteredImageType.lane);
+```
+
+See the example app's [turn_by_turn.dart](./example/lib/pages/turn_by_turn.dart) and [custom_navigation_ui.dart](./example/lib/widgets/custom_navigation_ui.dart) for a complete implementation.
+
 ## Support for Android Auto and Apple CarPlay
 This plugin is compatible with both Android Auto and Apple CarPlay infotainment systems. For more details, please refer to the respective platform documentation:
 
