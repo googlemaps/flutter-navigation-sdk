@@ -39,7 +39,7 @@ Future<Image?> _loadStepImage(ImageDescriptor? imageDescriptor) async {
     return _stepImageCache[cacheKey];
   }
 
-  final image = await getRegisteredImageData(imageDescriptor);
+  final image = await getRegisteredImage(imageDescriptor);
   if (image != null) {
     _stepImageCache[cacheKey] = image;
   }

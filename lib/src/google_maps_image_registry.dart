@@ -69,9 +69,9 @@ Future<void> clearRegisteredImages({RegisteredImageType? filter}) {
       .clearRegisteredImages(filter);
 }
 
-/// Get registered PNG image data from image registry.
+/// Get registered PNG image data from image registry anc convert it to Image.
 /// {@category Image Registry}
-Future<Image?> getRegisteredImageData(ImageDescriptor imageDescriptor) async {
+Future<Image?> getRegisteredImage(ImageDescriptor imageDescriptor) async {
   final pngBytes = await GoogleMapsNavigationPlatform.instance.imageRegistryAPI
       .getRegisteredImageData(imageDescriptor: imageDescriptor);
   return pngBytes != null ? Image.memory(pngBytes) : null;

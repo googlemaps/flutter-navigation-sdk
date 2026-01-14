@@ -378,7 +378,7 @@ Retrieve and display images directly from the image registry:
 
 ```dart
 // Returns an Image widget ready to display
-final image = await getRegisteredImageData(step.maneuverImage!);
+final image = await getRegisteredImage(step.maneuverImage!);
 
 // Use in your widget tree
 if (image != null) {

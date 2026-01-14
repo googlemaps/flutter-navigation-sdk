@@ -287,7 +287,7 @@ void main() {
       await subscription.cancel();
 
       /// Test that the image descriptor can be used to get the image data.
-      final image = await getRegisteredImageData(
+      final image = await getRegisteredImage(
         currentManeuverImageDescriptor!,
       );
       expect(image, isNotNull);
