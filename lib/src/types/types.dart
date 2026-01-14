@@ -25,6 +25,7 @@ export 'navinfo.dart';
 export 'polygons.dart';
 export 'polylines.dart';
 export 'simulation.dart';
+export 'screen_coordinate.dart';
 export 'stroke_patterns.dart';
 export 'terms_and_conditions_ui_params.dart';
 export 'view_initialization_options.dart';

@@ -1716,6 +1716,35 @@ struct LatLngBoundsDto: Hashable {
 }
 
 /// Generated class from Pigeon that represents data sent in messages.
+struct ScreenCoordinateDto: Hashable {
+  var x: Double
+  var y: Double
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> ScreenCoordinateDto? {
+    let x = pigeonVar_list[0] as! Double
+    let y = pigeonVar_list[1] as! Double
+
+    return ScreenCoordinateDto(
+      x: x,
+      y: y
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      x,
+      y,
+    ]
+  }
+  static func == (lhs: ScreenCoordinateDto, rhs: ScreenCoordinateDto) -> Bool {
+    return deepEqualsmessages(lhs.toList(), rhs.toList())
+  }
+  func hash(into hasher: inout Hasher) {
+    deepHashmessages(value: toList(), hasher: &hasher)
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
 struct SpeedingUpdatedEventDto: Hashable {
   var percentageAboveLimit: Double
   var severity: SpeedAlertSeverityDto
@@ -2484,31 +2513,33 @@ private class MessagesPigeonCodecReader: FlutterStandardReader {
     case 185:
       return LatLngBoundsDto.fromList(self.readValue() as! [Any?])
     case 186:
-      return SpeedingUpdatedEventDto.fromList(self.readValue() as! [Any?])
+      return ScreenCoordinateDto.fromList(self.readValue() as! [Any?])
     case 187:
-      return GpsAvailabilityChangeEventDto.fromList(self.readValue() as! [Any?])
+      return SpeedingUpdatedEventDto.fromList(self.readValue() as! [Any?])
     case 188:
-      return SpeedAlertOptionsThresholdPercentageDto.fromList(self.readValue() as! [Any?])
+      return GpsAvailabilityChangeEventDto.fromList(self.readValue() as! [Any?])
     case 189:
-      return SpeedAlertOptionsDto.fromList(self.readValue() as! [Any?])
+      return SpeedAlertOptionsThresholdPercentageDto.fromList(self.readValue() as! [Any?])
     case 190:
+      return SpeedAlertOptionsDto.fromList(self.readValue() as! [Any?])
+    case 191:
       return RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(
         self.readValue() as! [Any?])
-    case 191:
-      return RouteSegmentTrafficDataDto.fromList(self.readValue() as! [Any?])
     case 192:
-      return RouteSegmentDto.fromList(self.readValue() as! [Any?])
+      return RouteSegmentTrafficDataDto.fromList(self.readValue() as! [Any?])
     case 193:
-      return LaneDirectionDto.fromList(self.readValue() as! [Any?])
+      return RouteSegmentDto.fromList(self.readValue() as! [Any?])
     case 194:
-      return LaneDto.fromList(self.readValue() as! [Any?])
+      return LaneDirectionDto.fromList(self.readValue() as! [Any?])
     case 195:
-      return StepInfoDto.fromList(self.readValue() as! [Any?])
+      return LaneDto.fromList(self.readValue() as! [Any?])
     case 196:
-      return NavInfoDto.fromList(self.readValue() as! [Any?])
+      return StepInfoDto.fromList(self.readValue() as! [Any?])
     case 197:
-      return TermsAndConditionsUIParamsDto.fromList(self.readValue() as! [Any?])
+      return NavInfoDto.fromList(self.readValue() as! [Any?])
     case 198:
+      return TermsAndConditionsUIParamsDto.fromList(self.readValue() as! [Any?])
+    case 199:
       return StepImageGenerationOptionsDto.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -2689,44 +2720,47 @@ private class MessagesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? LatLngBoundsDto {
       super.writeByte(185)
       super.writeValue(value.toList())
-    } else if let value = value as? SpeedingUpdatedEventDto {
+    } else if let value = value as? ScreenCoordinateDto {
       super.writeByte(186)
       super.writeValue(value.toList())
-    } else if let value = value as? GpsAvailabilityChangeEventDto {
+    } else if let value = value as? SpeedingUpdatedEventDto {
       super.writeByte(187)
       super.writeValue(value.toList())
-    } else if let value = value as? SpeedAlertOptionsThresholdPercentageDto {
+    } else if let value = value as? GpsAvailabilityChangeEventDto {
       super.writeByte(188)
       super.writeValue(value.toList())
-    } else if let value = value as? SpeedAlertOptionsDto {
+    } else if let value = value as? SpeedAlertOptionsThresholdPercentageDto {
       super.writeByte(189)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteSegmentTrafficDataRoadStretchRenderingDataDto {
+    } else if let value = value as? SpeedAlertOptionsDto {
       super.writeByte(190)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteSegmentTrafficDataDto {
+    } else if let value = value as? RouteSegmentTrafficDataRoadStretchRenderingDataDto {
       super.writeByte(191)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteSegmentDto {
+    } else if let value = value as? RouteSegmentTrafficDataDto {
       super.writeByte(192)
       super.writeValue(value.toList())
-    } else if let value = value as? LaneDirectionDto {
+    } else if let value = value as? RouteSegmentDto {
       super.writeByte(193)
       super.writeValue(value.toList())
-    } else if let value = value as? LaneDto {
+    } else if let value = value as? LaneDirectionDto {
       super.writeByte(194)
       super.writeValue(value.toList())
-    } else if let value = value as? StepInfoDto {
+    } else if let value = value as? LaneDto {
       super.writeByte(195)
       super.writeValue(value.toList())
-    } else if let value = value as? NavInfoDto {
+    } else if let value = value as? StepInfoDto {
       super.writeByte(196)
       super.writeValue(value.toList())
-    } else if let value = value as? TermsAndConditionsUIParamsDto {
+    } else if let value = value as? NavInfoDto {
       super.writeByte(197)
       super.writeValue(value.toList())
-    } else if let value = value as? StepImageGenerationOptionsDto {
+    } else if let value = value as? TermsAndConditionsUIParamsDto {
       super.writeByte(198)
+      super.writeValue(value.toList())
+    } else if let value = value as? StepImageGenerationOptionsDto {
+      super.writeByte(199)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -2845,6 +2879,8 @@ protocol MapViewApi {
   func setBuildingsEnabled(viewId: Int64, enabled: Bool) throws
   func getCameraPosition(viewId: Int64) throws -> CameraPositionDto
   func getVisibleRegion(viewId: Int64) throws -> LatLngBoundsDto
+  func getScreenCoordinate(viewId: Int64, latLng: LatLngDto) throws -> ScreenCoordinateDto
+  func getLatLng(viewId: Int64, screenCoordinate: ScreenCoordinateDto) throws -> LatLngDto
   func followMyLocation(viewId: Int64, perspective: CameraPerspectiveDto, zoomLevel: Double?) throws
   func animateCameraToCameraPosition(
     viewId: Int64, cameraPosition: CameraPositionDto, duration: Int64?,
@@ -3930,6 +3966,43 @@ class MapViewApiSetup {
       }
     } else {
       getVisibleRegionChannel.setMessageHandler(nil)
+    }
+    let getScreenCoordinateChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getScreenCoordinate\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getScreenCoordinateChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] as! Int64
+        let latLngArg = args[1] as! LatLngDto
+        do {
+          let result = try api.getScreenCoordinate(viewId: viewIdArg, latLng: latLngArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getScreenCoordinateChannel.setMessageHandler(nil)
+    }
+    let getLatLngChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getLatLng\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLatLngChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] as! Int64
+        let screenCoordinateArg = args[1] as! ScreenCoordinateDto
+        do {
+          let result = try api.getLatLng(viewId: viewIdArg, screenCoordinate: screenCoordinateArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getLatLngChannel.setMessageHandler(nil)
     }
     let followMyLocationChannel = FlutterBasicMessageChannel(
       name:
@@ -6372,6 +6445,8 @@ protocol AutoMapViewApi {
   func setMapStyle(styleJson: String) throws
   func getCameraPosition() throws -> CameraPositionDto
   func getVisibleRegion() throws -> LatLngBoundsDto
+  func getScreenCoordinate(latLng: LatLngDto) throws -> ScreenCoordinateDto
+  func getLatLng(screenCoordinate: ScreenCoordinateDto) throws -> LatLngDto
   func followMyLocation(perspective: CameraPerspectiveDto, zoomLevel: Double?) throws
   func animateCameraToCameraPosition(
     cameraPosition: CameraPositionDto, duration: Int64?,
@@ -6594,6 +6669,41 @@ class AutoMapViewApiSetup {
       }
     } else {
       getVisibleRegionChannel.setMessageHandler(nil)
+    }
+    let getScreenCoordinateChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getScreenCoordinate\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getScreenCoordinateChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let latLngArg = args[0] as! LatLngDto
+        do {
+          let result = try api.getScreenCoordinate(latLng: latLngArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getScreenCoordinateChannel.setMessageHandler(nil)
+    }
+    let getLatLngChannel = FlutterBasicMessageChannel(
+      name: "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getLatLng\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLatLngChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let screenCoordinateArg = args[0] as! ScreenCoordinateDto
+        do {
+          let result = try api.getLatLng(screenCoordinate: screenCoordinateArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getLatLngChannel.setMessageHandler(nil)
     }
     let followMyLocationChannel = FlutterBasicMessageChannel(
       name:
