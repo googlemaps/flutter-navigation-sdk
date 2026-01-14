@@ -172,6 +172,24 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
     return Convert.convertLatLngBoundsToDto(getView(viewId.toInt()).getVisibleRegion())
   }
 
+  override fun getScreenCoordinate(viewId: Long, latLng: LatLngDto): ScreenCoordinateDto {
+    val googleLatLng = Convert.convertLatLngFromDto(latLng)
+    val point = getView(viewId.toInt()).getScreenCoordinate(googleLatLng)
+    val density = android.content.res.Resources.getSystem().displayMetrics.density
+    return ScreenCoordinateDto(point.x.toDouble() / density, point.y.toDouble() / density)
+  }
+
+  override fun getLatLng(viewId: Long, screenCoordinate: ScreenCoordinateDto): LatLngDto {
+    val density = android.content.res.Resources.getSystem().displayMetrics.density
+    val point =
+      android.graphics.Point(
+        kotlin.math.roundToInt(screenCoordinate.x * density),
+        kotlin.math.roundToInt(screenCoordinate.y * density),
+      )
+    val latLng = getView(viewId.toInt()).getLatLng(point)
+    return LatLngDto(latLng.latitude, latLng.longitude)
+  }
+
   override fun animateCameraToCameraPosition(
     viewId: Long,
     cameraPosition: CameraPositionDto,

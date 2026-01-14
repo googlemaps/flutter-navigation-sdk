@@ -156,6 +156,24 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
     return Convert.convertLatLngBoundsToDto(getView().getVisibleRegion())
   }
 
+  override fun getScreenCoordinate(latLng: LatLngDto): ScreenCoordinateDto {
+    val googleLatLng = Convert.convertLatLngFromDto(latLng)
+    val point = getView().getScreenCoordinate(googleLatLng)
+    val density = android.content.res.Resources.getSystem().displayMetrics.density
+    return ScreenCoordinateDto(point.x.toDouble() / density, point.y.toDouble() / density)
+  }
+
+  override fun getLatLng(screenCoordinate: ScreenCoordinateDto): LatLngDto {
+    val density = android.content.res.Resources.getSystem().displayMetrics.density
+    val point =
+      android.graphics.Point(
+        kotlin.math.roundToInt(screenCoordinate.x * density),
+        kotlin.math.roundToInt(screenCoordinate.y * density),
+      )
+    val latLng = getView().getLatLng(point)
+    return LatLngDto(latLng.latitude, latLng.longitude)
+  }
+
   override fun animateCameraToCameraPosition(
     cameraPosition: CameraPositionDto,
     duration: Long?,

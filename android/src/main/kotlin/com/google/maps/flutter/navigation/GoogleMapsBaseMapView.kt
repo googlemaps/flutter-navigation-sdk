@@ -568,6 +568,14 @@ abstract class GoogleMapsBaseMapView(
     return getMap().projection.visibleRegion.latLngBounds
   }
 
+  fun getScreenCoordinate(latLng: LatLng): android.graphics.Point {
+    return getMap().projection.toScreenLocation(latLng)
+  }
+
+  fun getLatLng(screenCoordinate: android.graphics.Point): LatLng {
+    return getMap().projection.fromScreenLocation(screenCoordinate)
+  }
+
   private fun getMapCallback(callback: (Result<Boolean>) -> Unit): GoogleMap.CancelableCallback {
     return object : GoogleMap.CancelableCallback {
       override fun onFinish() {
