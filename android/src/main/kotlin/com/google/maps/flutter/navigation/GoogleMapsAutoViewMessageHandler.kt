@@ -167,8 +167,8 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
     val density = android.content.res.Resources.getSystem().displayMetrics.density
     val point =
       android.graphics.Point(
-        kotlin.math.roundToInt(screenCoordinate.x * density),
-        kotlin.math.roundToInt(screenCoordinate.y * density),
+        (screenCoordinate.x * density).toInt(),
+        (screenCoordinate.y * density).toInt(),
       )
     val latLng = getView().getLatLng(point)
     return LatLngDto(latLng.latitude, latLng.longitude)
