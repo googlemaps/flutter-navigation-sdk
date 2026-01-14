@@ -270,8 +270,8 @@ extension ConvertRegisteredImageType on RegisteredImageType {
         return RegisteredImageTypeDto.regular;
       case RegisteredImageType.maneuver:
         return RegisteredImageTypeDto.maneuver;
-      case RegisteredImageType.lane:
-        return RegisteredImageTypeDto.lane;
+      case RegisteredImageType.lanes:
+        return RegisteredImageTypeDto.lanes;
     }
   }
 }

@@ -190,7 +190,7 @@ enum Convert {
   ) -> StepInfoDto {
     let maneuverKey = convertManeuverToKey(stepInfo.maneuver)
     // Only look up lane image if stepInfo has lanes
-    let laneImage: ImageDescriptorDto? =
+    let lanesImage: ImageDescriptorDto? =
       if let lanes = stepInfo.lanes, !lanes.isEmpty {
         imageDescriptors[convertLanesToKey(stepInfo)] ?? nil
       } else {
@@ -212,7 +212,7 @@ enum Convert {
       maneuver: convertManeuver(maneuver: stepInfo.maneuver),
       stepNumber: stepInfo.stepNumber >= 0 ? Int64(stepInfo.stepNumber) : nil,
       maneuverImage: imageDescriptors[maneuverKey] ?? nil,
-      laneImage: laneImage
+      lanesImage: lanesImage
     )
   }
 
@@ -609,7 +609,7 @@ enum Convert {
   static func registeredImageType(type: RegisteredImageTypeDto) -> RegisteredImageType {
     switch type {
     case .maneuver: return .maneuver
-    case .lane: return .lane
+    case .lanes: return .lanes
     case .regular: return .regular
     }
   }
@@ -617,7 +617,7 @@ enum Convert {
   static func registeredImageType(type: RegisteredImageType) -> RegisteredImageTypeDto {
     switch type {
     case .maneuver: return .maneuver
-    case .lane: return .lane
+    case .lanes: return .lanes
     case .regular: return .regular
     }
   }

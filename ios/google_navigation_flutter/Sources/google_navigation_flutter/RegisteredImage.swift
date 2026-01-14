@@ -20,7 +20,7 @@ enum RegisteredImageType: Int {
   /// Maneuver image generated from StepInfo data
   case maneuver = 1
   /// Lane guidance image generated from StepInfo data
-  case lane = 2
+  case lanes = 2
 }
 
 struct RegisteredImage {
@@ -43,8 +43,8 @@ struct RegisteredImage {
           return .regular
         case .maneuver:
           return .maneuver
-        case .lane:
-          return .lane
+        case .lanes:
+          return .lanes
         }
       }()
     )

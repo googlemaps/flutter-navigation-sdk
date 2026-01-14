@@ -186,8 +186,8 @@ enum class RegisteredImageTypeDto(val raw: Int) {
   REGULAR(0),
   /** Maneuver image generated from StepInfo data */
   MANEUVER(1),
-  /** Lane guidance image generated from StepInfo data */
-  LANE(2);
+  /** Lanes guidance image generated from StepInfo data */
+  LANES(2);
 
   companion object {
     fun ofRaw(raw: Int): RegisteredImageTypeDto? {
@@ -2194,7 +2194,7 @@ data class StepInfoDto(
    * otherwise null. This image is generated only if step image generation option includes lane
    * images.
    */
-  val laneImage: ImageDescriptorDto? = null,
+  val lanesImage: ImageDescriptorDto? = null,
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): StepInfoDto {
@@ -2210,7 +2210,7 @@ data class StepInfoDto(
       val maneuver = pigeonVar_list[9] as ManeuverDto
       val stepNumber = pigeonVar_list[10] as Long?
       val maneuverImage = pigeonVar_list[11] as ImageDescriptorDto?
-      val laneImage = pigeonVar_list[12] as ImageDescriptorDto?
+      val lanesImage = pigeonVar_list[12] as ImageDescriptorDto?
       return StepInfoDto(
         distanceFromPrevStepMeters,
         timeFromPrevStepSeconds,
@@ -2224,7 +2224,7 @@ data class StepInfoDto(
         maneuver,
         stepNumber,
         maneuverImage,
-        laneImage,
+        lanesImage,
       )
     }
   }
@@ -2243,7 +2243,7 @@ data class StepInfoDto(
       maneuver,
       stepNumber,
       maneuverImage,
-      laneImage,
+      lanesImage,
     )
   }
 

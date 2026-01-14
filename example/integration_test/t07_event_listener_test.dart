@@ -260,7 +260,7 @@ void main() {
               final currentStep = event.navInfo.currentStep;
               if (currentStep?.lanes != null &&
                   currentStep!.lanes!.isNotEmpty) {
-                expectSync(currentStep.laneImage, isNotNull);
+                expectSync(currentStep.lanesImage, isNotNull);
               }
 
               currentManeuverImageDescriptor =

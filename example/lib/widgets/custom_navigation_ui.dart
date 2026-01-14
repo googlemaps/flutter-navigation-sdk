@@ -294,7 +294,7 @@ class _CustomNavigationHeaderExampleState
                       );
 
           final showLaneGuidance =
-              step.laneImage != null &&
+              step.lanesImage != null &&
               (!isCurrentStep ||
                   (widget.navInfo.distanceToCurrentStepMeters ?? 0) <
                       _laneInfoLimit);
@@ -384,8 +384,8 @@ class _CustomNavigationHeaderExampleState
                       borderRadius: secondaryBorderRadius,
                     ),
                     child: _StepImageExample(
-                      key: ValueKey(step.laneImage!.registeredImageId),
-                      imageDescriptor: step.laneImage!,
+                      key: ValueKey(step.lanesImage!.registeredImageId),
+                      imageDescriptor: step.lanesImage!,
                       size: 40,
                     ),
                   ),

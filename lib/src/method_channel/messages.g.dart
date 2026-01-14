@@ -115,8 +115,8 @@ enum RegisteredImageTypeDto {
   /// Maneuver image generated from StepInfo data
   maneuver,
 
-  /// Lane guidance image generated from StepInfo data
-  lane,
+  /// Lanes guidance image generated from StepInfo data
+  lanes,
 }
 
 enum MarkerEventTypeDto {
@@ -2563,7 +2563,7 @@ class StepInfoDto {
     required this.maneuver,
     this.stepNumber,
     this.maneuverImage,
-    this.laneImage,
+    this.lanesImage,
   });
 
   /// Distance in meters from the previous step to this step if available, otherwise null.
@@ -2606,7 +2606,7 @@ class StepInfoDto {
 
   /// Image descriptor for the generated lane guidance image for the current step if available, otherwise null.
   /// This image is generated only if step image generation option includes lane images.
-  ImageDescriptorDto? laneImage;
+  ImageDescriptorDto? lanesImage;
 
   List<Object?> _toList() {
     return <Object?>[
@@ -2622,7 +2622,7 @@ class StepInfoDto {
       maneuver,
       stepNumber,
       maneuverImage,
-      laneImage,
+      lanesImage,
     ];
   }
 
@@ -2645,7 +2645,7 @@ class StepInfoDto {
       maneuver: result[9]! as ManeuverDto,
       stepNumber: result[10] as int?,
       maneuverImage: result[11] as ImageDescriptorDto?,
-      laneImage: result[12] as ImageDescriptorDto?,
+      lanesImage: result[12] as ImageDescriptorDto?,
     );
   }
 

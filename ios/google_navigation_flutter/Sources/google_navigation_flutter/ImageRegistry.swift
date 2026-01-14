@@ -93,7 +93,7 @@ class ImageRegistry {
         imagePixelRatio: imagePixelRatio,
         width: width,
         height: height,
-        type: .lane
+        type: .lanes
       )
     )
     return ImageDescriptorDto(
@@ -101,7 +101,7 @@ class ImageRegistry {
       imagePixelRatio: imagePixelRatio,
       width: width,
       height: height,
-      type: .lane
+      type: .lanes
     )
   }
 

@@ -368,7 +368,7 @@ Maneuver and lane images are available in the `StepInfo` objects:
 void _onNavInfoEvent(NavInfoEvent event) {
   final currentStep = event.navInfo.currentStep;
   final maneuverImage = currentStep?.maneuverImage;  // Turn icons
-  final laneImage = currentStep?.laneImage;          // Lane guidance
+  final lanesImage = currentStep?.lanesImage;          // Lane guidance
 }
 ```
 
@@ -397,7 +397,7 @@ Clear registered images by type when needed:
 ```dart
 // Clear maneuver and lane images when stopping navigation
 await clearRegisteredImages(filter: RegisteredImageType.maneuver);
-await clearRegisteredImages(filter: RegisteredImageType.lane);
+await clearRegisteredImages(filter: RegisteredImageType.lanes);
 ```
 
 See the example app's [turn_by_turn.dart](./example/lib/pages/turn_by_turn.dart) and [custom_navigation_ui.dart](./example/lib/widgets/custom_navigation_ui.dart) for a complete implementation.

@@ -110,8 +110,15 @@ class ImageRegistry {
     width: Double?,
     height: Double?,
   ): ImageDescriptorDto {
-    addRegisteredImage(imageId, bitmap, imagePixelRatio, width, height, RegisteredImageTypeDto.LANE)
-    return ImageDescriptorDto(imageId, imagePixelRatio, width, height, RegisteredImageTypeDto.LANE)
+    addRegisteredImage(
+      imageId,
+      bitmap,
+      imagePixelRatio,
+      width,
+      height,
+      RegisteredImageTypeDto.LANES,
+    )
+    return ImageDescriptorDto(imageId, imagePixelRatio, width, height, RegisteredImageTypeDto.LANES)
   }
 
   private fun addRegisteredImage(
@@ -126,7 +133,7 @@ class ImageRegistry {
     val bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap)
     // Store original bitmap for maneuver and lane images to return image data
     val shouldStoreBitmap =
-      imageType == RegisteredImageType.MANEUVER || imageType == RegisteredImageType.LANE
+      imageType == RegisteredImageType.MANEUVER || imageType == RegisteredImageType.LANES
     val registeredImage =
       RegisteredImage(
         imageId,

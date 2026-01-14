@@ -36,5 +36,5 @@ enum class RegisteredImageType(val raw: Int) {
   /** Maneuver image generated from StepInfo data */
   MANEUVER(1),
   /** Lane guidance image generated from StepInfo data */
-  LANE(2),
+  LANES(2),
 }

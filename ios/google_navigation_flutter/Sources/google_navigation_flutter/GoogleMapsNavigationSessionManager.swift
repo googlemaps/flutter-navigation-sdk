@@ -666,7 +666,7 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
     return imageDescriptor
   }
 
-  func getLaneImageDescriptor(_ step: GMSNavigationStepInfo) -> ImageDescriptorDto? {
+  func getLanesImageDescriptor(_ step: GMSNavigationStepInfo) -> ImageDescriptorDto? {
     let key = Convert.convertLanesToKey(step)
     guard
       let registeredImage = GoogleMapsNavigationPlugin.imageRegistry?.findRegisteredImage(
@@ -677,9 +677,9 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
     return Convert.registeredImageToImageDescriptorDto(registeredImage: registeredImage)
   }
 
-  func getLaneImageDescriptorForStepInfo(_ step: GMSNavigationStepInfo) -> ImageDescriptorDto? {
+  func getLanesImageDescriptorForStepInfo(_ step: GMSNavigationStepInfo) -> ImageDescriptorDto? {
     // If image is already registered, return it, otherwise register a new one.
-    if let existingDescriptor = getLaneImageDescriptor(step) {
+    if let existingDescriptor = getLanesImageDescriptor(step) {
       return existingDescriptor
     }
     // Get lane image from step info
@@ -722,7 +722,7 @@ extension GoogleMapsNavigationSessionManager: GMSNavigatorListener {
         guard let lanes = step.lanes, !lanes.isEmpty else { return }
         let key = Convert.convertLanesToKey(step)
         if imageDescriptors[key] == nil {
-          let imageDescriptor = getLaneImageDescriptorForStepInfo(step)
+          let imageDescriptor = getLanesImageDescriptorForStepInfo(step)
           imageDescriptors.updateValue(imageDescriptor, forKey: key)
         }
       }

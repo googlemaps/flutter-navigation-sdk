@@ -319,7 +319,7 @@ class StepInfo {
     required this.lanes,
     required this.maneuver,
     required this.maneuverImage,
-    required this.laneImage,
+    required this.lanesImage,
   });
 
   /// Distance in meters from the previous step to this step if available, otherwise null.
@@ -364,7 +364,7 @@ class StepInfo {
 
   /// Image descriptor for the generated lane guidance image for the current step if available, otherwise null.
   ///   /// This image is generated only if step image generation option includes lane images.
-  final ImageDescriptor? laneImage;
+  final ImageDescriptor? lanesImage;
 
   @override
   String toString() =>

@@ -148,7 +148,7 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
     if (_navigationRunning) {
       // Clear registered maneuver and lane images before cleanup
       await clearRegisteredImages(filter: RegisteredImageType.maneuver);
-      await clearRegisteredImages(filter: RegisteredImageType.lane);
+      await clearRegisteredImages(filter: RegisteredImageType.lanes);
       await GoogleMapsNavigator.simulator.removeUserLocation();
       await GoogleMapsNavigator.cleanup();
 
@@ -165,7 +165,7 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
     if (_navigationRunning) {
       // Clear registered maneuver and lane images before cleanup
       clearRegisteredImages(filter: RegisteredImageType.maneuver);
-      clearRegisteredImages(filter: RegisteredImageType.lane);
+      clearRegisteredImages(filter: RegisteredImageType.lanes);
       GoogleMapsNavigator.cleanup();
     }
     super.dispose();

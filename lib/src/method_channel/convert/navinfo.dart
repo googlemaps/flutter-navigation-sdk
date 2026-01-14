@@ -53,7 +53,7 @@ extension ConvertStepInfoDto on StepInfoDto {
     lanes: lanes?.map<Lane>((LaneDto lane) => lane.toLane()).toList(),
     maneuver: maneuver.toManeuver(),
     maneuverImage: maneuverImage?.toImageDescriptor(),
-    laneImage: laneImage?.toImageDescriptor(),
+    lanesImage: lanesImage?.toImageDescriptor(),
   );
 }
 

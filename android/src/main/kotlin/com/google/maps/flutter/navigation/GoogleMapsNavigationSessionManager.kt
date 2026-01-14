@@ -778,7 +778,7 @@ constructor(
         )
       }
 
-      fun getLaneImageDescriptor(stepInfo: StepInfo): ImageDescriptorDto? {
+      fun getLanesImageDescriptor(stepInfo: StepInfo): ImageDescriptorDto? {
         val key = Convert.convertLanesToKey(stepInfo)
         val registeredImage = imageRegistry.findRegisteredImage(key)
         if (registeredImage != null) {
@@ -787,9 +787,9 @@ constructor(
         return null
       }
 
-      fun getLaneImageDescriptorForStepInfo(stepInfo: StepInfo): ImageDescriptorDto? {
+      fun getLanesImageDescriptorForStepInfo(stepInfo: StepInfo): ImageDescriptorDto? {
         val bitmap = stepInfo.lanesBitmap ?: return null
-        val existingDescriptor = getLaneImageDescriptor(stepInfo)
+        val existingDescriptor = getLanesImageDescriptor(stepInfo)
         if (existingDescriptor != null) {
           return existingDescriptor
         }
@@ -823,7 +823,7 @@ constructor(
           if (generateLaneImages && !stepInfo.lanes.isNullOrEmpty()) {
             val laneKey = Convert.convertLanesToKey(stepInfo)
             if (!imageDescriptors.containsKey(laneKey)) {
-              val imageDescriptor = getLaneImageDescriptorForStepInfo(stepInfo)
+              val imageDescriptor = getLanesImageDescriptorForStepInfo(stepInfo)
               imageDescriptors[laneKey] = imageDescriptor
             }
           }

@@ -915,7 +915,7 @@ object Convert {
   ): StepInfoDto {
     val maneuverKey = convertManeuverToKey(stepInfo.maneuver)
     // Only look up lane image if stepInfo has lanes
-    val laneImage =
+    val lanesImage =
       if (!stepInfo.lanes.isNullOrEmpty()) {
         imageDescriptors[convertLanesToKey(stepInfo)]
       } else {
@@ -945,7 +945,7 @@ object Convert {
         },
       maneuver = convertManeuver(stepInfo.maneuver),
       maneuverImage = imageDescriptors[maneuverKey],
-      laneImage = laneImage,
+      lanesImage = lanesImage,
     )
   }
 
@@ -1184,7 +1184,7 @@ object Convert {
     return when (type) {
       RegisteredImageTypeDto.REGULAR -> RegisteredImageType.REGULAR
       RegisteredImageTypeDto.MANEUVER -> RegisteredImageType.MANEUVER
-      RegisteredImageTypeDto.LANE -> RegisteredImageType.LANE
+      RegisteredImageTypeDto.LANES -> RegisteredImageType.LANES
     }
   }
 
@@ -1192,7 +1192,7 @@ object Convert {
     return when (type) {
       RegisteredImageType.REGULAR -> RegisteredImageTypeDto.REGULAR
       RegisteredImageType.MANEUVER -> RegisteredImageTypeDto.MANEUVER
-      RegisteredImageType.LANE -> RegisteredImageTypeDto.LANE
+      RegisteredImageType.LANES -> RegisteredImageTypeDto.LANES
     }
   }
 

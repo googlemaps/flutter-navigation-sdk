@@ -202,8 +202,8 @@ enum RegisteredImageTypeDto: Int {
   case regular = 0
   /// Maneuver image generated from StepInfo data
   case maneuver = 1
-  /// Lane guidance image generated from StepInfo data
-  case lane = 2
+  /// Lanes guidance image generated from StepInfo data
+  case lanes = 2
 }
 
 enum MarkerEventTypeDto: Int {
@@ -2035,7 +2035,7 @@ struct StepInfoDto: Hashable {
   var maneuverImage: ImageDescriptorDto? = nil
   /// Image descriptor for the generated lane guidance image for the current step if available, otherwise null.
   /// This image is generated only if step image generation option includes lane images.
-  var laneImage: ImageDescriptorDto? = nil
+  var lanesImage: ImageDescriptorDto? = nil
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> StepInfoDto? {
@@ -2051,7 +2051,7 @@ struct StepInfoDto: Hashable {
     let maneuver = pigeonVar_list[9] as! ManeuverDto
     let stepNumber: Int64? = nilOrValue(pigeonVar_list[10])
     let maneuverImage: ImageDescriptorDto? = nilOrValue(pigeonVar_list[11])
-    let laneImage: ImageDescriptorDto? = nilOrValue(pigeonVar_list[12])
+    let lanesImage: ImageDescriptorDto? = nilOrValue(pigeonVar_list[12])
 
     return StepInfoDto(
       distanceFromPrevStepMeters: distanceFromPrevStepMeters,
@@ -2066,7 +2066,7 @@ struct StepInfoDto: Hashable {
       maneuver: maneuver,
       stepNumber: stepNumber,
       maneuverImage: maneuverImage,
-      laneImage: laneImage
+      lanesImage: lanesImage
     )
   }
   func toList() -> [Any?] {
@@ -2083,7 +2083,7 @@ struct StepInfoDto: Hashable {
       maneuver,
       stepNumber,
       maneuverImage,
-      laneImage,
+      lanesImage,
     ]
   }
   static func == (lhs: StepInfoDto, rhs: StepInfoDto) -> Bool {
