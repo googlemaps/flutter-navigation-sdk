@@ -420,8 +420,10 @@ class NavigationAudioGuidanceSettings {
       ')';
 }
 
+/// Speed alert options.
+/// {@category Navigation}
 class SpeedAlertOptions {
-  /// Initialize with options.
+  /// Initialize with minor and major speed alert threshold percentages and severity upgrade duration.
   SpeedAlertOptions({
     required this.minorSpeedAlertThresholdPercentage,
     required this.majorSpeedAlertThresholdPercentage,

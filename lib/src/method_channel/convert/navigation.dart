@@ -139,6 +139,8 @@ extension ConvertNavigationAudioGuidanceSettings
   }
 }
 
+/// [SpeedAlertOptions] convert extension.
+/// @nodoc
 extension ConvertSpeedAlertOptions on SpeedAlertOptions {
   SpeedAlertOptionsDto toDto() {
     return SpeedAlertOptionsDto(

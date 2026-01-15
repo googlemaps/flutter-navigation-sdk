@@ -680,6 +680,7 @@ class GoogleMapsNavigator {
         .setAudioGuidance(settings);
   }
 
+  /// Sets speed alert options.
   static Future<void> setSpeedAlertOptions(SpeedAlertOptions options) {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .setSpeedAlertOptions(options);

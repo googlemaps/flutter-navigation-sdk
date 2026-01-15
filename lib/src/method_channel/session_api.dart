@@ -302,6 +302,7 @@ class NavigationSessionAPIImpl {
     }
   }
 
+  /// Sets speed alert options.
   Future<void> setSpeedAlertOptions(SpeedAlertOptions options) async {
     try {
       return await _sessionApi.setSpeedAlertOptions(options.toDto());

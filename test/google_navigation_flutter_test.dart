@@ -1246,7 +1246,7 @@ void main() {
 
           // Set speed alert options.
           final SpeedAlertOptions speedAlertSettingsIn = SpeedAlertOptions(
-            minorSpeedAlertThresholdPercentage: 5.0,
+            minorSpeedAlertThresholdPercentage: 2.0,
             majorSpeedAlertThresholdPercentage: 10.0,
             severityUpgradeDurationSeconds: 5.0,
           );
