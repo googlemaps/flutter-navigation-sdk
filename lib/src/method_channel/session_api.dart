@@ -302,6 +302,19 @@ class NavigationSessionAPIImpl {
     }
   }
 
+  Future<void> setSpeedAlertOptions(SpeedAlertOptions options) async {
+    try {
+      return await _sessionApi.setSpeedAlertOptions(options.toDto());
+    } on PlatformException catch (e) {
+      switch (e.code) {
+        case 'sessionNotInitialized':
+          throw const SessionNotInitializedException();
+        default:
+          rethrow;
+      }
+    }
+  }
+
   /// Sets user location.
   Future<void> setUserLocation(LatLng location) async {
     try {

@@ -680,6 +680,11 @@ class GoogleMapsNavigator {
         .setAudioGuidance(settings);
   }
 
+  static Future<void> setSpeedAlertOptions(SpeedAlertOptions options) {
+    return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
+        .setSpeedAlertOptions(options);
+  }
+
   /// Sets state of allow background location updates. (iOS only)
   ///
   /// Throws [UnsupportedError] on Android.
