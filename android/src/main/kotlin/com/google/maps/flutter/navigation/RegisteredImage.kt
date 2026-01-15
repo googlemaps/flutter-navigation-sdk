@@ -21,7 +21,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor
 
 data class RegisteredImage(
   val imageId: String,
-  val bitmapDescriptor: BitmapDescriptor,
+  val bitmapDescriptor: BitmapDescriptor?,
   val imagePixelRatio: Double,
   val width: Double?,
   val height: Double?,

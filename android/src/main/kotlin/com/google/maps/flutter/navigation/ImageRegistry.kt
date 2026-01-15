@@ -19,6 +19,7 @@ package com.google.maps.flutter.navigation
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import java.io.ByteArrayOutputStream
 
@@ -130,7 +131,10 @@ class ImageRegistry {
     type: RegisteredImageTypeDto,
   ) {
     val imageType = Convert.registeredImageType(type)
-    val bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap)
+    var bitmapDescriptor: BitmapDescriptor? = null
+    if (type == RegisteredImageTypeDto.REGULAR) {
+      bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap)
+    }
     // Store original bitmap for maneuver and lane images to return image data
     val shouldStoreBitmap =
       imageType == RegisteredImageType.MANEUVER || imageType == RegisteredImageType.LANES
