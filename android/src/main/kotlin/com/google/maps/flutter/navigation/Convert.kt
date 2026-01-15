@@ -857,10 +857,16 @@ object Convert {
     }
   }
 
-  fun convertNavInfo(navInfo: NavInfo): NavInfoDto {
+  fun convertNavInfo(
+    navInfo: NavInfo,
+    imageDescriptors: Map<String, ImageDescriptorDto?>,
+  ): NavInfoDto {
     return NavInfoDto(
-      currentStep = navInfo.currentStep?.let { convertNavInfoStepInfo(it) },
-      remainingSteps = navInfo.remainingSteps.map { convertNavInfoStepInfo(it) },
+      currentStep = navInfo.currentStep?.let { convertNavInfoStepInfo(it, imageDescriptors) },
+      remainingSteps =
+        navInfo.remainingSteps.mapIndexed { index, item ->
+          convertNavInfoStepInfo(item, imageDescriptors)
+        },
       routeChanged = navInfo.routeChanged,
       distanceToCurrentStepMeters = navInfo.distanceToCurrentStepMeters?.toLong(),
       distanceToNextDestinationMeters = navInfo.distanceToNextDestinationMeters?.toLong(),
@@ -882,7 +888,39 @@ object Convert {
     }
   }
 
-  private fun convertNavInfoStepInfo(stepInfo: StepInfo): StepInfoDto {
+  fun convertManeuverToKey(maneuver: Int): String {
+    return "maneuver_$maneuver"
+  }
+
+  fun convertLanesToKey(stepInfo: StepInfo): String {
+    // This method should only be called when lanes exist
+    val lanes = stepInfo.lanes
+    require(!lanes.isNullOrEmpty()) {
+      "convertLanesToKey should only be called when stepInfo has lanes"
+    }
+
+    // Build a deterministic string from lane shapes and recommended flags
+    val lanesKey =
+      lanes.joinToString("|") { lane ->
+        lane.laneDirections().joinToString(",") { dir ->
+          "${dir.laneShape()}:${if (dir.isRecommended) 1 else 0}"
+        }
+      }
+    return "lane_$lanesKey"
+  }
+
+  private fun convertNavInfoStepInfo(
+    stepInfo: StepInfo,
+    imageDescriptors: Map<String, ImageDescriptorDto?>,
+  ): StepInfoDto {
+    val maneuverKey = convertManeuverToKey(stepInfo.maneuver)
+    // Only look up lane image if stepInfo has lanes
+    val lanesImage =
+      if (!stepInfo.lanes.isNullOrEmpty()) {
+        imageDescriptors[convertLanesToKey(stepInfo)]
+      } else {
+        null
+      }
     return StepInfoDto(
       distanceFromPrevStepMeters = stepInfo.distanceFromPrevStepMeters?.toLong() ?: 0L,
       timeFromPrevStepSeconds = stepInfo.timeFromPrevStepSeconds?.toLong() ?: 0L,
@@ -906,6 +944,8 @@ object Convert {
           )
         },
       maneuver = convertManeuver(stepInfo.maneuver),
+      maneuverImage = imageDescriptors[maneuverKey],
+      lanesImage = lanesImage,
     )
   }
 
@@ -1132,10 +1172,27 @@ object Convert {
         registeredImage.imagePixelRatio,
         registeredImage.width,
         registeredImage.height,
+        registeredImageType(registeredImage.type),
       )
     } else {
       // For default marker icon
-      ImageDescriptorDto()
+      ImageDescriptorDto(type = RegisteredImageTypeDto.REGULAR)
+    }
+  }
+
+  fun registeredImageType(type: RegisteredImageTypeDto): RegisteredImageType {
+    return when (type) {
+      RegisteredImageTypeDto.REGULAR -> RegisteredImageType.REGULAR
+      RegisteredImageTypeDto.MANEUVER -> RegisteredImageType.MANEUVER
+      RegisteredImageTypeDto.LANES -> RegisteredImageType.LANES
+    }
+  }
+
+  fun registeredImageType(type: RegisteredImageType): RegisteredImageTypeDto {
+    return when (type) {
+      RegisteredImageType.REGULAR -> RegisteredImageTypeDto.REGULAR
+      RegisteredImageType.MANEUVER -> RegisteredImageTypeDto.MANEUVER
+      RegisteredImageType.LANES -> RegisteredImageTypeDto.LANES
     }
   }
 

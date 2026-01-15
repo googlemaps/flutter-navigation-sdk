@@ -600,7 +600,16 @@ internal class ConvertTest {
 
   @Test
   fun convertRegisteredImageToImageIdDto_returnsExpectedValue() {
-    val registeredImage = RegisteredImage("Image_0", bitmapDescriptor, 1.0, 10.0, 20.0)
+    val registeredImage =
+      RegisteredImage(
+        "Image_0",
+        bitmapDescriptor,
+        1.0,
+        10.0,
+        20.0,
+        RegisteredImageType.REGULAR,
+        null,
+      )
     val imageDescriptor = Convert.registeredImageToImageDescriptorDto(registeredImage)
 
     assertEquals("Image_0", imageDescriptor.registeredImageId)

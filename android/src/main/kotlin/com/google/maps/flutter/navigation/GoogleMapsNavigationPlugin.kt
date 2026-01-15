@@ -68,7 +68,8 @@ class GoogleMapsNavigationPlugin : FlutterPlugin, ActivityAware {
     // Setup navigation session manager
     val app = binding.applicationContext as Application
     val navigationSessionEventApi = NavigationSessionEventApi(binding.binaryMessenger)
-    sessionManager = GoogleMapsNavigationSessionManager(navigationSessionEventApi, app)
+    sessionManager =
+      GoogleMapsNavigationSessionManager(navigationSessionEventApi, app, imageRegistry!!)
 
     // Setup platform view factory and its method channel handlers
     viewEventApi = ViewEventApi(binding.binaryMessenger)

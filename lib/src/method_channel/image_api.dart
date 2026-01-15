@@ -73,7 +73,13 @@ class ImageRegistryAPIImpl {
   }
 
   /// Remove all registered bitmaps from image registry.
-  Future<void> clearRegisteredImages() {
-    return _imageApi.clearRegisteredImages();
+  Future<void> clearRegisteredImages(RegisteredImageType? filter) {
+    return _imageApi.clearRegisteredImages(filter?.toDto());
+  }
+
+  Future<Uint8List?> getRegisteredImageData({
+    required ImageDescriptor imageDescriptor,
+  }) {
+    return _imageApi.getRegisteredImageData(imageDescriptor.toDto());
   }
 }

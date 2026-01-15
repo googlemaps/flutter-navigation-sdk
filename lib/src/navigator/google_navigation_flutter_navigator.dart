@@ -386,11 +386,20 @@ class GoogleMapsNavigator {
   /// number of next steps to preview. If set to null, all available steps will
   /// be returned in the [NavInfo.remainingSteps].
   ///
+  /// Optional parameter [stepImageGenerationOptions] can be used to configure
+  /// step image generation for the turn-by-turn events. Use
+  /// [StepImageGenerationOptions] to specify whether to generate maneuver
+  /// and/or lane images.
+  ///
   /// Example usage:
   /// ```dart
   /// final subscription = setNavInfoListener(
   ///   yourEventHandler,
   ///   numNextStepsToPreview: 5,
+  ///   stepImageGenerationOptions: StepImageGenerationOptions(
+  ///     generateManeuverImages: true,
+  ///     generateLaneImages: true,
+  ///   ),
   /// );
   /// // When done with the subscription
   /// await subscription.cancel();
@@ -398,6 +407,7 @@ class GoogleMapsNavigator {
   static StreamSubscription<NavInfoEvent> setNavInfoListener(
     OnNavInfoEventCallback listener, {
     int? numNextStepsToPreview,
+    StepImageGenerationOptions? stepImageGenerationOptions,
   }) {
     assert(
       numNextStepsToPreview == null || numNextStepsToPreview >= 0,
@@ -421,7 +431,10 @@ class GoogleMapsNavigator {
     }
 
     GoogleMapsNavigationPlatform.instance.navigationSessionAPI
-        .enableTurnByTurnNavigationEvents(numNextStepsToPreview);
+        .enableTurnByTurnNavigationEvents(
+          numNextStepsToPreview,
+          stepImageGenerationOptions,
+        );
 
     return _navInfoEventStreamController!.stream.listen(listener);
   }
@@ -694,10 +707,11 @@ class GoogleMapsNavigator {
   }
 
   static Future<void> enableTurnByTurnNavigationEvents(
-    int? numNextStepsToPreview,
-  ) {
+    int? numNextStepsToPreview, {
+    StepImageGenerationOptions? options,
+  }) {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
-        .enableTurnByTurnNavigationEvents(numNextStepsToPreview);
+        .enableTurnByTurnNavigationEvents(numNextStepsToPreview, options);
   }
 
   static Future<void> disableTurnByTurnNavigationEvents() {

@@ -509,10 +509,12 @@ class NavigationSessionAPIImpl {
   /// Enables navigation info updates.
   Future<void> enableTurnByTurnNavigationEvents(
     int? numNextStepsToPreview,
+    StepImageGenerationOptions? options,
   ) async {
     try {
       return await _sessionApi.enableTurnByTurnNavigationEvents(
         numNextStepsToPreview,
+        options?.toDto(),
       );
     } on PlatformException catch (e) {
       switch (e.code) {

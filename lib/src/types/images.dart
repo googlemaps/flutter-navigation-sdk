@@ -75,3 +75,7 @@ class ImageDescriptor {
       'height: $height'
       ')';
 }
+
+/// Registered image type filter for clearing registered images.
+/// {@category Image Registry}
+enum RegisteredImageType { regular, maneuver, lanes }

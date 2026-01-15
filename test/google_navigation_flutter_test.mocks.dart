@@ -1,4 +1,4 @@
-// Copyright 2025 Google LLC
+// Copyright 2026 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -338,13 +338,16 @@ class MockTestNavigationSessionApi extends _i1.Mock
   );
 
   @override
-  void enableTurnByTurnNavigationEvents(int? numNextStepsToPreview) =>
-      super.noSuchMethod(
-        Invocation.method(#enableTurnByTurnNavigationEvents, [
-          numNextStepsToPreview,
-        ]),
-        returnValueForMissingStub: null,
-      );
+  void enableTurnByTurnNavigationEvents(
+    int? numNextStepsToPreview,
+    _i2.StepImageGenerationOptionsDto? options,
+  ) => super.noSuchMethod(
+    Invocation.method(#enableTurnByTurnNavigationEvents, [
+      numNextStepsToPreview,
+      options,
+    ]),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void disableTurnByTurnNavigationEvents() => super.noSuchMethod(
@@ -1309,8 +1312,18 @@ class MockTestImageRegistryApi extends _i1.Mock
           as List<_i2.ImageDescriptorDto>);
 
   @override
-  void clearRegisteredImages() => super.noSuchMethod(
-    Invocation.method(#clearRegisteredImages, []),
-    returnValueForMissingStub: null,
-  );
+  void clearRegisteredImages(_i2.RegisteredImageTypeDto? filter) =>
+      super.noSuchMethod(
+        Invocation.method(#clearRegisteredImages, [filter]),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i6.Uint8List? getRegisteredImageData(
+    _i2.ImageDescriptorDto? imageDescriptor,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#getRegisteredImageData, [imageDescriptor]),
+          )
+          as _i6.Uint8List?);
 }

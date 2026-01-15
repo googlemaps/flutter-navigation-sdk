@@ -19,7 +19,9 @@ package com.google.maps.flutter.navigation
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import java.io.ByteArrayOutputStream
 
 class ImageRegistry {
   val registeredImages = mutableListOf<RegisteredImage>()
@@ -32,7 +34,14 @@ class ImageRegistry {
   fun mapViewInitializationComplete() {
     isMapViewInitialized = true
     bitmapQueue.forEach {
-      addRegisteredImage(it.imageId, it.bitmap, it.imagePixelRatio, it.width, it.height)
+      addRegisteredImage(
+        it.imageId,
+        it.bitmap,
+        it.imagePixelRatio,
+        it.width,
+        it.height,
+        RegisteredImageTypeDto.REGULAR,
+      )
     }
     bitmapQueue.clear()
   }
@@ -53,9 +62,64 @@ class ImageRegistry {
       // Add to queue to make it later.
       bitmapQueue.add(QueuedBitmap(imageId, bitmap, imagePixelRatio, width, height))
     } else {
-      addRegisteredImage(imageId, bitmap, imagePixelRatio, width, height)
+      addRegisteredImage(
+        imageId,
+        bitmap,
+        imagePixelRatio,
+        width,
+        height,
+        RegisteredImageTypeDto.REGULAR,
+      )
     }
-    return ImageDescriptorDto(imageId, imagePixelRatio, width, height)
+    return ImageDescriptorDto(
+      imageId,
+      imagePixelRatio,
+      width,
+      height,
+      RegisteredImageTypeDto.REGULAR,
+    )
+  }
+
+  fun registerManeuverImage(
+    imageId: String,
+    bitmap: Bitmap,
+    imagePixelRatio: Double,
+    width: Double?,
+    height: Double?,
+  ): ImageDescriptorDto {
+    addRegisteredImage(
+      imageId,
+      bitmap,
+      imagePixelRatio,
+      width,
+      height,
+      RegisteredImageTypeDto.MANEUVER,
+    )
+    return ImageDescriptorDto(
+      imageId,
+      imagePixelRatio,
+      width,
+      height,
+      RegisteredImageTypeDto.MANEUVER,
+    )
+  }
+
+  fun registerLaneImage(
+    imageId: String,
+    bitmap: Bitmap,
+    imagePixelRatio: Double,
+    width: Double?,
+    height: Double?,
+  ): ImageDescriptorDto {
+    addRegisteredImage(
+      imageId,
+      bitmap,
+      imagePixelRatio,
+      width,
+      height,
+      RegisteredImageTypeDto.LANES,
+    )
+    return ImageDescriptorDto(imageId, imagePixelRatio, width, height, RegisteredImageTypeDto.LANES)
   }
 
   private fun addRegisteredImage(
@@ -64,9 +128,26 @@ class ImageRegistry {
     imagePixelRatio: Double,
     width: Double?,
     height: Double?,
+    type: RegisteredImageTypeDto,
   ) {
-    val bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap)
-    val registeredImage = RegisteredImage(imageId, bitmapDescriptor, imagePixelRatio, width, height)
+    val imageType = Convert.registeredImageType(type)
+    var bitmapDescriptor: BitmapDescriptor? = null
+    if (type == RegisteredImageTypeDto.REGULAR) {
+      bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap)
+    }
+    // Store original bitmap for maneuver and lane images to return image data
+    val shouldStoreBitmap =
+      imageType == RegisteredImageType.MANEUVER || imageType == RegisteredImageType.LANES
+    val registeredImage =
+      RegisteredImage(
+        imageId,
+        bitmapDescriptor,
+        imagePixelRatio,
+        width,
+        height,
+        imageType,
+        if (shouldStoreBitmap) bitmap else null,
+      )
     registeredImages.add(registeredImage)
   }
 
@@ -117,7 +198,26 @@ class ImageRegistry {
     registeredImages.removeAll { it.imageId == imageId }
   }
 
-  fun clearRegisteredImages() {
-    registeredImages.clear()
+  fun clearRegisteredImages(filter: RegisteredImageTypeDto?) {
+    if (filter == null) {
+      registeredImages.clear()
+      return
+    }
+    registeredImages.removeAll { Convert.registeredImageType(filter) == it.type }
+  }
+
+  private fun convertBitmapToPNGByteArray(bitmap: Bitmap): ByteArray {
+    return ByteArrayOutputStream().use { stream ->
+      bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+      stream.toByteArray()
+    }
+  }
+
+  fun getRegisteredImageData(imageDescriptor: ImageDescriptorDto): ByteArray? {
+    return imageDescriptor.registeredImageId?.let {
+      findRegisteredImage(imageDescriptor.registeredImageId)?.originalBitmap?.let {
+        convertBitmapToPNGByteArray(it)
+      }
+    }
   }
 }

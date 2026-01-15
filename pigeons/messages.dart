@@ -238,17 +238,30 @@ class MarkerOptionsDto {
   final ImageDescriptorDto icon;
 }
 
+enum RegisteredImageTypeDto {
+  /// Default type used when custom bitmaps are uploaded to registry
+  regular,
+
+  /// Maneuver image generated from StepInfo data
+  maneuver,
+
+  /// Lanes guidance image generated from StepInfo data
+  lanes,
+}
+
 class ImageDescriptorDto {
   const ImageDescriptorDto({
     this.registeredImageId,
     this.imagePixelRatio,
     this.width,
     this.height,
+    this.type = RegisteredImageTypeDto.regular,
   });
   final String? registeredImageId;
   final double? imagePixelRatio;
   final double? width;
   final double? height;
+  final RegisteredImageTypeDto type;
 }
 
 class InfoWindowDto {
@@ -652,7 +665,8 @@ abstract class ImageRegistryApi {
   );
   void unregisterImage(ImageDescriptorDto imageDescriptor);
   List<ImageDescriptorDto> getRegisteredImages();
-  void clearRegisteredImages();
+  void clearRegisteredImages(RegisteredImageTypeDto? filter);
+  Uint8List? getRegisteredImageData(ImageDescriptorDto imageDescriptor);
 }
 
 @FlutterApi()
@@ -1216,6 +1230,8 @@ class StepInfoDto {
     required this.stepNumber,
     required this.lanes,
     required this.maneuver,
+    required this.maneuverImage,
+    required this.lanesImage,
   });
 
   /// Distance in meters from the previous step to this step if available, otherwise null.
@@ -1251,6 +1267,14 @@ class StepInfoDto {
 
   /// The index of the step in the list of all steps in the route if available, otherwise null.
   final int? stepNumber;
+
+  /// Image descriptor for the generated maneuver image for the current step if available, otherwise null.
+  /// This image is generated only if step image generation option includes maneuver images.
+  ImageDescriptorDto? maneuverImage;
+
+  /// Image descriptor for the generated lane guidance image for the current step if available, otherwise null.
+  /// This image is generated only if step image generation option includes lane images.
+  ImageDescriptorDto? lanesImage;
 }
 
 /// Contains information about the state of navigation, the current nav step if
@@ -1339,6 +1363,22 @@ enum TaskRemovedBehaviorDto {
   quitService,
 }
 
+/// Options for step image generation in turn-by-turn navigation events.
+class StepImageGenerationOptionsDto {
+  StepImageGenerationOptionsDto({
+    this.generateManeuverImages,
+    this.generateLaneImages,
+  });
+
+  /// Whether to generate maneuver images for navigation steps.
+  /// Defaults to false if not specified.
+  final bool? generateManeuverImages;
+
+  /// Whether to generate lane images for navigation steps.
+  /// Defaults to false if not specified.
+  final bool? generateLaneImages;
+}
+
 @HostApi(dartHostTestHandler: 'TestNavigationSessionApi')
 abstract class NavigationSessionApi {
   @async
@@ -1403,7 +1443,10 @@ abstract class NavigationSessionApi {
   void enableRoadSnappedLocationUpdates();
   void disableRoadSnappedLocationUpdates();
 
-  void enableTurnByTurnNavigationEvents(int? numNextStepsToPreview);
+  void enableTurnByTurnNavigationEvents(
+    int? numNextStepsToPreview,
+    StepImageGenerationOptionsDto? options,
+  );
   void disableTurnByTurnNavigationEvents();
 
   void registerRemainingTimeOrDistanceChangedListener(

@@ -14,6 +14,8 @@
 
 import 'dart:typed_data';
 
+import 'package:flutter/widgets.dart';
+
 import 'google_navigation_flutter_platform_interface.dart';
 import 'types/types.dart';
 
@@ -62,9 +64,17 @@ Future<List<ImageDescriptor>> getRegisteredImages() {
 
 /// Remove all registered bitmaps from image registry.
 /// {@category Image Registry}
-Future<void> clearRegisteredImages() {
+Future<void> clearRegisteredImages({RegisteredImageType? filter}) {
   return GoogleMapsNavigationPlatform.instance.imageRegistryAPI
-      .clearRegisteredImages();
+      .clearRegisteredImages(filter);
+}
+
+/// Get registered PNG image data from image registry anc convert it to Image.
+/// {@category Image Registry}
+Future<Image?> getRegisteredImage(ImageDescriptor imageDescriptor) async {
+  final pngBytes = await GoogleMapsNavigationPlatform.instance.imageRegistryAPI
+      .getRegisteredImageData(imageDescriptor: imageDescriptor);
+  return pngBytes != null ? Image.memory(pngBytes) : null;
 }
 
 /// [registerBitmapImage] failed to decode bitmap from byte array.

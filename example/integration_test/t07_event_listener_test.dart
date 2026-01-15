@@ -184,6 +184,7 @@ void main() {
           GoogleMapsNavigator.setNavInfoListener(
             expectAsync1((NavInfoEvent event) {
               expectSync(event.navInfo, isA<NavInfo>());
+              expectSync(event.navInfo.currentStep?.maneuverImage, isNull);
 
               /// Complete the eventReceived completer only once.
               if (!eventReceived.isCompleted) {
@@ -200,6 +201,95 @@ void main() {
       /// Wait until the event is received and then test cancelling the subscription.
       await eventReceived.future;
       await subscription.cancel();
+      await navigationController.clear();
+    },
+  );
+
+  patrol(
+    'Test NavInfo event listener with generatedStepImagesType value set to bitmap and fetching the image',
+    (PatrolIntegrationTester $) async {
+      final Completer<void> eventReceived = Completer<void>();
+
+      /// Set up navigation.
+      final GoogleNavigationViewController navigationController =
+          await startNavigationWithoutDestination($);
+      await $.pumpAndSettle();
+
+      /// Simulate location (1298 California St)
+      await GoogleMapsNavigator.simulator.setUserLocation(
+        const LatLng(
+          latitude: 37.79136614772824,
+          longitude: -122.41565900473043,
+        ),
+      );
+      await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
+
+      /// Set Destination.
+      final Destinations destinations = Destinations(
+        waypoints: <NavigationWaypoint>[
+          NavigationWaypoint.withLatLngTarget(
+            title: 'California St & Jones St',
+            target: const LatLng(latitude: 37.791424, longitude: -122.414139),
+          ),
+        ],
+        displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
+      );
+      final NavigationRouteStatus status =
+          await GoogleMapsNavigator.setDestinations(destinations);
+      expect(status, NavigationRouteStatus.statusOk);
+      await $.pumpAndSettle();
+
+      /// Start guidance.
+      await GoogleMapsNavigator.startGuidance();
+      await $.pumpAndSettle();
+
+      ImageDescriptor? currentManeuverImageDescriptor;
+
+      /// Set up the listener and the test.
+      final StreamSubscription<NavInfoEvent> subscription =
+          GoogleMapsNavigator.setNavInfoListener(
+            expectAsync1((NavInfoEvent event) {
+              expectSync(event.navInfo, isA<NavInfo>());
+              expectSync(event.navInfo.currentStep?.maneuverImage, isNotNull);
+              expectSync(
+                event.navInfo.remainingSteps.lastOrNull?.maneuverImage,
+                isNotNull,
+              );
+
+              /// Test that laneImage is available if lanes are present.
+              final currentStep = event.navInfo.currentStep;
+              if (currentStep?.lanes != null &&
+                  currentStep!.lanes!.isNotEmpty) {
+                expectSync(currentStep.lanesImage, isNotNull);
+              }
+
+              currentManeuverImageDescriptor =
+                  event.navInfo.currentStep?.maneuverImage;
+
+              /// Complete the eventReceived completer only once.
+              if (!eventReceived.isCompleted) {
+                eventReceived.complete();
+              }
+            }, max: -1),
+            numNextStepsToPreview: null,
+            stepImageGenerationOptions: const StepImageGenerationOptions(
+              generateManeuverImages: true,
+              generateLaneImages: true,
+            ),
+          );
+
+      /// Start simulation.
+      await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
+      await $.pumpAndSettle();
+
+      /// Wait until the event is received and then test cancelling the subscription.
+      await eventReceived.future;
+      await subscription.cancel();
+
+      /// Test that the image descriptor can be used to get the image data.
+      final image = await getRegisteredImage(currentManeuverImageDescriptor!);
+      expect(image, isNotNull);
+
       await navigationController.clear();
     },
   );

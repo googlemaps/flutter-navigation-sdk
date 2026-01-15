@@ -16,12 +16,25 @@
 
 package com.google.maps.flutter.navigation
 
+import android.graphics.Bitmap
 import com.google.android.gms.maps.model.BitmapDescriptor
 
 data class RegisteredImage(
   val imageId: String,
-  val bitmapDescriptor: BitmapDescriptor,
+  val bitmapDescriptor: BitmapDescriptor?,
   val imagePixelRatio: Double,
   val width: Double?,
   val height: Double?,
+  val type: RegisteredImageType,
+  /** The original bitmap for maneuver or lane images, used to return image data. */
+  val originalBitmap: Bitmap?,
 )
+
+enum class RegisteredImageType(val raw: Int) {
+  /** Default type used when custom bitmaps are uploaded to registry */
+  REGULAR(0),
+  /** Maneuver image generated from StepInfo data */
+  MANEUVER(1),
+  /** Lane guidance image generated from StepInfo data */
+  LANES(2),
+}

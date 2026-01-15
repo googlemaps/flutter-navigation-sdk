@@ -256,8 +256,17 @@ class GoogleMapsNavigationSessionMessageHandler(
     sessionManager.disableRoadSnappedLocationUpdates()
   }
 
-  override fun enableTurnByTurnNavigationEvents(numNextStepsToPreview: Long?) {
-    sessionManager.enableTurnByTurnNavigationEvents(numNextStepsToPreview?.toInt() ?: Int.MAX_VALUE)
+  override fun enableTurnByTurnNavigationEvents(
+    numNextStepsToPreview: Long?,
+    options: StepImageGenerationOptionsDto?,
+  ) {
+    val generateManeuverImages = options?.generateManeuverImages ?: false
+    val generateLaneImages = options?.generateLaneImages ?: false
+    sessionManager.enableTurnByTurnNavigationEvents(
+      numNextStepsToPreview?.toInt() ?: Int.MAX_VALUE,
+      generateManeuverImages,
+      generateLaneImages,
+    )
   }
 
   override fun disableTurnByTurnNavigationEvents() {
