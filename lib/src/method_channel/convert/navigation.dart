@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import '../../../google_navigation_flutter.dart';
+import '../../utils/color.dart';
 import '../method_channel.dart';
 
 /// [SpeedAlertSeverityDto] convert extension.
@@ -245,6 +246,80 @@ extension ConvertNavigationViewOptions on NavigationViewOptions {
     return NavigationViewOptionsDto(
       navigationUIEnabledPreference: preference,
       forceNightMode: forceNightMode.toDto(),
+      androidStylingOptions: androidStylingOptions?.toDto(),
+      iosStylingOptions: iosStylingOptions?.toDto(),
+    );
+  }
+}
+
+/// [AndroidNavigationStylingOptions] convert extension.
+/// @nodoc
+extension ConvertAndroidNavigationStylingOptions
+    on AndroidNavigationStylingOptions {
+  /// Converts [AndroidNavigationStylingOptions] to [AndroidNavigationStylingOptionsDto]
+  AndroidNavigationStylingOptionsDto toDto() {
+    return AndroidNavigationStylingOptionsDto(
+      primaryDayModeThemeColor: colorToInt(primaryDayModeThemeColor),
+      secondaryDayModeThemeColor: colorToInt(secondaryDayModeThemeColor),
+      primaryNightModeThemeColor: colorToInt(primaryNightModeThemeColor),
+      secondaryNightModeThemeColor: colorToInt(secondaryNightModeThemeColor),
+      headerLargeManeuverIconColor: colorToInt(headerLargeManeuverIconColor),
+      headerSmallManeuverIconColor: colorToInt(headerSmallManeuverIconColor),
+      headerNextStepTextColor: colorToInt(headerNextStepTextColor),
+      headerNextStepTextSize: headerNextStepTextSize,
+      headerDistanceValueTextColor: colorToInt(headerDistanceValueTextColor),
+      headerDistanceUnitsTextColor: colorToInt(headerDistanceUnitsTextColor),
+      headerDistanceValueTextSize: headerDistanceValueTextSize,
+      headerDistanceUnitsTextSize: headerDistanceUnitsTextSize,
+      headerInstructionsTextColor: colorToInt(headerInstructionsTextColor),
+      headerInstructionsFirstRowTextSize: headerInstructionsFirstRowTextSize,
+      headerInstructionsSecondRowTextSize: headerInstructionsSecondRowTextSize,
+      headerGuidanceRecommendedLaneColor: colorToInt(
+        headerGuidanceRecommendedLaneColor,
+      ),
+    );
+  }
+}
+
+/// [IOSNavigationStylingOptions] convert extension.
+/// @nodoc
+extension ConvertIOSNavigationStylingOptions on IOSNavigationStylingOptions {
+  /// Converts [IOSNavigationStylingOptions] to [IOSNavigationStylingOptionsDto]
+  IOSNavigationStylingOptionsDto toDto() {
+    return IOSNavigationStylingOptionsDto(
+      navigationHeaderPrimaryBackgroundColor: colorToInt(
+        navigationHeaderPrimaryBackgroundColor,
+      ),
+      navigationHeaderSecondaryBackgroundColor: colorToInt(
+        navigationHeaderSecondaryBackgroundColor,
+      ),
+      navigationHeaderPrimaryBackgroundColorNightMode: colorToInt(
+        navigationHeaderPrimaryBackgroundColorNightMode,
+      ),
+      navigationHeaderSecondaryBackgroundColorNightMode: colorToInt(
+        navigationHeaderSecondaryBackgroundColorNightMode,
+      ),
+      navigationHeaderLargeManeuverIconColor: colorToInt(
+        navigationHeaderLargeManeuverIconColor,
+      ),
+      navigationHeaderSmallManeuverIconColor: colorToInt(
+        navigationHeaderSmallManeuverIconColor,
+      ),
+      navigationHeaderGuidanceRecommendedLaneColor: colorToInt(
+        navigationHeaderGuidanceRecommendedLaneColor,
+      ),
+      navigationHeaderNextStepTextColor: colorToInt(
+        navigationHeaderNextStepTextColor,
+      ),
+      navigationHeaderDistanceValueTextColor: colorToInt(
+        navigationHeaderDistanceValueTextColor,
+      ),
+      navigationHeaderDistanceUnitsTextColor: colorToInt(
+        navigationHeaderDistanceUnitsTextColor,
+      ),
+      navigationHeaderInstructionsTextColor: colorToInt(
+        navigationHeaderInstructionsTextColor,
+      ),
     );
   }
 }

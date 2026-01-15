@@ -621,4 +621,49 @@ enum Convert {
     case .regular: return .regular
     }
   }
+
+  /// Struct to hold converted iOS navigation styling options as UIColor values.
+  struct IOSNavigationStylingOptions {
+    var navigationHeaderPrimaryBackgroundColor: UIColor?
+    var navigationHeaderSecondaryBackgroundColor: UIColor?
+    var navigationHeaderPrimaryBackgroundColorNightMode: UIColor?
+    var navigationHeaderSecondaryBackgroundColorNightMode: UIColor?
+    var navigationHeaderLargeManeuverIconColor: UIColor?
+    var navigationHeaderSmallManeuverIconColor: UIColor?
+    var navigationHeaderGuidanceRecommendedLaneColor: UIColor?
+    var navigationHeaderNextStepTextColor: UIColor?
+    var navigationHeaderDistanceValueTextColor: UIColor?
+    var navigationHeaderDistanceUnitsTextColor: UIColor?
+    var navigationHeaderInstructionsTextColor: UIColor?
+  }
+
+  /// Converts IOSNavigationStylingOptionsDto to IOSNavigationStylingOptions with UIColor values.
+  static func convertNavigationStylingOptions(_ options: IOSNavigationStylingOptionsDto)
+    -> IOSNavigationStylingOptions
+  {
+    return IOSNavigationStylingOptions(
+      navigationHeaderPrimaryBackgroundColor: options.navigationHeaderPrimaryBackgroundColor
+        .map { UIColor(from: $0) },
+      navigationHeaderSecondaryBackgroundColor: options.navigationHeaderSecondaryBackgroundColor
+        .map { UIColor(from: $0) },
+      navigationHeaderPrimaryBackgroundColorNightMode: options
+        .navigationHeaderPrimaryBackgroundColorNightMode.map { UIColor(from: $0) },
+      navigationHeaderSecondaryBackgroundColorNightMode: options
+        .navigationHeaderSecondaryBackgroundColorNightMode.map { UIColor(from: $0) },
+      navigationHeaderLargeManeuverIconColor: options.navigationHeaderLargeManeuverIconColor
+        .map { UIColor(from: $0) },
+      navigationHeaderSmallManeuverIconColor: options.navigationHeaderSmallManeuverIconColor
+        .map { UIColor(from: $0) },
+      navigationHeaderGuidanceRecommendedLaneColor: options
+        .navigationHeaderGuidanceRecommendedLaneColor.map { UIColor(from: $0) },
+      navigationHeaderNextStepTextColor: options.navigationHeaderNextStepTextColor
+        .map { UIColor(from: $0) },
+      navigationHeaderDistanceValueTextColor: options.navigationHeaderDistanceValueTextColor
+        .map { UIColor(from: $0) },
+      navigationHeaderDistanceUnitsTextColor: options.navigationHeaderDistanceUnitsTextColor
+        .map { UIColor(from: $0) },
+      navigationHeaderInstructionsTextColor: options.navigationHeaderInstructionsTextColor
+        .map { UIColor(from: $0) }
+    )
+  }
 }

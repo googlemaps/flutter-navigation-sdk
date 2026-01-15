@@ -276,6 +276,8 @@ class NavigationViewOptions {
     this.navigationUIEnabledPreference =
         NavigationUIEnabledPreference.automatic,
     this.forceNightMode = NavigationForceNightMode.auto,
+    this.androidStylingOptions,
+    this.iosStylingOptions,
   });
 
   /// Determines the initial visibility of the navigation UI on map initialization.
@@ -302,10 +304,26 @@ class NavigationViewOptions {
   /// determine day or night mode based on time and location.
   final NavigationForceNightMode forceNightMode;
 
+  /// Styling options for the navigation UI on Android.
+  ///
+  /// These options control the appearance of the navigation header and footer,
+  /// including colors and text sizes. Only applicable on Android platform.
+  /// If null, platform defaults will be used.
+  final AndroidNavigationStylingOptions? androidStylingOptions;
+
+  /// Styling options for the navigation UI on iOS.
+  ///
+  /// These options control the appearance of the navigation header,
+  /// including background colors and text colors. Only applicable on iOS platform.
+  /// If null, platform defaults will be used.
+  final IOSNavigationStylingOptions? iosStylingOptions;
+
   @override
   String toString() =>
       'NavigationViewOptions('
       'navigationUIEnabledPreference: $navigationUIEnabledPreference, '
-      'forceNightMode: $forceNightMode'
+      'forceNightMode: $forceNightMode, '
+      'androidStylingOptions: $androidStylingOptions, '
+      'iosStylingOptions: $iosStylingOptions'
       ')';
 }

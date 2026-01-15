@@ -597,4 +597,19 @@ class GoogleMapsNavigationViewMessageHandler: MapViewApi {
     let mode = Convert.convertNavigationForceNightMode(forceNightMode: forceNightMode)
     try getView(viewId).setForceNightMode(mode)
   }
+
+  func setAndroidNavigationStylingOptions(
+    viewId _: Int64,
+    options _: AndroidNavigationStylingOptionsDto
+  ) throws {
+    // Android-only method, no-op on iOS
+  }
+
+  func setIOSNavigationStylingOptions(
+    viewId: Int64,
+    options: IOSNavigationStylingOptionsDto
+  ) throws {
+    let convertedOptions = Convert.convertNavigationStylingOptions(options)
+    try getView(viewId).setIOSStylingOptions(convertedOptions)
+  }
 }

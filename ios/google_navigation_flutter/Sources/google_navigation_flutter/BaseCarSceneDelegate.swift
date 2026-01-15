@@ -87,6 +87,7 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
           viewEventApi: nil,
           navigationUIEnabledPreference: NavigationUIEnabledPreference.automatic,
           forceNightMode: nil,
+          iosStylingOptions: nil,
           mapConfiguration: MapConfiguration(
             cameraPosition: nil,
             mapType: .normal,

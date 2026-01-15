@@ -24,6 +24,7 @@ import com.google.android.libraries.navigation.ForceNightMode
 import com.google.android.libraries.navigation.NavigationView
 import com.google.android.libraries.navigation.OnNavigationUiChangedListener
 import com.google.android.libraries.navigation.PromptVisibilityChangedListener
+import com.google.android.libraries.navigation.StylingOptions
 import io.flutter.plugin.platform.PlatformView
 
 class GoogleMapsNavigationView
@@ -82,6 +83,11 @@ internal constructor(
     navigationOptions?.forceNightMode?.let { forceNightMode ->
       _forceNightMode = forceNightMode
       _navigationView.setForceNightMode(forceNightMode)
+    }
+
+    // Apply initial Android styling options if provided
+    navigationOptions?.androidStylingOptions?.let { stylingOptions ->
+      _navigationView.setStylingOptions(stylingOptions)
     }
 
     viewRegistry.registerNavigationView(viewId, this)
@@ -304,5 +310,9 @@ internal constructor(
   fun setForceNightMode(forceNightMode: Int) {
     _forceNightMode = forceNightMode
     _navigationView.setForceNightMode(forceNightMode)
+  }
+
+  fun setStylingOptions(stylingOptions: StylingOptions) {
+    _navigationView.setStylingOptions(stylingOptions)
   }
 }

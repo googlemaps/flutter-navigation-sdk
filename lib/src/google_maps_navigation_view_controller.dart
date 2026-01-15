@@ -245,4 +245,67 @@ class GoogleNavigationViewController extends GoogleMapViewController {
       forceNightMode: forceNightMode,
     );
   }
+
+  /// Sets the styling options for the navigation UI on Android.
+  ///
+  /// This method allows customizing the appearance of the navigation header
+  /// and footer, including colors for day and night mode, text colors,
+  /// text sizes, and icon colors.
+  ///
+  /// This method only has effect on Android platform. On iOS, it does nothing.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// await controller.setAndroidNavigationStylingOptions(
+  ///   AndroidNavigationStylingOptions(
+  ///     primaryDayModeThemeColor: Colors.blue,
+  ///     secondaryDayModeThemeColor: Colors.lightBlue,
+  ///     primaryNightModeThemeColor: Colors.indigo,
+  ///     secondaryNightModeThemeColor: Colors.deepPurple,
+  ///   ),
+  /// );
+  /// ```
+  ///
+  /// See also:
+  /// - [AndroidNavigationStylingOptions] for all available styling options
+  /// - [setIOSNavigationStylingOptions] for iOS styling
+  Future<void> setAndroidNavigationStylingOptions(
+    AndroidNavigationStylingOptions options,
+  ) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .setAndroidNavigationStylingOptions(
+          viewId: getViewId(),
+          options: options,
+        );
+  }
+
+  /// Sets the styling options for the navigation UI on iOS.
+  ///
+  /// This method allows customizing the appearance of the navigation header,
+  /// including background colors for day and night mode, text colors,
+  /// and icon colors.
+  ///
+  /// This method only has effect on iOS platform. On Android, it does nothing.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// await controller.setIOSNavigationStylingOptions(
+  ///   IOSNavigationStylingOptions(
+  ///     navigationHeaderPrimaryBackgroundColor: Colors.blue,
+  ///     navigationHeaderSecondaryBackgroundColor: Colors.lightBlue,
+  ///     navigationHeaderPrimaryBackgroundColorNightMode: Colors.indigo,
+  ///     navigationHeaderSecondaryBackgroundColorNightMode: Colors.deepPurple,
+  ///   ),
+  /// );
+  /// ```
+  ///
+  /// See also:
+  /// - [IOSNavigationStylingOptions] for all available styling options
+  /// - [setAndroidNavigationStylingOptions] for Android styling
+  Future<void> setIOSNavigationStylingOptions(
+    IOSNavigationStylingOptions options,
+  ) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .setIOSNavigationStylingOptions(viewId: getViewId(), options: options);
+  }
 }

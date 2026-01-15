@@ -118,11 +118,140 @@ enum NavigationUIEnabledPreferenceDto {
   disabled,
 }
 
+/// Styling options for navigation UI on Android.
+///
+/// All color values are 32-bit ARGB integers (format: 0xAARRGGBB).
+/// All text sizes are in float (sp) units.
+/// All parameters are optional - if not provided, platform defaults will be used.
+class AndroidNavigationStylingOptionsDto {
+  AndroidNavigationStylingOptionsDto({
+    this.primaryDayModeThemeColor,
+    this.secondaryDayModeThemeColor,
+    this.primaryNightModeThemeColor,
+    this.secondaryNightModeThemeColor,
+    this.headerLargeManeuverIconColor,
+    this.headerSmallManeuverIconColor,
+    this.headerNextStepTextColor,
+    this.headerNextStepTextSize,
+    this.headerDistanceValueTextColor,
+    this.headerDistanceUnitsTextColor,
+    this.headerDistanceValueTextSize,
+    this.headerDistanceUnitsTextSize,
+    this.headerInstructionsTextColor,
+    this.headerInstructionsFirstRowTextSize,
+    this.headerInstructionsSecondRowTextSize,
+    this.headerGuidanceRecommendedLaneColor,
+  });
+
+  /// Primary theme color for day mode (used for header background).
+  final int? primaryDayModeThemeColor;
+
+  /// Secondary theme color for day mode (used for footer background).
+  final int? secondaryDayModeThemeColor;
+
+  /// Primary theme color for night mode (used for header background).
+  final int? primaryNightModeThemeColor;
+
+  /// Secondary theme color for night mode (used for footer background).
+  final int? secondaryNightModeThemeColor;
+
+  /// Color for the large maneuver icon in the header.
+  final int? headerLargeManeuverIconColor;
+
+  /// Color for the small maneuver icon in the header.
+  final int? headerSmallManeuverIconColor;
+
+  /// Text color for the "next step" text in the header.
+  final int? headerNextStepTextColor;
+
+  /// Text size for the "next step" text in the header (in sp).
+  final double? headerNextStepTextSize;
+
+  /// Text color for the distance value in the header.
+  final int? headerDistanceValueTextColor;
+
+  /// Text color for the distance units in the header.
+  final int? headerDistanceUnitsTextColor;
+
+  /// Text size for the distance value in the header (in sp).
+  final double? headerDistanceValueTextSize;
+
+  /// Text size for the distance units in the header (in sp).
+  final double? headerDistanceUnitsTextSize;
+
+  /// Text color for the instructions in the header.
+  final int? headerInstructionsTextColor;
+
+  /// Text size for the first row of instructions in the header (in sp).
+  final double? headerInstructionsFirstRowTextSize;
+
+  /// Text size for the second row of instructions in the header (in sp).
+  final double? headerInstructionsSecondRowTextSize;
+
+  /// Color for the recommended lane indicator in guidance.
+  final int? headerGuidanceRecommendedLaneColor;
+}
+
+/// Styling options for navigation UI on iOS.
+///
+/// All color values are 32-bit ARGB integers (format: 0xAARRGGBB).
+/// All parameters are optional - if not provided, platform defaults will be used.
+class IOSNavigationStylingOptionsDto {
+  IOSNavigationStylingOptionsDto({
+    this.navigationHeaderPrimaryBackgroundColor,
+    this.navigationHeaderSecondaryBackgroundColor,
+    this.navigationHeaderPrimaryBackgroundColorNightMode,
+    this.navigationHeaderSecondaryBackgroundColorNightMode,
+    this.navigationHeaderLargeManeuverIconColor,
+    this.navigationHeaderSmallManeuverIconColor,
+    this.navigationHeaderGuidanceRecommendedLaneColor,
+    this.navigationHeaderNextStepTextColor,
+    this.navigationHeaderDistanceValueTextColor,
+    this.navigationHeaderDistanceUnitsTextColor,
+    this.navigationHeaderInstructionsTextColor,
+  });
+
+  /// Primary header background color for day mode.
+  final int? navigationHeaderPrimaryBackgroundColor;
+
+  /// Secondary header background color for day mode.
+  final int? navigationHeaderSecondaryBackgroundColor;
+
+  /// Primary header background color for night mode.
+  final int? navigationHeaderPrimaryBackgroundColorNightMode;
+
+  /// Secondary header background color for night mode.
+  final int? navigationHeaderSecondaryBackgroundColorNightMode;
+
+  /// Color for the large maneuver icon in the navigation header.
+  final int? navigationHeaderLargeManeuverIconColor;
+
+  /// Color for the small maneuver icon in the navigation header.
+  final int? navigationHeaderSmallManeuverIconColor;
+
+  /// Color for the recommended lane indicator in guidance.
+  final int? navigationHeaderGuidanceRecommendedLaneColor;
+
+  /// Text color for the "next step" text in the navigation header.
+  final int? navigationHeaderNextStepTextColor;
+
+  /// Text color for the distance value in the navigation header.
+  final int? navigationHeaderDistanceValueTextColor;
+
+  /// Text color for the distance units in the navigation header.
+  final int? navigationHeaderDistanceUnitsTextColor;
+
+  /// Text color for the instructions in the navigation header.
+  final int? navigationHeaderInstructionsTextColor;
+}
+
 /// Object containing navigation options used to initialize Google Navigation view.
 class NavigationViewOptionsDto {
   NavigationViewOptionsDto({
     required this.navigationUIEnabledPreference,
     required this.forceNightMode,
+    this.androidStylingOptions,
+    this.iosStylingOptions,
   });
 
   /// Determines the initial visibility of the navigation UI on map initialization.
@@ -130,6 +259,12 @@ class NavigationViewOptionsDto {
 
   /// Controls the navigation night mode for Navigation UI.
   final NavigationForceNightModeDto forceNightMode;
+
+  /// Android-specific navigation styling options.
+  final AndroidNavigationStylingOptionsDto? androidStylingOptions;
+
+  /// iOS-specific navigation styling options.
+  final IOSNavigationStylingOptionsDto? iosStylingOptions;
 }
 
 /// A message for creating a new navigation view.
@@ -651,6 +786,20 @@ abstract class MapViewApi {
   void setForceNightMode(
     int viewId,
     NavigationForceNightModeDto forceNightMode,
+  );
+
+  /// Sets navigation styling options for Android.
+  /// Only applicable when running on Android platform.
+  void setAndroidNavigationStylingOptions(
+    int viewId,
+    AndroidNavigationStylingOptionsDto options,
+  );
+
+  /// Sets navigation styling options for iOS.
+  /// Only applicable when running on iOS platform.
+  void setIOSNavigationStylingOptions(
+    int viewId,
+    IOSNavigationStylingOptionsDto options,
   );
 }
 

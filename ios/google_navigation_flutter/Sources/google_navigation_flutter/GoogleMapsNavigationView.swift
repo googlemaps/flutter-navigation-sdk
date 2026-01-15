@@ -76,6 +76,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     viewEventApi: ViewEventApi?,
     navigationUIEnabledPreference: NavigationUIEnabledPreference,
     forceNightMode: GMSNavigationLightingMode?,
+    iosStylingOptions: IOSNavigationStylingOptionsDto?,
     mapConfiguration: MapConfiguration,
     imageRegistry: ImageRegistry,
     isCarPlayView: Bool
@@ -110,6 +111,12 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     // Apply force night mode if this is a navigation view
     if _isNavigationView {
       applyForceNightMode()
+
+      // Apply initial iOS styling options if provided
+      if let stylingOptions = iosStylingOptions {
+        let convertedOptions = Convert.convertNavigationStylingOptions(stylingOptions)
+        try? setIOSStylingOptions(convertedOptions)
+      }
     }
   }
 
@@ -201,6 +208,55 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     }
     _forceNightMode = mode
     applyForceNightMode()
+  }
+
+  func setIOSStylingOptions(_ options: Convert.IOSNavigationStylingOptions) throws {
+    guard _isNavigationView else {
+      throw GoogleMapsNavigationViewError.notSupported
+    }
+
+    // Apply header background colors (day mode)
+    if let color = options.navigationHeaderPrimaryBackgroundColor {
+      _mapView.settings.navigationHeaderPrimaryBackgroundColor = color
+    }
+    if let color = options.navigationHeaderSecondaryBackgroundColor {
+      _mapView.settings.navigationHeaderSecondaryBackgroundColor = color
+    }
+
+    // Apply header background colors (night mode)
+    if let color = options.navigationHeaderPrimaryBackgroundColorNightMode {
+      _mapView.settings.navigationHeaderPrimaryBackgroundColorNightMode = color
+    }
+    if let color = options.navigationHeaderSecondaryBackgroundColorNightMode {
+      _mapView.settings.navigationHeaderSecondaryBackgroundColorNightMode = color
+    }
+
+    // Apply header icon colors
+    if let color = options.navigationHeaderLargeManeuverIconColor {
+      _mapView.settings.navigationHeaderLargeManeuverIconColor = color
+    }
+    if let color = options.navigationHeaderSmallManeuverIconColor {
+      _mapView.settings.navigationHeaderSmallManeuverIconColor = color
+    }
+
+    // Apply recommended lane color
+    if let color = options.navigationHeaderGuidanceRecommendedLaneColor {
+      _mapView.settings.navigationHeaderGuidanceRecommendedLaneColor = color
+    }
+
+    // Apply header text colors
+    if let color = options.navigationHeaderNextStepTextColor {
+      _mapView.settings.navigationHeaderNextStepTextColor = color
+    }
+    if let color = options.navigationHeaderDistanceValueTextColor {
+      _mapView.settings.navigationHeaderDistanceValueTextColor = color
+    }
+    if let color = options.navigationHeaderDistanceUnitsTextColor {
+      _mapView.settings.navigationHeaderDistanceUnitsTextColor = color
+    }
+    if let color = options.navigationHeaderInstructionsTextColor {
+      _mapView.settings.navigationHeaderInstructionsTextColor = color
+    }
   }
 
   func awaitMapReady(callback: @escaping (Result<Void, Error>) -> Void) {

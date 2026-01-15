@@ -16,6 +16,8 @@
 
 package com.google.maps.flutter.navigation
 
+import com.google.android.libraries.navigation.StylingOptions
+
 /** Determines the initial visibility of the navigation UI on map initialization. */
 enum class NavigationUIEnabledPreference {
   /** Navigation UI gets enabled if the navigation session has been started. */
@@ -29,4 +31,5 @@ enum class NavigationUIEnabledPreference {
 data class NavigationViewOptions(
   val navigationUiEnabledPreference: NavigationUIEnabledPreference?,
   val forceNightMode: Int?,
+  val androidStylingOptions: StylingOptions?,
 )

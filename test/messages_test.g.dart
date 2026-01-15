@@ -113,134 +113,140 @@ class _PigeonCodec extends StandardMessageCodec {
     } else if (value is MapOptionsDto) {
       buffer.putUint8(155);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationViewOptionsDto) {
+    } else if (value is AndroidNavigationStylingOptionsDto) {
       buffer.putUint8(156);
       writeValue(buffer, value.encode());
-    } else if (value is ViewCreationOptionsDto) {
+    } else if (value is IOSNavigationStylingOptionsDto) {
       buffer.putUint8(157);
       writeValue(buffer, value.encode());
-    } else if (value is CameraPositionDto) {
+    } else if (value is NavigationViewOptionsDto) {
       buffer.putUint8(158);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerDto) {
+    } else if (value is ViewCreationOptionsDto) {
       buffer.putUint8(159);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerOptionsDto) {
+    } else if (value is CameraPositionDto) {
       buffer.putUint8(160);
       writeValue(buffer, value.encode());
-    } else if (value is ImageDescriptorDto) {
+    } else if (value is MarkerDto) {
       buffer.putUint8(161);
       writeValue(buffer, value.encode());
-    } else if (value is InfoWindowDto) {
+    } else if (value is MarkerOptionsDto) {
       buffer.putUint8(162);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerAnchorDto) {
+    } else if (value is ImageDescriptorDto) {
       buffer.putUint8(163);
       writeValue(buffer, value.encode());
-    } else if (value is PointOfInterestDto) {
+    } else if (value is InfoWindowDto) {
       buffer.putUint8(164);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonDto) {
+    } else if (value is MarkerAnchorDto) {
       buffer.putUint8(165);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonOptionsDto) {
+    } else if (value is PointOfInterestDto) {
       buffer.putUint8(166);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonHoleDto) {
+    } else if (value is PolygonDto) {
       buffer.putUint8(167);
       writeValue(buffer, value.encode());
-    } else if (value is StyleSpanStrokeStyleDto) {
+    } else if (value is PolygonOptionsDto) {
       buffer.putUint8(168);
       writeValue(buffer, value.encode());
-    } else if (value is StyleSpanDto) {
+    } else if (value is PolygonHoleDto) {
       buffer.putUint8(169);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineDto) {
+    } else if (value is StyleSpanStrokeStyleDto) {
       buffer.putUint8(170);
       writeValue(buffer, value.encode());
-    } else if (value is PatternItemDto) {
+    } else if (value is StyleSpanDto) {
       buffer.putUint8(171);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineOptionsDto) {
+    } else if (value is PolylineDto) {
       buffer.putUint8(172);
       writeValue(buffer, value.encode());
-    } else if (value is CircleDto) {
+    } else if (value is PatternItemDto) {
       buffer.putUint8(173);
       writeValue(buffer, value.encode());
-    } else if (value is CircleOptionsDto) {
+    } else if (value is PolylineOptionsDto) {
       buffer.putUint8(174);
       writeValue(buffer, value.encode());
-    } else if (value is MapPaddingDto) {
+    } else if (value is CircleDto) {
       buffer.putUint8(175);
       writeValue(buffer, value.encode());
-    } else if (value is RouteTokenOptionsDto) {
+    } else if (value is CircleOptionsDto) {
       buffer.putUint8(176);
       writeValue(buffer, value.encode());
-    } else if (value is DestinationsDto) {
+    } else if (value is MapPaddingDto) {
       buffer.putUint8(177);
       writeValue(buffer, value.encode());
-    } else if (value is RoutingOptionsDto) {
+    } else if (value is RouteTokenOptionsDto) {
       buffer.putUint8(178);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationDisplayOptionsDto) {
+    } else if (value is DestinationsDto) {
       buffer.putUint8(179);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationWaypointDto) {
+    } else if (value is RoutingOptionsDto) {
       buffer.putUint8(180);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationTimeAndDistanceDto) {
+    } else if (value is NavigationDisplayOptionsDto) {
       buffer.putUint8(181);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationAudioGuidanceSettingsDto) {
+    } else if (value is NavigationWaypointDto) {
       buffer.putUint8(182);
       writeValue(buffer, value.encode());
-    } else if (value is SimulationOptionsDto) {
+    } else if (value is NavigationTimeAndDistanceDto) {
       buffer.putUint8(183);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngDto) {
+    } else if (value is NavigationAudioGuidanceSettingsDto) {
       buffer.putUint8(184);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngBoundsDto) {
+    } else if (value is SimulationOptionsDto) {
       buffer.putUint8(185);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedingUpdatedEventDto) {
+    } else if (value is LatLngDto) {
       buffer.putUint8(186);
       writeValue(buffer, value.encode());
-    } else if (value is GpsAvailabilityChangeEventDto) {
+    } else if (value is LatLngBoundsDto) {
       buffer.putUint8(187);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
+    } else if (value is SpeedingUpdatedEventDto) {
       buffer.putUint8(188);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsDto) {
+    } else if (value is GpsAvailabilityChangeEventDto) {
       buffer.putUint8(189);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
+    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
       buffer.putUint8(190);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataDto) {
+    } else if (value is SpeedAlertOptionsDto) {
       buffer.putUint8(191);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentDto) {
+    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
       buffer.putUint8(192);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDirectionDto) {
+    } else if (value is RouteSegmentTrafficDataDto) {
       buffer.putUint8(193);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDto) {
+    } else if (value is RouteSegmentDto) {
       buffer.putUint8(194);
       writeValue(buffer, value.encode());
-    } else if (value is StepInfoDto) {
+    } else if (value is LaneDirectionDto) {
       buffer.putUint8(195);
       writeValue(buffer, value.encode());
-    } else if (value is NavInfoDto) {
+    } else if (value is LaneDto) {
       buffer.putUint8(196);
       writeValue(buffer, value.encode());
-    } else if (value is TermsAndConditionsUIParamsDto) {
+    } else if (value is StepInfoDto) {
       buffer.putUint8(197);
       writeValue(buffer, value.encode());
-    } else if (value is StepImageGenerationOptionsDto) {
+    } else if (value is NavInfoDto) {
       buffer.putUint8(198);
+      writeValue(buffer, value.encode());
+    } else if (value is TermsAndConditionsUIParamsDto) {
+      buffer.putUint8(199);
+      writeValue(buffer, value.encode());
+    } else if (value is StepImageGenerationOptionsDto) {
+      buffer.putUint8(200);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -338,94 +344,98 @@ class _PigeonCodec extends StandardMessageCodec {
       case 155:
         return MapOptionsDto.decode(readValue(buffer)!);
       case 156:
-        return NavigationViewOptionsDto.decode(readValue(buffer)!);
+        return AndroidNavigationStylingOptionsDto.decode(readValue(buffer)!);
       case 157:
-        return ViewCreationOptionsDto.decode(readValue(buffer)!);
+        return IOSNavigationStylingOptionsDto.decode(readValue(buffer)!);
       case 158:
-        return CameraPositionDto.decode(readValue(buffer)!);
+        return NavigationViewOptionsDto.decode(readValue(buffer)!);
       case 159:
-        return MarkerDto.decode(readValue(buffer)!);
+        return ViewCreationOptionsDto.decode(readValue(buffer)!);
       case 160:
-        return MarkerOptionsDto.decode(readValue(buffer)!);
+        return CameraPositionDto.decode(readValue(buffer)!);
       case 161:
-        return ImageDescriptorDto.decode(readValue(buffer)!);
+        return MarkerDto.decode(readValue(buffer)!);
       case 162:
-        return InfoWindowDto.decode(readValue(buffer)!);
+        return MarkerOptionsDto.decode(readValue(buffer)!);
       case 163:
-        return MarkerAnchorDto.decode(readValue(buffer)!);
+        return ImageDescriptorDto.decode(readValue(buffer)!);
       case 164:
-        return PointOfInterestDto.decode(readValue(buffer)!);
+        return InfoWindowDto.decode(readValue(buffer)!);
       case 165:
-        return PolygonDto.decode(readValue(buffer)!);
+        return MarkerAnchorDto.decode(readValue(buffer)!);
       case 166:
-        return PolygonOptionsDto.decode(readValue(buffer)!);
+        return PointOfInterestDto.decode(readValue(buffer)!);
       case 167:
-        return PolygonHoleDto.decode(readValue(buffer)!);
+        return PolygonDto.decode(readValue(buffer)!);
       case 168:
-        return StyleSpanStrokeStyleDto.decode(readValue(buffer)!);
+        return PolygonOptionsDto.decode(readValue(buffer)!);
       case 169:
-        return StyleSpanDto.decode(readValue(buffer)!);
+        return PolygonHoleDto.decode(readValue(buffer)!);
       case 170:
-        return PolylineDto.decode(readValue(buffer)!);
+        return StyleSpanStrokeStyleDto.decode(readValue(buffer)!);
       case 171:
-        return PatternItemDto.decode(readValue(buffer)!);
+        return StyleSpanDto.decode(readValue(buffer)!);
       case 172:
-        return PolylineOptionsDto.decode(readValue(buffer)!);
+        return PolylineDto.decode(readValue(buffer)!);
       case 173:
-        return CircleDto.decode(readValue(buffer)!);
+        return PatternItemDto.decode(readValue(buffer)!);
       case 174:
-        return CircleOptionsDto.decode(readValue(buffer)!);
+        return PolylineOptionsDto.decode(readValue(buffer)!);
       case 175:
-        return MapPaddingDto.decode(readValue(buffer)!);
+        return CircleDto.decode(readValue(buffer)!);
       case 176:
-        return RouteTokenOptionsDto.decode(readValue(buffer)!);
+        return CircleOptionsDto.decode(readValue(buffer)!);
       case 177:
-        return DestinationsDto.decode(readValue(buffer)!);
+        return MapPaddingDto.decode(readValue(buffer)!);
       case 178:
-        return RoutingOptionsDto.decode(readValue(buffer)!);
+        return RouteTokenOptionsDto.decode(readValue(buffer)!);
       case 179:
-        return NavigationDisplayOptionsDto.decode(readValue(buffer)!);
+        return DestinationsDto.decode(readValue(buffer)!);
       case 180:
-        return NavigationWaypointDto.decode(readValue(buffer)!);
+        return RoutingOptionsDto.decode(readValue(buffer)!);
       case 181:
-        return NavigationTimeAndDistanceDto.decode(readValue(buffer)!);
+        return NavigationDisplayOptionsDto.decode(readValue(buffer)!);
       case 182:
-        return NavigationAudioGuidanceSettingsDto.decode(readValue(buffer)!);
+        return NavigationWaypointDto.decode(readValue(buffer)!);
       case 183:
-        return SimulationOptionsDto.decode(readValue(buffer)!);
+        return NavigationTimeAndDistanceDto.decode(readValue(buffer)!);
       case 184:
-        return LatLngDto.decode(readValue(buffer)!);
+        return NavigationAudioGuidanceSettingsDto.decode(readValue(buffer)!);
       case 185:
-        return LatLngBoundsDto.decode(readValue(buffer)!);
+        return SimulationOptionsDto.decode(readValue(buffer)!);
       case 186:
-        return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
+        return LatLngDto.decode(readValue(buffer)!);
       case 187:
-        return GpsAvailabilityChangeEventDto.decode(readValue(buffer)!);
+        return LatLngBoundsDto.decode(readValue(buffer)!);
       case 188:
+        return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
+      case 189:
+        return GpsAvailabilityChangeEventDto.decode(readValue(buffer)!);
+      case 190:
         return SpeedAlertOptionsThresholdPercentageDto.decode(
           readValue(buffer)!,
         );
-      case 189:
+      case 191:
         return SpeedAlertOptionsDto.decode(readValue(buffer)!);
-      case 190:
+      case 192:
         return RouteSegmentTrafficDataRoadStretchRenderingDataDto.decode(
           readValue(buffer)!,
         );
-      case 191:
-        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
-      case 192:
-        return RouteSegmentDto.decode(readValue(buffer)!);
       case 193:
-        return LaneDirectionDto.decode(readValue(buffer)!);
+        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
       case 194:
-        return LaneDto.decode(readValue(buffer)!);
+        return RouteSegmentDto.decode(readValue(buffer)!);
       case 195:
-        return StepInfoDto.decode(readValue(buffer)!);
+        return LaneDirectionDto.decode(readValue(buffer)!);
       case 196:
-        return NavInfoDto.decode(readValue(buffer)!);
+        return LaneDto.decode(readValue(buffer)!);
       case 197:
-        return TermsAndConditionsUIParamsDto.decode(readValue(buffer)!);
+        return StepInfoDto.decode(readValue(buffer)!);
       case 198:
+        return NavInfoDto.decode(readValue(buffer)!);
+      case 199:
+        return TermsAndConditionsUIParamsDto.decode(readValue(buffer)!);
+      case 200:
         return StepImageGenerationOptionsDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -689,6 +699,20 @@ abstract class TestMapViewApi {
   void setForceNightMode(
     int viewId,
     NavigationForceNightModeDto forceNightMode,
+  );
+
+  /// Sets navigation styling options for Android.
+  /// Only applicable when running on Android platform.
+  void setAndroidNavigationStylingOptions(
+    int viewId,
+    AndroidNavigationStylingOptionsDto options,
+  );
+
+  /// Sets navigation styling options for iOS.
+  /// Only applicable when running on iOS platform.
+  void setIOSNavigationStylingOptions(
+    int viewId,
+    IOSNavigationStylingOptionsDto options,
   );
 
   static void setUp(
@@ -5161,6 +5185,92 @@ abstract class TestMapViewApi {
           );
           try {
             api.setForceNightMode(arg_viewId!, arg_forceNightMode!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setAndroidNavigationStylingOptions$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
+          Object?
+        >(pigeonVar_channel, (Object? message) async {
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setAndroidNavigationStylingOptions was null.',
+          );
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setAndroidNavigationStylingOptions was null, expected non-null int.',
+          );
+          final AndroidNavigationStylingOptionsDto? arg_options =
+              (args[1] as AndroidNavigationStylingOptionsDto?);
+          assert(
+            arg_options != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setAndroidNavigationStylingOptions was null, expected non-null AndroidNavigationStylingOptionsDto.',
+          );
+          try {
+            api.setAndroidNavigationStylingOptions(arg_viewId!, arg_options!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setIOSNavigationStylingOptions$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
+          Object?
+        >(pigeonVar_channel, (Object? message) async {
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setIOSNavigationStylingOptions was null.',
+          );
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setIOSNavigationStylingOptions was null, expected non-null int.',
+          );
+          final IOSNavigationStylingOptionsDto? arg_options =
+              (args[1] as IOSNavigationStylingOptionsDto?);
+          assert(
+            arg_options != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setIOSNavigationStylingOptions was null, expected non-null IOSNavigationStylingOptionsDto.',
+          );
+          try {
+            api.setIOSNavigationStylingOptions(arg_viewId!, arg_options!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

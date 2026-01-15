@@ -539,4 +539,21 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
     val nightMode = Convert.convertNavigationForceNightModeFromDto(forceNightMode)
     getNavigationView(viewId.toInt()).setForceNightMode(nightMode)
   }
+
+  override fun setAndroidNavigationStylingOptions(
+    viewId: Long,
+    options: AndroidNavigationStylingOptionsDto,
+  ) {
+    val stylingOptions = Convert.convertAndroidStylingOptions(options)
+    if (stylingOptions != null) {
+      getNavigationView(viewId.toInt()).setStylingOptions(stylingOptions)
+    }
+  }
+
+  override fun setIOSNavigationStylingOptions(
+    viewId: Long,
+    options: IOSNavigationStylingOptionsDto,
+  ) {
+    // iOS-only method, no-op on Android
+  }
 }

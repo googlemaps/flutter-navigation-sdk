@@ -53,6 +53,7 @@ import com.google.android.libraries.navigation.RoutingOptions
 import com.google.android.libraries.navigation.RoutingOptions.RoutingStrategy
 import com.google.android.libraries.navigation.SpeedAlertOptions
 import com.google.android.libraries.navigation.SpeedAlertSeverity
+import com.google.android.libraries.navigation.StylingOptions
 import com.google.android.libraries.navigation.TimeAndDistance
 import com.google.android.libraries.navigation.Waypoint
 
@@ -119,6 +120,7 @@ object Convert {
       navigationUiEnabledPreference =
         convertNavigationUIEnabledPreferenceFromDto(options.navigationUIEnabledPreference),
       forceNightMode = convertNavigationForceNightModeFromDto(options.forceNightMode),
+      androidStylingOptions = convertAndroidStylingOptions(options.androidStylingOptions),
     )
   }
 
@@ -1204,5 +1206,73 @@ object Convert {
       TaskRemovedBehaviorDto.QUIT_SERVICE -> TaskRemovedBehavior.QUIT_SERVICE
       else -> TaskRemovedBehavior.CONTINUE_SERVICE
     }
+  }
+
+  /**
+   * Converts pigeon [AndroidNavigationStylingOptionsDto] to [StylingOptions].
+   *
+   * @param options pigeon [AndroidNavigationStylingOptionsDto], may be null.
+   * @return [StylingOptions] or null if input is null.
+   */
+  fun convertAndroidStylingOptions(options: AndroidNavigationStylingOptionsDto?): StylingOptions? {
+    if (options == null) return null
+
+    val stylingOptions = StylingOptions()
+
+    // Day mode theme colors
+    options.primaryDayModeThemeColor?.let { stylingOptions.primaryDayModeThemeColor(it.toInt()) }
+    options.secondaryDayModeThemeColor?.let {
+      stylingOptions.secondaryDayModeThemeColor(it.toInt())
+    }
+
+    // Night mode theme colors
+    options.primaryNightModeThemeColor?.let {
+      stylingOptions.primaryNightModeThemeColor(it.toInt())
+    }
+    options.secondaryNightModeThemeColor?.let {
+      stylingOptions.secondaryNightModeThemeColor(it.toInt())
+    }
+
+    // Header icon colors
+    options.headerLargeManeuverIconColor?.let {
+      stylingOptions.headerLargeManeuverIconColor(it.toInt())
+    }
+    options.headerSmallManeuverIconColor?.let {
+      stylingOptions.headerSmallManeuverIconColor(it.toInt())
+    }
+
+    // Header text colors
+    options.headerNextStepTextColor?.let { stylingOptions.headerNextStepTextColor(it.toInt()) }
+    options.headerDistanceValueTextColor?.let {
+      stylingOptions.headerDistanceValueTextColor(it.toInt())
+    }
+    options.headerDistanceUnitsTextColor?.let {
+      stylingOptions.headerDistanceUnitsTextColor(it.toInt())
+    }
+    options.headerInstructionsTextColor?.let {
+      stylingOptions.headerInstructionsTextColor(it.toInt())
+    }
+
+    // Header text sizes
+    options.headerNextStepTextSize?.let { stylingOptions.headerNextStepTextSize(it.toFloat()) }
+    options.headerDistanceValueTextSize?.let {
+      stylingOptions.headerDistanceValueTextSize(it.toFloat())
+    }
+    options.headerDistanceUnitsTextSize?.let {
+      stylingOptions.headerDistanceUnitsTextSize(it.toFloat())
+    }
+    options.headerInstructionsFirstRowTextSize?.let {
+      stylingOptions.headerInstructionsFirstRowTextSize(it.toFloat())
+    }
+    options.headerInstructionsSecondRowTextSize?.let {
+      stylingOptions.headerInstructionsSecondRowTextSize(it.toFloat())
+    }
+
+    // Recommended lane color
+    options.headerGuidanceRecommendedLaneColor?.let {
+      stylingOptions.headerGuidanceRecommendedLaneColor(it.toInt())
+    }
+
+    return stylingOptions
   }
 }

@@ -1222,6 +1222,22 @@ class MapViewAPIImpl {
     return _viewApi.setForceNightMode(viewId, forceNightMode.toDto());
   }
 
+  /// Sets the Android navigation styling options for the navigation view.
+  Future<void> setAndroidNavigationStylingOptions({
+    required int viewId,
+    required AndroidNavigationStylingOptions options,
+  }) {
+    return _viewApi.setAndroidNavigationStylingOptions(viewId, options.toDto());
+  }
+
+  /// Sets the iOS navigation styling options for the navigation view.
+  Future<void> setIOSNavigationStylingOptions({
+    required int viewId,
+    required IOSNavigationStylingOptions options,
+  }) {
+    return _viewApi.setIOSNavigationStylingOptions(viewId, options.toDto());
+  }
+
   Stream<MapClickEvent> getMapClickEventStream({required int viewId}) {
     return _unwrapEventStream<MapClickEvent>(viewId: viewId);
   }

@@ -605,6 +605,199 @@ struct MapOptionsDto: Hashable {
   }
 }
 
+/// Styling options for navigation UI on Android.
+///
+/// All color values are 32-bit ARGB integers (format: 0xAARRGGBB).
+/// All text sizes are in float (sp) units.
+/// All parameters are optional - if not provided, platform defaults will be used.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct AndroidNavigationStylingOptionsDto: Hashable {
+  /// Primary theme color for day mode (used for header background).
+  var primaryDayModeThemeColor: Int64? = nil
+  /// Secondary theme color for day mode (used for footer background).
+  var secondaryDayModeThemeColor: Int64? = nil
+  /// Primary theme color for night mode (used for header background).
+  var primaryNightModeThemeColor: Int64? = nil
+  /// Secondary theme color for night mode (used for footer background).
+  var secondaryNightModeThemeColor: Int64? = nil
+  /// Color for the large maneuver icon in the header.
+  var headerLargeManeuverIconColor: Int64? = nil
+  /// Color for the small maneuver icon in the header.
+  var headerSmallManeuverIconColor: Int64? = nil
+  /// Text color for the "next step" text in the header.
+  var headerNextStepTextColor: Int64? = nil
+  /// Text size for the "next step" text in the header (in sp).
+  var headerNextStepTextSize: Double? = nil
+  /// Text color for the distance value in the header.
+  var headerDistanceValueTextColor: Int64? = nil
+  /// Text color for the distance units in the header.
+  var headerDistanceUnitsTextColor: Int64? = nil
+  /// Text size for the distance value in the header (in sp).
+  var headerDistanceValueTextSize: Double? = nil
+  /// Text size for the distance units in the header (in sp).
+  var headerDistanceUnitsTextSize: Double? = nil
+  /// Text color for the instructions in the header.
+  var headerInstructionsTextColor: Int64? = nil
+  /// Text size for the first row of instructions in the header (in sp).
+  var headerInstructionsFirstRowTextSize: Double? = nil
+  /// Text size for the second row of instructions in the header (in sp).
+  var headerInstructionsSecondRowTextSize: Double? = nil
+  /// Color for the recommended lane indicator in guidance.
+  var headerGuidanceRecommendedLaneColor: Int64? = nil
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> AndroidNavigationStylingOptionsDto? {
+    let primaryDayModeThemeColor: Int64? = nilOrValue(pigeonVar_list[0])
+    let secondaryDayModeThemeColor: Int64? = nilOrValue(pigeonVar_list[1])
+    let primaryNightModeThemeColor: Int64? = nilOrValue(pigeonVar_list[2])
+    let secondaryNightModeThemeColor: Int64? = nilOrValue(pigeonVar_list[3])
+    let headerLargeManeuverIconColor: Int64? = nilOrValue(pigeonVar_list[4])
+    let headerSmallManeuverIconColor: Int64? = nilOrValue(pigeonVar_list[5])
+    let headerNextStepTextColor: Int64? = nilOrValue(pigeonVar_list[6])
+    let headerNextStepTextSize: Double? = nilOrValue(pigeonVar_list[7])
+    let headerDistanceValueTextColor: Int64? = nilOrValue(pigeonVar_list[8])
+    let headerDistanceUnitsTextColor: Int64? = nilOrValue(pigeonVar_list[9])
+    let headerDistanceValueTextSize: Double? = nilOrValue(pigeonVar_list[10])
+    let headerDistanceUnitsTextSize: Double? = nilOrValue(pigeonVar_list[11])
+    let headerInstructionsTextColor: Int64? = nilOrValue(pigeonVar_list[12])
+    let headerInstructionsFirstRowTextSize: Double? = nilOrValue(pigeonVar_list[13])
+    let headerInstructionsSecondRowTextSize: Double? = nilOrValue(pigeonVar_list[14])
+    let headerGuidanceRecommendedLaneColor: Int64? = nilOrValue(pigeonVar_list[15])
+
+    return AndroidNavigationStylingOptionsDto(
+      primaryDayModeThemeColor: primaryDayModeThemeColor,
+      secondaryDayModeThemeColor: secondaryDayModeThemeColor,
+      primaryNightModeThemeColor: primaryNightModeThemeColor,
+      secondaryNightModeThemeColor: secondaryNightModeThemeColor,
+      headerLargeManeuverIconColor: headerLargeManeuverIconColor,
+      headerSmallManeuverIconColor: headerSmallManeuverIconColor,
+      headerNextStepTextColor: headerNextStepTextColor,
+      headerNextStepTextSize: headerNextStepTextSize,
+      headerDistanceValueTextColor: headerDistanceValueTextColor,
+      headerDistanceUnitsTextColor: headerDistanceUnitsTextColor,
+      headerDistanceValueTextSize: headerDistanceValueTextSize,
+      headerDistanceUnitsTextSize: headerDistanceUnitsTextSize,
+      headerInstructionsTextColor: headerInstructionsTextColor,
+      headerInstructionsFirstRowTextSize: headerInstructionsFirstRowTextSize,
+      headerInstructionsSecondRowTextSize: headerInstructionsSecondRowTextSize,
+      headerGuidanceRecommendedLaneColor: headerGuidanceRecommendedLaneColor
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      primaryDayModeThemeColor,
+      secondaryDayModeThemeColor,
+      primaryNightModeThemeColor,
+      secondaryNightModeThemeColor,
+      headerLargeManeuverIconColor,
+      headerSmallManeuverIconColor,
+      headerNextStepTextColor,
+      headerNextStepTextSize,
+      headerDistanceValueTextColor,
+      headerDistanceUnitsTextColor,
+      headerDistanceValueTextSize,
+      headerDistanceUnitsTextSize,
+      headerInstructionsTextColor,
+      headerInstructionsFirstRowTextSize,
+      headerInstructionsSecondRowTextSize,
+      headerGuidanceRecommendedLaneColor,
+    ]
+  }
+  static func == (lhs: AndroidNavigationStylingOptionsDto, rhs: AndroidNavigationStylingOptionsDto)
+    -> Bool
+  {
+    return deepEqualsmessages(lhs.toList(), rhs.toList())
+  }
+  func hash(into hasher: inout Hasher) {
+    deepHashmessages(value: toList(), hasher: &hasher)
+  }
+}
+
+/// Styling options for navigation UI on iOS.
+///
+/// All color values are 32-bit ARGB integers (format: 0xAARRGGBB).
+/// All parameters are optional - if not provided, platform defaults will be used.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct IOSNavigationStylingOptionsDto: Hashable {
+  /// Primary header background color for day mode.
+  var navigationHeaderPrimaryBackgroundColor: Int64? = nil
+  /// Secondary header background color for day mode.
+  var navigationHeaderSecondaryBackgroundColor: Int64? = nil
+  /// Primary header background color for night mode.
+  var navigationHeaderPrimaryBackgroundColorNightMode: Int64? = nil
+  /// Secondary header background color for night mode.
+  var navigationHeaderSecondaryBackgroundColorNightMode: Int64? = nil
+  /// Color for the large maneuver icon in the navigation header.
+  var navigationHeaderLargeManeuverIconColor: Int64? = nil
+  /// Color for the small maneuver icon in the navigation header.
+  var navigationHeaderSmallManeuverIconColor: Int64? = nil
+  /// Color for the recommended lane indicator in guidance.
+  var navigationHeaderGuidanceRecommendedLaneColor: Int64? = nil
+  /// Text color for the "next step" text in the navigation header.
+  var navigationHeaderNextStepTextColor: Int64? = nil
+  /// Text color for the distance value in the navigation header.
+  var navigationHeaderDistanceValueTextColor: Int64? = nil
+  /// Text color for the distance units in the navigation header.
+  var navigationHeaderDistanceUnitsTextColor: Int64? = nil
+  /// Text color for the instructions in the navigation header.
+  var navigationHeaderInstructionsTextColor: Int64? = nil
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> IOSNavigationStylingOptionsDto? {
+    let navigationHeaderPrimaryBackgroundColor: Int64? = nilOrValue(pigeonVar_list[0])
+    let navigationHeaderSecondaryBackgroundColor: Int64? = nilOrValue(pigeonVar_list[1])
+    let navigationHeaderPrimaryBackgroundColorNightMode: Int64? = nilOrValue(pigeonVar_list[2])
+    let navigationHeaderSecondaryBackgroundColorNightMode: Int64? = nilOrValue(pigeonVar_list[3])
+    let navigationHeaderLargeManeuverIconColor: Int64? = nilOrValue(pigeonVar_list[4])
+    let navigationHeaderSmallManeuverIconColor: Int64? = nilOrValue(pigeonVar_list[5])
+    let navigationHeaderGuidanceRecommendedLaneColor: Int64? = nilOrValue(pigeonVar_list[6])
+    let navigationHeaderNextStepTextColor: Int64? = nilOrValue(pigeonVar_list[7])
+    let navigationHeaderDistanceValueTextColor: Int64? = nilOrValue(pigeonVar_list[8])
+    let navigationHeaderDistanceUnitsTextColor: Int64? = nilOrValue(pigeonVar_list[9])
+    let navigationHeaderInstructionsTextColor: Int64? = nilOrValue(pigeonVar_list[10])
+
+    return IOSNavigationStylingOptionsDto(
+      navigationHeaderPrimaryBackgroundColor: navigationHeaderPrimaryBackgroundColor,
+      navigationHeaderSecondaryBackgroundColor: navigationHeaderSecondaryBackgroundColor,
+      navigationHeaderPrimaryBackgroundColorNightMode:
+        navigationHeaderPrimaryBackgroundColorNightMode,
+      navigationHeaderSecondaryBackgroundColorNightMode:
+        navigationHeaderSecondaryBackgroundColorNightMode,
+      navigationHeaderLargeManeuverIconColor: navigationHeaderLargeManeuverIconColor,
+      navigationHeaderSmallManeuverIconColor: navigationHeaderSmallManeuverIconColor,
+      navigationHeaderGuidanceRecommendedLaneColor: navigationHeaderGuidanceRecommendedLaneColor,
+      navigationHeaderNextStepTextColor: navigationHeaderNextStepTextColor,
+      navigationHeaderDistanceValueTextColor: navigationHeaderDistanceValueTextColor,
+      navigationHeaderDistanceUnitsTextColor: navigationHeaderDistanceUnitsTextColor,
+      navigationHeaderInstructionsTextColor: navigationHeaderInstructionsTextColor
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      navigationHeaderPrimaryBackgroundColor,
+      navigationHeaderSecondaryBackgroundColor,
+      navigationHeaderPrimaryBackgroundColorNightMode,
+      navigationHeaderSecondaryBackgroundColorNightMode,
+      navigationHeaderLargeManeuverIconColor,
+      navigationHeaderSmallManeuverIconColor,
+      navigationHeaderGuidanceRecommendedLaneColor,
+      navigationHeaderNextStepTextColor,
+      navigationHeaderDistanceValueTextColor,
+      navigationHeaderDistanceUnitsTextColor,
+      navigationHeaderInstructionsTextColor,
+    ]
+  }
+  static func == (lhs: IOSNavigationStylingOptionsDto, rhs: IOSNavigationStylingOptionsDto) -> Bool
+  {
+    return deepEqualsmessages(lhs.toList(), rhs.toList())
+  }
+  func hash(into hasher: inout Hasher) {
+    deepHashmessages(value: toList(), hasher: &hasher)
+  }
+}
+
 /// Object containing navigation options used to initialize Google Navigation view.
 ///
 /// Generated class from Pigeon that represents data sent in messages.
@@ -613,21 +806,31 @@ struct NavigationViewOptionsDto: Hashable {
   var navigationUIEnabledPreference: NavigationUIEnabledPreferenceDto
   /// Controls the navigation night mode for Navigation UI.
   var forceNightMode: NavigationForceNightModeDto
+  /// Android-specific navigation styling options.
+  var androidStylingOptions: AndroidNavigationStylingOptionsDto? = nil
+  /// iOS-specific navigation styling options.
+  var iosStylingOptions: IOSNavigationStylingOptionsDto? = nil
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> NavigationViewOptionsDto? {
     let navigationUIEnabledPreference = pigeonVar_list[0] as! NavigationUIEnabledPreferenceDto
     let forceNightMode = pigeonVar_list[1] as! NavigationForceNightModeDto
+    let androidStylingOptions: AndroidNavigationStylingOptionsDto? = nilOrValue(pigeonVar_list[2])
+    let iosStylingOptions: IOSNavigationStylingOptionsDto? = nilOrValue(pigeonVar_list[3])
 
     return NavigationViewOptionsDto(
       navigationUIEnabledPreference: navigationUIEnabledPreference,
-      forceNightMode: forceNightMode
+      forceNightMode: forceNightMode,
+      androidStylingOptions: androidStylingOptions,
+      iosStylingOptions: iosStylingOptions
     )
   }
   func toList() -> [Any?] {
     return [
       navigationUIEnabledPreference,
       forceNightMode,
+      androidStylingOptions,
+      iosStylingOptions,
     ]
   }
   static func == (lhs: NavigationViewOptionsDto, rhs: NavigationViewOptionsDto) -> Bool {
@@ -2424,91 +2627,95 @@ private class MessagesPigeonCodecReader: FlutterStandardReader {
     case 155:
       return MapOptionsDto.fromList(self.readValue() as! [Any?])
     case 156:
-      return NavigationViewOptionsDto.fromList(self.readValue() as! [Any?])
+      return AndroidNavigationStylingOptionsDto.fromList(self.readValue() as! [Any?])
     case 157:
-      return ViewCreationOptionsDto.fromList(self.readValue() as! [Any?])
+      return IOSNavigationStylingOptionsDto.fromList(self.readValue() as! [Any?])
     case 158:
-      return CameraPositionDto.fromList(self.readValue() as! [Any?])
+      return NavigationViewOptionsDto.fromList(self.readValue() as! [Any?])
     case 159:
-      return MarkerDto.fromList(self.readValue() as! [Any?])
+      return ViewCreationOptionsDto.fromList(self.readValue() as! [Any?])
     case 160:
-      return MarkerOptionsDto.fromList(self.readValue() as! [Any?])
+      return CameraPositionDto.fromList(self.readValue() as! [Any?])
     case 161:
-      return ImageDescriptorDto.fromList(self.readValue() as! [Any?])
+      return MarkerDto.fromList(self.readValue() as! [Any?])
     case 162:
-      return InfoWindowDto.fromList(self.readValue() as! [Any?])
+      return MarkerOptionsDto.fromList(self.readValue() as! [Any?])
     case 163:
-      return MarkerAnchorDto.fromList(self.readValue() as! [Any?])
+      return ImageDescriptorDto.fromList(self.readValue() as! [Any?])
     case 164:
-      return PointOfInterestDto.fromList(self.readValue() as! [Any?])
+      return InfoWindowDto.fromList(self.readValue() as! [Any?])
     case 165:
-      return PolygonDto.fromList(self.readValue() as! [Any?])
+      return MarkerAnchorDto.fromList(self.readValue() as! [Any?])
     case 166:
-      return PolygonOptionsDto.fromList(self.readValue() as! [Any?])
+      return PointOfInterestDto.fromList(self.readValue() as! [Any?])
     case 167:
-      return PolygonHoleDto.fromList(self.readValue() as! [Any?])
+      return PolygonDto.fromList(self.readValue() as! [Any?])
     case 168:
-      return StyleSpanStrokeStyleDto.fromList(self.readValue() as! [Any?])
+      return PolygonOptionsDto.fromList(self.readValue() as! [Any?])
     case 169:
-      return StyleSpanDto.fromList(self.readValue() as! [Any?])
+      return PolygonHoleDto.fromList(self.readValue() as! [Any?])
     case 170:
-      return PolylineDto.fromList(self.readValue() as! [Any?])
+      return StyleSpanStrokeStyleDto.fromList(self.readValue() as! [Any?])
     case 171:
-      return PatternItemDto.fromList(self.readValue() as! [Any?])
+      return StyleSpanDto.fromList(self.readValue() as! [Any?])
     case 172:
-      return PolylineOptionsDto.fromList(self.readValue() as! [Any?])
+      return PolylineDto.fromList(self.readValue() as! [Any?])
     case 173:
-      return CircleDto.fromList(self.readValue() as! [Any?])
+      return PatternItemDto.fromList(self.readValue() as! [Any?])
     case 174:
-      return CircleOptionsDto.fromList(self.readValue() as! [Any?])
+      return PolylineOptionsDto.fromList(self.readValue() as! [Any?])
     case 175:
-      return MapPaddingDto.fromList(self.readValue() as! [Any?])
+      return CircleDto.fromList(self.readValue() as! [Any?])
     case 176:
-      return RouteTokenOptionsDto.fromList(self.readValue() as! [Any?])
+      return CircleOptionsDto.fromList(self.readValue() as! [Any?])
     case 177:
-      return DestinationsDto.fromList(self.readValue() as! [Any?])
+      return MapPaddingDto.fromList(self.readValue() as! [Any?])
     case 178:
-      return RoutingOptionsDto.fromList(self.readValue() as! [Any?])
+      return RouteTokenOptionsDto.fromList(self.readValue() as! [Any?])
     case 179:
-      return NavigationDisplayOptionsDto.fromList(self.readValue() as! [Any?])
+      return DestinationsDto.fromList(self.readValue() as! [Any?])
     case 180:
-      return NavigationWaypointDto.fromList(self.readValue() as! [Any?])
+      return RoutingOptionsDto.fromList(self.readValue() as! [Any?])
     case 181:
-      return NavigationTimeAndDistanceDto.fromList(self.readValue() as! [Any?])
+      return NavigationDisplayOptionsDto.fromList(self.readValue() as! [Any?])
     case 182:
-      return NavigationAudioGuidanceSettingsDto.fromList(self.readValue() as! [Any?])
+      return NavigationWaypointDto.fromList(self.readValue() as! [Any?])
     case 183:
-      return SimulationOptionsDto.fromList(self.readValue() as! [Any?])
+      return NavigationTimeAndDistanceDto.fromList(self.readValue() as! [Any?])
     case 184:
-      return LatLngDto.fromList(self.readValue() as! [Any?])
+      return NavigationAudioGuidanceSettingsDto.fromList(self.readValue() as! [Any?])
     case 185:
-      return LatLngBoundsDto.fromList(self.readValue() as! [Any?])
+      return SimulationOptionsDto.fromList(self.readValue() as! [Any?])
     case 186:
-      return SpeedingUpdatedEventDto.fromList(self.readValue() as! [Any?])
+      return LatLngDto.fromList(self.readValue() as! [Any?])
     case 187:
-      return GpsAvailabilityChangeEventDto.fromList(self.readValue() as! [Any?])
+      return LatLngBoundsDto.fromList(self.readValue() as! [Any?])
     case 188:
-      return SpeedAlertOptionsThresholdPercentageDto.fromList(self.readValue() as! [Any?])
+      return SpeedingUpdatedEventDto.fromList(self.readValue() as! [Any?])
     case 189:
-      return SpeedAlertOptionsDto.fromList(self.readValue() as! [Any?])
+      return GpsAvailabilityChangeEventDto.fromList(self.readValue() as! [Any?])
     case 190:
+      return SpeedAlertOptionsThresholdPercentageDto.fromList(self.readValue() as! [Any?])
+    case 191:
+      return SpeedAlertOptionsDto.fromList(self.readValue() as! [Any?])
+    case 192:
       return RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(
         self.readValue() as! [Any?])
-    case 191:
-      return RouteSegmentTrafficDataDto.fromList(self.readValue() as! [Any?])
-    case 192:
-      return RouteSegmentDto.fromList(self.readValue() as! [Any?])
     case 193:
-      return LaneDirectionDto.fromList(self.readValue() as! [Any?])
+      return RouteSegmentTrafficDataDto.fromList(self.readValue() as! [Any?])
     case 194:
-      return LaneDto.fromList(self.readValue() as! [Any?])
+      return RouteSegmentDto.fromList(self.readValue() as! [Any?])
     case 195:
-      return StepInfoDto.fromList(self.readValue() as! [Any?])
+      return LaneDirectionDto.fromList(self.readValue() as! [Any?])
     case 196:
-      return NavInfoDto.fromList(self.readValue() as! [Any?])
+      return LaneDto.fromList(self.readValue() as! [Any?])
     case 197:
-      return TermsAndConditionsUIParamsDto.fromList(self.readValue() as! [Any?])
+      return StepInfoDto.fromList(self.readValue() as! [Any?])
     case 198:
+      return NavInfoDto.fromList(self.readValue() as! [Any?])
+    case 199:
+      return TermsAndConditionsUIParamsDto.fromList(self.readValue() as! [Any?])
+    case 200:
       return StepImageGenerationOptionsDto.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -2599,134 +2806,140 @@ private class MessagesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? MapOptionsDto {
       super.writeByte(155)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationViewOptionsDto {
+    } else if let value = value as? AndroidNavigationStylingOptionsDto {
       super.writeByte(156)
       super.writeValue(value.toList())
-    } else if let value = value as? ViewCreationOptionsDto {
+    } else if let value = value as? IOSNavigationStylingOptionsDto {
       super.writeByte(157)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraPositionDto {
+    } else if let value = value as? NavigationViewOptionsDto {
       super.writeByte(158)
       super.writeValue(value.toList())
-    } else if let value = value as? MarkerDto {
+    } else if let value = value as? ViewCreationOptionsDto {
       super.writeByte(159)
       super.writeValue(value.toList())
-    } else if let value = value as? MarkerOptionsDto {
+    } else if let value = value as? CameraPositionDto {
       super.writeByte(160)
       super.writeValue(value.toList())
-    } else if let value = value as? ImageDescriptorDto {
+    } else if let value = value as? MarkerDto {
       super.writeByte(161)
       super.writeValue(value.toList())
-    } else if let value = value as? InfoWindowDto {
+    } else if let value = value as? MarkerOptionsDto {
       super.writeByte(162)
       super.writeValue(value.toList())
-    } else if let value = value as? MarkerAnchorDto {
+    } else if let value = value as? ImageDescriptorDto {
       super.writeByte(163)
       super.writeValue(value.toList())
-    } else if let value = value as? PointOfInterestDto {
+    } else if let value = value as? InfoWindowDto {
       super.writeByte(164)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonDto {
+    } else if let value = value as? MarkerAnchorDto {
       super.writeByte(165)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonOptionsDto {
+    } else if let value = value as? PointOfInterestDto {
       super.writeByte(166)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonHoleDto {
+    } else if let value = value as? PolygonDto {
       super.writeByte(167)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleSpanStrokeStyleDto {
+    } else if let value = value as? PolygonOptionsDto {
       super.writeByte(168)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleSpanDto {
+    } else if let value = value as? PolygonHoleDto {
       super.writeByte(169)
       super.writeValue(value.toList())
-    } else if let value = value as? PolylineDto {
+    } else if let value = value as? StyleSpanStrokeStyleDto {
       super.writeByte(170)
       super.writeValue(value.toList())
-    } else if let value = value as? PatternItemDto {
+    } else if let value = value as? StyleSpanDto {
       super.writeByte(171)
       super.writeValue(value.toList())
-    } else if let value = value as? PolylineOptionsDto {
+    } else if let value = value as? PolylineDto {
       super.writeByte(172)
       super.writeValue(value.toList())
-    } else if let value = value as? CircleDto {
+    } else if let value = value as? PatternItemDto {
       super.writeByte(173)
       super.writeValue(value.toList())
-    } else if let value = value as? CircleOptionsDto {
+    } else if let value = value as? PolylineOptionsDto {
       super.writeByte(174)
       super.writeValue(value.toList())
-    } else if let value = value as? MapPaddingDto {
+    } else if let value = value as? CircleDto {
       super.writeByte(175)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteTokenOptionsDto {
+    } else if let value = value as? CircleOptionsDto {
       super.writeByte(176)
       super.writeValue(value.toList())
-    } else if let value = value as? DestinationsDto {
+    } else if let value = value as? MapPaddingDto {
       super.writeByte(177)
       super.writeValue(value.toList())
-    } else if let value = value as? RoutingOptionsDto {
+    } else if let value = value as? RouteTokenOptionsDto {
       super.writeByte(178)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationDisplayOptionsDto {
+    } else if let value = value as? DestinationsDto {
       super.writeByte(179)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationWaypointDto {
+    } else if let value = value as? RoutingOptionsDto {
       super.writeByte(180)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationTimeAndDistanceDto {
+    } else if let value = value as? NavigationDisplayOptionsDto {
       super.writeByte(181)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationAudioGuidanceSettingsDto {
+    } else if let value = value as? NavigationWaypointDto {
       super.writeByte(182)
       super.writeValue(value.toList())
-    } else if let value = value as? SimulationOptionsDto {
+    } else if let value = value as? NavigationTimeAndDistanceDto {
       super.writeByte(183)
       super.writeValue(value.toList())
-    } else if let value = value as? LatLngDto {
+    } else if let value = value as? NavigationAudioGuidanceSettingsDto {
       super.writeByte(184)
       super.writeValue(value.toList())
-    } else if let value = value as? LatLngBoundsDto {
+    } else if let value = value as? SimulationOptionsDto {
       super.writeByte(185)
       super.writeValue(value.toList())
-    } else if let value = value as? SpeedingUpdatedEventDto {
+    } else if let value = value as? LatLngDto {
       super.writeByte(186)
       super.writeValue(value.toList())
-    } else if let value = value as? GpsAvailabilityChangeEventDto {
+    } else if let value = value as? LatLngBoundsDto {
       super.writeByte(187)
       super.writeValue(value.toList())
-    } else if let value = value as? SpeedAlertOptionsThresholdPercentageDto {
+    } else if let value = value as? SpeedingUpdatedEventDto {
       super.writeByte(188)
       super.writeValue(value.toList())
-    } else if let value = value as? SpeedAlertOptionsDto {
+    } else if let value = value as? GpsAvailabilityChangeEventDto {
       super.writeByte(189)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteSegmentTrafficDataRoadStretchRenderingDataDto {
+    } else if let value = value as? SpeedAlertOptionsThresholdPercentageDto {
       super.writeByte(190)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteSegmentTrafficDataDto {
+    } else if let value = value as? SpeedAlertOptionsDto {
       super.writeByte(191)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteSegmentDto {
+    } else if let value = value as? RouteSegmentTrafficDataRoadStretchRenderingDataDto {
       super.writeByte(192)
       super.writeValue(value.toList())
-    } else if let value = value as? LaneDirectionDto {
+    } else if let value = value as? RouteSegmentTrafficDataDto {
       super.writeByte(193)
       super.writeValue(value.toList())
-    } else if let value = value as? LaneDto {
+    } else if let value = value as? RouteSegmentDto {
       super.writeByte(194)
       super.writeValue(value.toList())
-    } else if let value = value as? StepInfoDto {
+    } else if let value = value as? LaneDirectionDto {
       super.writeByte(195)
       super.writeValue(value.toList())
-    } else if let value = value as? NavInfoDto {
+    } else if let value = value as? LaneDto {
       super.writeByte(196)
       super.writeValue(value.toList())
-    } else if let value = value as? TermsAndConditionsUIParamsDto {
+    } else if let value = value as? StepInfoDto {
       super.writeByte(197)
       super.writeValue(value.toList())
-    } else if let value = value as? StepImageGenerationOptionsDto {
+    } else if let value = value as? NavInfoDto {
       super.writeByte(198)
+      super.writeValue(value.toList())
+    } else if let value = value as? TermsAndConditionsUIParamsDto {
+      super.writeByte(199)
+      super.writeValue(value.toList())
+    } else if let value = value as? StepImageGenerationOptionsDto {
+      super.writeByte(200)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -2908,6 +3121,13 @@ protocol MapViewApi {
   func setMapColorScheme(viewId: Int64, mapColorScheme: MapColorSchemeDto) throws
   func getForceNightMode(viewId: Int64) throws -> NavigationForceNightModeDto
   func setForceNightMode(viewId: Int64, forceNightMode: NavigationForceNightModeDto) throws
+  /// Sets navigation styling options for Android.
+  /// Only applicable when running on Android platform.
+  func setAndroidNavigationStylingOptions(
+    viewId: Int64, options: AndroidNavigationStylingOptionsDto) throws
+  /// Sets navigation styling options for iOS.
+  /// Only applicable when running on iOS platform.
+  func setIOSNavigationStylingOptions(viewId: Int64, options: IOSNavigationStylingOptionsDto) throws
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -4875,6 +5095,48 @@ class MapViewApiSetup {
       }
     } else {
       setForceNightModeChannel.setMessageHandler(nil)
+    }
+    /// Sets navigation styling options for Android.
+    /// Only applicable when running on Android platform.
+    let setAndroidNavigationStylingOptionsChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setAndroidNavigationStylingOptions\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setAndroidNavigationStylingOptionsChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] as! Int64
+        let optionsArg = args[1] as! AndroidNavigationStylingOptionsDto
+        do {
+          try api.setAndroidNavigationStylingOptions(viewId: viewIdArg, options: optionsArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setAndroidNavigationStylingOptionsChannel.setMessageHandler(nil)
+    }
+    /// Sets navigation styling options for iOS.
+    /// Only applicable when running on iOS platform.
+    let setIOSNavigationStylingOptionsChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setIOSNavigationStylingOptions\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setIOSNavigationStylingOptionsChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] as! Int64
+        let optionsArg = args[1] as! IOSNavigationStylingOptionsDto
+        do {
+          try api.setIOSNavigationStylingOptions(viewId: viewIdArg, options: optionsArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setIOSNavigationStylingOptionsChannel.setMessageHandler(nil)
     }
   }
 }

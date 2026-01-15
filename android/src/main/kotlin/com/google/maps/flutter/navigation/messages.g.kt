@@ -736,6 +736,211 @@ data class MapOptionsDto(
 }
 
 /**
+ * Styling options for navigation UI on Android.
+ *
+ * All color values are 32-bit ARGB integers (format: 0xAARRGGBB). All text sizes are in float (sp)
+ * units. All parameters are optional - if not provided, platform defaults will be used.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class AndroidNavigationStylingOptionsDto(
+  /** Primary theme color for day mode (used for header background). */
+  val primaryDayModeThemeColor: Long? = null,
+  /** Secondary theme color for day mode (used for footer background). */
+  val secondaryDayModeThemeColor: Long? = null,
+  /** Primary theme color for night mode (used for header background). */
+  val primaryNightModeThemeColor: Long? = null,
+  /** Secondary theme color for night mode (used for footer background). */
+  val secondaryNightModeThemeColor: Long? = null,
+  /** Color for the large maneuver icon in the header. */
+  val headerLargeManeuverIconColor: Long? = null,
+  /** Color for the small maneuver icon in the header. */
+  val headerSmallManeuverIconColor: Long? = null,
+  /** Text color for the "next step" text in the header. */
+  val headerNextStepTextColor: Long? = null,
+  /** Text size for the "next step" text in the header (in sp). */
+  val headerNextStepTextSize: Double? = null,
+  /** Text color for the distance value in the header. */
+  val headerDistanceValueTextColor: Long? = null,
+  /** Text color for the distance units in the header. */
+  val headerDistanceUnitsTextColor: Long? = null,
+  /** Text size for the distance value in the header (in sp). */
+  val headerDistanceValueTextSize: Double? = null,
+  /** Text size for the distance units in the header (in sp). */
+  val headerDistanceUnitsTextSize: Double? = null,
+  /** Text color for the instructions in the header. */
+  val headerInstructionsTextColor: Long? = null,
+  /** Text size for the first row of instructions in the header (in sp). */
+  val headerInstructionsFirstRowTextSize: Double? = null,
+  /** Text size for the second row of instructions in the header (in sp). */
+  val headerInstructionsSecondRowTextSize: Double? = null,
+  /** Color for the recommended lane indicator in guidance. */
+  val headerGuidanceRecommendedLaneColor: Long? = null,
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): AndroidNavigationStylingOptionsDto {
+      val primaryDayModeThemeColor = pigeonVar_list[0] as Long?
+      val secondaryDayModeThemeColor = pigeonVar_list[1] as Long?
+      val primaryNightModeThemeColor = pigeonVar_list[2] as Long?
+      val secondaryNightModeThemeColor = pigeonVar_list[3] as Long?
+      val headerLargeManeuverIconColor = pigeonVar_list[4] as Long?
+      val headerSmallManeuverIconColor = pigeonVar_list[5] as Long?
+      val headerNextStepTextColor = pigeonVar_list[6] as Long?
+      val headerNextStepTextSize = pigeonVar_list[7] as Double?
+      val headerDistanceValueTextColor = pigeonVar_list[8] as Long?
+      val headerDistanceUnitsTextColor = pigeonVar_list[9] as Long?
+      val headerDistanceValueTextSize = pigeonVar_list[10] as Double?
+      val headerDistanceUnitsTextSize = pigeonVar_list[11] as Double?
+      val headerInstructionsTextColor = pigeonVar_list[12] as Long?
+      val headerInstructionsFirstRowTextSize = pigeonVar_list[13] as Double?
+      val headerInstructionsSecondRowTextSize = pigeonVar_list[14] as Double?
+      val headerGuidanceRecommendedLaneColor = pigeonVar_list[15] as Long?
+      return AndroidNavigationStylingOptionsDto(
+        primaryDayModeThemeColor,
+        secondaryDayModeThemeColor,
+        primaryNightModeThemeColor,
+        secondaryNightModeThemeColor,
+        headerLargeManeuverIconColor,
+        headerSmallManeuverIconColor,
+        headerNextStepTextColor,
+        headerNextStepTextSize,
+        headerDistanceValueTextColor,
+        headerDistanceUnitsTextColor,
+        headerDistanceValueTextSize,
+        headerDistanceUnitsTextSize,
+        headerInstructionsTextColor,
+        headerInstructionsFirstRowTextSize,
+        headerInstructionsSecondRowTextSize,
+        headerGuidanceRecommendedLaneColor,
+      )
+    }
+  }
+
+  fun toList(): List<Any?> {
+    return listOf(
+      primaryDayModeThemeColor,
+      secondaryDayModeThemeColor,
+      primaryNightModeThemeColor,
+      secondaryNightModeThemeColor,
+      headerLargeManeuverIconColor,
+      headerSmallManeuverIconColor,
+      headerNextStepTextColor,
+      headerNextStepTextSize,
+      headerDistanceValueTextColor,
+      headerDistanceUnitsTextColor,
+      headerDistanceValueTextSize,
+      headerDistanceUnitsTextSize,
+      headerInstructionsTextColor,
+      headerInstructionsFirstRowTextSize,
+      headerInstructionsSecondRowTextSize,
+      headerGuidanceRecommendedLaneColor,
+    )
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (other !is AndroidNavigationStylingOptionsDto) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Styling options for navigation UI on iOS.
+ *
+ * All color values are 32-bit ARGB integers (format: 0xAARRGGBB). All parameters are optional - if
+ * not provided, platform defaults will be used.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class IOSNavigationStylingOptionsDto(
+  /** Primary header background color for day mode. */
+  val navigationHeaderPrimaryBackgroundColor: Long? = null,
+  /** Secondary header background color for day mode. */
+  val navigationHeaderSecondaryBackgroundColor: Long? = null,
+  /** Primary header background color for night mode. */
+  val navigationHeaderPrimaryBackgroundColorNightMode: Long? = null,
+  /** Secondary header background color for night mode. */
+  val navigationHeaderSecondaryBackgroundColorNightMode: Long? = null,
+  /** Color for the large maneuver icon in the navigation header. */
+  val navigationHeaderLargeManeuverIconColor: Long? = null,
+  /** Color for the small maneuver icon in the navigation header. */
+  val navigationHeaderSmallManeuverIconColor: Long? = null,
+  /** Color for the recommended lane indicator in guidance. */
+  val navigationHeaderGuidanceRecommendedLaneColor: Long? = null,
+  /** Text color for the "next step" text in the navigation header. */
+  val navigationHeaderNextStepTextColor: Long? = null,
+  /** Text color for the distance value in the navigation header. */
+  val navigationHeaderDistanceValueTextColor: Long? = null,
+  /** Text color for the distance units in the navigation header. */
+  val navigationHeaderDistanceUnitsTextColor: Long? = null,
+  /** Text color for the instructions in the navigation header. */
+  val navigationHeaderInstructionsTextColor: Long? = null,
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): IOSNavigationStylingOptionsDto {
+      val navigationHeaderPrimaryBackgroundColor = pigeonVar_list[0] as Long?
+      val navigationHeaderSecondaryBackgroundColor = pigeonVar_list[1] as Long?
+      val navigationHeaderPrimaryBackgroundColorNightMode = pigeonVar_list[2] as Long?
+      val navigationHeaderSecondaryBackgroundColorNightMode = pigeonVar_list[3] as Long?
+      val navigationHeaderLargeManeuverIconColor = pigeonVar_list[4] as Long?
+      val navigationHeaderSmallManeuverIconColor = pigeonVar_list[5] as Long?
+      val navigationHeaderGuidanceRecommendedLaneColor = pigeonVar_list[6] as Long?
+      val navigationHeaderNextStepTextColor = pigeonVar_list[7] as Long?
+      val navigationHeaderDistanceValueTextColor = pigeonVar_list[8] as Long?
+      val navigationHeaderDistanceUnitsTextColor = pigeonVar_list[9] as Long?
+      val navigationHeaderInstructionsTextColor = pigeonVar_list[10] as Long?
+      return IOSNavigationStylingOptionsDto(
+        navigationHeaderPrimaryBackgroundColor,
+        navigationHeaderSecondaryBackgroundColor,
+        navigationHeaderPrimaryBackgroundColorNightMode,
+        navigationHeaderSecondaryBackgroundColorNightMode,
+        navigationHeaderLargeManeuverIconColor,
+        navigationHeaderSmallManeuverIconColor,
+        navigationHeaderGuidanceRecommendedLaneColor,
+        navigationHeaderNextStepTextColor,
+        navigationHeaderDistanceValueTextColor,
+        navigationHeaderDistanceUnitsTextColor,
+        navigationHeaderInstructionsTextColor,
+      )
+    }
+  }
+
+  fun toList(): List<Any?> {
+    return listOf(
+      navigationHeaderPrimaryBackgroundColor,
+      navigationHeaderSecondaryBackgroundColor,
+      navigationHeaderPrimaryBackgroundColorNightMode,
+      navigationHeaderSecondaryBackgroundColorNightMode,
+      navigationHeaderLargeManeuverIconColor,
+      navigationHeaderSmallManeuverIconColor,
+      navigationHeaderGuidanceRecommendedLaneColor,
+      navigationHeaderNextStepTextColor,
+      navigationHeaderDistanceValueTextColor,
+      navigationHeaderDistanceUnitsTextColor,
+      navigationHeaderInstructionsTextColor,
+    )
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (other !is IOSNavigationStylingOptionsDto) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
  * Object containing navigation options used to initialize Google Navigation view.
  *
  * Generated class from Pigeon that represents data sent in messages.
@@ -745,17 +950,33 @@ data class NavigationViewOptionsDto(
   val navigationUIEnabledPreference: NavigationUIEnabledPreferenceDto,
   /** Controls the navigation night mode for Navigation UI. */
   val forceNightMode: NavigationForceNightModeDto,
+  /** Android-specific navigation styling options. */
+  val androidStylingOptions: AndroidNavigationStylingOptionsDto? = null,
+  /** iOS-specific navigation styling options. */
+  val iosStylingOptions: IOSNavigationStylingOptionsDto? = null,
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): NavigationViewOptionsDto {
       val navigationUIEnabledPreference = pigeonVar_list[0] as NavigationUIEnabledPreferenceDto
       val forceNightMode = pigeonVar_list[1] as NavigationForceNightModeDto
-      return NavigationViewOptionsDto(navigationUIEnabledPreference, forceNightMode)
+      val androidStylingOptions = pigeonVar_list[2] as AndroidNavigationStylingOptionsDto?
+      val iosStylingOptions = pigeonVar_list[3] as IOSNavigationStylingOptionsDto?
+      return NavigationViewOptionsDto(
+        navigationUIEnabledPreference,
+        forceNightMode,
+        androidStylingOptions,
+        iosStylingOptions,
+      )
     }
   }
 
   fun toList(): List<Any?> {
-    return listOf(navigationUIEnabledPreference, forceNightMode)
+    return listOf(
+      navigationUIEnabledPreference,
+      forceNightMode,
+      androidStylingOptions,
+      iosStylingOptions,
+    )
   }
 
   override fun equals(other: Any?): Boolean {
@@ -2546,142 +2767,152 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
         return (readValue(buffer) as? List<Any?>)?.let { MapOptionsDto.fromList(it) }
       }
       156.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { NavigationViewOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          AndroidNavigationStylingOptionsDto.fromList(it)
+        }
       }
       157.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { ViewCreationOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          IOSNavigationStylingOptionsDto.fromList(it)
+        }
       }
       158.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { CameraPositionDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { NavigationViewOptionsDto.fromList(it) }
       }
       159.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MarkerDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { ViewCreationOptionsDto.fromList(it) }
       }
       160.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MarkerOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { CameraPositionDto.fromList(it) }
       }
       161.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { ImageDescriptorDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerDto.fromList(it) }
       }
       162.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { InfoWindowDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerOptionsDto.fromList(it) }
       }
       163.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MarkerAnchorDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { ImageDescriptorDto.fromList(it) }
       }
       164.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PointOfInterestDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { InfoWindowDto.fromList(it) }
       }
       165.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolygonDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { MarkerAnchorDto.fromList(it) }
       }
       166.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolygonOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PointOfInterestDto.fromList(it) }
       }
       167.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolygonHoleDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonDto.fromList(it) }
       }
       168.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { StyleSpanStrokeStyleDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonOptionsDto.fromList(it) }
       }
       169.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { StyleSpanDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonHoleDto.fromList(it) }
       }
       170.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolylineDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { StyleSpanStrokeStyleDto.fromList(it) }
       }
       171.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PatternItemDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { StyleSpanDto.fromList(it) }
       }
       172.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolylineOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolylineDto.fromList(it) }
       }
       173.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { CircleDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PatternItemDto.fromList(it) }
       }
       174.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { CircleOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolylineOptionsDto.fromList(it) }
       }
       175.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MapPaddingDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { CircleDto.fromList(it) }
       }
       176.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { RouteTokenOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { CircleOptionsDto.fromList(it) }
       }
       177.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { DestinationsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { MapPaddingDto.fromList(it) }
       }
       178.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { RoutingOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { RouteTokenOptionsDto.fromList(it) }
       }
       179.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { NavigationDisplayOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { DestinationsDto.fromList(it) }
       }
       180.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { NavigationWaypointDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { RoutingOptionsDto.fromList(it) }
       }
       181.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { NavigationTimeAndDistanceDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { NavigationDisplayOptionsDto.fromList(it) }
       }
       182.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { NavigationWaypointDto.fromList(it) }
+      }
+      183.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { NavigationTimeAndDistanceDto.fromList(it) }
+      }
+      184.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           NavigationAudioGuidanceSettingsDto.fromList(it)
         }
       }
-      183.toByte() -> {
+      185.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SimulationOptionsDto.fromList(it) }
       }
-      184.toByte() -> {
+      186.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LatLngDto.fromList(it) }
       }
-      185.toByte() -> {
+      187.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LatLngBoundsDto.fromList(it) }
       }
-      186.toByte() -> {
+      188.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SpeedingUpdatedEventDto.fromList(it) }
       }
-      187.toByte() -> {
+      189.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           GpsAvailabilityChangeEventDto.fromList(it)
         }
       }
-      188.toByte() -> {
+      190.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           SpeedAlertOptionsThresholdPercentageDto.fromList(it)
         }
       }
-      189.toByte() -> {
+      191.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SpeedAlertOptionsDto.fromList(it) }
       }
-      190.toByte() -> {
+      192.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(it)
         }
       }
-      191.toByte() -> {
+      193.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentTrafficDataDto.fromList(it) }
       }
-      192.toByte() -> {
+      194.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentDto.fromList(it) }
       }
-      193.toByte() -> {
+      195.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LaneDirectionDto.fromList(it) }
       }
-      194.toByte() -> {
+      196.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LaneDto.fromList(it) }
       }
-      195.toByte() -> {
+      197.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { StepInfoDto.fromList(it) }
       }
-      196.toByte() -> {
+      198.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavInfoDto.fromList(it) }
       }
-      197.toByte() -> {
+      199.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           TermsAndConditionsUIParamsDto.fromList(it)
         }
       }
-      198.toByte() -> {
+      200.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           StepImageGenerationOptionsDto.fromList(it)
         }
@@ -2800,176 +3031,184 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
         stream.write(155)
         writeValue(stream, value.toList())
       }
-      is NavigationViewOptionsDto -> {
+      is AndroidNavigationStylingOptionsDto -> {
         stream.write(156)
         writeValue(stream, value.toList())
       }
-      is ViewCreationOptionsDto -> {
+      is IOSNavigationStylingOptionsDto -> {
         stream.write(157)
         writeValue(stream, value.toList())
       }
-      is CameraPositionDto -> {
+      is NavigationViewOptionsDto -> {
         stream.write(158)
         writeValue(stream, value.toList())
       }
-      is MarkerDto -> {
+      is ViewCreationOptionsDto -> {
         stream.write(159)
         writeValue(stream, value.toList())
       }
-      is MarkerOptionsDto -> {
+      is CameraPositionDto -> {
         stream.write(160)
         writeValue(stream, value.toList())
       }
-      is ImageDescriptorDto -> {
+      is MarkerDto -> {
         stream.write(161)
         writeValue(stream, value.toList())
       }
-      is InfoWindowDto -> {
+      is MarkerOptionsDto -> {
         stream.write(162)
         writeValue(stream, value.toList())
       }
-      is MarkerAnchorDto -> {
+      is ImageDescriptorDto -> {
         stream.write(163)
         writeValue(stream, value.toList())
       }
-      is PointOfInterestDto -> {
+      is InfoWindowDto -> {
         stream.write(164)
         writeValue(stream, value.toList())
       }
-      is PolygonDto -> {
+      is MarkerAnchorDto -> {
         stream.write(165)
         writeValue(stream, value.toList())
       }
-      is PolygonOptionsDto -> {
+      is PointOfInterestDto -> {
         stream.write(166)
         writeValue(stream, value.toList())
       }
-      is PolygonHoleDto -> {
+      is PolygonDto -> {
         stream.write(167)
         writeValue(stream, value.toList())
       }
-      is StyleSpanStrokeStyleDto -> {
+      is PolygonOptionsDto -> {
         stream.write(168)
         writeValue(stream, value.toList())
       }
-      is StyleSpanDto -> {
+      is PolygonHoleDto -> {
         stream.write(169)
         writeValue(stream, value.toList())
       }
-      is PolylineDto -> {
+      is StyleSpanStrokeStyleDto -> {
         stream.write(170)
         writeValue(stream, value.toList())
       }
-      is PatternItemDto -> {
+      is StyleSpanDto -> {
         stream.write(171)
         writeValue(stream, value.toList())
       }
-      is PolylineOptionsDto -> {
+      is PolylineDto -> {
         stream.write(172)
         writeValue(stream, value.toList())
       }
-      is CircleDto -> {
+      is PatternItemDto -> {
         stream.write(173)
         writeValue(stream, value.toList())
       }
-      is CircleOptionsDto -> {
+      is PolylineOptionsDto -> {
         stream.write(174)
         writeValue(stream, value.toList())
       }
-      is MapPaddingDto -> {
+      is CircleDto -> {
         stream.write(175)
         writeValue(stream, value.toList())
       }
-      is RouteTokenOptionsDto -> {
+      is CircleOptionsDto -> {
         stream.write(176)
         writeValue(stream, value.toList())
       }
-      is DestinationsDto -> {
+      is MapPaddingDto -> {
         stream.write(177)
         writeValue(stream, value.toList())
       }
-      is RoutingOptionsDto -> {
+      is RouteTokenOptionsDto -> {
         stream.write(178)
         writeValue(stream, value.toList())
       }
-      is NavigationDisplayOptionsDto -> {
+      is DestinationsDto -> {
         stream.write(179)
         writeValue(stream, value.toList())
       }
-      is NavigationWaypointDto -> {
+      is RoutingOptionsDto -> {
         stream.write(180)
         writeValue(stream, value.toList())
       }
-      is NavigationTimeAndDistanceDto -> {
+      is NavigationDisplayOptionsDto -> {
         stream.write(181)
         writeValue(stream, value.toList())
       }
-      is NavigationAudioGuidanceSettingsDto -> {
+      is NavigationWaypointDto -> {
         stream.write(182)
         writeValue(stream, value.toList())
       }
-      is SimulationOptionsDto -> {
+      is NavigationTimeAndDistanceDto -> {
         stream.write(183)
         writeValue(stream, value.toList())
       }
-      is LatLngDto -> {
+      is NavigationAudioGuidanceSettingsDto -> {
         stream.write(184)
         writeValue(stream, value.toList())
       }
-      is LatLngBoundsDto -> {
+      is SimulationOptionsDto -> {
         stream.write(185)
         writeValue(stream, value.toList())
       }
-      is SpeedingUpdatedEventDto -> {
+      is LatLngDto -> {
         stream.write(186)
         writeValue(stream, value.toList())
       }
-      is GpsAvailabilityChangeEventDto -> {
+      is LatLngBoundsDto -> {
         stream.write(187)
         writeValue(stream, value.toList())
       }
-      is SpeedAlertOptionsThresholdPercentageDto -> {
+      is SpeedingUpdatedEventDto -> {
         stream.write(188)
         writeValue(stream, value.toList())
       }
-      is SpeedAlertOptionsDto -> {
+      is GpsAvailabilityChangeEventDto -> {
         stream.write(189)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentTrafficDataRoadStretchRenderingDataDto -> {
+      is SpeedAlertOptionsThresholdPercentageDto -> {
         stream.write(190)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentTrafficDataDto -> {
+      is SpeedAlertOptionsDto -> {
         stream.write(191)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentDto -> {
+      is RouteSegmentTrafficDataRoadStretchRenderingDataDto -> {
         stream.write(192)
         writeValue(stream, value.toList())
       }
-      is LaneDirectionDto -> {
+      is RouteSegmentTrafficDataDto -> {
         stream.write(193)
         writeValue(stream, value.toList())
       }
-      is LaneDto -> {
+      is RouteSegmentDto -> {
         stream.write(194)
         writeValue(stream, value.toList())
       }
-      is StepInfoDto -> {
+      is LaneDirectionDto -> {
         stream.write(195)
         writeValue(stream, value.toList())
       }
-      is NavInfoDto -> {
+      is LaneDto -> {
         stream.write(196)
         writeValue(stream, value.toList())
       }
-      is TermsAndConditionsUIParamsDto -> {
+      is StepInfoDto -> {
         stream.write(197)
         writeValue(stream, value.toList())
       }
-      is StepImageGenerationOptionsDto -> {
+      is NavInfoDto -> {
         stream.write(198)
+        writeValue(stream, value.toList())
+      }
+      is TermsAndConditionsUIParamsDto -> {
+        stream.write(199)
+        writeValue(stream, value.toList())
+      }
+      is StepImageGenerationOptionsDto -> {
+        stream.write(200)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -3281,6 +3520,14 @@ interface MapViewApi {
   fun getForceNightMode(viewId: Long): NavigationForceNightModeDto
 
   fun setForceNightMode(viewId: Long, forceNightMode: NavigationForceNightModeDto)
+
+  /**
+   * Sets navigation styling options for Android. Only applicable when running on Android platform.
+   */
+  fun setAndroidNavigationStylingOptions(viewId: Long, options: AndroidNavigationStylingOptionsDto)
+
+  /** Sets navigation styling options for iOS. Only applicable when running on iOS platform. */
+  fun setIOSNavigationStylingOptions(viewId: Long, options: IOSNavigationStylingOptionsDto)
 
   companion object {
     /** The codec used by MapViewApi. */
@@ -5823,6 +6070,56 @@ interface MapViewApi {
             val wrapped: List<Any?> =
               try {
                 api.setForceNightMode(viewIdArg, forceNightModeArg)
+                listOf(null)
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setAndroidNavigationStylingOptions$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val optionsArg = args[1] as AndroidNavigationStylingOptionsDto
+            val wrapped: List<Any?> =
+              try {
+                api.setAndroidNavigationStylingOptions(viewIdArg, optionsArg)
+                listOf(null)
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setIOSNavigationStylingOptions$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val optionsArg = args[1] as IOSNavigationStylingOptionsDto
+            val wrapped: List<Any?> =
+              try {
+                api.setIOSNavigationStylingOptions(viewIdArg, optionsArg)
                 listOf(null)
               } catch (exception: Throwable) {
                 MessagesPigeonUtils.wrapError(exception)
