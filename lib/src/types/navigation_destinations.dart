@@ -419,3 +419,26 @@ class NavigationAudioGuidanceSettings {
       'guidanceType: $guidanceType'
       ')';
 }
+
+/// Speed alert options.
+/// {@category Navigation}
+class SpeedAlertOptions {
+  /// Initialize with minor and major speed alert threshold percentages and severity upgrade duration.
+  SpeedAlertOptions({
+    required this.minorSpeedAlertThresholdPercentage,
+    required this.majorSpeedAlertThresholdPercentage,
+    required this.severityUpgradeDurationSeconds,
+  });
+
+  final double minorSpeedAlertThresholdPercentage;
+  final double majorSpeedAlertThresholdPercentage;
+  final double severityUpgradeDurationSeconds;
+
+  @override
+  String toString() =>
+      'SpeedAlertOptions('
+      'minorSpeedAlertThresholdPercentage: $minorSpeedAlertThresholdPercentage, '
+      'majorSpeedAlertThresholdPercentage: $majorSpeedAlertThresholdPercentage, '
+      'severityUpgradeDurationSeconds: $severityUpgradeDurationSeconds'
+      ')';
+}

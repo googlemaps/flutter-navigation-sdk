@@ -74,7 +74,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   static const int _userLocationTimeoutMS = 1500;
 
   /// Speed multiplier used for simulation.
-  static const double simulationSpeedMultiplier = 3.0;
+  static const double simulationSpeedMultiplier = 9.0;
 
   /// Navigation view controller used to interact with the navigation view.
   GoogleNavigationViewController? _navigationViewController;
@@ -445,6 +445,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
     // Set audio guidance settings for the new navigation session.
     unawaited(_setAudioGuidance());
+
+    // Set speed alert options for the new navigation session.
+    unawaited(_setSpeedAlertGuidance());
   }
 
   void _onRoadSnappedLocationUpdatedEvent(
@@ -562,6 +565,16 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         isBluetoothAudioEnabled: true,
         isVibrationEnabled: true,
         guidanceType: NavigationAudioGuidanceType.alertsAndGuidance,
+      ),
+    );
+  }
+
+  Future<void> _setSpeedAlertGuidance() async {
+    await GoogleMapsNavigator.setSpeedAlertOptions(
+      SpeedAlertOptions(
+        minorSpeedAlertThresholdPercentage: 5.0,
+        majorSpeedAlertThresholdPercentage: 10.0,
+        severityUpgradeDurationSeconds: 3.0,
       ),
     );
   }

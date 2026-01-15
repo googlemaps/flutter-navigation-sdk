@@ -90,6 +90,17 @@ void main() {
           guidanceType: NavigationAudioGuidanceType.alertsAndGuidance,
         ),
       );
+
+      /// Sets speed alert options for the current navigation session.
+      /// Cannot be verified, because native SDK lacks getter methods,
+      /// but exercise the API for basic sanity testing.
+      await GoogleMapsNavigator.setSpeedAlertOptions(
+        SpeedAlertOptions(
+          minorSpeedAlertThresholdPercentage: 5,
+          majorSpeedAlertThresholdPercentage: 10,
+          severityUpgradeDurationSeconds: 3,
+        ),
+      );
     }
 
     final StreamSubscription<OnArrivalEvent> onArrivalSubscription =
@@ -273,6 +284,17 @@ void main() {
             isBluetoothAudioEnabled: true,
             isVibrationEnabled: true,
             guidanceType: NavigationAudioGuidanceType.alertsAndGuidance,
+          ),
+        );
+
+        /// Sets speed alert options for the current navigation session.
+        /// Cannot be verified, because native SDK lacks getter methods,
+        /// but exercise the API for basic sanity testing.
+        await GoogleMapsNavigator.setSpeedAlertOptions(
+          SpeedAlertOptions(
+            minorSpeedAlertThresholdPercentage: 5,
+            majorSpeedAlertThresholdPercentage: 10,
+            severityUpgradeDurationSeconds: 3,
           ),
         );
       }
@@ -664,6 +686,17 @@ void main() {
           guidanceType: NavigationAudioGuidanceType.silent,
         );
     await GoogleMapsNavigator.setAudioGuidance(settings);
+
+    /// Sets speed alert options for the current navigation session.
+    /// Cannot be verified, because native SDK lacks getter methods,
+    /// but exercise the API for basic sanity testing.
+    await GoogleMapsNavigator.setSpeedAlertOptions(
+      SpeedAlertOptions(
+        minorSpeedAlertThresholdPercentage: 5,
+        majorSpeedAlertThresholdPercentage: 10,
+        severityUpgradeDurationSeconds: 3,
+      ),
+    );
 
     /// Simulate location (1298 California St)
     await GoogleMapsNavigator.simulator.setUserLocation(

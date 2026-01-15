@@ -1243,6 +1243,32 @@ void main() {
           );
           expect(settingsIn.isVibrationEnabled, settingsOut.isVibrationEnabled);
           expect(settingsOut.guidanceType, AudioGuidanceTypeDto.alertsOnly);
+
+          // Set speed alert options.
+          final SpeedAlertOptions speedAlertSettingsIn = SpeedAlertOptions(
+            minorSpeedAlertThresholdPercentage: 2.0,
+            majorSpeedAlertThresholdPercentage: 10.0,
+            severityUpgradeDurationSeconds: 5.0,
+          );
+
+          await GoogleMapsNavigator.setSpeedAlertOptions(speedAlertSettingsIn);
+          final VerificationResult speedAlertSettingsResult = verify(
+            sessionMockApi.setSpeedAlertOptions(captureAny),
+          );
+          final SpeedAlertOptionsDto speedAlertSettingsOut =
+              speedAlertSettingsResult.captured[0] as SpeedAlertOptionsDto;
+          expect(
+            speedAlertSettingsIn.majorSpeedAlertThresholdPercentage,
+            speedAlertSettingsOut.majorSpeedAlertThresholdPercentage,
+          );
+          expect(
+            speedAlertSettingsIn.minorSpeedAlertThresholdPercentage,
+            speedAlertSettingsOut.minorSpeedAlertThresholdPercentage,
+          );
+          expect(
+            speedAlertSettingsIn.severityUpgradeDurationSeconds,
+            speedAlertSettingsOut.severityUpgradeDurationSeconds,
+          );
         });
 
         test('Test navigation simulator', () async {
