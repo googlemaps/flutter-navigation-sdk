@@ -20,7 +20,7 @@ enum GoogleMapsImageRegistryError: Error {
 }
 
 class ImageRegistry {
-  var registeredImages: [RegisteredImage] = []
+  var registeredImages: [String: RegisteredImage] = [:]
 
   func registerBitmapImage(
     imageId: String, bytes: Data, imagePixelRatio: Double, width: Double?,
@@ -41,7 +41,7 @@ class ImageRegistry {
       image = ImageResizer.resize(image: image, height: CGFloat(height!))
     }
 
-    registeredImages.append(
+    registeredImages[imageId] =
       RegisteredImage(
         imageId: imageId,
         image: image,
@@ -49,7 +49,7 @@ class ImageRegistry {
         width: width,
         height: height,
         type: .regular
-      ))
+      )
     return ImageDescriptorDto(
       registeredImageId: imageId,
       imagePixelRatio: imagePixelRatio,
@@ -63,7 +63,7 @@ class ImageRegistry {
     imageId: String, image: UIImage, imagePixelRatio: Double, width: Double?,
     height: Double?
   ) throws -> ImageDescriptorDto {
-    registeredImages.append(
+    registeredImages[imageId] =
       RegisteredImage(
         imageId: imageId,
         image: image,
@@ -72,7 +72,6 @@ class ImageRegistry {
         height: height,
         type: .maneuver
       )
-    )
     return ImageDescriptorDto(
       registeredImageId: imageId,
       imagePixelRatio: imagePixelRatio,
@@ -86,7 +85,7 @@ class ImageRegistry {
     imageId: String, image: UIImage, imagePixelRatio: Double, width: Double?,
     height: Double?
   ) throws -> ImageDescriptorDto {
-    registeredImages.append(
+    registeredImages[imageId] =
       RegisteredImage(
         imageId: imageId,
         image: image,
@@ -95,7 +94,6 @@ class ImageRegistry {
         height: height,
         type: .lanes
       )
-    )
     return ImageDescriptorDto(
       registeredImageId: imageId,
       imagePixelRatio: imagePixelRatio,
@@ -106,11 +104,11 @@ class ImageRegistry {
   }
 
   func findRegisteredImage(imageId: String) -> RegisteredImage? {
-    registeredImages.first(where: { $0.imageId == imageId })
+    registeredImages[imageId]
   }
 
   func unregisterImage(imageId: String) {
-    registeredImages.removeAll(where: { $0.imageId == imageId })
+    registeredImages.removeValue(forKey: imageId)
   }
 
   func clearRegisteredImages(filter: RegisteredImageTypeDto?) {
@@ -118,8 +116,8 @@ class ImageRegistry {
       registeredImages.removeAll()
       return
     }
-    registeredImages.removeAll { image in
-      image.type == Convert.registeredImageType(type: filter)
+    registeredImages = registeredImages.filter { (_, image) in
+      image.type != Convert.registeredImageType(type: filter)
     }
   }
 

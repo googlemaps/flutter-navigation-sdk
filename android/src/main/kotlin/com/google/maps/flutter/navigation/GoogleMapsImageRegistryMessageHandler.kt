@@ -41,6 +41,8 @@ class GoogleMapsImageRegistryMessageHandler(private val imageRegistry: ImageRegi
   }
 
   override fun getRegisteredImages(): List<ImageDescriptorDto> {
-    return imageRegistry.registeredImages.map { Convert.registeredImageToImageDescriptorDto(it) }
+    return imageRegistry.registeredImages.map {
+      Convert.registeredImageToImageDescriptorDto(it.value)
+    }
   }
 }

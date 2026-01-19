@@ -44,7 +44,7 @@ class GoogleMapsImageRegistryMessageHandler: ImageRegistryApi {
   }
 
   func getRegisteredImages() throws -> [ImageDescriptorDto] {
-    imageRegistry.registeredImages.map { $0.toImageDescriptorDto() }
+    imageRegistry.registeredImages.map { $0.value.toImageDescriptorDto() }
   }
 
   func clearRegisteredImages(filter: RegisteredImageTypeDto?) throws {
