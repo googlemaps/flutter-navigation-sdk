@@ -24,7 +24,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import java.io.ByteArrayOutputStream
 
 class ImageRegistry {
-  val registeredImages = mutableListOf<RegisteredImage>()
+  val registeredImages = mutableMapOf<String, RegisteredImage>()
   private val bitmapQueue = mutableListOf<QueuedBitmap>()
 
   private var isMapViewInitialized = false
@@ -148,7 +148,7 @@ class ImageRegistry {
         imageType,
         if (shouldStoreBitmap) bitmap else null,
       )
-    registeredImages.add(registeredImage)
+    registeredImages[registeredImage.imageId] = registeredImage
   }
 
   @Throws(FlutterError::class)
@@ -191,11 +191,11 @@ class ImageRegistry {
   }
 
   fun findRegisteredImage(imageId: String): RegisteredImage? {
-    return registeredImages.firstOrNull { it.imageId == imageId }
+    return registeredImages[imageId]
   }
 
   fun unregisterImage(imageId: String) {
-    registeredImages.removeAll { it.imageId == imageId }
+    registeredImages.remove(imageId)
   }
 
   fun clearRegisteredImages(filter: RegisteredImageTypeDto?) {
@@ -203,7 +203,7 @@ class ImageRegistry {
       registeredImages.clear()
       return
     }
-    registeredImages.removeAll { Convert.registeredImageType(filter) == it.type }
+    registeredImages.entries.removeIf { Convert.registeredImageType(filter) == it.value.type }
   }
 
   private fun convertBitmapToPNGByteArray(bitmap: Bitmap): ByteArray {
