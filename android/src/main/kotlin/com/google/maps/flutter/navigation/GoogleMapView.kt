@@ -29,7 +29,7 @@ internal constructor(
   viewEventApi: ViewEventApi,
   private val viewRegistry: GoogleMapsViewRegistry,
   imageRegistry: ImageRegistry,
-) : PlatformView, GoogleMapsBaseMapView(viewId, mapOptions, viewEventApi, imageRegistry) {
+) : PlatformView, GoogleMapsBaseMapView(context, viewId, mapOptions, viewEventApi, imageRegistry) {
   private val _mapView: MapView = MapView(context, mapOptions.googleMapOptions)
 
   override fun getView(): View {

@@ -39,6 +39,7 @@ import com.google.android.gms.maps.model.Polygon
 import com.google.android.gms.maps.model.Polyline
 
 abstract class GoogleMapsBaseMapView(
+  private val context: android.content.Context,
   private val viewId: Int?,
   mapOptions: MapOptions,
   protected val viewEventApi: ViewEventApi?,
@@ -49,6 +50,7 @@ abstract class GoogleMapsBaseMapView(
   private val _polygons = mutableListOf<PolygonController>()
   private val _polylines = mutableListOf<PolylineController>()
   private val _circles = mutableListOf<CircleController>()
+  private var _clusterManagersController: ClusterManagersController? = null
 
   // Store preferred zoom values here because MapView getMinZoom and
   // getMaxZoom always return min/max possible values and not the preferred ones.
@@ -128,6 +130,11 @@ abstract class GoogleMapsBaseMapView(
   // Method to set the _map object
   protected fun setMap(map: GoogleMap) {
     _map = map
+    // Initialize cluster managers controller
+    if (viewId != null && viewEventApi != null) {
+      _clusterManagersController = ClusterManagersController(context, viewEventApi, viewId)
+      _clusterManagersController?.init(map)
+    }
   }
 
   @Throws(FlutterError::class)
@@ -166,6 +173,12 @@ abstract class GoogleMapsBaseMapView(
   }
 
   protected open fun initListeners() {
+    // Set up camera idle listener for clustering (always needed)
+    getMap().setOnCameraIdleListener {
+      // Notify cluster managers about camera idle event (always)
+      _clusterManagersController?.onCameraIdle()
+    }
+
     getMap().setOnMapClickListener {
       viewEventApi?.onMapClickEvent(getViewId().toLong(), LatLngDto(it.latitude, it.longitude)) {}
     }
@@ -751,26 +764,41 @@ abstract class GoogleMapsBaseMapView(
   fun addMarkers(markers: List<MarkerDto>): List<MarkerDto> {
     val result = mutableListOf<MarkerDto>()
     markers.forEach {
-      val builder = MarkerBuilder()
-      Convert.sinkMarkerOptions(it.options, builder, imageRegistry)
-      val options = builder.build()
-      val marker = getMap().addMarker(options)
-      if (marker != null) {
+      // Check if marker belongs to a cluster
+      if (it.options.clusterManagerId != null) {
         val registeredImage =
           it.options.icon.registeredImageId?.let { id -> imageRegistry.findRegisteredImage(id) }
-        val controller =
-          MarkerController(
-            marker,
-            it.markerId,
-            builder.consumeTapEvents,
-            it.options.anchor.u.toFloat(),
-            it.options.anchor.v.toFloat(),
-            it.options.infoWindow.anchor.u.toFloat(),
-            it.options.infoWindow.anchor.v.toFloat(),
-            registeredImage,
-          )
-        _markers.add(controller)
+        val builder = MarkerBuilder()
+        Convert.sinkMarkerOptions(it.options, builder, imageRegistry)
+        _clusterManagersController?.addMarkerToCluster(
+          it,
+          registeredImage,
+          builder.consumeTapEvents,
+        )
         result.add(it)
+      } else {
+        // Regular marker (not clustered)
+        val builder = MarkerBuilder()
+        Convert.sinkMarkerOptions(it.options, builder, imageRegistry)
+        val options = builder.build()
+        val marker = getMap().addMarker(options)
+        if (marker != null) {
+          val registeredImage =
+            it.options.icon.registeredImageId?.let { id -> imageRegistry.findRegisteredImage(id) }
+          val controller =
+            MarkerController(
+              marker,
+              it.markerId,
+              builder.consumeTapEvents,
+              it.options.anchor.u.toFloat(),
+              it.options.anchor.v.toFloat(),
+              it.options.infoWindow.anchor.u.toFloat(),
+              it.options.infoWindow.anchor.v.toFloat(),
+              registeredImage,
+            )
+          _markers.add(controller)
+          result.add(it)
+        }
       }
     }
     return result
@@ -811,6 +839,31 @@ abstract class GoogleMapsBaseMapView(
   fun clearMarkers() {
     _markers.forEach { controller -> controller.remove() }
     _markers.clear()
+  }
+
+  fun getClusterManagers(): List<ClusterManagerDto> {
+    val clusterManagerIds = _clusterManagersController?.getClusterManagerIds() ?: emptyList()
+    return clusterManagerIds.map { ClusterManagerDto(it) }
+  }
+
+  fun addClusterManagers(clusterManagers: List<ClusterManagerDto>): List<ClusterManagerDto> {
+    val result = mutableListOf<ClusterManagerDto>()
+    clusterManagers.forEach {
+      _clusterManagersController?.addClusterManager(it.clusterManagerId)?.let {
+        result.add(ClusterManagerDto(it.clusterManagerId))
+      }
+    }
+    return result
+  }
+
+  fun removeClusterManagers(clusterManagers: List<ClusterManagerDto>) {
+    clusterManagers.forEach {
+      _clusterManagersController?.removeClusterManager(it.clusterManagerId)
+    }
+  }
+
+  fun clearClusterManagers() {
+    _clusterManagersController?.clearClusterManagers()
   }
 
   fun clear() {
@@ -1042,6 +1095,9 @@ abstract class GoogleMapsBaseMapView(
       ) {}
     }
     getMap().setOnCameraIdleListener {
+      // Notify cluster managers about camera idle event (always)
+      _clusterManagersController?.onCameraIdle()
+      // Send Flutter event only if camera change events are enabled
       val position = Convert.convertCameraPositionToDto(getMap().cameraPosition)
       viewEventApi?.onCameraChanged(
         getViewId().toLong(),

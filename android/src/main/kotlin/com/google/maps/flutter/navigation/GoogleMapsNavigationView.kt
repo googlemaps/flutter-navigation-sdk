@@ -35,7 +35,7 @@ internal constructor(
   private val viewRegistry: GoogleMapsViewRegistry,
   viewEventApi: ViewEventApi,
   private val imageRegistry: ImageRegistry,
-) : PlatformView, GoogleMapsBaseMapView(viewId, mapOptions, viewEventApi, imageRegistry) {
+) : PlatformView, GoogleMapsBaseMapView(context, viewId, mapOptions, viewEventApi, imageRegistry) {
   private val _navigationView: NavigationView = NavigationView(context, mapOptions.googleMapOptions)
 
   /// Default values for UI features.
