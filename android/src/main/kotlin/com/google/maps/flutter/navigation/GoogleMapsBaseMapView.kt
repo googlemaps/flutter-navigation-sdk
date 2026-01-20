@@ -37,6 +37,7 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.Polygon
 import com.google.android.gms.maps.model.Polyline
+import com.google.maps.android.collections.MarkerManager
 
 abstract class GoogleMapsBaseMapView(
   private val context: android.content.Context,
@@ -46,6 +47,8 @@ abstract class GoogleMapsBaseMapView(
   private val imageRegistry: ImageRegistry,
 ) {
   private var _map: GoogleMap? = null
+  private var _markerManager: MarkerManager? = null
+  private var _markerCollection: MarkerManager.Collection? = null
   private val _markers = mutableListOf<MarkerController>()
   private val _polygons = mutableListOf<PolygonController>()
   private val _polylines = mutableListOf<PolylineController>()
@@ -130,10 +133,14 @@ abstract class GoogleMapsBaseMapView(
   // Method to set the _map object
   protected fun setMap(map: GoogleMap) {
     _map = map
-    // Initialize cluster managers controller
+    // Initialize MarkerManager for coordinating all markers
+    _markerManager = MarkerManager(map)
+    // Create a collection for regular (non-clustered) markers
+    _markerCollection = _markerManager?.newCollection()
+    // Initialize cluster managers controller with MarkerManager
     if (viewId != null && viewEventApi != null) {
       _clusterManagersController = ClusterManagersController(context, viewEventApi, viewId)
-      _clusterManagersController?.init(map)
+      _clusterManagersController?.init(map, _markerManager!!)
     }
   }
 
@@ -188,7 +195,7 @@ abstract class GoogleMapsBaseMapView(
         LatLngDto(it.latitude, it.longitude),
       ) {}
     }
-    getMap().setOnMarkerClickListener { marker ->
+    _markerCollection?.setOnMarkerClickListener { marker ->
       val markerId = findMarkerId(marker)
       val controller = findMarkerController(markerId)
 
@@ -200,25 +207,28 @@ abstract class GoogleMapsBaseMapView(
       // appear.
       controller?.consumeTapEvents ?: false
     }
-    getMap()
-      .setOnMarkerDragListener(
-        object : OnMarkerDragListener {
-          override fun onMarkerDrag(marker: Marker) {
-            sendMarkerDragEvent(marker, MarkerDragEventTypeDto.DRAG)
-          }
-
-          override fun onMarkerDragEnd(marker: Marker) {
-            sendMarkerDragEvent(marker, MarkerDragEventTypeDto.DRAG_END)
-          }
-
-          override fun onMarkerDragStart(marker: Marker) {
-            sendMarkerDragEvent(marker, MarkerDragEventTypeDto.DRAG_START)
-          }
+    _markerCollection?.setOnMarkerDragListener(
+      object : OnMarkerDragListener {
+        override fun onMarkerDrag(marker: Marker) {
+          sendMarkerDragEvent(marker, MarkerDragEventTypeDto.DRAG)
         }
-      )
-    getMap().setOnInfoWindowClickListener { marker ->
+
+        override fun onMarkerDragEnd(marker: Marker) {
+          sendMarkerDragEvent(marker, MarkerDragEventTypeDto.DRAG_END)
+        }
+
+        override fun onMarkerDragStart(marker: Marker) {
+          sendMarkerDragEvent(marker, MarkerDragEventTypeDto.DRAG_START)
+        }
+      }
+    )
+    _markerCollection?.setOnInfoWindowClickListener { marker ->
       sendMarkerEvent(marker, MarkerEventTypeDto.INFO_WINDOW_CLICKED)
     }
+    _markerCollection?.setOnInfoWindowLongClickListener { marker ->
+      sendMarkerEvent(marker, MarkerEventTypeDto.INFO_WINDOW_LONG_CLICKED)
+    }
+    // Info window close listener must be set on GoogleMap directly (not available on MarkerManager.Collection)
     getMap().setOnInfoWindowCloseListener { marker ->
       try {
         sendMarkerEvent(marker, MarkerEventTypeDto.INFO_WINDOW_CLOSED)
@@ -227,9 +237,6 @@ abstract class GoogleMapsBaseMapView(
         // As marker and it's information that maps the marker to the markerId is removed,
         // [FlutterError] is thrown. In this case info window close event is not sent.
       }
-    }
-    getMap().setOnInfoWindowLongClickListener { marker ->
-      sendMarkerEvent(marker, MarkerEventTypeDto.INFO_WINDOW_LONG_CLICKED)
     }
 
     getMap().setOnPolygonClickListener { polygon ->
@@ -781,7 +788,7 @@ abstract class GoogleMapsBaseMapView(
         val builder = MarkerBuilder()
         Convert.sinkMarkerOptions(it.options, builder, imageRegistry)
         val options = builder.build()
-        val marker = getMap().addMarker(options)
+        val marker = _markerCollection?.addMarker(options)
         if (marker != null) {
           val registeredImage =
             it.options.icon.registeredImageId?.let { id -> imageRegistry.findRegisteredImage(id) }
@@ -837,7 +844,7 @@ abstract class GoogleMapsBaseMapView(
   }
 
   fun clearMarkers() {
-    _markers.forEach { controller -> controller.remove() }
+    _markerCollection?.clear()
     _markers.clear()
   }
 

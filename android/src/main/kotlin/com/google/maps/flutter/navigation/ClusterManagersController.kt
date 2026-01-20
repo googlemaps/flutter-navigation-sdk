@@ -19,6 +19,7 @@ package com.google.maps.flutter.navigation
 import android.content.Context
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
+import com.google.maps.android.collections.MarkerManager
 
 /** Controller for managing multiple ClusterManager instances. */
 class ClusterManagersController(
@@ -27,23 +28,27 @@ class ClusterManagersController(
   private val viewId: Int,
 ) {
   private var googleMap: GoogleMap? = null
+  private var markerManager: MarkerManager? = null
   private val clusterManagers = mutableMapOf<String, ClusterManagerController>()
   private val clusterItemsByManager = mutableMapOf<String, MutableMap<String, MarkerClusterItem>>()
 
-  /** Initializes the controller with a GoogleMap instance. */
-  fun init(googleMap: GoogleMap) {
+  /** Initializes the controller with a GoogleMap instance and MarkerManager. */
+  fun init(googleMap: GoogleMap, markerManager: MarkerManager) {
     this.googleMap = googleMap
+    this.markerManager = markerManager
   }
 
   /** Adds a new cluster manager. */
   fun addClusterManager(clusterManagerId: String): ClusterManagerController? {
     val map = googleMap ?: return null
+    val manager = markerManager ?: return null
 
     if (clusterManagers.containsKey(clusterManagerId)) {
       return clusterManagers[clusterManagerId]
     }
 
-    val controller = ClusterManagerController(clusterManagerId, context, map, viewEventApi, viewId)
+    val controller =
+      ClusterManagerController(clusterManagerId, context, map, manager, viewEventApi, viewId)
 
     clusterManagers[clusterManagerId] = controller
     clusterItemsByManager[clusterManagerId] = mutableMapOf()

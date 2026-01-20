@@ -22,12 +22,14 @@ import com.google.android.gms.maps.model.Marker
 import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.clustering.view.DefaultClusterRenderer
+import com.google.maps.android.collections.MarkerManager
 
 /** Controller for managing a single ClusterManager instance. */
 class ClusterManagerController(
   val clusterManagerId: String,
   private val context: Context,
   private val googleMap: GoogleMap,
+  private val markerManager: MarkerManager,
   private val viewEventApi: ViewEventApi,
   private val viewId: Int,
 ) {
@@ -36,7 +38,7 @@ class ClusterManagerController(
   private val markerToClusterItem = mutableMapOf<Marker, MarkerClusterItem>()
 
   init {
-    clusterManager = ClusterManager(context, googleMap)
+    clusterManager = ClusterManager(context, googleMap, markerManager)
     clusterRenderer = ClusterRenderer(context, googleMap, clusterManager)
     clusterManager.renderer = clusterRenderer
 
