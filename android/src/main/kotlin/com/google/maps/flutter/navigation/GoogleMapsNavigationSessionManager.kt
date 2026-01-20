@@ -809,25 +809,27 @@ constructor(
         // Map to store all the unique images for each maneuver and lane
         val imageDescriptors: MutableMap<String, ImageDescriptorDto?> = mutableMapOf()
 
-        (navInfo.remainingSteps + navInfo.currentStep).forEach { stepInfo ->
-          // Handle maneuver images
-          if (generateManeuverImages) {
-            val maneuverKey = Convert.convertManeuverToKey(stepInfo.maneuver)
-            if (!imageDescriptors.containsKey(maneuverKey)) {
-              val imageDescriptor = getManeuverImageDescriptorForStepInfo(stepInfo)
-              imageDescriptors[maneuverKey] = imageDescriptor
+        (navInfo.remainingSteps + navInfo.currentStep)
+          .filter { it != null }
+          .forEach { stepInfo ->
+            // Handle maneuver images
+            if (generateManeuverImages) {
+              val maneuverKey = Convert.convertManeuverToKey(stepInfo.maneuver)
+              if (!imageDescriptors.containsKey(maneuverKey)) {
+                val imageDescriptor = getManeuverImageDescriptorForStepInfo(stepInfo)
+                imageDescriptors[maneuverKey] = imageDescriptor
+              }
             }
-          }
 
-          // Handle lane images
-          if (generateLaneImages && !stepInfo.lanes.isNullOrEmpty()) {
-            val laneKey = Convert.convertLanesToKey(stepInfo)
-            if (!imageDescriptors.containsKey(laneKey)) {
-              val imageDescriptor = getLanesImageDescriptorForStepInfo(stepInfo)
-              imageDescriptors[laneKey] = imageDescriptor
+            // Handle lane images
+            if (generateLaneImages && !stepInfo.lanes.isNullOrEmpty()) {
+              val laneKey = Convert.convertLanesToKey(stepInfo)
+              if (!imageDescriptors.containsKey(laneKey)) {
+                val imageDescriptor = getLanesImageDescriptorForStepInfo(stepInfo)
+                imageDescriptors[laneKey] = imageDescriptor
+              }
             }
           }
-        }
 
         navigationSessionEventApi.onNavInfo(Convert.convertNavInfo(navInfo, imageDescriptors)) {}
       }
