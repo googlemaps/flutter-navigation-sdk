@@ -41,21 +41,28 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
   bool _showCameraUpdates = false;
   String _latestCameraUpdate = '';
   bool _isFollowingLocation = false;
+  bool _ready = false;
 
   // ignore: use_setters_to_change_properties
   Future<void> _onViewCreated(GoogleNavigationViewController controller) async {
-    _navigationViewController = controller;
-    calculateFocusCenter();
-    _minZoomLevel = await _navigationViewController.getMinZoomPreference();
-    _maxZoomLevel = await _navigationViewController.getMaxZoomPreference();
-
-    if (mounted) {
-      setState(() {});
+    try {
+      _navigationViewController = controller;
+      calculateFocusCenter();
+      _minZoomLevel = await _navigationViewController.getMinZoomPreference();
+      _maxZoomLevel = await _navigationViewController.getMaxZoomPreference();
+      if (mounted) {
+        setState(() {
+          _ready = true;
+        });
+      }
+    } on ViewNotFoundException catch (_) {
+      // View not found exception is thrown if view is disposed before async
+      // method is handled on native side.
     }
   }
 
   Future<void> _startNavigation() async {
-    showMessage('Starting navigation.');
+    _showMessage('Starting navigation.');
     if (!await GoogleMapsNavigator.areTermsAccepted()) {
       await GoogleMapsNavigator.showTermsAndConditionsDialog(
         'test_title',
@@ -100,7 +107,7 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
         });
       }
     } else {
-      showMessage('Starting navigation failed.');
+      _showMessage('Starting navigation failed.');
     }
   }
 
@@ -147,7 +154,10 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
           onCameraStartedFollowingLocation: _onCameraStartedFollowingLocation,
           onCameraStoppedFollowingLocation: _onCameraStoppedFollowingLocation,
         ),
-        getOverlayOptionsButton(context, onPressed: () => toggleOverlay()),
+        getOverlayOptionsButton(
+          context,
+          onPressed: _ready ? () => toggleOverlay() : null,
+        ),
         if (_showCameraUpdates)
           Container(
             width: 180,
@@ -164,7 +174,7 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
       return;
     }
     if (_showCameraUpdates) {
-      showMessage(
+      _showMessage(
         gesture
             ? 'Camera move started by gesture'
             : 'Camera move started by action',
@@ -215,7 +225,7 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
     });
   }
 
-  void showMessage(String message) {
+  void _showMessage(String message) {
     if (!mounted) {
       return;
     }
@@ -237,7 +247,7 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
       return;
     }
     if (_displayAnimationFinished) {
-      showMessage(success ? 'Animation finished' : 'Animation canceled');
+      _showMessage(success ? 'Animation finished' : 'Animation canceled');
     }
   }
 
@@ -247,8 +257,9 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
       setState(() {
         _minZoomLevel = newMinZoomLevel;
       });
-    } catch (e) {
-      showMessage(e.toString());
+    } on MinZoomRangeException catch (e) {
+      debugPrint(e.toString());
+      _showMessage('Cannot set min zoom');
     }
   }
 
@@ -258,8 +269,9 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
       setState(() {
         _maxZoomLevel = newMaxZoomLevel;
       });
-    } catch (e) {
-      showMessage(e.toString());
+    } on MaxZoomRangeException catch (e) {
+      debugPrint(e.toString());
+      _showMessage('Cannot set max zoom');
     }
   }
 
@@ -689,7 +701,7 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
 
             // Hide overlay to show the message.
             hideOverlay();
-            showMessage(
+            _showMessage(
               'Camera position\n\nTilt: ${position.tilt}°\nZoom: ${position.zoom}\nBearing: ${position.bearing}°\nTarget: ${position.target.latitude.toStringAsFixed(4)}, ${position.target.longitude.toStringAsFixed(4)}',
             );
           },

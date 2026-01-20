@@ -27,7 +27,6 @@ enum GoogleMapsNavigationSessionManagerError: Error {
   case sessionNotInitialized
   case noViewRegistry
   case viewNotFound
-  case notSupported
 }
 
 // Expose the navigator to the google_maps_driver side.

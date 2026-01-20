@@ -62,7 +62,7 @@ class _NavigationWithoutMapPageState
       await GoogleMapsNavigator.resetTermsAccepted();
       return true;
     } on ResetTermsAndConditionsException {
-      showMessage(
+      _showMessage(
         'Cannot reset the terms after the navigation session has already been initialized.',
       );
       return false;
@@ -88,7 +88,7 @@ class _NavigationWithoutMapPageState
             cancelButtonTextColor: Color(0xFFD32F2F),
           ),
         );
-    showMessage(accepted ? 'Terms accepted' : 'Terms not accepted');
+    _showMessage(accepted ? 'Terms accepted' : 'Terms not accepted');
     setState(() {
       termsAccepted = accepted;
     });
@@ -103,13 +103,13 @@ class _NavigationWithoutMapPageState
     } on SessionInitializationException catch (e) {
       switch (e.code) {
         case SessionInitializationError.locationPermissionMissing:
-          showMessage(
+          _showMessage(
             'No user location is available. Did you allow location permission?',
           );
         case SessionInitializationError.termsNotAccepted:
-          showMessage('Accept the terms and conditions dialog first.');
+          _showMessage('Accept the terms and conditions dialog first.');
         case SessionInitializationError.notAuthorized:
-          showMessage(
+          _showMessage(
             'Your API key is empty, invalid or not authorized to use Navigation.',
           );
       }
@@ -149,56 +149,56 @@ class _NavigationWithoutMapPageState
             routeCalculated = true;
           });
         case NavigationRouteStatus.internalError:
-          showMessage(
+          _showMessage(
             'Unexpected internal error occured. Please restart the app.',
           );
         case NavigationRouteStatus.routeNotFound:
-          showMessage('The route could not be calculated.');
+          _showMessage('The route could not be calculated.');
         case NavigationRouteStatus.networkError:
-          showMessage(
+          _showMessage(
             'Working network connection is required to calculate the route.',
           );
         case NavigationRouteStatus.quotaExceeded:
-          showMessage('Insufficient API quota to use the navigation.');
+          _showMessage('Insufficient API quota to use the navigation.');
         case NavigationRouteStatus.quotaCheckFailed:
-          showMessage(
+          _showMessage(
             'API quota check failed, cannot authorize the navigation.',
           );
         case NavigationRouteStatus.apiKeyNotAuthorized:
-          showMessage('A valid API key is required to use the navigation.');
+          _showMessage('A valid API key is required to use the navigation.');
         case NavigationRouteStatus.statusCanceled:
-          showMessage(
+          _showMessage(
             'The route calculation was canceled in favor of a newer one.',
           );
         case NavigationRouteStatus.duplicateWaypointsError:
-          showMessage(
+          _showMessage(
             'The route could not be calculated because of duplicate waypoints.',
           );
         case NavigationRouteStatus.noWaypointsError:
-          showMessage(
+          _showMessage(
             'The route could not be calculated because no waypoints were provided.',
           );
         case NavigationRouteStatus.locationUnavailable:
-          showMessage(
+          _showMessage(
             'No user location is available. Did you allow location permission?',
           );
         case NavigationRouteStatus.waypointError:
-          showMessage('Invalid waypoints provided.');
+          _showMessage('Invalid waypoints provided.');
         case NavigationRouteStatus.travelModeUnsupported:
-          showMessage(
+          _showMessage(
             'The route could not calculated for the given travel mode.',
           );
         case NavigationRouteStatus.unknown:
-          showMessage(
+          _showMessage(
             'The route could not be calculated due to an unknown error.',
           );
         case NavigationRouteStatus.locationUnknown:
-          showMessage(
+          _showMessage(
             'The route could not be calculated, because the user location is unknown.',
           );
       }
     } on SessionNotInitializedException {
-      showMessage(
+      _showMessage(
         'Cannot set the destination before the navigation session has been initialized.',
       );
     }
@@ -211,7 +211,7 @@ class _NavigationWithoutMapPageState
         routeCalculated = false;
       });
     } on SessionNotInitializedException {
-      showMessage(
+      _showMessage(
         'Cannot clear the destinations before the navigation session has been initialized.',
       );
     }
@@ -226,7 +226,7 @@ class _NavigationWithoutMapPageState
         });
       }
     } on SessionNotInitializedException {
-      showMessage(
+      _showMessage(
         'Cannot start the guidance before the navigation session has been initialized.',
       );
     }
@@ -241,7 +241,7 @@ class _NavigationWithoutMapPageState
         });
       }
     } on SessionNotInitializedException {
-      showMessage(
+      _showMessage(
         'Cannot stop the guidance before the navigation session has been initialized.',
       );
     }
@@ -252,9 +252,9 @@ class _NavigationWithoutMapPageState
       await GoogleMapsNavigator.simulator.setUserLocation(
         const LatLng(latitude: 37.528560, longitude: -122.361996),
       );
-      showMessage('User location simulated.');
+      _showMessage('User location simulated.');
     } on SessionNotInitializedException {
-      showMessage(
+      _showMessage(
         'Cannot set the user location before the navigation session has been initialized.',
       );
     }
@@ -263,9 +263,9 @@ class _NavigationWithoutMapPageState
   Future<void> simulateLocationsAlongExistingRoute() async {
     try {
       await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
-      showMessage('Simulating user location along existing route.');
+      _showMessage('Simulating user location along existing route.');
     } on SessionNotInitializedException {
-      showMessage(
+      _showMessage(
         'Cannot start the simulation before the navigation session has been initialized.',
       );
     }
@@ -274,9 +274,9 @@ class _NavigationWithoutMapPageState
   Future<void> pauseSimulation() async {
     try {
       await GoogleMapsNavigator.simulator.pauseSimulation();
-      showMessage('Simulation paused.');
+      _showMessage('Simulation paused.');
     } on SessionNotInitializedException {
-      showMessage(
+      _showMessage(
         'Cannot pause the simulation before the navigation session has been initialized.',
       );
     }
@@ -285,9 +285,9 @@ class _NavigationWithoutMapPageState
   Future<void> resumeSimulation() async {
     try {
       await GoogleMapsNavigator.simulator.resumeSimulation();
-      showMessage('Simulation resumed.');
+      _showMessage('Simulation resumed.');
     } on SessionNotInitializedException {
-      showMessage(
+      _showMessage(
         'Cannot resume the simulation before the navigation session has been initialized.',
       );
     }
@@ -296,16 +296,16 @@ class _NavigationWithoutMapPageState
   Future<void> stopSimulation() async {
     try {
       await GoogleMapsNavigator.simulator.removeUserLocation();
-      showMessage('The simulation stopped.');
+      _showMessage('The simulation stopped.');
     } on SessionNotInitializedException {
-      showMessage(
+      _showMessage(
         'Cannot stop the user location simulation before the navigation session has been initialized.',
       );
     }
   }
 
-  void showMessage(String message) {
-    hideMessage();
+  void _showMessage(String message) {
+    _hideMessage();
 
     final SnackBar snackBar = SnackBar(
       content: Text(message),
@@ -314,7 +314,7 @@ class _NavigationWithoutMapPageState
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  void hideMessage() {
+  void _hideMessage() {
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
   }
 

@@ -39,33 +39,23 @@ class ImageRegistryAPIImpl {
     double? height,
   }) async {
     final String newImageId = _createImageId();
-    try {
-      final ImageDescriptorDto addedImage = await _imageApi.registerBitmapImage(
-        newImageId,
-        bitmap,
-        imagePixelRatio,
-        width,
-        height,
-      );
-      return addedImage.toImageDescriptor();
-    } on PlatformException catch (error) {
-      if (error.code == 'imageDecodingFailed') {
-        throw const ImageDecodingFailedException();
-      } else {
-        rethrow;
-      }
-    }
+    final ImageDescriptorDto addedImage = await _imageApi
+        .registerBitmapImage(newImageId, bitmap, imagePixelRatio, width, height)
+        .wrapPlatformException();
+    return addedImage.toImageDescriptor();
   }
 
   /// Delete bitmap from image registry.
-  Future<void> unregisterImage({required ImageDescriptor imageDescriptor}) {
-    return _imageApi.unregisterImage(imageDescriptor.toDto());
-  }
+  Future<void> unregisterImage({required ImageDescriptor imageDescriptor}) =>
+      _imageApi
+          .unregisterImage(imageDescriptor.toDto())
+          .wrapPlatformException();
 
   /// Get all registered bitmaps from image registry.
   Future<List<ImageDescriptor>> getRegisteredImages() async {
     final List<ImageDescriptorDto?> registeredImages = await _imageApi
-        .getRegisteredImages();
+        .getRegisteredImages()
+        .wrapPlatformException();
     return registeredImages
         .whereType<ImageDescriptorDto>()
         .map((ImageDescriptorDto e) => e.toImageDescriptor())
@@ -73,13 +63,12 @@ class ImageRegistryAPIImpl {
   }
 
   /// Remove all registered bitmaps from image registry.
-  Future<void> clearRegisteredImages(RegisteredImageType? filter) {
-    return _imageApi.clearRegisteredImages(filter?.toDto());
-  }
+  Future<void> clearRegisteredImages(RegisteredImageType? filter) =>
+      _imageApi.clearRegisteredImages(filter?.toDto()).wrapPlatformException();
 
   Future<Uint8List?> getRegisteredImageData({
     required ImageDescriptor imageDescriptor,
-  }) {
-    return _imageApi.getRegisteredImageData(imageDescriptor.toDto());
-  }
+  }) => _imageApi
+      .getRegisteredImageData(imageDescriptor.toDto())
+      .wrapPlatformException();
 }

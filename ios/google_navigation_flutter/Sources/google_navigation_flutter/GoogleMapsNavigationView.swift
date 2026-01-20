@@ -17,7 +17,6 @@ import GoogleNavigation
 import UIKit
 
 enum GoogleMapsNavigationViewError: Error {
-  case notSupported
   case markerNotFound
   case polygonNotFound
   case polylineNotFound
@@ -190,14 +189,22 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
 
   func getForceNightMode() throws -> GMSNavigationLightingMode? {
     guard _isNavigationView else {
-      throw GoogleMapsNavigationViewError.notSupported
+      throw PigeonError(
+        code: "notSupported",
+        message: "Night mode is only supported on navigation views.",
+        details: nil
+      )
     }
     return _forceNightMode
   }
 
   func setForceNightMode(_ mode: GMSNavigationLightingMode?) throws {
     guard _isNavigationView else {
-      throw GoogleMapsNavigationViewError.notSupported
+      throw PigeonError(
+        code: "notSupported",
+        message: "Night mode is only supported on navigation views.",
+        details: nil
+      )
     }
     _forceNightMode = mode
     applyForceNightMode()
@@ -312,7 +319,11 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   }
 
   func setZoomControlsEnabled(_ enabled: Bool) throws {
-    throw GoogleMapsNavigationViewError.notSupported
+    throw PigeonError(
+      code: "notSupported",
+      message: "Zoom controls are not supported on iOS.",
+      details: nil
+    )
   }
 
   func setCompassEnabled(_ enabled: Bool) throws {
@@ -336,7 +347,11 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   }
 
   func setMapToolbarEnabled(_ enabled: Bool) throws {
-    throw GoogleMapsNavigationViewError.notSupported
+    throw PigeonError(
+      code: "notSupported",
+      message: "Map toolbar is not supported on iOS.",
+      details: nil
+    )
   }
 
   func setTrafficEnabled(_ enabled: Bool) throws {
@@ -352,7 +367,11 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   }
 
   func isZoomControlsEnabled() throws -> Bool {
-    throw GoogleMapsNavigationViewError.notSupported
+    throw PigeonError(
+      code: "notSupported",
+      message: "Zoom controls are not supported on iOS.",
+      details: nil
+    )
   }
 
   func isCompassEnabled() -> Bool {
@@ -376,7 +395,11 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   }
 
   func isMapToolbarEnabled() throws -> Bool {
-    throw GoogleMapsNavigationViewError.notSupported
+    throw PigeonError(
+      code: "notSupported",
+      message: "Map toolbar is not supported on iOS.",
+      details: nil
+    )
   }
 
   func isTrafficEnabled() -> Bool {

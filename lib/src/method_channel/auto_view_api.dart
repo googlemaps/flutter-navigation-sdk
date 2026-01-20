@@ -15,7 +15,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../google_navigation_flutter.dart';
@@ -88,213 +87,156 @@ class AutoMapViewAPIImpl {
   }
 
   /// Get the preference for whether the my location should be enabled or disabled.
-  Future<bool> isMyLocationEnabled() {
-    return _viewApi.isMyLocationEnabled();
-  }
+  Future<bool> isMyLocationEnabled() =>
+      _viewApi.isMyLocationEnabled().wrapPlatformException();
 
   /// Enabled location in the navigation view.
-  Future<void> setMyLocationEnabled({required bool enabled}) {
-    return _viewApi.setMyLocationEnabled(enabled);
-  }
+  Future<void> setMyLocationEnabled({required bool enabled}) =>
+      _viewApi.setMyLocationEnabled(enabled).wrapPlatformException();
 
   /// Get the map type.
   Future<MapType> getMapType() async {
-    final MapTypeDto mapType = await _viewApi.getMapType();
+    final MapTypeDto mapType = await _viewApi
+        .getMapType()
+        .wrapPlatformException();
     return mapType.toMapType();
   }
 
   /// Modified visible map type.
-  Future<void> setMapType({required MapType mapType}) async {
-    return _viewApi.setMapType(mapType.toDto());
-  }
+  Future<void> setMapType({required MapType mapType}) =>
+      _viewApi.setMapType(mapType.toDto()).wrapPlatformException();
 
   /// Set map style by json string.
-  Future<void> setMapStyle(String? styleJson) async {
-    try {
+  Future<void> setMapStyle(String? styleJson) =>
       // Set the given json to the viewApi or reset the map style if
       // the styleJson is null.
-      return await _viewApi.setMapStyle(styleJson ?? '[]');
-    } on PlatformException catch (error) {
-      if (error.code == 'mapStyleError') {
-        throw const MapStyleException();
-      } else {
-        rethrow;
-      }
-    }
-  }
+      _viewApi.setMapStyle(styleJson ?? '[]').wrapPlatformException();
 
   /// Enables or disables the my-location button.
-  Future<void> setMyLocationButtonEnabled({required bool enabled}) {
-    return _viewApi.setMyLocationButtonEnabled(enabled);
-  }
+  Future<void> setMyLocationButtonEnabled({required bool enabled}) =>
+      _viewApi.setMyLocationButtonEnabled(enabled).wrapPlatformException();
 
   /// Enables or disables if the my location button consumes click events.
   Future<void> setConsumeMyLocationButtonClickEventsEnabled({
     required bool enabled,
-  }) async {
-    return _viewApi.setConsumeMyLocationButtonClickEventsEnabled(enabled);
-  }
+  }) => _viewApi
+      .setConsumeMyLocationButtonClickEventsEnabled(enabled)
+      .wrapPlatformException();
 
   /// Enables or disables the zoom gestures.
-  Future<void> setZoomGesturesEnabled({required bool enabled}) {
-    return _viewApi.setZoomGesturesEnabled(enabled);
-  }
+  Future<void> setZoomGesturesEnabled({required bool enabled}) =>
+      _viewApi.setZoomGesturesEnabled(enabled).wrapPlatformException();
 
   /// Enables or disables the zoom controls.
-  Future<void> setZoomControlsEnabled({required bool enabled}) async {
-    try {
-      return await _viewApi.setZoomControlsEnabled(enabled);
-    } on PlatformException catch (error) {
-      if (error.code == 'notSupported') {
-        throw UnsupportedError('Zoom controls are not supported on iOS.');
-      } else {
-        rethrow;
-      }
-    }
-  }
+  Future<void> setZoomControlsEnabled({required bool enabled}) =>
+      _viewApi.setZoomControlsEnabled(enabled).wrapPlatformException();
 
   /// Enables or disables the compass.
-  Future<void> setCompassEnabled({required bool enabled}) {
-    return _viewApi.setCompassEnabled(enabled);
-  }
+  Future<void> setCompassEnabled({required bool enabled}) =>
+      _viewApi.setCompassEnabled(enabled).wrapPlatformException();
 
   /// Sets the preference for whether rotate gestures should be enabled or disabled.
-  Future<void> setRotateGesturesEnabled({required bool enabled}) {
-    return _viewApi.setRotateGesturesEnabled(enabled);
-  }
+  Future<void> setRotateGesturesEnabled({required bool enabled}) =>
+      _viewApi.setRotateGesturesEnabled(enabled).wrapPlatformException();
 
   /// Sets the preference for whether scroll gestures should be enabled or disabled.
-  Future<void> setScrollGesturesEnabled({required bool enabled}) {
-    return _viewApi.setScrollGesturesEnabled(enabled);
-  }
+  Future<void> setScrollGesturesEnabled({required bool enabled}) =>
+      _viewApi.setScrollGesturesEnabled(enabled).wrapPlatformException();
 
   /// Sets the preference for whether scroll gestures can take place at the same time as a zoom or rotate gesture.
   Future<void> setScrollGesturesDuringRotateOrZoomEnabled({
     required bool enabled,
-  }) {
-    return _viewApi.setScrollGesturesDuringRotateOrZoomEnabled(enabled);
-  }
+  }) => _viewApi
+      .setScrollGesturesDuringRotateOrZoomEnabled(enabled)
+      .wrapPlatformException();
 
   /// Sets the preference for whether tilt gestures should be enabled or disabled.
-  Future<void> setTiltGesturesEnabled({required bool enabled}) {
-    return _viewApi.setTiltGesturesEnabled(enabled);
-  }
+  Future<void> setTiltGesturesEnabled({required bool enabled}) =>
+      _viewApi.setTiltGesturesEnabled(enabled).wrapPlatformException();
 
   /// Sets the preference for whether the Map Toolbar should be enabled or disabled.
-  Future<void> setMapToolbarEnabled({required bool enabled}) async {
-    try {
-      return await _viewApi.setMapToolbarEnabled(enabled);
-    } on PlatformException catch (error) {
-      if (error.code == 'notSupported') {
-        throw UnsupportedError('Map toolbar is not supported on iOS.');
-      } else {
-        rethrow;
-      }
-    }
-  }
+  Future<void> setMapToolbarEnabled({required bool enabled}) =>
+      _viewApi.setMapToolbarEnabled(enabled).wrapPlatformException();
 
   /// Turns the traffic layer on or off.
-  Future<void> setTrafficEnabled({required bool enabled}) {
-    return _viewApi.setTrafficEnabled(enabled);
-  }
+  Future<void> setTrafficEnabled({required bool enabled}) =>
+      _viewApi.setTrafficEnabled(enabled).wrapPlatformException();
 
   /// Get the preference for whether the my location button should be enabled or disabled.
-  Future<bool> isMyLocationButtonEnabled() {
-    return _viewApi.isMyLocationButtonEnabled();
-  }
+  Future<bool> isMyLocationButtonEnabled() =>
+      _viewApi.isMyLocationButtonEnabled().wrapPlatformException();
 
   /// Get the preference for whether the my location button consumes click events.
-  Future<bool> isConsumeMyLocationButtonClickEventsEnabled() {
-    return _viewApi.isConsumeMyLocationButtonClickEventsEnabled();
-  }
+  Future<bool> isConsumeMyLocationButtonClickEventsEnabled() => _viewApi
+      .isConsumeMyLocationButtonClickEventsEnabled()
+      .wrapPlatformException();
 
   /// Gets the preference for whether zoom gestures should be enabled or disabled.
-  Future<bool> isZoomGesturesEnabled() {
-    return _viewApi.isZoomGesturesEnabled();
-  }
+  Future<bool> isZoomGesturesEnabled() =>
+      _viewApi.isZoomGesturesEnabled().wrapPlatformException();
 
   /// Gets the preference for whether zoom controls should be enabled or disabled.
-  Future<bool> isZoomControlsEnabled() async {
-    try {
-      return await _viewApi.isZoomControlsEnabled();
-    } on PlatformException catch (error) {
-      if (error.code == 'notSupported') {
-        throw UnsupportedError('Zoom controls are not supported on iOS.');
-      } else {
-        rethrow;
-      }
-    }
-  }
+  Future<bool> isZoomControlsEnabled() =>
+      _viewApi.isZoomControlsEnabled().wrapPlatformException();
 
   /// Gets the preference for whether compass should be enabled or disabled.
-  Future<bool> isCompassEnabled() {
-    return _viewApi.isCompassEnabled();
-  }
+  Future<bool> isCompassEnabled() =>
+      _viewApi.isCompassEnabled().wrapPlatformException();
 
   /// Gets the preference for whether rotate gestures should be enabled or disabled.
-  Future<bool> isRotateGesturesEnabled() {
-    return _viewApi.isRotateGesturesEnabled();
-  }
+  Future<bool> isRotateGesturesEnabled() =>
+      _viewApi.isRotateGesturesEnabled().wrapPlatformException();
 
   /// Gets the preference for whether scroll gestures should be enabled or disabled.
-  Future<bool> isScrollGesturesEnabled() {
-    return _viewApi.isScrollGesturesEnabled();
-  }
+  Future<bool> isScrollGesturesEnabled() =>
+      _viewApi.isScrollGesturesEnabled().wrapPlatformException();
 
   /// Gets the preference for whether scroll gestures can take place at the same time as a zoom or rotate gesture.
-  Future<bool> isScrollGesturesEnabledDuringRotateOrZoom() {
-    return _viewApi.isScrollGesturesEnabledDuringRotateOrZoom();
-  }
+  Future<bool> isScrollGesturesEnabledDuringRotateOrZoom() => _viewApi
+      .isScrollGesturesEnabledDuringRotateOrZoom()
+      .wrapPlatformException();
 
   /// Gets the preference for whether tilt gestures should be enabled or disabled.
-  Future<bool> isTiltGesturesEnabled() {
-    return _viewApi.isTiltGesturesEnabled();
-  }
+  Future<bool> isTiltGesturesEnabled() =>
+      _viewApi.isTiltGesturesEnabled().wrapPlatformException();
 
   /// Gets whether the Map Toolbar is enabled/disabled.
-  Future<bool> isMapToolbarEnabled() async {
-    try {
-      return await _viewApi.isMapToolbarEnabled();
-    } on PlatformException catch (error) {
-      if (error.code == 'notSupported') {
-        throw UnsupportedError('Map toolbar is not supported on iOS.');
-      } else {
-        rethrow;
-      }
-    }
-  }
+  Future<bool> isMapToolbarEnabled() =>
+      _viewApi.isMapToolbarEnabled().wrapPlatformException();
 
   /// Checks whether the map is drawing traffic data.
-  Future<bool> isTrafficEnabled() {
-    return _viewApi.isTrafficEnabled();
-  }
+  Future<bool> isTrafficEnabled() =>
+      _viewApi.isTrafficEnabled().wrapPlatformException();
 
   /// Sets the Camera to follow the location of the user.
   Future<void> followMyLocation({
     required CameraPerspective perspective,
     required double? zoomLevel,
-  }) {
-    return _viewApi.followMyLocation(perspective.toDto(), zoomLevel);
-  }
+  }) => _viewApi
+      .followMyLocation(perspective.toDto(), zoomLevel)
+      .wrapPlatformException();
 
   /// Gets users current location.
   Future<LatLng?> getMyLocation() async {
-    final LatLngDto? myLocation = await _viewApi.getMyLocation();
-    if (myLocation == null) {
-      return null;
-    }
-    return myLocation.toLatLng();
+    final LatLngDto? myLocation = await _viewApi
+        .getMyLocation()
+        .wrapPlatformException();
+    return myLocation?.toLatLng();
   }
 
   /// Gets the current position of the camera.
   Future<CameraPosition> getCameraPosition() async {
-    final CameraPositionDto position = await _viewApi.getCameraPosition();
+    final CameraPositionDto position = await _viewApi
+        .getCameraPosition()
+        .wrapPlatformException();
     return position.toCameraPosition();
   }
 
   /// Gets the current visible area / camera bounds.
   Future<LatLngBounds> getVisibleRegion() async {
-    final LatLngBoundsDto bounds = await _viewApi.getVisibleRegion();
+    final LatLngBoundsDto bounds = await _viewApi
+        .getVisibleRegion()
+        .wrapPlatformException();
     return LatLngBounds(
       southwest: bounds.southwest.toLatLng(),
       northeast: bounds.northeast.toLatLng(),
@@ -406,82 +348,77 @@ class AutoMapViewAPIImpl {
     switch (cameraUpdate.type) {
       case CameraUpdateType.cameraPosition:
         assert(cameraUpdate.cameraPosition != null, 'Camera position is null');
-        return _viewApi.moveCameraToCameraPosition(
-          cameraUpdate.cameraPosition!.toCameraPosition(),
-        );
+        return _viewApi
+            .moveCameraToCameraPosition(
+              cameraUpdate.cameraPosition!.toCameraPosition(),
+            )
+            .wrapPlatformException();
       case CameraUpdateType.latLng:
-        return _viewApi.moveCameraToLatLng(cameraUpdate.latLng!.toDto());
+        return _viewApi
+            .moveCameraToLatLng(cameraUpdate.latLng!.toDto())
+            .wrapPlatformException();
       case CameraUpdateType.latLngBounds:
         assert(cameraUpdate.padding != null, 'Camera position is null');
-        return _viewApi.moveCameraToLatLngBounds(
-          cameraUpdate.bounds!.toDto(),
-          cameraUpdate.padding!,
-        );
+        return _viewApi
+            .moveCameraToLatLngBounds(
+              cameraUpdate.bounds!.toDto(),
+              cameraUpdate.padding!,
+            )
+            .wrapPlatformException();
       case CameraUpdateType.latLngZoom:
-        return _viewApi.moveCameraToLatLngZoom(
-          cameraUpdate.latLng!.toDto(),
-          cameraUpdate.zoom!,
-        );
+        return _viewApi
+            .moveCameraToLatLngZoom(
+              cameraUpdate.latLng!.toDto(),
+              cameraUpdate.zoom!,
+            )
+            .wrapPlatformException();
       case CameraUpdateType.scrollBy:
-        return _viewApi.moveCameraByScroll(
-          cameraUpdate.scrollByDx!,
-          cameraUpdate.scrollByDy!,
-        );
+        return _viewApi
+            .moveCameraByScroll(
+              cameraUpdate.scrollByDx!,
+              cameraUpdate.scrollByDy!,
+            )
+            .wrapPlatformException();
       case CameraUpdateType.zoomBy:
-        return _viewApi.moveCameraByZoom(
-          cameraUpdate.zoomByAmount!,
-          cameraUpdate.focus?.dx,
-          cameraUpdate.focus?.dy,
-        );
+        return _viewApi
+            .moveCameraByZoom(
+              cameraUpdate.zoomByAmount!,
+              cameraUpdate.focus?.dx,
+              cameraUpdate.focus?.dy,
+            )
+            .wrapPlatformException();
       case CameraUpdateType.zoomTo:
-        return _viewApi.moveCameraToZoom(cameraUpdate.zoom!);
+        return _viewApi
+            .moveCameraToZoom(cameraUpdate.zoom!)
+            .wrapPlatformException();
     }
   }
 
   /// Returns the minimum zoom level.
-  Future<double> getMinZoomPreference() {
-    return _viewApi.getMinZoomPreference();
-  }
+  Future<double> getMinZoomPreference() =>
+      _viewApi.getMinZoomPreference().wrapPlatformException();
 
   /// Returns the maximum zoom level for the current camera position.
-  Future<double> getMaxZoomPreference() {
-    return _viewApi.getMaxZoomPreference();
-  }
+  Future<double> getMaxZoomPreference() =>
+      _viewApi.getMaxZoomPreference().wrapPlatformException();
 
   /// Removes any previously specified upper and lower zoom bounds.
-  Future<void> resetMinMaxZoomPreference() {
-    return _viewApi.resetMinMaxZoomPreference();
-  }
+  Future<void> resetMinMaxZoomPreference() =>
+      _viewApi.resetMinMaxZoomPreference().wrapPlatformException();
 
   /// Sets a preferred lower bound for the camera zoom.
-  Future<void> setMinZoomPreference({required double minZoomPreference}) async {
-    try {
-      return await _viewApi.setMinZoomPreference(minZoomPreference);
-    } on PlatformException catch (error) {
-      if (error.code == 'minZoomGreaterThanMaxZoom') {
-        throw const MinZoomRangeException();
-      } else {
-        rethrow;
-      }
-    }
-  }
+  Future<void> setMinZoomPreference({required double minZoomPreference}) =>
+      _viewApi.setMinZoomPreference(minZoomPreference).wrapPlatformException();
 
   /// Sets a preferred upper bound for the camera zoom.
-  Future<void> setMaxZoomPreference({required double maxZoomPreference}) async {
-    try {
-      return await _viewApi.setMaxZoomPreference(maxZoomPreference);
-    } on PlatformException catch (error) {
-      if (error.code == 'maxZoomLessThanMinZoom') {
-        throw const MaxZoomRangeException();
-      } else {
-        rethrow;
-      }
-    }
-  }
+  Future<void> setMaxZoomPreference({required double maxZoomPreference}) =>
+      _viewApi.setMaxZoomPreference(maxZoomPreference).wrapPlatformException();
 
   /// Get all markers from map view.
   Future<List<Marker?>> getMarkers() async {
-    final List<MarkerDto?> markers = await _viewApi.getMarkers();
+    final List<MarkerDto?> markers = await _viewApi
+        .getMarkers()
+        .wrapPlatformException();
     return markers
         .whereType<MarkerDto>()
         .map((MarkerDto e) => e.toMarker())
@@ -506,9 +443,9 @@ class AutoMapViewAPIImpl {
         .toList();
 
     // Add markers to map
-    final List<MarkerDto?> markersAdded = await _viewApi.addMarkers(
-      markersToAdd,
-    );
+    final List<MarkerDto?> markersAdded = await _viewApi
+        .addMarkers(markersToAdd)
+        .wrapPlatformException();
 
     if (markersToAdd.length != markersAdded.length) {
       throw Exception('Could not add all markers to map view');
@@ -522,55 +459,35 @@ class AutoMapViewAPIImpl {
 
   /// Update markers on the map view.
   Future<List<Marker>> updateMarkers({required List<Marker> markers}) async {
-    try {
-      final List<MarkerDto> markerDtos = markers
-          .map((Marker marker) => marker.toDto())
-          .toList();
-      final List<MarkerDto?> updatedMarkers = await _viewApi.updateMarkers(
-        markerDtos,
-      );
-      return updatedMarkers
-          .whereType<MarkerDto>()
-          .map((MarkerDto markerDto) => markerDto.toMarker())
-          .toList();
-    } on PlatformException catch (error) {
-      if (error.code == 'markerNotFound') {
-        throw const MarkerNotFoundException();
-      } else {
-        rethrow;
-      }
-    }
+    final List<MarkerDto> markerDtos = markers
+        .map((Marker marker) => marker.toDto())
+        .toList();
+    final List<MarkerDto?> updatedMarkers = await _viewApi
+        .updateMarkers(markerDtos)
+        .wrapPlatformException();
+    return updatedMarkers
+        .whereType<MarkerDto>()
+        .map((MarkerDto markerDto) => markerDto.toMarker())
+        .toList();
   }
 
   /// Remove markers from map view.
-  Future<void> removeMarkers({required List<Marker> markers}) async {
-    try {
-      final List<MarkerDto> markerDtos = markers
-          .map((Marker marker) => marker.toDto())
-          .toList();
-      return await _viewApi.removeMarkers(markerDtos);
-    } on PlatformException catch (error) {
-      if (error.code == 'markerNotFound') {
-        throw const MarkerNotFoundException();
-      } else {
-        rethrow;
-      }
-    }
-  }
+  Future<void> removeMarkers({required List<Marker> markers}) => _viewApi
+      .removeMarkers(markers.map((Marker marker) => marker.toDto()).toList())
+      .wrapPlatformException();
 
   /// Remove all markers from map view.
-  Future<void> clearMarkers() {
-    return _viewApi.clearMarkers();
-  }
+  Future<void> clearMarkers() =>
+      _viewApi.clearMarkers().wrapPlatformException();
 
   /// Removes all markers, polylines, polygons, overlays, etc from the map.
-  Future<void> clear() {
-    return _viewApi.clear();
-  }
+  Future<void> clear() => _viewApi.clear().wrapPlatformException();
 
   /// Get all polygons from map view.
   Future<List<Polygon?>> getPolygons() async {
-    final List<PolygonDto?> polygons = await _viewApi.getPolygons();
+    final List<PolygonDto?> polygons = await _viewApi
+        .getPolygons()
+        .wrapPlatformException();
 
     return polygons
         .whereType<PolygonDto>()
@@ -596,9 +513,9 @@ class AutoMapViewAPIImpl {
         .toList();
 
     // Add polygons to map
-    final List<PolygonDto?> polygonsAdded = await _viewApi.addPolygons(
-      polygonsToAdd,
-    );
+    final List<PolygonDto?> polygonsAdded = await _viewApi
+        .addPolygons(polygonsToAdd)
+        .wrapPlatformException();
 
     if (polygonsToAdd.length != polygonsAdded.length) {
       throw Exception('Could not add all polygons to map view');
@@ -614,50 +531,34 @@ class AutoMapViewAPIImpl {
   Future<List<Polygon?>> updatePolygons({
     required List<Polygon> polygons,
   }) async {
-    try {
-      final List<PolygonDto> navigationViewPolygons = polygons
-          .map((Polygon polygon) => polygon.toDto())
-          .toList();
-      final List<PolygonDto?> updatedPolygons = await _viewApi.updatePolygons(
-        navigationViewPolygons,
-      );
-      return updatedPolygons
-          .whereType<PolygonDto>()
-          .map((PolygonDto polygon) => polygon.toPolygon())
-          .toList();
-    } on PlatformException catch (error) {
-      if (error.code == 'polygonNotFound') {
-        throw const PolygonNotFoundException();
-      } else {
-        rethrow;
-      }
-    }
+    final List<PolygonDto> navigationViewPolygons = polygons
+        .map((Polygon polygon) => polygon.toDto())
+        .toList();
+    final List<PolygonDto?> updatedPolygons = await _viewApi
+        .updatePolygons(navigationViewPolygons)
+        .wrapPlatformException();
+    return updatedPolygons
+        .whereType<PolygonDto>()
+        .map((PolygonDto polygon) => polygon.toPolygon())
+        .toList();
   }
 
   /// Remove polygons from map view.
-  Future<void> removePolygons({required List<Polygon> polygons}) async {
-    try {
-      final List<PolygonDto> navigationViewPolygons = polygons
-          .map((Polygon polygon) => polygon.toDto())
-          .toList();
-      return await _viewApi.removePolygons(navigationViewPolygons);
-    } on PlatformException catch (error) {
-      if (error.code == 'polygonNotFound') {
-        throw const PolygonNotFoundException();
-      } else {
-        rethrow;
-      }
-    }
-  }
+  Future<void> removePolygons({required List<Polygon> polygons}) => _viewApi
+      .removePolygons(
+        polygons.map((Polygon polygon) => polygon.toDto()).toList(),
+      )
+      .wrapPlatformException();
 
   /// Remove all polygons from map view.
-  Future<void> clearPolygons() {
-    return _viewApi.clearPolygons();
-  }
+  Future<void> clearPolygons() =>
+      _viewApi.clearPolygons().wrapPlatformException();
 
   /// Get all polylines from map view.
   Future<List<Polyline?>> getPolylines() async {
-    final List<PolylineDto?> polylines = await _viewApi.getPolylines();
+    final List<PolylineDto?> polylines = await _viewApi
+        .getPolylines()
+        .wrapPlatformException();
 
     return polylines
         .whereType<PolylineDto>()
@@ -683,9 +584,9 @@ class AutoMapViewAPIImpl {
         .toList();
 
     // Add polylines to map
-    final List<PolylineDto?> polylinesAdded = await _viewApi.addPolylines(
-      polylinesToAdd,
-    );
+    final List<PolylineDto?> polylinesAdded = await _viewApi
+        .addPolylines(polylinesToAdd)
+        .wrapPlatformException();
 
     if (polylinesToAdd.length != polylinesAdded.length) {
       throw Exception('Could not add all polylines to map view');
@@ -701,49 +602,36 @@ class AutoMapViewAPIImpl {
   Future<List<Polyline?>> updatePolylines({
     required List<Polyline> polylines,
   }) async {
-    try {
-      final List<PolylineDto> navigationViewPolylines = polylines
-          .map((Polyline polyline) => polyline.toNavigationViewPolyline())
-          .toList();
-      final List<PolylineDto?> updatedPolylines = await _viewApi
-          .updatePolylines(navigationViewPolylines);
-      return updatedPolylines
-          .whereType<PolylineDto>()
-          .map((PolylineDto polyline) => polyline.toPolyline())
-          .toList();
-    } on PlatformException catch (error) {
-      if (error.code == 'polylineNotFound') {
-        throw const PolylineNotFoundException();
-      } else {
-        rethrow;
-      }
-    }
+    final List<PolylineDto> navigationViewPolylines = polylines
+        .map((Polyline polyline) => polyline.toNavigationViewPolyline())
+        .toList();
+    final List<PolylineDto?> updatedPolylines = await _viewApi
+        .updatePolylines(navigationViewPolylines)
+        .wrapPlatformException();
+    return updatedPolylines
+        .whereType<PolylineDto>()
+        .map((PolylineDto polyline) => polyline.toPolyline())
+        .toList();
   }
 
   /// Remove polylines from map view.
-  Future<void> removePolylines({required List<Polyline> polylines}) async {
-    try {
-      final List<PolylineDto> navigationViewPolylines = polylines
-          .map((Polyline polyline) => polyline.toNavigationViewPolyline())
-          .toList();
-      return await _viewApi.removePolylines(navigationViewPolylines);
-    } on PlatformException catch (error) {
-      if (error.code == 'polylineNotFound') {
-        throw const PolylineNotFoundException();
-      } else {
-        rethrow;
-      }
-    }
-  }
+  Future<void> removePolylines({required List<Polyline> polylines}) => _viewApi
+      .removePolylines(
+        polylines
+            .map((Polyline polyline) => polyline.toNavigationViewPolyline())
+            .toList(),
+      )
+      .wrapPlatformException();
 
   /// Remove all polylines from map view.
-  Future<void> clearPolylines() {
-    return _viewApi.clearPolylines();
-  }
+  Future<void> clearPolylines() =>
+      _viewApi.clearPolylines().wrapPlatformException();
 
   /// Get all circles from map view.
   Future<List<Circle?>> getCircles() async {
-    final List<CircleDto?> circles = await _viewApi.getCircles();
+    final List<CircleDto?> circles = await _viewApi
+        .getCircles()
+        .wrapPlatformException();
 
     return circles
         .whereType<CircleDto>()
@@ -769,9 +657,9 @@ class AutoMapViewAPIImpl {
         .toList();
 
     // Add circles to map
-    final List<CircleDto?> circlesAdded = await _viewApi.addCircles(
-      circlesToAdd,
-    );
+    final List<CircleDto?> circlesAdded = await _viewApi
+        .addCircles(circlesToAdd)
+        .wrapPlatformException();
 
     if (circlesToAdd.length != circlesAdded.length) {
       throw Exception('Could not add all circles to map view');
@@ -785,67 +673,48 @@ class AutoMapViewAPIImpl {
 
   /// Update circles on the map view.
   Future<List<Circle?>> updateCircles({required List<Circle> circles}) async {
-    try {
-      final List<CircleDto> navigationViewCircles = circles
-          .map((Circle circle) => circle.toDto())
-          .toList();
-      final List<CircleDto?> updatedCircles = await _viewApi.updateCircles(
-        navigationViewCircles,
-      );
+    final List<CircleDto> navigationViewCircles = circles
+        .map((Circle circle) => circle.toDto())
+        .toList();
+    final List<CircleDto?> updatedCircles = await _viewApi
+        .updateCircles(navigationViewCircles)
+        .wrapPlatformException();
 
-      return updatedCircles
-          .whereType<CircleDto>()
-          .map((CircleDto circle) => circle.toCircle())
-          .toList();
-    } on PlatformException catch (error) {
-      if (error.code == 'circleNotFound') {
-        throw const CircleNotFoundException();
-      } else {
-        rethrow;
-      }
-    }
+    return updatedCircles
+        .whereType<CircleDto>()
+        .map((CircleDto circle) => circle.toCircle())
+        .toList();
   }
 
   /// Remove circles from map view.
-  Future<void> removeCircles({required List<Circle> circles}) async {
-    try {
-      final List<CircleDto> navigationViewCircles = circles
-          .map((Circle circle) => circle.toDto())
-          .toList();
-      return await _viewApi.removeCircles(navigationViewCircles);
-    } on PlatformException catch (error) {
-      if (error.code == 'circleNotFound') {
-        throw const CircleNotFoundException();
-      } else {
-        rethrow;
-      }
-    }
-  }
+  Future<void> removeCircles({required List<Circle> circles}) => _viewApi
+      .removeCircles(circles.map((Circle circle) => circle.toDto()).toList())
+      .wrapPlatformException();
 
   /// Remove all circles from map view.
-  Future<void> clearCircles() {
-    return _viewApi.clearCircles();
-  }
+  Future<void> clearCircles() =>
+      _viewApi.clearCircles().wrapPlatformException();
 
   /// Register camera changed listeners.
-  Future<void> enableOnCameraChangedEvents() {
-    return _viewApi.enableOnCameraChangedEvents();
-  }
+  Future<void> enableOnCameraChangedEvents() =>
+      _viewApi.enableOnCameraChangedEvents().wrapPlatformException();
 
-  Future<void> setPadding({required EdgeInsets padding}) {
-    return _viewApi.setPadding(
-      MapPaddingDto(
-        top: padding.top.toInt(),
-        left: padding.left.toInt(),
-        bottom: padding.bottom.toInt(),
-        right: padding.right.toInt(),
-      ),
-    );
-  }
+  Future<void> setPadding({required EdgeInsets padding}) => _viewApi
+      .setPadding(
+        MapPaddingDto(
+          top: padding.top.toInt(),
+          left: padding.left.toInt(),
+          bottom: padding.bottom.toInt(),
+          right: padding.right.toInt(),
+        ),
+      )
+      .wrapPlatformException();
 
   // Gets the map padding from the map view.
   Future<EdgeInsets> getPadding() async {
-    final MapPaddingDto padding = await _viewApi.getPadding();
+    final MapPaddingDto padding = await _viewApi
+        .getPadding()
+        .wrapPlatformException();
     return EdgeInsets.only(
       top: padding.top.toDouble(),
       left: padding.left.toDouble(),
@@ -854,9 +723,8 @@ class AutoMapViewAPIImpl {
     );
   }
 
-  Future<bool> isAutoScreenAvailable() {
-    return _viewApi.isAutoScreenAvailable();
-  }
+  Future<bool> isAutoScreenAvailable() =>
+      _viewApi.isAutoScreenAvailable().wrapPlatformException();
 
   /// Get custom navigation auto event stream from the auto view.
   Stream<CustomNavigationAutoEvent> getCustomNavigationAutoEventStream() {

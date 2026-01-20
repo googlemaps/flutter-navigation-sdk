@@ -76,10 +76,3 @@ Future<Image?> getRegisteredImage(ImageDescriptor imageDescriptor) async {
       .getRegisteredImageData(imageDescriptor: imageDescriptor);
   return pngBytes != null ? Image.memory(pngBytes) : null;
 }
-
-/// [registerBitmapImage] failed to decode bitmap from byte array.
-/// {@category Image Registry}
-class ImageDecodingFailedException implements Exception {
-  /// Default constructor for [ImageDecodingFailedException].
-  const ImageDecodingFailedException();
-}
