@@ -354,10 +354,6 @@ void main() {
       'all typed exceptions extend GoogleMapsNavigationPlatformException',
       () {
         final StackTrace stackTrace = StackTrace.current;
-        final PlatformException basePlatformException = PlatformException(
-          code: 'test',
-          message: 'test message',
-        );
 
         // Create each exception type and verify hierarchy
         final List<GoogleMapsNavigationPlatformException> exceptions =
