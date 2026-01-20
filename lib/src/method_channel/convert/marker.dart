@@ -50,6 +50,7 @@ extension ConvertMarkerOptions on MarkerOptions {
       infoWindow: infoWindow.toDto(),
       visible: visible,
       zIndex: zIndex,
+      clusterManagerId: clusterManagerId,
     );
   }
 }
@@ -71,6 +72,7 @@ extension ConvertMarkerOptionsDto on MarkerOptionsDto {
       infoWindow: infoWindow.toInfoWindow(),
       visible: visible,
       zIndex: zIndex,
+      clusterManagerId: clusterManagerId,
     );
   }
 }

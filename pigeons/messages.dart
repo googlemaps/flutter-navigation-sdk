@@ -223,6 +223,7 @@ class MarkerOptionsDto {
     required this.visible,
     required this.zIndex,
     required this.icon,
+    this.clusterManagerId,
   });
 
   final double alpha;
@@ -236,6 +237,7 @@ class MarkerOptionsDto {
   final bool visible;
   final double zIndex;
   final ImageDescriptorDto icon;
+  final String? clusterManagerId;
 }
 
 enum RegisteredImageTypeDto {
@@ -286,6 +288,38 @@ enum MarkerEventTypeDto {
 }
 
 enum MarkerDragEventTypeDto { drag, dragStart, dragEnd }
+
+/// Cluster manager for grouping nearby markers.
+class ClusterManagerDto {
+  ClusterManagerDto({required this.clusterManagerId});
+
+  /// Uniquely identifies a cluster manager.
+  final String clusterManagerId;
+}
+
+/// Represents a cluster of markers.
+class ClusterDto {
+  ClusterDto({
+    required this.clusterManagerId,
+    required this.position,
+    required this.markerIds,
+  });
+
+  /// The ID of the cluster manager this cluster belongs to.
+  final String clusterManagerId;
+
+  /// The position of the cluster on the map.
+  final LatLngDto position;
+
+  /// The list of marker IDs that belong to this cluster.
+  final List<String> markerIds;
+}
+
+/// Event type for cluster interactions.
+enum ClusterEventTypeDto {
+  /// User tapped on a cluster.
+  clicked,
+}
 
 /// Represents a point of interest (POI) on the map.
 /// POIs include parks, schools, government buildings, and businesses.
@@ -622,6 +656,18 @@ abstract class MapViewApi {
   void clearMarkers(int viewId);
   void clear(int viewId);
 
+  // Cluster manager methods
+  List<ClusterManagerDto> getClusterManagers(int viewId);
+  List<ClusterManagerDto> addClusterManagers(
+    int viewId,
+    List<ClusterManagerDto> clusterManagers,
+  );
+  void removeClusterManagers(
+    int viewId,
+    List<ClusterManagerDto> clusterManagers,
+  );
+  void clearClusterManagers(int viewId);
+
   List<PolygonDto> getPolygons(int viewId);
   List<PolygonDto> addPolygons(int viewId, List<PolygonDto> polygons);
   List<PolygonDto> updatePolygons(int viewId, List<PolygonDto> polygons);
@@ -680,6 +726,12 @@ abstract class ViewEventApi {
     String markerId,
     MarkerDragEventTypeDto eventType,
     LatLngDto position,
+  );
+  void onClusterEvent(
+    int viewId,
+    String clusterManagerId,
+    ClusterEventTypeDto eventType,
+    ClusterDto cluster,
   );
   void onPolygonClicked(int viewId, String polygonId);
   void onPolylineClicked(int viewId, String polylineId);

@@ -58,189 +58,198 @@ class _PigeonCodec extends StandardMessageCodec {
     } else if (value is MarkerDragEventTypeDto) {
       buffer.putUint8(137);
       writeValue(buffer, value.index);
-    } else if (value is StrokeJointTypeDto) {
+    } else if (value is ClusterEventTypeDto) {
       buffer.putUint8(138);
       writeValue(buffer, value.index);
-    } else if (value is PatternTypeDto) {
+    } else if (value is StrokeJointTypeDto) {
       buffer.putUint8(139);
       writeValue(buffer, value.index);
-    } else if (value is CameraEventTypeDto) {
+    } else if (value is PatternTypeDto) {
       buffer.putUint8(140);
       writeValue(buffer, value.index);
-    } else if (value is AlternateRoutesStrategyDto) {
+    } else if (value is CameraEventTypeDto) {
       buffer.putUint8(141);
       writeValue(buffer, value.index);
-    } else if (value is RoutingStrategyDto) {
+    } else if (value is AlternateRoutesStrategyDto) {
       buffer.putUint8(142);
       writeValue(buffer, value.index);
-    } else if (value is TravelModeDto) {
+    } else if (value is RoutingStrategyDto) {
       buffer.putUint8(143);
       writeValue(buffer, value.index);
-    } else if (value is RouteStatusDto) {
+    } else if (value is TravelModeDto) {
       buffer.putUint8(144);
       writeValue(buffer, value.index);
-    } else if (value is TrafficDelaySeverityDto) {
+    } else if (value is RouteStatusDto) {
       buffer.putUint8(145);
       writeValue(buffer, value.index);
-    } else if (value is AudioGuidanceTypeDto) {
+    } else if (value is TrafficDelaySeverityDto) {
       buffer.putUint8(146);
       writeValue(buffer, value.index);
-    } else if (value is SpeedAlertSeverityDto) {
+    } else if (value is AudioGuidanceTypeDto) {
       buffer.putUint8(147);
       writeValue(buffer, value.index);
-    } else if (value is RouteSegmentTrafficDataStatusDto) {
+    } else if (value is SpeedAlertSeverityDto) {
       buffer.putUint8(148);
+      writeValue(buffer, value.index);
+    } else if (value is RouteSegmentTrafficDataStatusDto) {
+      buffer.putUint8(149);
       writeValue(buffer, value.index);
     } else if (value
         is RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto) {
-      buffer.putUint8(149);
-      writeValue(buffer, value.index);
-    } else if (value is ManeuverDto) {
       buffer.putUint8(150);
       writeValue(buffer, value.index);
-    } else if (value is DrivingSideDto) {
+    } else if (value is ManeuverDto) {
       buffer.putUint8(151);
       writeValue(buffer, value.index);
-    } else if (value is NavStateDto) {
+    } else if (value is DrivingSideDto) {
       buffer.putUint8(152);
       writeValue(buffer, value.index);
-    } else if (value is LaneShapeDto) {
+    } else if (value is NavStateDto) {
       buffer.putUint8(153);
       writeValue(buffer, value.index);
-    } else if (value is TaskRemovedBehaviorDto) {
+    } else if (value is LaneShapeDto) {
       buffer.putUint8(154);
       writeValue(buffer, value.index);
-    } else if (value is MapOptionsDto) {
+    } else if (value is TaskRemovedBehaviorDto) {
       buffer.putUint8(155);
-      writeValue(buffer, value.encode());
-    } else if (value is NavigationViewOptionsDto) {
+      writeValue(buffer, value.index);
+    } else if (value is MapOptionsDto) {
       buffer.putUint8(156);
       writeValue(buffer, value.encode());
-    } else if (value is ViewCreationOptionsDto) {
+    } else if (value is NavigationViewOptionsDto) {
       buffer.putUint8(157);
       writeValue(buffer, value.encode());
-    } else if (value is CameraPositionDto) {
+    } else if (value is ViewCreationOptionsDto) {
       buffer.putUint8(158);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerDto) {
+    } else if (value is CameraPositionDto) {
       buffer.putUint8(159);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerOptionsDto) {
+    } else if (value is MarkerDto) {
       buffer.putUint8(160);
       writeValue(buffer, value.encode());
-    } else if (value is ImageDescriptorDto) {
+    } else if (value is MarkerOptionsDto) {
       buffer.putUint8(161);
       writeValue(buffer, value.encode());
-    } else if (value is InfoWindowDto) {
+    } else if (value is ImageDescriptorDto) {
       buffer.putUint8(162);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerAnchorDto) {
+    } else if (value is InfoWindowDto) {
       buffer.putUint8(163);
       writeValue(buffer, value.encode());
-    } else if (value is PointOfInterestDto) {
+    } else if (value is MarkerAnchorDto) {
       buffer.putUint8(164);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonDto) {
+    } else if (value is ClusterManagerDto) {
       buffer.putUint8(165);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonOptionsDto) {
+    } else if (value is ClusterDto) {
       buffer.putUint8(166);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonHoleDto) {
+    } else if (value is PointOfInterestDto) {
       buffer.putUint8(167);
       writeValue(buffer, value.encode());
-    } else if (value is StyleSpanStrokeStyleDto) {
+    } else if (value is PolygonDto) {
       buffer.putUint8(168);
       writeValue(buffer, value.encode());
-    } else if (value is StyleSpanDto) {
+    } else if (value is PolygonOptionsDto) {
       buffer.putUint8(169);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineDto) {
+    } else if (value is PolygonHoleDto) {
       buffer.putUint8(170);
       writeValue(buffer, value.encode());
-    } else if (value is PatternItemDto) {
+    } else if (value is StyleSpanStrokeStyleDto) {
       buffer.putUint8(171);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineOptionsDto) {
+    } else if (value is StyleSpanDto) {
       buffer.putUint8(172);
       writeValue(buffer, value.encode());
-    } else if (value is CircleDto) {
+    } else if (value is PolylineDto) {
       buffer.putUint8(173);
       writeValue(buffer, value.encode());
-    } else if (value is CircleOptionsDto) {
+    } else if (value is PatternItemDto) {
       buffer.putUint8(174);
       writeValue(buffer, value.encode());
-    } else if (value is MapPaddingDto) {
+    } else if (value is PolylineOptionsDto) {
       buffer.putUint8(175);
       writeValue(buffer, value.encode());
-    } else if (value is RouteTokenOptionsDto) {
+    } else if (value is CircleDto) {
       buffer.putUint8(176);
       writeValue(buffer, value.encode());
-    } else if (value is DestinationsDto) {
+    } else if (value is CircleOptionsDto) {
       buffer.putUint8(177);
       writeValue(buffer, value.encode());
-    } else if (value is RoutingOptionsDto) {
+    } else if (value is MapPaddingDto) {
       buffer.putUint8(178);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationDisplayOptionsDto) {
+    } else if (value is RouteTokenOptionsDto) {
       buffer.putUint8(179);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationWaypointDto) {
+    } else if (value is DestinationsDto) {
       buffer.putUint8(180);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationTimeAndDistanceDto) {
+    } else if (value is RoutingOptionsDto) {
       buffer.putUint8(181);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationAudioGuidanceSettingsDto) {
+    } else if (value is NavigationDisplayOptionsDto) {
       buffer.putUint8(182);
       writeValue(buffer, value.encode());
-    } else if (value is SimulationOptionsDto) {
+    } else if (value is NavigationWaypointDto) {
       buffer.putUint8(183);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngDto) {
+    } else if (value is NavigationTimeAndDistanceDto) {
       buffer.putUint8(184);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngBoundsDto) {
+    } else if (value is NavigationAudioGuidanceSettingsDto) {
       buffer.putUint8(185);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedingUpdatedEventDto) {
+    } else if (value is SimulationOptionsDto) {
       buffer.putUint8(186);
       writeValue(buffer, value.encode());
-    } else if (value is GpsAvailabilityChangeEventDto) {
+    } else if (value is LatLngDto) {
       buffer.putUint8(187);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
+    } else if (value is LatLngBoundsDto) {
       buffer.putUint8(188);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsDto) {
+    } else if (value is SpeedingUpdatedEventDto) {
       buffer.putUint8(189);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
+    } else if (value is GpsAvailabilityChangeEventDto) {
       buffer.putUint8(190);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataDto) {
+    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
       buffer.putUint8(191);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentDto) {
+    } else if (value is SpeedAlertOptionsDto) {
       buffer.putUint8(192);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDirectionDto) {
+    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
       buffer.putUint8(193);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDto) {
+    } else if (value is RouteSegmentTrafficDataDto) {
       buffer.putUint8(194);
       writeValue(buffer, value.encode());
-    } else if (value is StepInfoDto) {
+    } else if (value is RouteSegmentDto) {
       buffer.putUint8(195);
       writeValue(buffer, value.encode());
-    } else if (value is NavInfoDto) {
+    } else if (value is LaneDirectionDto) {
       buffer.putUint8(196);
       writeValue(buffer, value.encode());
-    } else if (value is TermsAndConditionsUIParamsDto) {
+    } else if (value is LaneDto) {
       buffer.putUint8(197);
       writeValue(buffer, value.encode());
-    } else if (value is StepImageGenerationOptionsDto) {
+    } else if (value is StepInfoDto) {
       buffer.putUint8(198);
+      writeValue(buffer, value.encode());
+    } else if (value is NavInfoDto) {
+      buffer.putUint8(199);
+      writeValue(buffer, value.encode());
+    } else if (value is TermsAndConditionsUIParamsDto) {
+      buffer.putUint8(200);
+      writeValue(buffer, value.encode());
+    } else if (value is StepImageGenerationOptionsDto) {
+      buffer.putUint8(201);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -281,151 +290,158 @@ class _PigeonCodec extends StandardMessageCodec {
         return value == null ? null : MarkerDragEventTypeDto.values[value];
       case 138:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : StrokeJointTypeDto.values[value];
+        return value == null ? null : ClusterEventTypeDto.values[value];
       case 139:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : PatternTypeDto.values[value];
+        return value == null ? null : StrokeJointTypeDto.values[value];
       case 140:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : CameraEventTypeDto.values[value];
+        return value == null ? null : PatternTypeDto.values[value];
       case 141:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : AlternateRoutesStrategyDto.values[value];
+        return value == null ? null : CameraEventTypeDto.values[value];
       case 142:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : RoutingStrategyDto.values[value];
+        return value == null ? null : AlternateRoutesStrategyDto.values[value];
       case 143:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : TravelModeDto.values[value];
+        return value == null ? null : RoutingStrategyDto.values[value];
       case 144:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : RouteStatusDto.values[value];
+        return value == null ? null : TravelModeDto.values[value];
       case 145:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : TrafficDelaySeverityDto.values[value];
+        return value == null ? null : RouteStatusDto.values[value];
       case 146:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : AudioGuidanceTypeDto.values[value];
+        return value == null ? null : TrafficDelaySeverityDto.values[value];
       case 147:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : SpeedAlertSeverityDto.values[value];
+        return value == null ? null : AudioGuidanceTypeDto.values[value];
       case 148:
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : SpeedAlertSeverityDto.values[value];
+      case 149:
         final int? value = readValue(buffer) as int?;
         return value == null
             ? null
             : RouteSegmentTrafficDataStatusDto.values[value];
-      case 149:
+      case 150:
         final int? value = readValue(buffer) as int?;
         return value == null
             ? null
             : RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
                   .values[value];
-      case 150:
-        final int? value = readValue(buffer) as int?;
-        return value == null ? null : ManeuverDto.values[value];
       case 151:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : DrivingSideDto.values[value];
+        return value == null ? null : ManeuverDto.values[value];
       case 152:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : NavStateDto.values[value];
+        return value == null ? null : DrivingSideDto.values[value];
       case 153:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : LaneShapeDto.values[value];
+        return value == null ? null : NavStateDto.values[value];
       case 154:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : TaskRemovedBehaviorDto.values[value];
+        return value == null ? null : LaneShapeDto.values[value];
       case 155:
-        return MapOptionsDto.decode(readValue(buffer)!);
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : TaskRemovedBehaviorDto.values[value];
       case 156:
-        return NavigationViewOptionsDto.decode(readValue(buffer)!);
+        return MapOptionsDto.decode(readValue(buffer)!);
       case 157:
-        return ViewCreationOptionsDto.decode(readValue(buffer)!);
+        return NavigationViewOptionsDto.decode(readValue(buffer)!);
       case 158:
-        return CameraPositionDto.decode(readValue(buffer)!);
+        return ViewCreationOptionsDto.decode(readValue(buffer)!);
       case 159:
-        return MarkerDto.decode(readValue(buffer)!);
+        return CameraPositionDto.decode(readValue(buffer)!);
       case 160:
-        return MarkerOptionsDto.decode(readValue(buffer)!);
+        return MarkerDto.decode(readValue(buffer)!);
       case 161:
-        return ImageDescriptorDto.decode(readValue(buffer)!);
+        return MarkerOptionsDto.decode(readValue(buffer)!);
       case 162:
-        return InfoWindowDto.decode(readValue(buffer)!);
+        return ImageDescriptorDto.decode(readValue(buffer)!);
       case 163:
-        return MarkerAnchorDto.decode(readValue(buffer)!);
+        return InfoWindowDto.decode(readValue(buffer)!);
       case 164:
-        return PointOfInterestDto.decode(readValue(buffer)!);
+        return MarkerAnchorDto.decode(readValue(buffer)!);
       case 165:
-        return PolygonDto.decode(readValue(buffer)!);
+        return ClusterManagerDto.decode(readValue(buffer)!);
       case 166:
-        return PolygonOptionsDto.decode(readValue(buffer)!);
+        return ClusterDto.decode(readValue(buffer)!);
       case 167:
-        return PolygonHoleDto.decode(readValue(buffer)!);
+        return PointOfInterestDto.decode(readValue(buffer)!);
       case 168:
-        return StyleSpanStrokeStyleDto.decode(readValue(buffer)!);
+        return PolygonDto.decode(readValue(buffer)!);
       case 169:
-        return StyleSpanDto.decode(readValue(buffer)!);
+        return PolygonOptionsDto.decode(readValue(buffer)!);
       case 170:
-        return PolylineDto.decode(readValue(buffer)!);
+        return PolygonHoleDto.decode(readValue(buffer)!);
       case 171:
-        return PatternItemDto.decode(readValue(buffer)!);
+        return StyleSpanStrokeStyleDto.decode(readValue(buffer)!);
       case 172:
-        return PolylineOptionsDto.decode(readValue(buffer)!);
+        return StyleSpanDto.decode(readValue(buffer)!);
       case 173:
-        return CircleDto.decode(readValue(buffer)!);
+        return PolylineDto.decode(readValue(buffer)!);
       case 174:
-        return CircleOptionsDto.decode(readValue(buffer)!);
+        return PatternItemDto.decode(readValue(buffer)!);
       case 175:
-        return MapPaddingDto.decode(readValue(buffer)!);
+        return PolylineOptionsDto.decode(readValue(buffer)!);
       case 176:
-        return RouteTokenOptionsDto.decode(readValue(buffer)!);
+        return CircleDto.decode(readValue(buffer)!);
       case 177:
-        return DestinationsDto.decode(readValue(buffer)!);
+        return CircleOptionsDto.decode(readValue(buffer)!);
       case 178:
-        return RoutingOptionsDto.decode(readValue(buffer)!);
+        return MapPaddingDto.decode(readValue(buffer)!);
       case 179:
-        return NavigationDisplayOptionsDto.decode(readValue(buffer)!);
+        return RouteTokenOptionsDto.decode(readValue(buffer)!);
       case 180:
-        return NavigationWaypointDto.decode(readValue(buffer)!);
+        return DestinationsDto.decode(readValue(buffer)!);
       case 181:
-        return NavigationTimeAndDistanceDto.decode(readValue(buffer)!);
+        return RoutingOptionsDto.decode(readValue(buffer)!);
       case 182:
-        return NavigationAudioGuidanceSettingsDto.decode(readValue(buffer)!);
+        return NavigationDisplayOptionsDto.decode(readValue(buffer)!);
       case 183:
-        return SimulationOptionsDto.decode(readValue(buffer)!);
+        return NavigationWaypointDto.decode(readValue(buffer)!);
       case 184:
-        return LatLngDto.decode(readValue(buffer)!);
+        return NavigationTimeAndDistanceDto.decode(readValue(buffer)!);
       case 185:
-        return LatLngBoundsDto.decode(readValue(buffer)!);
+        return NavigationAudioGuidanceSettingsDto.decode(readValue(buffer)!);
       case 186:
-        return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
+        return SimulationOptionsDto.decode(readValue(buffer)!);
       case 187:
-        return GpsAvailabilityChangeEventDto.decode(readValue(buffer)!);
+        return LatLngDto.decode(readValue(buffer)!);
       case 188:
+        return LatLngBoundsDto.decode(readValue(buffer)!);
+      case 189:
+        return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
+      case 190:
+        return GpsAvailabilityChangeEventDto.decode(readValue(buffer)!);
+      case 191:
         return SpeedAlertOptionsThresholdPercentageDto.decode(
           readValue(buffer)!,
         );
-      case 189:
+      case 192:
         return SpeedAlertOptionsDto.decode(readValue(buffer)!);
-      case 190:
+      case 193:
         return RouteSegmentTrafficDataRoadStretchRenderingDataDto.decode(
           readValue(buffer)!,
         );
-      case 191:
-        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
-      case 192:
-        return RouteSegmentDto.decode(readValue(buffer)!);
-      case 193:
-        return LaneDirectionDto.decode(readValue(buffer)!);
       case 194:
-        return LaneDto.decode(readValue(buffer)!);
+        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
       case 195:
-        return StepInfoDto.decode(readValue(buffer)!);
+        return RouteSegmentDto.decode(readValue(buffer)!);
       case 196:
-        return NavInfoDto.decode(readValue(buffer)!);
+        return LaneDirectionDto.decode(readValue(buffer)!);
       case 197:
-        return TermsAndConditionsUIParamsDto.decode(readValue(buffer)!);
+        return LaneDto.decode(readValue(buffer)!);
       case 198:
+        return StepInfoDto.decode(readValue(buffer)!);
+      case 199:
+        return NavInfoDto.decode(readValue(buffer)!);
+      case 200:
+        return TermsAndConditionsUIParamsDto.decode(readValue(buffer)!);
+      case 201:
         return StepImageGenerationOptionsDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -643,6 +659,20 @@ abstract class TestMapViewApi {
   void clearMarkers(int viewId);
 
   void clear(int viewId);
+
+  List<ClusterManagerDto> getClusterManagers(int viewId);
+
+  List<ClusterManagerDto> addClusterManagers(
+    int viewId,
+    List<ClusterManagerDto> clusterManagers,
+  );
+
+  void removeClusterManagers(
+    int viewId,
+    List<ClusterManagerDto> clusterManagers,
+  );
+
+  void clearClusterManagers(int viewId);
 
   List<PolygonDto> getPolygons(int viewId);
 
@@ -4212,6 +4242,179 @@ abstract class TestMapViewApi {
               );
               try {
                 api.clear(arg_viewId!);
+                return wrapResponse(empty: true);
+              } on PlatformException catch (e) {
+                return wrapResponse(error: e);
+              } catch (e) {
+                return wrapResponse(
+                  error: PlatformException(
+                    code: 'error',
+                    message: e.toString(),
+                  ),
+                );
+              }
+            });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getClusterManagers$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
+              Object? message,
+            ) async {
+              assert(
+                message != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getClusterManagers was null.',
+              );
+              final List<Object?> args = (message as List<Object?>?)!;
+              final int? arg_viewId = (args[0] as int?);
+              assert(
+                arg_viewId != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getClusterManagers was null, expected non-null int.',
+              );
+              try {
+                final List<ClusterManagerDto> output = api.getClusterManagers(
+                  arg_viewId!,
+                );
+                return <Object?>[output];
+              } on PlatformException catch (e) {
+                return wrapResponse(error: e);
+              } catch (e) {
+                return wrapResponse(
+                  error: PlatformException(
+                    code: 'error',
+                    message: e.toString(),
+                  ),
+                );
+              }
+            });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addClusterManagers$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
+          Object?
+        >(pigeonVar_channel, (Object? message) async {
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addClusterManagers was null.',
+          );
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addClusterManagers was null, expected non-null int.',
+          );
+          final List<ClusterManagerDto>? arg_clusterManagers =
+              (args[1] as List<Object?>?)?.cast<ClusterManagerDto>();
+          assert(
+            arg_clusterManagers != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addClusterManagers was null, expected non-null List<ClusterManagerDto>.',
+          );
+          try {
+            final List<ClusterManagerDto> output = api.addClusterManagers(
+              arg_viewId!,
+              arg_clusterManagers!,
+            );
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeClusterManagers$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
+          Object?
+        >(pigeonVar_channel, (Object? message) async {
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeClusterManagers was null.',
+          );
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeClusterManagers was null, expected non-null int.',
+          );
+          final List<ClusterManagerDto>? arg_clusterManagers =
+              (args[1] as List<Object?>?)?.cast<ClusterManagerDto>();
+          assert(
+            arg_clusterManagers != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeClusterManagers was null, expected non-null List<ClusterManagerDto>.',
+          );
+          try {
+            api.removeClusterManagers(arg_viewId!, arg_clusterManagers!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearClusterManagers$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
+              Object? message,
+            ) async {
+              assert(
+                message != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearClusterManagers was null.',
+              );
+              final List<Object?> args = (message as List<Object?>?)!;
+              final int? arg_viewId = (args[0] as int?);
+              assert(
+                arg_viewId != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearClusterManagers was null, expected non-null int.',
+              );
+              try {
+                api.clearClusterManagers(arg_viewId!);
                 return wrapResponse(empty: true);
               } on PlatformException catch (e) {
                 return wrapResponse(error: e);

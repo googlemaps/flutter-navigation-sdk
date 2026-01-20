@@ -305,6 +305,45 @@ class GoogleMapViewController {
     );
   }
 
+  /// Retrieves all cluster managers that have been added to the map view.
+  Future<List<ClusterManager>> getClusterManagers() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI.getClusterManagers(
+      viewId: _viewId,
+    );
+  }
+
+  /// Add cluster managers to the map view.
+  ///
+  /// Cluster managers group nearby markers into clusters at different zoom levels.
+  /// Markers can be assigned to a cluster manager by setting their [MarkerOptions.clusterManagerId].
+  Future<List<ClusterManager>> addClusterManagers(
+    List<String> clusterManagerIds,
+  ) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI.addClusterManagers(
+      viewId: _viewId,
+      clusterManagerIds: clusterManagerIds,
+    );
+  }
+
+  /// Remove cluster managers from the map view.
+  ///
+  /// This will also remove all markers associated with the cluster managers.
+  Future<void> removeClusterManagers(List<ClusterManager> clusterManagers) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI.removeClusterManagers(
+      viewId: _viewId,
+      clusterManagers: clusterManagers,
+    );
+  }
+
+  /// Remove all cluster managers from the map view.
+  ///
+  /// This will also remove all clustered markers.
+  Future<void> clearClusterManagers() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI.clearClusterManagers(
+      viewId: _viewId,
+    );
+  }
+
   /// Retrieves all polygons that have been added to the map view.
   Future<List<Polygon?>> getPolygons() {
     return GoogleMapsNavigationPlatform.instance.viewAPI.getPolygons(

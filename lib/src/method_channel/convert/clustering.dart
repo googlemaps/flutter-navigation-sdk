@@ -1,4 +1,4 @@
-// Copyright 2023 Google LLC
+// Copyright 2026 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,20 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'circles.dart';
-export 'clustering.dart';
-export 'images.dart';
-export 'lat_lng.dart';
-export 'lat_lng_bounds.dart';
-export 'markers.dart';
-export 'navigation.dart';
-export 'navigation_destinations.dart';
-export 'navigation_initialization_params.dart';
-export 'navigation_view_types.dart';
-export 'navinfo.dart';
-export 'polygons.dart';
-export 'polylines.dart';
-export 'simulation.dart';
-export 'stroke_patterns.dart';
-export 'terms_and_conditions_ui_params.dart';
-export 'view_initialization_options.dart';
+import '../../../google_navigation_flutter.dart';
+import '../method_channel.dart';
+
+/// [ClusterEventTypeDto] convert extension.
+/// @nodoc
+extension ConvertClusterEventType on ClusterEventTypeDto {
+  /// Converts [ClusterEventTypeDto] to [ClusterEventType]
+  ClusterEventType toClusterEventType() {
+    switch (this) {
+      case ClusterEventTypeDto.clicked:
+        return ClusterEventType.clicked;
+    }
+  }
+}

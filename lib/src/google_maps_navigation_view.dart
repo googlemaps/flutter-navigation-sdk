@@ -75,6 +75,7 @@ class GoogleMapsNavigationView extends GoogleMapsBaseMapView {
     super.onMarkerInfoWindowClicked,
     super.onMarkerInfoWindowClosed,
     super.onMarkerInfoWindowLongClicked,
+    super.onClusterClicked,
     super.onMapClicked,
     super.onMapLongClicked,
     super.onPolygonClicked,
