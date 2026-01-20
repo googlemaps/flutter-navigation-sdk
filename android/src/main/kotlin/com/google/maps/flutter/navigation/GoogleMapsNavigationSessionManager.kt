@@ -809,7 +809,9 @@ constructor(
         // Map to store all the unique images for each maneuver and lane
         val imageDescriptors: MutableMap<String, ImageDescriptorDto?> = mutableMapOf()
 
-        (navInfo.remainingSteps + navInfo.currentStep).forEach { stepInfo ->
+        (navInfo.remainingSteps + navInfo.currentStep)
+          .filter { it != null }
+          .forEach { stepInfo ->
           // Handle maneuver images
           if (generateManeuverImages) {
             val maneuverKey = Convert.convertManeuverToKey(stepInfo.maneuver)
