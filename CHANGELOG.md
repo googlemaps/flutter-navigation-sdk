@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.8.2](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.8.1...0.8.2) (2026-01-20)
+
+
+### Features
+
+* add support for maneuver and lanes images ([#546](https://github.com/googlemaps/flutter-navigation-sdk/issues/546)) ([767cda4](https://github.com/googlemaps/flutter-navigation-sdk/commit/767cda47ad5592a8710a98efce02f16dd3b0dc0b))
+* support for speed alert options ([#585](https://github.com/googlemaps/flutter-navigation-sdk/issues/585)) ([3c98d7a](https://github.com/googlemaps/flutter-navigation-sdk/commit/3c98d7abf45b26c46290c8de39400d51c283869d))
+* support for terms and conditions UI customization ([#569](https://github.com/googlemaps/flutter-navigation-sdk/issues/569)) ([f8e9867](https://github.com/googlemaps/flutter-navigation-sdk/commit/f8e9867aa9e695347e3485ff2e532f54212f1b6c))
+
+
+### Bug Fixes
+
+* filter out null from navigation steps on android ([#592](https://github.com/googlemaps/flutter-navigation-sdk/issues/592)) ([82e28b7](https://github.com/googlemaps/flutter-navigation-sdk/commit/82e28b7d2cf1c8468829a5a81860c1ee9df16dc5))
+* store images in a map instead of an array in ImageRegistry ([#588](https://github.com/googlemaps/flutter-navigation-sdk/issues/588)) ([b083beb](https://github.com/googlemaps/flutter-navigation-sdk/commit/b083beb93b1660ae0f26c8455717accae27792e6))
+
 ## [0.8.1](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.8.0...0.8.1) (2026-01-08)
 
 
