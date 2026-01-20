@@ -49,6 +49,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   private var _listenCameraChanges = false
   var isAttachedToSession: Bool = false
   private let _isCarPlayView: Bool
+  private var _clusterManagersController: ClusterManagersController?
 
   // As prompt visibility settings is handled by the navigator, value is
   // stored here to handle the session attach. On android prompts visibility
@@ -102,6 +103,16 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
 
     _mapView.delegate = self
     _mapView.viewSettledDelegate = self
+
+    // Initialize cluster managers controller if viewId and viewEventApi are available
+    if !_isCarPlayView {
+      _clusterManagersController = ClusterManagersController(
+        mapView: _mapView,
+        viewEventApi: viewEventApi,
+        viewId: viewId,
+        imageRegistry: imageRegistry
+      )
+    }
 
     _navigationUIEnabledPreference = navigationUIEnabledPreference
     applyNavigationUIEnabledPreference()
@@ -677,13 +688,31 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
       markers
       .compactMap { $0 }
       .map { marker in
-        let markerController = MarkerController(markerId: marker.markerId)
-        markerController.update(from: marker, imageRegistry: _imageRegistry)
-        // Handle visibility property on iOS by removing/not putting the marker
-        // on the map.
-        markerController.gmsMarker.map = marker.isVisible() ? _mapView : nil
-        _markerControllers.append(markerController)
-        return marker
+        // Check if marker belongs to a cluster manager
+        if marker.options.clusterManagerId != nil {
+          let registeredImage: RegisteredImage?
+          if let imageId = marker.options.icon.registeredImageId {
+            registeredImage = _imageRegistry.findRegisteredImage(imageId: imageId)
+          } else {
+            registeredImage = nil
+          }
+
+          _clusterManagersController?.addMarkerToCluster(
+            markerDto: marker,
+            registeredImage: registeredImage,
+            consumeTapEvents: marker.options.consumeTapEvents
+          )
+          return marker
+        } else {
+          // Regular marker handling
+          let markerController = MarkerController(markerId: marker.markerId)
+          markerController.update(from: marker, imageRegistry: _imageRegistry)
+          // Handle visibility property on iOS by removing/not putting the marker
+          // on the map.
+          markerController.gmsMarker.map = marker.isVisible() ? _mapView : nil
+          _markerControllers.append(markerController)
+          return marker
+        }
       }
     return markers
   }
@@ -693,12 +722,30 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
       try markers
       .compactMap { $0 }
       .compactMap { updatedMarker in
-        let markerController = try findMarkerController(markerId: updatedMarker.markerId)
-        markerController.update(from: updatedMarker, imageRegistry: _imageRegistry)
-        // Handle visibility property on iOS by removing/not putting the marker
-        // on the map.
-        markerController.gmsMarker.map = updatedMarker.isVisible() ? _mapView : nil
-        return updatedMarker
+        // Check if marker belongs to a cluster manager
+        if updatedMarker.options.clusterManagerId != nil {
+          let registeredImage: RegisteredImage?
+          if let imageId = updatedMarker.options.icon.registeredImageId {
+            registeredImage = _imageRegistry.findRegisteredImage(imageId: imageId)
+          } else {
+            registeredImage = nil
+          }
+
+          _clusterManagersController?.updateMarkerInCluster(
+            markerDto: updatedMarker,
+            registeredImage: registeredImage,
+            consumeTapEvents: updatedMarker.options.consumeTapEvents
+          )
+          return updatedMarker
+        } else {
+          // Regular marker handling
+          let markerController = try findMarkerController(markerId: updatedMarker.markerId)
+          markerController.update(from: updatedMarker, imageRegistry: _imageRegistry)
+          // Handle visibility property on iOS by removing/not putting the marker
+          // on the map.
+          markerController.gmsMarker.map = updatedMarker.isVisible() ? _mapView : nil
+          return updatedMarker
+        }
       }
     return markers
   }
@@ -707,9 +754,20 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     try markers
       .compactMap { $0 }
       .forEach { markerDto in
-        let markerController = try findMarkerController(markerId: markerDto.markerId)
-        markerController.gmsMarker.map = nil
-        _markerControllers = _markerControllers.filter { $0.markerId != markerController.markerId }
+        // Check if marker belongs to a cluster manager
+        if let clusterManagerId = markerDto.options.clusterManagerId {
+          _clusterManagersController?.removeMarkerFromCluster(
+            markerId: markerDto.markerId,
+            clusterManagerId: clusterManagerId
+          )
+        } else {
+          // Regular marker handling
+          let markerController = try findMarkerController(markerId: markerDto.markerId)
+          markerController.gmsMarker.map = nil
+          _markerControllers = _markerControllers.filter {
+            $0.markerId != markerController.markerId
+          }
+        }
       }
   }
 
@@ -718,6 +776,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
       markerController.gmsMarker.map = nil
     }
     _markerControllers.removeAll()
+    _clusterManagersController?.clearClusterManagers()
   }
 
   func getPolygons() -> [PolygonDto] {
@@ -886,7 +945,31 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     _gmsPolylines.removeAll()
     _gmsPolygons.removeAll()
     _gmsCircles.removeAll()
+    _clusterManagersController?.clearClusterManagers()
     _mapView.clear()
+  }
+
+  func getClusterManagers() -> [ClusterManagerDto] {
+    guard let controller = _clusterManagersController else { return [] }
+    return controller.getClusterManagerIds().map { ClusterManagerDto(clusterManagerId: $0) }
+  }
+
+  func addClusterManagers(clusterManagers: [ClusterManagerDto]) -> [ClusterManagerDto] {
+    guard let controller = _clusterManagersController else { return [] }
+    return clusterManagers.compactMap { dto in
+      controller.addClusterManager(clusterManagerId: dto.clusterManagerId) != nil ? dto : nil
+    }
+  }
+
+  func removeClusterManagers(clusterManagers: [ClusterManagerDto]) {
+    guard let controller = _clusterManagersController else { return }
+    clusterManagers.forEach { dto in
+      controller.removeClusterManager(clusterManagerId: dto.clusterManagerId)
+    }
+  }
+
+  func clearClusterManagers() {
+    _clusterManagersController?.clearClusterManagers()
   }
 
   private func sendMarkerEvent(marker: GMSMarker, eventType: MarkerEventTypeDto) {
@@ -1088,6 +1171,9 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
   }
 
   public func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
+    // Refresh clusters when camera stops moving
+    _clusterManagersController?.onCameraIdle()
+
     if _listenCameraChanges {
       getViewEventApi()?.onCameraChanged(
         viewId: _viewId!,
