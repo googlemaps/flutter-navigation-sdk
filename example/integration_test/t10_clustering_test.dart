@@ -39,7 +39,9 @@ void main() {
 
     // Test adding a single cluster manager
     final List<ClusterManager> addedClusterManagers = await viewController
-        .addClusterManagers(<String>['cluster_1']);
+        .addClusterManagers(<ClusterManager>[
+          const ClusterManager(clusterManagerId: 'cluster_1'),
+        ]);
     expect(addedClusterManagers.length, 1);
     expect(addedClusterManagers.first.clusterManagerId, 'cluster_1');
 
@@ -51,7 +53,10 @@ void main() {
 
     // Test adding multiple cluster managers at once
     final List<ClusterManager> addedClusterManagers2 = await viewController
-        .addClusterManagers(<String>['cluster_2', 'cluster_3']);
+        .addClusterManagers(<ClusterManager>[
+          const ClusterManager(clusterManagerId: 'cluster_2'),
+          const ClusterManager(clusterManagerId: 'cluster_3'),
+        ]);
     expect(addedClusterManagers2.length, 2);
     expect(addedClusterManagers2[0].clusterManagerId, 'cluster_2');
     expect(addedClusterManagers2[1].clusterManagerId, 'cluster_3');
@@ -90,7 +95,10 @@ void main() {
     expect(afterRemove2.length, 0);
 
     // Add some cluster managers to test clearClusterManagers
-    await viewController.addClusterManagers(<String>['cluster_4', 'cluster_5']);
+    await viewController.addClusterManagers(<ClusterManager>[
+      const ClusterManager(clusterManagerId: 'cluster_4'),
+      const ClusterManager(clusterManagerId: 'cluster_5'),
+    ]);
     final List<ClusterManager> beforeClear =
         await viewController.getClusterManagers();
     expect(beforeClear.length, 2);
@@ -116,7 +124,9 @@ void main() {
 
     // Add a cluster manager
     final List<ClusterManager> addedClusterManagers = await viewController
-        .addClusterManagers(<String>['cluster_manager_1']);
+        .addClusterManagers(<ClusterManager>[
+          const ClusterManager(clusterManagerId: 'cluster_manager_1'),
+        ]);
     expect(addedClusterManagers.length, 1);
     final ClusterManager clusterManager = addedClusterManagers.first;
 
@@ -189,7 +199,10 @@ void main() {
         );
 
     // Add cluster managers
-    await viewController.addClusterManagers(<String>['cluster_A', 'cluster_B']);
+    await viewController.addClusterManagers(<ClusterManager>[
+      const ClusterManager(clusterManagerId: 'cluster_A'),
+      const ClusterManager(clusterManagerId: 'cluster_B'),
+    ]);
 
     // Add a marker to cluster_A
     const MarkerOptions markerOptions = MarkerOptions(
@@ -261,10 +274,10 @@ void main() {
           );
 
       // Add multiple cluster managers
-      await viewController.addClusterManagers(<String>[
-        'cluster_north',
-        'cluster_south',
-        'cluster_east',
+      await viewController.addClusterManagers(<ClusterManager>[
+        const ClusterManager(clusterManagerId: 'cluster_north'),
+        const ClusterManager(clusterManagerId: 'cluster_south'),
+        const ClusterManager(clusterManagerId: 'cluster_east'),
       ]);
 
       final List<ClusterManager> clusterManagers =
@@ -400,7 +413,9 @@ void main() {
           );
 
       // Add a cluster manager
-      await viewController.addClusterManagers(<String>['test_cluster']);
+      await viewController.addClusterManagers(<ClusterManager>[
+        const ClusterManager(clusterManagerId: 'test_cluster'),
+      ]);
 
       // Add multiple markers to the cluster
       final List<MarkerOptions> markerOptions = <MarkerOptions>[
