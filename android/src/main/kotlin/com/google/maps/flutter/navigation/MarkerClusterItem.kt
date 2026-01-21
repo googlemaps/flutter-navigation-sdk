@@ -26,9 +26,9 @@ import com.google.maps.android.clustering.ClusterItem
 class MarkerClusterItem(
   val markerId: String,
   val clusterManagerId: String,
-  private val markerOptions: MarkerDto,
-  val registeredImage: RegisteredImage?,
-  val consumeTapEvents: Boolean,
+  private var markerOptions: MarkerDto,
+  var registeredImage: RegisteredImage?,
+  var consumeTapEvents: Boolean,
 ) : ClusterItem {
 
   override fun getPosition(): LatLng {
@@ -50,5 +50,16 @@ class MarkerClusterItem(
   /** Returns the marker data transfer object. */
   fun getMarkerDto(): MarkerDto {
     return markerOptions
+  }
+
+  /** Updates the marker options. */
+  fun updateMarkerOptions(
+    newMarkerOptions: MarkerDto,
+    newRegisteredImage: RegisteredImage?,
+    newConsumeTapEvents: Boolean,
+  ) {
+    markerOptions = newMarkerOptions
+    registeredImage = newRegisteredImage
+    consumeTapEvents = newConsumeTapEvents
   }
 }

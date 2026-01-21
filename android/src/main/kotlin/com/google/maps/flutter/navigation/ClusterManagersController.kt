@@ -60,7 +60,7 @@ class ClusterManagersController(
   fun removeClusterManager(clusterManagerId: String) {
     clusterManagers[clusterManagerId]?.let { controller ->
       controller.clearItems()
-      controller.cluster() // Force refresh to remove clusters from display
+      controller.cluster()
     }
     clusterManagers.remove(clusterManagerId)
     clusterItemsByManager.remove(clusterManagerId)
@@ -121,11 +121,26 @@ class ClusterManagersController(
     registeredImage: RegisteredImage?,
     consumeTapEvents: Boolean,
   ) {
-    val clusterManagerId = markerDto.options.clusterManagerId ?: return
+    val markerId = markerDto.markerId
+    
+    val newClusterManagerId = markerDto.options.clusterManagerId ?: return
+    val existingItem = findClusterItem(markerId) ?: return
 
-    // Remove old item and add updated one
-    removeMarkerFromCluster(markerDto.markerId, clusterManagerId)
-    addMarkerToCluster(markerDto, registeredImage, consumeTapEvents)
+    val oldClusterManagerId = existingItem.clusterManagerId
+
+    // If the cluster ID on the updated marker has changed, the marker needs to
+    // be removed and re-added to update its cluster manager state.
+    if (newClusterManagerId != oldClusterManagerId) {
+      removeMarkerFromCluster(markerId, oldClusterManagerId)
+      addMarkerToCluster(markerDto, registeredImage, consumeTapEvents)
+      return
+    }
+
+    // Update item in place
+    existingItem.updateMarkerOptions(markerDto, registeredImage, consumeTapEvents)
+
+    // Trigger re-clustering to refresh display
+    clusterManagers[newClusterManagerId]?.cluster()
   }
 
   /** Called when camera stops moving to refresh all clusters. */
@@ -144,6 +159,14 @@ class ClusterManagersController(
     return null
   }
 
+  /** Finds which cluster manager owns a marker by marker ID. */
+  fun findClusterItem(markerId: String): MarkerClusterItem? {
+    for (items in clusterItemsByManager.values) {
+      items[markerId]?.let { return it }
+    }
+    return null
+  }
+
   /** Gets clusters for a specific cluster manager. */
   fun getClusters(clusterManagerId: String): List<ClusterDto> {
     return clusterManagers[clusterManagerId]?.getClusters() ?: emptyList()
@@ -151,17 +174,13 @@ class ClusterManagersController(
 
   /** Gets all clusters from all cluster managers. */
   fun getAllClusters(): List<ClusterDto> {
-    val allClusters = mutableListOf<ClusterDto>()
-    clusterManagers.values.forEach { controller -> allClusters.addAll(controller.getClusters()) }
-    return allClusters
+    return clusterManagers.values.flatMap { it.getClusters() }
   }
 
   /** Gets all clustered markers from all cluster managers. */
   fun getAllClusteredMarkers(): List<MarkerDto> {
-    val allMarkers = mutableListOf<MarkerDto>()
-    clusterItemsByManager.values.forEach { items ->
-      items.values.forEach { item -> allMarkers.add(item.getMarkerDto()) }
+    return clusterItemsByManager.values.flatMap { items ->
+      items.values.map { it.getMarkerDto() }
     }
-    return allMarkers
   }
 }

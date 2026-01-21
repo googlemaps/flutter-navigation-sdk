@@ -43,16 +43,8 @@ class ClusterManagerController(
     clusterManager.renderer = clusterRenderer
 
     // Set up click listeners
-    clusterManager.setOnClusterClickListener { cluster ->
-      onClusterClick(cluster)
-      // Return false to allow the default behavior of the cluster click event to occur.
-      false
-    }
-
-    clusterManager.setOnClusterItemClickListener { item ->
-      onClusterItemClick(item)
-      item.consumeTapEvents
-    }
+    clusterManager.setOnClusterClickListener(::onClusterClick)
+    clusterManager.setOnClusterItemClickListener(::onClusterItemClick)
   }
 
   /** Adds a marker item to the cluster. */
@@ -79,8 +71,6 @@ class ClusterManagerController(
   /** Called when camera stops moving to refresh clusters. */
   fun onCameraIdle() {
     clusterManager.onCameraIdle()
-    // Force reclustering after camera idle to ensure clusters update on zoom
-    clusterManager.cluster()
   }
 
   /** Returns the underlying ClusterManager instance. */
@@ -111,7 +101,7 @@ class ClusterManagerController(
     return clusters
   }
 
-  private fun onClusterClick(cluster: Cluster<MarkerClusterItem>) {
+  private fun onClusterClick(cluster: Cluster<MarkerClusterItem>): Boolean {
     if (cluster.size > 0) {
       val markerIds = cluster.items.map { it.markerId }
       val position =
@@ -127,10 +117,13 @@ class ClusterManagerController(
         clusterDto,
       ) {}
     }
+    // Return false to allow the default behavior of the cluster click event to occur.
+    return false
   }
 
-  private fun onClusterItemClick(item: MarkerClusterItem) {
+  private fun onClusterItemClick(item: MarkerClusterItem): Boolean {
     viewEventApi.onMarkerEvent(viewId.toLong(), item.markerId, MarkerEventTypeDto.CLICKED) {}
+    return item.consumeTapEvents
   }
 
   /**
