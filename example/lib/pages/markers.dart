@@ -71,7 +71,14 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
   }
 
   Future<void> _removeMarker() async {
-    await _navigationViewController.removeMarkers(<Marker>[_selectedMarker!]);
+    try {
+      await _navigationViewController.removeMarkers(<Marker>[_selectedMarker!]);
+    } on MarkerNotFoundException catch (e) {
+      debugPrint(e.toString());
+      _showMessage('Marker not found');
+      return;
+    }
+
     setState(() {
       _markers.remove(_selectedMarker);
       _selectedMarker = null;
@@ -88,9 +95,17 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
   Future<void> _updateSelectedMarkerWithOptions(MarkerOptions options) async {
     final Marker newMarker = _selectedMarker!.copyWith(options: options);
 
-    final List<Marker?> markers = await _navigationViewController.updateMarkers(
-      <Marker>[newMarker],
-    );
+    final List<Marker?> markers;
+    try {
+      markers = await _navigationViewController.updateMarkers(<Marker>[
+        newMarker,
+      ]);
+    } on MarkerNotFoundException catch (e) {
+      debugPrint(e.toString());
+      _showMessage('Marker not found');
+      return;
+    }
+
     final Marker? marker = markers.firstOrNull;
     if (marker != null) {
       setState(() {
@@ -168,10 +183,18 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
     );
     final double imagePixelRatio = assetBundleImageKey.scale;
     final ByteData imageBytes = await rootBundle.load(assetBundleImageKey.name);
-    _registeredCustomIcon = await registerBitmapImage(
-      bitmap: imageBytes,
-      imagePixelRatio: imagePixelRatio,
-    );
+
+    try {
+      _registeredCustomIcon = await registerBitmapImage(
+        bitmap: imageBytes,
+        imagePixelRatio: imagePixelRatio,
+      );
+    } on ImageDecodingFailedException catch (e) {
+      debugPrint(e.toString());
+      _showMessage('Failed to decode image');
+      return ImageDescriptor.defaultImage;
+    }
+
     return _registeredCustomIcon!;
   }
 
@@ -249,15 +272,15 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
   }
 
   void _onMarkerInfoWindowClicked(String markerId) {
-    showMessage('Marker info window clicked. markerId: $markerId');
+    _showMessage('Marker info window clicked. markerId: $markerId');
   }
 
   void _onMarkerInfoWindowClosed(String markerId) {
-    showMessage('Marker info window closed. markerId: $markerId');
+    _showMessage('Marker info window closed. markerId: $markerId');
   }
 
   void _onMarkerInfoWindowLongClicked(String markerId) {
-    showMessage('Marker info window long clicked. markerId: $markerId');
+    _showMessage('Marker info window long clicked. markerId: $markerId');
   }
 
   @override
@@ -428,7 +451,7 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
     );
   }
 
-  void showMessage(String message) {
+  void _showMessage(String message) {
     if (_displayMarkerUpdates) {
       final SnackBar snackBar = SnackBar(content: Text(message));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);

@@ -14,6 +14,7 @@
 
 export 'auto_view_api.dart';
 export 'image_api.dart';
+export 'platform_exception_extension.dart';
 export 'session_api.dart';
 export 'map_view_api.dart';
 export 'convert/convert.dart';

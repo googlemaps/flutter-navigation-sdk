@@ -54,3 +54,11 @@ extension UIColor {
     }
   }
 }
+
+func getNotSupportedError(_ message: String) -> PigeonError {
+  PigeonError(
+    code: "notSupported",
+    message: message,
+    details: nil
+  )
+}

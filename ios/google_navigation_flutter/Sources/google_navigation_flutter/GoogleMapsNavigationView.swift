@@ -17,7 +17,6 @@ import GoogleNavigation
 import UIKit
 
 enum GoogleMapsNavigationViewError: Error {
-  case notSupported
   case markerNotFound
   case polygonNotFound
   case polylineNotFound
@@ -190,14 +189,14 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
 
   func getForceNightMode() throws -> GMSNavigationLightingMode? {
     guard _isNavigationView else {
-      throw GoogleMapsNavigationViewError.notSupported
+      throw getNotSupportedError("Night mode is only supported on navigation views.")
     }
     return _forceNightMode
   }
 
   func setForceNightMode(_ mode: GMSNavigationLightingMode?) throws {
     guard _isNavigationView else {
-      throw GoogleMapsNavigationViewError.notSupported
+      throw getNotSupportedError("Night mode is only supported on navigation views.")
     }
     _forceNightMode = mode
     applyForceNightMode()
@@ -312,7 +311,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   }
 
   func setZoomControlsEnabled(_ enabled: Bool) throws {
-    throw GoogleMapsNavigationViewError.notSupported
+    throw getNotSupportedError("Zoom controls are not supported on iOS.")
   }
 
   func setCompassEnabled(_ enabled: Bool) throws {
@@ -336,7 +335,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   }
 
   func setMapToolbarEnabled(_ enabled: Bool) throws {
-    throw GoogleMapsNavigationViewError.notSupported
+    throw getNotSupportedError("Map toolbar is not supported on iOS.")
   }
 
   func setTrafficEnabled(_ enabled: Bool) throws {
@@ -352,7 +351,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   }
 
   func isZoomControlsEnabled() throws -> Bool {
-    throw GoogleMapsNavigationViewError.notSupported
+    throw getNotSupportedError("Zoom controls are not supported on iOS.")
   }
 
   func isCompassEnabled() -> Bool {
@@ -376,7 +375,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   }
 
   func isMapToolbarEnabled() throws -> Bool {
-    throw GoogleMapsNavigationViewError.notSupported
+    throw getNotSupportedError("Map toolbar is not supported on iOS.")
   }
 
   func isTrafficEnabled() -> Bool {

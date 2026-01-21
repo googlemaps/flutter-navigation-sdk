@@ -201,7 +201,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     }
 
     _autoViewController.listenForCustomNavigationAutoEvents((event) {
-      showMessage("Received event: ${event.event}");
+      _showMessage("Received event: ${event.event}");
     });
 
     _isAutoScreenAvailable = await _autoViewController.isAutoScreenAvailable();
@@ -441,7 +441,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       _onNewNavigationSessionEventCallCount += 1;
     });
 
-    showMessage('New navigation session started');
+    _showMessage('New navigation session started');
 
     // Set audio guidance settings for the new navigation session.
     unawaited(_setAudioGuidance());
@@ -549,7 +549,13 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     setState(() {
       _navigationViewController = controller;
     });
-    await controller.setMyLocationEnabled(true);
+
+    try {
+      await controller.setMyLocationEnabled(true);
+    } on ViewNotFoundException catch (_) {
+      // View not found exception is thrown if view is disposed before async
+      // method is handled on native side.
+    }
 
     if (_guidanceRunning) {
       // Guidance is running, enable navigation UI.
@@ -643,7 +649,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       setState(() {
         _onPromptVisibilityChangedEventCallCount += 1;
       });
-      showMessage('Prompt visibility changed: $promptVisible');
+      _showMessage('Prompt visibility changed: $promptVisible');
     }
   }
 
@@ -730,45 +736,69 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       if (addedMarkers.first != null) {
         _newWaypointMarker = addedMarkers.first;
       } else {
-        showMessage('Error while adding destination marker');
+        _showMessage('Error while adding destination marker');
       }
     } else {
       // Update existing marker.
       final Marker updatedWaypointMarker = _newWaypointMarker!.copyWith(
         options: markerOptions,
       );
-      final List<Marker?> updatedMarkers = await _navigationViewController!
-          .updateMarkers(<Marker>[updatedWaypointMarker]);
+
+      final List<Marker?> updatedMarkers;
+      try {
+        updatedMarkers = await _navigationViewController!.updateMarkers(
+          <Marker>[updatedWaypointMarker],
+        );
+      } on MarkerNotFoundException catch (e) {
+        debugPrint(e.toString());
+        _showMessage('Marker not found');
+        return;
+      }
+
       if (updatedMarkers.first != null) {
         _newWaypointMarker = updatedMarkers.first;
       } else {
-        showMessage('Error while updating destination marker');
+        _showMessage('Error while updating destination marker');
       }
     }
     setState(() {});
   }
 
   Future<void> _removeNewWaypointMarker() async {
-    if (_newWaypointMarker != null) {
+    if (_newWaypointMarker == null) return;
+
+    try {
       await _navigationViewController!.removeMarkers(<Marker>[
         _newWaypointMarker!,
       ]);
-      _newWaypointMarker = null;
-      setState(() {});
+    } on MarkerNotFoundException catch (e) {
+      debugPrint(e.toString());
+      _showMessage('Marker not found');
+      return;
     }
+
+    _newWaypointMarker = null;
+    setState(() {});
   }
 
   Future<void> _removeDestinationWaypointMarkers() async {
-    if (_destinationWaypointMarkers.isNotEmpty) {
+    if (_destinationWaypointMarkers.isEmpty) return;
+
+    try {
       await _navigationViewController!.removeMarkers(
         _destinationWaypointMarkers,
       );
-      _destinationWaypointMarkers.clear();
-
-      // Unregister custom marker images
-      await clearRegisteredImages();
-      setState(() {});
+    } on MarkerNotFoundException catch (e) {
+      debugPrint(e.toString());
+      _showMessage('Marker not found');
+      return;
     }
+
+    _destinationWaypointMarkers.clear();
+
+    // Unregister custom marker images
+    await clearRegisteredImages();
+    setState(() {});
   }
 
   Future<void> _onMapClicked(LatLng location) async {
@@ -834,16 +864,25 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
           index,
           MediaQuery.of(context).devicePixelRatio,
         );
-    final List<Marker?> destinationMarkers = await _navigationViewController!
-        .updateMarkers(<Marker>[
-          _newWaypointMarker!.copyWith(
-            options: _newWaypointMarker!.options.copyWith(
-              infoWindow: InfoWindow(title: title),
-              anchor: const MarkerAnchor(u: 0.5, v: 1.2),
-              icon: waypointMarkerImage,
+
+    final List<Marker?> destinationMarkers;
+    try {
+      destinationMarkers = await _navigationViewController!
+          .updateMarkers(<Marker>[
+            _newWaypointMarker!.copyWith(
+              options: _newWaypointMarker!.options.copyWith(
+                infoWindow: InfoWindow(title: title),
+                anchor: const MarkerAnchor(u: 0.5, v: 1.2),
+                icon: waypointMarkerImage,
+              ),
             ),
-          ),
-        ]);
+          ]);
+    } on MarkerNotFoundException catch (e) {
+      debugPrint(e.toString());
+      _showMessage('Marker not found');
+      return;
+    }
+
     _destinationWaypointMarkers.add(destinationMarkers.first!);
     _newWaypointMarker = null;
   }
@@ -851,7 +890,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   Future<void> showCalculatingRouteMessage() async {
     await Future<void>.delayed(const Duration(seconds: 1));
     if (!_validRoute) {
-      showMessage('Calculating the route.');
+      _showMessage('Calculating the route.');
     }
   }
 
@@ -898,7 +937,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       // destination. Stop navigation completely.
       await _stopGuidedNavigation();
 
-      showMessage('You have arrived at your final destination!');
+      _showMessage('You have arrived at your final destination!');
     } else {
       debugPrint('Arrived at waypoint, waiting for user to continue...');
 
@@ -911,7 +950,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         _arrivedWaypoint = waypoint;
       });
 
-      showMessage(
+      _showMessage(
         'You have arrived at ${waypoint.title}. Tap "Continue guidance" to proceed to the next destination.',
       );
     }
@@ -947,11 +986,11 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
           _arrivedWaypoint = null;
         });
 
-        showMessage('Continuing to next destination...');
+        _showMessage('Continuing to next destination...');
       } else {
         _stopGuidance();
         _stopSimulation();
-        showMessage(
+        _showMessage(
           'Failed to continue to next destination. Please try again.',
         );
       }
@@ -1003,58 +1042,58 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
           });
           return true;
         case NavigationRouteStatus.internalError:
-          showMessage(
+          _showMessage(
             'Unexpected internal error occured. Please restart the app.',
           );
         case NavigationRouteStatus.routeNotFound:
-          showMessage('The route could not be calculated.');
+          _showMessage('The route could not be calculated.');
         case NavigationRouteStatus.networkError:
-          showMessage(
+          _showMessage(
             'Working network connection is required to calculate the route.',
           );
         case NavigationRouteStatus.quotaExceeded:
-          showMessage('Insufficient API quota to use the navigation.');
+          _showMessage('Insufficient API quota to use the navigation.');
         case NavigationRouteStatus.quotaCheckFailed:
-          showMessage(
+          _showMessage(
             'API quota check failed, cannot authorize the navigation.',
           );
         case NavigationRouteStatus.apiKeyNotAuthorized:
-          showMessage('A valid API key is required to use the navigation.');
+          _showMessage('A valid API key is required to use the navigation.');
         case NavigationRouteStatus.statusCanceled:
-          showMessage(
+          _showMessage(
             'The route calculation was canceled in favor of a newer one.',
           );
         case NavigationRouteStatus.duplicateWaypointsError:
-          showMessage(
+          _showMessage(
             'The route could not be calculated because of duplicate waypoints.',
           );
         case NavigationRouteStatus.noWaypointsError:
-          showMessage(
+          _showMessage(
             'The route could not be calculated because no waypoints were provided.',
           );
         case NavigationRouteStatus.locationUnavailable:
-          showMessage(
+          _showMessage(
             'No user location is available. Did you allow location permission?',
           );
         case NavigationRouteStatus.waypointError:
-          showMessage('Invalid waypoints provided.');
+          _showMessage('Invalid waypoints provided.');
         case NavigationRouteStatus.travelModeUnsupported:
-          showMessage(
+          _showMessage(
             'The route could not calculated for the given travel mode.',
           );
         case NavigationRouteStatus.unknown:
-          showMessage(
+          _showMessage(
             'The route could not be calculated due to an unknown error.',
           );
         case NavigationRouteStatus.locationUnknown:
-          showMessage(
+          _showMessage(
             'The route could not be calculated, because the user location is unknown.',
           );
       }
     } on RouteTokenMalformedException catch (_) {
-      showMessage('Malformed route token');
+      _showMessage('Malformed route token');
     } on SessionNotInitializedException catch (_) {
-      showMessage('Cannot set destinations, session not initialized');
+      _showMessage('Cannot set destinations, session not initialized');
     }
     setState(() {
       _errorOnSetDestinations = true;
@@ -1091,7 +1130,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   Future<Destinations?> _buildDestinationsWithRoutesApi() async {
     assert(_routeTokensEnabled);
 
-    showMessage('Using route token from Routes API.');
+    _showMessage('Using route token from Routes API.');
 
     List<String> routeTokens = <String>[];
     try {
@@ -1104,15 +1143,15 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         ..._waypoints,
       ]);
     } catch (e) {
-      showMessage('Failed to get route tokens from Routes API. $e');
+      _showMessage('Failed to get route tokens from Routes API. $e');
       return null;
     }
 
     if (routeTokens.isEmpty) {
-      showMessage('Failed to get route tokens from Routes API.');
+      _showMessage('Failed to get route tokens from Routes API.');
       return null;
     } else if (routeTokens.length > 1) {
-      showMessage(
+      _showMessage(
         'More than one route token received from Routes API. Using the first one.',
       );
     }
@@ -1143,9 +1182,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   Future<void> _showNativeNavigatorState() async {
     if (await GoogleMapsNavigator.isInitialized()) {
-      showMessage('Navigator initialized');
+      _showMessage('Navigator initialized');
     } else {
-      showMessage('Navigator not inititalized');
+      _showMessage('Navigator not inititalized');
     }
   }
 
@@ -1205,18 +1244,18 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   Future<void> _displayRouteSegments() async {
     final List<RouteSegment> segments =
         await GoogleMapsNavigator.getRouteSegments();
-    showMessage('Route segments amount: ${segments.length}');
+    _showMessage('Route segments amount: ${segments.length}');
   }
 
   Future<void> _displayTraveledRoute() async {
     final List<LatLng> route = await GoogleMapsNavigator.getTraveledRoute();
-    showMessage('Traveled route segment points: ${route.length}');
+    _showMessage('Traveled route segment points: ${route.length}');
   }
 
   Future<void> _displayCurrentRouteSegment() async {
     final RouteSegment? segment =
         await GoogleMapsNavigator.getCurrentRouteSegment();
-    showMessage(
+    _showMessage(
       'Current route segment destination: ${segment?.destinationWaypoint?.title ?? 'unknown'}',
     );
   }
@@ -1228,7 +1267,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         _mapPadding = padding;
       });
     } catch (e) {
-      showMessage(e.toString());
+      _showMessage(e.toString());
     }
   }
 
@@ -1239,7 +1278,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         _autoViewMapPadding = padding;
       });
     } catch (e) {
-      showMessage(e.toString());
+      _showMessage(e.toString());
     }
   }
 
@@ -2167,7 +2206,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                               .showReportIncidentsPanel();
                         } else {
                           if (context.mounted) {
-                            showMessage('Incident reporting is not available');
+                            _showMessage('Incident reporting is not available');
                           }
                         }
                       },
@@ -2178,7 +2217,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                         final bool available =
                             await _navigationViewController!
                                 .isIncidentReportingAvailable();
-                        showMessage('Incident reporting available: $available');
+                        _showMessage(
+                          'Incident reporting available: $available',
+                        );
                       },
                       child: const Text(
                         'Check incident reporting availability',
@@ -2240,7 +2281,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       await _navigationViewController?.setMapColorScheme(_mapColorScheme);
       await _navigationViewController?.setForceNightMode(_forceNightMode);
     } catch (e) {
-      showMessage('Failed to update color scheme: $e');
+      _showMessage('Failed to update color scheme: $e');
     }
   }
 
@@ -2326,7 +2367,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
           try {
             await _navigationViewController?.setMapColorScheme(scheme);
           } catch (e) {
-            showMessage('Failed to set map color scheme: $e');
+            _showMessage('Failed to set map color scheme: $e');
           }
         }
       },
@@ -2346,14 +2387,14 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
           try {
             await _navigationViewController?.setForceNightMode(mode);
           } catch (e) {
-            showMessage('Failed to set force night mode: $e');
+            _showMessage('Failed to set force night mode: $e');
           }
         }
       },
     );
   }
 
-  void showMessage(String message) {
+  void _showMessage(String message) {
     if (isOverlayVisible) {
       showOverlaySnackBar(message);
     } else {

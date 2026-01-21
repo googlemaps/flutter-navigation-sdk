@@ -36,7 +36,9 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
   ) {
     if shouldOnlyShowDriverAwarenessDisclaimer {
       // TODO: Disable driver awareness disclaimer on iOS due to the bug in the native side SDK
-      completion(Result.failure(GoogleMapsNavigationSessionManagerError.notSupported))
+      completion(
+        Result.failure(
+          getNotSupportedError("Driver awareness disclaimer is not supported on iOS.")))
       return
     }
 
