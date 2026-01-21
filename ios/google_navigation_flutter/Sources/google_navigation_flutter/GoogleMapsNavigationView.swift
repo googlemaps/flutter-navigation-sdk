@@ -410,6 +410,14 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     GMSCoordinateBounds(region: _mapView.projection.visibleRegion())
   }
 
+  public func getScreenCoordinate(coordinate: CLLocationCoordinate2D) -> CGPoint {
+    _mapView.projection.point(for: coordinate)
+  }
+
+  public func getLatLng(point: CGPoint) -> CLLocationCoordinate2D {
+    _mapView.projection.coordinate(for: point)
+  }
+
   public func animateCameraToCameraPosition(cameraPosition: GMSCameraPosition) {
     _mapView.animate(with: GMSCameraUpdate.setCamera(cameraPosition))
   }

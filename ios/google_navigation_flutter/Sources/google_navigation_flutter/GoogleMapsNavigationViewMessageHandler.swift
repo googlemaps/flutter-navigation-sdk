@@ -172,6 +172,18 @@ class GoogleMapsNavigationViewMessageHandler: MapViewApi {
     try Convert.convertLatLngBounds(bounds: getView(viewId).getVisibleRegion())
   }
 
+  func getScreenCoordinate(viewId: Int64, latLng: LatLngDto) throws -> ScreenCoordinateDto {
+    let coordinate = Convert.convertLatLngFromDto(point: latLng)
+    let point = try getView(viewId).getScreenCoordinate(coordinate: coordinate)
+    return ScreenCoordinateDto(x: Double(point.x), y: Double(point.y))
+  }
+
+  func getLatLng(viewId: Int64, screenCoordinate: ScreenCoordinateDto) throws -> LatLngDto {
+    let point = CGPoint(x: screenCoordinate.x, y: screenCoordinate.y)
+    let coordinate = try getView(viewId).getLatLng(point: point)
+    return Convert.convertLatLngToDto(point: coordinate)
+  }
+
   func animateCameraToCameraPosition(
     viewId: Int64, cameraPosition: CameraPositionDto,
     duration: Int64?,

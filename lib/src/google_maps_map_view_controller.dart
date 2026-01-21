@@ -127,6 +127,38 @@ class GoogleMapViewController {
     );
   }
 
+  /// Converts geographic coordinates to screen pixel coordinates.
+  ///
+  /// This method returns the screen location (in logical pixels) corresponding
+  /// to a geographical coordinate ([LatLng]). The screen location is in logical
+  /// pixels (Flutter's coordinate system) relative to the top left of the map
+  /// (not the top left of the whole screen).
+  ///
+  /// The returned coordinates work seamlessly with Flutter's layout system and
+  /// do not require manual device pixel ratio conversion.
+  Future<ScreenCoordinate> getScreenCoordinate(LatLng latLng) async {
+    return GoogleMapsNavigationPlatform.instance.viewAPI.getScreenCoordinate(
+      viewId: _viewId,
+      latLng: latLng,
+    );
+  }
+
+  /// Converts screen pixel coordinates to geographic coordinates.
+  ///
+  /// This method returns the geographic location ([LatLng]) corresponding to
+  /// a screen location. The screen location is specified in logical pixels
+  /// (Flutter's coordinate system) relative to the top left of the map
+  /// (not the top left of the whole screen).
+  ///
+  /// The coordinates should be provided in Flutter's logical pixel system and
+  /// do not require manual device pixel ratio conversion.
+  Future<LatLng> getLatLng(ScreenCoordinate screenCoordinate) async {
+    return GoogleMapsNavigationPlatform.instance.viewAPI.getLatLng(
+      viewId: _viewId,
+      screenCoordinate: screenCoordinate,
+    );
+  }
+
   /// Animates the movement of the camera from the current position
   /// to the position defined in the [cameraUpdate].
   ///
