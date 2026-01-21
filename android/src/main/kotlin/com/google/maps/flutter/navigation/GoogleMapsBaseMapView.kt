@@ -817,13 +817,28 @@ abstract class GoogleMapsBaseMapView(
     val result = mutableListOf<MarkerDto>()
     var error: Throwable? = null
     markers.forEach {
-      findMarkerController(it.markerId)?.let { controller ->
-        Convert.sinkMarkerOptions(it.options, controller, imageRegistry)
+      // Check if marker belongs to a cluster manager
+      if (it.options.clusterManagerId != null) {
+        val registeredImage =
+          it.options.icon.registeredImageId?.let { id -> imageRegistry.findRegisteredImage(id) }
+        val builder = MarkerBuilder()
+        Convert.sinkMarkerOptions(it.options, builder, imageRegistry)
+        _clusterManagersController?.updateMarkerInCluster(
+          it,
+          registeredImage,
+          builder.consumeTapEvents,
+        )
         result.add(it)
-      }
-        ?: run {
-          error = FlutterError("markerNotFound", "Failed to update marker with id ${it.markerId}")
+      } else {
+        // Regular marker (not clustered)
+        findMarkerController(it.markerId)?.let { controller ->
+          Convert.sinkMarkerOptions(it.options, controller, imageRegistry)
+          result.add(it)
         }
+          ?: run {
+            error = FlutterError("markerNotFound", "Failed to update marker with id ${it.markerId}")
+          }
+      }
     }
     error?.let { throw error as Throwable }
     return result
@@ -833,13 +848,22 @@ abstract class GoogleMapsBaseMapView(
   fun removeMarkers(markers: List<MarkerDto>) {
     var error: Throwable? = null
     markers.forEach {
-      findMarkerController(it.markerId)?.let { controller ->
-        controller.remove()
-        _markers.remove(controller)
-      }
-        ?: run {
-          error = FlutterError("markerNotFound", "Failed to remove marker with id ${it.markerId}")
+      // Check if marker belongs to a cluster manager
+      if (it.options.clusterManagerId != null) {
+        _clusterManagersController?.removeMarkerFromCluster(
+          it.markerId,
+          it.options.clusterManagerId!!,
+        )
+      } else {
+        // Regular marker (not clustered)
+        findMarkerController(it.markerId)?.let { controller ->
+          controller.remove()
+          _markers.remove(controller)
         }
+          ?: run {
+            error = FlutterError("markerNotFound", "Failed to remove marker with id ${it.markerId}")
+          }
+      }
     }
     error?.let { throw error as Throwable }
   }
@@ -847,6 +871,7 @@ abstract class GoogleMapsBaseMapView(
   fun clearMarkers() {
     _markerCollection?.clear()
     _markers.clear()
+    _clusterManagersController?.clearClusterManagers()
   }
 
   fun getClusterManagers(): List<ClusterManagerDto> {
