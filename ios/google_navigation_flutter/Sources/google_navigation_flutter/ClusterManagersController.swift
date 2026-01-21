@@ -220,4 +220,9 @@ class ClusterManagersController {
   func getClusterItem(markerId: String, clusterManagerId: String) -> MarkerClusterItem? {
     clusterItemsByManager[clusterManagerId]?[markerId]
   }
+
+  /// Gets all cluster items for a specific cluster manager.
+  func getClusterItems(clusterManagerId: String) -> [String: MarkerClusterItem]? {
+    clusterItemsByManager[clusterManagerId]
+  }
 }

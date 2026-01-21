@@ -36,6 +36,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   private var _isNavigationView: Bool
   private var _myLocationButton: Bool = true
   private var _markerControllers: [MarkerController] = []
+  private var _allMarkersMap: [String: MarkerDto] = [:]
   private var _gmsPolygons: [GMSPolygon] = []
   private var _gmsPolylines: [GMSPolyline] = []
   private var _gmsCircles: [GMSCircle] = []
@@ -681,13 +682,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   }
 
   func getMarkers() -> [MarkerDto] {
-    // Get regular markers
-    let regularMarkers = _markerControllers.map { $0.toMarkerDto() }
-
-    // Get clustered markers from all cluster managers
-    let clusteredMarkers = _clusterManagersController?.getAllClusteredMarkers() ?? []
-
-    return regularMarkers + clusteredMarkers
+    return Array(_allMarkersMap.values)
   }
 
   func addMarkers(markers: [MarkerDto]) -> [MarkerDto] {
@@ -695,6 +690,8 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
       markers
       .compactMap { $0 }
       .map { marker in
+        _allMarkersMap[marker.markerId] = marker
+
         // Check if marker belongs to a cluster manager
         if marker.options.clusterManagerId != nil {
           let registeredImage: RegisteredImage?
@@ -731,6 +728,8 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     var result: [MarkerDto] = []
 
     for markerDto in markers.compactMap({ $0 }) {
+      _allMarkersMap[markerDto.markerId] = markerDto
+
       // First, check if this marker exists in any cluster
       let foundInCluster = _clusterManagersController?.findClusterManagerIdForMarker(
         markerId: markerDto.markerId)
@@ -811,6 +810,8 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     try markers
       .compactMap { $0 }
       .forEach { markerDto in
+        _allMarkersMap.removeValue(forKey: markerDto.markerId)
+
         // Check if marker belongs to a cluster manager
         if let clusterManagerId = markerDto.options.clusterManagerId {
           _clusterManagersController?.removeMarkerFromCluster(
@@ -833,6 +834,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
       markerController.gmsMarker.map = nil
     }
     _markerControllers.removeAll()
+    _allMarkersMap.removeAll()
     _clusterManagersController?.clearClusterManagers()
   }
 
@@ -999,6 +1001,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     // The clear will remove everything from map view, so emptying
     // these arrays is enough.
     _markerControllers.removeAll()
+    _allMarkersMap.removeAll()
     _gmsPolylines.removeAll()
     _gmsPolygons.removeAll()
     _gmsCircles.removeAll()
@@ -1021,11 +1024,25 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   func removeClusterManagers(clusterManagers: [ClusterManagerDto]) {
     guard let controller = _clusterManagersController else { return }
     clusterManagers.forEach { dto in
+      if let items = controller.getClusterItems(clusterManagerId: dto.clusterManagerId) {
+        items.keys.forEach { markerId in
+          _allMarkersMap.removeValue(forKey: markerId)
+        }
+      }
       controller.removeClusterManager(clusterManagerId: dto.clusterManagerId)
     }
   }
 
   func clearClusterManagers() {
+    if let controller = _clusterManagersController {
+      for clusterManagerId in controller.getClusterManagerIds() {
+        if let items = controller.getClusterItems(clusterManagerId: clusterManagerId) {
+          items.keys.forEach { markerId in
+            _allMarkersMap.removeValue(forKey: markerId)
+          }
+        }
+      }
+    }
     _clusterManagersController?.clearClusterManagers()
   }
 

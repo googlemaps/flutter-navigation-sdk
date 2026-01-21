@@ -50,6 +50,7 @@ abstract class GoogleMapsBaseMapView(
   private var _markerManager: MarkerManager? = null
   private var _markerCollection: MarkerManager.Collection? = null
   private val _markers = mutableListOf<MarkerController>()
+  private val _allMarkersMap = mutableMapOf<String, MarkerDto>()
   private val _polygons = mutableListOf<PolygonController>()
   private val _polylines = mutableListOf<PolylineController>()
   private val _circles = mutableListOf<CircleController>()
@@ -766,18 +767,15 @@ abstract class GoogleMapsBaseMapView(
   }
 
   fun getMarkers(): List<MarkerDto> {
-    // Get regular markers
-    val regularMarkers = _markers.map { MarkerDto(it.markerId, Convert.markerControllerToMarkerOptions(it)) }
-
-    // Get clustered markers from all cluster managers
-    val clusteredMarkers = _clusterManagersController?.getAllClusteredMarkers() ?: emptyList()
-
-    return regularMarkers + clusteredMarkers
+    // Return all markers from single source of truth
+    return _allMarkersMap.values.toList()
   }
 
   fun addMarkers(markers: List<MarkerDto>): List<MarkerDto> {
     val result = mutableListOf<MarkerDto>()
     markers.forEach {
+      _allMarkersMap[it.markerId] = it
+
       // Check if marker belongs to a cluster
       if (it.options.clusterManagerId != null) {
         val registeredImage =
@@ -823,6 +821,8 @@ abstract class GoogleMapsBaseMapView(
     val result = mutableListOf<MarkerDto>()
     var error: Throwable? = null
     markers.forEach { markerDto ->
+      _allMarkersMap[markerDto.markerId] = markerDto
+
       // First, check if this marker exists in any cluster
       var foundInCluster: String? = null
       _clusterManagersController?.let { controller ->
@@ -842,10 +842,15 @@ abstract class GoogleMapsBaseMapView(
         foundInCluster != null && targetClusterId != null -> {
           if (foundInCluster != targetClusterId) {
             // Moving between clusters
-            _clusterManagersController?.removeMarkerFromCluster(markerDto.markerId, foundInCluster!!)
+            _clusterManagersController?.removeMarkerFromCluster(
+              markerDto.markerId,
+              foundInCluster!!,
+            )
           }
           val registeredImage =
-            markerDto.options.icon.registeredImageId?.let { id -> imageRegistry.findRegisteredImage(id) }
+            markerDto.options.icon.registeredImageId?.let { id ->
+              imageRegistry.findRegisteredImage(id)
+            }
           val builder = MarkerBuilder()
           Convert.sinkMarkerOptions(markerDto.options, builder, imageRegistry)
           _clusterManagersController?.updateMarkerInCluster(
@@ -866,7 +871,9 @@ abstract class GoogleMapsBaseMapView(
           val marker = _markerCollection?.addMarker(options)
           if (marker != null) {
             val registeredImage =
-              markerDto.options.icon.registeredImageId?.let { id -> imageRegistry.findRegisteredImage(id) }
+              markerDto.options.icon.registeredImageId?.let { id ->
+                imageRegistry.findRegisteredImage(id)
+              }
             val controller =
               MarkerController(
                 marker,
@@ -891,7 +898,9 @@ abstract class GoogleMapsBaseMapView(
           }
           // Add to cluster
           val registeredImage =
-            markerDto.options.icon.registeredImageId?.let { id -> imageRegistry.findRegisteredImage(id) }
+            markerDto.options.icon.registeredImageId?.let { id ->
+              imageRegistry.findRegisteredImage(id)
+            }
           val builder = MarkerBuilder()
           Convert.sinkMarkerOptions(markerDto.options, builder, imageRegistry)
           _clusterManagersController?.addMarkerToCluster(
@@ -908,7 +917,11 @@ abstract class GoogleMapsBaseMapView(
             result.add(markerDto)
           }
             ?: run {
-              error = FlutterError("markerNotFound", "Failed to update marker with id ${markerDto.markerId}")
+              error =
+                FlutterError(
+                  "markerNotFound",
+                  "Failed to update marker with id ${markerDto.markerId}",
+                )
             }
         }
       }
@@ -921,6 +934,8 @@ abstract class GoogleMapsBaseMapView(
   fun removeMarkers(markers: List<MarkerDto>) {
     var error: Throwable? = null
     markers.forEach {
+      _allMarkersMap.remove(it.markerId)
+
       // Check if marker belongs to a cluster manager
       if (it.options.clusterManagerId != null) {
         _clusterManagersController?.removeMarkerFromCluster(
@@ -944,6 +959,7 @@ abstract class GoogleMapsBaseMapView(
   fun clearMarkers() {
     _markerCollection?.clear()
     _markers.clear()
+    _allMarkersMap.clear()
     _clusterManagersController?.clearClusterManagers()
   }
 
@@ -963,18 +979,31 @@ abstract class GoogleMapsBaseMapView(
   }
 
   fun removeClusterManagers(clusterManagers: List<ClusterManagerDto>) {
-    clusterManagers.forEach {
-      _clusterManagersController?.removeClusterManager(it.clusterManagerId)
+    clusterManagers.forEach { clusterManagerDto ->
+      // Remove all markers from this cluster manager from _allMarkersMap
+      _clusterManagersController
+        ?.getClusterManager(clusterManagerDto.clusterManagerId)
+        ?.getItems()
+        ?.forEach { item -> _allMarkersMap.remove(item.markerId) }
+      _clusterManagersController?.removeClusterManager(clusterManagerDto.clusterManagerId)
     }
   }
 
   fun clearClusterManagers() {
+    _clusterManagersController?.let { controller ->
+      controller.getClusterManagerIds().forEach { clusterManagerId ->
+        controller.getClusterManager(clusterManagerId)?.getItems()?.forEach { item ->
+          _allMarkersMap.remove(item.markerId)
+        }
+      }
+    }
     _clusterManagersController?.clearClusterManagers()
   }
 
   fun clear() {
     getMap().clear()
     _markers.clear()
+    _allMarkersMap.clear()
     _polygons.clear()
     _polylines.clear()
     _circles.clear()
