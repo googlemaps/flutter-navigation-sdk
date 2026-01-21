@@ -821,7 +821,6 @@ class MarkerOptionsDto {
 
   ImageDescriptorDto icon;
 
-  /// Optional cluster manager ID. If provided, this marker will be managed by the cluster manager.
   String? clusterManagerId;
 
   List<Object?> _toList() {

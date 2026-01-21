@@ -763,7 +763,6 @@ struct MarkerOptionsDto: Hashable {
   var visible: Bool
   var zIndex: Double
   var icon: ImageDescriptorDto
-  /// Optional cluster manager ID. If provided, this marker will be managed by the cluster manager.
   var clusterManagerId: String? = nil
 
   // swift-format-ignore: AlwaysUseLowerCamelCase

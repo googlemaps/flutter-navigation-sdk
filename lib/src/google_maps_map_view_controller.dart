@@ -317,11 +317,11 @@ class GoogleMapViewController {
   /// Cluster managers group nearby markers into clusters at different zoom levels.
   /// Markers can be assigned to a cluster manager by setting their [MarkerOptions.clusterManagerId].
   Future<List<ClusterManager>> addClusterManagers(
-    List<String> clusterManagerIds,
+    List<ClusterManager> clusterManagers,
   ) {
     return GoogleMapsNavigationPlatform.instance.viewAPI.addClusterManagers(
       viewId: _viewId,
-      clusterManagerIds: clusterManagerIds,
+      clusterManagers: clusterManagers,
     );
   }
 

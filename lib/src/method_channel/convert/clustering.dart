@@ -15,6 +15,24 @@
 import '../../../google_navigation_flutter.dart';
 import '../method_channel.dart';
 
+/// [ClusterManager] convert extension.
+/// @nodoc
+extension ConvertClusterManager on ClusterManager {
+  /// Converts [ClusterManager] to [ClusterManagerDto]
+  ClusterManagerDto toDto() {
+    return ClusterManagerDto(clusterManagerId: clusterManagerId);
+  }
+}
+
+/// [ClusterManagerDto] convert extension.
+/// @nodoc
+extension ConvertClusterManagerDto on ClusterManagerDto {
+  /// Converts [ClusterManagerDto] to [ClusterManager]
+  ClusterManager toClusterManager() {
+    return ClusterManager(clusterManagerId: clusterManagerId);
+  }
+}
+
 /// [ClusterEventTypeDto] convert extension.
 /// @nodoc
 extension ConvertClusterEventType on ClusterEventTypeDto {

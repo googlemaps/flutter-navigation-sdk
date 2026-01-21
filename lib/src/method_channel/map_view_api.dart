@@ -67,14 +67,6 @@ class MapViewAPIImpl {
     return circleId;
   }
 
-  /// Keep track of cluster manager count, used to generate cluster manager ID's.
-  int _clusterManagerCounter = 0;
-  String _createClusterManagerId() {
-    final String clusterManagerId = 'ClusterManager_$_clusterManagerCounter';
-    _clusterManagerCounter += 1;
-    return clusterManagerId;
-  }
-
   Stream<T> _unwrapEventStream<T>({required int viewId}) {
     // If event that does not
     return _viewEventStreamController.stream
@@ -777,28 +769,19 @@ class MapViewAPIImpl {
 
     return clusterManagers
         .whereType<ClusterManagerDto>()
-        .map(
-          (ClusterManagerDto cm) =>
-              ClusterManager(clusterManagerId: cm.clusterManagerId),
-        )
+        .map((ClusterManagerDto cm) => cm.toClusterManager())
         .toList();
   }
 
   /// Add cluster managers to map view.
   Future<List<ClusterManager>> addClusterManagers({
     required int viewId,
-    required List<String> clusterManagerIds,
+    required List<ClusterManager> clusterManagers,
   }) async {
-    // Create cluster manager objects with provided or generated ID's
-    final List<ClusterManagerDto> clusterManagersToAdd = clusterManagerIds
-        .map(
-          (String id) => ClusterManagerDto(
-            clusterManagerId: id.isEmpty ? _createClusterManagerId() : id,
-          ),
-        )
+    final List<ClusterManagerDto> clusterManagersToAdd = clusterManagers
+        .map((cm) => cm.toDto())
         .toList();
 
-    // Add cluster managers to map
     final List<ClusterManagerDto?> clusterManagersAdded = await _viewApi
         .addClusterManagers(viewId, clusterManagersToAdd);
 

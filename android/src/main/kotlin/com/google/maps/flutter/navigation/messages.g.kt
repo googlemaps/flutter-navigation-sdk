@@ -900,9 +900,6 @@ data class MarkerOptionsDto(
   val visible: Boolean,
   val zIndex: Double,
   val icon: ImageDescriptorDto,
-  /**
-   * Optional cluster manager ID. If provided, this marker will be managed by the cluster manager.
-   */
   val clusterManagerId: String? = null,
 ) {
   companion object {

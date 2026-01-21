@@ -119,13 +119,13 @@ class _ClusteringPageState extends ExamplePageState<ClusteringPage> {
     final clusterManagerId = 'cluster_manager_id_$_clusterManagerIdCounter';
     _clusterManagerIdCounter++;
 
+    final clusterManager = ClusterManager(clusterManagerId: clusterManagerId);
     final List<ClusterManager> addedClusterManagers =
-        await _navigationViewController!.addClusterManagers(<String>[
-          clusterManagerId,
+        await _navigationViewController!.addClusterManagers(<ClusterManager>[
+          clusterManager,
         ]);
 
     if (addedClusterManagers.isNotEmpty) {
-      final clusterManager = addedClusterManagers.first;
       setState(() {
         _clusterManagers[clusterManagerId] = clusterManager;
       });
