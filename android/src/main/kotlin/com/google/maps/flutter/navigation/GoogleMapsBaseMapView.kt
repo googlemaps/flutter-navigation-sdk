@@ -228,7 +228,8 @@ abstract class GoogleMapsBaseMapView(
     _markerCollection?.setOnInfoWindowLongClickListener { marker ->
       sendMarkerEvent(marker, MarkerEventTypeDto.INFO_WINDOW_LONG_CLICKED)
     }
-    // Info window close listener must be set on GoogleMap directly (not available on MarkerManager.Collection)
+    // Info window close listener must be set on GoogleMap directly (not available on
+    // MarkerManager.Collection)
     getMap().setOnInfoWindowCloseListener { marker ->
       try {
         sendMarkerEvent(marker, MarkerEventTypeDto.INFO_WINDOW_CLOSED)

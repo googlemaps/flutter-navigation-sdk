@@ -50,8 +50,7 @@ class ClusterManagerController(
 
     clusterManager.setOnClusterItemClickListener { item ->
       onClusterItemClick(item)
-      // Return false to allow default behavior (show info window)
-      false
+      item.consumeTapEvents
     }
   }
 
@@ -122,9 +121,8 @@ class ClusterManagerController(
     ) {}
   }
 
-  private fun onClusterItemClick(item: MarkerClusterItem): Boolean {
-    // Individual marker clicks are handled by the marker controller
-    return item.consumeTapEvents
+  private fun onClusterItemClick(item: MarkerClusterItem) {
+    viewEventApi.onMarkerEvent(viewId.toLong(), item.markerId, MarkerEventTypeDto.CLICKED) {}
   }
 
   /**
