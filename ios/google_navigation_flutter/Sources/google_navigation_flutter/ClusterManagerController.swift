@@ -57,9 +57,6 @@ class ClusterManagerController: NSObject {
       algorithm: algorithm,
       renderer: clusterRenderer
     )
-
-    // Set cluster manager delegate for click events
-    clusterManager.setDelegate(self, mapDelegate: nil)
   }
 
   /// Adds a marker item to the cluster.
@@ -136,25 +133,19 @@ class ClusterManagerController: NSObject {
       self.delegate = self
     }
 
-    // GMUClusterRendererDelegate method called when a marker is rendered
-    func renderer(
-      _ renderer: GMUClusterRenderer,
-      willRenderMarker marker: GMSMarker,
-      for clusterItem: GMUClusterItem,
-      inCluster cluster: GMUCluster?
-    ) {
-      guard let item = clusterItem as? MarkerClusterItem else {
+    func renderer(_ renderer: GMUClusterRenderer, willRenderMarker marker: GMSMarker) {
+      guard let item = marker.userData as? MarkerClusterItem else {
         return
       }
 
       let itemOptions = item.getMarkerDto().options
 
-      // Apply marker options
       marker.title = itemOptions.infoWindow.title
       marker.snippet = itemOptions.infoWindow.snippet
       marker.opacity = Float(itemOptions.alpha)
       marker.isDraggable = itemOptions.draggable
       marker.isFlat = itemOptions.flat
+      marker.isTappable = true
       marker.rotation = itemOptions.rotation
       marker.zIndex = Int32(itemOptions.zIndex)
       marker.groundAnchor = CGPoint(x: itemOptions.anchor.u, y: itemOptions.anchor.v)
@@ -163,26 +154,12 @@ class ClusterManagerController: NSObject {
         y: itemOptions.infoWindow.anchor.v
       )
 
-      // Set custom icon if available
       if let registeredImage = item.registeredImage {
         marker.icon = registeredImage.image
       }
 
       // Store the mapping between marker and cluster item
       customDelegate?.clusterRenderer(self, didRenderMarker: marker, forClusterItem: item)
-    }
-
-    func renderer(
-      _ renderer: GMUClusterRenderer,
-      markerFor clusterItem: GMUClusterItem
-    ) -> GMSMarker? {
-      // Return nil to use default marker creation
-      return nil
-    }
-
-    override func shouldRender(as cluster: GMUCluster, atZoom zoom: Float) -> Bool {
-      // Render as cluster if it has more than one item
-      return cluster.count > 1
     }
   }
 }
@@ -203,46 +180,5 @@ extension ClusterManagerController: ClusterRendererDelegate {
     forClusterItem item: MarkerClusterItem
   ) {
     markerToClusterItem[marker] = item
-  }
-}
-
-extension ClusterManagerController: GMUClusterManagerDelegate {
-  func clusterManager(
-    _ clusterManager: GMUClusterManager,
-    didTap cluster: GMUCluster
-  ) -> Bool {
-    let markerIds = cluster.items.compactMap { ($0 as? MarkerClusterItem)?.markerId }
-    let position = LatLngDto(
-      latitude: cluster.position.latitude,
-      longitude: cluster.position.longitude
-    )
-
-    let clusterDto = ClusterDto(
-      clusterManagerId: clusterManagerId,
-      position: position,
-      markerIds: markerIds
-    )
-
-    if let viewId = viewId {
-      viewEventApi?.onClusterEvent(
-        viewId: viewId,
-        clusterManagerId: clusterManagerId,
-        eventType: .clicked,
-        cluster: clusterDto
-      ) { _ in }
-    }
-
-    return true
-  }
-
-  func clusterManager(
-    _ clusterManager: GMUClusterManager,
-    didTap clusterItem: GMUClusterItem
-  ) -> Bool {
-    // Individual marker clicks are handled by the marker controller
-    if let item = clusterItem as? MarkerClusterItem {
-      return item.consumeTapEvents
-    }
-    return false
   }
 }

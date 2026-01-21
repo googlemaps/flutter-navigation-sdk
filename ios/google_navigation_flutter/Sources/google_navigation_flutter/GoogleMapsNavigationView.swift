@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import Flutter
+import GoogleMapsUtils
 import GoogleNavigation
 import UIKit
 
@@ -714,6 +715,9 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
           return marker
         }
       }
+
+    _clusterManagersController?.invokeClusteringForAll()
+
     return markers
   }
 
@@ -1072,14 +1076,25 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
   }
 
   public func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+    if marker.userData is GMUCluster {
+      let cluster = marker.userData as! GMUCluster
+      _clusterManagersController?.handleClusterTap(cluster)
+      return false
+    }
+
+    if let clusterItem = _clusterManagersController?.findClusterItem(marker: marker) {
+      getViewEventApi()?.onMarkerEvent(
+        viewId: _viewId!,
+        markerId: clusterItem.markerId,
+        eventType: .clicked,
+        completion: { _ in }
+      )
+      return clusterItem.consumeTapEvents
+    }
+
     do {
       let markerController = try findMarkerController(gmsMarker: marker)
       sendMarkerEvent(marker: markerController.gmsMarker, eventType: .clicked)
-
-      // This return value controls the default onClick behaviour,
-      // return true for default behaviour to occur and false to not.
-      // Default behavior is for the camera to move to the marker and an info window to
-      // appear.
       return markerController.consumeTapEvents
     } catch {
       return false
@@ -1171,9 +1186,6 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
   }
 
   public func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
-    // Refresh clusters when camera stops moving
-    _clusterManagersController?.onCameraIdle()
-
     if _listenCameraChanges {
       getViewEventApi()?.onCameraChanged(
         viewId: _viewId!,

@@ -14,6 +14,7 @@
 
 import Foundation
 import GoogleMaps
+import GoogleMapsUtils
 
 /// Controller for managing multiple ClusterManager instances.
 class ClusterManagersController {
@@ -43,6 +44,8 @@ class ClusterManagersController {
       return existingManager
     }
 
+    let currentDelegate = mapView.delegate
+
     let controller = ClusterManagerController(
       clusterManagerId: clusterManagerId,
       mapView: mapView,
@@ -50,6 +53,8 @@ class ClusterManagersController {
       viewId: viewId,
       imageRegistry: imageRegistry
     )
+
+    mapView.delegate = currentDelegate
 
     clusterManagers[clusterManagerId] = controller
     clusterItemsByManager[clusterManagerId] = [:]
@@ -102,7 +107,6 @@ class ClusterManagersController {
 
     controller.addItem(item)
     clusterItemsByManager[clusterManagerId]?[markerDto.markerId] = item
-    controller.cluster()
   }
 
   /// Removes a marker from its cluster manager.
@@ -112,7 +116,6 @@ class ClusterManagersController {
 
     clusterItemsByManager[clusterManagerId]?.removeValue(forKey: markerId)
     controller.removeItem(item)
-    controller.cluster()
   }
 
   /// Updates a marker in its cluster manager.
@@ -132,11 +135,40 @@ class ClusterManagersController {
     )
   }
 
-  /// Called when camera stops moving to refresh all clusters.
-  func onCameraIdle() {
+  /// Manually invokes clustering for all cluster managers.
+  /// Should be called after adding/removing markers in batch.
+  func invokeClusteringForAll() {
     for controller in clusterManagers.values {
       controller.cluster()
     }
+  }
+
+  func handleClusterTap(_ cluster: GMUCluster) {
+    guard let firstItem = cluster.items.first as? MarkerClusterItem,
+      viewId != nil
+    else {
+      return
+    }
+
+    let clusterManagerId = firstItem.clusterManagerId
+    let markerIds = cluster.items.compactMap { ($0 as? MarkerClusterItem)?.markerId }
+    let position = LatLngDto(
+      latitude: cluster.position.latitude,
+      longitude: cluster.position.longitude
+    )
+
+    let clusterDto = ClusterDto(
+      clusterManagerId: clusterManagerId,
+      position: position,
+      markerIds: markerIds
+    )
+
+    viewEventApi?.onClusterEvent(
+      viewId: viewId!,
+      clusterManagerId: clusterManagerId,
+      eventType: .clicked,
+      cluster: clusterDto
+    ) { _ in }
   }
 
   /// Finds which cluster manager owns a marker.
