@@ -124,14 +124,29 @@ class ClusterManagersController {
     registeredImage: RegisteredImage?,
     consumeTapEvents: Bool
   ) {
-    guard let clusterManagerId = markerDto.options.clusterManagerId else { return }
+    let markerId = markerDto.markerId
+    guard let newClusterManagerId = markerDto.options.clusterManagerId else { return }
 
-    // Remove old item and add updated one
-    removeMarkerFromCluster(markerId: markerDto.markerId, clusterManagerId: clusterManagerId)
-    addMarkerToCluster(
-      markerDto: markerDto,
-      registeredImage: registeredImage,
-      consumeTapEvents: consumeTapEvents
+    guard let existingItem = findClusterItem(markerId: markerId) else { return }
+    let oldClusterManagerId = existingItem.clusterManagerId
+
+    // If the cluster ID on the updated marker has changed, the marker needs to
+    // be removed and re-added to update its cluster manager state.
+    if newClusterManagerId != oldClusterManagerId {
+      removeMarkerFromCluster(markerId: markerId, clusterManagerId: oldClusterManagerId)
+      addMarkerToCluster(
+        markerDto: markerDto,
+        registeredImage: registeredImage,
+        consumeTapEvents: consumeTapEvents
+      )
+      return
+    }
+
+    // Update item in place
+    existingItem.updateMarkerOptions(
+      newMarkerDto: markerDto,
+      newRegisteredImage: registeredImage,
+      newConsumeTapEvents: consumeTapEvents
     )
   }
 
@@ -181,6 +196,16 @@ class ClusterManagersController {
     return nil
   }
 
+  /// Finds which cluster manager owns a marker by marker ID.
+  func findClusterItem(markerId: String) -> MarkerClusterItem? {
+    for items in clusterItemsByManager.values {
+      if let item = items[markerId] {
+        return item
+      }
+    }
+    return nil
+  }
+
   /// Gets clusters for a specific cluster manager.
   func getClusters(clusterManagerId: String) -> [ClusterDto] {
     clusterManagers[clusterManagerId]?.getClusters() ?? []
@@ -188,32 +213,19 @@ class ClusterManagersController {
 
   /// Gets all clusters from all cluster managers.
   func getAllClusters() -> [ClusterDto] {
-    var allClusters: [ClusterDto] = []
-    for controller in clusterManagers.values {
-      allClusters.append(contentsOf: controller.getClusters())
-    }
-    return allClusters
+    return clusterManagers.values.flatMap { $0.getClusters() }
   }
 
   /// Gets all clustered markers from all cluster managers.
   func getAllClusteredMarkers() -> [MarkerDto] {
-    var allMarkers: [MarkerDto] = []
-    for items in clusterItemsByManager.values {
-      for item in items.values {
-        allMarkers.append(item.getMarkerDto())
-      }
+    return clusterItemsByManager.values.flatMap { items in
+      items.values.map { $0.getMarkerDto() }
     }
-    return allMarkers
   }
 
   /// Finds which cluster manager owns a marker by markerId.
   func findClusterManagerIdForMarker(markerId: String) -> String? {
-    for (clusterManagerId, items) in clusterItemsByManager {
-      if items[markerId] != nil {
-        return clusterManagerId
-      }
-    }
-    return nil
+    return findClusterItem(markerId: markerId)?.clusterManagerId
   }
 
   /// Gets a cluster item by markerId.
@@ -221,8 +233,9 @@ class ClusterManagersController {
     clusterItemsByManager[clusterManagerId]?[markerId]
   }
 
-  /// Gets all cluster items for a specific cluster manager.
-  func getClusterItems(clusterManagerId: String) -> [String: MarkerClusterItem]? {
-    clusterItemsByManager[clusterManagerId]
+  /// Gets all clustered marker IDs for a specific cluster manager.
+  func getClusteredMarkerIds(clusterManagerId: String) -> [String] {
+    guard let items = clusterItemsByManager[clusterManagerId] else { return [] }
+    return Array(items.keys)
   }
 }

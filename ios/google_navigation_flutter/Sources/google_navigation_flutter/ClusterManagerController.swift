@@ -87,29 +87,26 @@ class ClusterManagerController: NSObject {
 
   /// Gets all current clusters.
   func getClusters() -> [ClusterDto] {
-    var clusters: [ClusterDto] = []
-
-    // Get all clusters from the algorithm
-    if let algorithm = clusterManager.algorithm as? GMUNonHierarchicalDistanceBasedAlgorithm {
-      for item in algorithm.clusters(atZoom: mapView.camera.zoom) {
-        if let cluster = item as? GMUStaticCluster {
-          let markerIds = cluster.items.compactMap { ($0 as? MarkerClusterItem)?.markerId }
-          let position = LatLngDto(
-            latitude: cluster.position.latitude,
-            longitude: cluster.position.longitude
-          )
-
-          clusters.append(
-            ClusterDto(
-              clusterManagerId: clusterManagerId,
-              position: position,
-              markerIds: markerIds
-            ))
-        }
-      }
+    guard let algorithm = clusterManager.algorithm as? GMUNonHierarchicalDistanceBasedAlgorithm
+    else {
+      return []
     }
 
-    return clusters
+    return algorithm.clusters(atZoom: mapView.camera.zoom).compactMap { item in
+      guard let cluster = item as? GMUStaticCluster else { return nil }
+
+      let markerIds = cluster.items.compactMap { ($0 as? MarkerClusterItem)?.markerId }
+      let position = LatLngDto(
+        latitude: cluster.position.latitude,
+        longitude: cluster.position.longitude
+      )
+
+      return ClusterDto(
+        clusterManagerId: clusterManagerId,
+        position: position,
+        markerIds: markerIds
+      )
+    }
   }
 
   /// Finds the cluster item associated with a marker.

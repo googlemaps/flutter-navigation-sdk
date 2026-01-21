@@ -21,9 +21,9 @@ import GoogleMapsUtils
 class MarkerClusterItem: NSObject, GMUClusterItem {
   let markerId: String
   let clusterManagerId: String
-  private let markerDto: MarkerDto
-  let registeredImage: RegisteredImage?
-  let consumeTapEvents: Bool
+  private var markerDto: MarkerDto
+  var registeredImage: RegisteredImage?
+  var consumeTapEvents: Bool
 
   var position: CLLocationCoordinate2D {
     CLLocationCoordinate2D(
@@ -50,5 +50,16 @@ class MarkerClusterItem: NSObject, GMUClusterItem {
   /// Returns the marker data transfer object.
   func getMarkerDto() -> MarkerDto {
     markerDto
+  }
+
+  /// Updates the marker options.
+  func updateMarkerOptions(
+    newMarkerDto: MarkerDto,
+    newRegisteredImage: RegisteredImage?,
+    newConsumeTapEvents: Bool
+  ) {
+    markerDto = newMarkerDto
+    registeredImage = newRegisteredImage
+    consumeTapEvents = newConsumeTapEvents
   }
 }
