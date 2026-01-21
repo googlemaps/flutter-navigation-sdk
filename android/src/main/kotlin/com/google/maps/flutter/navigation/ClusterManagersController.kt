@@ -122,7 +122,7 @@ class ClusterManagersController(
     consumeTapEvents: Boolean,
   ) {
     val markerId = markerDto.markerId
-    
+
     val newClusterManagerId = markerDto.options.clusterManagerId ?: return
     val existingItem = findClusterItem(markerId) ?: return
 
@@ -162,7 +162,9 @@ class ClusterManagersController(
   /** Finds which cluster manager owns a marker by marker ID. */
   fun findClusterItem(markerId: String): MarkerClusterItem? {
     for (items in clusterItemsByManager.values) {
-      items[markerId]?.let { return it }
+      items[markerId]?.let {
+        return it
+      }
     }
     return null
   }
@@ -179,8 +181,11 @@ class ClusterManagersController(
 
   /** Gets all clustered markers from all cluster managers. */
   fun getAllClusteredMarkers(): List<MarkerDto> {
-    return clusterItemsByManager.values.flatMap { items ->
-      items.values.map { it.getMarkerDto() }
-    }
+    return clusterItemsByManager.values.flatMap { items -> items.values.map { it.getMarkerDto() } }
+  }
+
+  /** Gets all clustered marker IDs for a specific cluster manager. */
+  fun getClusteredMarkerIds(clusterManagerId: String): List<String> {
+    return clusterItemsByManager[clusterManagerId]?.keys?.toList() ?: emptyList()
   }
 }
