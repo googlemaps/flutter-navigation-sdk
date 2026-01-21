@@ -118,6 +118,7 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
         mViewRegistry = viewRegistry
         mAutoMapView =
           GoogleMapsAutoMapView(
+            carContext,
             MapOptions(GoogleMapOptions(), null),
             viewRegistry,
             imageRegistry,

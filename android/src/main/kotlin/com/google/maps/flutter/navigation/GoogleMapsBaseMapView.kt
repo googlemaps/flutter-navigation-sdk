@@ -37,18 +37,24 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.Polygon
 import com.google.android.gms.maps.model.Polyline
+import com.google.maps.android.collections.MarkerManager
 
 abstract class GoogleMapsBaseMapView(
+  private val context: android.content.Context,
   private val viewId: Int?,
   mapOptions: MapOptions,
   protected val viewEventApi: ViewEventApi?,
   private val imageRegistry: ImageRegistry,
 ) {
   private var _map: GoogleMap? = null
+  private var _markerManager: MarkerManager? = null
+  private var _markerCollection: MarkerManager.Collection? = null
   private val _markers = mutableListOf<MarkerController>()
+  private val _allMarkersMap = mutableMapOf<String, MarkerDto>()
   private val _polygons = mutableListOf<PolygonController>()
   private val _polylines = mutableListOf<PolylineController>()
   private val _circles = mutableListOf<CircleController>()
+  private var _clusterManagersController: ClusterManagersController? = null
 
   // Store preferred zoom values here because MapView getMinZoom and
   // getMaxZoom always return min/max possible values and not the preferred ones.
@@ -128,6 +134,15 @@ abstract class GoogleMapsBaseMapView(
   // Method to set the _map object
   protected fun setMap(map: GoogleMap) {
     _map = map
+    // Initialize MarkerManager for coordinating all markers
+    _markerManager = MarkerManager(map)
+    // Create a collection for regular (non-clustered) markers
+    _markerCollection = _markerManager?.newCollection()
+    // Initialize cluster managers controller with MarkerManager
+    if (viewId != null && viewEventApi != null) {
+      _clusterManagersController = ClusterManagersController(context, viewEventApi, viewId)
+      _clusterManagersController?.init(map, _markerManager!!)
+    }
   }
 
   @Throws(FlutterError::class)
@@ -166,6 +181,12 @@ abstract class GoogleMapsBaseMapView(
   }
 
   protected open fun initListeners() {
+    // Set up camera idle listener for clustering (always needed)
+    getMap().setOnCameraIdleListener {
+      // Notify cluster managers about camera idle event (always)
+      _clusterManagersController?.onCameraIdle()
+    }
+
     getMap().setOnMapClickListener {
       viewEventApi?.onMapClickEvent(getViewId().toLong(), LatLngDto(it.latitude, it.longitude)) {}
     }
@@ -175,7 +196,7 @@ abstract class GoogleMapsBaseMapView(
         LatLngDto(it.latitude, it.longitude),
       ) {}
     }
-    getMap().setOnMarkerClickListener { marker ->
+    _markerCollection?.setOnMarkerClickListener { marker ->
       val markerId = findMarkerId(marker)
       val controller = findMarkerController(markerId)
 
@@ -187,25 +208,29 @@ abstract class GoogleMapsBaseMapView(
       // appear.
       controller?.consumeTapEvents ?: false
     }
-    getMap()
-      .setOnMarkerDragListener(
-        object : OnMarkerDragListener {
-          override fun onMarkerDrag(marker: Marker) {
-            sendMarkerDragEvent(marker, MarkerDragEventTypeDto.DRAG)
-          }
-
-          override fun onMarkerDragEnd(marker: Marker) {
-            sendMarkerDragEvent(marker, MarkerDragEventTypeDto.DRAG_END)
-          }
-
-          override fun onMarkerDragStart(marker: Marker) {
-            sendMarkerDragEvent(marker, MarkerDragEventTypeDto.DRAG_START)
-          }
+    _markerCollection?.setOnMarkerDragListener(
+      object : OnMarkerDragListener {
+        override fun onMarkerDrag(marker: Marker) {
+          sendMarkerDragEvent(marker, MarkerDragEventTypeDto.DRAG)
         }
-      )
-    getMap().setOnInfoWindowClickListener { marker ->
+
+        override fun onMarkerDragEnd(marker: Marker) {
+          sendMarkerDragEvent(marker, MarkerDragEventTypeDto.DRAG_END)
+        }
+
+        override fun onMarkerDragStart(marker: Marker) {
+          sendMarkerDragEvent(marker, MarkerDragEventTypeDto.DRAG_START)
+        }
+      }
+    )
+    _markerCollection?.setOnInfoWindowClickListener { marker ->
       sendMarkerEvent(marker, MarkerEventTypeDto.INFO_WINDOW_CLICKED)
     }
+    _markerCollection?.setOnInfoWindowLongClickListener { marker ->
+      sendMarkerEvent(marker, MarkerEventTypeDto.INFO_WINDOW_LONG_CLICKED)
+    }
+    // Info window close listener must be set on GoogleMap directly (not available on
+    // MarkerManager.Collection)
     getMap().setOnInfoWindowCloseListener { marker ->
       try {
         sendMarkerEvent(marker, MarkerEventTypeDto.INFO_WINDOW_CLOSED)
@@ -214,9 +239,6 @@ abstract class GoogleMapsBaseMapView(
         // As marker and it's information that maps the marker to the markerId is removed,
         // [FlutterError] is thrown. In this case info window close event is not sent.
       }
-    }
-    getMap().setOnInfoWindowLongClickListener { marker ->
-      sendMarkerEvent(marker, MarkerEventTypeDto.INFO_WINDOW_LONG_CLICKED)
     }
 
     getMap().setOnPolygonClickListener { polygon ->
@@ -745,32 +767,50 @@ abstract class GoogleMapsBaseMapView(
   }
 
   fun getMarkers(): List<MarkerDto> {
-    return _markers.map { MarkerDto(it.markerId, Convert.markerControllerToMarkerOptions(it)) }
+    // Return all markers from single source of truth
+    return _allMarkersMap.values.toList()
   }
 
   fun addMarkers(markers: List<MarkerDto>): List<MarkerDto> {
     val result = mutableListOf<MarkerDto>()
     markers.forEach {
-      val builder = MarkerBuilder()
-      Convert.sinkMarkerOptions(it.options, builder, imageRegistry)
-      val options = builder.build()
-      val marker = getMap().addMarker(options)
-      if (marker != null) {
+      _allMarkersMap[it.markerId] = it
+
+      // Check if marker belongs to a cluster
+      if (it.options.clusterManagerId != null) {
         val registeredImage =
           it.options.icon.registeredImageId?.let { id -> imageRegistry.findRegisteredImage(id) }
-        val controller =
-          MarkerController(
-            marker,
-            it.markerId,
-            builder.consumeTapEvents,
-            it.options.anchor.u.toFloat(),
-            it.options.anchor.v.toFloat(),
-            it.options.infoWindow.anchor.u.toFloat(),
-            it.options.infoWindow.anchor.v.toFloat(),
-            registeredImage,
-          )
-        _markers.add(controller)
+        val builder = MarkerBuilder()
+        Convert.sinkMarkerOptions(it.options, builder, imageRegistry)
+        _clusterManagersController?.addMarkerToCluster(
+          it,
+          registeredImage,
+          builder.consumeTapEvents,
+        )
         result.add(it)
+      } else {
+        // Regular marker (not clustered)
+        val builder = MarkerBuilder()
+        Convert.sinkMarkerOptions(it.options, builder, imageRegistry)
+        val options = builder.build()
+        val marker = _markerCollection?.addMarker(options)
+        if (marker != null) {
+          val registeredImage =
+            it.options.icon.registeredImageId?.let { id -> imageRegistry.findRegisteredImage(id) }
+          val controller =
+            MarkerController(
+              marker,
+              it.markerId,
+              builder.consumeTapEvents,
+              it.options.anchor.u.toFloat(),
+              it.options.anchor.v.toFloat(),
+              it.options.infoWindow.anchor.u.toFloat(),
+              it.options.infoWindow.anchor.v.toFloat(),
+              registeredImage,
+            )
+          _markers.add(controller)
+          result.add(it)
+        }
       }
     }
     return result
@@ -780,14 +820,51 @@ abstract class GoogleMapsBaseMapView(
   fun updateMarkers(markers: List<MarkerDto>): List<MarkerDto> {
     val result = mutableListOf<MarkerDto>()
     var error: Throwable? = null
-    markers.forEach {
-      findMarkerController(it.markerId)?.let { controller ->
-        Convert.sinkMarkerOptions(it.options, controller, imageRegistry)
-        result.add(it)
+    markers.forEach { markerDto ->
+      val markerId = markerDto.markerId
+
+      // Check if marker exists
+      val existingMarkerDto = _allMarkersMap[markerId]
+      if (existingMarkerDto == null) {
+        error = FlutterError("markerNotFound", "Failed to update marker with id $markerId")
+        return@forEach
       }
-        ?: run {
-          error = FlutterError("markerNotFound", "Failed to update marker with id ${it.markerId}")
+
+      // Update marker
+      _allMarkersMap[markerId] = markerDto
+
+      val oldClusterManagerId = existingMarkerDto.options.clusterManagerId
+      val newClusterManagerId = markerDto.options.clusterManagerId
+
+      // If cluster ID changed, remove and re-add
+      if (oldClusterManagerId != newClusterManagerId) {
+        removeMarkers(listOf(existingMarkerDto))
+        addMarkers(listOf(markerDto))
+        result.add(markerDto)
+        return@forEach
+      }
+
+      // Update marker in place
+      if (newClusterManagerId != null) {
+        // Update clustered marker
+        val registeredImage =
+          markerDto.options.icon.registeredImageId?.let { id ->
+            imageRegistry.findRegisteredImage(id)
+          }
+        val builder = MarkerBuilder()
+        Convert.sinkMarkerOptions(markerDto.options, builder, imageRegistry)
+        _clusterManagersController?.updateMarkerInCluster(
+          markerDto,
+          registeredImage,
+          builder.consumeTapEvents,
+        )
+      } else {
+        // Update regular marker
+        findMarkerController(markerId)?.let { controller ->
+          Convert.sinkMarkerOptions(markerDto.options, controller, imageRegistry)
         }
+      }
+      result.add(markerDto)
     }
     error?.let { throw error as Throwable }
     return result
@@ -797,28 +874,74 @@ abstract class GoogleMapsBaseMapView(
   fun removeMarkers(markers: List<MarkerDto>) {
     var error: Throwable? = null
     markers.forEach {
-      findMarkerController(it.markerId)?.let { controller ->
-        controller.remove()
-        _markers.remove(controller)
-      }
-        ?: run {
-          error = FlutterError("markerNotFound", "Failed to remove marker with id ${it.markerId}")
+      _allMarkersMap.remove(it.markerId)
+
+      // Check if marker belongs to a cluster manager
+      if (it.options.clusterManagerId != null) {
+        _clusterManagersController?.removeMarkerFromCluster(
+          it.markerId,
+          it.options.clusterManagerId!!,
+        )
+      } else {
+        // Regular marker (not clustered)
+        findMarkerController(it.markerId)?.let { controller ->
+          controller.remove()
+          _markers.remove(controller)
         }
+          ?: run {
+            error = FlutterError("markerNotFound", "Failed to remove marker with id ${it.markerId}")
+          }
+      }
     }
     error?.let { throw error as Throwable }
   }
 
   fun clearMarkers() {
-    _markers.forEach { controller -> controller.remove() }
+    _markerCollection?.clear()
     _markers.clear()
+    _allMarkersMap.clear()
+    _clusterManagersController?.clearClusterManagers()
+  }
+
+  fun getClusterManagers(): List<ClusterManagerDto> {
+    val clusterManagerIds = _clusterManagersController?.getClusterManagerIds() ?: emptyList()
+    return clusterManagerIds.map { ClusterManagerDto(it) }
+  }
+
+  fun addClusterManagers(clusterManagers: List<ClusterManagerDto>): List<ClusterManagerDto> {
+    val result = mutableListOf<ClusterManagerDto>()
+    clusterManagers.forEach {
+      _clusterManagersController?.addClusterManager(it.clusterManagerId)?.let {
+        result.add(ClusterManagerDto(it.clusterManagerId))
+      }
+    }
+    return result
+  }
+
+  fun removeClusterManagers(clusterManagers: List<ClusterManagerDto>) {
+    clusterManagers.forEach { clusterManagerDto ->
+      _clusterManagersController
+        ?.getClusteredMarkerIds(clusterManagerDto.clusterManagerId)
+        ?.forEach { markerId -> _allMarkersMap.remove(markerId) }
+      _clusterManagersController?.removeClusterManager(clusterManagerDto.clusterManagerId)
+    }
+  }
+
+  fun clearClusterManagers() {
+    _clusterManagersController?.getAllClusteredMarkers()?.forEach { marker ->
+      _allMarkersMap.remove(marker.markerId)
+    }
+    _clusterManagersController?.clearClusterManagers()
   }
 
   fun clear() {
     getMap().clear()
     _markers.clear()
+    _allMarkersMap.clear()
     _polygons.clear()
     _polylines.clear()
     _circles.clear()
+    _clusterManagersController?.clearClusterManagers()
   }
 
   fun getPolygons(): List<PolygonDto> {
@@ -1042,6 +1165,9 @@ abstract class GoogleMapsBaseMapView(
       ) {}
     }
     getMap().setOnCameraIdleListener {
+      // Notify cluster managers about camera idle event (always)
+      _clusterManagersController?.onCameraIdle()
+      // Send Flutter event only if camera change events are enabled
       val position = Convert.convertCameraPositionToDto(getMap().cameraPosition)
       viewEventApi?.onCameraChanged(
         getViewId().toLong(),

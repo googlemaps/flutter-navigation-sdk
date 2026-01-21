@@ -762,6 +762,61 @@ class MapViewAPIImpl {
   Future<void> clearMarkers({required int viewId}) =>
       _viewApi.clearMarkers(viewId).wrapPlatformException();
 
+  /// Get all cluster managers from map view.
+  Future<List<ClusterManager>> getClusterManagers({required int viewId}) async {
+    final List<ClusterManagerDto?> clusterManagers = await _viewApi
+        .getClusterManagers(viewId);
+
+    return clusterManagers
+        .whereType<ClusterManagerDto>()
+        .map((ClusterManagerDto cm) => cm.toClusterManager())
+        .toList();
+  }
+
+  /// Add cluster managers to map view.
+  Future<List<ClusterManager>> addClusterManagers({
+    required int viewId,
+    required List<ClusterManager> clusterManagers,
+  }) async {
+    final List<ClusterManagerDto> clusterManagersToAdd = clusterManagers
+        .map((cm) => cm.toDto())
+        .toList();
+
+    final List<ClusterManagerDto?> clusterManagersAdded = await _viewApi
+        .addClusterManagers(viewId, clusterManagersToAdd);
+
+    if (clusterManagersToAdd.length != clusterManagersAdded.length) {
+      throw Exception('Could not add all cluster managers to map view');
+    }
+
+    return clusterManagersAdded
+        .whereType<ClusterManagerDto>()
+        .map(
+          (ClusterManagerDto cm) =>
+              ClusterManager(clusterManagerId: cm.clusterManagerId),
+        )
+        .toList();
+  }
+
+  /// Remove cluster managers from map view.
+  Future<void> removeClusterManagers({
+    required int viewId,
+    required List<ClusterManager> clusterManagers,
+  }) {
+    final List<ClusterManagerDto> clusterManagerDtos = clusterManagers
+        .map(
+          (ClusterManager cm) =>
+              ClusterManagerDto(clusterManagerId: cm.clusterManagerId),
+        )
+        .toList();
+    return _viewApi.removeClusterManagers(viewId, clusterManagerDtos);
+  }
+
+  /// Remove all cluster managers from map view.
+  Future<void> clearClusterManagers({required int viewId}) {
+    return _viewApi.clearClusterManagers(viewId);
+  }
+
   /// Removes all markers, polylines, polygons, overlays, etc from the map.
   Future<void> clear({required int viewId}) =>
       _viewApi.clear(viewId).wrapPlatformException();
@@ -1084,6 +1139,11 @@ class MapViewAPIImpl {
     return _unwrapEventStream<MarkerDragEvent>(viewId: viewId);
   }
 
+  /// Get cluster event stream from the navigation view.
+  Stream<ClusterEvent> getClusterEventStream({required int viewId}) {
+    return _unwrapEventStream<ClusterEvent>(viewId: viewId);
+  }
+
   /// Get navigation view polygon clicked event stream from the navigation view.
   Stream<PolygonClickedEvent> getPolygonClickedEventStream({
     required int viewId,
@@ -1206,6 +1266,29 @@ class ViewEventApiImpl implements ViewEventApi {
         MarkerEvent(
           markerId: markerId,
           eventType: eventType.toMarkerEventType(),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void onClusterEvent(
+    int viewId,
+    String clusterManagerId,
+    ClusterEventTypeDto eventType,
+    ClusterDto cluster,
+  ) {
+    _viewEventStreamController.add(
+      _ViewIdEventWrapper(
+        viewId,
+        ClusterEvent(
+          clusterManagerId: clusterManagerId,
+          eventType: eventType.toClusterEventType(),
+          cluster: Cluster(
+            clusterManagerId: cluster.clusterManagerId,
+            position: cluster.position.toLatLng(),
+            markerIds: cluster.markerIds,
+          ),
         ),
       ),
     );

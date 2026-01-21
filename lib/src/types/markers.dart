@@ -75,6 +75,7 @@ class MarkerOptions {
     this.infoWindow = InfoWindow.noInfo,
     this.visible = true,
     this.zIndex = 0.0,
+    this.clusterManagerId,
   });
 
   /// Sets the alpha (opacity) of the marker.
@@ -135,6 +136,15 @@ class MarkerOptions {
   /// By default, the marker is placed at the base of the drawing order; [zIndex] is 0.0
   final double zIndex;
 
+  /// Sets the cluster manager ID for the marker.
+  ///
+  /// If set, the marker will be managed by the specified cluster manager
+  /// and will be clustered with other markers in the same cluster manager.
+  /// If null, the marker will be displayed as a regular marker without clustering.
+  ///
+  /// By default, clustering is disabled; [clusterManagerId] is null.
+  final String? clusterManagerId;
+
   /// Create copy of [MarkerOptions] with specified parameters
   MarkerOptions copyWith({
     double? alpha,
@@ -151,6 +161,7 @@ class MarkerOptions {
     InfoWindow? infoWindow,
     bool? visible,
     double? zIndex,
+    String? clusterManagerId,
   }) {
     return MarkerOptions(
       alpha: alpha ?? this.alpha,
@@ -164,6 +175,7 @@ class MarkerOptions {
       infoWindow: infoWindow ?? this.infoWindow,
       visible: visible ?? this.visible,
       zIndex: zIndex ?? this.zIndex,
+      clusterManagerId: clusterManagerId ?? this.clusterManagerId,
     );
   }
 
@@ -186,7 +198,8 @@ class MarkerOptions {
         rotation == other.rotation &&
         infoWindow == other.infoWindow &&
         visible == other.visible &&
-        zIndex == other.zIndex;
+        zIndex == other.zIndex &&
+        clusterManagerId == other.clusterManagerId;
   }
 
   @override
@@ -201,7 +214,7 @@ class MarkerOptions {
     rotation.hashCode,
     infoWindow.hashCode,
     visible.hashCode,
-    zIndex.hashCode,
+    Object.hash(zIndex.hashCode, clusterManagerId.hashCode),
   );
 
   @override
@@ -217,7 +230,8 @@ class MarkerOptions {
       'rotation: $rotation, '
       'infoWindow: $infoWindow, '
       'visible: $visible, '
-      'zIndex: $zIndex'
+      'zIndex: $zIndex, '
+      'clusterManagerId: $clusterManagerId'
       ')';
 }
 

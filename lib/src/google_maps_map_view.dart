@@ -56,6 +56,7 @@ abstract class GoogleMapsBaseMapView extends StatefulWidget {
     this.onMarkerInfoWindowClicked,
     this.onMarkerInfoWindowClosed,
     this.onMarkerInfoWindowLongClicked,
+    this.onClusterClicked,
     this.onMapClicked,
     this.onMapLongClicked,
     this.onPolygonClicked,
@@ -209,6 +210,9 @@ abstract class GoogleMapsBaseMapView extends StatefulWidget {
   /// On marker info window long clicked callback.
   final OnMarkerInfoWindowLongClicked? onMarkerInfoWindowLongClicked;
 
+  /// On cluster clicked callback.
+  final OnClusterClicked? onClusterClicked;
+
   /// On map clicked callback.
   final OnMapClicked? onMapClicked;
 
@@ -298,6 +302,7 @@ class GoogleMapsMapView extends GoogleMapsBaseMapView {
     super.onMarkerInfoWindowClicked,
     super.onMarkerInfoWindowClosed,
     super.onMarkerInfoWindowLongClicked,
+    super.onClusterClicked,
     super.onMapClicked,
     super.onMapLongClicked,
     super.onPolygonClicked,
@@ -393,6 +398,15 @@ abstract class MapViewState<T extends GoogleMapsBaseMapView> extends State<T> {
               widget.onMarkerDragEnd?.call(event.markerId, event.position);
             case MarkerDragEventType.dragStart:
               widget.onMarkerDragStart?.call(event.markerId, event.position);
+          }
+        });
+
+    GoogleMapsNavigationPlatform.instance.viewAPI
+        .getClusterEventStream(viewId: viewId)
+        .listen((ClusterEvent event) {
+          switch (event.eventType) {
+            case ClusterEventType.clicked:
+              widget.onClusterClicked?.call(event.cluster);
           }
         });
 

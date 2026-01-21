@@ -34,6 +34,10 @@ let package = Package(
       url: "https://github.com/googlemaps/ios-maps-sdk",
       exact: "10.7.0"
     ),
+    .package(
+      url: "https://github.com/googlemaps/google-maps-ios-utils",
+      exact: "7.0.0"
+    ),
   ],
   targets: [
     .target(
@@ -46,6 +50,10 @@ let package = Package(
         .product(
           name: "GoogleMaps",
           package: "ios-maps-sdk"
+        ),
+        .product(
+          name: "GoogleMapsUtils",
+          package: "google-maps-ios-utils"
         ),
       ],
       resources: [

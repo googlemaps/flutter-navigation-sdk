@@ -39,6 +39,7 @@ final List<ExamplePage> _allPages = <ExamplePage>[
   const WidgetInitializationPage(),
   const NavigationWithoutMapPage(),
   const MultipleMapViewsPage(),
+  const ClusteringPage(),
 ];
 
 /// The main Google Maps Navigation demo screen.

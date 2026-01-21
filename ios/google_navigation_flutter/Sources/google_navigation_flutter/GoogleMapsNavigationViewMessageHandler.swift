@@ -474,6 +474,24 @@ class GoogleMapsNavigationViewMessageHandler: MapViewApi {
     try getView(viewId).clearMarkers()
   }
 
+  func getClusterManagers(viewId: Int64) throws -> [ClusterManagerDto] {
+    try getView(viewId).getClusterManagers()
+  }
+
+  func addClusterManagers(viewId: Int64, clusterManagers: [ClusterManagerDto]) throws
+    -> [ClusterManagerDto]
+  {
+    try getView(viewId).addClusterManagers(clusterManagers: clusterManagers)
+  }
+
+  func removeClusterManagers(viewId: Int64, clusterManagers: [ClusterManagerDto]) throws {
+    try getView(viewId).removeClusterManagers(clusterManagers: clusterManagers)
+  }
+
+  func clearClusterManagers(viewId: Int64) throws {
+    try getView(viewId).clearClusterManagers()
+  }
+
   func getPolygons(viewId: Int64) throws -> [PolygonDto] {
     try getView(viewId).getPolygons()
   }

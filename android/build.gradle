@@ -35,11 +35,6 @@ allprojects {
         google()
         mavenCentral()
     }
-    configurations {
-        implementation {
-            exclude group: 'com.google.android.gms', module: 'play-services-maps'
-        }
-    }
 }
 
 apply plugin: 'com.android.library'
@@ -53,7 +48,7 @@ ktfmt {
 android {
     namespace 'com.google.maps.flutter.navigation'
     
-    compileSdk = 35
+    compileSdk = 36
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
@@ -78,6 +73,10 @@ android {
         implementation 'androidx.car.app:app:1.7.0'
         implementation 'androidx.car.app:app-projected:1.7.0'
         implementation 'com.google.android.libraries.navigation:navigation:7.3.0'
+        implementation('com.google.maps.android:android-maps-utils:3.20.1') {
+            exclude group: 'com.google.android.gms', module: 'play-services-maps'
+        }
+        implementation 'com.google.android.gms:play-services-base:18.5.0'
         testImplementation 'org.jetbrains.kotlin:kotlin-test'
         testImplementation 'io.mockk:mockk:1.13.8'
         testImplementation 'junit:junit:4.13.2'

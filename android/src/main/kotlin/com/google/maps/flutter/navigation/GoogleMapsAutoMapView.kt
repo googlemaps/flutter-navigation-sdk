@@ -22,12 +22,13 @@ import com.google.android.libraries.navigation.NavigationViewForAuto
 
 class GoogleMapsAutoMapView
 internal constructor(
+  context: android.content.Context,
   mapOptions: MapOptions,
   viewRegistry: GoogleMapsViewRegistry,
   imageRegistry: ImageRegistry,
   private val mapView: NavigationViewForAuto,
   map: GoogleMap,
-) : GoogleMapsBaseMapView(null, mapOptions, null, imageRegistry) {
+) : GoogleMapsBaseMapView(context, null, mapOptions, null, imageRegistry) {
   override fun getView(): View {
     return mapView
   }

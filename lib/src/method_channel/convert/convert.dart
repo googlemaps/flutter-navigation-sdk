@@ -14,6 +14,7 @@
 
 export 'camera.dart';
 export 'circle.dart';
+export 'clustering.dart';
 export 'destinations.dart';
 export 'latlng.dart';
 export 'latlng_bounds.dart';

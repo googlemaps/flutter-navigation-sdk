@@ -539,4 +539,23 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
     val nightMode = Convert.convertNavigationForceNightModeFromDto(forceNightMode)
     getNavigationView(viewId.toInt()).setForceNightMode(nightMode)
   }
+
+  override fun getClusterManagers(viewId: Long): List<ClusterManagerDto> {
+    return getView(viewId.toInt()).getClusterManagers()
+  }
+
+  override fun addClusterManagers(
+    viewId: Long,
+    clusterManagers: List<ClusterManagerDto>,
+  ): List<ClusterManagerDto> {
+    return getView(viewId.toInt()).addClusterManagers(clusterManagers)
+  }
+
+  override fun removeClusterManagers(viewId: Long, clusterManagers: List<ClusterManagerDto>) {
+    getView(viewId.toInt()).removeClusterManagers(clusterManagers)
+  }
+
+  override fun clearClusterManagers(viewId: Long) {
+    getView(viewId.toInt()).clearClusterManagers()
+  }
 }

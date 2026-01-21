@@ -97,6 +97,9 @@ typedef OnMarkerInfoWindowClosed = void Function(String markerId);
 /// Called during marker info window long clicked event.
 typedef OnMarkerInfoWindowLongClicked = void Function(String markerId);
 
+/// Called during cluster clicked event.
+typedef OnClusterClicked = void Function(Cluster cluster);
+
 /// Called during map clicked event.
 typedef OnMapClicked = void Function(LatLng position);
 

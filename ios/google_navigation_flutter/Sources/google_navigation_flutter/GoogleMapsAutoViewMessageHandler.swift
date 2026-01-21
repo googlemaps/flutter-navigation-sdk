@@ -374,6 +374,22 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
     try getView().clearMarkers()
   }
 
+  func getClusterManagers() throws -> [ClusterManagerDto] {
+    try getView().getClusterManagers()
+  }
+
+  func addClusterManagers(clusterManagers: [ClusterManagerDto]) throws -> [ClusterManagerDto] {
+    try getView().addClusterManagers(clusterManagers: clusterManagers)
+  }
+
+  func removeClusterManagers(clusterManagers: [ClusterManagerDto]) throws {
+    try getView().removeClusterManagers(clusterManagers: clusterManagers)
+  }
+
+  func clearClusterManagers() throws {
+    try getView().clearClusterManagers()
+  }
+
   func getPolygons() throws -> [PolygonDto] {
     try getView().getPolygons()
   }

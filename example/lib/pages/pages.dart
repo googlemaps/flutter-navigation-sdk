@@ -13,6 +13,7 @@
 // limitations under the License.
 
 export 'camera.dart';
+export 'clustering.dart';
 export 'map.dart';
 export 'markers.dart';
 export 'multiple_views.dart';

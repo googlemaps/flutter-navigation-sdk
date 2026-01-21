@@ -13,6 +13,7 @@
 // limitations under the License.
 
 export 'circles.dart';
+export 'clustering.dart';
 export 'images.dart';
 export 'lat_lng.dart';
 export 'lat_lng_bounds.dart';
