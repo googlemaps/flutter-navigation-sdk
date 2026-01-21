@@ -45,7 +45,8 @@ class ClusterManagerController(
     // Set up click listeners
     clusterManager.setOnClusterClickListener { cluster ->
       onClusterClick(cluster)
-      true
+      // Return false to allow the default behavior of the cluster click event to occur.
+      false
     }
 
     clusterManager.setOnClusterItemClickListener { item ->
@@ -106,19 +107,21 @@ class ClusterManagerController(
   }
 
   private fun onClusterClick(cluster: Cluster<MarkerClusterItem>) {
-    val markerIds = cluster.items.map { it.markerId }
-    val position =
-      LatLngDto(latitude = cluster.position.latitude, longitude = cluster.position.longitude)
+    if (cluster.size > 0) {
+      val markerIds = cluster.items.map { it.markerId }
+      val position =
+        LatLngDto(latitude = cluster.position.latitude, longitude = cluster.position.longitude)
 
-    val clusterDto =
-      ClusterDto(clusterManagerId = clusterManagerId, position = position, markerIds = markerIds)
+      val clusterDto =
+        ClusterDto(clusterManagerId = clusterManagerId, position = position, markerIds = markerIds)
 
-    viewEventApi.onClusterEvent(
-      viewId.toLong(),
-      clusterManagerId,
-      ClusterEventTypeDto.CLICKED,
-      clusterDto,
-    ) {}
+      viewEventApi.onClusterEvent(
+        viewId.toLong(),
+        clusterManagerId,
+        ClusterEventTypeDto.CLICKED,
+        clusterDto,
+      ) {}
+    }
   }
 
   private fun onClusterItemClick(item: MarkerClusterItem) {
