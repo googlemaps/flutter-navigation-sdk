@@ -176,7 +176,6 @@ class _ClusteringPageState extends ExamplePageState<ClusteringPage> {
                 clusterManagerLongitudeOffset,
           ),
           infoWindow: InfoWindow(title: markerIdVal, snippet: '*'),
-          consumeTapEvents: true,
           clusterManagerId: clusterManager.clusterManagerId,
         ),
       );
