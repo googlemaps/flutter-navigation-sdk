@@ -88,6 +88,11 @@ class ClusterManagerController(
     return clusterManager
   }
 
+  /** Gets all items in this cluster manager. */
+  fun getItems(): Collection<MarkerClusterItem> {
+    return clusterManager.algorithm.items
+  }
+
   /** Gets all current clusters. */
   fun getClusters(): List<ClusterDto> {
     val clusters = mutableListOf<ClusterDto>()

@@ -194,4 +194,30 @@ class ClusterManagersController {
     }
     return allClusters
   }
+
+  /// Gets all clustered markers from all cluster managers.
+  func getAllClusteredMarkers() -> [MarkerDto] {
+    var allMarkers: [MarkerDto] = []
+    for items in clusterItemsByManager.values {
+      for item in items.values {
+        allMarkers.append(item.getMarkerDto())
+      }
+    }
+    return allMarkers
+  }
+
+  /// Finds which cluster manager owns a marker by markerId.
+  func findClusterManagerIdForMarker(markerId: String) -> String? {
+    for (clusterManagerId, items) in clusterItemsByManager {
+      if items[markerId] != nil {
+        return clusterManagerId
+      }
+    }
+    return nil
+  }
+
+  /// Gets a cluster item by markerId.
+  func getClusterItem(markerId: String, clusterManagerId: String) -> MarkerClusterItem? {
+    clusterItemsByManager[clusterManagerId]?[markerId]
+  }
 }

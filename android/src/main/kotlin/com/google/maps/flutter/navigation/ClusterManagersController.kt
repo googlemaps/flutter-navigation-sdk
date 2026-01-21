@@ -155,4 +155,13 @@ class ClusterManagersController(
     clusterManagers.values.forEach { controller -> allClusters.addAll(controller.getClusters()) }
     return allClusters
   }
+
+  /** Gets all clustered markers from all cluster managers. */
+  fun getAllClusteredMarkers(): List<MarkerDto> {
+    val allMarkers = mutableListOf<MarkerDto>()
+    clusterItemsByManager.values.forEach { items ->
+      items.values.forEach { item -> allMarkers.add(item.getMarkerDto()) }
+    }
+    return allMarkers
+  }
 }

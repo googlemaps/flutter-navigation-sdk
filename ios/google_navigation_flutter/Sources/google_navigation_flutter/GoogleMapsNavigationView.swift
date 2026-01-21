@@ -681,7 +681,13 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   }
 
   func getMarkers() -> [MarkerDto] {
-    _markerControllers.map { $0.toMarkerDto() }
+    // Get regular markers
+    let regularMarkers = _markerControllers.map { $0.toMarkerDto() }
+
+    // Get clustered markers from all cluster managers
+    let clusteredMarkers = _clusterManagersController?.getAllClusteredMarkers() ?? []
+
+    return regularMarkers + clusteredMarkers
   }
 
   func addMarkers(markers: [MarkerDto]) -> [MarkerDto] {
@@ -722,36 +728,83 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   }
 
   func updateMarkers(markers: [MarkerDto]) throws -> [MarkerDto] {
-    let markers: [MarkerDto] =
-      try markers
-      .compactMap { $0 }
-      .compactMap { updatedMarker in
-        // Check if marker belongs to a cluster manager
-        if updatedMarker.options.clusterManagerId != nil {
-          let registeredImage: RegisteredImage?
-          if let imageId = updatedMarker.options.icon.registeredImageId {
-            registeredImage = _imageRegistry.findRegisteredImage(imageId: imageId)
-          } else {
-            registeredImage = nil
-          }
+    var result: [MarkerDto] = []
 
-          _clusterManagersController?.updateMarkerInCluster(
-            markerDto: updatedMarker,
-            registeredImage: registeredImage,
-            consumeTapEvents: updatedMarker.options.consumeTapEvents
-          )
-          return updatedMarker
-        } else {
-          // Regular marker handling
-          let markerController = try findMarkerController(markerId: updatedMarker.markerId)
-          markerController.update(from: updatedMarker, imageRegistry: _imageRegistry)
-          // Handle visibility property on iOS by removing/not putting the marker
-          // on the map.
-          markerController.gmsMarker.map = updatedMarker.isVisible() ? _mapView : nil
-          return updatedMarker
-        }
+    for markerDto in markers.compactMap({ $0 }) {
+      // First, check if this marker exists in any cluster
+      let foundInCluster = _clusterManagersController?.findClusterManagerIdForMarker(
+        markerId: markerDto.markerId)
+
+      let targetClusterId = markerDto.options.clusterManagerId
+
+      // Get registered image
+      let registeredImage: RegisteredImage?
+      if let imageId = markerDto.options.icon.registeredImageId {
+        registeredImage = _imageRegistry.findRegisteredImage(imageId: imageId)
+      } else {
+        registeredImage = nil
       }
-    return markers
+
+      switch (foundInCluster, targetClusterId) {
+      // Case 1: Marker is moving between clusters or staying in same cluster
+      case (.some(let currentCluster), .some(let targetCluster)):
+        if currentCluster == targetCluster {
+          // Update in same cluster
+          _clusterManagersController?.updateMarkerInCluster(
+            markerDto: markerDto,
+            registeredImage: registeredImage,
+            consumeTapEvents: markerDto.options.consumeTapEvents
+          )
+        } else {
+          // Move between clusters
+          _clusterManagersController?.removeMarkerFromCluster(
+            markerId: markerDto.markerId,
+            clusterManagerId: currentCluster
+          )
+          _clusterManagersController?.addMarkerToCluster(
+            markerDto: markerDto,
+            registeredImage: registeredImage,
+            consumeTapEvents: markerDto.options.consumeTapEvents
+          )
+        }
+        result.append(markerDto)
+
+      // Case 2: Marker is moving from cluster to non-clustered
+      case (.some(let currentCluster), .none):
+        _clusterManagersController?.removeMarkerFromCluster(
+          markerId: markerDto.markerId,
+          clusterManagerId: currentCluster
+        )
+        let markerController = MarkerController(markerId: markerDto.markerId)
+        markerController.update(from: markerDto, imageRegistry: _imageRegistry)
+        markerController.gmsMarker.map = markerDto.isVisible() ? _mapView : nil
+        _markerControllers.append(markerController)
+        result.append(markerDto)
+
+      // Case 3: Marker is moving from non-clustered to cluster
+      case (.none, .some):
+        if let markerController = try? findMarkerController(markerId: markerDto.markerId) {
+          markerController.gmsMarker.map = nil
+          _markerControllers.removeAll { $0.markerId == markerDto.markerId }
+        }
+        _clusterManagersController?.addMarkerToCluster(
+          markerDto: markerDto,
+          registeredImage: registeredImage,
+          consumeTapEvents: markerDto.options.consumeTapEvents
+        )
+        result.append(markerDto)
+
+      // Case 4: Regular marker staying regular
+      case (.none, .none):
+        let markerController = try findMarkerController(markerId: markerDto.markerId)
+        markerController.update(from: markerDto, imageRegistry: _imageRegistry)
+        markerController.gmsMarker.map = markerDto.isVisible() ? _mapView : nil
+        result.append(markerDto)
+      }
+    }
+
+    _clusterManagersController?.invokeClusteringForAll()
+    return result
   }
 
   func removeMarkers(markers: [MarkerDto]) throws {
