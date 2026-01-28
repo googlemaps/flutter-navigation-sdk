@@ -14,7 +14,6 @@
 
 // ignore_for_file: public_member_api_docs
 
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 import '../utils/utils.dart';
@@ -303,7 +302,7 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
             });
           },
         ),
-        if (Platform.isAndroid && _animationsEnabled) ...<Widget>[
+        if (_animationsEnabled) ...<Widget>[
           SwitchListTile(
             title: const Text('Default animation duration'),
             value: _animationDuration == null,
@@ -328,7 +327,7 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
               max: 3000,
             ),
         ],
-        if (Platform.isAndroid && _animationsEnabled && _animationDuration != 0)
+        if (_animationsEnabled && _animationDuration != 0)
           SwitchListTile(
             title: const Text('Display animation finished'),
             value: _displayAnimationFinished,

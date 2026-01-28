@@ -133,8 +133,8 @@ class GoogleMapViewController {
   /// See [CameraUpdate] for more information on how to create different camera
   /// animations.
   ///
-  /// On Android you can override the default animation [duration] and
-  /// set [onFinished] callback that is called when the animation completes
+  /// The default animation [duration] can be overridden and an [onFinished]
+  /// callback can be set that is called when the animation completes
   /// (passes true) or is cancelled (passes false).
   ///
   /// Example usage:
@@ -143,8 +143,6 @@ class GoogleMapViewController {
   ///   duration: Duration(milliseconds: 600),
   ///   onFinished: (bool success) => {});
   /// ```
-  /// On iOS [duration] and [onFinished] are not supported and defining them
-  /// does nothing.
   ///
   /// See also [moveCamera], [followMyLocation].
   Future<void> animateCamera(

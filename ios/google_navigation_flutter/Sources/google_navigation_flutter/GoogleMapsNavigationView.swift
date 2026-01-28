@@ -50,6 +50,12 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   var isAttachedToSession: Bool = false
   private let _isCarPlayView: Bool
 
+  /// A token to identify the currently active animation.
+  private var _currentCameraAnimationToken: NSObject?
+  /// The completion handler for the currently active camera animation.
+  private var _currentCameraAnimationCompletion: ((_ finished: Bool) -> Void)?
+  private var _isGestureCameraMove: Bool = false
+
   // As prompt visibility settings is handled by the navigator, value is
   // stored here to handle the session attach. On android prompts visibility
   // is handled by the view.
@@ -114,6 +120,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
 
   deinit {
     unregisterView()
+    completeCurrentCameraAnimation(finished: false)
     _mapView.delegate = nil
   }
 
@@ -410,36 +417,105 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     GMSCoordinateBounds(region: _mapView.projection.visibleRegion())
   }
 
-  public func animateCameraToCameraPosition(cameraPosition: GMSCameraPosition) {
-    _mapView.animate(with: GMSCameraUpdate.setCamera(cameraPosition))
-  }
-
-  public func animateCameraToLatLng(point: CLLocationCoordinate2D) {
-    _mapView.animate(with: GMSCameraUpdate.setTarget(point))
-  }
-
-  public func animateCameraToLatLngBounds(bounds: GMSCoordinateBounds, padding: Double) {
-    _mapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: padding))
-  }
-
-  public func animateCameraToLatLngZoom(point: CLLocationCoordinate2D, zoom: Double) {
-    _mapView.animate(with: GMSCameraUpdate.setTarget(point, zoom: Float(zoom)))
-  }
-
-  public func animateCameraByScroll(dx: Double, dy: Double) {
-    _mapView.animate(with: GMSCameraUpdate.scrollBy(x: CGFloat(dx), y: CGFloat(dy)))
-  }
-
-  public func animateCameraByZoom(zoomBy: Double, focus: CGPoint?) {
-    if focus != nil {
-      _mapView.animate(with: GMSCameraUpdate.zoom(by: Float(zoomBy), at: focus!))
-    } else {
-      _mapView.animate(with: GMSCameraUpdate.zoom(by: Float(zoomBy)))
+  /// Completes the currently active camera animation if one exists.
+  private func completeCurrentCameraAnimation(finished: Bool) {
+    guard _currentCameraAnimationToken != nil else { return }
+    _currentCameraAnimationToken = nil
+    if let completion = _currentCameraAnimationCompletion {
+      _currentCameraAnimationCompletion = nil
+      completion(finished)
     }
   }
 
-  public func animateCameraToZoom(zoom: Double) {
-    _mapView.animate(with: GMSCameraUpdate.zoom(to: Float(zoom)))
+  private func performCameraAnimation(
+    with update: GMSCameraUpdate,
+    duration: TimeInterval? = nil,
+    completion: ((_ finished: Bool) -> Void)? = nil
+  ) {
+    // Cancel any ongoing camera animation.
+    completeCurrentCameraAnimation(finished: false)
+
+    let newAnimationToken = NSObject()
+    _currentCameraAnimationToken = newAnimationToken
+    _currentCameraAnimationCompletion = completion
+
+    CATransaction.begin()
+
+    // Set custom duration if provided.
+    if let duration = duration {
+      CATransaction.setValue(duration, forKey: kCATransactionAnimationDuration)
+    }
+
+    CATransaction.setCompletionBlock { [weak self] in
+      guard let self = self else { return }
+      if self._currentCameraAnimationToken === newAnimationToken {
+        self.completeCurrentCameraAnimation(finished: true)
+      }
+    }
+
+    _mapView.animate(with: update)
+    _isGestureCameraMove = false
+    CATransaction.commit()
+  }
+
+  public func animateCameraToCameraPosition(
+    cameraPosition: GMSCameraPosition, duration: TimeInterval? = nil,
+    completion: ((Bool) -> Void)? = nil
+  ) {
+    performCameraAnimation(
+      with: GMSCameraUpdate.setCamera(cameraPosition), duration: duration, completion: completion)
+  }
+
+  public func animateCameraToLatLng(
+    point: CLLocationCoordinate2D, duration: TimeInterval? = nil,
+    completion: ((Bool) -> Void)? = nil
+  ) {
+    performCameraAnimation(
+      with: GMSCameraUpdate.setTarget(point), duration: duration, completion: completion)
+  }
+
+  public func animateCameraToLatLngBounds(
+    bounds: GMSCoordinateBounds, padding: Double, duration: TimeInterval? = nil,
+    completion: ((Bool) -> Void)? = nil
+  ) {
+    performCameraAnimation(
+      with: GMSCameraUpdate.fit(bounds, withPadding: padding), duration: duration,
+      completion: completion)
+  }
+
+  public func animateCameraToLatLngZoom(
+    point: CLLocationCoordinate2D, zoom: Double, duration: TimeInterval? = nil,
+    completion: ((Bool) -> Void)? = nil
+  ) {
+    performCameraAnimation(
+      with: GMSCameraUpdate.setTarget(point, zoom: Float(zoom)), duration: duration,
+      completion: completion)
+  }
+
+  public func animateCameraByScroll(
+    dx: Double, dy: Double, duration: TimeInterval? = nil, completion: ((Bool) -> Void)? = nil
+  ) {
+    performCameraAnimation(
+      with: GMSCameraUpdate.scrollBy(x: CGFloat(dx), y: CGFloat(dy)), duration: duration,
+      completion: completion)
+  }
+
+  public func animateCameraByZoom(
+    zoomBy: Double, focus: CGPoint?, duration: TimeInterval? = nil,
+    completion: ((Bool) -> Void)? = nil
+  ) {
+    let update =
+      focus != nil
+      ? GMSCameraUpdate.zoom(by: Float(zoomBy), at: focus!)
+      : GMSCameraUpdate.zoom(by: Float(zoomBy))
+    performCameraAnimation(with: update, duration: duration, completion: completion)
+  }
+
+  public func animateCameraToZoom(
+    zoom: Double, duration: TimeInterval? = nil, completion: ((Bool) -> Void)? = nil
+  ) {
+    performCameraAnimation(
+      with: GMSCameraUpdate.zoom(to: Float(zoom)), duration: duration, completion: completion)
   }
 
   public func moveCameraToCameraPosition(cameraPosition: GMSCameraPosition) {
@@ -967,6 +1043,7 @@ extension GoogleMapsNavigationView: GMSMapViewNavigationUIDelegate {
 
 extension GoogleMapsNavigationView: GMSMapViewDelegate {
   public func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
+    _isGestureCameraMove = false
     getViewEventApi()?.onMapClickEvent(
       viewId: _viewId!,
       latLng: .init(
@@ -978,6 +1055,7 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
   }
 
   public func mapView(_ mapView: GMSMapView, didLongPressAt coordinate: CLLocationCoordinate2D) {
+    _isGestureCameraMove = false
     getViewEventApi()?.onMapLongClickEvent(
       viewId: _viewId!,
       latLng: .init(
@@ -1076,6 +1154,7 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
   }
 
   public func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
+    _isGestureCameraMove = gesture
     if _listenCameraChanges {
       let position = Convert.convertCameraPosition(position: mapView.camera)
       getViewEventApi()?.onCameraChanged(
@@ -1088,6 +1167,9 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
   }
 
   public func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
+    // If there's an active animation, complete it when camera becomes idle.
+    completeCurrentCameraAnimation(finished: true)
+
     if _listenCameraChanges {
       getViewEventApi()?.onCameraChanged(
         viewId: _viewId!,
@@ -1099,6 +1181,9 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
   }
 
   public func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
+    if _isGestureCameraMove {
+      completeCurrentCameraAnimation(finished: false)
+    }
     if _listenCameraChanges {
       getViewEventApi()?.onCameraChanged(
         viewId: _viewId!,

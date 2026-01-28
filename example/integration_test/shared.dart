@@ -255,6 +255,7 @@ Future<GoogleMapViewController> getMapViewControllerForTestMapType(
   void Function(NavigationViewRecenterButtonClickedEvent)?
   onRecenterButtonClicked,
   void Function(CameraPosition)? onCameraIdle,
+  void Function(CameraPosition, bool)? onCameraMoveStarted,
 }) async {
   GoogleMapViewController viewController;
 
@@ -279,6 +280,7 @@ Future<GoogleMapViewController> getMapViewControllerForTestMapType(
         onPolygonClicked: onPolygonClicked,
         onPolylineClicked: onPolylineClicked,
         onCameraIdle: onCameraIdle,
+        onCameraMoveStarted: onCameraMoveStarted,
       ); // Instantiate a regular map.
       break;
 
@@ -306,6 +308,7 @@ Future<GoogleMapViewController> getMapViewControllerForTestMapType(
         onPolylineClicked: onPolylineClicked,
         onRecenterButtonClicked: onRecenterButtonClicked,
         onCameraIdle: onCameraIdle,
+        onCameraMoveStarted: onCameraMoveStarted,
       ); // Instantiate a navigation map.
       break;
   }
@@ -427,6 +430,7 @@ Future<GoogleMapViewController> startMapView(
   void Function(NavigationViewRecenterButtonClickedEvent)?
   onRecenterButtonClicked,
   void Function(CameraPosition)? onCameraIdle,
+  void Function(CameraPosition, bool)? onCameraMoveStarted,
 }) async {
   final ControllerCompleter<GoogleMapViewController> controllerCompleter =
       ControllerCompleter();
@@ -456,6 +460,7 @@ Future<GoogleMapViewController> startMapView(
       onPolylineClicked: onPolylineClicked,
       onRecenterButtonClicked: onRecenterButtonClicked,
       onCameraIdle: onCameraIdle,
+      onCameraMoveStarted: onCameraMoveStarted,
     ),
   );
 
