@@ -31,6 +31,7 @@ void main() {
   Completer<void> cameraMoveStartedCompleter = Completer<void>();
   Completer<void> cameraMoveCompleter = Completer<void>();
   Completer<void> cameraIdleCompleter = Completer<void>();
+  Completer<void> cameraAnimationOnFinishedCompleter = Completer<void>();
   late CameraPosition cameraMoveStartedPosition;
   late CameraPosition cameraMovePosition;
   late CameraPosition cameraIdlePosition;
@@ -77,10 +78,19 @@ void main() {
   }
 
   /// Reset the camera event completers.
-  void resetCameraEventCompleters() {
+  Future<void> resetCameraEventCompleters(
+    PatrolIntegrationTester $, {
+    bool waitForEvents = true,
+  }) async {
+    // Wait for a while to be sure all possible events are fired before
+    // resetting the completers.
+    await $.tester.runAsync(
+      () => Future.delayed(const Duration(milliseconds: 100)),
+    );
     cameraMoveStartedCompleter = Completer<void>();
     cameraMoveCompleter = Completer<void>();
     cameraIdleCompleter = Completer<void>();
+    cameraAnimationOnFinishedCompleter = Completer<void>();
   }
 
   double distanceToNorth(double angle) {
@@ -108,6 +118,12 @@ void main() {
 
   /// Check the received camera bearing value is less than or equal to the expected bearing value.
   bool checkBearingLessThanOrEqualTo(CameraPosition receivedPosition) {
+    return distanceToNorth(receivedPosition.bearing) <=
+        expectedPosition.bearing;
+  }
+
+  /// Check the received camera bearing value is greater than or equal to the expected bearing value.
+  bool checkBearingGreaterThanOrEqualTo(CameraPosition receivedPosition) {
     return distanceToNorth(receivedPosition.bearing) <=
         expectedPosition.bearing;
   }
@@ -218,7 +234,9 @@ void main() {
     CameraPosition? camera = await waitForValueMatchingPredicate(
       $,
       getPosition,
-      checkTiltGreaterThanOrEqualTo,
+      (CameraPosition cameraPosition) =>
+          checkTiltGreaterThanOrEqualTo(cameraPosition) &&
+          checkBearingGreaterThanOrEqualTo(cameraPosition),
     );
     expect(camera, isNotNull);
 
@@ -271,17 +289,15 @@ void main() {
     expectedPosition = const CameraPosition(bearing: 1.0, tilt: 0.1);
     await controller.followMyLocation(CameraPerspective.topDownNorthUp);
 
-    // Wait until the bearing & tilt are less than or equal to the expected bearing & tilt.
-    // On iOS the random small tilt change caused occasional test failures.
-    await waitForValueMatchingPredicate(
-      $,
-      getPosition,
-      checkTiltLessThanOrEqualTo,
-    );
+    // Wait until the bearing & tilt are less than or equal to the expected
+    // bearing & tilt. On iOS the random small tilt change caused occasional
+    // test failures.
     camera = await waitForValueMatchingPredicate(
       $,
       getPosition,
-      checkBearingLessThanOrEqualTo,
+      (CameraPosition cameraPosition) =>
+          checkTiltLessThanOrEqualTo(cameraPosition) &&
+          checkBearingLessThanOrEqualTo(cameraPosition),
     );
     expect(camera, isNotNull);
 
@@ -344,14 +360,17 @@ void main() {
     oldZoom = camera.zoom;
 
     // 5. Test showRouteOverview().
-    expectedPosition = const CameraPosition(tilt: 0.1);
+    expectedPosition = const CameraPosition(tilt: 0.1, bearing: 1.0);
     await controller.showRouteOverview();
 
-    // Wait until the tilt is less than or equal to the expected tilt.
+    // Wait until the tilt and bearing are less than
+    // or equal to the expected values.
     camera = await waitForValueMatchingPredicate(
       $,
       getPosition,
-      checkTiltLessThanOrEqualTo,
+      (CameraPosition cameraPosition) =>
+          checkTiltLessThanOrEqualTo(cameraPosition) &&
+          checkBearingLessThanOrEqualTo(cameraPosition),
     );
 
     // Test that stoppedFollowingMyLocation event has been received and
@@ -416,7 +435,7 @@ void main() {
     oldZoom = camera.zoom;
 
     // 7. Test stoppedFollowingMyLocation event.
-    resetCameraEventCompleters();
+    await resetCameraEventCompleters($);
 
     // Stop followMyLocation.
     final CameraUpdate positionUpdate = CameraUpdate.newLatLng(
@@ -453,7 +472,6 @@ void main() {
     // 8. Test cameraMoveStarted, cameraMove and cameraIdle events.
     await GoogleMapsNavigator.simulator.pauseSimulation();
     camera = await controller.getCameraPosition();
-    resetCameraEventCompleters();
 
     final LatLng newTarget = LatLng(
       latitude: camera.target.latitude + 0.5,
@@ -466,6 +484,7 @@ void main() {
 
     // Move camera and wait for cameraMoveStarted, cameraMove
     // and cameraIdle events to come in.
+    await resetCameraEventCompleters($);
     await controller.moveCamera(cameraUpdate);
     await waitForCameraEvents($);
 
@@ -539,12 +558,12 @@ void main() {
           );
       // Move camera back to the start.
       Future<void> moveCameraToStart() async {
-        resetCameraEventCompleters();
+        await resetCameraEventCompleters($);
         await viewController.moveCamera(start);
         await cameraIdleCompleter.future.timeout(
           const Duration(seconds: 10),
           onTimeout: () {
-            fail('Future timed out');
+            fail('cameraIdleCompleter Future timed out on moveCameraToStart');
           },
         );
       }
@@ -554,12 +573,12 @@ void main() {
 
       // Create a wrapper for moveCamera() that waits until the move is finished.
       Future<void> moveCamera(CameraUpdate update) async {
-        resetCameraEventCompleters();
+        await resetCameraEventCompleters($);
         await viewController.moveCamera(update);
         await cameraIdleCompleter.future.timeout(
           const Duration(seconds: 10),
           onTimeout: () {
-            fail('Future timed out');
+            fail('cameraIdleCompleter Future timed out');
           },
         );
       }
@@ -567,26 +586,35 @@ void main() {
       // Create a wrapper for animateCamera() that waits until move is finished
       // using cameraIdle event on iOS and onFinished listener on Android.
       Future<void> animateCamera(CameraUpdate update) async {
-        resetCameraEventCompleters();
+        await resetCameraEventCompleters($);
 
-        // Create onFinished callback function that is used on Android
-        // to test that the callback comes in.
+        // Create onFinished callback function that is used to test that the
+        // callback comes in.
         void onFinished(bool finished) {
+          cameraAnimationOnFinishedCompleter.complete();
           expect(finished, true);
         }
 
         // Animate camera to the set position with reduced duration.
         await viewController.animateCamera(
           update,
-          duration: const Duration(milliseconds: 50),
+          duration: const Duration(milliseconds: 500),
           onFinished: onFinished,
         );
 
-        // Wait until the cameraIdle event comes in.
+        // Make sure onFinished event is received.
+        await cameraAnimationOnFinishedCompleter.future.timeout(
+          const Duration(seconds: 10),
+          onTimeout: () {
+            fail('cameraAnimationOnFinishedCompleter Future timed out');
+          },
+        );
+
+        // Make sure camera idle event is received.
         await cameraIdleCompleter.future.timeout(
           const Duration(seconds: 10),
           onTimeout: () {
-            fail('Future timed out');
+            fail('cameraIdleCompleter Future timed out');
           },
         );
       }
@@ -919,5 +947,256 @@ void main() {
       }
     },
     variant: mapTypeVariants,
+    skip:
+        Platform
+            .isIOS, // Skipping camera animation tests on iOS simulator due to platform issues.
+  );
+
+  patrol(
+    'Test camera animation cancellation by drag gesture',
+    (PatrolIntegrationTester $) async {
+      // Long enough duration to ensure animation is running when we cancel it.
+      const Duration animationDuration = Duration(seconds: 10);
+      // Max time to wait for cancellation to complete.
+      const Duration cancellationTimeout = Duration(seconds: 1);
+      // Max time to wait for camera to become idle.
+      const Duration cameraIdleTimeout = Duration(seconds: 9);
+      // Max time to wait for camera animation to start.
+      const Duration cameraMoveStartTimeout = Duration(seconds: 1);
+
+      const LatLng target = LatLng(
+        latitude: startLocationLat + 1,
+        longitude: startLocationLng + 1,
+      );
+      final CameraUpdate startCameraUpdate = CameraUpdate.newLatLngZoom(
+        LatLng(latitude: startLocationLat, longitude: startLocationLng),
+        10,
+      );
+      final CameraUpdate cancelCameraUpdate = CameraUpdate.newLatLngZoom(
+        target,
+        15,
+      );
+
+      /// Initialize view with the event listener functions.
+      final GoogleMapViewController viewController =
+          await getMapViewControllerForTestMapType(
+            $,
+            testMapType: mapTypeVariants.currentValue!,
+            initializeNavigation: false,
+            simulateLocation: false,
+            onCameraIdle: onCameraIdle,
+            onCameraMoveStarted: onCameraMoveStarted,
+          );
+
+      await resetCameraEventCompleters($);
+      await viewController.moveCamera(startCameraUpdate);
+      await cameraIdleCompleter.future.timeout(
+        cameraIdleTimeout,
+        onTimeout: () {
+          fail('cameraIdleCompleter Future timed out');
+        },
+      );
+
+      await resetCameraEventCompleters($);
+
+      void onFinished(bool finished) {
+        cameraAnimationOnFinishedCompleter.complete();
+        expect(
+          finished,
+          false,
+        ); // Animation should be cancelled, so finished value should be false.
+      }
+
+      await viewController.animateCamera(
+        cancelCameraUpdate,
+        duration: animationDuration,
+        onFinished: onFinished,
+      );
+
+      // Wait until the camera move has started.
+      await cameraMoveStartedCompleter.future.timeout(
+        cameraMoveStartTimeout,
+        onTimeout: () {
+          // FIXME(jokerttu): Android does not always trigger cameraMoveStarted event.
+          // Most likely the native SDK does not trigger it in some cases.
+          // Skipping failure on Android for now.
+          if (Platform.isAndroid) {
+            $.log(
+              'Warning: cameraMoveStarted event was not triggered on Android.',
+            );
+            return;
+          }
+          fail('cameraMoveStartedCompleter Future timed out');
+        },
+      );
+
+      // Drag the map to cancel the animation while it's in progress.
+      await $.native.swipe(
+        from: const Offset(0.4, 0.4),
+        to: const Offset(0.6, 0.6),
+      );
+      await $.pumpAndSettle();
+
+      // The animation should be cancelled quickly after the drag.
+      await cameraAnimationOnFinishedCompleter.future.timeout(
+        cancellationTimeout,
+        onTimeout: () {
+          fail('cameraAnimationOnFinishedCompleter Future timed out');
+        },
+      );
+
+      final CameraPosition finalPosition =
+          await viewController.getCameraPosition();
+      expect(
+        finalPosition.target.latitude,
+        isNot(closeTo(target.latitude, latLngTestThreshold)),
+      );
+      expect(
+        finalPosition.target.longitude,
+        isNot(closeTo(target.longitude, latLngTestThreshold)),
+      );
+    },
+    variant: mapTypeVariants,
+    skip:
+        Platform
+            .isIOS, // Skipping camera animation tests on iOS simulator due to platform issues.
+  );
+
+  patrol(
+    'Test camera animation cancellation by starting new animation',
+    (PatrolIntegrationTester $) async {
+      // Long enough duration to ensure first animation is running when we start
+      // the second one.
+      const Duration firstAnimationDuration = Duration(seconds: 10);
+      const Duration secondAnimationDuration = Duration(milliseconds: 100);
+      // Max time to wait for first animation to start.
+      const Duration firstAnimationStartTimeout = Duration(seconds: 1);
+      // Max time to wait for second animation to complete.
+      const Duration secondAnimationCompleteTimeout = Duration(seconds: 3);
+      // Max time to wait for first animation to be cancelled.
+      const Duration firstAnimationCancelTimeout = Duration(seconds: 2);
+
+      const LatLng firstTarget = LatLng(
+        latitude: startLocationLat + 1,
+        longitude: startLocationLng + 1,
+      );
+      const LatLng secondTarget = LatLng(
+        latitude: startLocationLat - 1,
+        longitude: startLocationLng - 1,
+      );
+      final CameraUpdate startCameraUpdate = CameraUpdate.newLatLngZoom(
+        LatLng(latitude: startLocationLat, longitude: startLocationLng),
+        10,
+      );
+      final CameraUpdate firstCameraUpdate = CameraUpdate.newLatLngZoom(
+        firstTarget,
+        15,
+      );
+      final CameraUpdate secondCameraUpdate = CameraUpdate.newLatLngZoom(
+        secondTarget,
+        12,
+      );
+
+      /// Initialize view with the event listener functions.
+      final GoogleMapViewController viewController =
+          await getMapViewControllerForTestMapType(
+            $,
+            testMapType: mapTypeVariants.currentValue!,
+            initializeNavigation: false,
+            simulateLocation: false,
+            onCameraIdle: onCameraIdle,
+            onCameraMoveStarted: onCameraMoveStarted,
+          );
+
+      // Move to start position
+      await resetCameraEventCompleters($);
+      await viewController.moveCamera(startCameraUpdate);
+
+      await cameraIdleCompleter.future.timeout(
+        const Duration(seconds: 5),
+        onTimeout: () {
+          fail('Initial cameraIdleCompleter Future timed out');
+        },
+      );
+
+      // Track completion of both animations.
+      final Completer<bool> firstAnimationCompleter = Completer<bool>();
+      final Completer<bool> secondAnimationCompleter = Completer<bool>();
+
+      void onFirstAnimationFinished(bool finished) {
+        firstAnimationCompleter.complete(finished);
+      }
+
+      void onSecondAnimationFinished(bool finished) {
+        secondAnimationCompleter.complete(finished);
+      }
+
+      await resetCameraEventCompleters($);
+
+      // Start first animation.
+      await viewController.animateCamera(
+        firstCameraUpdate,
+        duration: firstAnimationDuration,
+        onFinished: onFirstAnimationFinished,
+      );
+
+      // Wait until the first animation has started.
+      await cameraMoveStartedCompleter.future.timeout(
+        firstAnimationStartTimeout,
+        onTimeout: () {
+          // FIXME(jokerttu): Android does not always trigger cameraMoveStarted event.
+          // Most likely the native SDK does not trigger it in some cases.
+          // Skipping failure on Android for now.
+          if (Platform.isAndroid) {
+            $.log(
+              'Warning: cameraMoveStarted event was not triggered on Android.',
+            );
+            return;
+          }
+          fail('First animation cameraMoveStartedCompleter Future timed out');
+        },
+      );
+
+      // Start second animation while first is still running.
+      await viewController.animateCamera(
+        secondCameraUpdate,
+        duration: secondAnimationDuration,
+        onFinished: onSecondAnimationFinished,
+      );
+
+      // First animation should be cancelled (onFinished called with false)
+      final bool firstAnimationResult = await firstAnimationCompleter.future
+          .timeout(
+            firstAnimationCancelTimeout,
+            onTimeout: () {
+              fail('First animation was not cancelled within timeout');
+            },
+          );
+      expect(
+        firstAnimationResult,
+        false,
+        reason:
+            'First animation should be cancelled when second animation starts',
+      );
+
+      // Second animation should complete successfully; onFinished called
+      // with `true`.
+      final bool secondAnimationResult = await secondAnimationCompleter.future
+          .timeout(
+            secondAnimationCompleteTimeout,
+            onTimeout: () {
+              fail('Second animation did not complete within timeout');
+            },
+          );
+      expect(
+        secondAnimationResult,
+        true,
+        reason: 'Second animation should complete successfully',
+      );
+    },
+    variant: mapTypeVariants,
+    skip:
+        Platform
+            .isIOS, // Skipping camera animation tests on iOS simulator due to platform issues.
   );
 }

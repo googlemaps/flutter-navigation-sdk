@@ -74,7 +74,10 @@ public class GoogleMapsNavigationPlugin: NSObject, FlutterPlugin {
       viewEventApi: viewEventApi!,
       imageRegistry: imageRegistry!
     )
-    registrar.register(factory, withId: "google_navigation_flutter")
+    registrar.register(
+      factory, withId: "google_navigation_flutter",
+      gestureRecognizersBlockingPolicy:
+        FlutterPlatformViewGestureRecognizersBlockingPolicyWaitUntilTouchesEnded)
 
     navigationSessionEventApi = NavigationSessionEventApi(
       binaryMessenger: registrar.messenger()
