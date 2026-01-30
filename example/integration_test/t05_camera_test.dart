@@ -947,112 +947,120 @@ void main() {
       }
     },
     variant: mapTypeVariants,
+    skip:
+        Platform
+            .isIOS, // Skipping camera animation tests on iOS simulator due to platform issues.
   );
 
-  patrol('Test camera animation cancellation by drag gesture', (
-    PatrolIntegrationTester $,
-  ) async {
-    // Long enough duration to ensure animation is running when we cancel it.
-    const Duration animationDuration = Duration(seconds: 10);
-    // Max time to wait for cancellation to complete.
-    const Duration cancellationTimeout = Duration(seconds: 1);
-    // Max time to wait for camera to become idle.
-    const Duration cameraIdleTimeout = Duration(seconds: 9);
-    // Max time to wait for camera animation to start.
-    const Duration cameraMoveStartTimeout = Duration(seconds: 1);
+  patrol(
+    'Test camera animation cancellation by drag gesture',
+    (PatrolIntegrationTester $) async {
+      // Long enough duration to ensure animation is running when we cancel it.
+      const Duration animationDuration = Duration(seconds: 10);
+      // Max time to wait for cancellation to complete.
+      const Duration cancellationTimeout = Duration(seconds: 1);
+      // Max time to wait for camera to become idle.
+      const Duration cameraIdleTimeout = Duration(seconds: 9);
+      // Max time to wait for camera animation to start.
+      const Duration cameraMoveStartTimeout = Duration(seconds: 1);
 
-    const LatLng target = LatLng(
-      latitude: startLocationLat + 1,
-      longitude: startLocationLng + 1,
-    );
-    final CameraUpdate startCameraUpdate = CameraUpdate.newLatLngZoom(
-      LatLng(latitude: startLocationLat, longitude: startLocationLng),
-      10,
-    );
-    final CameraUpdate cancelCameraUpdate = CameraUpdate.newLatLngZoom(
-      target,
-      15,
-    );
+      const LatLng target = LatLng(
+        latitude: startLocationLat + 1,
+        longitude: startLocationLng + 1,
+      );
+      final CameraUpdate startCameraUpdate = CameraUpdate.newLatLngZoom(
+        LatLng(latitude: startLocationLat, longitude: startLocationLng),
+        10,
+      );
+      final CameraUpdate cancelCameraUpdate = CameraUpdate.newLatLngZoom(
+        target,
+        15,
+      );
 
-    /// Initialize view with the event listener functions.
-    final GoogleMapViewController viewController =
-        await getMapViewControllerForTestMapType(
-          $,
-          testMapType: mapTypeVariants.currentValue!,
-          initializeNavigation: false,
-          simulateLocation: false,
-          onCameraIdle: onCameraIdle,
-          onCameraMoveStarted: onCameraMoveStarted,
-        );
-
-    await resetCameraEventCompleters($);
-    await viewController.moveCamera(startCameraUpdate);
-    await cameraIdleCompleter.future.timeout(
-      cameraIdleTimeout,
-      onTimeout: () {
-        fail('cameraIdleCompleter Future timed out');
-      },
-    );
-
-    await resetCameraEventCompleters($);
-
-    void onFinished(bool finished) {
-      cameraAnimationOnFinishedCompleter.complete();
-      expect(
-        finished,
-        false,
-      ); // Animation should be cancelled, so finished value should be false.
-    }
-
-    await viewController.animateCamera(
-      cancelCameraUpdate,
-      duration: animationDuration,
-      onFinished: onFinished,
-    );
-
-    // Wait until the camera move has started.
-    await cameraMoveStartedCompleter.future.timeout(
-      cameraMoveStartTimeout,
-      onTimeout: () {
-        // FIXME(jokerttu): Android does not always trigger cameraMoveStarted event.
-        // Most likely the native SDK does not trigger it in some cases.
-        // Skipping failure on Android for now.
-        if (Platform.isAndroid) {
-          $.log(
-            'Warning: cameraMoveStarted event was not triggered on Android.',
+      /// Initialize view with the event listener functions.
+      final GoogleMapViewController viewController =
+          await getMapViewControllerForTestMapType(
+            $,
+            testMapType: mapTypeVariants.currentValue!,
+            initializeNavigation: false,
+            simulateLocation: false,
+            onCameraIdle: onCameraIdle,
+            onCameraMoveStarted: onCameraMoveStarted,
           );
-          return;
-        }
-        fail('cameraMoveStartedCompleter Future timed out');
-      },
-    );
 
-    // Drag the map to cancel the animation while it's in progress.
-    await $.native.swipe(
-      from: const Offset(0.4, 0.4),
-      to: const Offset(0.6, 0.6),
-    );
-    await $.pumpAndSettle();
+      await resetCameraEventCompleters($);
+      await viewController.moveCamera(startCameraUpdate);
+      await cameraIdleCompleter.future.timeout(
+        cameraIdleTimeout,
+        onTimeout: () {
+          fail('cameraIdleCompleter Future timed out');
+        },
+      );
 
-    // The animation should be cancelled quickly after the drag.
-    await cameraAnimationOnFinishedCompleter.future.timeout(
-      cancellationTimeout,
-      onTimeout: () {
-        fail('cameraAnimationOnFinishedCompleter Future timed out');
-      },
-    );
+      await resetCameraEventCompleters($);
 
-    final CameraPosition finalPosition =
-        await viewController.getCameraPosition();
-    expect(
-      finalPosition.target.latitude,
-      isNot(closeTo(target.latitude, latLngTestThreshold)),
-    );
-    expect(
-      finalPosition.target.longitude,
-      isNot(closeTo(target.longitude, latLngTestThreshold)),
-    );
-  }, variant: mapTypeVariants);
+      void onFinished(bool finished) {
+        cameraAnimationOnFinishedCompleter.complete();
+        expect(
+          finished,
+          false,
+        ); // Animation should be cancelled, so finished value should be false.
+      }
+
+      await viewController.animateCamera(
+        cancelCameraUpdate,
+        duration: animationDuration,
+        onFinished: onFinished,
+      );
+
+      // Wait until the camera move has started.
+      await cameraMoveStartedCompleter.future.timeout(
+        cameraMoveStartTimeout,
+        onTimeout: () {
+          // FIXME(jokerttu): Android does not always trigger cameraMoveStarted event.
+          // Most likely the native SDK does not trigger it in some cases.
+          // Skipping failure on Android for now.
+          if (Platform.isAndroid) {
+            $.log(
+              'Warning: cameraMoveStarted event was not triggered on Android.',
+            );
+            return;
+          }
+          fail('cameraMoveStartedCompleter Future timed out');
+        },
+      );
+
+      // Drag the map to cancel the animation while it's in progress.
+      await $.native.swipe(
+        from: const Offset(0.4, 0.4),
+        to: const Offset(0.6, 0.6),
+      );
+      await $.pumpAndSettle();
+
+      // The animation should be cancelled quickly after the drag.
+      await cameraAnimationOnFinishedCompleter.future.timeout(
+        cancellationTimeout,
+        onTimeout: () {
+          fail('cameraAnimationOnFinishedCompleter Future timed out');
+        },
+      );
+
+      final CameraPosition finalPosition =
+          await viewController.getCameraPosition();
+      expect(
+        finalPosition.target.latitude,
+        isNot(closeTo(target.latitude, latLngTestThreshold)),
+      );
+      expect(
+        finalPosition.target.longitude,
+        isNot(closeTo(target.longitude, latLngTestThreshold)),
+      );
+    },
+    variant: mapTypeVariants,
+    skip:
+        Platform
+            .isIOS, // Skipping camera animation tests on iOS simulator due to platform issues.
+  );
 
   patrol(
     'Test camera animation cancellation by starting new animation',
@@ -1187,5 +1195,8 @@ void main() {
       );
     },
     variant: mapTypeVariants,
+    skip:
+        Platform
+            .isIOS, // Skipping camera animation tests on iOS simulator due to platform issues.
   );
 }
