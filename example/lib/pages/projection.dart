@@ -40,8 +40,7 @@ enum ProjectionMode { latLngToScreen, screenToLatLng }
 class _ProjectionPageState extends ExamplePageState<ProjectionPage> {
   late final GoogleMapViewController _mapViewController;
   List<Marker> _markers = <Marker>[];
-  String _coordinateInfo = 'Select a mode and tap to test projection';
-  bool _showOverlay = true;
+  LatLng? _lastLatLng;
   ScreenCoordinate? _lastScreenCoordinate;
   ProjectionMode _mode = ProjectionMode.latLngToScreen;
 
@@ -82,21 +81,8 @@ class _ProjectionPageState extends ExamplePageState<ProjectionPage> {
       if (addedMarkers.isNotEmpty && addedMarkers.first != null) {
         _markers = <Marker>[addedMarkers.first!];
       }
-
+      _lastLatLng = latLng;
       _lastScreenCoordinate = screenCoord;
-
-      _coordinateInfo = '''
-Mode: LatLng → Screen
-Converts geographic coordinates to screen pixels
-
-Geographic Coordinates (input):
-  Lat: ${latLng.latitude.toStringAsFixed(6)}
-  Lng: ${latLng.longitude.toStringAsFixed(6)}
-
-Screen Coordinates (output):
-  X: ${screenCoord.x.toStringAsFixed(2)} px
-  Y: ${screenCoord.y.toStringAsFixed(2)} px
-''';
     });
   }
 
@@ -135,21 +121,8 @@ Screen Coordinates (output):
       if (addedMarkers.isNotEmpty && addedMarkers.first != null) {
         _markers = <Marker>[addedMarkers.first!];
       }
-
+      _lastLatLng = latLng;
       _lastScreenCoordinate = screenCoord;
-
-      _coordinateInfo = '''
-Mode: Screen → LatLng
-Converts screen pixels to geographic coordinates
-
-Screen Coordinates (input):
-  X: ${screenCoord.x.toStringAsFixed(2)} px
-  Y: ${screenCoord.y.toStringAsFixed(2)} px
-
-Geographic Coordinates (output):
-  Lat: ${latLng.latitude.toStringAsFixed(6)}
-  Lng: ${latLng.longitude.toStringAsFixed(6)}
-''';
     });
   }
 
@@ -176,8 +149,8 @@ Geographic Coordinates (output):
     _mapViewController.clearMarkers();
     setState(() {
       _markers.clear();
+      _lastLatLng = null;
       _lastScreenCoordinate = null;
-      _coordinateInfo = 'Select a mode and tap to test projection';
     });
   }
 
@@ -186,6 +159,51 @@ Geographic Coordinates (output):
       _mode = mode;
       _clearMarkers();
     });
+  }
+
+  Widget _buildCoordinateLabel({
+    required String title,
+    required String content,
+    required Color color,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.9),
+        borderRadius: BorderRadius.circular(6),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+              color: Colors.white70,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            content,
+            style: const TextStyle(
+              fontSize: 12,
+              fontFamily: 'monospace',
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -227,77 +245,32 @@ Geographic Coordinates (output):
                 ),
               ),
             ),
-          // Info overlay
-          if (_showOverlay)
-            Positioned(
-              top: 10,
-              left: 10,
-              right: 10,
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 6,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        const Text(
-                          'Projection Test',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.close, size: 20),
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                          onPressed: () {
-                            setState(() {
-                              _showOverlay = false;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      _coordinateInfo,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        fontFamily: 'monospace',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+          // LatLng coordinates label (top left)
+          Positioned(
+            top: 10,
+            left: 10,
+            child: _buildCoordinateLabel(
+              title: 'Geographic (LatLng)',
+              content:
+                  _lastLatLng != null
+                      ? 'Lat: ${_lastLatLng!.latitude.toStringAsFixed(6)}\nLng: ${_lastLatLng!.longitude.toStringAsFixed(6)}'
+                      : 'Tap map to see coordinates',
+              color: Colors.blue.shade700,
             ),
-          // Button to show overlay if hidden
-          if (!_showOverlay)
-            Positioned(
-              top: 10,
-              right: 10,
-              child: FloatingActionButton.small(
-                onPressed: () {
-                  setState(() {
-                    _showOverlay = true;
-                  });
-                },
-                child: const Icon(Icons.info_outline),
-              ),
+          ),
+          // Screen coordinates label (top right)
+          Positioned(
+            top: 10,
+            right: 10,
+            child: _buildCoordinateLabel(
+              title: 'Screen (pixels)',
+              content:
+                  _lastScreenCoordinate != null
+                      ? 'X: ${_lastScreenCoordinate!.x.toStringAsFixed(1)}\nY: ${_lastScreenCoordinate!.y.toStringAsFixed(1)}'
+                      : 'Tap map to see coordinates',
+              color: Colors.green.shade700,
             ),
+          ),
           // Mode selector
           Positioned(
             bottom: 80,
@@ -335,7 +308,7 @@ Geographic Coordinates (output):
                                 ? Colors.white
                                 : null,
                       ),
-                      child: const Text('LatLng → Screen'),
+                      child: const Text('LatLng -> Screen'),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -356,7 +329,7 @@ Geographic Coordinates (output):
                                 ? Colors.white
                                 : null,
                       ),
-                      child: const Text('Screen → LatLng'),
+                      child: const Text('Screen -> LatLng'),
                     ),
                   ),
                 ],
