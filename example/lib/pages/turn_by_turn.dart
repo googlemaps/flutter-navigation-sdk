@@ -46,6 +46,29 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
 
   NavInfo? _navInfo;
 
+  final GoogleMapsAutoViewController _autoViewController =
+      GoogleMapsAutoViewController();
+
+   @override
+  void initState() {
+    super.initState();
+    unawaited(_initialize());
+  }
+
+  
+
+  Future<void> _initialize() async {
+    _autoViewController.listenForCustomNavigationAutoEvents((event) {
+    //_showMessage("Received event: ${event.event}");
+
+    if (event.event == "AutoEventStart") {
+        _startNavigation();
+      } else if (event.event == "AutoEventStop") {
+        _stopNavigation();
+      }
+    });
+  }
+
   // ignore: use_setters_to_change_properties
   void _onViewCreated(GoogleNavigationViewController controller) async {
     _navigationViewController = controller;
