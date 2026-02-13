@@ -38,6 +38,8 @@ target 'Runner' do
   target 'RunnerUITests' do
     inherit! :complete
   end
+
+  pod 'SnapKit', '~> 5.7.1'
 end
 
 target 'RunnerCarPlay' do
@@ -45,6 +47,8 @@ target 'RunnerCarPlay' do
   use_modular_headers!
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+
+  pod 'SnapKit', '~> 5.7.1'
 end
 
 post_install do |installer|
