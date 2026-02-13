@@ -97,7 +97,15 @@ class CarPlayNavigationStateMonitor {
             return
         }
 
-        lastGuidanceState = navigator.isGuidanceActive
+        let initialGuidanceState = navigator.isGuidanceActive
+        lastGuidanceState = initialGuidanceState
+        
+        // If guidance is already active when monitoring starts, trigger the delegate immediately
+        // This handles the case where CarPlay connects after navigation has already started
+        if initialGuidanceState {
+            NSLog("⏱️ [StateMonitor] startFullStateMonitoring() - guidance already active, triggering delegate")
+            delegate?.guidanceStateDidChange(isActive: true)
+        }
 
         stateCheckTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) {
             [weak self] timer in

@@ -43,6 +43,10 @@ public class ExposedGoogleMapsNavigator: NSObject {
   public static func enableRoadSnappedLocationUpdates() {
     GoogleMapsNavigationSessionManager.shared.enableRoadSnappedLocationUpdates()
   }
+ 
+  public static func getSession() throws -> GMSNavigationSession {
+    try GoogleMapsNavigationSessionManager.shared.getSession()
+  }
 }
 
 class GoogleMapsNavigationSessionManager: NSObject {

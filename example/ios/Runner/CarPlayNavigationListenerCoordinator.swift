@@ -19,6 +19,7 @@ class CarPlayNavigationListenerCoordinator: NSObject, GMSNavigatorListener {
     private var isListenerAttached = false
     private(set) var cachedRemainingTime: TimeInterval?
     private(set) var cachedRemainingDistance: CLLocationDistance?
+    private(set) var cachedNavInfo: GMSNavigationNavInfo?
 
     // MARK: - Initialization
 
@@ -113,10 +114,21 @@ class CarPlayNavigationListenerCoordinator: NSObject, GMSNavigatorListener {
     }
 
     func navigator(_ navigator: GMSNavigator, didUpdate navInfo: GMSNavigationNavInfo) {
+        NSLog("🔶 [ListenerCoordinator] navigator didUpdate navInfo - isGuidanceActive: \(navigator.isGuidanceActive)")
+        
+        // Cache the latest navInfo
+        cachedNavInfo = navInfo
+        
         if navigator.isGuidanceActive {
             let nextManeuver = navInfo.remainingSteps.first?.maneuver
+            NSLog("🔶 [ListenerCoordinator] Forwarding navInfo to delegate - steps: \(navInfo.remainingSteps.count)")
             delegate?.navigatorDidUpdateNavInfo(navInfo, nextManeuver: nextManeuver)
         }
+    }
+    
+    /// Get the last cached navInfo (useful for initializing CarPlay session)
+    func getCachedNavInfo() -> GMSNavigationNavInfo? {
+        return cachedNavInfo
     }
 
     func navigatorDidChangeRoute(_ navigator: GMSNavigator) {
@@ -131,5 +143,6 @@ class CarPlayNavigationListenerCoordinator: NSObject, GMSNavigatorListener {
         detachListener()
         cachedRemainingTime = nil
         cachedRemainingDistance = nil
+        cachedNavInfo = nil
     }
 }

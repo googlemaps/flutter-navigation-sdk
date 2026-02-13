@@ -39,6 +39,33 @@ class SampleAndroidAutoScreen(carContext: CarContext) : AndroidAutoBaseScreen(ca
         // Maximum value for top padding (based on car_app_bar_height from framework)
         private const val TOP_PADDING_NO_GUIDANCE_MAX = 80
     }
+    
+    /**
+     * Formats distance with smart rounding similar to iOS CarPlay:
+     * - >= 1km: show in km with 1 decimal precision
+     * - >= 100m: round to nearest 50m
+     * - < 100m: round to nearest 10m
+     */
+    private fun formatDistance(distanceMeters: Double): Distance {
+        return when {
+            distanceMeters >= 1000 -> {
+                // >= 1km: convert to km with 1 decimal precision
+                val km = distanceMeters / 1000.0
+                val roundedKm = Math.round(km * 10.0) / 10.0
+                Distance.create(roundedKm, Distance.UNIT_KILOMETERS)
+            }
+            distanceMeters >= 100 -> {
+                // >= 100m: round to nearest 50m
+                val roundedMeters = Math.round(distanceMeters / 50.0) * 50.0
+                Distance.create(roundedMeters, Distance.UNIT_METERS)
+            }
+            else -> {
+                // < 100m: round to nearest 10m
+                val roundedMeters = Math.round(distanceMeters / 10.0) * 10.0
+                Distance.create(roundedMeters, Distance.UNIT_METERS)
+            }
+        }
+    }
 
     private var mTravelEstimate: TravelEstimate? = null
     private var mNavInfo: RoutingInfo? = null
@@ -89,13 +116,11 @@ class SampleAndroidAutoScreen(carContext: CarContext) : AndroidAutoBaseScreen(ca
 
         try {
             val currentStep: Step = buildStepFromStepInfo(currentStepInfo)
-            val distanceToStep =
-                Distance.create(
-                    java.lang.Double.max(
-                        navInfo.distanceToCurrentStepMeters?.toDouble() ?: 0.0,
-                        0.0
-                    ), Distance.UNIT_METERS
-                )
+            val distanceToStepMeters = java.lang.Double.max(
+                navInfo.distanceToCurrentStepMeters?.toDouble() ?: 0.0,
+                0.0
+            )
+            val distanceToStep = formatDistance(distanceToStepMeters)
 
             mNavInfo = RoutingInfo.Builder().setCurrentStep(currentStep, distanceToStep).build()
         } catch (e: Exception) {
@@ -113,7 +138,7 @@ class SampleAndroidAutoScreen(carContext: CarContext) : AndroidAutoBaseScreen(ca
             } else {
                 val arrivalTimeMillis = System.currentTimeMillis() + (timeToDestinationSeconds * 1000)
                 val arrivalTime = DateTimeWithZone.create(arrivalTimeMillis, TimeZone.getDefault())
-                val remainingDistance = Distance.create(distanceToDestinationMeters.toDouble(), Distance.UNIT_METERS)
+                val remainingDistance = formatDistance(distanceToDestinationMeters.toDouble())
 
                 mTravelEstimate = TravelEstimate.Builder(remainingDistance, arrivalTime)
                     .setRemainingTimeSeconds(timeToDestinationSeconds.toLong())
@@ -141,6 +166,25 @@ class SampleAndroidAutoScreen(carContext: CarContext) : AndroidAutoBaseScreen(ca
                 .setRoad(stepInfo.fullRoadName ?: "")
                 .setCue(stepInfo.fullInstructionText ?: "")
                 .setManeuver(maneuverBuilder.build())
+        
+        // Add lane guidance if available (requires both lanes data AND lanes image)
+        if (stepInfo.lanes != null && stepInfo.lanes!!.isNotEmpty() && stepInfo.lanesBitmap != null) {
+            val androidAutoLanes = LaneConverter.convertToAndroidAutoLanes(stepInfo.lanes)
+            if (androidAutoLanes != null && androidAutoLanes.isNotEmpty()) {
+                // Add lanes
+                for (lane in androidAutoLanes) {
+                    stepBuilder.addLane(lane)
+                }
+                
+                // Add lanes image (REQUIRED by Android Auto when lanes are present)
+                val lanesIcon = IconCompat.createWithBitmap(stepInfo.lanesBitmap!!)
+                val lanesCarIcon = CarIcon.Builder(lanesIcon).build()
+                stepBuilder.setLanesImage(lanesCarIcon)
+                
+                Log.d(TAG, "🔷 [AndroidAuto] Added ${androidAutoLanes.size} lanes with image to step")
+            }
+        }
+        
         return stepBuilder.build()
         } catch (e: Exception) {
             Log.e(TAG, "🔷 [AndroidAuto] buildStepFromStepInfo() - error: ${e.message}")

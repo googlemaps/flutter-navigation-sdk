@@ -59,6 +59,10 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     _mapView
   }
 
+  public func getMapView() -> GMSMapView {
+    _mapView
+  }
+
   // Getter that wont return viewEventApi if viewId is missing.
   private func getViewEventApi() -> ViewEventApi? {
     if _viewId != nil {
