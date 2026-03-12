@@ -111,13 +111,13 @@ jobs:
           key: ${{ runner.os }}-pods-${{ hashFiles('**/*.podspec') }}
           restore-keys: |
             ${{ runner.os }}-pods-
-      - name: Select XCode 16.4
-        run: sudo xcode-select -s '/Applications/Xcode_16.4.0.app/Contents/Developer'
+      - name: Select XCode 26.3
+        run: sudo xcode-select -s '/Applications/Xcode_26.3.0.app/Contents/Developer'
       - name: Generate necessary files with flutter build
         working-directory: ${{ env.working_directory }}
         run: flutter build ios --config-only
       - name: "Run iOS native unit tests"
-        run: TEST_DEVICE='iPhone 16 Pro' TEST_OS='18.5' melos run test:ios
+        run: TEST_DEVICE='iPhone 16 Pro' TEST_OS='26.2' melos run test:ios
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
@@ -203,8 +203,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ runner.os }}-build-artifact
-      - name: Select XCode 16.4
-        run: sudo xcode-select -s '/Applications/Xcode_16.4.0.app/Contents/Developer'
+      - name: Select XCode 26.3
+        run: sudo xcode-select -s '/Applications/Xcode_26.3.0.app/Contents/Developer'
       - name: "Run build for iOS"
         run: melos run flutter-build-ios
       - name: Upload build artifact
@@ -322,13 +322,13 @@ jobs:
     if: contains(github.base_ref, 'main')
     timeout-minutes: 90
     runs-on:
-      labels: macos-15-xlarge
+      labels: macos-latest-xlarge
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
       PATROL_ANALYTICS_ENABLED: false
       patrol_cli_version: "3.10.0"
       working_directory: "example"
-      IOS_VERSION: "18.6"
+      IOS_VERSION: "26.2"
     steps:
       - name: Fail if workflow has no access to API key
         if: ${{ env.MAPS_API_KEY == '' }}
@@ -343,8 +343,8 @@ jobs:
           flutter-version: "3.38.x"
           channel: "stable"
           cache: true
-      - name: Select XCode 16.4
-        run: sudo xcode-select -s '/Applications/Xcode_16.4.0.app/Contents/Developer'
+      - name: Select XCode 26.3
+        run: sudo xcode-select -s '/Applications/Xcode_26.3.0.app/Contents/Developer'
       - name: Start iOS simulator
         run: |
           SIMULATOR_NAME="iPhone 16 Pro"
