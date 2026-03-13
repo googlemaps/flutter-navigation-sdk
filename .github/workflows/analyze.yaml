@@ -37,7 +37,7 @@ jobs:
           channel: "stable"
           cache: true
       - name: Setup melos
-        uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
+        uses: bluefireteam/melos-action@705015c3d2bc4ab94201ac24accb2bbe070cf533
         with:
           melos-version: "6.3.2"
       - name: "Run Flutter Analyze"
@@ -62,7 +62,7 @@ jobs:
           channel: "stable"
           cache: true
       - name: Setup melos
-        uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
+        uses: bluefireteam/melos-action@705015c3d2bc4ab94201ac24accb2bbe070cf533
         with:
           melos-version: "6.3.2"
       - name: Restore Cache
