@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.3](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.8.2...0.8.3) (2026-03-13)
+
+
+### Features
+
+* upgrade Android (7.4.0) and iOS (10.10.0) Nav SDKs ([#624](https://github.com/googlemaps/flutter-navigation-sdk/issues/624)) ([004f6a1](https://github.com/googlemaps/flutter-navigation-sdk/commit/004f6a108edcbca7cba457f9da6930557b3101d7))
+
 ## [0.8.2](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.8.1...0.8.2) (2026-01-20)
 
 
