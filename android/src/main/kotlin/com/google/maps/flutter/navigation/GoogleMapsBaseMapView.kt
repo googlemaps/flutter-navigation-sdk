@@ -706,7 +706,6 @@ abstract class GoogleMapsBaseMapView(
 
   @SuppressLint("MissingPermission")
   fun followMyLocation(perspective: Int, zoomLevel: Double?) {
-    getMap().followMyLocation(perspective)
     if (zoomLevel != null) {
       val options: FollowMyLocationOptions =
         FollowMyLocationOptions.builder().setZoomLevel(zoomLevel.toFloat()).build()
