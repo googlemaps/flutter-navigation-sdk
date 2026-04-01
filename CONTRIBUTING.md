@@ -7,10 +7,10 @@ _See also: [Flutter's code of conduct](https://flutter.io/design-principles/#cod
 - **Operating System:** Linux, macOS, or Windows.
 - **Version Control:** [git](https://git-scm.com).
 - **Development Environment:** An IDE such as [Android Studio](https://developer.android.com/studio) or [Visual Studio Code](https://code.visualstudio.com/).
-- **Code Formatting:** [`swift-format`](https://formulae.brew.sh/formula/swift-formatt). 
+- **Code Formatting:** [`swift-format`](https://formulae.brew.sh/formula/swift-format). 
 
 ### 1.1. Installing swift-format
-The CI is locked to swift-format 600.0.0 version which you can install with the command below:
+The CI is locked to swift-format 602.0.0 which you can install with the command below:
 ```bash
 curl -O https://raw.githubusercontent.com/Homebrew/homebrew-core/402e262f48947bad849ea7793752ff16b7038406/Formula/s/swift-format.rb
 brew install swift-format.rb
