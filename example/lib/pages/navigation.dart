@@ -201,7 +201,13 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     }
 
     _autoViewController.listenForCustomNavigationAutoEvents((event) {
-      _showMessage("Received event: ${event.event}");
+      //_showMessage("Received event: ${event.event}");
+
+     if (event.event == "AutoEventStart") {
+          _startGuidedNavigation();
+        } else if (event.event == "AutoEventStop") {
+          _stopGuidedNavigation();
+        }
     });
 
     _isAutoScreenAvailable = await _autoViewController.isAutoScreenAvailable();
@@ -666,6 +672,33 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   Future<void> _stopGuidedNavigation() async {
     assert(_navigationViewController != null);
 
+    await _stopGuidance();
+
+    // Reset navigation perspective to top down north up.
+    await _navigationViewController!.followMyLocation(
+      CameraPerspective.topDownNorthUp,
+    );
+
+    // Disable navigation UI after small delay to make sure routes are cleared.
+    // On Android routes are not always created on the map, if navigation UI is
+    // disabled right after cleanup.
+    unawaited(
+      Future<void>.delayed(
+        const Duration(milliseconds: _disableNavigationUIDelay),
+        () async {
+          await _navigationViewController!.setNavigationUIEnabled(false);
+        },
+      ),
+    );
+
+    setState(() {
+      _guidanceRunning = false;
+    });
+  }
+
+  Future<void> _resetNavigation() async {
+    assert(_navigationViewController != null);
+
     // Cleanup navigation session.
     // This will also clear destinations, stop simulation, stop guidance
     await GoogleMapsNavigator.cleanup();
@@ -935,7 +968,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
       // If there is no next waypoint, it means we have arrived at the final
       // destination. Stop navigation completely.
-      await _stopGuidedNavigation();
+      await _resetNavigation();
 
       _showMessage('You have arrived at your final destination!');
     } else {
@@ -999,7 +1032,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   Future<void> _clearNavigationWaypoints() async {
     // Stopping guided navigation will also clear the waypoints.
-    await _stopGuidedNavigation();
+    await _resetNavigation();
     setState(() {
       _waypoints.clear();
     });
@@ -1409,6 +1442,11 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     onPressed: _validRoute ? _stopGuidedNavigation : null,
                     child: const Text('Stop Guidance'),
                   ),
+                if (_validRoute)
+                  ElevatedButton(
+                    onPressed: () => _resetNavigation(),
+                    child: const Text('Reset navigation'),
+                  ),
                 if (_guidanceRunning &&
                     _simulationState == SimulationState.notRunning)
                   ElevatedButton(
@@ -1673,6 +1711,13 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                             ? () => _stopGuidedNavigation()
                             : null,
                     child: const Text('Stop navigation'),
+                  ),
+                  ElevatedButton(
+                    onPressed:
+                        _navigatorInitialized
+                            ? () => _resetNavigation()
+                            : null,
+                    child: const Text('Reset navigation'),
                   ),
                   ElevatedButton(
                     onPressed:

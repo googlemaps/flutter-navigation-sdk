@@ -15,6 +15,7 @@
 import CarPlay
 import Foundation
 import GoogleMaps
+import GoogleNavigation
 
 open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate,
   CPMapTemplateDelegate
@@ -32,7 +33,14 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
     navView
   }
 
-  public func templateApplicationScene(
+  public func getMapView() -> GMSMapView? {
+      if navView == nil {
+          NSLog("[CarPlay] 🗺️ BaseCarSceneDelegate getMapView navView is null")
+      }
+      return navView?.getMapView()
+  }
+
+  open func templateApplicationScene(
     _ templateApplicationScene: CPTemplateApplicationScene,
     didConnect interfaceController: CPInterfaceController,
     to window: CPWindow
@@ -90,11 +98,11 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
           mapConfiguration: MapConfiguration(
             cameraPosition: nil,
             mapType: .normal,
-            compassEnabled: true,
+            compassEnabled: false,
             rotateGesturesEnabled: false,
-            scrollGesturesEnabled: true,
+            scrollGesturesEnabled: false,
             tiltGesturesEnabled: false,
-            zoomGesturesEnabled: true,
+            zoomGesturesEnabled: false,
             scrollGesturesEnabledDuringRotateOrZoom: false,
             mapColorScheme: .unspecified
           ),
@@ -117,13 +125,30 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
       }
   }
 
-  // CPMapTemplateDelegate
+  // MARK: - CPMapTemplateDelegate
+
   open func mapTemplate(
     _ mapTemplate: CPMapTemplate,
     panWith direction: CPMapTemplate.PanDirection
   ) {
     let scrollAmount = scrollAmount(for: direction)
     navView?.animateCameraByScroll(dx: scrollAmount.x, dy: scrollAmount.y)
+  }
+
+   // MARK: - CPMapTemplateDelegate Optional Methods
+  
+  @objc open func mapTemplate(
+    _ mapTemplate: CPMapTemplate,
+    displayStyleFor maneuver: CPManeuver
+  ) -> CPManeuverDisplayStyle {
+    NSLog("[CarPlay] 🗺️ BaseCarSceneDelegate: displayStyleFor maneuver called")
+    return []
+  }
+
+  @available(iOS 17.4, *)
+  @objc open func mapTemplateShouldProvideNavigationMetadata(_ mapTemplate: CPMapTemplate) -> Bool {
+    NSLog("[CarPlay] 🗺️ BaseCarSceneDelegate: mapTemplateShouldProvideNavigationMetadata called")
+    return false
   }
 
   func scrollAmount(for direction: CPMapTemplate.PanDirection) -> CGPoint {
