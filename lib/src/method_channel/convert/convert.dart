@@ -31,3 +31,4 @@ export 'poi.dart';
 export 'polygon.dart';
 export 'polyline.dart';
 export 'simulation.dart';
+export 'screen_coordinate.dart';

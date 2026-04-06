@@ -340,6 +340,28 @@ class MapViewAPIImpl {
     );
   }
 
+  /// Converts geographic coordinates to screen pixel coordinates.
+  Future<ScreenCoordinate> getScreenCoordinate({
+    required int viewId,
+    required LatLng latLng,
+  }) async {
+    final ScreenCoordinateDto screenCoordinate = await _viewApi
+        .getScreenCoordinate(viewId, latLng.toDto());
+    return screenCoordinate.toScreenCoordinate();
+  }
+
+  /// Converts screen pixel coordinates to geographic coordinates.
+  Future<LatLng> getLatLng({
+    required int viewId,
+    required ScreenCoordinate screenCoordinate,
+  }) async {
+    final LatLngDto latLng = await _viewApi.getLatLng(
+      viewId,
+      screenCoordinate.toDto(),
+    );
+    return latLng.toLatLng();
+  }
+
   /// Animates the movement of the camera.
   Future<void> animateCamera({
     required int viewId,

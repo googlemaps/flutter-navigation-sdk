@@ -2131,6 +2131,46 @@ class LatLngBoundsDto {
   int get hashCode => Object.hashAll(_toList());
 }
 
+class ScreenCoordinateDto {
+  ScreenCoordinateDto({required this.x, required this.y});
+
+  double x;
+
+  double y;
+
+  List<Object?> _toList() {
+    return <Object?>[x, y];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static ScreenCoordinateDto decode(Object result) {
+    result as List<Object?>;
+    return ScreenCoordinateDto(
+      x: result[0]! as double,
+      y: result[1]! as double,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! ScreenCoordinateDto || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(encode(), other.encode());
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
 class SpeedingUpdatedEventDto {
   SpeedingUpdatedEventDto({
     required this.percentageAboveLimit,
@@ -3071,44 +3111,47 @@ class _PigeonCodec extends StandardMessageCodec {
     } else if (value is LatLngBoundsDto) {
       buffer.putUint8(185);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedingUpdatedEventDto) {
+    } else if (value is ScreenCoordinateDto) {
       buffer.putUint8(186);
       writeValue(buffer, value.encode());
-    } else if (value is GpsAvailabilityChangeEventDto) {
+    } else if (value is SpeedingUpdatedEventDto) {
       buffer.putUint8(187);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
+    } else if (value is GpsAvailabilityChangeEventDto) {
       buffer.putUint8(188);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsDto) {
+    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
       buffer.putUint8(189);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
+    } else if (value is SpeedAlertOptionsDto) {
       buffer.putUint8(190);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataDto) {
+    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
       buffer.putUint8(191);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentDto) {
+    } else if (value is RouteSegmentTrafficDataDto) {
       buffer.putUint8(192);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDirectionDto) {
+    } else if (value is RouteSegmentDto) {
       buffer.putUint8(193);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDto) {
+    } else if (value is LaneDirectionDto) {
       buffer.putUint8(194);
       writeValue(buffer, value.encode());
-    } else if (value is StepInfoDto) {
+    } else if (value is LaneDto) {
       buffer.putUint8(195);
       writeValue(buffer, value.encode());
-    } else if (value is NavInfoDto) {
+    } else if (value is StepInfoDto) {
       buffer.putUint8(196);
       writeValue(buffer, value.encode());
-    } else if (value is TermsAndConditionsUIParamsDto) {
+    } else if (value is NavInfoDto) {
       buffer.putUint8(197);
       writeValue(buffer, value.encode());
-    } else if (value is StepImageGenerationOptionsDto) {
+    } else if (value is TermsAndConditionsUIParamsDto) {
       buffer.putUint8(198);
+      writeValue(buffer, value.encode());
+    } else if (value is StepImageGenerationOptionsDto) {
+      buffer.putUint8(199);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -3266,34 +3309,36 @@ class _PigeonCodec extends StandardMessageCodec {
       case 185:
         return LatLngBoundsDto.decode(readValue(buffer)!);
       case 186:
-        return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
+        return ScreenCoordinateDto.decode(readValue(buffer)!);
       case 187:
-        return GpsAvailabilityChangeEventDto.decode(readValue(buffer)!);
+        return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
       case 188:
+        return GpsAvailabilityChangeEventDto.decode(readValue(buffer)!);
+      case 189:
         return SpeedAlertOptionsThresholdPercentageDto.decode(
           readValue(buffer)!,
         );
-      case 189:
-        return SpeedAlertOptionsDto.decode(readValue(buffer)!);
       case 190:
+        return SpeedAlertOptionsDto.decode(readValue(buffer)!);
+      case 191:
         return RouteSegmentTrafficDataRoadStretchRenderingDataDto.decode(
           readValue(buffer)!,
         );
-      case 191:
-        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
       case 192:
-        return RouteSegmentDto.decode(readValue(buffer)!);
+        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
       case 193:
-        return LaneDirectionDto.decode(readValue(buffer)!);
+        return RouteSegmentDto.decode(readValue(buffer)!);
       case 194:
-        return LaneDto.decode(readValue(buffer)!);
+        return LaneDirectionDto.decode(readValue(buffer)!);
       case 195:
-        return StepInfoDto.decode(readValue(buffer)!);
+        return LaneDto.decode(readValue(buffer)!);
       case 196:
-        return NavInfoDto.decode(readValue(buffer)!);
+        return StepInfoDto.decode(readValue(buffer)!);
       case 197:
-        return TermsAndConditionsUIParamsDto.decode(readValue(buffer)!);
+        return NavInfoDto.decode(readValue(buffer)!);
       case 198:
+        return TermsAndConditionsUIParamsDto.decode(readValue(buffer)!);
+      case 199:
         return StepImageGenerationOptionsDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -4995,6 +5040,76 @@ class MapViewApi {
       );
     } else {
       return (pigeonVar_replyList[0] as LatLngBoundsDto?)!;
+    }
+  }
+
+  Future<ScreenCoordinateDto> getScreenCoordinate(
+    int viewId,
+    LatLngDto latLng,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getScreenCoordinate$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, latLng],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as ScreenCoordinateDto?)!;
+    }
+  }
+
+  Future<LatLngDto> getLatLng(
+    int viewId,
+    ScreenCoordinateDto screenCoordinate,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getLatLng$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, screenCoordinate],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as LatLngDto?)!;
     }
   }
 
@@ -8989,6 +9104,70 @@ class AutoMapViewApi {
       );
     } else {
       return (pigeonVar_replyList[0] as LatLngBoundsDto?)!;
+    }
+  }
+
+  Future<ScreenCoordinateDto> getScreenCoordinate(LatLngDto latLng) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getScreenCoordinate$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[latLng],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as ScreenCoordinateDto?)!;
+    }
+  }
+
+  Future<LatLngDto> getLatLng(ScreenCoordinateDto screenCoordinate) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getLatLng$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[screenCoordinate],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as LatLngDto?)!;
     }
   }
 

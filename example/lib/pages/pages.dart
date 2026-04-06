@@ -21,5 +21,6 @@ export 'navigation_without_map.dart';
 export 'poi_click.dart';
 export 'polygons.dart';
 export 'polylines.dart';
+export 'projection.dart';
 export 'turn_by_turn.dart';
 export 'widget_initialization.dart';
