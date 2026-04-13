@@ -103,7 +103,7 @@ flutter {
 dependencies {
     implementation("androidx.car.app:app:1.7.0")
     implementation("androidx.car.app:app-projected:1.7.0")
-    implementation("com.google.android.libraries.navigation:navigation:7.5.0")
+    implementation("com.google.android.libraries.navigation:navigation:7.6.0")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs_nio:2.0.4")
     androidTestUtil("androidx.test:orchestrator:1.5.1")
 }
