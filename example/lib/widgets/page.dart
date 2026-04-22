@@ -122,12 +122,11 @@ abstract class ExamplePageState<T extends ExamplePage> extends State<T>
           onTap: hideOverlay,
           child: AnimatedBuilder(
             animation: _controller,
-            builder:
-                (BuildContext context, Widget? child) => Container(
-                  color: Colors.black.withAlpha(
-                    (255.0 * _controller.value * 0.5).round(),
-                  ),
-                ),
+            builder: (BuildContext context, Widget? child) => Container(
+              color: Colors.black.withAlpha(
+                (255.0 * _controller.value * 0.5).round(),
+              ),
+            ),
           ),
         ),
         // Overlay content
@@ -200,27 +199,26 @@ abstract class ExamplePageState<T extends ExamplePage> extends State<T>
   }) {
     final OverlayState overlay = Overlay.of(context);
     final OverlayEntry overlayEntry = OverlayEntry(
-      builder:
-          (BuildContext context) => Align(
-            alignment: alignment,
-            child: SizedBox(
-              width: double.infinity,
-              child: Material(
-                elevation: 10.0,
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  color: Theme.of(context).snackBarTheme.backgroundColor,
-                  child: SafeArea(
-                    top: false,
-                    child: Text(
-                      message,
-                      style: Theme.of(context).snackBarTheme.contentTextStyle,
-                    ),
-                  ),
+      builder: (BuildContext context) => Align(
+        alignment: alignment,
+        child: SizedBox(
+          width: double.infinity,
+          child: Material(
+            elevation: 10.0,
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              color: Theme.of(context).snackBarTheme.backgroundColor,
+              child: SafeArea(
+                top: false,
+                child: Text(
+                  message,
+                  style: Theme.of(context).snackBarTheme.contentTextStyle,
                 ),
               ),
             ),
           ),
+        ),
+      ),
     );
 
     overlay.insert(overlayEntry);

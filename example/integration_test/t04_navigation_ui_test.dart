@@ -184,8 +184,8 @@ void main() {
     for (final bool result in results) {
       await viewController.setNavigationTripProgressBarEnabled(result);
       await $.pumpAndSettle();
-      final bool isEnabled =
-          await viewController.isNavigationTripProgressBarEnabled();
+      final bool isEnabled = await viewController
+          .isNavigationTripProgressBarEnabled();
       expect(
         isEnabled,
         result,
@@ -224,8 +224,8 @@ void main() {
     for (final bool result in results) {
       await viewController.setTrafficIncidentCardsEnabled(result);
       await $.pumpAndSettle();
-      final bool isEnabled =
-          await viewController.isTrafficIncidentCardsEnabled();
+      final bool isEnabled = await viewController
+          .isTrafficIncidentCardsEnabled();
       expect(
         isEnabled,
         result,
@@ -247,8 +247,8 @@ void main() {
     /// Test enabling and disabling the report incident button.
     for (final bool result in results) {
       await viewController.setReportIncidentButtonEnabled(result);
-      final bool isEnabled =
-          await viewController.isReportIncidentButtonEnabled();
+      final bool isEnabled = await viewController
+          .isReportIncidentButtonEnabled();
       expect(
         isEnabled,
         result,
@@ -288,8 +288,8 @@ void main() {
     for (final MapColorScheme scheme in mapColorSchemes) {
       await viewController.setMapColorScheme(scheme);
       await $.pumpAndSettle();
-      final MapColorScheme currentScheme =
-          await viewController.getMapColorScheme();
+      final MapColorScheme currentScheme = await viewController
+          .getMapColorScheme();
       expect(currentScheme, scheme, reason: 'MapColorScheme should be $scheme');
     }
 
@@ -304,8 +304,8 @@ void main() {
     for (final NavigationForceNightMode mode in nightModes) {
       await viewController.setForceNightMode(mode);
       await $.pumpAndSettle();
-      final NavigationForceNightMode currentMode =
-          await viewController.getForceNightMode();
+      final NavigationForceNightMode currentMode = await viewController
+          .getForceNightMode();
       expect(
         currentMode,
         mode,
@@ -314,8 +314,8 @@ void main() {
     }
 
     /// Test incident reporting availability.
-    final bool isIncidentReportingAvailable =
-        await viewController.isIncidentReportingAvailable();
+    final bool isIncidentReportingAvailable = await viewController
+        .isIncidentReportingAvailable();
     $.log('Incident reporting available: $isIncidentReportingAvailable');
     expect(
       isIncidentReportingAvailable,

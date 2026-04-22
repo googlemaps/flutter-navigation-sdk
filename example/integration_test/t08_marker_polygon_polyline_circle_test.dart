@@ -147,8 +147,8 @@ void main() {
     final Marker? updatedMarker = updatedMarkersList.first;
 
     // Get updated markers and save them to [getUpdatedMarkerList].
-    final List<Marker?> getUpdatedMarkersList =
-        await viewController.getMarkers();
+    final List<Marker?> getUpdatedMarkersList = await viewController
+        .getMarkers();
     expect(getUpdatedMarkersList.length, 1);
     final Marker? getUpdatedMarker = getUpdatedMarkersList.first;
 
@@ -376,8 +376,8 @@ void main() {
     ]);
 
     /// Test that polylines were ceated with default values.
-    final List<Polyline?> receivedPolylines =
-        await viewController.getPolylines();
+    final List<Polyline?> receivedPolylines = await viewController
+        .getPolylines();
     expect(receivedPolylines.length, 1);
     expect(receivedPolylines[0]!.options.geodesic, false);
     expect(receivedPolylines[0]!.options.clickable, false);
@@ -415,8 +415,8 @@ void main() {
 
     await viewController.updatePolylines(<Polyline>[updatedPolyline]);
 
-    final List<Polyline?> receivedPolylines2 =
-        await viewController.getPolylines();
+    final List<Polyline?> receivedPolylines2 = await viewController
+        .getPolylines();
     expect(receivedPolylines2.length, 1);
     expect(receivedPolylines2[0]!.options.geodesic, true);
     expect(receivedPolylines2[0]!.options.clickable, true);
@@ -439,14 +439,14 @@ void main() {
       ),
     ]);
 
-    final List<Polyline?> receivedPolylines3 =
-        await viewController.getPolylines();
+    final List<Polyline?> receivedPolylines3 = await viewController
+        .getPolylines();
     expect(receivedPolylines3.length, 2);
 
     await viewController.removePolylines(<Polyline>[receivedPolylines3[0]!]);
 
-    final List<Polyline?> receivedPolylines4 =
-        await viewController.getPolylines();
+    final List<Polyline?> receivedPolylines4 = await viewController
+        .getPolylines();
     expect(receivedPolylines4.length, 1);
 
     /// Test that right polyline was removed.
@@ -490,14 +490,14 @@ void main() {
       ),
     ]);
 
-    final List<Polyline?> receivedPolylines5 =
-        await viewController.getPolylines();
+    final List<Polyline?> receivedPolylines5 = await viewController
+        .getPolylines();
     expect(receivedPolylines5.length, 2);
 
     await viewController.clearPolylines();
 
-    final List<Polyline?> receivedPolylines6 =
-        await viewController.getPolylines();
+    final List<Polyline?> receivedPolylines6 = await viewController
+        .getPolylines();
     expect(receivedPolylines6.length, 0);
 
     /// Test clearing all polylines with clear().
@@ -516,14 +516,14 @@ void main() {
       ),
     ]);
 
-    final List<Polyline?> receivedPolylines7 =
-        await viewController.getPolylines();
+    final List<Polyline?> receivedPolylines7 = await viewController
+        .getPolylines();
     expect(receivedPolylines7.length, 2);
 
     await viewController.clear();
 
-    final List<Polyline?> receivedPolylines8 =
-        await viewController.getPolylines();
+    final List<Polyline?> receivedPolylines8 = await viewController
+        .getPolylines();
     expect(receivedPolylines8.length, 0);
   }, variant: mapTypeVariants);
 

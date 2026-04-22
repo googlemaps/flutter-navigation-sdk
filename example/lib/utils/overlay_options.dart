@@ -35,8 +35,9 @@ Widget getOverlayOptionsButton(
   ButtonStyle? style,
 }) => SafeArea(
   child: Align(
-    alignment:
-        Platform.isAndroid ? Alignment.bottomCenter : Alignment.bottomRight,
+    alignment: Platform.isAndroid
+        ? Alignment.bottomCenter
+        : Alignment.bottomRight,
     child: Padding(
       padding: const EdgeInsets.all(10),
       child: getOptionsButton(context, onPressed: onPressed, style: style),

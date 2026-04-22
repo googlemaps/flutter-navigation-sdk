@@ -41,34 +41,42 @@ import 'messages_test.g.dart' as _i3;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeNavigationTimeAndDistanceDto_0 extends _i1.SmartFake
-    implements _i2.NavigationTimeAndDistanceDto {
-  _FakeNavigationTimeAndDistanceDto_0(
+class _FakeContinueToNextDestinationResponseDto_0 extends _i1.SmartFake
+    implements _i2.ContinueToNextDestinationResponseDto {
+  _FakeContinueToNextDestinationResponseDto_0(
     Object parent,
     Invocation parentInvocation,
   ) : super(parent, parentInvocation);
 }
 
-class _FakeCameraPositionDto_1 extends _i1.SmartFake
+class _FakeNavigationTimeAndDistanceDto_1 extends _i1.SmartFake
+    implements _i2.NavigationTimeAndDistanceDto {
+  _FakeNavigationTimeAndDistanceDto_1(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(parent, parentInvocation);
+}
+
+class _FakeCameraPositionDto_2 extends _i1.SmartFake
     implements _i2.CameraPositionDto {
-  _FakeCameraPositionDto_1(Object parent, Invocation parentInvocation)
+  _FakeCameraPositionDto_2(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeLatLngBoundsDto_2 extends _i1.SmartFake
+class _FakeLatLngBoundsDto_3 extends _i1.SmartFake
     implements _i2.LatLngBoundsDto {
-  _FakeLatLngBoundsDto_2(Object parent, Invocation parentInvocation)
+  _FakeLatLngBoundsDto_3(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeMapPaddingDto_3 extends _i1.SmartFake implements _i2.MapPaddingDto {
-  _FakeMapPaddingDto_3(Object parent, Invocation parentInvocation)
+class _FakeMapPaddingDto_4 extends _i1.SmartFake implements _i2.MapPaddingDto {
+  _FakeMapPaddingDto_4(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeImageDescriptorDto_4 extends _i1.SmartFake
+class _FakeImageDescriptorDto_5 extends _i1.SmartFake
     implements _i2.ImageDescriptorDto {
-  _FakeImageDescriptorDto_4(Object parent, Invocation parentInvocation)
+  _FakeImageDescriptorDto_5(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
@@ -192,10 +200,25 @@ class MockTestNavigationSessionApi extends _i1.Mock
   );
 
   @override
+  _i4.Future<_i2.ContinueToNextDestinationResponseDto>
+  continueToNextDestination() =>
+      (super.noSuchMethod(
+            Invocation.method(#continueToNextDestination, []),
+            returnValue:
+                _i4.Future<_i2.ContinueToNextDestinationResponseDto>.value(
+                  _FakeContinueToNextDestinationResponseDto_0(
+                    this,
+                    Invocation.method(#continueToNextDestination, []),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.ContinueToNextDestinationResponseDto>);
+
+  @override
   _i2.NavigationTimeAndDistanceDto getCurrentTimeAndDistance() =>
       (super.noSuchMethod(
             Invocation.method(#getCurrentTimeAndDistance, []),
-            returnValue: _FakeNavigationTimeAndDistanceDto_0(
+            returnValue: _FakeNavigationTimeAndDistanceDto_1(
               this,
               Invocation.method(#getCurrentTimeAndDistance, []),
             ),
@@ -778,7 +801,7 @@ class MockTestMapViewApi extends _i1.Mock implements _i3.TestMapViewApi {
   _i2.CameraPositionDto getCameraPosition(int? viewId) =>
       (super.noSuchMethod(
             Invocation.method(#getCameraPosition, [viewId]),
-            returnValue: _FakeCameraPositionDto_1(
+            returnValue: _FakeCameraPositionDto_2(
               this,
               Invocation.method(#getCameraPosition, [viewId]),
             ),
@@ -789,7 +812,7 @@ class MockTestMapViewApi extends _i1.Mock implements _i3.TestMapViewApi {
   _i2.LatLngBoundsDto getVisibleRegion(int? viewId) =>
       (super.noSuchMethod(
             Invocation.method(#getVisibleRegion, [viewId]),
-            returnValue: _FakeLatLngBoundsDto_2(
+            returnValue: _FakeLatLngBoundsDto_3(
               this,
               Invocation.method(#getVisibleRegion, [viewId]),
             ),
@@ -1218,7 +1241,7 @@ class MockTestMapViewApi extends _i1.Mock implements _i3.TestMapViewApi {
   _i2.MapPaddingDto getPadding(int? viewId) =>
       (super.noSuchMethod(
             Invocation.method(#getPadding, [viewId]),
-            returnValue: _FakeMapPaddingDto_3(
+            returnValue: _FakeMapPaddingDto_4(
               this,
               Invocation.method(#getPadding, [viewId]),
             ),
@@ -1283,7 +1306,7 @@ class MockTestImageRegistryApi extends _i1.Mock
               width,
               height,
             ]),
-            returnValue: _FakeImageDescriptorDto_4(
+            returnValue: _FakeImageDescriptorDto_5(
               this,
               Invocation.method(#registerBitmapImage, [
                 imageId,

@@ -198,20 +198,20 @@ void main() {
     /// is false before initialization is done. Test the onMapClicked event
     /// and setting the other callback functions.
     final GoogleMapViewController controller =
-    /// Get viewController for the test type (navigation map or regular map).
-    await getMapViewControllerForTestMapType(
-      $,
-      testMapType: mapTypeVariants.currentValue!,
-      initializeNavigation: false,
-      simulateLocation: false,
-      onMapClicked: expectAsync1((LatLng msg) {
-        expectSync(msg, isA<LatLng>());
-      }, max: 1),
-      onMapLongClicked: onMapLongClicked,
-      onMyLocationButtonClicked: onMyLocationButtonClicked,
-      onMyLocationClicked: onMyLocationClicked,
-      onPoiClicked: onPoiClicked,
-    );
+        /// Get viewController for the test type (navigation map or regular map).
+        await getMapViewControllerForTestMapType(
+          $,
+          testMapType: mapTypeVariants.currentValue!,
+          initializeNavigation: false,
+          simulateLocation: false,
+          onMapClicked: expectAsync1((LatLng msg) {
+            expectSync(msg, isA<LatLng>());
+          }, max: 1),
+          onMapLongClicked: onMapLongClicked,
+          onMyLocationButtonClicked: onMyLocationButtonClicked,
+          onMyLocationClicked: onMyLocationClicked,
+          onPoiClicked: onPoiClicked,
+        );
 
     /// Test that the onMapClicked event comes in.
     await $.native.tapAt(const Offset(0.5, 0.5));

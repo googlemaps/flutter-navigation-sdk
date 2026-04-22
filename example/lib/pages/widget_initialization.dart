@@ -85,13 +85,12 @@ class _ViewInitializationPageState
 
   void _toggleCameraTargetBounds(bool enabled) {
     setState(() {
-      _initialCameraTargetBounds =
-          enabled
-              ? LatLngBounds(
-                northeast: const LatLng(latitude: 90, longitude: 180),
-                southwest: const LatLng(latitude: -90, longitude: -179.9),
-              )
-              : null;
+      _initialCameraTargetBounds = enabled
+          ? LatLngBounds(
+              northeast: const LatLng(latitude: 90, longitude: 180),
+              southwest: const LatLng(latitude: -90, longitude: -179.9),
+            )
+          : null;
     });
   }
 
@@ -99,29 +98,28 @@ class _ViewInitializationPageState
     Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder:
-            (BuildContext context) => _InitializedViewPage(
-              initialCameraPosition: _initialCameraPosition,
-              initialMapType: _initialMapType,
-              initialCompassEnabled: _initialCompassEnabled,
-              initialRotateGesturesEnabled: _initialRotateGesturesEnabled,
-              initialScrollGesturesEnabled: _initialScrollGesturesEnabled,
-              initialTiltGesturesEnabled: _initialTiltGesturesEnabled,
-              initialZoomGesturesEnabled: _initialZoomGesturesEnabled,
-              initialScrollGesturesEnabledDuringRotateOrZoom:
-                  _initialScrollGesturesEnabledDuringRotateOrZoom,
-              initialMapToolbarEnabled: _initialMapToolbarEnabled,
-              initialMinZoomPreference: _initialMinZoomPreference,
-              initialMaxZoomPreference: _initialMaxZoomPreference,
-              initialZoomControlsEnabled: _initialZoomControlsEnabled,
-              initialCameraTargetBounds: _initialCameraTargetBounds,
-              initialPadding: _initialPadding,
-              initialNavigationUIEnabledPreference:
-                  _initialNavigationUIEnabledPreference,
-              initialMapColorScheme: _initialMapColorScheme,
-              initialForceNightMode: _initialForceNightMode,
-              layoutDirection: _layoutDirection,
-            ),
+        builder: (BuildContext context) => _InitializedViewPage(
+          initialCameraPosition: _initialCameraPosition,
+          initialMapType: _initialMapType,
+          initialCompassEnabled: _initialCompassEnabled,
+          initialRotateGesturesEnabled: _initialRotateGesturesEnabled,
+          initialScrollGesturesEnabled: _initialScrollGesturesEnabled,
+          initialTiltGesturesEnabled: _initialTiltGesturesEnabled,
+          initialZoomGesturesEnabled: _initialZoomGesturesEnabled,
+          initialScrollGesturesEnabledDuringRotateOrZoom:
+              _initialScrollGesturesEnabledDuringRotateOrZoom,
+          initialMapToolbarEnabled: _initialMapToolbarEnabled,
+          initialMinZoomPreference: _initialMinZoomPreference,
+          initialMaxZoomPreference: _initialMaxZoomPreference,
+          initialZoomControlsEnabled: _initialZoomControlsEnabled,
+          initialCameraTargetBounds: _initialCameraTargetBounds,
+          initialPadding: _initialPadding,
+          initialNavigationUIEnabledPreference:
+              _initialNavigationUIEnabledPreference,
+          initialMapColorScheme: _initialMapColorScheme,
+          initialForceNightMode: _initialForceNightMode,
+          layoutDirection: _layoutDirection,
+        ),
       ),
     );
   }
@@ -172,11 +170,8 @@ class _ViewInitializationPageState
                         title: const Text('Map ID'),
                         subtitle: Text(MapIdManager.instance.mapIdDisplay),
                         trailing: ElevatedButton(
-                          onPressed:
-                              () => showMapIdDialog(
-                                context,
-                                () => setState(() {}),
-                              ),
+                          onPressed: () =>
+                              showMapIdDialog(context, () => setState(() {})),
                           child: const Text('Set'),
                         ),
                       ),
@@ -312,12 +307,9 @@ class _ViewInitializationPageState
                         onChanged: (bool value) {
                           setState(() {
                             _isMinZoomPreferenceEnabled = value;
-                            _initialMinZoomPreference =
-                                value
-                                    ? _limitMinZoomReference(
-                                      googleMapsMinZoomLevel,
-                                    )
-                                    : null;
+                            _initialMinZoomPreference = value
+                                ? _limitMinZoomReference(googleMapsMinZoomLevel)
+                                : null;
                           });
                         },
                       ),
@@ -340,12 +332,9 @@ class _ViewInitializationPageState
                         onChanged: (bool value) {
                           setState(() {
                             _isMaxZoomPreferenceEnabled = value;
-                            _initialMaxZoomPreference =
-                                value
-                                    ? _limitMaxZoomReference(
-                                      googleMapsMaxZoomLevel,
-                                    )
-                                    : null;
+                            _initialMaxZoomPreference = value
+                                ? _limitMaxZoomReference(googleMapsMaxZoomLevel)
+                                : null;
                           });
                         },
                       ),
@@ -378,8 +367,8 @@ class _ViewInitializationPageState
                             });
                             hideSnackBarMessage(context);
                           },
-                          onAssert:
-                              (AssertionError error) => showSnackBarMessage(
+                          onAssert: (AssertionError error) =>
+                              showSnackBarMessage(
                                 context,
                                 error.message.toString(),
                               ),
@@ -432,10 +421,9 @@ class _ViewInitializationPageState
             spacing: 10,
             children: <Widget>[
               ElevatedButton(
-                onPressed:
-                    _navigationInitialized
-                        ? _disposeNavigation
-                        : _startNavigation,
+                onPressed: _navigationInitialized
+                    ? _disposeNavigation
+                    : _startNavigation,
                 child: Text(
                   _navigationInitialized
                       ? 'Dispose navigation'

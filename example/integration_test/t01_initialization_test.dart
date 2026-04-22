@@ -125,8 +125,6 @@ void main() {
     }
 
     try {
-      // Note: Testing deprecated continueToNextDestination for proper exception
-      // handling.
       await GoogleMapsNavigator.continueToNextDestination();
       fail('Expected SessionNotInitializedException.');
     } on Exception catch (e) {

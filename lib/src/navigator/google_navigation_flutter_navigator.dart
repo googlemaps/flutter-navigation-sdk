@@ -639,6 +639,9 @@ class GoogleMapsNavigator {
   ///
   /// If the options are omitted, the default routing and display options will
   /// be used.
+  ///
+  /// When navigating to multiple waypoints, use [continueToNextDestination]
+  /// to advance to the next waypoint.
   static Future<NavigationRouteStatus> setDestinations(
     Destinations destinations,
   ) {
@@ -658,10 +661,9 @@ class GoogleMapsNavigator {
   /// Following this call, guidance will be toward the next destination,
   /// and information about the old destination is not available.
   ///
-  /// Deprecated: Use [setDestinations] with an updated list of waypoints
-  /// instead. This approach provides better control over the navigation route.
-  @Deprecated('Use setDestinations with an updated list of waypoints instead')
-  static Future<NavigationWaypoint?> continueToNextDestination() {
+  /// Returns a [ContinueToNextDestinationResponse] containing the next
+  /// waypoint (or null if no more waypoints) and, on iOS, the route status.
+  static Future<ContinueToNextDestinationResponse> continueToNextDestination() {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .continueToNextDestination();
   }

@@ -50,8 +50,8 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
 
   Future<void> addMarkerToMap() async {
     // Add a marker to the current camera position.
-    final CameraPosition position =
-        await _navigationViewController.getCameraPosition();
+    final CameraPosition position = await _navigationViewController
+        .getCameraPosition();
 
     final MarkerOptions options = MarkerOptions(
       position: position.target,
@@ -109,10 +109,9 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
     final Marker? marker = markers.firstOrNull;
     if (marker != null) {
       setState(() {
-        _markers =
-            _markers
-                .where((Marker element) => element != _selectedMarker)
-                .toList();
+        _markers = _markers
+            .where((Marker element) => element != _selectedMarker)
+            .toList();
         _selectedMarker = marker;
         _markers = _markers + <Marker>[marker];
       });
@@ -369,20 +368,23 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
               ),
               ElevatedButton(
                 style: style,
-                onPressed:
-                    _selectedMarker == null ? null : () => _removeMarker(),
+                onPressed: _selectedMarker == null
+                    ? null
+                    : () => _removeMarker(),
                 child: const Text('Remove marker'),
               ),
               ElevatedButton(
                 style: style,
-                onPressed:
-                    _selectedMarker == null ? null : () => _toggleVisibility(),
+                onPressed: _selectedMarker == null
+                    ? null
+                    : () => _toggleVisibility(),
                 child: Text('Visibility: ${_selectedMarker?.options.visible}'),
               ),
               ElevatedButton(
                 style: style,
-                onPressed:
-                    _selectedMarker == null ? null : () => _toggleDraggable(),
+                onPressed: _selectedMarker == null
+                    ? null
+                    : () => _toggleDraggable(),
                 child: Text('Draggable: ${_selectedMarker?.options.draggable}'),
               ),
               ElevatedButton(
@@ -402,24 +404,24 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
               ),
               ElevatedButton(
                 style: style,
-                onPressed:
-                    _selectedMarker == null ? null : () => _toggleCustomIcon(),
+                onPressed: _selectedMarker == null
+                    ? null
+                    : () => _toggleCustomIcon(),
                 child: Text(
                   'Icon: ${_selectedMarker?.options.icon.registeredImageId != null ? 'Custom' : 'Default'}',
                 ),
               ),
               ElevatedButton(
                 style: style,
-                onPressed:
-                    _markers.isNotEmpty
-                        ? () {
-                          setState(() {
-                            _navigationViewController.clearMarkers();
-                            _markers.clear();
-                            _selectedMarker = null;
-                          });
-                        }
-                        : null,
+                onPressed: _markers.isNotEmpty
+                    ? () {
+                        setState(() {
+                          _navigationViewController.clearMarkers();
+                          _markers.clear();
+                          _selectedMarker = null;
+                        });
+                      }
+                    : null,
                 child: const Text('Clear all'),
               ),
             ],
@@ -430,9 +432,8 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
                 await _navigationViewController.settings.setMapToolbarEnabled(
                   newValue,
                 );
-                _isMapToolbarEnabled =
-                    await _navigationViewController.settings
-                        .isMapToolbarEnabled();
+                _isMapToolbarEnabled = await _navigationViewController.settings
+                    .isMapToolbarEnabled();
                 setState(() {});
               },
               title: const Text('Enable map toolbar'),

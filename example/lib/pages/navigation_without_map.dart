@@ -339,16 +339,15 @@ class _NavigationWithoutMapPageState
               ),
             ),
             ElevatedButton(
-              onPressed:
-                  termsAccepted == null || !termsAccepted!
-                      ? null
-                      : () async {
-                        if (await resetTermsAccepted()) {
-                          setState(() {
-                            termsAccepted = false;
-                          });
-                        }
-                      },
+              onPressed: termsAccepted == null || !termsAccepted!
+                  ? null
+                  : () async {
+                      if (await resetTermsAccepted()) {
+                        setState(() {
+                          termsAccepted = false;
+                        });
+                      }
+                    },
               child: const Text('Reset TOS'),
             ),
             Wrap(
@@ -356,25 +355,23 @@ class _NavigationWithoutMapPageState
               crossAxisAlignment: WrapCrossAlignment.center,
               children: <Widget>[
                 ElevatedButton(
-                  onPressed:
-                      termsAccepted != null && termsAccepted!
-                          ? null
-                          : () => showTermsAndConditionsDialog(
-                            'Test title',
-                            'Test company',
-                          ),
+                  onPressed: termsAccepted != null && termsAccepted!
+                      ? null
+                      : () => showTermsAndConditionsDialog(
+                          'Test title',
+                          'Test company',
+                        ),
                   child: const Text('Show TOS'),
                 ),
                 if (Platform.isAndroid)
                   ElevatedButton(
-                    onPressed:
-                        termsAccepted != null && termsAccepted!
-                            ? null
-                            : () => showTermsAndConditionsDialog(
-                              'Test title',
-                              'Test company',
-                              shouldOnlyShowDriverAwarenessDisclaimer: true,
-                            ),
+                    onPressed: termsAccepted != null && termsAccepted!
+                        ? null
+                        : () => showTermsAndConditionsDialog(
+                            'Test title',
+                            'Test company',
+                            shouldOnlyShowDriverAwarenessDisclaimer: true,
+                          ),
                     child: const Text('Show noTOS'),
                   ),
               ],

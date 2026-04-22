@@ -61,8 +61,8 @@ class _PolylinesPageState extends ExamplePageState<PolylinesPage> {
 
   Future<void> _addPolyline() async {
     // Add triangle made out of polylines on the current camera position.
-    final LatLngBounds cameraBounds =
-        await _navigationViewController.getVisibleRegion();
+    final LatLngBounds cameraBounds = await _navigationViewController
+        .getVisibleRegion();
 
     // Use the latitudeSpan and longitudeSpan properties of LatLngBounds
     final List<LatLng> points = _createInsetTriangle(cameraBounds, 0.2);
@@ -124,10 +124,9 @@ class _PolylinesPageState extends ExamplePageState<PolylinesPage> {
     final Polyline? polyline = polylines.firstOrNull;
     if (polyline != null) {
       setState(() {
-        _polylines =
-            _polylines
-                .where((Polyline element) => element != _selectedPolyline)
-                .toList();
+        _polylines = _polylines
+            .where((Polyline element) => element != _selectedPolyline)
+            .toList();
         _selectedPolyline = polyline;
         _polylines = _polylines + <Polyline>[polyline];
       });
@@ -146,10 +145,9 @@ class _PolylinesPageState extends ExamplePageState<PolylinesPage> {
     }
 
     setState(() {
-      _polylines =
-          _polylines
-              .where((Polyline element) => element != _selectedPolyline)
-              .toList();
+      _polylines = _polylines
+          .where((Polyline element) => element != _selectedPolyline)
+          .toList();
       _selectedPolyline = null;
     });
   }
@@ -309,62 +307,64 @@ class _PolylinesPageState extends ExamplePageState<PolylinesPage> {
                 child: const Text('Add polyline'),
               ),
               ElevatedButton(
-                onPressed:
-                    _selectedPolyline == null ? null : () => _removePolyline(),
+                onPressed: _selectedPolyline == null
+                    ? null
+                    : () => _removePolyline(),
                 child: const Text('Remove polyline'),
               ),
               ElevatedButton(
-                onPressed:
-                    _selectedPolyline == null ? null : () => _toggleGeodesic(),
+                onPressed: _selectedPolyline == null
+                    ? null
+                    : () => _toggleGeodesic(),
                 child: Text('Geodesic: ${_selectedPolyline?.options.geodesic}'),
               ),
               ElevatedButton(
-                onPressed:
-                    _selectedPolyline == null ? null : () => _setStrokeColor(),
+                onPressed: _selectedPolyline == null
+                    ? null
+                    : () => _setStrokeColor(),
                 child: Text(
                   'Stroke color: ${_colorName(_selectedPolyline?.options.strokeColor)}',
                 ),
               ),
               ElevatedButton(
-                onPressed:
-                    _selectedPolyline == null ? null : () => _setStrokeWidth(),
+                onPressed: _selectedPolyline == null
+                    ? null
+                    : () => _setStrokeWidth(),
                 child: Text(
                   'Stroke width: ${_selectedPolyline?.options.strokeWidth}',
                 ),
               ),
               if (Platform.isAndroid)
                 ElevatedButton(
-                  onPressed:
-                      _selectedPolyline == null
-                          ? null
-                          : () => _setStrokePattern(),
+                  onPressed: _selectedPolyline == null
+                      ? null
+                      : () => _setStrokePattern(),
                   child: const Text('Change stroke pattern'),
                 ),
               ElevatedButton(
-                onPressed:
-                    _selectedPolyline == null
-                        ? null
-                        : () => _toggleVisibility(),
+                onPressed: _selectedPolyline == null
+                    ? null
+                    : () => _toggleVisibility(),
                 child: Text(
                   'Visibility: ${_selectedPolyline?.options.visible}',
                 ),
               ),
               ElevatedButton(
-                onPressed:
-                    _selectedPolyline == null ? null : () => _setZIndex(),
+                onPressed: _selectedPolyline == null
+                    ? null
+                    : () => _setZIndex(),
                 child: Text('Z-index: ${_selectedPolyline?.options.zIndex}'),
               ),
               ElevatedButton(
-                onPressed:
-                    _polylines.isNotEmpty
-                        ? () {
-                          setState(() {
-                            _navigationViewController.clearPolylines();
-                            _polylines.clear();
-                            _selectedPolyline = null;
-                          });
-                        }
-                        : null,
+                onPressed: _polylines.isNotEmpty
+                    ? () {
+                        setState(() {
+                          _navigationViewController.clearPolylines();
+                          _polylines.clear();
+                          _selectedPolyline = null;
+                        });
+                      }
+                    : null,
                 child: const Text('Clear all'),
               ),
             ],

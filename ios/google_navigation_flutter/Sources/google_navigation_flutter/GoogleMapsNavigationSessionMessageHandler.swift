@@ -115,8 +115,10 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
     try GoogleMapsNavigationSessionManager.shared.clearDestinations()
   }
 
-  func continueToNextDestination() throws -> NavigationWaypointDto? {
-    try GoogleMapsNavigationSessionManager.shared.continueToNextDestination()
+  func continueToNextDestination(
+    completion: @escaping (Result<ContinueToNextDestinationResponseDto, Error>) -> Void
+  ) {
+    GoogleMapsNavigationSessionManager.shared.continueToNextDestination(completion: completion)
   }
 
   func getCurrentTimeAndDistance() throws -> NavigationTimeAndDistanceDto {

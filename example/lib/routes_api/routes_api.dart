@@ -44,11 +44,10 @@ Future<List<String>> getRouteToken(List<NavigationWaypoint> waypoints) async {
   final Map<String, dynamic> requestBody = <String, dynamic>{
     'origin': _toRoutesApiWaypoint(waypoints.first),
     'destination': _toRoutesApiWaypoint(waypoints.last),
-    'intermediates':
-        waypoints
-            .sublist(1, waypoints.length - 1)
-            .map((NavigationWaypoint wp) => _toRoutesApiWaypoint(wp, via: true))
-            .toList(),
+    'intermediates': waypoints
+        .sublist(1, waypoints.length - 1)
+        .map((NavigationWaypoint wp) => _toRoutesApiWaypoint(wp, via: true))
+        .toList(),
     'travelMode': 'DRIVE',
     'routingPreference': 'TRAFFIC_AWARE',
   };

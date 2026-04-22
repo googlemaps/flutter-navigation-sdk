@@ -48,10 +48,9 @@ void main() {
 
   setUpAll(() async {
     final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    isPhysicalDevice =
-        (Platform.isAndroid
-            ? (await deviceInfo.androidInfo).isPhysicalDevice
-            : (await deviceInfo.iosInfo).isPhysicalDevice);
+    isPhysicalDevice = (Platform.isAndroid
+        ? (await deviceInfo.androidInfo).isPhysicalDevice
+        : (await deviceInfo.iosInfo).isPhysicalDevice);
     debugPrint('isPhysicalDevice: $isPhysicalDevice');
   });
 
@@ -168,11 +167,8 @@ void main() {
     /// Wait for new navigation session event.
     await newSessionFired.future.timeout(
       const Duration(seconds: 30),
-      onTimeout:
-          () =>
-              throw TimeoutException(
-                'New navigation session event was not fired',
-              ),
+      onTimeout: () =>
+          throw TimeoutException('New navigation session event was not fired'),
     );
     expect(newSessionFired.isCompleted, true);
 
@@ -213,12 +209,16 @@ void main() {
 
           if (multipleDestinationsVariants.currentValue ==
               'continueToNextDestination') {
-            // Note: continueToNextDestination is deprecated.
-            // This test still uses it to verify the deprecated API works correctly.
-            // For new implementations, use setDestinations with updated waypoints instead.
-            NavigationWaypoint? waypoint =
+            final ContinueToNextDestinationResponse response =
                 await GoogleMapsNavigator.continueToNextDestination();
-            expect(waypoint, isNotNull);
+            expect(response.waypoint, isNotNull);
+            // On iOS, routeStatus should be available and OK.
+            if (Platform.isIOS) {
+              expect(response.routeStatus, NavigationRouteStatus.statusOk);
+            }
+            // Guidance must be explicitly restarted after
+            // continueToNextDestination.
+            await GoogleMapsNavigator.startGuidance();
             await GoogleMapsNavigator.simulator
                 .simulateLocationsAlongExistingRouteWithOptions(
                   SimulationOptions(speedMultiplier: 5),
@@ -258,11 +258,9 @@ void main() {
           // Wait for new session event after updating destinations
           await newSessionFired.future.timeout(
             const Duration(seconds: 10),
-            onTimeout:
-                () =>
-                    throw TimeoutException(
-                      'New navigation session event was not fired after updating destinations',
-                    ),
+            onTimeout: () => throw TimeoutException(
+              'New navigation session event was not fired after updating destinations',
+            ),
           );
         } else {
           $.log('Got second arrival event, stopping guidance');
@@ -390,11 +388,9 @@ void main() {
       /// Wait for new navigation session event.
       await newSessionFired.future.timeout(
         const Duration(seconds: 30),
-        onTimeout:
-            () =>
-                throw TimeoutException(
-                  'New navigation session event was not fired',
-                ),
+        onTimeout: () => throw TimeoutException(
+          'New navigation session event was not fired',
+        ),
       );
       expect(newSessionFired.isCompleted, true);
 
