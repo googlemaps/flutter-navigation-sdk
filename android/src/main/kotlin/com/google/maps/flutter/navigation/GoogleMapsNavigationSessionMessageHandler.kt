@@ -119,12 +119,7 @@ class GoogleMapsNavigationSessionMessageHandler(
     callback: (Result<ContinueToNextDestinationResponseDto>) -> Unit
   ) {
     val waypoint = sessionManager.continueToNextDestination()
-    val waypointDto =
-      if (waypoint != null) {
-        Convert.convertWaypointToDto(waypoint)
-      } else {
-        null
-      }
+    val waypointDto = waypoint?.let { Convert.convertWaypointToDto(it) }
     callback(
       Result.success(
         ContinueToNextDestinationResponseDto(
