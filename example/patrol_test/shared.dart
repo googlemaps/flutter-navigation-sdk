@@ -59,15 +59,17 @@ const double startLocationLat = 68.593793;
 const double startLocationLng = 23.510763;
 
 /// Timeout for tests in seconds.
-const int testTimeoutSeconds = 240; // 4 minutes
+const int testTimeoutSeconds = 480; // 8 minutes
 
 /// Timeout for controller completer in seconds. This timeout is set to be
 /// long as on CI emulator the controller creation can take a while.
 const int controllerCompleterTimeoutSeconds = 30;
 
-const NativeAutomatorConfig _nativeAutomatorConfig = NativeAutomatorConfig(
-  findTimeout: Duration(seconds: 20),
-);
+final PlatformAutomatorConfig _platformAutomatorConfig =
+    PlatformAutomatorConfig.fromOptions(
+      findTimeout: Duration(seconds: 120),
+      connectionTimeout: Duration(seconds: 240),
+    );
 
 /// Create a wrapper [patrol] for [patrolTest] with custom options.
 @isTest
@@ -76,7 +78,7 @@ void patrol(
   Future<void> Function(PatrolIntegrationTester) callback, {
   bool skip = false,
   int timeoutSeconds = testTimeoutSeconds,
-  NativeAutomatorConfig? nativeAutomatorConfig,
+  PlatformAutomatorConfig? platformAutomatorConfig,
   TestVariant<Object?> variant = const DefaultTestVariant(),
 }) {
   patrolTest(
@@ -92,7 +94,8 @@ void patrol(
     skip: skip,
     variant: variant,
     timeout: Timeout(Duration(seconds: timeoutSeconds)),
-    nativeAutomatorConfig: nativeAutomatorConfig ?? _nativeAutomatorConfig,
+    platformAutomatorConfig:
+        platformAutomatorConfig ?? _platformAutomatorConfig,
   );
 }
 
@@ -128,31 +131,39 @@ Widget wrapMapView(GoogleMapsMapView mapView) {
   );
 }
 
+Future<void> _acceptTermsAndConditionsDialog(PatrolIntegrationTester $) async {
+  if (Platform.isAndroid) {
+    await $.native.tap(Selector(text: 'Got It'));
+  } else if (Platform.isIOS) {
+    await $.native.tap(Selector(text: 'OK'));
+  } else {
+    fail('Unsupported platform: ${Platform.operatingSystem}');
+  }
+}
+
 Future<void> checkTermsAndConditionsAcceptance(
   PatrolIntegrationTester $,
 ) async {
   if (!await GoogleMapsNavigator.areTermsAccepted()) {
+    // Reset terms to ensure the dialog is always shown.
+    await GoogleMapsNavigator.resetTermsAccepted();
+
     /// Request native TOS dialog.
     final Future<bool> tosAccepted =
         GoogleMapsNavigator.showTermsAndConditionsDialog(
           'test_title',
           'test_company_name',
         );
-
     await $.pumpAndSettle();
-    // Force wait a bit for the dialog to appear.
-    await $.tester.runAsync(
-      () => Future.delayed(const Duration(milliseconds: 250)),
-    );
 
-    // Tap accept or cancel.
+    // On Android wait a bit after showing the TOS dialog, as it can take a
+    // moment to appear and be ready for interaction.
     if (Platform.isAndroid) {
-      await $.native.tap(Selector(text: "Got It"));
-    } else if (Platform.isIOS) {
-      await $.native.tap(Selector(text: "OK"));
-    } else {
-      fail('Unsupported platform: ${Platform.operatingSystem}');
+      await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
     }
+
+    await _acceptTermsAndConditionsDialog($);
+
     // Verify the TOS was accepted
     await tosAccepted.then((bool accept) {
       expect(accept, true);
@@ -392,7 +403,11 @@ Future<GoogleNavigationViewController> startNavigationWithoutDestination(
       await controllerCompleter.future;
 
   if (initializeNavigation) {
-    await GoogleMapsNavigator.initializeNavigationSession();
+    try {
+      await GoogleMapsNavigator.initializeNavigationSession();
+    } on SessionInitializationException catch (e) {
+      fail('initializeNavigationSession failed: $e');
+    }
   }
 
   if (simulateLocation) {

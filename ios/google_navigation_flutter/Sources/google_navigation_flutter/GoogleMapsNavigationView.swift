@@ -595,13 +595,8 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   }
 
   func showReportIncidentsPanel() throws {
-    Task {
-      do {
-        try await _mapView.presentReportIncidentsPanel(nil)
-      } catch {
-        // Handle error silently
-      }
-    }
+    guard _mapView.isIncidentReportingAvailable else { return }
+    _mapView.presentReportIncidentsPanel(nil, completion: nil)
   }
 
   func isTrafficPromptsEnabled() -> Bool {

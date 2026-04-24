@@ -233,15 +233,30 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   }
 
   Future<void> _initializeNavigator() async {
-    assert(_termsAndConditionsAccepted, 'Terms must be accepted');
-    assert(
-      _locationPermissionsAccepted,
-      'Location permissions must be granted',
-    );
-
     if (!_navigatorInitialized) {
       debugPrint('Initializing new navigation session...');
-      await GoogleMapsNavigator.initializeNavigationSession();
+      try {
+        await GoogleMapsNavigator.initializeNavigationSession();
+      } on SessionInitializationException catch (e) {
+        switch (e.code) {
+          case SessionInitializationError.termsNotAccepted:
+            _showMessage(
+              'Terms not accepted. Please accept the terms and conditions first.',
+            );
+            await _updateTermsAcceptedState();
+          case SessionInitializationError.locationPermissionMissing:
+            _showMessage(
+              'Location permission missing. Please grant location permission.',
+            );
+            _locationPermissionsAccepted = false;
+          case SessionInitializationError.notAuthorized:
+            _showMessage(
+              'Not authorized. Your API key is empty, invalid or not authorized to use Navigation.',
+            );
+        }
+        setState(() {});
+        return;
+      }
       await _setupListeners();
       await _updateNavigatorInitializationState();
       await _restorePossibleNavigatorState();

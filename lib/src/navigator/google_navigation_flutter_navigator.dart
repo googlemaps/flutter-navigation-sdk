@@ -749,6 +749,9 @@ class SessionInitializationException implements Exception {
 
   /// The error code for the exception.
   final SessionInitializationError code;
+
+  @override
+  String toString() => 'SessionInitializationException(code: $code)';
 }
 
 /// Exception thrown by [GoogleMapsNavigator.resetTermsAccepted],
@@ -758,6 +761,10 @@ class SessionInitializationException implements Exception {
 class ResetTermsAndConditionsException implements Exception {
   /// Default constructor for [ResetTermsAndConditionsException].
   const ResetTermsAndConditionsException();
+
+  @override
+  String toString() =>
+      'ResetTermsAndConditionsException: Cannot reset terms while navigation session is active.';
 }
 
 /// [GoogleMapsNavigator] navigation method call has failed, because the navigation
@@ -766,6 +773,10 @@ class ResetTermsAndConditionsException implements Exception {
 class SessionNotInitializedException implements Exception {
   /// Default constructor for [SessionNotInitializedException].
   const SessionNotInitializedException();
+
+  @override
+  String toString() =>
+      'SessionNotInitializedException: Navigation session has not been initialized.';
 }
 
 /// [GoogleMapsNavigator.setDestinations] method call has failed, because the
@@ -773,4 +784,7 @@ class SessionNotInitializedException implements Exception {
 class RouteTokenMalformedException implements Exception {
   /// Default constructor for [RouteTokenMalformedException].
   const RouteTokenMalformedException();
+
+  @override
+  String toString() => 'RouteTokenMalformedException';
 }

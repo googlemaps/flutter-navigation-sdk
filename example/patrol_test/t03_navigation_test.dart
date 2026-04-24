@@ -29,6 +29,7 @@ import 'package:google_navigation_flutter/src/inspector/inspector_platform.dart'
 import 'shared.dart';
 
 void main() {
+  // ignore: invalid_use_of_visible_for_testing_member
   GoogleMapsNavigationPlatform.instance.enableDebugInspection();
 
   final GoogleNavigationInspectorPlatform inspector =
@@ -159,11 +160,6 @@ void main() {
           onLocationEvent,
         );
 
-    /// Start simulation.
-    await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
-
-    expect(await GoogleMapsNavigator.isGuidanceRunning(), true);
-
     /// Wait for new navigation session event.
     await newSessionFired.future.timeout(
       const Duration(seconds: 30),
@@ -171,6 +167,11 @@ void main() {
           throw TimeoutException('New navigation session event was not fired'),
     );
     expect(newSessionFired.isCompleted, true);
+
+    /// Start simulation.
+    await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
+
+    expect(await GoogleMapsNavigator.isGuidanceRunning(), true);
 
     await hasArrived.future;
     expect(await GoogleMapsNavigator.isGuidanceRunning(), false);
@@ -185,9 +186,11 @@ void main() {
   patrol(
     'Test navigating to multiple destinations',
     (PatrolIntegrationTester $) async {
+      final Completer<void> firstArrival = Completer<void>();
       final Completer<void> navigationFinished = Completer<void>();
       Completer<void> newSessionFired = Completer<void>();
       int arrivalEventCount = 0;
+      OnArrivalEvent? firstArrivalEvent;
       List<NavigationWaypoint> waypoints = <NavigationWaypoint>[];
 
       /// Set up navigation view and controller.
@@ -203,65 +206,9 @@ void main() {
 
       Future<void> onArrivalEvent(OnArrivalEvent msg) async {
         arrivalEventCount += 1;
-        if (arrivalEventCount < 2) {
-          // Reset the completer to test that new session event fires again
-          newSessionFired = Completer<void>();
-
-          if (multipleDestinationsVariants.currentValue ==
-              'continueToNextDestination') {
-            final ContinueToNextDestinationResponse response =
-                await GoogleMapsNavigator.continueToNextDestination();
-            expect(response.waypoint, isNotNull);
-            // On iOS, routeStatus should be available and OK.
-            if (Platform.isIOS) {
-              expect(response.routeStatus, NavigationRouteStatus.statusOk);
-            }
-            // Guidance must be explicitly restarted after
-            // continueToNextDestination.
-            await GoogleMapsNavigator.startGuidance();
-            await GoogleMapsNavigator.simulator
-                .simulateLocationsAlongExistingRouteWithOptions(
-                  SimulationOptions(speedMultiplier: 5),
-                );
-          } else {
-            // Find and remove the waypoint that matches the arrived waypoint
-            int waypointIndex = -1;
-            for (int i = 0; i < waypoints.length; i++) {
-              final NavigationWaypoint waypoint = waypoints[i];
-              if (waypoint.title == msg.waypoint.title) {
-                waypointIndex = i;
-                break;
-              }
-            }
-
-            if (waypointIndex >= 0) {
-              waypoints.removeAt(waypointIndex);
-            }
-
-            if (waypoints.isNotEmpty) {
-              // Update destinations with remaining waypoints
-              final Destinations updatedDestinations = Destinations(
-                waypoints: waypoints,
-                displayOptions: NavigationDisplayOptions(
-                  showDestinationMarkers: false,
-                ),
-              );
-              await GoogleMapsNavigator.setDestinations(updatedDestinations);
-
-              await GoogleMapsNavigator.simulator
-                  .simulateLocationsAlongExistingRouteWithOptions(
-                    SimulationOptions(speedMultiplier: 5),
-                  );
-            }
-          }
-
-          // Wait for new session event after updating destinations
-          await newSessionFired.future.timeout(
-            const Duration(seconds: 10),
-            onTimeout: () => throw TimeoutException(
-              'New navigation session event was not fired after updating destinations',
-            ),
-          );
+        if (arrivalEventCount == 1) {
+          firstArrivalEvent = msg;
+          firstArrival.complete();
         } else {
           $.log('Got second arrival event, stopping guidance');
           // Stop guidance after the last destination
@@ -272,7 +219,9 @@ void main() {
 
       /// Set up listener for new navigation session event.
       Future<void> onNewNavigationSession() async {
-        newSessionFired.complete();
+        if (!newSessionFired.isCompleted) {
+          newSessionFired.complete();
+        }
 
         /// Sets audio guidance settings for the current navigation session.
         /// Cannot be verified, because native SDK lacks getter methods,
@@ -371,6 +320,15 @@ void main() {
             onLocationEvent,
           );
 
+      /// Wait for new navigation session event.
+      await newSessionFired.future.timeout(
+        const Duration(seconds: 30),
+        onTimeout: () => throw TimeoutException(
+          'New navigation session event was not fired',
+        ),
+      );
+      expect(newSessionFired.isCompleted, true);
+
       /// Start simulation.
       $.log('Starting simulation with speedMultiplier: 5');
       await GoogleMapsNavigator.simulator
@@ -385,14 +343,62 @@ void main() {
 
       expect(await GoogleMapsNavigator.isGuidanceRunning(), true);
 
-      /// Wait for new navigation session event.
+      await firstArrival.future.timeout(
+        const Duration(seconds: 60),
+        onTimeout: () =>
+            throw TimeoutException('First arrival event was not fired'),
+      );
+
+      if (multipleDestinationsVariants.currentValue ==
+          'continueToNextDestination') {
+        newSessionFired = Completer<void>();
+        final ContinueToNextDestinationResponse response =
+            await GoogleMapsNavigator.continueToNextDestination();
+        expectSync(response.waypoint, isNotNull);
+        // On iOS, routeStatus should be available and OK.
+        if (Platform.isIOS) {
+          expectSync(response.routeStatus, NavigationRouteStatus.statusOk);
+        }
+        // Guidance must be explicitly restarted after continueToNextDestination.
+        await GoogleMapsNavigator.startGuidance();
+      } else {
+        // Find and remove the waypoint that matches the arrived waypoint.
+        int waypointIndex = -1;
+        for (int i = 0; i < waypoints.length; i++) {
+          final NavigationWaypoint waypoint = waypoints[i];
+          if (waypoint.title == firstArrivalEvent?.waypoint.title) {
+            waypointIndex = i;
+            break;
+          }
+        }
+
+        if (waypointIndex >= 0) {
+          waypoints.removeAt(waypointIndex);
+        }
+
+        if (waypoints.isNotEmpty) {
+          newSessionFired = Completer<void>();
+          final Destinations updatedDestinations = Destinations(
+            waypoints: waypoints,
+            displayOptions: NavigationDisplayOptions(
+              showDestinationMarkers: false,
+            ),
+          );
+          await GoogleMapsNavigator.setDestinations(updatedDestinations);
+        }
+      }
+
       await newSessionFired.future.timeout(
-        const Duration(seconds: 30),
+        const Duration(seconds: 10),
         onTimeout: () => throw TimeoutException(
-          'New navigation session event was not fired',
+          'New navigation session event was not fired after updating destinations',
         ),
       );
-      expect(newSessionFired.isCompleted, true);
+
+      await GoogleMapsNavigator.simulator
+          .simulateLocationsAlongExistingRouteWithOptions(
+            SimulationOptions(speedMultiplier: 5),
+          );
 
       await navigationFinished.future;
       expect(await GoogleMapsNavigator.isGuidanceRunning(), false);

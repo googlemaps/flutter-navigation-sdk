@@ -132,7 +132,7 @@ Specify the device you want to run the tests on with the DEVICE env variable.
 Integration tests are responsible for ensuring that the plugin works against the native Navigation SDK for both Android and iOS platforms. Patrol is used for the integration tests to simplify interactions with native elements. To use patrol, you first need to activate the patrol_cli.  
 
 ```bash
-flutter pub global activate patrol_cli 3.10.0
+flutter pub global activate patrol_cli 4.3.1
 ```
 
 To ensure that all necessary dependencies for patrol are properly set up, run the following command:
@@ -152,7 +152,7 @@ To only run a specific test file, use patrol command with -t flag. For example t
 
 ```bash
 cd ./example
-patrol test --dart-define MAPS_API_KEY=YOUR_API_KEY -t integration_test/navigation_test.dart
+patrol test --dart-define MAPS_API_KEY=YOUR_API_KEY -t patrol_test/navigation_test.dart
 ```
 
 Test report should appear in the build folder:
@@ -172,7 +172,7 @@ For debugging the tests, you can add `debugPrint()` functions in your test and u
 
 ```bash
 cd ./example
-patrol develop --dart-define MAPS_API_KEY=YOUR_API_KEY --verbose -t integration_test/navigation_test.dart
+patrol develop --dart-define MAPS_API_KEY=YOUR_API_KEY --verbose -t patrol_test/navigation_test.dart
 ```
 
 Please note that the "hot restart" feature in patrol's develop mode may not work correctly with all test files.

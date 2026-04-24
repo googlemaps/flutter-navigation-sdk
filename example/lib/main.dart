@@ -72,8 +72,16 @@ class _NavigationDemoState extends State<NavigationBody> {
   }
 
   Future<void> _checkSDKVersion() async {
+    setState(() {
+      _navSDKVersion = 'Loading...';
+    });
     // Get the Navigation SDK version.
-    _navSDKVersion = await GoogleMapsNavigator.getNavSDKVersion();
+    try {
+      _navSDKVersion = await GoogleMapsNavigator.getNavSDKVersion();
+    } catch (e) {
+      _navSDKVersion = 'Error: $e';
+    }
+    setState(() {});
   }
 
   Future<void> _pushPage(BuildContext context, ExamplePage page) async {

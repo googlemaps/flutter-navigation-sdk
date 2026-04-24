@@ -18,4 +18,14 @@
 @import XCTest;
 @import patrol;
 
+// These macros are normally defined by patrol_cli during `patrol test` builds.
+// Define defaults here so that xcodebuild can compile this target independently
+// (e.g., when running native unit tests via `xcodebuild test -only-testing RunnerTests`).
+#ifndef CLEAR_PERMISSIONS
+#define CLEAR_PERMISSIONS 0
+#endif
+#ifndef FULL_ISOLATION
+#define FULL_ISOLATION 0
+#endif
+
 PATROL_INTEGRATION_TEST_IOS_RUNNER(RunnerUITests)
