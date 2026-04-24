@@ -368,6 +368,18 @@ abstract class MapViewState<T extends GoogleMapsBaseMapView> extends State<T> {
           });
     }
 
+    if (widget.onMyLocationClicked != null) {
+      GoogleMapsNavigationPlatform.instance.viewAPI
+          .getMyLocationClickedEventStream(viewId: viewId)
+          .listen(widget.onMyLocationClicked);
+    }
+
+    if (widget.onMyLocationButtonClicked != null) {
+      GoogleMapsNavigationPlatform.instance.viewAPI
+          .getMyLocationButtonClickedEventStream(viewId: viewId)
+          .listen(widget.onMyLocationButtonClicked);
+    }
+
     GoogleMapsNavigationPlatform.instance.viewAPI
         .getMarkerEventStream(viewId: viewId)
         .listen((MarkerEvent event) {
