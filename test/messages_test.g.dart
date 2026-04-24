@@ -188,59 +188,62 @@ class _PigeonCodec extends StandardMessageCodec {
     } else if (value is NavigationWaypointDto) {
       buffer.putUint8(180);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationTimeAndDistanceDto) {
+    } else if (value is ContinueToNextDestinationResponseDto) {
       buffer.putUint8(181);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationAudioGuidanceSettingsDto) {
+    } else if (value is NavigationTimeAndDistanceDto) {
       buffer.putUint8(182);
       writeValue(buffer, value.encode());
-    } else if (value is SimulationOptionsDto) {
+    } else if (value is NavigationAudioGuidanceSettingsDto) {
       buffer.putUint8(183);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngDto) {
+    } else if (value is SimulationOptionsDto) {
       buffer.putUint8(184);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngBoundsDto) {
+    } else if (value is LatLngDto) {
       buffer.putUint8(185);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedingUpdatedEventDto) {
+    } else if (value is LatLngBoundsDto) {
       buffer.putUint8(186);
       writeValue(buffer, value.encode());
-    } else if (value is GpsAvailabilityChangeEventDto) {
+    } else if (value is SpeedingUpdatedEventDto) {
       buffer.putUint8(187);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
+    } else if (value is GpsAvailabilityChangeEventDto) {
       buffer.putUint8(188);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsDto) {
+    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
       buffer.putUint8(189);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
+    } else if (value is SpeedAlertOptionsDto) {
       buffer.putUint8(190);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataDto) {
+    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
       buffer.putUint8(191);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentDto) {
+    } else if (value is RouteSegmentTrafficDataDto) {
       buffer.putUint8(192);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDirectionDto) {
+    } else if (value is RouteSegmentDto) {
       buffer.putUint8(193);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDto) {
+    } else if (value is LaneDirectionDto) {
       buffer.putUint8(194);
       writeValue(buffer, value.encode());
-    } else if (value is StepInfoDto) {
+    } else if (value is LaneDto) {
       buffer.putUint8(195);
       writeValue(buffer, value.encode());
-    } else if (value is NavInfoDto) {
+    } else if (value is StepInfoDto) {
       buffer.putUint8(196);
       writeValue(buffer, value.encode());
-    } else if (value is TermsAndConditionsUIParamsDto) {
+    } else if (value is NavInfoDto) {
       buffer.putUint8(197);
       writeValue(buffer, value.encode());
-    } else if (value is StepImageGenerationOptionsDto) {
+    } else if (value is TermsAndConditionsUIParamsDto) {
       buffer.putUint8(198);
+      writeValue(buffer, value.encode());
+    } else if (value is StepImageGenerationOptionsDto) {
+      buffer.putUint8(199);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -388,44 +391,46 @@ class _PigeonCodec extends StandardMessageCodec {
       case 180:
         return NavigationWaypointDto.decode(readValue(buffer)!);
       case 181:
-        return NavigationTimeAndDistanceDto.decode(readValue(buffer)!);
+        return ContinueToNextDestinationResponseDto.decode(readValue(buffer)!);
       case 182:
-        return NavigationAudioGuidanceSettingsDto.decode(readValue(buffer)!);
+        return NavigationTimeAndDistanceDto.decode(readValue(buffer)!);
       case 183:
-        return SimulationOptionsDto.decode(readValue(buffer)!);
+        return NavigationAudioGuidanceSettingsDto.decode(readValue(buffer)!);
       case 184:
-        return LatLngDto.decode(readValue(buffer)!);
+        return SimulationOptionsDto.decode(readValue(buffer)!);
       case 185:
-        return LatLngBoundsDto.decode(readValue(buffer)!);
+        return LatLngDto.decode(readValue(buffer)!);
       case 186:
-        return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
+        return LatLngBoundsDto.decode(readValue(buffer)!);
       case 187:
-        return GpsAvailabilityChangeEventDto.decode(readValue(buffer)!);
+        return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
       case 188:
+        return GpsAvailabilityChangeEventDto.decode(readValue(buffer)!);
+      case 189:
         return SpeedAlertOptionsThresholdPercentageDto.decode(
           readValue(buffer)!,
         );
-      case 189:
-        return SpeedAlertOptionsDto.decode(readValue(buffer)!);
       case 190:
+        return SpeedAlertOptionsDto.decode(readValue(buffer)!);
+      case 191:
         return RouteSegmentTrafficDataRoadStretchRenderingDataDto.decode(
           readValue(buffer)!,
         );
-      case 191:
-        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
       case 192:
-        return RouteSegmentDto.decode(readValue(buffer)!);
+        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
       case 193:
-        return LaneDirectionDto.decode(readValue(buffer)!);
+        return RouteSegmentDto.decode(readValue(buffer)!);
       case 194:
-        return LaneDto.decode(readValue(buffer)!);
+        return LaneDirectionDto.decode(readValue(buffer)!);
       case 195:
-        return StepInfoDto.decode(readValue(buffer)!);
+        return LaneDto.decode(readValue(buffer)!);
       case 196:
-        return NavInfoDto.decode(readValue(buffer)!);
+        return StepInfoDto.decode(readValue(buffer)!);
       case 197:
-        return TermsAndConditionsUIParamsDto.decode(readValue(buffer)!);
+        return NavInfoDto.decode(readValue(buffer)!);
       case 198:
+        return TermsAndConditionsUIParamsDto.decode(readValue(buffer)!);
+      case 199:
         return StepImageGenerationOptionsDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -5455,7 +5460,7 @@ abstract class TestNavigationSessionApi {
 
   void clearDestinations();
 
-  NavigationWaypointDto? continueToNextDestination();
+  Future<ContinueToNextDestinationResponseDto> continueToNextDestination();
 
   NavigationTimeAndDistanceDto getCurrentTimeAndDistance();
 
@@ -5977,7 +5982,7 @@ abstract class TestNavigationSessionApi {
               Object? message,
             ) async {
               try {
-                final NavigationWaypointDto? output = api
+                final ContinueToNextDestinationResponseDto output = await api
                     .continueToNextDestination();
                 return <Object?>[output];
               } on PlatformException catch (e) {

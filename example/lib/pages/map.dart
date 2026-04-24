@@ -88,8 +88,8 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
   }
 
   Future<void> getMapColorScheme() async {
-    final MapColorScheme colorScheme =
-        await _mapViewController.getMapColorScheme();
+    final MapColorScheme colorScheme = await _mapViewController
+        .getMapColorScheme();
     setState(() {
       mapColorScheme = colorScheme;
     });
@@ -152,34 +152,30 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
               children: <Widget>[
                 ElevatedButton(
                   style: mapTypeStyle,
-                  onPressed:
-                      mapType == MapType.normal
-                          ? null
-                          : () => setMapType(MapType.normal),
+                  onPressed: mapType == MapType.normal
+                      ? null
+                      : () => setMapType(MapType.normal),
                   child: const Text('Normal'),
                 ),
                 ElevatedButton(
                   style: mapTypeStyle,
-                  onPressed:
-                      mapType == MapType.satellite
-                          ? null
-                          : () => setMapType(MapType.satellite),
+                  onPressed: mapType == MapType.satellite
+                      ? null
+                      : () => setMapType(MapType.satellite),
                   child: const Text('Satellite'),
                 ),
                 ElevatedButton(
                   style: mapTypeStyle,
-                  onPressed:
-                      mapType == MapType.terrain
-                          ? null
-                          : () => setMapType(MapType.terrain),
+                  onPressed: mapType == MapType.terrain
+                      ? null
+                      : () => setMapType(MapType.terrain),
                   child: const Text('Terrain'),
                 ),
                 ElevatedButton(
                   style: mapTypeStyle,
-                  onPressed:
-                      mapType == MapType.hybrid
-                          ? null
-                          : () => setMapType(MapType.hybrid),
+                  onPressed: mapType == MapType.hybrid
+                      ? null
+                      : () => setMapType(MapType.hybrid),
                   child: const Text('Hybrid'),
                 ),
               ],
@@ -187,36 +183,32 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
           ),
           if (mapType == MapType.normal)
             Padding(
-              padding:
-                  isMyLocationEnabled && isMyLocationButtonEnabled
-                      ? const EdgeInsets.only(top: 50.0, right: 8.0)
-                      : const EdgeInsets.all(8.0),
+              padding: isMyLocationEnabled && isMyLocationButtonEnabled
+                  ? const EdgeInsets.only(top: 50.0, right: 8.0)
+                  : const EdgeInsets.all(8.0),
               child: Align(
                 alignment: Alignment.topRight,
                 child: Column(
                   children: <Widget>[
                     ElevatedButton(
                       style: mapTypeStyle,
-                      onPressed:
-                          MapIdManager.instance.mapId != null
-                              ? null
-                              : () => setMapStyleDefault(),
+                      onPressed: MapIdManager.instance.mapId != null
+                          ? null
+                          : () => setMapStyleDefault(),
                       child: const Text('Default style'),
                     ),
                     ElevatedButton(
                       style: mapTypeStyle,
-                      onPressed:
-                          MapIdManager.instance.mapId != null
-                              ? null
-                              : () => setMapStyleNight(),
+                      onPressed: MapIdManager.instance.mapId != null
+                          ? null
+                          : () => setMapStyleNight(),
                       child: const Text('Night style'),
                     ),
                     ElevatedButton(
                       style: mapTypeStyle,
-                      onPressed:
-                          MapIdManager.instance.mapId != null
-                              ? null
-                              : () => setMapStyleSepia(),
+                      onPressed: MapIdManager.instance.mapId != null
+                          ? null
+                          : () => setMapStyleSepia(),
                       child: const Text('Sepia style'),
                     ),
                   ],
@@ -281,8 +273,8 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
         SwitchListTile(
           onChanged: (bool newValue) async {
             await _mapViewController.settings.setCompassEnabled(newValue);
-            final bool enabled =
-                await _mapViewController.settings.isCompassEnabled();
+            final bool enabled = await _mapViewController.settings
+                .isCompassEnabled();
             setState(() {
               isCompassEnabled = enabled;
             });
@@ -307,45 +299,42 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
           title: const Text('Enable my location button'),
           value: isMyLocationButtonEnabled,
           controlAffinity: ListTileControlAffinity.leading,
-          onChanged:
-              isMyLocationEnabled
-                  ? (bool newValue) async {
-                    await _mapViewController.settings
-                        .setMyLocationButtonEnabled(newValue);
-                    final bool enabled =
-                        await _mapViewController.settings
-                            .isMyLocationButtonEnabled();
-                    setState(() {
-                      isMyLocationButtonEnabled = enabled;
-                    });
-                  }
-                  : null,
+          onChanged: isMyLocationEnabled
+              ? (bool newValue) async {
+                  await _mapViewController.settings.setMyLocationButtonEnabled(
+                    newValue,
+                  );
+                  final bool enabled = await _mapViewController.settings
+                      .isMyLocationButtonEnabled();
+                  setState(() {
+                    isMyLocationButtonEnabled = enabled;
+                  });
+                }
+              : null,
           visualDensity: VisualDensity.compact,
         ),
         SwitchListTile(
           title: const Text('Consume my location button click'),
           value: consumeMyLocationButtonClickEvent,
           controlAffinity: ListTileControlAffinity.leading,
-          onChanged:
-              isMyLocationEnabled && isMyLocationButtonEnabled
-                  ? (bool newValue) async {
-                    await _mapViewController.settings
-                        .setConsumeMyLocationButtonClickEventsEnabled(newValue);
-                    final bool enabled =
-                        await _mapViewController.settings
-                            .isConsumeMyLocationButtonClickEventsEnabled();
-                    setState(() {
-                      consumeMyLocationButtonClickEvent = enabled;
-                    });
-                  }
-                  : null,
+          onChanged: isMyLocationEnabled && isMyLocationButtonEnabled
+              ? (bool newValue) async {
+                  await _mapViewController.settings
+                      .setConsumeMyLocationButtonClickEventsEnabled(newValue);
+                  final bool enabled = await _mapViewController.settings
+                      .isConsumeMyLocationButtonClickEventsEnabled();
+                  setState(() {
+                    consumeMyLocationButtonClickEvent = enabled;
+                  });
+                }
+              : null,
           visualDensity: VisualDensity.compact,
         ),
         SwitchListTile(
           onChanged: (bool newValue) async {
             await _mapViewController.settings.setZoomGesturesEnabled(newValue);
-            final bool enabled =
-                await _mapViewController.settings.isZoomGesturesEnabled();
+            final bool enabled = await _mapViewController.settings
+                .isZoomGesturesEnabled();
             setState(() {
               isZoomGesturesEnabled = enabled;
             });
@@ -359,8 +348,8 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
               await _mapViewController.settings.setZoomControlsEnabled(
                 newValue,
               );
-              final bool enabled =
-                  await _mapViewController.settings.isZoomControlsEnabled();
+              final bool enabled = await _mapViewController.settings
+                  .isZoomControlsEnabled();
               setState(() {
                 isZoomControlsEnabled = enabled;
               });
@@ -373,8 +362,8 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
             await _mapViewController.settings.setRotateGesturesEnabled(
               newValue,
             );
-            final bool enabled =
-                await _mapViewController.settings.isRotateGesturesEnabled();
+            final bool enabled = await _mapViewController.settings
+                .isRotateGesturesEnabled();
             setState(() {
               isRotateGesturesEnabled = enabled;
             });
@@ -387,8 +376,8 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
             await _mapViewController.settings.setScrollGesturesEnabled(
               newValue,
             );
-            final bool enabled =
-                await _mapViewController.settings.isScrollGesturesEnabled();
+            final bool enabled = await _mapViewController.settings
+                .isScrollGesturesEnabled();
             setState(() {
               isScrollGesturesEnabled = enabled;
             });
@@ -400,9 +389,8 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
           onChanged: (bool newValue) async {
             await _mapViewController.settings
                 .setScrollGesturesDuringRotateOrZoomEnabled(newValue);
-            final bool enabled =
-                await _mapViewController.settings
-                    .isScrollGesturesEnabledDuringRotateOrZoom();
+            final bool enabled = await _mapViewController.settings
+                .isScrollGesturesEnabledDuringRotateOrZoom();
             setState(() {
               isScrollGesturesEnabledDuringRotateOrZoom = enabled;
             });
@@ -413,8 +401,8 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
         SwitchListTile(
           onChanged: (bool newValue) async {
             await _mapViewController.settings.setTiltGesturesEnabled(newValue);
-            final bool enabled =
-                await _mapViewController.settings.isTiltGesturesEnabled();
+            final bool enabled = await _mapViewController.settings
+                .isTiltGesturesEnabled();
             setState(() {
               isTiltGesturesEnabled = enabled;
             });
@@ -425,8 +413,8 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
         SwitchListTile(
           onChanged: (bool newValue) async {
             await _mapViewController.settings.setTrafficEnabled(newValue);
-            final bool enabled =
-                await _mapViewController.settings.isTrafficEnabled();
+            final bool enabled = await _mapViewController.settings
+                .isTrafficEnabled();
             setState(() {
               isTrafficEnabled = enabled;
             });

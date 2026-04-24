@@ -280,18 +280,18 @@ class _CustomNavigationHeaderExampleState
           final step = steps[index];
           final isCurrentStep = index == 0;
           final cardBgColor = isCurrentStep ? bgColor : previewBgColor;
-          final secondaryInfoBgColor =
-              isCurrentStep ? secondaryBgColor : previewSecondaryBgColor;
-          final distanceToStep =
-              index == 0
-                  ? widget.navInfo.distanceToCurrentStepMeters
-                  : steps
-                      .take(index + 1)
-                      .skip(1)
-                      .fold<int>(
-                        widget.navInfo.distanceToCurrentStepMeters ?? 0,
-                        (sum, s) => sum + (s.distanceFromPrevStepMeters ?? 0),
-                      );
+          final secondaryInfoBgColor = isCurrentStep
+              ? secondaryBgColor
+              : previewSecondaryBgColor;
+          final distanceToStep = index == 0
+              ? widget.navInfo.distanceToCurrentStepMeters
+              : steps
+                    .take(index + 1)
+                    .skip(1)
+                    .fold<int>(
+                      widget.navInfo.distanceToCurrentStepMeters ?? 0,
+                      (sum, s) => sum + (s.distanceFromPrevStepMeters ?? 0),
+                    );
 
           final showLaneGuidance =
               step.lanesImage != null &&
@@ -360,10 +360,9 @@ class _CustomNavigationHeaderExampleState
                                 ),
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color:
-                                      i == _currentPageIndex
-                                          ? widget.textColor
-                                          : widget.textColor.withAlpha(100),
+                                  color: i == _currentPageIndex
+                                      ? widget.textColor
+                                      : widget.textColor.withAlpha(100),
                                 ),
                               ),
                           ],
@@ -400,7 +399,7 @@ class _CustomNavigationHeaderExampleState
   Widget _buildStepContent(StepInfo step, int? distanceToStep, int pageIndex) {
     bool hasFullInstructions =
         (step.fullInstructions != null &&
-            step.fullInstructions != step.fullRoadName);
+        step.fullInstructions != step.fullRoadName);
     return Padding(
       padding: const EdgeInsets.only(top: 16, bottom: 8, left: 16, right: 16),
       child: Row(
@@ -707,12 +706,9 @@ class StepCardExample extends StatelessWidget {
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),
-        trailing:
-            step.distanceFromPrevStepMeters != null
-                ? Text(
-                  formatRemainingDistance(step.distanceFromPrevStepMeters!),
-                )
-                : null,
+        trailing: step.distanceFromPrevStepMeters != null
+            ? Text(formatRemainingDistance(step.distanceFromPrevStepMeters!))
+            : null,
       ),
     );
   }

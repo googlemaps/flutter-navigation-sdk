@@ -782,6 +782,13 @@ class NavigationWaypointDto {
   int? preferredSegmentHeading;
 }
 
+class ContinueToNextDestinationResponseDto {
+  ContinueToNextDestinationResponseDto({this.waypoint, this.routeStatus});
+
+  NavigationWaypointDto? waypoint;
+  RouteStatusDto? routeStatus;
+}
+
 enum RouteStatusDto {
   internalError,
   statusOk,
@@ -1405,7 +1412,8 @@ abstract class NavigationSessionApi {
   @async
   RouteStatusDto setDestinations(DestinationsDto destinations);
   void clearDestinations();
-  NavigationWaypointDto? continueToNextDestination();
+  @async
+  ContinueToNextDestinationResponseDto continueToNextDestination();
   NavigationTimeAndDistanceDto getCurrentTimeAndDistance();
   void setAudioGuidance(NavigationAudioGuidanceSettingsDto settings);
   void setSpeedAlertOptions(SpeedAlertOptionsDto options);

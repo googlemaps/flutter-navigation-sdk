@@ -626,6 +626,8 @@ void main() {
       /// Cancel all subscriptions.
       await cancelSubscriptionsAndResetState();
     },
-    skip: !Platform.isAndroid,
+    // Android-only test; also skip on CI where ATD emulator image lacks
+    // the Settings app required for Patrol's native location interactions.
+    skip: !Platform.isAndroid || isCI,
   );
 }

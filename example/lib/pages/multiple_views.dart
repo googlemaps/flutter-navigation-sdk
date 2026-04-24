@@ -71,8 +71,8 @@ class _MultiplexState extends ExamplePageState<MultipleMapViewsPage> {
   /// showing the navigation view.
   bool _navigatorInitializedAtLeastOnce = false;
 
-  GoogleMapViewController? _mapController;
-  GoogleNavigationViewController? _navigationController;
+  GoogleMapViewController? _mapViewController;
+  GoogleNavigationViewController? _navigationViewController;
 
   @override
   void initState() {
@@ -128,8 +128,12 @@ class _MultiplexState extends ExamplePageState<MultipleMapViewsPage> {
       const Duration(milliseconds: _userLocationTimeoutMS),
       () async {
         if (mounted && _userLocation == null) {
-          _userLocation =
-              await _navigationController?.getMyLocation() ?? cameraLocationMIT;
+          final LatLng? deviceLocation = await _navigationViewController
+              ?.getMyLocation();
+          _userLocation = deviceLocation ?? cameraLocationMIT;
+          if (deviceLocation == null) {
+            await GoogleMapsNavigator.simulator.setUserLocation(_userLocation!);
+          }
           if (mounted) {
             setState(() {});
           }
@@ -198,7 +202,7 @@ class _MultiplexState extends ExamplePageState<MultipleMapViewsPage> {
 
   void _onViewCreated(GoogleMapViewController controller) {
     setState(() {
-      _mapController = controller;
+      _mapViewController = controller;
     });
   }
 
@@ -206,7 +210,7 @@ class _MultiplexState extends ExamplePageState<MultipleMapViewsPage> {
     GoogleNavigationViewController controller,
   ) async {
     setState(() {
-      _navigationController = controller;
+      _navigationViewController = controller;
     });
 
     try {
@@ -218,12 +222,12 @@ class _MultiplexState extends ExamplePageState<MultipleMapViewsPage> {
   }
 
   Future<void> _moveCameras() async {
-    await _mapController!.moveCamera(
+    await _mapViewController!.moveCamera(
       CameraUpdate.newCameraPosition(
         _cameraMoveCounter.isEven ? cameraPositionOxford : cameraPositionMIT,
       ),
     );
-    await _navigationController!.moveCamera(
+    await _navigationViewController!.moveCamera(
       CameraUpdate.newCameraPosition(
         _cameraMoveCounter.isOdd ? cameraPositionOxford : cameraPositionMIT,
       ),
@@ -251,34 +255,33 @@ class _MultiplexState extends ExamplePageState<MultipleMapViewsPage> {
           const SizedBox(height: 20),
           SizedBox(
             height: 200,
-            child:
-                _navigatorInitializedAtLeastOnce && _userLocation != null
-                    ? GoogleMapsNavigationView(
-                      onViewCreated: _onViewCreated2,
-                      initialCameraPosition: CameraPosition(
-                        // Initialize map to user location.
-                        target: _userLocation!,
-                        zoom: 15,
-                      ),
-                      mapId: MapIdManager.instance.mapId,
-                    )
-                    : const Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text('Waiting navigator and user location'),
-                          SizedBox(height: 10),
-                          SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: CircularProgressIndicator(),
-                          ),
-                        ],
-                      ),
+            child: _navigatorInitializedAtLeastOnce && _userLocation != null
+                ? GoogleMapsNavigationView(
+                    onViewCreated: _onViewCreated2,
+                    initialCameraPosition: CameraPosition(
+                      // Initialize map to user location.
+                      target: _userLocation!,
+                      zoom: 15,
                     ),
+                    mapId: MapIdManager.instance.mapId,
+                  )
+                : const Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text('Waiting navigator and user location'),
+                        SizedBox(height: 10),
+                        SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: CircularProgressIndicator(),
+                        ),
+                      ],
+                    ),
+                  ),
           ),
           const SizedBox(height: 50),
-          if (_mapController != null && _navigationController != null)
+          if (_mapViewController != null && _navigationViewController != null)
             ElevatedButton(
               onPressed: _moveCameras,
               child: const Text('Move cameras'),

@@ -72,8 +72,16 @@ class _NavigationDemoState extends State<NavigationBody> {
   }
 
   Future<void> _checkSDKVersion() async {
+    setState(() {
+      _navSDKVersion = 'Loading...';
+    });
     // Get the Navigation SDK version.
-    _navSDKVersion = await GoogleMapsNavigator.getNavSDKVersion();
+    try {
+      _navSDKVersion = await GoogleMapsNavigator.getNavSDKVersion();
+    } catch (e) {
+      _navSDKVersion = 'Error: $e';
+    }
+    setState(() {});
   }
 
   Future<void> _pushPage(BuildContext context, ExamplePage page) async {
@@ -87,8 +95,8 @@ class _NavigationDemoState extends State<NavigationBody> {
   /// Android: Fine and Coarse Location
   /// iOS: CoreLocation (Always and WhenInUse), Notification
   Future<void> _requestPermissions() async {
-    final PermissionStatus locationPermission =
-        await Permission.location.request();
+    final PermissionStatus locationPermission = await Permission.location
+        .request();
 
     PermissionStatus notificationPermission = PermissionStatus.denied;
     if (Platform.isIOS) {
@@ -147,8 +155,8 @@ class _NavigationDemoState extends State<NavigationBody> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
-                onPressed:
-                    () => showMapIdDialog(context, () => setState(() {})),
+                onPressed: () =>
+                    showMapIdDialog(context, () => setState(() {})),
                 child: const Text('Set Map ID'),
               ),
             ),

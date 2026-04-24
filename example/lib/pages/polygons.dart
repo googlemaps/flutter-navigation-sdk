@@ -47,8 +47,8 @@ class _PolygonsPageState extends ExamplePageState<PolygonsPage> {
 
   Future<void> _addPolygon() async {
     // Add square polygon on the current camera position.
-    final LatLngBounds cameraBounds =
-        await _navigationViewController.getVisibleRegion();
+    final LatLngBounds cameraBounds = await _navigationViewController
+        .getVisibleRegion();
 
     final List<LatLng> points = _createInsetSquare(cameraBounds, 0.2);
 
@@ -181,10 +181,9 @@ class _PolygonsPageState extends ExamplePageState<PolygonsPage> {
     final Polygon? polygon = polygons.firstOrNull;
     if (polygon != null) {
       setState(() {
-        _polygons =
-            _polygons
-                .where((Polygon element) => element != _selectedPolygon)
-                .toList();
+        _polygons = _polygons
+            .where((Polygon element) => element != _selectedPolygon)
+            .toList();
         _selectedPolygon = polygon;
         _polygons = _polygons + <Polygon>[polygon];
       });
@@ -203,10 +202,9 @@ class _PolygonsPageState extends ExamplePageState<PolygonsPage> {
     }
 
     setState(() {
-      _polygons =
-          _polygons
-              .where((Polygon element) => element != _selectedPolygon)
-              .toList();
+      _polygons = _polygons
+          .where((Polygon element) => element != _selectedPolygon)
+          .toList();
       _selectedPolygon = null;
     });
   }
@@ -351,47 +349,53 @@ class _PolygonsPageState extends ExamplePageState<PolygonsPage> {
                 child: const Text('Add polygon'),
               ),
               ElevatedButton(
-                onPressed:
-                    _selectedPolygon == null ? null : () => _removePolygon(),
+                onPressed: _selectedPolygon == null
+                    ? null
+                    : () => _removePolygon(),
                 child: const Text('Remove polygon'),
               ),
               ElevatedButton(
-                onPressed:
-                    _selectedPolygon == null ? null : () => _toggleHoles(),
-                child:
-                    _selectedPolygon?.options.holes.isEmpty ?? true
-                        ? const Text('Add holes')
-                        : const Text('Remove holes'),
+                onPressed: _selectedPolygon == null
+                    ? null
+                    : () => _toggleHoles(),
+                child: _selectedPolygon?.options.holes.isEmpty ?? true
+                    ? const Text('Add holes')
+                    : const Text('Remove holes'),
               ),
               ElevatedButton(
-                onPressed:
-                    _selectedPolygon == null ? null : () => _toggleGeodesic(),
+                onPressed: _selectedPolygon == null
+                    ? null
+                    : () => _toggleGeodesic(),
                 child: Text('Geodesic: ${_selectedPolygon?.options.geodesic}'),
               ),
               ElevatedButton(
-                onPressed:
-                    _selectedPolygon == null ? null : () => _setFillColor(),
+                onPressed: _selectedPolygon == null
+                    ? null
+                    : () => _setFillColor(),
                 child: Text(
                   'Fill color: ${_colorName(_selectedPolygon?.options.fillColor)}',
                 ),
               ),
               ElevatedButton(
-                onPressed:
-                    _selectedPolygon == null ? null : () => _setStrokeColor(),
+                onPressed: _selectedPolygon == null
+                    ? null
+                    : () => _setStrokeColor(),
                 child: Text(
                   'Stroke color: ${_colorName(_selectedPolygon?.options.strokeColor)}',
                 ),
               ),
               ElevatedButton(
-                onPressed:
-                    _selectedPolygon == null ? null : () => _setStrokeWidth(),
+                onPressed: _selectedPolygon == null
+                    ? null
+                    : () => _setStrokeWidth(),
                 child: Text(
                   'Stroke width: ${_selectedPolygon?.options.strokeWidth}',
                 ),
               ),
               ElevatedButton(
-                onPressed:
-                    _selectedPolygon == null ? null : () => _toggleVisibility(),
+                onPressed: _selectedPolygon == null
+                    ? null
+                    : () => _toggleVisibility(),
                 child: Text('Visibility: ${_selectedPolygon?.options.visible}'),
               ),
               ElevatedButton(
@@ -399,16 +403,15 @@ class _PolygonsPageState extends ExamplePageState<PolygonsPage> {
                 child: Text('Z-index: ${_selectedPolygon?.options.zIndex}'),
               ),
               ElevatedButton(
-                onPressed:
-                    _polygons.isNotEmpty
-                        ? () {
-                          setState(() {
-                            _navigationViewController.clearPolygons();
-                            _polygons.clear();
-                            _selectedPolygon = null;
-                          });
-                        }
-                        : null,
+                onPressed: _polygons.isNotEmpty
+                    ? () {
+                        setState(() {
+                          _navigationViewController.clearPolygons();
+                          _polygons.clear();
+                          _selectedPolygon = null;
+                        });
+                      }
+                    : null,
                 child: const Text('Clear all'),
               ),
             ],

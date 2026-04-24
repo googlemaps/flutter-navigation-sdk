@@ -208,6 +208,18 @@ extension ConvertRouteSegmentTrafficDataDto on RouteSegmentTrafficDataDto {
       );
 }
 
+/// [ContinueToNextDestinationResponseDto] convert extension.
+/// @nodoc
+extension ConvertContinueToNextDestinationResponseDto
+    on ContinueToNextDestinationResponseDto {
+  /// Converts [ContinueToNextDestinationResponseDto] to [ContinueToNextDestinationResponse]
+  ContinueToNextDestinationResponse toContinueToNextDestinationResponse() =>
+      ContinueToNextDestinationResponse(
+        waypoint: waypoint?.toNavigationWaypoint(),
+        routeStatus: routeStatus?.toNavigationRouteStatus(),
+      );
+}
+
 /// [RouteSegmentDto] convert extension.
 /// @nodoc
 extension ConvertRouteSegmentDto on RouteSegmentDto {

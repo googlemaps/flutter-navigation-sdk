@@ -355,6 +355,21 @@ enum NavigationRouteStatus {
   quotaCheckFailed,
 }
 
+/// Response returned by [GoogleMapsNavigator.continueToNextDestination].
+/// {@category Navigation}
+class ContinueToNextDestinationResponse {
+  /// Initialize with waypoint and optional route status.
+  ContinueToNextDestinationResponse({this.waypoint, this.routeStatus});
+
+  /// The waypoint guidance is now heading to, or null if there are no more
+  /// waypoints left.
+  final NavigationWaypoint? waypoint;
+
+  /// The route status indicating the result of routing to the next destination.
+  /// Only available on iOS. On Android this will be null.
+  final NavigationRouteStatus? routeStatus;
+}
+
 /// Time and distance to next waypoint.
 /// {@category Navigation}
 class NavigationTimeAndDistance {

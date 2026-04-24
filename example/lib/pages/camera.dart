@@ -186,8 +186,9 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
     if (!mounted) {
       return;
     }
-    final String cameraState =
-        _isFollowingLocation ? 'Camera following' : 'Camera moving';
+    final String cameraState = _isFollowingLocation
+        ? 'Camera following'
+        : 'Camera moving';
     final String positionStr =
         'Position: ${position.target.latitude.toStringAsFixed(2)}, ${position.target.longitude.toStringAsFixed(2)}';
     setState(() {
@@ -285,11 +286,12 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
 
   @override
   Widget buildOverlayContent(BuildContext context) {
-    final ButtonStyle threeButtonRowStyle = Theme.of(
-      context,
-    ).elevatedButtonTheme.style!.copyWith(
-      minimumSize: WidgetStateProperty.all<Size>(const Size(107, 36)),
-    );
+    final ButtonStyle threeButtonRowStyle = Theme.of(context)
+        .elevatedButtonTheme
+        .style!
+        .copyWith(
+          minimumSize: WidgetStateProperty.all<Size>(const Size(107, 36)),
+        );
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -369,13 +371,11 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
                 if (_animationsEnabled) {
                   _navigationViewController.animateCamera(
                     cameraUpdate,
-                    duration:
-                        _animationDuration != null
-                            ? Duration(milliseconds: _animationDuration!)
-                            : null,
-                    onFinished:
-                        (bool success) =>
-                            _showAnimationFinishedMessage(success),
+                    duration: _animationDuration != null
+                        ? Duration(milliseconds: _animationDuration!)
+                        : null,
+                    onFinished: (bool success) =>
+                        _showAnimationFinishedMessage(success),
                   );
                 } else {
                   _navigationViewController.moveCamera(cameraUpdate);
@@ -392,13 +392,11 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
                 if (_animationsEnabled) {
                   _navigationViewController.animateCamera(
                     cameraUpdate,
-                    duration:
-                        _animationDuration != null
-                            ? Duration(milliseconds: _animationDuration!)
-                            : null,
-                    onFinished:
-                        (bool success) =>
-                            _showAnimationFinishedMessage(success),
+                    duration: _animationDuration != null
+                        ? Duration(milliseconds: _animationDuration!)
+                        : null,
+                    onFinished: (bool success) =>
+                        _showAnimationFinishedMessage(success),
                   );
                 } else {
                   _navigationViewController.moveCamera(cameraUpdate);
@@ -420,13 +418,11 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
                 if (_animationsEnabled) {
                   _navigationViewController.animateCamera(
                     cameraUpdate,
-                    duration:
-                        _animationDuration != null
-                            ? Duration(milliseconds: _animationDuration!)
-                            : null,
-                    onFinished:
-                        (bool success) =>
-                            _showAnimationFinishedMessage(success),
+                    duration: _animationDuration != null
+                        ? Duration(milliseconds: _animationDuration!)
+                        : null,
+                    onFinished: (bool success) =>
+                        _showAnimationFinishedMessage(success),
                   );
                 } else {
                   _navigationViewController.moveCamera(cameraUpdate);
@@ -452,13 +448,11 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
                 if (_animationsEnabled) {
                   _navigationViewController.animateCamera(
                     cameraUpdate,
-                    duration:
-                        _animationDuration != null
-                            ? Duration(milliseconds: _animationDuration!)
-                            : null,
-                    onFinished:
-                        (bool success) =>
-                            _showAnimationFinishedMessage(success),
+                    duration: _animationDuration != null
+                        ? Duration(milliseconds: _animationDuration!)
+                        : null,
+                    onFinished: (bool success) =>
+                        _showAnimationFinishedMessage(success),
                   );
                 } else {
                   _navigationViewController.moveCamera(cameraUpdate);
@@ -477,12 +471,11 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
             if (_animationsEnabled) {
               _navigationViewController.animateCamera(
                 cameraUpdate,
-                duration:
-                    _animationDuration != null
-                        ? Duration(milliseconds: _animationDuration!)
-                        : null,
-                onFinished:
-                    (bool success) => _showAnimationFinishedMessage(success),
+                duration: _animationDuration != null
+                    ? Duration(milliseconds: _animationDuration!)
+                    : null,
+                onFinished: (bool success) =>
+                    _showAnimationFinishedMessage(success),
               );
             } else {
               _navigationViewController.moveCamera(cameraUpdate);
@@ -501,13 +494,11 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
                 if (_animationsEnabled) {
                   _navigationViewController.animateCamera(
                     cameraUpdate,
-                    duration:
-                        _animationDuration != null
-                            ? Duration(milliseconds: _animationDuration!)
-                            : null,
-                    onFinished:
-                        (bool success) =>
-                            _showAnimationFinishedMessage(success),
+                    duration: _animationDuration != null
+                        ? Duration(milliseconds: _animationDuration!)
+                        : null,
+                    onFinished: (bool success) =>
+                        _showAnimationFinishedMessage(success),
                   );
                 } else {
                   _navigationViewController.moveCamera(cameraUpdate);
@@ -524,13 +515,11 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
                 if (_animationsEnabled) {
                   _navigationViewController.animateCamera(
                     cameraUpdate,
-                    duration:
-                        _animationDuration != null
-                            ? Duration(milliseconds: _animationDuration!)
-                            : null,
-                    onFinished:
-                        (bool success) =>
-                            _showAnimationFinishedMessage(success),
+                    duration: _animationDuration != null
+                        ? Duration(milliseconds: _animationDuration!)
+                        : null,
+                    onFinished: (bool success) =>
+                        _showAnimationFinishedMessage(success),
                   );
                 } else {
                   _navigationViewController.moveCamera(cameraUpdate);
@@ -551,13 +540,11 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
                 if (_animationsEnabled) {
                   _navigationViewController.animateCamera(
                     cameraUpdate,
-                    duration:
-                        _animationDuration != null
-                            ? Duration(milliseconds: _animationDuration!)
-                            : null,
-                    onFinished:
-                        (bool success) =>
-                            _showAnimationFinishedMessage(success),
+                    duration: _animationDuration != null
+                        ? Duration(milliseconds: _animationDuration!)
+                        : null,
+                    onFinished: (bool success) =>
+                        _showAnimationFinishedMessage(success),
                   );
                 } else {
                   _navigationViewController.moveCamera(cameraUpdate);
@@ -572,13 +559,11 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
                 if (_animationsEnabled) {
                   _navigationViewController.animateCamera(
                     cameraUpdate,
-                    duration:
-                        _animationDuration != null
-                            ? Duration(milliseconds: _animationDuration!)
-                            : null,
-                    onFinished:
-                        (bool success) =>
-                            _showAnimationFinishedMessage(success),
+                    duration: _animationDuration != null
+                        ? Duration(milliseconds: _animationDuration!)
+                        : null,
+                    onFinished: (bool success) =>
+                        _showAnimationFinishedMessage(success),
                   );
                 } else {
                   _navigationViewController.moveCamera(cameraUpdate);
@@ -594,13 +579,11 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
                 if (_animationsEnabled) {
                   _navigationViewController.animateCamera(
                     cameraUpdate,
-                    duration:
-                        _animationDuration != null
-                            ? Duration(milliseconds: _animationDuration!)
-                            : null,
-                    onFinished:
-                        (bool success) =>
-                            _showAnimationFinishedMessage(success),
+                    duration: _animationDuration != null
+                        ? Duration(milliseconds: _animationDuration!)
+                        : null,
+                    onFinished: (bool success) =>
+                        _showAnimationFinishedMessage(success),
                   );
                 } else {
                   _navigationViewController.moveCamera(cameraUpdate);
@@ -616,19 +599,17 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
           spacing: 10,
           children: <Widget>[
             ElevatedButton(
-              onPressed:
-                  _navigationRunning
-                      ? () => _stopNavigation()
-                      : () => _startNavigation(),
+              onPressed: _navigationRunning
+                  ? () => _stopNavigation()
+                  : () => _startNavigation(),
               child: Text(
                 _navigationRunning ? 'Stop navigation' : 'Start navigation',
               ),
             ),
             ElevatedButton(
-              onPressed:
-                  _navigationRunning
-                      ? () => _navigationViewController.showRouteOverview()
-                      : null,
+              onPressed: _navigationRunning
+                  ? () => _navigationViewController.showRouteOverview()
+                  : null,
               child: const Text('Route overview'),
             ),
           ],
@@ -639,56 +620,52 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
           children: <Widget>[
             ElevatedButton(
               style: threeButtonRowStyle,
-              onPressed:
-                  _navigationRunning
-                      ? () {
-                        _navigationViewController.followMyLocation(
-                          CameraPerspective.tilted,
-                        );
+              onPressed: _navigationRunning
+                  ? () {
+                      _navigationViewController.followMyLocation(
+                        CameraPerspective.tilted,
+                      );
 
-                        hideMessage();
-                      }
-                      : null,
+                      hideMessage();
+                    }
+                  : null,
               child: const Text('Tilted'),
             ),
             ElevatedButton(
               style: threeButtonRowStyle,
-              onPressed:
-                  _navigationRunning
-                      ? () {
-                        _navigationViewController.followMyLocation(
-                          CameraPerspective.topDownHeadingUp,
-                        );
-                        hideMessage();
-                      }
-                      : null,
+              onPressed: _navigationRunning
+                  ? () {
+                      _navigationViewController.followMyLocation(
+                        CameraPerspective.topDownHeadingUp,
+                      );
+                      hideMessage();
+                    }
+                  : null,
               child: const Text('Heading up'),
             ),
             ElevatedButton(
               style: threeButtonRowStyle,
-              onPressed:
-                  _navigationRunning
-                      ? () {
-                        _navigationViewController.followMyLocation(
-                          CameraPerspective.topDownNorthUp,
-                        );
-                        hideMessage();
-                      }
-                      : null,
+              onPressed: _navigationRunning
+                  ? () {
+                      _navigationViewController.followMyLocation(
+                        CameraPerspective.topDownNorthUp,
+                      );
+                      hideMessage();
+                    }
+                  : null,
               child: const Text('North up'),
             ),
             ElevatedButton(
               style: threeButtonRowStyle,
-              onPressed:
-                  _navigationRunning
-                      ? () {
-                        _navigationViewController.followMyLocation(
-                          CameraPerspective.tilted,
-                          zoomLevel: 10.0,
-                        );
-                        hideMessage();
-                      }
-                      : null,
+              onPressed: _navigationRunning
+                  ? () {
+                      _navigationViewController.followMyLocation(
+                        CameraPerspective.tilted,
+                        zoomLevel: 10.0,
+                      );
+                      hideMessage();
+                    }
+                  : null,
               child: const Text('Tilted with custom zoom'),
             ),
           ],
@@ -696,8 +673,8 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
         const SizedBox(height: 24.0),
         ElevatedButton(
           onPressed: () async {
-            final CameraPosition position =
-                await _navigationViewController.getCameraPosition();
+            final CameraPosition position = await _navigationViewController
+                .getCameraPosition();
 
             // Hide overlay to show the message.
             hideOverlay();

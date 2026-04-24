@@ -226,7 +226,7 @@ jobs:
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
       PATROL_ANALYTICS_ENABLED: false
-      patrol_cli_version: "3.10.0"
+      patrol_cli_version: "4.3.1"
       working_directory: "example"
     steps:
       - name: Fail if workflow has no access to API key
@@ -288,17 +288,17 @@ jobs:
       - name: Create and start emulator
         run: |
           echo "Installing system image..."
-          echo "y" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "system-images;android-30;google_apis;x86_64"
+          echo "y" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "system-images;android-35;google_atd;x86_64"
 
           echo "Setting ANDROID_AVD_HOME"
           export ANDROID_AVD_HOME=$HOME/.config/.android/avd
           mkdir -p $ANDROID_AVD_HOME
 
           echo "Creating AVD..."
-          echo "no" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/avdmanager create avd -n test_emulator -k "system-images;android-30;google_apis;x86_64" --force
+          echo "no" | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/avdmanager create avd -n test_emulator -k "system-images;android-35;google_atd;x86_64" --force
 
           echo "Starting emulator"
-          $ANDROID_SDK_ROOT/emulator/emulator -avd test_emulator -no-audio -no-boot-anim -no-window -no-snapshot &
+          $ANDROID_SDK_ROOT/emulator/emulator -avd test_emulator -no-audio -no-boot-anim -no-window -no-snapshot -gpu swiftshader_indirect &
           adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done; input keyevent 82'
           adb devices
       - name: Generate gradlew file with flutter build
@@ -307,7 +307,7 @@ jobs:
       - name: Run integration tests
         working-directory: ${{ env.working_directory }}
         run: |
-          patrol test ${{ runner.debug && '--show-flutter-logs --verbose' || '' }}
+          patrol test --dart-define=IS_CI=true ${{ runner.debug && '--show-flutter-logs --verbose' || '' }}
       - name: Upload test report
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
@@ -326,7 +326,7 @@ jobs:
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
       PATROL_ANALYTICS_ENABLED: false
-      patrol_cli_version: "3.10.0"
+      patrol_cli_version: "4.3.1"
       working_directory: "example"
       IOS_VERSION: "26.2"
     steps:
@@ -395,7 +395,7 @@ jobs:
         id: tests_step
         working-directory: ${{ env.working_directory }}
         run: |
-          patrol test --dart-define=MAPS_API_KEY="$MAPS_API_KEY" --ios=$IOS_VERSION ${{ runner.debug && '--show-flutter-logs --verbose' || '' }} -d "$DEVICE_ID"
+          patrol test --dart-define=MAPS_API_KEY="$MAPS_API_KEY" --dart-define=IS_CI=true --ios=$IOS_VERSION ${{ runner.debug && '--show-flutter-logs --verbose' || '' }} -d "$DEVICE_ID"
       - name: Upload test report
         uses: actions/upload-artifact@v4
         if: ${{ always() }}

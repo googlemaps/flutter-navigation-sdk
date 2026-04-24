@@ -1089,12 +1089,24 @@ void main() {
             preferredSegmentHeading: 50,
           );
 
-          when(
-            sessionMockApi.continueToNextDestination(),
-          ).thenReturn(targetWaypointIn);
-          final NavigationWaypoint? waypointOut =
+          when(sessionMockApi.continueToNextDestination()).thenAnswer(
+            (_) async => ContinueToNextDestinationResponseDto(
+              waypoint: targetWaypointIn,
+              // routeStatus is only available on iOS; Android always returns null.
+              routeStatus: platform is GoogleMapsNavigationIOS
+                  ? RouteStatusDto.statusOk
+                  : null,
+            ),
+          );
+          final ContinueToNextDestinationResponse response =
               await GoogleMapsNavigator.continueToNextDestination();
-          expect(waypointOut, isNotNull);
+          if (platform is GoogleMapsNavigationIOS) {
+            expect(response.routeStatus, NavigationRouteStatus.statusOk);
+          } else {
+            expect(response.routeStatus, isNull);
+          }
+          expect(response.waypoint, isNotNull);
+          final NavigationWaypoint? waypointOut = response.waypoint;
           if (waypointOut != null) {
             expect(targetWaypointIn.title, waypointOut.title);
             expect(

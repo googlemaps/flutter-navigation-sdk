@@ -74,7 +74,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   static const int _userLocationTimeoutMS = 1500;
 
   /// Speed multiplier used for simulation.
-  static const double simulationSpeedMultiplier = 9.0;
+  static const double simulationSpeedMultiplier = 5.0;
 
   /// Navigation view controller used to interact with the navigation view.
   GoogleNavigationViewController? _navigationViewController;
@@ -233,19 +233,34 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   }
 
   Future<void> _initializeNavigator() async {
-    assert(_termsAndConditionsAccepted, 'Terms must be accepted');
-    assert(
-      _locationPermissionsAccepted,
-      'Location permissions must be granted',
-    );
-
     if (!_navigatorInitialized) {
       debugPrint('Initializing new navigation session...');
-      await GoogleMapsNavigator.initializeNavigationSession();
+      try {
+        await GoogleMapsNavigator.initializeNavigationSession();
+      } on SessionInitializationException catch (e) {
+        switch (e.code) {
+          case SessionInitializationError.termsNotAccepted:
+            _showMessage(
+              'Terms not accepted. Please accept the terms and conditions first.',
+            );
+            await _updateTermsAcceptedState();
+          case SessionInitializationError.locationPermissionMissing:
+            _showMessage(
+              'Location permission missing. Please grant location permission.',
+            );
+            _locationPermissionsAccepted = false;
+          case SessionInitializationError.notAuthorized:
+            _showMessage(
+              'Not authorized. Your API key is empty, invalid or not authorized to use Navigation.',
+            );
+        }
+        setState(() {});
+        return;
+      }
       await _setupListeners();
       await _updateNavigatorInitializationState();
       await _restorePossibleNavigatorState();
-      unawaited(_setDefaultUserLocationAfterDelay());
+      unawaited(_simulateDefaultUserLocationAfterDelay());
       debugPrint('Navigator has been initialized: $_navigatorInitialized');
     }
     setState(() {});
@@ -278,14 +293,17 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   /// iOS emulator does not update location and does not fire roadsnapping
   /// events. Initialize user location to [cameraLocationMIT] if user
   /// location is not available after timeout.
-  Future<void> _setDefaultUserLocationAfterDelay() async {
+  Future<void> _simulateDefaultUserLocationAfterDelay() async {
     Future<void>.delayed(
       const Duration(milliseconds: _userLocationTimeoutMS),
       () async {
         if (mounted && _userLocation == null) {
-          _userLocation =
-              await _navigationViewController?.getMyLocation() ??
-              cameraLocationMIT;
+          final LatLng? deviceLocation = await _navigationViewController
+              ?.getMyLocation();
+          _userLocation = deviceLocation ?? cameraLocationMIT;
+          if (deviceLocation == null) {
+            await _simulateStationaryUserLocation(_userLocation);
+          }
           if (mounted) {
             setState(() {});
           }
@@ -588,28 +606,28 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   Future<void> _getInitialViewStates() async {
     assert(_navigationViewController != null);
     if (_navigationViewController != null) {
-      final bool navigationHeaderEnabled =
-          await _navigationViewController!.isNavigationHeaderEnabled();
-      final bool navigationFooterEnabled =
-          await _navigationViewController!.isNavigationFooterEnabled();
+      final bool navigationHeaderEnabled = await _navigationViewController!
+          .isNavigationHeaderEnabled();
+      final bool navigationFooterEnabled = await _navigationViewController!
+          .isNavigationFooterEnabled();
       final bool navigationTripProgressBarEnabled =
           await _navigationViewController!.isNavigationTripProgressBarEnabled();
-      final bool navigationUIEnabled =
-          await _navigationViewController!.isNavigationUIEnabled();
-      final bool recenterButtonEnabled =
-          await _navigationViewController!.isRecenterButtonEnabled();
-      final bool speedometerEnabled =
-          await _navigationViewController!.isSpeedometerEnabled();
-      final bool speedLimitIconEnabled =
-          await _navigationViewController!.isSpeedLimitIconEnabled();
-      final bool trafficIndicentCardsEnabled =
-          await _navigationViewController!.isTrafficIncidentCardsEnabled();
-      final bool trafficPromptsEnabled =
-          await _navigationViewController!.isTrafficPromptsEnabled();
-      final bool reportIncidentButtonEnabled =
-          await _navigationViewController!.isReportIncidentButtonEnabled();
-      final bool buildingsEnabled =
-          await _navigationViewController!.isBuildingsEnabled();
+      final bool navigationUIEnabled = await _navigationViewController!
+          .isNavigationUIEnabled();
+      final bool recenterButtonEnabled = await _navigationViewController!
+          .isRecenterButtonEnabled();
+      final bool speedometerEnabled = await _navigationViewController!
+          .isSpeedometerEnabled();
+      final bool speedLimitIconEnabled = await _navigationViewController!
+          .isSpeedLimitIconEnabled();
+      final bool trafficIndicentCardsEnabled = await _navigationViewController!
+          .isTrafficIncidentCardsEnabled();
+      final bool trafficPromptsEnabled = await _navigationViewController!
+          .isTrafficPromptsEnabled();
+      final bool reportIncidentButtonEnabled = await _navigationViewController!
+          .isReportIncidentButtonEnabled();
+      final bool buildingsEnabled = await _navigationViewController!
+          .isBuildingsEnabled();
 
       setState(() {
         _navigationHeaderEnabled = navigationHeaderEnabled;
@@ -818,10 +836,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       });
       _nextWaypointIndex += 1;
       // Use POI name if available, otherwise use generic waypoint title
-      final String waypointTitle =
-          _lastClickedPoi != null
-              ? '${_lastClickedPoi!.name} (Waypoint $_nextWaypointIndex)'
-              : 'Waypoint $_nextWaypointIndex';
+      final String waypointTitle = _lastClickedPoi != null
+          ? '${_lastClickedPoi!.name} (Waypoint $_nextWaypointIndex)'
+          : 'Waypoint $_nextWaypointIndex';
       _waypoints.add(
         NavigationWaypoint.withLatLngTarget(
           title: waypointTitle,
@@ -906,12 +923,6 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     );
 
     if (waypointIndex >= 0) {
-      // Pause simulation when arriving at any waypoint to preserve location
-      if (_simulationState != SimulationState.notRunning) {
-        await _pauseSimulation();
-        await _simulateUserLocation(_waypoints[waypointIndex].target);
-      }
-
       // Remove the corresponding destination marker.
       if (waypointIndex < _destinationWaypointMarkers.length) {
         final Marker markerToRemove =
@@ -933,29 +944,36 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     if (_waypoints.isEmpty) {
       debugPrint('Arrived to final destination, stopping navigation.');
 
-      // If there is no next waypoint, it means we have arrived at the final
-      // destination. Stop navigation completely.
-      await _stopGuidedNavigation();
+      // Stop guidance but keep navigation session active
+      await _stopGuidance();
+      await GoogleMapsNavigator.clearDestinations();
 
       _showMessage('You have arrived at your final destination!');
     } else {
-      debugPrint('Arrived at waypoint, waiting for user to continue...');
+      debugPrint('Waiting for user to continue to the next waypoint...');
 
       // Stop guidance but keep navigation session active
       await _stopGuidance();
-
-      // Set state to waiting for user to continue
-      setState(() {
-        _waitingForUserToContinue = true;
-        _arrivedWaypoint = waypoint;
-      });
 
       _showMessage(
         'You have arrived at ${waypoint.title}. Tap "Continue guidance" to proceed to the next destination.',
       );
     }
 
-    setState(() {});
+    // Simulate user location to the arrived waypoint target if simulation is
+    // running, to keep the user location simulated.
+    // Otherwise user location will reset to the device location, which can be
+    // far from the arrived waypoint, and can cause unexpected behavior on
+    // simulating navigation between multiple waypoints.
+    if (_simulationState != SimulationState.notRunning) {
+      await _simulateStationaryUserLocation(waypoint.target);
+    }
+
+    // Set state to waiting for user to continue
+    setState(() {
+      _waitingForUserToContinue = _waypoints.isNotEmpty;
+      _arrivedWaypoint = waypoint;
+    });
   }
 
   /// Continue guidance to the next destination.
@@ -966,35 +984,40 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
     debugPrint('Continuing guidance to next destination...');
 
-    // Update destinations with the remaining waypoints.
-    final Destinations? updatedDestinations = _buildDestinations();
-    if (updatedDestinations != null) {
-      if (_simulationState != SimulationState.notRunning) {
-        // If simulation was active set the simulation state to waiting for new
-        // route, so that simulation is continued automatically when the new
-        // route is ready after setting the new destinations.
-        _simulationState = SimulationState.waitingNewRoute;
-      }
-      final NavigationRouteStatus status =
-          await GoogleMapsNavigator.setDestinations(updatedDestinations);
-      if (status == NavigationRouteStatus.statusOk) {
-        // Start guidance again
-        await _startGuidance();
+    final ContinueToNextDestinationResponse response =
+        await GoogleMapsNavigator.continueToNextDestination();
 
-        setState(() {
-          _waitingForUserToContinue = false;
-          _arrivedWaypoint = null;
-        });
-
-        _showMessage('Continuing to next destination...');
-      } else {
-        _stopGuidance();
-        _stopSimulation();
-        _showMessage(
-          'Failed to continue to next destination. Please try again.',
-        );
-      }
+    // Check route status if available (iOS).
+    if (response.routeStatus != null &&
+        response.routeStatus != NavigationRouteStatus.statusOk) {
+      _stopGuidance();
+      _stopSimulation();
+      _showMessage(
+        'Failed to continue to next destination: ${response.routeStatus}',
+      );
+      return;
     }
+
+    if (response.waypoint == null) {
+      debugPrint('No more waypoints remaining.');
+      await _stopGuidedNavigation();
+      _showMessage('No more waypoints remaining.');
+      return;
+    }
+
+    // Start guidance again
+    await _startGuidance();
+
+    if (_simulationState != SimulationState.notRunning) {
+      await _startSimulation();
+    }
+
+    setState(() {
+      _waitingForUserToContinue = false;
+      _arrivedWaypoint = null;
+    });
+
+    _showMessage('Continuing to next destination...');
   }
 
   Future<void> _clearNavigationWaypoints() async {
@@ -1015,10 +1038,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     }
 
     // If route tokens are enabled, build destinations with route tokens.
-    final Destinations? destinations =
-        _routeTokensEnabled
-            ? (await _buildDestinationsWithRoutesApi())
-            : _buildDestinations();
+    final Destinations? destinations = _routeTokensEnabled
+        ? (await _buildDestinationsWithRoutesApi())
+        : _buildDestinations();
 
     if (destinations == null) {
       // Failed to build destinations.
@@ -1193,7 +1215,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       final LatLng? myLocation =
           _userLocation ?? await _navigationViewController!.getMyLocation();
       if (myLocation != null) {
-        await _simulateUserLocation(myLocation);
+        await _simulateStationaryUserLocation(myLocation);
       }
 
       await GoogleMapsNavigator.simulator
@@ -1207,10 +1229,16 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     }
   }
 
-  Future<void> _simulateUserLocation(LatLng? location) async {
+  Future<void> _simulateStationaryUserLocation(LatLng? location) async {
     if (location == null) {
       return;
     }
+
+    // Stop simulation if it's already running to prevent conflicts.
+    if (_simulationState != SimulationState.notRunning) {
+      await _stopSimulation();
+    }
+
     await GoogleMapsNavigator.simulator.setUserLocation(location);
   }
 
@@ -1293,46 +1321,43 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
             children: <Widget>[
               _topBarControls,
               Expanded(
-                child:
-                    _navigatorInitializedAtLeastOnce && _userLocation != null
-                        ? GoogleMapsNavigationView(
-                          onViewCreated: _onViewCreated,
-                          onMapClicked: _onMapClicked,
-                          onMapLongClicked: _onMapClicked,
-                          onPoiClicked: _onPoiClicked,
-                          onRecenterButtonClicked:
-                              _onRecenterButtonClickedEvent,
-                          onNavigationUIEnabledChanged:
-                              _onNavigationUIEnabledChanged,
-                          onPromptVisibilityChanged: _onPromptVisibilityChanged,
-                          initialCameraPosition: CameraPosition(
-                            // Initialize map to user location.
-                            target: _userLocation!,
-                            zoom: 15,
-                          ),
-                          initialNavigationUIEnabledPreference:
-                              _guidanceRunning
-                                  ? NavigationUIEnabledPreference.automatic
-                                  : NavigationUIEnabledPreference.disabled,
-                          initialPadding: const EdgeInsets.all(0),
-                          mapId: MapIdManager.instance.mapId,
-                          initialMapColorScheme: _mapColorScheme,
-                          initialForceNightMode: _forceNightMode,
-                        )
-                        : const Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Text('Waiting navigator and user location'),
-                              SizedBox(height: 10),
-                              SizedBox(
-                                width: 30,
-                                height: 30,
-                                child: CircularProgressIndicator(),
-                              ),
-                            ],
-                          ),
+                child: _navigatorInitializedAtLeastOnce && _userLocation != null
+                    ? GoogleMapsNavigationView(
+                        onViewCreated: _onViewCreated,
+                        onMapClicked: _onMapClicked,
+                        onMapLongClicked: _onMapClicked,
+                        onPoiClicked: _onPoiClicked,
+                        onRecenterButtonClicked: _onRecenterButtonClickedEvent,
+                        onNavigationUIEnabledChanged:
+                            _onNavigationUIEnabledChanged,
+                        onPromptVisibilityChanged: _onPromptVisibilityChanged,
+                        initialCameraPosition: CameraPosition(
+                          // Initialize map to user location.
+                          target: _userLocation!,
+                          zoom: 15,
                         ),
+                        initialNavigationUIEnabledPreference: _guidanceRunning
+                            ? NavigationUIEnabledPreference.automatic
+                            : NavigationUIEnabledPreference.disabled,
+                        initialPadding: const EdgeInsets.all(0),
+                        mapId: MapIdManager.instance.mapId,
+                        initialMapColorScheme: _mapColorScheme,
+                        initialForceNightMode: _forceNightMode,
+                      )
+                    : const Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text('Waiting navigator and user location'),
+                            SizedBox(height: 10),
+                            SizedBox(
+                              width: 30,
+                              height: 30,
+                              child: CircularProgressIndicator(),
+                            ),
+                          ],
+                        ),
+                      ),
               ),
               if (_navigationViewController != null) bottomControls,
             ],
@@ -1430,11 +1455,18 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   ),
               ],
             ),
-          if (_waypoints.isEmpty)
+          if (_waypoints.isEmpty) ...[
             const Padding(
               padding: EdgeInsets.all(15),
               child: Text('Click on the map to add waypoints'),
             ),
+            if (_arrivedWaypoint != null)
+              ElevatedButton(
+                onPressed: _validRoute ? _stopGuidedNavigation : null,
+                child: const Text('End navigation session'),
+              ),
+          ],
+
           Wrap(
             alignment: WrapAlignment.center,
             spacing: 10,
@@ -1446,10 +1478,10 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
               ElevatedButton(
                 onPressed:
                     _waypoints.isNotEmpty &&
-                            !_guidanceRunning &&
-                            !_waitingForUserToContinue
-                        ? () => _clearNavigationWaypoints()
-                        : null,
+                        !_guidanceRunning &&
+                        !_waitingForUserToContinue
+                    ? () => _clearNavigationWaypoints()
+                    : null,
                 child: const Text('Clear waypoints'),
               ),
               getOptionsButton(context, onPressed: () => toggleOverlay()),
@@ -1635,15 +1667,15 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                 spacing: 10,
                 children: <Widget>[
                   ElevatedButton(
-                    onPressed:
-                        !_termsAndConditionsAccepted
-                            ? () => _showTermsAndConditionsDialogIfNeeded()
-                            : null,
+                    onPressed: !_termsAndConditionsAccepted
+                        ? () => _showTermsAndConditionsDialogIfNeeded()
+                        : null,
                     child: const Text('Show TOS'),
                   ),
                   ElevatedButton(
-                    onPressed:
-                        _termsAndConditionsAccepted ? () => _resetTOS() : null,
+                    onPressed: _termsAndConditionsAccepted
+                        ? () => _resetTOS()
+                        : null,
                     child: const Text('Reset TOS'),
                   ),
                 ],
@@ -1661,33 +1693,28 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                 spacing: 10,
                 children: <Widget>[
                   ElevatedButton(
-                    onPressed:
-                        !_navigatorInitialized
-                            ? () => _initializeNavigator()
-                            : null,
+                    onPressed: !_navigatorInitialized
+                        ? () => _initializeNavigator()
+                        : null,
                     child: const Text('Start navigation'),
                   ),
                   ElevatedButton(
-                    onPressed:
-                        _navigatorInitialized
-                            ? () => _stopGuidedNavigation()
-                            : null,
+                    onPressed: _navigatorInitialized
+                        ? () => _stopGuidedNavigation()
+                        : null,
                     child: const Text('Stop navigation'),
                   ),
                   ElevatedButton(
-                    onPressed:
-                        _navigatorInitialized
-                            ? (_guidanceRunning
-                                ? _stopGuidance
-                                : _startGuidance)
-                            : null,
+                    onPressed: _navigatorInitialized
+                        ? (_guidanceRunning ? _stopGuidance : _startGuidance)
+                        : null,
                     child: Text(
                       _guidanceRunning ? 'Stop guidance' : 'Start guidance',
                     ),
                   ),
                   ElevatedButton(
-                    onPressed:
-                        () => _showNavigationEventListenerCallCounts(context),
+                    onPressed: () =>
+                        _showNavigationEventListenerCallCounts(context),
                     child: const Text('Show listeners'),
                   ),
                   ElevatedButton(
@@ -1695,22 +1722,21 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     child: const Text('Show native navigator state'),
                   ),
                   ElevatedButton(
-                    onPressed:
-                        _waypoints.isNotEmpty ? _displayRouteSegments : null,
+                    onPressed: _waypoints.isNotEmpty
+                        ? _displayRouteSegments
+                        : null,
                     child: const Text('Display route segments'),
                   ),
                   ElevatedButton(
-                    onPressed:
-                        _waypoints.isNotEmpty
-                            ? _displayCurrentRouteSegment
-                            : null,
+                    onPressed: _waypoints.isNotEmpty
+                        ? _displayCurrentRouteSegment
+                        : null,
                     child: const Text('Display current route segment'),
                   ),
                   ElevatedButton(
-                    onPressed:
-                        _waypoints.isNotEmpty && _guidanceRunning
-                            ? _displayTraveledRoute
-                            : null,
+                    onPressed: _waypoints.isNotEmpty && _guidanceRunning
+                        ? _displayTraveledRoute
+                        : null,
                     child: const Text('Display travelled route'),
                   ),
                   ExampleSwitch(
@@ -1725,10 +1751,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   ExampleSwitch(
                     title: 'Use route tokens',
                     initialValue: _routeTokensEnabled,
-                    onChanged:
-                        _guidanceRunning
-                            ? null
-                            : (bool value) => _setRouteTokensEnabled(value),
+                    onChanged: _guidanceRunning
+                        ? null
+                        : (bool value) => _setRouteTokensEnabled(value),
                   ),
                   ExampleSwitch(
                     title: 'Turn by turn events',
@@ -2185,22 +2210,19 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   spacing: 10,
                   children: <Widget>[
                     ElevatedButton(
-                      onPressed:
-                          () => _navigationViewController!.showRouteOverview(),
+                      onPressed: () =>
+                          _navigationViewController!.showRouteOverview(),
                       child: const Text('Route overview'),
                     ),
                     ElevatedButton(
-                      onPressed:
-                          () => _navigationViewController!.followMyLocation(
-                            CameraPerspective.tilted,
-                          ),
+                      onPressed: () => _navigationViewController!
+                          .followMyLocation(CameraPerspective.tilted),
                       child: const Text('Follow my location'),
                     ),
                     ElevatedButton(
                       onPressed: () async {
-                        final bool available =
-                            await _navigationViewController!
-                                .isIncidentReportingAvailable();
+                        final bool available = await _navigationViewController!
+                            .isIncidentReportingAvailable();
                         if (available) {
                           await _navigationViewController!
                               .showReportIncidentsPanel();
@@ -2214,9 +2236,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     ),
                     ElevatedButton(
                       onPressed: () async {
-                        final bool available =
-                            await _navigationViewController!
-                                .isIncidentReportingAvailable();
+                        final bool available = await _navigationViewController!
+                            .isIncidentReportingAvailable();
                         _showMessage(
                           'Incident reporting available: $available',
                         );
@@ -2322,12 +2343,11 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
             child: Icon(
               icon,
               size: 30,
-              color:
-                  enabled
-                      ? (isSelected
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.secondary)
-                      : Theme.of(context).colorScheme.secondary.withAlpha(128),
+              color: enabled
+                  ? (isSelected
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.secondary)
+                  : Theme.of(context).colorScheme.secondary.withAlpha(128),
             ),
           ),
           if (isSelected)
@@ -2398,7 +2418,10 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     if (isOverlayVisible) {
       showOverlaySnackBar(message);
     } else {
-      final SnackBar snackBar = SnackBar(content: Text(message));
+      final SnackBar snackBar = SnackBar(
+        content: Text(message),
+        duration: Duration(milliseconds: 1500),
+      );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }

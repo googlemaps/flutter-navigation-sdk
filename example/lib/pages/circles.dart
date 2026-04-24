@@ -62,8 +62,8 @@ class _CirclesPageState extends ExamplePageState<CirclesPage> {
 
   Future<void> _addCircle() async {
     // Add circle on the current camera position.
-    final LatLngBounds cameraBounds =
-        await _navigationViewController.getVisibleRegion();
+    final LatLngBounds cameraBounds = await _navigationViewController
+        .getVisibleRegion();
 
     final LatLng centerPoint = cameraBounds.center;
 
@@ -103,10 +103,9 @@ class _CirclesPageState extends ExamplePageState<CirclesPage> {
     final Circle? circle = circles.firstOrNull;
     if (circle != null) {
       setState(() {
-        _circles =
-            _circles
-                .where((Circle element) => element != _selectedCircle)
-                .toList();
+        _circles = _circles
+            .where((Circle element) => element != _selectedCircle)
+            .toList();
         _selectedCircle = circle;
         _circles = _circles + <Circle>[circle];
       });
@@ -123,10 +122,9 @@ class _CirclesPageState extends ExamplePageState<CirclesPage> {
     }
 
     setState(() {
-      _circles =
-          _circles
-              .where((Circle element) => element != _selectedCircle)
-              .toList();
+      _circles = _circles
+          .where((Circle element) => element != _selectedCircle)
+          .toList();
       _selectedCircle = null;
     });
   }
@@ -287,8 +285,9 @@ class _CirclesPageState extends ExamplePageState<CirclesPage> {
                 child: const Text('Add circle'),
               ),
               ElevatedButton(
-                onPressed:
-                    _selectedCircle == null ? null : () => _removeCircle(),
+                onPressed: _selectedCircle == null
+                    ? null
+                    : () => _removeCircle(),
                 child: const Text('Remove circle'),
               ),
               ElevatedButton(
@@ -296,37 +295,40 @@ class _CirclesPageState extends ExamplePageState<CirclesPage> {
                 child: Text('Radius: ${_selectedCircle?.options.radius}'),
               ),
               ElevatedButton(
-                onPressed:
-                    _selectedCircle == null ? null : () => _setFillColor(),
+                onPressed: _selectedCircle == null
+                    ? null
+                    : () => _setFillColor(),
                 child: Text(
                   'Fill color: ${_colorName(_selectedCircle?.options.fillColor)}',
                 ),
               ),
               ElevatedButton(
-                onPressed:
-                    _selectedCircle == null ? null : () => _setStrokeColor(),
+                onPressed: _selectedCircle == null
+                    ? null
+                    : () => _setStrokeColor(),
                 child: Text(
                   'Stroke color: ${_colorName(_selectedCircle?.options.strokeColor)}',
                 ),
               ),
               ElevatedButton(
-                onPressed:
-                    _selectedCircle == null ? null : () => _setStrokeWidth(),
+                onPressed: _selectedCircle == null
+                    ? null
+                    : () => _setStrokeWidth(),
                 child: Text(
                   'Stroke width: ${_selectedCircle?.options.strokeWidth}',
                 ),
               ),
               if (Platform.isAndroid)
                 ElevatedButton(
-                  onPressed:
-                      _selectedCircle == null
-                          ? null
-                          : () => _setStrokePattern(),
+                  onPressed: _selectedCircle == null
+                      ? null
+                      : () => _setStrokePattern(),
                   child: const Text('Change stroke pattern'),
                 ),
               ElevatedButton(
-                onPressed:
-                    _selectedCircle == null ? null : () => _toggleVisibility(),
+                onPressed: _selectedCircle == null
+                    ? null
+                    : () => _toggleVisibility(),
                 child: Text('Visibility: ${_selectedCircle?.options.visible}'),
               ),
               ElevatedButton(
@@ -334,16 +336,15 @@ class _CirclesPageState extends ExamplePageState<CirclesPage> {
                 child: Text('Z-index: ${_selectedCircle?.options.zIndex}'),
               ),
               ElevatedButton(
-                onPressed:
-                    _circles.isNotEmpty
-                        ? () {
-                          setState(() {
-                            _navigationViewController.clearCircles();
-                            _circles.clear();
-                            _selectedCircle = null;
-                          });
-                        }
-                        : null,
+                onPressed: _circles.isNotEmpty
+                    ? () {
+                        setState(() {
+                          _navigationViewController.clearCircles();
+                          _circles.clear();
+                          _selectedCircle = null;
+                        });
+                      }
+                    : null,
                 child: const Text('Clear all'),
               ),
             ],

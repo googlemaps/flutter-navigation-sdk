@@ -251,15 +251,11 @@ class NavigationSessionAPIImpl {
   }
 
   /// Continues to next waypoint.
-  @Deprecated('Use setDestinations with an updated list of waypoints instead')
-  Future<NavigationWaypoint?> continueToNextDestination() async {
+  Future<ContinueToNextDestinationResponse> continueToNextDestination() async {
     try {
-      final NavigationWaypointDto? waypointDto = await _sessionApi
+      final ContinueToNextDestinationResponseDto responseDto = await _sessionApi
           .continueToNextDestination();
-      if (waypointDto == null) {
-        return null;
-      }
-      return waypointDto.toNavigationWaypoint();
+      return responseDto.toContinueToNextDestinationResponse();
     } on PlatformException catch (e) {
       switch (e.code) {
         case 'sessionNotInitialized':

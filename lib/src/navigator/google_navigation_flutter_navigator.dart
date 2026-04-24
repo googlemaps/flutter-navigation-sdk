@@ -639,6 +639,9 @@ class GoogleMapsNavigator {
   ///
   /// If the options are omitted, the default routing and display options will
   /// be used.
+  ///
+  /// When navigating to multiple waypoints, use [continueToNextDestination]
+  /// to advance to the next waypoint.
   static Future<NavigationRouteStatus> setDestinations(
     Destinations destinations,
   ) {
@@ -658,10 +661,9 @@ class GoogleMapsNavigator {
   /// Following this call, guidance will be toward the next destination,
   /// and information about the old destination is not available.
   ///
-  /// Deprecated: Use [setDestinations] with an updated list of waypoints
-  /// instead. This approach provides better control over the navigation route.
-  @Deprecated('Use setDestinations with an updated list of waypoints instead')
-  static Future<NavigationWaypoint?> continueToNextDestination() {
+  /// Returns a [ContinueToNextDestinationResponse] containing the next
+  /// waypoint (or null if no more waypoints) and, on iOS, the route status.
+  static Future<ContinueToNextDestinationResponse> continueToNextDestination() {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .continueToNextDestination();
   }
@@ -747,6 +749,9 @@ class SessionInitializationException implements Exception {
 
   /// The error code for the exception.
   final SessionInitializationError code;
+
+  @override
+  String toString() => 'SessionInitializationException(code: $code)';
 }
 
 /// Exception thrown by [GoogleMapsNavigator.resetTermsAccepted],
@@ -756,6 +761,10 @@ class SessionInitializationException implements Exception {
 class ResetTermsAndConditionsException implements Exception {
   /// Default constructor for [ResetTermsAndConditionsException].
   const ResetTermsAndConditionsException();
+
+  @override
+  String toString() =>
+      'ResetTermsAndConditionsException: Cannot reset terms while navigation session is active.';
 }
 
 /// [GoogleMapsNavigator] navigation method call has failed, because the navigation
@@ -764,6 +773,10 @@ class ResetTermsAndConditionsException implements Exception {
 class SessionNotInitializedException implements Exception {
   /// Default constructor for [SessionNotInitializedException].
   const SessionNotInitializedException();
+
+  @override
+  String toString() =>
+      'SessionNotInitializedException: Navigation session has not been initialized.';
 }
 
 /// [GoogleMapsNavigator.setDestinations] method call has failed, because the
@@ -771,4 +784,7 @@ class SessionNotInitializedException implements Exception {
 class RouteTokenMalformedException implements Exception {
   /// Default constructor for [RouteTokenMalformedException].
   const RouteTokenMalformedException();
+
+  @override
+  String toString() => 'RouteTokenMalformedException';
 }

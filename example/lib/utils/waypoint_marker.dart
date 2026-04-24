@@ -63,20 +63,18 @@ class _WaypointMarkerPainter extends CustomPainter {
     const double strokeWidth = 6.0;
 
     // Draw the background circle
-    final Paint circlePaint =
-        Paint()
-          ..color = Colors.blue
-          ..style = PaintingStyle.fill;
+    final Paint circlePaint = Paint()
+      ..color = Colors.blue
+      ..style = PaintingStyle.fill;
     final Offset center = Offset(size.width / 2, size.height / 2);
     final double radius = size.width / 2 - strokeWidth / 2;
     canvas.drawCircle(center, radius, circlePaint);
 
     // Draw the border
-    final Paint borderPaint =
-        Paint()
-          ..color = Colors.blue[800]!
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = strokeWidth;
+    final Paint borderPaint = Paint()
+      ..color = Colors.blue[800]!
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth;
     canvas.drawCircle(center, radius, borderPaint);
 
     // Draw the waypoint number

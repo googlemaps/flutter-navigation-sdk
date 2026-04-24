@@ -350,10 +350,9 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
       runSpacing: 8,
       children: <Widget>[
         ElevatedButton(
-          onPressed:
-              _navigationRunning
-                  ? () => _stopNavigation()
-                  : () => _startNavigation(),
+          onPressed: _navigationRunning
+              ? () => _stopNavigation()
+              : () => _startNavigation(),
           child: Text(
             _navigationRunning ? 'Stop navigation' : 'Start navigation',
           ),
