@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.9.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.8.4...0.9.0) (2026-04-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* continueToNextDestination() return type changed from NavigationWaypoint? to ContinueToNextDestinationResponse, which contains waypoint (NavigationWaypoint?) and routeStatus (NavigationRouteStatus?, iOS only). The method has also been un-deprecated and it is now the recommended way to advance to the next waypoint when navigating to multiple destinations.
+
+### Features
+
+* upgrade Nav SDKs to Android 7.6.0 and iOS 10.12.0 ([#664](https://github.com/googlemaps/flutter-navigation-sdk/issues/664)) ([013f386](https://github.com/googlemaps/flutter-navigation-sdk/commit/013f386eae48b27b8c10cfc9e38dab494e058a41))
+
+
+### Bug Fixes
+
+* missing mapping for onMyLocationClicked and onMyLocationButtonClicked events ([#666](https://github.com/googlemaps/flutter-navigation-sdk/issues/666)) ([caad31b](https://github.com/googlemaps/flutter-navigation-sdk/commit/caad31b5aca9dd4f7c710dd41dff09ebdc6b1a2e))
+
 ## [0.8.4](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.8.3...0.8.4) (2026-04-01)
 
 
