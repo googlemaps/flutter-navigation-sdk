@@ -34,6 +34,10 @@ export 'package:flutter_test/flutter_test.dart';
 export 'package:google_navigation_flutter/google_navigation_flutter.dart';
 export 'package:patrol/patrol.dart';
 
+/// Whether tests are running in CI environment.
+/// Set via --dart-define=IS_CI=true in the CI workflow.
+const bool isCI = bool.fromEnvironment('IS_CI');
+
 // Type used for iterating over different maps to be tested.
 enum TestMapType {
   /// Regular google map view.

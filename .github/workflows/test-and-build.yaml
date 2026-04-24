@@ -307,7 +307,7 @@ jobs:
       - name: Run integration tests
         working-directory: ${{ env.working_directory }}
         run: |
-          patrol test ${{ runner.debug && '--show-flutter-logs --verbose' || '' }}
+          patrol test --dart-define=IS_CI=true ${{ runner.debug && '--show-flutter-logs --verbose' || '' }}
       - name: Upload test report
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
@@ -395,7 +395,7 @@ jobs:
         id: tests_step
         working-directory: ${{ env.working_directory }}
         run: |
-          patrol test --dart-define=MAPS_API_KEY="$MAPS_API_KEY" --ios=$IOS_VERSION ${{ runner.debug && '--show-flutter-logs --verbose' || '' }} -d "$DEVICE_ID"
+          patrol test --dart-define=MAPS_API_KEY="$MAPS_API_KEY" --dart-define=IS_CI=true --ios=$IOS_VERSION ${{ runner.debug && '--show-flutter-logs --verbose' || '' }} -d "$DEVICE_ID"
       - name: Upload test report
         uses: actions/upload-artifact@v4
         if: ${{ always() }}

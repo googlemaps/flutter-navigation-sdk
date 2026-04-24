@@ -192,6 +192,7 @@ void main() {
       int arrivalEventCount = 0;
       OnArrivalEvent? firstArrivalEvent;
       List<NavigationWaypoint> waypoints = <NavigationWaypoint>[];
+      final Set<String> arrivedWaypointTitles = <String>{};
 
       /// Set up navigation view and controller.
       final GoogleNavigationViewController viewController =
@@ -206,11 +207,21 @@ void main() {
 
       Future<void> onArrivalEvent(OnArrivalEvent msg) async {
         arrivalEventCount += 1;
-        if (arrivalEventCount == 1) {
+        final String title = msg.waypoint.title;
+        $.log('Got arrival event #$arrivalEventCount, waypoint: "$title"');
+
+        // Ignore duplicate arrivals for the same waypoint.
+        if (!arrivedWaypointTitles.add(title)) {
+          $.log('Ignoring duplicate arrival for "$title"');
+          return;
+        }
+
+        if (arrivedWaypointTitles.length == 1) {
+          // First unique waypoint arrival.
           firstArrivalEvent = msg;
           firstArrival.complete();
         } else {
-          $.log('Got second arrival event, stopping guidance');
+          $.log('Final arrival at "$title", stopping guidance');
           // Stop guidance after the last destination
           await GoogleMapsNavigator.stopGuidance();
           navigationFinished.complete();
@@ -351,17 +362,27 @@ void main() {
 
       if (multipleDestinationsVariants.currentValue ==
           'continueToNextDestination') {
+        $.log('Call continueToNextDestination after first arrival');
+
+        // Clear simulation, on iOS the simulator needs to be cleared before
+        // continuing to next destination. Otherwise simulation to the next
+        // waypoint will not start and the test will timeout waiting for the
+        // final arrival.
+        await GoogleMapsNavigator.simulator.removeUserLocation();
+
         newSessionFired = Completer<void>();
         final ContinueToNextDestinationResponse response =
             await GoogleMapsNavigator.continueToNextDestination();
+
         expectSync(response.waypoint, isNotNull);
         // On iOS, routeStatus should be available and OK.
         if (Platform.isIOS) {
           expectSync(response.routeStatus, NavigationRouteStatus.statusOk);
         }
-        // Guidance must be explicitly restarted after continueToNextDestination.
-        await GoogleMapsNavigator.startGuidance();
       } else {
+        $.log(
+          'Call setDestinations with remaining waypoint after first arrival',
+        );
         // Find and remove the waypoint that matches the arrived waypoint.
         int waypointIndex = -1;
         for (int i = 0; i < waypoints.length; i++) {
@@ -746,75 +767,85 @@ void main() {
     });
   });
 
-  patrol('Test error during navigation if no network connection', (
-    PatrolIntegrationTester $,
-  ) async {
-    if (Platform.isIOS && !isPhysicalDevice) {
-      // Skipping test on emulated devices as these do not properly get real
-      // location updates, causing flaky tests on CI.
-      $.log('Skipping test on emulated device on iOS.');
-      return;
-    }
+  patrol(
+    'Test error during navigation if no network connection',
+    (PatrolIntegrationTester $) async {
+      if (Platform.isIOS && !isPhysicalDevice) {
+        // Skipping test on emulated devices as these do not properly get real
+        // location updates, causing flaky tests on CI.
+        $.log('Skipping test on emulated device on iOS.');
+        return;
+      }
 
-    /// Set up navigation view and controller.
-    await startNavigationWithoutDestination($);
+      /// Set up navigation view and controller.
+      await startNavigationWithoutDestination($);
 
-    /// Simulate location (1298 California St)
-    await GoogleMapsNavigator.simulator.setUserLocation(
-      const LatLng(latitude: 37.79136614772824, longitude: -122.41565900473043),
-    );
-    await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
-
-    /// Create a waypoint.
-    final List<NavigationWaypoint> waypoint = <NavigationWaypoint>[
-      NavigationWaypoint.withLatLngTarget(
-        title: 'California St & Jones St',
-        target: const LatLng(latitude: 37.791424, longitude: -122.414139),
-      ),
-    ];
-
-    /// Set Destination.
-    final Destinations destinations = Destinations(
-      waypoints: waypoint,
-      displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
-    );
-
-    try {
-      /// Cut network connection.
-      await $.native.enableAirplaneMode();
-
-      // Wait a while to ensure network is down.
+      /// Simulate location (1298 California St)
+      await GoogleMapsNavigator.simulator.setUserLocation(
+        const LatLng(
+          latitude: 37.79136614772824,
+          longitude: -122.41565900473043,
+        ),
+      );
       await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
 
-      /// Test that the error is received.
-      final NavigationRouteStatus routeStatus =
-          await GoogleMapsNavigator.setDestinations(destinations);
-      expect(
-        routeStatus,
-        isIn([
-          NavigationRouteStatus.networkError,
-          NavigationRouteStatus.routeNotFound,
-        ]),
-        reason: 'setDestinations did not return networkError or routeNotFound',
+      /// Create a waypoint.
+      final List<NavigationWaypoint> waypoint = <NavigationWaypoint>[
+        NavigationWaypoint.withLatLngTarget(
+          title: 'California St & Jones St',
+          target: const LatLng(latitude: 37.791424, longitude: -122.414139),
+        ),
+      ];
+
+      /// Set Destination.
+      final Destinations destinations = Destinations(
+        waypoints: waypoint,
+        displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
       );
 
-      final NavigationRouteStatus routeStatusSim = await GoogleMapsNavigator
-          .simulator
-          .simulateLocationsAlongNewRoute(waypoint);
-      expect(
-        routeStatusSim,
-        isIn([
-          NavigationRouteStatus.networkError,
-          NavigationRouteStatus.routeNotFound,
-        ]),
-        reason:
-            'simulateLocationsAlongNewRoute did not return networkError or routeNotFound',
-      );
-    } finally {
-      /// Re-enable network connection.
-      await $.native.disableAirplaneMode();
-    }
-  });
+      try {
+        /// Cut network connection.
+        await $.native.enableAirplaneMode();
+
+        // Wait a while to ensure network is down.
+        await $.tester.runAsync(
+          () => Future.delayed(const Duration(seconds: 1)),
+        );
+
+        /// Test that the error is received.
+        final NavigationRouteStatus routeStatus =
+            await GoogleMapsNavigator.setDestinations(destinations);
+        expect(
+          routeStatus,
+          isIn([
+            NavigationRouteStatus.networkError,
+            NavigationRouteStatus.routeNotFound,
+          ]),
+          reason:
+              'setDestinations did not return networkError or routeNotFound',
+        );
+
+        final NavigationRouteStatus routeStatusSim = await GoogleMapsNavigator
+            .simulator
+            .simulateLocationsAlongNewRoute(waypoint);
+        expect(
+          routeStatusSim,
+          isIn([
+            NavigationRouteStatus.networkError,
+            NavigationRouteStatus.routeNotFound,
+          ]),
+          reason:
+              'simulateLocationsAlongNewRoute did not return networkError or routeNotFound',
+        );
+      } finally {
+        /// Re-enable network connection.
+        await $.native.disableAirplaneMode();
+      }
+    },
+    // ATD emulator image used in Android CI does not have Settings app,
+    // which is required for Patrol's enableAirplaneMode().
+    skip: Platform.isAndroid && isCI,
+  );
 
   patrol('Test route not found errors', (PatrolIntegrationTester $) async {
     /// Set up navigation view and controller.
