@@ -398,6 +398,60 @@ void main() {
       expect(receivedPoi!.latLng.longitude, testPoi.latLng.longitude);
     });
 
+    testWidgets('onMyLocationClicked callback receives event', (
+      WidgetTester tester,
+    ) async {
+      bool myLocationClicked = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: GoogleMapsMapView(
+            onViewCreated: (_) {},
+            onMyLocationClicked: (MyLocationClickedEvent event) {
+              myLocationClicked = true;
+            },
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      final int testViewId = getViewId();
+
+      testMapViewApi.testEventApi.onMyLocationClicked(testViewId);
+
+      await tester.pump();
+
+      expect(myLocationClicked, isTrue);
+    });
+
+    testWidgets('onMyLocationButtonClicked callback receives event', (
+      WidgetTester tester,
+    ) async {
+      bool myLocationButtonClicked = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: GoogleMapsMapView(
+            onViewCreated: (_) {},
+            onMyLocationButtonClicked: (MyLocationButtonClickedEvent event) {
+              myLocationButtonClicked = true;
+            },
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      final int testViewId = getViewId();
+
+      testMapViewApi.testEventApi.onMyLocationButtonClicked(testViewId);
+
+      await tester.pump();
+
+      expect(myLocationButtonClicked, isTrue);
+    });
+
     testWidgets('onCameraMove callback receives event', (
       WidgetTester tester,
     ) async {
