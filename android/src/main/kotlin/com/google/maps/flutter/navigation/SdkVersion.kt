@@ -18,7 +18,7 @@ package com.google.maps.flutter.navigation
 
 /** SDK version constants for internal usage attribution. */
 object SdkVersion {
-  const val VERSION = "0.9.0" // {x-release-please-version}
+  const val VERSION = "0.9.1" // {x-release-please-version}
 
   const val ATTRIBUTION_ID = "gmp_git_flutternavigationsdk_v${VERSION}_android"
 }

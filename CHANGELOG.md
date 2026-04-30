@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.1](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.9.0...0.9.1) (2026-04-30)
+
+
+### Features
+
+* internal usage attribution ID ([#669](https://github.com/googlemaps/flutter-navigation-sdk/issues/669)) ([6051017](https://github.com/googlemaps/flutter-navigation-sdk/commit/6051017d2310db2ffe8516bc63addfefb8485b78))
+
 ## [0.9.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.8.4...0.9.0) (2026-04-24)
 
 
