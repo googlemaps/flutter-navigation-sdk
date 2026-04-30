@@ -25,7 +25,9 @@ class NavSdkInitializer : Initializer<Unit> {
 
   override fun create(context: Context): Unit {
     MapsApiSettings.addInternalUsageAttributionId(
-      context.applicationContext, SdkVersion.ATTRIBUTION_ID)
+      context.applicationContext,
+      SdkVersion.ATTRIBUTION_ID,
+    )
   }
 
   override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()
