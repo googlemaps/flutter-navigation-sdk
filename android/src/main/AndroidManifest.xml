@@ -15,10 +15,20 @@
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.google.maps.flutter.navigation">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.google.maps.flutter.navigation">
     <application>
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="com.google.maps.flutter.navigation.NavSdkInitializer"
+                android:value="androidx.startup" />
+        </provider>
         <service
-        android:name="com.google.maps.flutter.navigation.GoogleMapsNavigationNavUpdatesService"
-        android:exported="false" />
+            android:name="com.google.maps.flutter.navigation.GoogleMapsNavigationNavUpdatesService"
+            android:exported="false" />
     </application>
 </manifest>
