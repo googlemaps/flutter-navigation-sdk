@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import Flutter
+import GoogleMaps
 import UIKit
 
 public class GoogleMapsNavigationPlugin: NSObject, FlutterPlugin {
@@ -54,6 +55,8 @@ public class GoogleMapsNavigationPlugin: NSObject, FlutterPlugin {
   }
 
   public static func register(with registrar: FlutterPluginRegistrar) {
+    GMSServices.addInternalUsageAttributionID(SdkVersion.attributionId)
+
     // Navigation View handling
     viewRegistry = GoogleMapsNavigationViewRegistry()
     guard viewRegistry != nil else {

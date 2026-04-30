@@ -8,7 +8,11 @@
   "packages": {
     ".": {
       "package-name": "google_navigation_flutter",
-      "changelog-path": "CHANGELOG.md"
+      "changelog-path": "CHANGELOG.md",
+      "extra-files": [
+        "android/src/main/kotlin/com/google/maps/flutter/navigation/SdkVersion.kt",
+        "ios/google_navigation_flutter/Sources/google_navigation_flutter/SdkVersion.swift"
+      ]
     }
   }
 }
