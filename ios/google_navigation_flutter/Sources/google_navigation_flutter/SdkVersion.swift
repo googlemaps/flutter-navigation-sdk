@@ -15,7 +15,7 @@
 import Foundation
 
 enum SdkVersion {
-  static let version = "0.9.0"  // {x-release-please-version}
+  static let version = "0.9.1"  // {x-release-please-version}
 
   static let attributionId = "gmp_git_flutternavigationsdk_v\(version)_ios"
 }
