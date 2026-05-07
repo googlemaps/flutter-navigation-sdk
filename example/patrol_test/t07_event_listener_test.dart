@@ -513,6 +513,7 @@ void main() {
       await $.pumpAndSettle();
 
       /// Set up GPS availability listeners with completers.
+      // ignore: deprecated_member_use
       void onGpsAvailability(GpsAvailabilityUpdatedEvent event) {
         $.log('GpsAvailabilityEvent (deprecated): $event');
         if (!gpsAvailabilityEventReceived.isCompleted) {
@@ -530,8 +531,11 @@ void main() {
       }
 
       /// Set up both the old (deprecated) and new gpsAvailability listeners.
+      // ignore: deprecated_member_use
       final StreamSubscription<GpsAvailabilityUpdatedEvent>
-      onGpsAvailabilitySubscription =
+          // ignore: deprecated_member_use
+          onGpsAvailabilitySubscription =
+          // ignore: deprecated_member_use
           await GoogleMapsNavigator.setOnGpsAvailabilityListener(
             onGpsAvailability,
           );
@@ -589,7 +593,7 @@ void main() {
       await $.pumpAndSettle();
 
       Future<void> cancelSubscriptionsAndResetState() async {
-        await $.native.enableLocation();
+        await $.platformAutomator.android.enableLocation();
         await onReroutingSubscription.cancel();
         await onGpsAvailabilitySubscription.cancel();
         await onGpsAvailabilityChangeSubscription.cancel();
@@ -604,7 +608,7 @@ void main() {
         },
       );
 
-      await $.native.disableLocation();
+      await $.platformAutomator.android.disableLocation();
 
       /// Wait for GPS availability events with timeout.
       await gpsAvailabilityEventReceived.future.timeout(

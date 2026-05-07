@@ -30,7 +30,7 @@ void main() {
   ) async {
     if (!Platform.isIOS) {
       // Be sure location is enabled.
-      await $.native.enableLocation();
+      await $.platformAutomator.android.enableLocation();
     }
 
     // Grant the location permission.
@@ -59,9 +59,9 @@ void main() {
 
     // Tap ok.
     if (Platform.isAndroid) {
-      await $.native.tap(Selector(text: "Got It"));
+      await $.platformAutomator.tap(Selector(text: "Got It"));
     } else if (Platform.isIOS) {
-      await $.native.tap(Selector(text: "OK"));
+      await $.platformAutomator.tap(Selector(text: "OK"));
     } else {
       fail('Unsupported platform: ${Platform.operatingSystem}');
     }
@@ -112,9 +112,9 @@ void main() {
 
       // Accept driver awareness disclaimer.
       if (Platform.isAndroid) {
-        await $.native.tap(Selector(text: "Got It"));
+        await $.platformAutomator.tap(Selector(text: "Got It"));
       } else if (Platform.isIOS) {
-        await $.native.tap(Selector(text: "OK"));
+        await $.platformAutomator.tap(Selector(text: "OK"));
       } else {
         fail('Unsupported platform: ${Platform.operatingSystem}');
       }
@@ -152,7 +152,7 @@ void main() {
   ) async {
     if (!Platform.isIOS) {
       // Be sure location is enabled.
-      await $.native.enableLocation();
+      await $.platformAutomator.android.enableLocation();
     }
 
     // Grant the location permission.
@@ -188,9 +188,9 @@ void main() {
 
     // Tap ok.
     if (Platform.isAndroid) {
-      await $.native.tap(Selector(text: "Got It"));
+      await $.platformAutomator.tap(Selector(text: "Got It"));
     } else if (Platform.isIOS) {
-      await $.native.tap(Selector(text: "OK"));
+      await $.platformAutomator.tap(Selector(text: "OK"));
     } else {
       fail('Unsupported platform: ${Platform.operatingSystem}');
     }

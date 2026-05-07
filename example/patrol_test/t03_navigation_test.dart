@@ -805,7 +805,7 @@ void main() {
 
       try {
         /// Cut network connection.
-        await $.native.enableAirplaneMode();
+        await $.platformAutomator.mobile.enableAirplaneMode();
 
         // Wait a while to ensure network is down.
         await $.tester.runAsync(
@@ -839,7 +839,7 @@ void main() {
         );
       } finally {
         /// Re-enable network connection.
-        await $.native.disableAirplaneMode();
+        await $.platformAutomator.mobile.disableAirplaneMode();
       }
     },
     // ATD emulator image used in Android CI does not have Settings app,
