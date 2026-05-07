@@ -123,8 +123,32 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
     getView().setTrafficIncidentCardsEnabled(enabled)
   }
 
-  override fun setReportIncidentButtonEnabled(enabled: Boolean) {
-    getView().setReportIncidentButtonEnabled(enabled)
+  override fun isNavigationTripProgressBarEnabled(): Boolean {
+    return getView().isNavigationTripProgressBarEnabled()
+  }
+
+  override fun setNavigationTripProgressBarEnabled(enabled: Boolean) {
+    getView().setNavigationTripProgressBarEnabled(enabled)
+  }
+
+  override fun isSpeedLimitIconEnabled(): Boolean {
+    return getView().isSpeedLimitIconEnabled()
+  }
+
+  override fun setSpeedLimitIconEnabled(enabled: Boolean) {
+    getView().setSpeedLimitIconEnabled(enabled)
+  }
+
+  override fun isSpeedometerEnabled(): Boolean {
+    return getView().isSpeedometerEnabled()
+  }
+
+  override fun setSpeedometerEnabled(enabled: Boolean) {
+    getView().setSpeedometerEnabled(enabled)
+  }
+
+  override fun showRouteOverview() {
+    getView().showRouteOverview()
   }
 
   override fun isMyLocationButtonEnabled(): Boolean {
@@ -177,10 +201,6 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
 
   override fun isTrafficIncidentCardsEnabled(): Boolean {
     return getView().isTrafficIncidentCardsEnabled()
-  }
-
-  override fun isReportIncidentButtonEnabled(): Boolean {
-    return getView().isReportIncidentButtonEnabled()
   }
 
   override fun getMyLocation(): LatLngDto? {

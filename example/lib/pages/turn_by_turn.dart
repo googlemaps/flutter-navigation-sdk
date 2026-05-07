@@ -149,8 +149,12 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
       // Clear registered maneuver and lane images before cleanup
       await clearRegisteredImages(filter: RegisteredImageType.maneuver);
       await clearRegisteredImages(filter: RegisteredImageType.lanes);
-      await GoogleMapsNavigator.simulator.removeUserLocation();
-      await GoogleMapsNavigator.cleanup();
+      try {
+        await GoogleMapsNavigator.simulator.removeUserLocation();
+        await GoogleMapsNavigator.cleanup();
+      } on SessionNotInitializedException catch (_) {
+        // Session was not initialized, continue.
+      }
 
       setState(() {
         _navigationRunning = false;
@@ -166,7 +170,11 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
       // Clear registered maneuver and lane images before cleanup
       clearRegisteredImages(filter: RegisteredImageType.maneuver);
       clearRegisteredImages(filter: RegisteredImageType.lanes);
-      GoogleMapsNavigator.cleanup();
+      try {
+        GoogleMapsNavigator.cleanup();
+      } on SessionNotInitializedException catch (_) {
+        // Session was not initialized, continue.
+      }
     }
     super.dispose();
   }

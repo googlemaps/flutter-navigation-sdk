@@ -88,6 +88,7 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
   protected var mIsNavigationReady: Boolean = false
   var mGoogleMap: GoogleMap? = null
   private var mIsPromptVisible: Boolean = false
+  private var mIsSurfaceDestroyed: Boolean = false
 
   init {
     initializeSurfaceCallback()
@@ -122,6 +123,7 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
 
   override fun onSurfaceAvailable(surfaceContainer: SurfaceContainer) {
     super.onSurfaceAvailable(surfaceContainer)
+    mIsSurfaceDestroyed = false
     lifecycle.addObserver(mLifeCycleObserver)
     if (!isSurfaceReady(surfaceContainer)) {
       return
@@ -184,6 +186,9 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
     presentation.show()
 
     navigationView.getMapAsync { googleMap: GoogleMap ->
+      // Guard against race condition where surface is destroyed before getMapAsync completes
+      if (mIsSurfaceDestroyed) return@getMapAsync
+
       val viewRegistry = GoogleMapsNavigationPlugin.getInstance()?.viewRegistry
       val imageRegistry = GoogleMapsNavigationPlugin.getInstance()?.imageRegistry
       if (viewRegistry != null && imageRegistry != null) {
@@ -192,7 +197,7 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
 
         mAutoMapView =
           GoogleMapsAutoMapView(
-            MapOptions(GoogleMapOptions(), null),
+            MapOptions(googleMapOptions, null),
             viewRegistry,
             imageRegistry,
             navigationView,
@@ -215,6 +220,7 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
 
   override fun onSurfaceDestroyed(surfaceContainer: SurfaceContainer) {
     super.onSurfaceDestroyed(surfaceContainer)
+    mIsSurfaceDestroyed = true
     sendAutoScreenAvailabilityChangedEvent(false)
 
     // Clean up prompt visibility listener
@@ -224,10 +230,12 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
     }
     mIsPromptVisible = false
 
+    mAutoMapView = null
     mViewRegistry?.unregisterAndroidAutoView()
     mNavigationView?.onPause()
     mNavigationView?.onStop()
     mNavigationView?.onDestroy()
+    mNavigationView = null
     mGoogleMap = null
 
     mPresentation?.dismiss()

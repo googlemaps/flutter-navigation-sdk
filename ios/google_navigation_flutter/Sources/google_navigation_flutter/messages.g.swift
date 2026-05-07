@@ -1,4 +1,4 @@
-// Copyright 2023 Google LLC
+// Copyright 2026 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -6513,7 +6513,9 @@ protocol AutoMapViewApi {
   func setTrafficEnabled(enabled: Bool) throws
   func setTrafficPromptsEnabled(enabled: Bool) throws
   func setTrafficIncidentCardsEnabled(enabled: Bool) throws
-  func setReportIncidentButtonEnabled(enabled: Bool) throws
+  func setNavigationTripProgressBarEnabled(enabled: Bool) throws
+  func setSpeedLimitIconEnabled(enabled: Bool) throws
+  func setSpeedometerEnabled(enabled: Bool) throws
   func isMyLocationButtonEnabled() throws -> Bool
   func isConsumeMyLocationButtonClickEventsEnabled() throws -> Bool
   func isZoomGesturesEnabled() throws -> Bool
@@ -6527,7 +6529,10 @@ protocol AutoMapViewApi {
   func isTrafficEnabled() throws -> Bool
   func isTrafficPromptsEnabled() throws -> Bool
   func isTrafficIncidentCardsEnabled() throws -> Bool
-  func isReportIncidentButtonEnabled() throws -> Bool
+  func isNavigationTripProgressBarEnabled() throws -> Bool
+  func isSpeedLimitIconEnabled() throws -> Bool
+  func isSpeedometerEnabled() throws -> Bool
+  func showRouteOverview() throws
   func getMarkers() throws -> [MarkerDto]
   func addMarkers(markers: [MarkerDto]) throws -> [MarkerDto]
   func updateMarkers(markers: [MarkerDto]) throws -> [MarkerDto]
@@ -7351,23 +7356,59 @@ class AutoMapViewApiSetup {
     } else {
       setTrafficIncidentCardsEnabledChannel.setMessageHandler(nil)
     }
-    let setReportIncidentButtonEnabledChannel = FlutterBasicMessageChannel(
+    let setNavigationTripProgressBarEnabledChannel = FlutterBasicMessageChannel(
       name:
-        "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setReportIncidentButtonEnabled\(channelSuffix)",
+        "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationTripProgressBarEnabled\(channelSuffix)",
       binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      setReportIncidentButtonEnabledChannel.setMessageHandler { message, reply in
+      setNavigationTripProgressBarEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let enabledArg = args[0] as! Bool
         do {
-          try api.setReportIncidentButtonEnabled(enabled: enabledArg)
+          try api.setNavigationTripProgressBarEnabled(enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      setReportIncidentButtonEnabledChannel.setMessageHandler(nil)
+      setNavigationTripProgressBarEnabledChannel.setMessageHandler(nil)
+    }
+    let setSpeedLimitIconEnabledChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setSpeedLimitIconEnabled\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setSpeedLimitIconEnabledChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let enabledArg = args[0] as! Bool
+        do {
+          try api.setSpeedLimitIconEnabled(enabled: enabledArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setSpeedLimitIconEnabledChannel.setMessageHandler(nil)
+    }
+    let setSpeedometerEnabledChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setSpeedometerEnabled\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setSpeedometerEnabledChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let enabledArg = args[0] as! Bool
+        do {
+          try api.setSpeedometerEnabled(enabled: enabledArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setSpeedometerEnabledChannel.setMessageHandler(nil)
     }
     let isMyLocationButtonEnabledChannel = FlutterBasicMessageChannel(
       name:
@@ -7577,21 +7618,69 @@ class AutoMapViewApiSetup {
     } else {
       isTrafficIncidentCardsEnabledChannel.setMessageHandler(nil)
     }
-    let isReportIncidentButtonEnabledChannel = FlutterBasicMessageChannel(
+    let isNavigationTripProgressBarEnabledChannel = FlutterBasicMessageChannel(
       name:
-        "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isReportIncidentButtonEnabled\(channelSuffix)",
+        "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isNavigationTripProgressBarEnabled\(channelSuffix)",
       binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      isReportIncidentButtonEnabledChannel.setMessageHandler { _, reply in
+      isNavigationTripProgressBarEnabledChannel.setMessageHandler { _, reply in
         do {
-          let result = try api.isReportIncidentButtonEnabled()
+          let result = try api.isNavigationTripProgressBarEnabled()
           reply(wrapResult(result))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      isReportIncidentButtonEnabledChannel.setMessageHandler(nil)
+      isNavigationTripProgressBarEnabledChannel.setMessageHandler(nil)
+    }
+    let isSpeedLimitIconEnabledChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isSpeedLimitIconEnabled\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      isSpeedLimitIconEnabledChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.isSpeedLimitIconEnabled()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      isSpeedLimitIconEnabledChannel.setMessageHandler(nil)
+    }
+    let isSpeedometerEnabledChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isSpeedometerEnabled\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      isSpeedometerEnabledChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.isSpeedometerEnabled()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      isSpeedometerEnabledChannel.setMessageHandler(nil)
+    }
+    let showRouteOverviewChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.showRouteOverview\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      showRouteOverviewChannel.setMessageHandler { _, reply in
+        do {
+          try api.showRouteOverview()
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      showRouteOverviewChannel.setMessageHandler(nil)
     }
     let getMarkersChannel = FlutterBasicMessageChannel(
       name:

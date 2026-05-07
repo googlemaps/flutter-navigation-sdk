@@ -768,12 +768,32 @@ class AutoMapViewAPIImpl {
     return _viewApi.isTrafficIncidentCardsEnabled();
   }
 
-  Future<void> setReportIncidentButtonEnabled({required bool enabled}) {
-    return _viewApi.setReportIncidentButtonEnabled(enabled);
+  Future<bool> isNavigationTripProgressBarEnabled() {
+    return _viewApi.isNavigationTripProgressBarEnabled();
   }
 
-  Future<bool> isReportIncidentButtonEnabled() {
-    return _viewApi.isReportIncidentButtonEnabled();
+  Future<void> setNavigationTripProgressBarEnabled({required bool enabled}) {
+    return _viewApi.setNavigationTripProgressBarEnabled(enabled);
+  }
+
+  Future<bool> isSpeedLimitIconEnabled() {
+    return _viewApi.isSpeedLimitIconEnabled();
+  }
+
+  Future<void> setSpeedLimitIconEnabled({required bool enabled}) {
+    return _viewApi.setSpeedLimitIconEnabled(enabled);
+  }
+
+  Future<bool> isSpeedometerEnabled() {
+    return _viewApi.isSpeedometerEnabled();
+  }
+
+  Future<void> setSpeedometerEnabled({required bool enabled}) {
+    return _viewApi.setSpeedometerEnabled(enabled);
+  }
+
+  Future<void> showRouteOverview() {
+    return _viewApi.showRouteOverview();
   }
 
   Future<MapColorScheme> getMapColorScheme() async {

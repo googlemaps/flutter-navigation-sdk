@@ -32,7 +32,9 @@ internal constructor(
 ) : GoogleMapsBaseMapView(null, mapOptions, null, imageRegistry) {
   private var _isTrafficPromptsEnabled: Boolean = true
   private var _isTrafficIncidentCardsEnabled: Boolean = true
-  private var _isReportIncidentButtonEnabled: Boolean = true
+  private var _isNavigationTripProgressBarEnabled: Boolean = false
+  private var _isSpeedLimitIconEnabled: Boolean = false
+  private var _isSpeedometerEnabled: Boolean = false
   private var _forceNightMode: Int = 0
 
   override fun getView(): View {
@@ -65,15 +67,6 @@ internal constructor(
     return _isTrafficIncidentCardsEnabled
   }
 
-  override fun setReportIncidentButtonEnabled(enabled: Boolean) {
-    navigationView.setReportIncidentButtonEnabled(enabled)
-    _isReportIncidentButtonEnabled = enabled
-  }
-
-  override fun isReportIncidentButtonEnabled(): Boolean {
-    return _isReportIncidentButtonEnabled
-  }
-
   override fun getForceNightMode(): Int {
     return _forceNightMode
   }
@@ -81,6 +74,37 @@ internal constructor(
   override fun setForceNightMode(forceNightMode: Int) {
     navigationView.setForceNightMode(forceNightMode)
     _forceNightMode = forceNightMode
+  }
+
+  override fun isNavigationTripProgressBarEnabled(): Boolean {
+    return _isNavigationTripProgressBarEnabled
+  }
+
+  override fun setNavigationTripProgressBarEnabled(enabled: Boolean) {
+    navigationView.setTripProgressBarEnabled(enabled)
+    _isNavigationTripProgressBarEnabled = enabled
+  }
+
+  override fun isSpeedLimitIconEnabled(): Boolean {
+    return _isSpeedLimitIconEnabled
+  }
+
+  override fun setSpeedLimitIconEnabled(enabled: Boolean) {
+    navigationView.setSpeedLimitIconEnabled(enabled)
+    _isSpeedLimitIconEnabled = enabled
+  }
+
+  override fun isSpeedometerEnabled(): Boolean {
+    return _isSpeedometerEnabled
+  }
+
+  override fun setSpeedometerEnabled(enabled: Boolean) {
+    navigationView.setSpeedometerEnabled(enabled)
+    _isSpeedometerEnabled = enabled
+  }
+
+  override fun showRouteOverview() {
+    navigationView.showRouteOverview()
   }
 
   // Handled by AndroidAutoBaseScreen.

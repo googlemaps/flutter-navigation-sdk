@@ -1281,6 +1281,719 @@ class MockTestMapViewApi extends _i1.Mock implements _i3.TestMapViewApi {
   );
 }
 
+/// A class which mocks [TestAutoMapViewApi].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockTestAutoMapViewApi extends _i1.Mock
+    implements _i3.TestAutoMapViewApi {
+  MockTestAutoMapViewApi() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  void setAutoMapOptions(_i2.AutoMapOptionsDto? mapOptions) =>
+      super.noSuchMethod(
+        Invocation.method(#setAutoMapOptions, [mapOptions]),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  bool isMyLocationEnabled() =>
+      (super.noSuchMethod(
+            Invocation.method(#isMyLocationEnabled, []),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  void setMyLocationEnabled(bool? enabled) => super.noSuchMethod(
+    Invocation.method(#setMyLocationEnabled, [enabled]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  _i2.MapTypeDto getMapType() =>
+      (super.noSuchMethod(
+            Invocation.method(#getMapType, []),
+            returnValue: _i2.MapTypeDto.none,
+          )
+          as _i2.MapTypeDto);
+
+  @override
+  void setMapType(_i2.MapTypeDto? mapType) => super.noSuchMethod(
+    Invocation.method(#setMapType, [mapType]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void setMapStyle(String? styleJson) => super.noSuchMethod(
+    Invocation.method(#setMapStyle, [styleJson]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  _i2.CameraPositionDto getCameraPosition() =>
+      (super.noSuchMethod(
+            Invocation.method(#getCameraPosition, []),
+            returnValue: _FakeCameraPositionDto_2(
+              this,
+              Invocation.method(#getCameraPosition, []),
+            ),
+          )
+          as _i2.CameraPositionDto);
+
+  @override
+  _i2.LatLngBoundsDto getVisibleRegion() =>
+      (super.noSuchMethod(
+            Invocation.method(#getVisibleRegion, []),
+            returnValue: _FakeLatLngBoundsDto_3(
+              this,
+              Invocation.method(#getVisibleRegion, []),
+            ),
+          )
+          as _i2.LatLngBoundsDto);
+
+  @override
+  void followMyLocation(
+    _i2.CameraPerspectiveDto? perspective,
+    double? zoomLevel,
+  ) => super.noSuchMethod(
+    Invocation.method(#followMyLocation, [perspective, zoomLevel]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  _i4.Future<bool> animateCameraToCameraPosition(
+    _i2.CameraPositionDto? cameraPosition,
+    int? duration,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#animateCameraToCameraPosition, [
+              cameraPosition,
+              duration,
+            ]),
+            returnValue: _i4.Future<bool>.value(false),
+          )
+          as _i4.Future<bool>);
+
+  @override
+  _i4.Future<bool> animateCameraToLatLng(_i2.LatLngDto? point, int? duration) =>
+      (super.noSuchMethod(
+            Invocation.method(#animateCameraToLatLng, [point, duration]),
+            returnValue: _i4.Future<bool>.value(false),
+          )
+          as _i4.Future<bool>);
+
+  @override
+  _i4.Future<bool> animateCameraToLatLngBounds(
+    _i2.LatLngBoundsDto? bounds,
+    double? padding,
+    int? duration,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#animateCameraToLatLngBounds, [
+              bounds,
+              padding,
+              duration,
+            ]),
+            returnValue: _i4.Future<bool>.value(false),
+          )
+          as _i4.Future<bool>);
+
+  @override
+  _i4.Future<bool> animateCameraToLatLngZoom(
+    _i2.LatLngDto? point,
+    double? zoom,
+    int? duration,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#animateCameraToLatLngZoom, [
+              point,
+              zoom,
+              duration,
+            ]),
+            returnValue: _i4.Future<bool>.value(false),
+          )
+          as _i4.Future<bool>);
+
+  @override
+  _i4.Future<bool> animateCameraByScroll(
+    double? scrollByDx,
+    double? scrollByDy,
+    int? duration,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#animateCameraByScroll, [
+              scrollByDx,
+              scrollByDy,
+              duration,
+            ]),
+            returnValue: _i4.Future<bool>.value(false),
+          )
+          as _i4.Future<bool>);
+
+  @override
+  _i4.Future<bool> animateCameraByZoom(
+    double? zoomBy,
+    double? focusDx,
+    double? focusDy,
+    int? duration,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#animateCameraByZoom, [
+              zoomBy,
+              focusDx,
+              focusDy,
+              duration,
+            ]),
+            returnValue: _i4.Future<bool>.value(false),
+          )
+          as _i4.Future<bool>);
+
+  @override
+  _i4.Future<bool> animateCameraToZoom(double? zoom, int? duration) =>
+      (super.noSuchMethod(
+            Invocation.method(#animateCameraToZoom, [zoom, duration]),
+            returnValue: _i4.Future<bool>.value(false),
+          )
+          as _i4.Future<bool>);
+
+  @override
+  void moveCameraToCameraPosition(_i2.CameraPositionDto? cameraPosition) =>
+      super.noSuchMethod(
+        Invocation.method(#moveCameraToCameraPosition, [cameraPosition]),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void moveCameraToLatLng(_i2.LatLngDto? point) => super.noSuchMethod(
+    Invocation.method(#moveCameraToLatLng, [point]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void moveCameraToLatLngBounds(_i2.LatLngBoundsDto? bounds, double? padding) =>
+      super.noSuchMethod(
+        Invocation.method(#moveCameraToLatLngBounds, [bounds, padding]),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void moveCameraToLatLngZoom(_i2.LatLngDto? point, double? zoom) =>
+      super.noSuchMethod(
+        Invocation.method(#moveCameraToLatLngZoom, [point, zoom]),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void moveCameraByScroll(double? scrollByDx, double? scrollByDy) =>
+      super.noSuchMethod(
+        Invocation.method(#moveCameraByScroll, [scrollByDx, scrollByDy]),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void moveCameraByZoom(double? zoomBy, double? focusDx, double? focusDy) =>
+      super.noSuchMethod(
+        Invocation.method(#moveCameraByZoom, [zoomBy, focusDx, focusDy]),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void moveCameraToZoom(double? zoom) => super.noSuchMethod(
+    Invocation.method(#moveCameraToZoom, [zoom]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  double getMinZoomPreference() =>
+      (super.noSuchMethod(
+            Invocation.method(#getMinZoomPreference, []),
+            returnValue: 0.0,
+          )
+          as double);
+
+  @override
+  double getMaxZoomPreference() =>
+      (super.noSuchMethod(
+            Invocation.method(#getMaxZoomPreference, []),
+            returnValue: 0.0,
+          )
+          as double);
+
+  @override
+  void resetMinMaxZoomPreference() => super.noSuchMethod(
+    Invocation.method(#resetMinMaxZoomPreference, []),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void setMinZoomPreference(double? minZoomPreference) => super.noSuchMethod(
+    Invocation.method(#setMinZoomPreference, [minZoomPreference]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void setMaxZoomPreference(double? maxZoomPreference) => super.noSuchMethod(
+    Invocation.method(#setMaxZoomPreference, [maxZoomPreference]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void setMyLocationButtonEnabled(bool? enabled) => super.noSuchMethod(
+    Invocation.method(#setMyLocationButtonEnabled, [enabled]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void setConsumeMyLocationButtonClickEventsEnabled(bool? enabled) =>
+      super.noSuchMethod(
+        Invocation.method(#setConsumeMyLocationButtonClickEventsEnabled, [
+          enabled,
+        ]),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void setZoomGesturesEnabled(bool? enabled) => super.noSuchMethod(
+    Invocation.method(#setZoomGesturesEnabled, [enabled]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void setZoomControlsEnabled(bool? enabled) => super.noSuchMethod(
+    Invocation.method(#setZoomControlsEnabled, [enabled]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void setCompassEnabled(bool? enabled) => super.noSuchMethod(
+    Invocation.method(#setCompassEnabled, [enabled]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void setRotateGesturesEnabled(bool? enabled) => super.noSuchMethod(
+    Invocation.method(#setRotateGesturesEnabled, [enabled]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void setScrollGesturesEnabled(bool? enabled) => super.noSuchMethod(
+    Invocation.method(#setScrollGesturesEnabled, [enabled]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void setScrollGesturesDuringRotateOrZoomEnabled(bool? enabled) =>
+      super.noSuchMethod(
+        Invocation.method(#setScrollGesturesDuringRotateOrZoomEnabled, [
+          enabled,
+        ]),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void setTiltGesturesEnabled(bool? enabled) => super.noSuchMethod(
+    Invocation.method(#setTiltGesturesEnabled, [enabled]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void setMapToolbarEnabled(bool? enabled) => super.noSuchMethod(
+    Invocation.method(#setMapToolbarEnabled, [enabled]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void setTrafficEnabled(bool? enabled) => super.noSuchMethod(
+    Invocation.method(#setTrafficEnabled, [enabled]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void setTrafficPromptsEnabled(bool? enabled) => super.noSuchMethod(
+    Invocation.method(#setTrafficPromptsEnabled, [enabled]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void setTrafficIncidentCardsEnabled(bool? enabled) => super.noSuchMethod(
+    Invocation.method(#setTrafficIncidentCardsEnabled, [enabled]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void setNavigationTripProgressBarEnabled(bool? enabled) => super.noSuchMethod(
+    Invocation.method(#setNavigationTripProgressBarEnabled, [enabled]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void setSpeedLimitIconEnabled(bool? enabled) => super.noSuchMethod(
+    Invocation.method(#setSpeedLimitIconEnabled, [enabled]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void setSpeedometerEnabled(bool? enabled) => super.noSuchMethod(
+    Invocation.method(#setSpeedometerEnabled, [enabled]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  bool isMyLocationButtonEnabled() =>
+      (super.noSuchMethod(
+            Invocation.method(#isMyLocationButtonEnabled, []),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  bool isConsumeMyLocationButtonClickEventsEnabled() =>
+      (super.noSuchMethod(
+            Invocation.method(#isConsumeMyLocationButtonClickEventsEnabled, []),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  bool isZoomGesturesEnabled() =>
+      (super.noSuchMethod(
+            Invocation.method(#isZoomGesturesEnabled, []),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  bool isZoomControlsEnabled() =>
+      (super.noSuchMethod(
+            Invocation.method(#isZoomControlsEnabled, []),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  bool isCompassEnabled() =>
+      (super.noSuchMethod(
+            Invocation.method(#isCompassEnabled, []),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  bool isRotateGesturesEnabled() =>
+      (super.noSuchMethod(
+            Invocation.method(#isRotateGesturesEnabled, []),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  bool isScrollGesturesEnabled() =>
+      (super.noSuchMethod(
+            Invocation.method(#isScrollGesturesEnabled, []),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  bool isScrollGesturesEnabledDuringRotateOrZoom() =>
+      (super.noSuchMethod(
+            Invocation.method(#isScrollGesturesEnabledDuringRotateOrZoom, []),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  bool isTiltGesturesEnabled() =>
+      (super.noSuchMethod(
+            Invocation.method(#isTiltGesturesEnabled, []),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  bool isMapToolbarEnabled() =>
+      (super.noSuchMethod(
+            Invocation.method(#isMapToolbarEnabled, []),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  bool isTrafficEnabled() =>
+      (super.noSuchMethod(
+            Invocation.method(#isTrafficEnabled, []),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  bool isTrafficPromptsEnabled() =>
+      (super.noSuchMethod(
+            Invocation.method(#isTrafficPromptsEnabled, []),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  bool isTrafficIncidentCardsEnabled() =>
+      (super.noSuchMethod(
+            Invocation.method(#isTrafficIncidentCardsEnabled, []),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  bool isNavigationTripProgressBarEnabled() =>
+      (super.noSuchMethod(
+            Invocation.method(#isNavigationTripProgressBarEnabled, []),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  bool isSpeedLimitIconEnabled() =>
+      (super.noSuchMethod(
+            Invocation.method(#isSpeedLimitIconEnabled, []),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  bool isSpeedometerEnabled() =>
+      (super.noSuchMethod(
+            Invocation.method(#isSpeedometerEnabled, []),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  void showRouteOverview() => super.noSuchMethod(
+    Invocation.method(#showRouteOverview, []),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  List<_i2.MarkerDto> getMarkers() =>
+      (super.noSuchMethod(
+            Invocation.method(#getMarkers, []),
+            returnValue: <_i2.MarkerDto>[],
+          )
+          as List<_i2.MarkerDto>);
+
+  @override
+  List<_i2.MarkerDto> addMarkers(List<_i2.MarkerDto>? markers) =>
+      (super.noSuchMethod(
+            Invocation.method(#addMarkers, [markers]),
+            returnValue: <_i2.MarkerDto>[],
+          )
+          as List<_i2.MarkerDto>);
+
+  @override
+  List<_i2.MarkerDto> updateMarkers(List<_i2.MarkerDto>? markers) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateMarkers, [markers]),
+            returnValue: <_i2.MarkerDto>[],
+          )
+          as List<_i2.MarkerDto>);
+
+  @override
+  void removeMarkers(List<_i2.MarkerDto>? markers) => super.noSuchMethod(
+    Invocation.method(#removeMarkers, [markers]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void clearMarkers() => super.noSuchMethod(
+    Invocation.method(#clearMarkers, []),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void clear() => super.noSuchMethod(
+    Invocation.method(#clear, []),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  List<_i2.PolygonDto> getPolygons() =>
+      (super.noSuchMethod(
+            Invocation.method(#getPolygons, []),
+            returnValue: <_i2.PolygonDto>[],
+          )
+          as List<_i2.PolygonDto>);
+
+  @override
+  List<_i2.PolygonDto> addPolygons(List<_i2.PolygonDto>? polygons) =>
+      (super.noSuchMethod(
+            Invocation.method(#addPolygons, [polygons]),
+            returnValue: <_i2.PolygonDto>[],
+          )
+          as List<_i2.PolygonDto>);
+
+  @override
+  List<_i2.PolygonDto> updatePolygons(List<_i2.PolygonDto>? polygons) =>
+      (super.noSuchMethod(
+            Invocation.method(#updatePolygons, [polygons]),
+            returnValue: <_i2.PolygonDto>[],
+          )
+          as List<_i2.PolygonDto>);
+
+  @override
+  void removePolygons(List<_i2.PolygonDto>? polygons) => super.noSuchMethod(
+    Invocation.method(#removePolygons, [polygons]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void clearPolygons() => super.noSuchMethod(
+    Invocation.method(#clearPolygons, []),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  List<_i2.PolylineDto> getPolylines() =>
+      (super.noSuchMethod(
+            Invocation.method(#getPolylines, []),
+            returnValue: <_i2.PolylineDto>[],
+          )
+          as List<_i2.PolylineDto>);
+
+  @override
+  List<_i2.PolylineDto> addPolylines(List<_i2.PolylineDto>? polylines) =>
+      (super.noSuchMethod(
+            Invocation.method(#addPolylines, [polylines]),
+            returnValue: <_i2.PolylineDto>[],
+          )
+          as List<_i2.PolylineDto>);
+
+  @override
+  List<_i2.PolylineDto> updatePolylines(List<_i2.PolylineDto>? polylines) =>
+      (super.noSuchMethod(
+            Invocation.method(#updatePolylines, [polylines]),
+            returnValue: <_i2.PolylineDto>[],
+          )
+          as List<_i2.PolylineDto>);
+
+  @override
+  void removePolylines(List<_i2.PolylineDto>? polylines) => super.noSuchMethod(
+    Invocation.method(#removePolylines, [polylines]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void clearPolylines() => super.noSuchMethod(
+    Invocation.method(#clearPolylines, []),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  List<_i2.CircleDto> getCircles() =>
+      (super.noSuchMethod(
+            Invocation.method(#getCircles, []),
+            returnValue: <_i2.CircleDto>[],
+          )
+          as List<_i2.CircleDto>);
+
+  @override
+  List<_i2.CircleDto> addCircles(List<_i2.CircleDto>? circles) =>
+      (super.noSuchMethod(
+            Invocation.method(#addCircles, [circles]),
+            returnValue: <_i2.CircleDto>[],
+          )
+          as List<_i2.CircleDto>);
+
+  @override
+  List<_i2.CircleDto> updateCircles(List<_i2.CircleDto>? circles) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateCircles, [circles]),
+            returnValue: <_i2.CircleDto>[],
+          )
+          as List<_i2.CircleDto>);
+
+  @override
+  void removeCircles(List<_i2.CircleDto>? circles) => super.noSuchMethod(
+    Invocation.method(#removeCircles, [circles]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void clearCircles() => super.noSuchMethod(
+    Invocation.method(#clearCircles, []),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void enableOnCameraChangedEvents() => super.noSuchMethod(
+    Invocation.method(#enableOnCameraChangedEvents, []),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  bool isAutoScreenAvailable() =>
+      (super.noSuchMethod(
+            Invocation.method(#isAutoScreenAvailable, []),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  void setPadding(_i2.MapPaddingDto? padding) => super.noSuchMethod(
+    Invocation.method(#setPadding, [padding]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  _i2.MapPaddingDto getPadding() =>
+      (super.noSuchMethod(
+            Invocation.method(#getPadding, []),
+            returnValue: _FakeMapPaddingDto_4(
+              this,
+              Invocation.method(#getPadding, []),
+            ),
+          )
+          as _i2.MapPaddingDto);
+
+  @override
+  _i2.MapColorSchemeDto getMapColorScheme() =>
+      (super.noSuchMethod(
+            Invocation.method(#getMapColorScheme, []),
+            returnValue: _i2.MapColorSchemeDto.followSystem,
+          )
+          as _i2.MapColorSchemeDto);
+
+  @override
+  void setMapColorScheme(_i2.MapColorSchemeDto? mapColorScheme) =>
+      super.noSuchMethod(
+        Invocation.method(#setMapColorScheme, [mapColorScheme]),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i2.NavigationForceNightModeDto getForceNightMode() =>
+      (super.noSuchMethod(
+            Invocation.method(#getForceNightMode, []),
+            returnValue: _i2.NavigationForceNightModeDto.auto,
+          )
+          as _i2.NavigationForceNightModeDto);
+
+  @override
+  void setForceNightMode(_i2.NavigationForceNightModeDto? forceNightMode) =>
+      super.noSuchMethod(
+        Invocation.method(#setForceNightMode, [forceNightMode]),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void sendCustomNavigationAutoEvent(String? event, Object? data) =>
+      super.noSuchMethod(
+        Invocation.method(#sendCustomNavigationAutoEvent, [event, data]),
+        returnValueForMissingStub: null,
+      );
+}
+
 /// A class which mocks [TestImageRegistryApi].
 ///
 /// See the documentation for Mockito's code generation for more information.
