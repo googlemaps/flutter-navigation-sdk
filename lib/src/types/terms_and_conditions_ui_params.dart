@@ -71,11 +71,11 @@ class TermsAndConditionsUIParams {
   /// for internal use with the platform channels.
   TermsAndConditionsUIParamsDto toDto() {
     return TermsAndConditionsUIParamsDto(
-      backgroundColor: backgroundColor?.value,
-      titleColor: titleColor?.value,
-      mainTextColor: mainTextColor?.value,
-      acceptButtonTextColor: acceptButtonTextColor?.value,
-      cancelButtonTextColor: cancelButtonTextColor?.value,
+      backgroundColor: backgroundColor?.toARGB32(),
+      titleColor: titleColor?.toARGB32(),
+      mainTextColor: mainTextColor?.toARGB32(),
+      acceptButtonTextColor: acceptButtonTextColor?.toARGB32(),
+      cancelButtonTextColor: cancelButtonTextColor?.toARGB32(),
     );
   }
 }

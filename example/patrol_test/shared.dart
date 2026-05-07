@@ -137,9 +137,9 @@ Widget wrapMapView(GoogleMapsMapView mapView) {
 
 Future<void> _acceptTermsAndConditionsDialog(PatrolIntegrationTester $) async {
   if (Platform.isAndroid) {
-    await $.native.tap(Selector(text: 'Got It'));
+    await $.platformAutomator.tap(Selector(text: 'Got It'));
   } else if (Platform.isIOS) {
-    await $.native.tap(Selector(text: 'OK'));
+    await $.platformAutomator.tap(Selector(text: 'OK'));
   } else {
     fail('Unsupported platform: ${Platform.operatingSystem}');
   }
@@ -183,11 +183,11 @@ Future<void> checkLocationDialogAcceptance(PatrolIntegrationTester $) async {
         .locationWhenInUse
         .request();
 
-    if (await $.native.isPermissionDialogVisible(
+    if (await $.platformAutomator.mobile.isPermissionDialogVisible(
       timeout: const Duration(seconds: 5),
     )) {
       // Grant location permission.
-      await $.native.grantPermissionWhenInUse();
+      await $.platformAutomator.mobile.grantPermissionWhenInUse();
     }
 
     // Check that the location permission is granted.

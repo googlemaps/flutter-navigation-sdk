@@ -214,7 +214,7 @@ void main() {
         );
 
     /// Test that the onMapClicked event comes in.
-    await $.native.tapAt(const Offset(0.5, 0.5));
+    await $.platformAutomator.mobile.tapAt(const Offset(0.5, 0.5));
 
     /// Test the default values match with what has been documented in the
     /// API documentation in google_navigation_flutter.dart file.
