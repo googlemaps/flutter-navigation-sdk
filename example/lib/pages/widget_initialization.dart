@@ -73,7 +73,11 @@ class _ViewInitializationPageState
   @override
   void dispose() {
     if (_navigationInitialized) {
-      GoogleMapsNavigator.cleanup();
+      try {
+        GoogleMapsNavigator.cleanup();
+      } on SessionNotInitializedException catch (_) {
+        // Session was not initialized, continue.
+      }
     }
     super.dispose();
   }
@@ -144,7 +148,11 @@ class _ViewInitializationPageState
   }
 
   Future<void> _disposeNavigation() async {
-    await GoogleMapsNavigator.cleanup();
+    try {
+      await GoogleMapsNavigator.cleanup();
+    } on SessionNotInitializedException catch (_) {
+      // Session was not initialized, continue.
+    }
     await _updateNavigationInitializationState();
   }
 

@@ -1,4 +1,4 @@
-// Copyright 2023 Google LLC
+// Copyright 2026 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -6487,7 +6487,9 @@ interface AutoMapViewApi {
   fun setTrafficEnabled(enabled: Boolean)
   fun setTrafficPromptsEnabled(enabled: Boolean)
   fun setTrafficIncidentCardsEnabled(enabled: Boolean)
-  fun setReportIncidentButtonEnabled(enabled: Boolean)
+  fun setNavigationTripProgressBarEnabled(enabled: Boolean)
+  fun setSpeedLimitIconEnabled(enabled: Boolean)
+  fun setSpeedometerEnabled(enabled: Boolean)
   fun isMyLocationButtonEnabled(): Boolean
   fun isConsumeMyLocationButtonClickEventsEnabled(): Boolean
   fun isZoomGesturesEnabled(): Boolean
@@ -6501,7 +6503,10 @@ interface AutoMapViewApi {
   fun isTrafficEnabled(): Boolean
   fun isTrafficPromptsEnabled(): Boolean
   fun isTrafficIncidentCardsEnabled(): Boolean
-  fun isReportIncidentButtonEnabled(): Boolean
+  fun isNavigationTripProgressBarEnabled(): Boolean
+  fun isSpeedLimitIconEnabled(): Boolean
+  fun isSpeedometerEnabled(): Boolean
+  fun showRouteOverview()
   fun getMarkers(): List<MarkerDto>
   fun addMarkers(markers: List<MarkerDto>): List<MarkerDto>
   fun updateMarkers(markers: List<MarkerDto>): List<MarkerDto>
@@ -7308,13 +7313,49 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setReportIncidentButtonEnabled$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationTripProgressBarEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val enabledArg = args[0] as Boolean
             val wrapped: List<Any?> = try {
-              api.setReportIncidentButtonEnabled(enabledArg)
+              api.setNavigationTripProgressBarEnabled(enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setSpeedLimitIconEnabled$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            val wrapped: List<Any?> = try {
+              api.setSpeedLimitIconEnabled(enabledArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setSpeedometerEnabled$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            val wrapped: List<Any?> = try {
+              api.setSpeedometerEnabled(enabledArg)
               listOf(null)
             } catch (exception: Throwable) {
               MessagesPigeonUtils.wrapError(exception)
@@ -7521,11 +7562,57 @@ interface AutoMapViewApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isReportIncidentButtonEnabled$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isNavigationTripProgressBarEnabled$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
-              listOf(api.isReportIncidentButtonEnabled())
+              listOf(api.isNavigationTripProgressBarEnabled())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isSpeedLimitIconEnabled$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              listOf(api.isSpeedLimitIconEnabled())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isSpeedometerEnabled$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              listOf(api.isSpeedometerEnabled())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.showRouteOverview$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              api.showRouteOverview()
+              listOf(null)
             } catch (exception: Throwable) {
               MessagesPigeonUtils.wrapError(exception)
             }

@@ -113,8 +113,32 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
     try getView().setTrafficIncidentCardsEnabled(enabled)
   }
 
-  func setReportIncidentButtonEnabled(enabled: Bool) throws {
-    try getView().setReportIncidentButtonEnabled(enabled)
+  func isNavigationTripProgressBarEnabled() throws -> Bool {
+    try getView().isNavigationTripProgressBarEnabled()
+  }
+
+  func setNavigationTripProgressBarEnabled(enabled: Bool) throws {
+    try getView().setNavigationTripProgressBarEnabled(enabled)
+  }
+
+  func isSpeedLimitIconEnabled() throws -> Bool {
+    try getView().isSpeedLimitIconEnabled()
+  }
+
+  func setSpeedLimitIconEnabled(enabled: Bool) throws {
+    try getView().setSpeedLimitIconEnabled(enabled)
+  }
+
+  func isSpeedometerEnabled() throws -> Bool {
+    try getView().isSpeedometerEnabled()
+  }
+
+  func setSpeedometerEnabled(enabled: Bool) throws {
+    try getView().setSpeedometerEnabled(enabled)
+  }
+
+  func showRouteOverview() throws {
+    try getView().showRouteOverview()
   }
 
   func setAutoMapOptions(mapOptions: AutoMapOptionsDto) throws {
@@ -183,10 +207,6 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
 
   func isTrafficIncidentCardsEnabled() throws -> Bool {
     try getView().isTrafficIncidentCardsEnabled()
-  }
-
-  func isReportIncidentButtonEnabled() throws -> Bool {
-    try getView().isReportIncidentButtonEnabled()
   }
 
   func getMyLocation() throws -> LatLngDto? {

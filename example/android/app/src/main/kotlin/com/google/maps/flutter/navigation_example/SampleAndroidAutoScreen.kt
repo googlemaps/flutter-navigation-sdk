@@ -36,6 +36,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.libraries.mapsplatform.turnbyturn.model.NavInfo
 import com.google.android.libraries.mapsplatform.turnbyturn.model.StepInfo
 import com.google.maps.flutter.navigation.AndroidAutoBaseScreen
+import com.google.maps.flutter.navigation.AutoMapViewOptions
 import com.google.maps.flutter.navigation.GoogleMapsNavigationNavUpdatesService
 
 

@@ -1522,7 +1522,7 @@ abstract class NavigationSessionEventApi {
   void onNewNavigationSession();
 }
 
-@HostApi()
+@HostApi(dartHostTestHandler: 'TestAutoMapViewApi')
 abstract class AutoMapViewApi {
   /// Sets the map options to be used for Android Auto and CarPlay views.
   /// Should be called before the Auto/CarPlay screen is created.
@@ -1598,7 +1598,9 @@ abstract class AutoMapViewApi {
   void setTrafficEnabled(bool enabled);
   void setTrafficPromptsEnabled(bool enabled);
   void setTrafficIncidentCardsEnabled(bool enabled);
-  void setReportIncidentButtonEnabled(bool enabled);
+  void setNavigationTripProgressBarEnabled(bool enabled);
+  void setSpeedLimitIconEnabled(bool enabled);
+  void setSpeedometerEnabled(bool enabled);
 
   bool isMyLocationButtonEnabled();
   bool isConsumeMyLocationButtonClickEventsEnabled();
@@ -1613,7 +1615,11 @@ abstract class AutoMapViewApi {
   bool isTrafficEnabled();
   bool isTrafficPromptsEnabled();
   bool isTrafficIncidentCardsEnabled();
-  bool isReportIncidentButtonEnabled();
+  bool isNavigationTripProgressBarEnabled();
+  bool isSpeedLimitIconEnabled();
+  bool isSpeedometerEnabled();
+
+  void showRouteOverview();
 
   List<MarkerDto> getMarkers();
   List<MarkerDto> addMarkers(List<MarkerDto> markers);

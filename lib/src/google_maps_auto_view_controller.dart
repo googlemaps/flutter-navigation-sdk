@@ -456,24 +456,80 @@ class GoogleMapsAutoViewController {
         .isTrafficIncidentCardsEnabled();
   }
 
-  /// Sets whether the report incident button is enabled on the Android Auto or CarPlay view.
+  /// Returns whether the navigation trip progress bar is enabled on the
+  /// Android Auto or CarPlay map view.
   ///
-  /// The report incident button allows users to report traffic incidents they encounter.
+  /// The trip progress bar shows the progress of the current navigation trip.
+  Future<bool> isNavigationTripProgressBarEnabled() {
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .isNavigationTripProgressBarEnabled();
+  }
+
+  /// Sets whether the navigation trip progress bar is enabled on the
+  /// Android Auto or CarPlay view.
+  ///
+  /// The trip progress bar shows the progress along the route during navigation.
   ///
   /// Example:
   /// ```dart
-  /// await autoViewController.setReportIncidentButtonEnabled(true);
+  /// await autoViewController.setNavigationTripProgressBarEnabled(true);
   /// ```
-  Future<void> setReportIncidentButtonEnabled(bool enabled) {
+  Future<void> setNavigationTripProgressBarEnabled(bool enabled) {
     return GoogleMapsNavigationPlatform.instance.autoAPI
-        .setReportIncidentButtonEnabled(enabled: enabled);
+        .setNavigationTripProgressBarEnabled(enabled: enabled);
   }
 
-  /// Returns whether the report incident button is currently enabled on the
+  /// Returns whether the speed limit icon is enabled on the
   /// Android Auto or CarPlay map view.
-  Future<bool> isReportIncidentButtonEnabled() {
+  Future<bool> isSpeedLimitIconEnabled() {
     return GoogleMapsNavigationPlatform.instance.autoAPI
-        .isReportIncidentButtonEnabled();
+        .isSpeedLimitIconEnabled();
+  }
+
+  /// Sets whether the speed limit icon is enabled on the Android Auto or CarPlay view.
+  ///
+  /// When enabled, the current speed limit is displayed on the map during navigation.
+  ///
+  /// Example:
+  /// ```dart
+  /// await autoViewController.setSpeedLimitIconEnabled(true);
+  /// ```
+  Future<void> setSpeedLimitIconEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .setSpeedLimitIconEnabled(enabled: enabled);
+  }
+
+  /// Returns whether the speedometer is enabled on the
+  /// Android Auto or CarPlay map view.
+  Future<bool> isSpeedometerEnabled() {
+    return GoogleMapsNavigationPlatform.instance.autoAPI.isSpeedometerEnabled();
+  }
+
+  /// Sets whether the speedometer is enabled on the Android Auto or CarPlay view.
+  ///
+  /// When enabled, the current driving speed is displayed on the map during navigation.
+  ///
+  /// Example:
+  /// ```dart
+  /// await autoViewController.setSpeedometerEnabled(true);
+  /// ```
+  Future<void> setSpeedometerEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.autoAPI.setSpeedometerEnabled(
+      enabled: enabled,
+    );
+  }
+
+  /// Shows the route overview on the Android Auto or CarPlay map view.
+  ///
+  /// This adjusts the camera to show the entire route on the screen,
+  /// providing the user with an overview of their navigation route.
+  ///
+  /// Example:
+  /// ```dart
+  /// await autoViewController.showRouteOverview();
+  /// ```
+  Future<void> showRouteOverview() {
+    return GoogleMapsNavigationPlatform.instance.autoAPI.showRouteOverview();
   }
 
   /// Gets the current map color scheme for the Android Auto or CarPlay view.

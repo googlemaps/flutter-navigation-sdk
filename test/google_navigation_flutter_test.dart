@@ -25,6 +25,7 @@ import 'messages_test.g.dart';
 @GenerateMocks(<Type>[
   TestNavigationSessionApi,
   TestMapViewApi,
+  TestAutoMapViewApi,
   TestImageRegistryApi,
 ])
 void main() {

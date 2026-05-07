@@ -95,7 +95,7 @@ class _NavigationDemoState extends State<NavigationBody> {
         mapId: mapId,
         // You can add more options here as needed:
         // mapType: MapType.normal,
-        // mapColorScheme: MapColorScheme.followSystem,
+        // mapColorScheme: MapColorScheme.dark,
       ),
     );
   }
