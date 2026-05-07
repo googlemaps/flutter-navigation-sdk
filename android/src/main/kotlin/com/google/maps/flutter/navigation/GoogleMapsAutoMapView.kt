@@ -17,19 +17,28 @@
 package com.google.maps.flutter.navigation
 
 import android.view.View
+import android.view.ViewGroup
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.libraries.navigation.NavigationViewForAuto
+import com.google.android.libraries.navigation.NavigationView
 
 class GoogleMapsAutoMapView
 internal constructor(
   mapOptions: MapOptions,
   viewRegistry: GoogleMapsViewRegistry,
   imageRegistry: ImageRegistry,
-  private val mapView: NavigationViewForAuto,
+  private val navigationView: NavigationView,
+  private val viewGroup: ViewGroup,
   map: GoogleMap,
 ) : GoogleMapsBaseMapView(null, mapOptions, null, imageRegistry) {
+  private var _isTrafficPromptsEnabled: Boolean = true
+  private var _isTrafficIncidentCardsEnabled: Boolean = true
+  private var _isNavigationTripProgressBarEnabled: Boolean = false
+  private var _isSpeedLimitIconEnabled: Boolean = false
+  private var _isSpeedometerEnabled: Boolean = false
+  private var _forceNightMode: Int = 0
+
   override fun getView(): View {
-    return mapView
+    return viewGroup
   }
 
   init {
@@ -38,6 +47,64 @@ internal constructor(
     imageRegistry.mapViewInitializationComplete()
     viewRegistry.registerAndroidAutoView(this)
     mapReady()
+  }
+
+  override fun setTrafficPromptsEnabled(enabled: Boolean) {
+    navigationView.setTrafficPromptsEnabled(enabled)
+    _isTrafficPromptsEnabled = enabled
+  }
+
+  override fun isTrafficPromptsEnabled(): Boolean {
+    return _isTrafficPromptsEnabled
+  }
+
+  override fun setTrafficIncidentCardsEnabled(enabled: Boolean) {
+    navigationView.setTrafficIncidentCardsEnabled(enabled)
+    _isTrafficIncidentCardsEnabled = enabled
+  }
+
+  override fun isTrafficIncidentCardsEnabled(): Boolean {
+    return _isTrafficIncidentCardsEnabled
+  }
+
+  override fun getForceNightMode(): Int {
+    return _forceNightMode
+  }
+
+  override fun setForceNightMode(forceNightMode: Int) {
+    navigationView.setForceNightMode(forceNightMode)
+    _forceNightMode = forceNightMode
+  }
+
+  override fun isNavigationTripProgressBarEnabled(): Boolean {
+    return _isNavigationTripProgressBarEnabled
+  }
+
+  override fun setNavigationTripProgressBarEnabled(enabled: Boolean) {
+    navigationView.setTripProgressBarEnabled(enabled)
+    _isNavigationTripProgressBarEnabled = enabled
+  }
+
+  override fun isSpeedLimitIconEnabled(): Boolean {
+    return _isSpeedLimitIconEnabled
+  }
+
+  override fun setSpeedLimitIconEnabled(enabled: Boolean) {
+    navigationView.setSpeedLimitIconEnabled(enabled)
+    _isSpeedLimitIconEnabled = enabled
+  }
+
+  override fun isSpeedometerEnabled(): Boolean {
+    return _isSpeedometerEnabled
+  }
+
+  override fun setSpeedometerEnabled(enabled: Boolean) {
+    navigationView.setSpeedometerEnabled(enabled)
+    _isSpeedometerEnabled = enabled
+  }
+
+  override fun showRouteOverview() {
+    navigationView.showRouteOverview()
   }
 
   // Handled by AndroidAutoBaseScreen.

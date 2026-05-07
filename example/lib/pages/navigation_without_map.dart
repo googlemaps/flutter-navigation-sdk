@@ -117,7 +117,11 @@ class _NavigationWithoutMapPageState
   }
 
   Future<void> cleanupNavigationSession() async {
-    await GoogleMapsNavigator.cleanup();
+    try {
+      await GoogleMapsNavigator.cleanup();
+    } on SessionNotInitializedException catch (_) {
+      // Session was not initialized, continue.
+    }
     setState(() {
       routeCalculated = false;
       guidanceRunning = false;

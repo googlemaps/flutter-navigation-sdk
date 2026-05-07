@@ -31,7 +31,7 @@ extension ConvertCameraPositionDto on CameraPositionDto {
 /// @nodoc
 extension ConvertCameraPosition on CameraPosition {
   /// Convert [CameraPosition] to [CameraPositionDto].
-  CameraPositionDto toCameraPosition() => CameraPositionDto(
+  CameraPositionDto toDto() => CameraPositionDto(
     bearing: bearing,
     target: target.toDto(),
     tilt: tilt,

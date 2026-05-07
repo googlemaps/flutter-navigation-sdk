@@ -113,7 +113,11 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
 
   Future<void> _stopNavigation() async {
     if (_navigationRunning) {
-      await GoogleMapsNavigator.cleanup();
+      try {
+        await GoogleMapsNavigator.cleanup();
+      } on SessionNotInitializedException catch (_) {
+        // Session was not initialized, continue.
+      }
 
       if (mounted) {
         setState(() {
@@ -126,7 +130,11 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
   @override
   void dispose() {
     if (_navigationRunning) {
-      GoogleMapsNavigator.cleanup();
+      try {
+        GoogleMapsNavigator.cleanup();
+      } on SessionNotInitializedException catch (_) {
+        // Session was not initialized, continue.
+      }
     }
     super.dispose();
   }

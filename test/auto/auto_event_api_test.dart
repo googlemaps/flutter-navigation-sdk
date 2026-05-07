@@ -148,5 +148,99 @@ void main() {
         expect(receivedEvents[2].isAvailable, true);
       },
     );
+
+    test('PromptVisibilityChangedEvent stream receives events', () async {
+      PromptVisibilityChangedEvent? receivedEvent;
+
+      // Subscribe directly to the test API's stream
+      testAutoApi.getPromptVisibilityChangedEventStream().listen((
+        PromptVisibilityChangedEvent event,
+      ) {
+        receivedEvent = event;
+      });
+      await Future<void>.delayed(Duration.zero);
+
+      // Inject event via test API
+      testAutoApi.testEventApi.onPromptVisibilityChanged(true);
+      await Future<void>.delayed(Duration.zero);
+
+      // Verify event was received
+      expect(receivedEvent, isNotNull);
+      expect(receivedEvent!.promptVisible, true);
+    });
+
+    test('Multiple PromptVisibilityChangedEvent events are received', () async {
+      final List<PromptVisibilityChangedEvent> receivedEvents =
+          <PromptVisibilityChangedEvent>[];
+
+      // Subscribe directly to the test API's stream
+      testAutoApi.getPromptVisibilityChangedEventStream().listen((
+        PromptVisibilityChangedEvent event,
+      ) {
+        receivedEvents.add(event);
+      });
+      await Future<void>.delayed(Duration.zero);
+
+      // Inject multiple events with different visibility states
+      testAutoApi.testEventApi.onPromptVisibilityChanged(true);
+      testAutoApi.testEventApi.onPromptVisibilityChanged(false);
+      testAutoApi.testEventApi.onPromptVisibilityChanged(true);
+      await Future<void>.delayed(Duration.zero);
+
+      // Verify all events were received
+      expect(receivedEvents.length, 3);
+      expect(receivedEvents[0].promptVisible, true);
+      expect(receivedEvents[1].promptVisible, false);
+      expect(receivedEvents[2].promptVisible, true);
+    });
+
+    test(
+      'Event streams filter correctly between different event types',
+      () async {
+        final List<CustomNavigationAutoEvent> customEvents =
+            <CustomNavigationAutoEvent>[];
+        final List<AutoScreenAvailabilityChangedEvent> availabilityEvents =
+            <AutoScreenAvailabilityChangedEvent>[];
+        final List<PromptVisibilityChangedEvent> promptEvents =
+            <PromptVisibilityChangedEvent>[];
+
+        // Subscribe to all streams
+        testAutoApi.getCustomNavigationAutoEventStream().listen((
+          CustomNavigationAutoEvent event,
+        ) {
+          customEvents.add(event);
+        });
+        testAutoApi.getAutoScreenAvailabilityChangedEventStream().listen((
+          AutoScreenAvailabilityChangedEvent event,
+        ) {
+          availabilityEvents.add(event);
+        });
+        testAutoApi.getPromptVisibilityChangedEventStream().listen((
+          PromptVisibilityChangedEvent event,
+        ) {
+          promptEvents.add(event);
+        });
+        await Future<void>.delayed(Duration.zero);
+
+        // Inject mixed events
+        testAutoApi.testEventApi.onCustomNavigationAutoEvent('event1', 'data1');
+        testAutoApi.testEventApi.onAutoScreenAvailabilityChanged(true);
+        testAutoApi.testEventApi.onPromptVisibilityChanged(true);
+        testAutoApi.testEventApi.onCustomNavigationAutoEvent('event2', 'data2');
+        testAutoApi.testEventApi.onPromptVisibilityChanged(false);
+        await Future<void>.delayed(Duration.zero);
+
+        // Verify each stream only received its own events
+        expect(customEvents.length, 2);
+        expect(availabilityEvents.length, 1);
+        expect(promptEvents.length, 2);
+
+        expect(customEvents[0].event, 'event1');
+        expect(customEvents[1].event, 'event2');
+        expect(availabilityEvents[0].isAvailable, true);
+        expect(promptEvents[0].promptVisible, true);
+        expect(promptEvents[1].promptVisible, false);
+      },
+    );
   });
 }
