@@ -10,10 +10,9 @@ _See also: [Flutter's code of conduct](https://flutter.io/design-principles/#cod
 - **Code Formatting:** [`swift-format`](https://formulae.brew.sh/formula/swift-format). 
 
 ### 1.1. Installing swift-format
-The CI is locked to swift-format 602.0.0 which you can install with the command below:
+The CI uses latest swift-format which you can install with the command below:
 ```bash
-curl -O https://raw.githubusercontent.com/Homebrew/homebrew-core/402e262f48947bad849ea7793752ff16b7038406/Formula/s/swift-format.rb
-brew install swift-format.rb
+brew install swift-format
 ```
 
 ## 2. Setting Up Your Local Repository
