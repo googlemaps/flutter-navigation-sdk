@@ -630,8 +630,10 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   func setNavigationUIEnabled(_ enabled: Bool) {
     if _mapView.isNavigationEnabled != enabled {
       _mapView.isNavigationEnabled = enabled
-      getViewEventApi()?
-        .onNavigationUIEnabledChanged(viewId: _viewId!, navigationUIEnabled: enabled) { _ in }
+      if let viewId = _viewId {
+        getViewEventApi()?
+          .onNavigationUIEnabledChanged(viewId: viewId, navigationUIEnabled: enabled) { _ in }
+      }
 
       if !enabled {
         let camera = _mapView.camera

@@ -519,6 +519,21 @@ class GoogleMapsAutoViewController {
     );
   }
 
+  /// Returns whether the navigation UI is enabled on the Android Auto or CarPlay map view.
+  Future<bool> isNavigationUIEnabled() {
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .isNavigationUIEnabled();
+  }
+
+  /// Sets whether the navigation UI is enabled on the Android Auto or CarPlay map view.
+  ///
+  /// When disabled, the underlying map remains visible without the active
+  /// navigation UI.
+  Future<void> setNavigationUIEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .setNavigationUIEnabled(enabled: enabled);
+  }
+
   /// Shows the route overview on the Android Auto or CarPlay map view.
   ///
   /// This adjusts the camera to show the entire route on the screen,

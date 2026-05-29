@@ -137,6 +137,14 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
     try getView().setSpeedometerEnabled(enabled)
   }
 
+  func isNavigationUIEnabled() throws -> Bool {
+    try getView().isNavigationUIEnabled()
+  }
+
+  func setNavigationUIEnabled(enabled: Bool) throws {
+    try getView().setNavigationUIEnabled(enabled)
+  }
+
   func showRouteOverview() throws {
     try getView().showRouteOverview()
   }
@@ -152,7 +160,9 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
       mapColorScheme: mapOptions.mapColorScheme != nil
         ? Convert.convertMapColorScheme(mapColorScheme: mapOptions.mapColorScheme!) : nil,
       forceNightMode: mapOptions.forceNightMode != nil
-        ? Convert.convertNavigationForceNightMode(forceNightMode: mapOptions.forceNightMode!) : nil
+        ? Convert.convertNavigationForceNightMode(forceNightMode: mapOptions.forceNightMode!) : nil,
+      navigationUIEnabledPreference: Convert.convertNavigationUIEnabledPreference(
+        preference: mapOptions.navigationUIEnabledPreference)
     )
     BaseCarSceneDelegate.mapOptions = options
   }

@@ -169,11 +169,18 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
       navigationView.setForceNightMode(forceNightMode)
     }
 
+    val initialNavigationUIEnabled =
+      (autoMapOptions?.navigationUIEnabledPreference ?: NavigationUIEnabledPreference.AUTOMATIC) ==
+        NavigationUIEnabledPreference.AUTOMATIC &&
+        GoogleMapsNavigatorHolder.getInitializationState() ==
+          GoogleNavigatorInitializationState.INITIALIZED
+
     // Configure NavigationView for Android Auto
     navigationView.apply {
       onCreate(null)
       onStart()
       onResume()
+      isNavigationUiEnabled = initialNavigationUIEnabled
       setHeaderEnabled(false)
       setRecenterButtonEnabled(false)
       setEtaCardEnabled(false)

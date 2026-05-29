@@ -44,6 +44,7 @@ class AutoMapOptionsDto {
     this.mapType,
     this.mapColorScheme,
     this.forceNightMode,
+    this.navigationUIEnabledPreference,
   });
 
   /// The initial positioning of the camera in the map view.
@@ -60,6 +61,9 @@ class AutoMapOptionsDto {
 
   /// Forces night mode (dark theme) regardless of system settings.
   final NavigationForceNightModeDto? forceNightMode;
+
+  /// Determines the initial visibility of the navigation UI on map initialization.
+  final NavigationUIEnabledPreferenceDto? navigationUIEnabledPreference;
 }
 
 /// Object containing map options used to initialize Google Map view.
@@ -1618,6 +1622,8 @@ abstract class AutoMapViewApi {
   bool isNavigationTripProgressBarEnabled();
   bool isSpeedLimitIconEnabled();
   bool isSpeedometerEnabled();
+  bool isNavigationUIEnabled();
+  void setNavigationUIEnabled(bool enabled);
 
   void showRouteOverview();
 

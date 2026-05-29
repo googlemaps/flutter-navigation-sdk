@@ -93,6 +93,7 @@ class _NavigationDemoState extends State<NavigationBody> {
     await GoogleMapsAutoViewController.setAutoMapOptions(
       AutoMapOptions(
         mapId: mapId,
+        navigationUIEnabledPreference: NavigationUIEnabledPreference.disabled,
         // You can add more options here as needed:
         // mapType: MapType.normal,
         // mapColorScheme: MapColorScheme.dark,

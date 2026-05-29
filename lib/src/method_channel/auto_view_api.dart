@@ -94,6 +94,8 @@ class AutoMapViewAPIImpl {
       mapType: mapOptions.mapType?.toDto(),
       mapColorScheme: mapOptions.mapColorScheme?.toDto(),
       forceNightMode: mapOptions.forceNightMode?.toDto(),
+      navigationUIEnabledPreference:
+          mapOptions.navigationUIEnabledPreference.toDto(),
     );
     return _viewApi.setAutoMapOptions(mapOptionsDto);
   }
@@ -790,6 +792,14 @@ class AutoMapViewAPIImpl {
 
   Future<void> setSpeedometerEnabled({required bool enabled}) {
     return _viewApi.setSpeedometerEnabled(enabled);
+  }
+
+  Future<bool> isNavigationUIEnabled() {
+    return _viewApi.isNavigationUIEnabled();
+  }
+
+  Future<void> setNavigationUIEnabled({required bool enabled}) {
+    return _viewApi.setNavigationUIEnabled(enabled);
   }
 
   Future<void> showRouteOverview() {

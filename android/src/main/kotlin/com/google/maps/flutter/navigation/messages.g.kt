@@ -624,7 +624,9 @@ data class AutoMapOptionsDto (
   /** The color scheme for the map (light, dark, or follow system). */
   val mapColorScheme: MapColorSchemeDto? = null,
   /** Forces night mode (dark theme) regardless of system settings. */
-  val forceNightMode: NavigationForceNightModeDto? = null
+  val forceNightMode: NavigationForceNightModeDto? = null,
+  /** Determines the initial visibility of the navigation UI on map initialization. */
+  val navigationUIEnabledPreference: NavigationUIEnabledPreferenceDto? = null
 )
  {
   companion object {
@@ -634,7 +636,8 @@ data class AutoMapOptionsDto (
       val mapType = pigeonVar_list[2] as MapTypeDto?
       val mapColorScheme = pigeonVar_list[3] as MapColorSchemeDto?
       val forceNightMode = pigeonVar_list[4] as NavigationForceNightModeDto?
-      return AutoMapOptionsDto(cameraPosition, mapId, mapType, mapColorScheme, forceNightMode)
+      val navigationUIEnabledPreference = pigeonVar_list[5] as NavigationUIEnabledPreferenceDto?
+      return AutoMapOptionsDto(cameraPosition, mapId, mapType, mapColorScheme, forceNightMode, navigationUIEnabledPreference)
     }
   }
   fun toList(): List<Any?> {
@@ -644,6 +647,7 @@ data class AutoMapOptionsDto (
       mapType,
       mapColorScheme,
       forceNightMode,
+      navigationUIEnabledPreference,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -6506,6 +6510,8 @@ interface AutoMapViewApi {
   fun isNavigationTripProgressBarEnabled(): Boolean
   fun isSpeedLimitIconEnabled(): Boolean
   fun isSpeedometerEnabled(): Boolean
+  fun isNavigationUIEnabled(): Boolean
+  fun setNavigationUIEnabled(enabled: Boolean)
   fun showRouteOverview()
   fun getMarkers(): List<MarkerDto>
   fun addMarkers(markers: List<MarkerDto>): List<MarkerDto>
@@ -7597,6 +7603,39 @@ interface AutoMapViewApi {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
               listOf(api.isSpeedometerEnabled())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isNavigationUIEnabled$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              listOf(api.isNavigationUIEnabled())
+            } catch (exception: Throwable) {
+              MessagesPigeonUtils.wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationUIEnabled$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            val wrapped: List<Any?> = try {
+              api.setNavigationUIEnabled(enabledArg)
+              listOf(null)
             } catch (exception: Throwable) {
               MessagesPigeonUtils.wrapError(exception)
             }

@@ -120,7 +120,8 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
           isNavigationView: true,
           viewRegistry: viewRegistry,
           viewEventApi: nil,
-          navigationUIEnabledPreference: NavigationUIEnabledPreference.automatic,
+          navigationUIEnabledPreference:
+            autoMapOptions?.navigationUIEnabledPreference ?? .automatic,
           forceNightMode: autoMapOptions?.forceNightMode,
           mapConfiguration: MapConfiguration(
             cameraPosition: autoMapOptions?.cameraPosition,

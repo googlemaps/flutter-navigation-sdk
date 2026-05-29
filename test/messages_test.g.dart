@@ -24,6 +24,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:google_navigation_flutter/src/method_channel/messages.g.dart';
 
+
 class _PigeonCodec extends StandardMessageCodec {
   const _PigeonCodec();
   @override
@@ -31,221 +32,220 @@ class _PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    } else if (value is MapViewTypeDto) {
+    }    else if (value is MapViewTypeDto) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
-    } else if (value is NavigationUIEnabledPreferenceDto) {
+    }    else if (value is NavigationUIEnabledPreferenceDto) {
       buffer.putUint8(130);
       writeValue(buffer, value.index);
-    } else if (value is MapTypeDto) {
+    }    else if (value is MapTypeDto) {
       buffer.putUint8(131);
       writeValue(buffer, value.index);
-    } else if (value is MapColorSchemeDto) {
+    }    else if (value is MapColorSchemeDto) {
       buffer.putUint8(132);
       writeValue(buffer, value.index);
-    } else if (value is NavigationForceNightModeDto) {
+    }    else if (value is NavigationForceNightModeDto) {
       buffer.putUint8(133);
       writeValue(buffer, value.index);
-    } else if (value is CameraPerspectiveDto) {
+    }    else if (value is CameraPerspectiveDto) {
       buffer.putUint8(134);
       writeValue(buffer, value.index);
-    } else if (value is RegisteredImageTypeDto) {
+    }    else if (value is RegisteredImageTypeDto) {
       buffer.putUint8(135);
       writeValue(buffer, value.index);
-    } else if (value is MarkerEventTypeDto) {
+    }    else if (value is MarkerEventTypeDto) {
       buffer.putUint8(136);
       writeValue(buffer, value.index);
-    } else if (value is MarkerDragEventTypeDto) {
+    }    else if (value is MarkerDragEventTypeDto) {
       buffer.putUint8(137);
       writeValue(buffer, value.index);
-    } else if (value is StrokeJointTypeDto) {
+    }    else if (value is StrokeJointTypeDto) {
       buffer.putUint8(138);
       writeValue(buffer, value.index);
-    } else if (value is PatternTypeDto) {
+    }    else if (value is PatternTypeDto) {
       buffer.putUint8(139);
       writeValue(buffer, value.index);
-    } else if (value is CameraEventTypeDto) {
+    }    else if (value is CameraEventTypeDto) {
       buffer.putUint8(140);
       writeValue(buffer, value.index);
-    } else if (value is AlternateRoutesStrategyDto) {
+    }    else if (value is AlternateRoutesStrategyDto) {
       buffer.putUint8(141);
       writeValue(buffer, value.index);
-    } else if (value is RoutingStrategyDto) {
+    }    else if (value is RoutingStrategyDto) {
       buffer.putUint8(142);
       writeValue(buffer, value.index);
-    } else if (value is TravelModeDto) {
+    }    else if (value is TravelModeDto) {
       buffer.putUint8(143);
       writeValue(buffer, value.index);
-    } else if (value is RouteStatusDto) {
+    }    else if (value is RouteStatusDto) {
       buffer.putUint8(144);
       writeValue(buffer, value.index);
-    } else if (value is TrafficDelaySeverityDto) {
+    }    else if (value is TrafficDelaySeverityDto) {
       buffer.putUint8(145);
       writeValue(buffer, value.index);
-    } else if (value is AudioGuidanceTypeDto) {
+    }    else if (value is AudioGuidanceTypeDto) {
       buffer.putUint8(146);
       writeValue(buffer, value.index);
-    } else if (value is SpeedAlertSeverityDto) {
+    }    else if (value is SpeedAlertSeverityDto) {
       buffer.putUint8(147);
       writeValue(buffer, value.index);
-    } else if (value is RouteSegmentTrafficDataStatusDto) {
+    }    else if (value is RouteSegmentTrafficDataStatusDto) {
       buffer.putUint8(148);
       writeValue(buffer, value.index);
-    } else if (value
-        is RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto) {
+    }    else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto) {
       buffer.putUint8(149);
       writeValue(buffer, value.index);
-    } else if (value is ManeuverDto) {
+    }    else if (value is ManeuverDto) {
       buffer.putUint8(150);
       writeValue(buffer, value.index);
-    } else if (value is DrivingSideDto) {
+    }    else if (value is DrivingSideDto) {
       buffer.putUint8(151);
       writeValue(buffer, value.index);
-    } else if (value is NavStateDto) {
+    }    else if (value is NavStateDto) {
       buffer.putUint8(152);
       writeValue(buffer, value.index);
-    } else if (value is LaneShapeDto) {
+    }    else if (value is LaneShapeDto) {
       buffer.putUint8(153);
       writeValue(buffer, value.index);
-    } else if (value is TaskRemovedBehaviorDto) {
+    }    else if (value is TaskRemovedBehaviorDto) {
       buffer.putUint8(154);
       writeValue(buffer, value.index);
-    } else if (value is AutoMapOptionsDto) {
+    }    else if (value is AutoMapOptionsDto) {
       buffer.putUint8(155);
       writeValue(buffer, value.encode());
-    } else if (value is MapOptionsDto) {
+    }    else if (value is MapOptionsDto) {
       buffer.putUint8(156);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationViewOptionsDto) {
+    }    else if (value is NavigationViewOptionsDto) {
       buffer.putUint8(157);
       writeValue(buffer, value.encode());
-    } else if (value is ViewCreationOptionsDto) {
+    }    else if (value is ViewCreationOptionsDto) {
       buffer.putUint8(158);
       writeValue(buffer, value.encode());
-    } else if (value is CameraPositionDto) {
+    }    else if (value is CameraPositionDto) {
       buffer.putUint8(159);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerDto) {
+    }    else if (value is MarkerDto) {
       buffer.putUint8(160);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerOptionsDto) {
+    }    else if (value is MarkerOptionsDto) {
       buffer.putUint8(161);
       writeValue(buffer, value.encode());
-    } else if (value is ImageDescriptorDto) {
+    }    else if (value is ImageDescriptorDto) {
       buffer.putUint8(162);
       writeValue(buffer, value.encode());
-    } else if (value is InfoWindowDto) {
+    }    else if (value is InfoWindowDto) {
       buffer.putUint8(163);
       writeValue(buffer, value.encode());
-    } else if (value is MarkerAnchorDto) {
+    }    else if (value is MarkerAnchorDto) {
       buffer.putUint8(164);
       writeValue(buffer, value.encode());
-    } else if (value is PointOfInterestDto) {
+    }    else if (value is PointOfInterestDto) {
       buffer.putUint8(165);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonDto) {
+    }    else if (value is PolygonDto) {
       buffer.putUint8(166);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonOptionsDto) {
+    }    else if (value is PolygonOptionsDto) {
       buffer.putUint8(167);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonHoleDto) {
+    }    else if (value is PolygonHoleDto) {
       buffer.putUint8(168);
       writeValue(buffer, value.encode());
-    } else if (value is StyleSpanStrokeStyleDto) {
+    }    else if (value is StyleSpanStrokeStyleDto) {
       buffer.putUint8(169);
       writeValue(buffer, value.encode());
-    } else if (value is StyleSpanDto) {
+    }    else if (value is StyleSpanDto) {
       buffer.putUint8(170);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineDto) {
+    }    else if (value is PolylineDto) {
       buffer.putUint8(171);
       writeValue(buffer, value.encode());
-    } else if (value is PatternItemDto) {
+    }    else if (value is PatternItemDto) {
       buffer.putUint8(172);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineOptionsDto) {
+    }    else if (value is PolylineOptionsDto) {
       buffer.putUint8(173);
       writeValue(buffer, value.encode());
-    } else if (value is CircleDto) {
+    }    else if (value is CircleDto) {
       buffer.putUint8(174);
       writeValue(buffer, value.encode());
-    } else if (value is CircleOptionsDto) {
+    }    else if (value is CircleOptionsDto) {
       buffer.putUint8(175);
       writeValue(buffer, value.encode());
-    } else if (value is MapPaddingDto) {
+    }    else if (value is MapPaddingDto) {
       buffer.putUint8(176);
       writeValue(buffer, value.encode());
-    } else if (value is RouteTokenOptionsDto) {
+    }    else if (value is RouteTokenOptionsDto) {
       buffer.putUint8(177);
       writeValue(buffer, value.encode());
-    } else if (value is DestinationsDto) {
+    }    else if (value is DestinationsDto) {
       buffer.putUint8(178);
       writeValue(buffer, value.encode());
-    } else if (value is RoutingOptionsDto) {
+    }    else if (value is RoutingOptionsDto) {
       buffer.putUint8(179);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationDisplayOptionsDto) {
+    }    else if (value is NavigationDisplayOptionsDto) {
       buffer.putUint8(180);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationWaypointDto) {
+    }    else if (value is NavigationWaypointDto) {
       buffer.putUint8(181);
       writeValue(buffer, value.encode());
-    } else if (value is ContinueToNextDestinationResponseDto) {
+    }    else if (value is ContinueToNextDestinationResponseDto) {
       buffer.putUint8(182);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationTimeAndDistanceDto) {
+    }    else if (value is NavigationTimeAndDistanceDto) {
       buffer.putUint8(183);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationAudioGuidanceSettingsDto) {
+    }    else if (value is NavigationAudioGuidanceSettingsDto) {
       buffer.putUint8(184);
       writeValue(buffer, value.encode());
-    } else if (value is SimulationOptionsDto) {
+    }    else if (value is SimulationOptionsDto) {
       buffer.putUint8(185);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngDto) {
+    }    else if (value is LatLngDto) {
       buffer.putUint8(186);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngBoundsDto) {
+    }    else if (value is LatLngBoundsDto) {
       buffer.putUint8(187);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedingUpdatedEventDto) {
+    }    else if (value is SpeedingUpdatedEventDto) {
       buffer.putUint8(188);
       writeValue(buffer, value.encode());
-    } else if (value is GpsAvailabilityChangeEventDto) {
+    }    else if (value is GpsAvailabilityChangeEventDto) {
       buffer.putUint8(189);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
+    }    else if (value is SpeedAlertOptionsThresholdPercentageDto) {
       buffer.putUint8(190);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsDto) {
+    }    else if (value is SpeedAlertOptionsDto) {
       buffer.putUint8(191);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
+    }    else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
       buffer.putUint8(192);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataDto) {
+    }    else if (value is RouteSegmentTrafficDataDto) {
       buffer.putUint8(193);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentDto) {
+    }    else if (value is RouteSegmentDto) {
       buffer.putUint8(194);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDirectionDto) {
+    }    else if (value is LaneDirectionDto) {
       buffer.putUint8(195);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDto) {
+    }    else if (value is LaneDto) {
       buffer.putUint8(196);
       writeValue(buffer, value.encode());
-    } else if (value is StepInfoDto) {
+    }    else if (value is StepInfoDto) {
       buffer.putUint8(197);
       writeValue(buffer, value.encode());
-    } else if (value is NavInfoDto) {
+    }    else if (value is NavInfoDto) {
       buffer.putUint8(198);
       writeValue(buffer, value.encode());
-    } else if (value is TermsAndConditionsUIParamsDto) {
+    }    else if (value is TermsAndConditionsUIParamsDto) {
       buffer.putUint8(199);
       writeValue(buffer, value.encode());
-    } else if (value is StepImageGenerationOptionsDto) {
+    }    else if (value is StepImageGenerationOptionsDto) {
       buffer.putUint8(200);
       writeValue(buffer, value.encode());
     } else {
@@ -256,186 +256,175 @@ class _PigeonCodec extends StandardMessageCodec {
   @override
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
-      case 129:
+      case 129: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : MapViewTypeDto.values[value];
-      case 130:
+      case 130: 
         final int? value = readValue(buffer) as int?;
-        return value == null
-            ? null
-            : NavigationUIEnabledPreferenceDto.values[value];
-      case 131:
+        return value == null ? null : NavigationUIEnabledPreferenceDto.values[value];
+      case 131: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : MapTypeDto.values[value];
-      case 132:
+      case 132: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : MapColorSchemeDto.values[value];
-      case 133:
+      case 133: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : NavigationForceNightModeDto.values[value];
-      case 134:
+      case 134: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : CameraPerspectiveDto.values[value];
-      case 135:
+      case 135: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : RegisteredImageTypeDto.values[value];
-      case 136:
+      case 136: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : MarkerEventTypeDto.values[value];
-      case 137:
+      case 137: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : MarkerDragEventTypeDto.values[value];
-      case 138:
+      case 138: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : StrokeJointTypeDto.values[value];
-      case 139:
+      case 139: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : PatternTypeDto.values[value];
-      case 140:
+      case 140: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : CameraEventTypeDto.values[value];
-      case 141:
+      case 141: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : AlternateRoutesStrategyDto.values[value];
-      case 142:
+      case 142: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : RoutingStrategyDto.values[value];
-      case 143:
+      case 143: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : TravelModeDto.values[value];
-      case 144:
+      case 144: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : RouteStatusDto.values[value];
-      case 145:
+      case 145: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : TrafficDelaySeverityDto.values[value];
-      case 146:
+      case 146: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : AudioGuidanceTypeDto.values[value];
-      case 147:
+      case 147: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : SpeedAlertSeverityDto.values[value];
-      case 148:
+      case 148: 
         final int? value = readValue(buffer) as int?;
-        return value == null
-            ? null
-            : RouteSegmentTrafficDataStatusDto.values[value];
-      case 149:
+        return value == null ? null : RouteSegmentTrafficDataStatusDto.values[value];
+      case 149: 
         final int? value = readValue(buffer) as int?;
-        return value == null
-            ? null
-            : RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
-                  .values[value];
-      case 150:
+        return value == null ? null : RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto.values[value];
+      case 150: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : ManeuverDto.values[value];
-      case 151:
+      case 151: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : DrivingSideDto.values[value];
-      case 152:
+      case 152: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : NavStateDto.values[value];
-      case 153:
+      case 153: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : LaneShapeDto.values[value];
-      case 154:
+      case 154: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : TaskRemovedBehaviorDto.values[value];
-      case 155:
+      case 155: 
         return AutoMapOptionsDto.decode(readValue(buffer)!);
-      case 156:
+      case 156: 
         return MapOptionsDto.decode(readValue(buffer)!);
-      case 157:
+      case 157: 
         return NavigationViewOptionsDto.decode(readValue(buffer)!);
-      case 158:
+      case 158: 
         return ViewCreationOptionsDto.decode(readValue(buffer)!);
-      case 159:
+      case 159: 
         return CameraPositionDto.decode(readValue(buffer)!);
-      case 160:
+      case 160: 
         return MarkerDto.decode(readValue(buffer)!);
-      case 161:
+      case 161: 
         return MarkerOptionsDto.decode(readValue(buffer)!);
-      case 162:
+      case 162: 
         return ImageDescriptorDto.decode(readValue(buffer)!);
-      case 163:
+      case 163: 
         return InfoWindowDto.decode(readValue(buffer)!);
-      case 164:
+      case 164: 
         return MarkerAnchorDto.decode(readValue(buffer)!);
-      case 165:
+      case 165: 
         return PointOfInterestDto.decode(readValue(buffer)!);
-      case 166:
+      case 166: 
         return PolygonDto.decode(readValue(buffer)!);
-      case 167:
+      case 167: 
         return PolygonOptionsDto.decode(readValue(buffer)!);
-      case 168:
+      case 168: 
         return PolygonHoleDto.decode(readValue(buffer)!);
-      case 169:
+      case 169: 
         return StyleSpanStrokeStyleDto.decode(readValue(buffer)!);
-      case 170:
+      case 170: 
         return StyleSpanDto.decode(readValue(buffer)!);
-      case 171:
+      case 171: 
         return PolylineDto.decode(readValue(buffer)!);
-      case 172:
+      case 172: 
         return PatternItemDto.decode(readValue(buffer)!);
-      case 173:
+      case 173: 
         return PolylineOptionsDto.decode(readValue(buffer)!);
-      case 174:
+      case 174: 
         return CircleDto.decode(readValue(buffer)!);
-      case 175:
+      case 175: 
         return CircleOptionsDto.decode(readValue(buffer)!);
-      case 176:
+      case 176: 
         return MapPaddingDto.decode(readValue(buffer)!);
-      case 177:
+      case 177: 
         return RouteTokenOptionsDto.decode(readValue(buffer)!);
-      case 178:
+      case 178: 
         return DestinationsDto.decode(readValue(buffer)!);
-      case 179:
+      case 179: 
         return RoutingOptionsDto.decode(readValue(buffer)!);
-      case 180:
+      case 180: 
         return NavigationDisplayOptionsDto.decode(readValue(buffer)!);
-      case 181:
+      case 181: 
         return NavigationWaypointDto.decode(readValue(buffer)!);
-      case 182:
+      case 182: 
         return ContinueToNextDestinationResponseDto.decode(readValue(buffer)!);
-      case 183:
+      case 183: 
         return NavigationTimeAndDistanceDto.decode(readValue(buffer)!);
-      case 184:
+      case 184: 
         return NavigationAudioGuidanceSettingsDto.decode(readValue(buffer)!);
-      case 185:
+      case 185: 
         return SimulationOptionsDto.decode(readValue(buffer)!);
-      case 186:
+      case 186: 
         return LatLngDto.decode(readValue(buffer)!);
-      case 187:
+      case 187: 
         return LatLngBoundsDto.decode(readValue(buffer)!);
-      case 188:
+      case 188: 
         return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
-      case 189:
+      case 189: 
         return GpsAvailabilityChangeEventDto.decode(readValue(buffer)!);
-      case 190:
-        return SpeedAlertOptionsThresholdPercentageDto.decode(
-          readValue(buffer)!,
-        );
-      case 191:
+      case 190: 
+        return SpeedAlertOptionsThresholdPercentageDto.decode(readValue(buffer)!);
+      case 191: 
         return SpeedAlertOptionsDto.decode(readValue(buffer)!);
-      case 192:
-        return RouteSegmentTrafficDataRoadStretchRenderingDataDto.decode(
-          readValue(buffer)!,
-        );
-      case 193:
+      case 192: 
+        return RouteSegmentTrafficDataRoadStretchRenderingDataDto.decode(readValue(buffer)!);
+      case 193: 
         return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
-      case 194:
+      case 194: 
         return RouteSegmentDto.decode(readValue(buffer)!);
-      case 195:
+      case 195: 
         return LaneDirectionDto.decode(readValue(buffer)!);
-      case 196:
+      case 196: 
         return LaneDto.decode(readValue(buffer)!);
-      case 197:
+      case 197: 
         return StepInfoDto.decode(readValue(buffer)!);
-      case 198:
+      case 198: 
         return NavInfoDto.decode(readValue(buffer)!);
-      case 199:
+      case 199: 
         return TermsAndConditionsUIParamsDto.decode(readValue(buffer)!);
-      case 200:
+      case 200: 
         return StepImageGenerationOptionsDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -444,8 +433,7 @@ class _PigeonCodec extends StandardMessageCodec {
 }
 
 abstract class TestMapViewApi {
-  static TestDefaultBinaryMessengerBinding? get _testBinaryMessengerBinding =>
-      TestDefaultBinaryMessengerBinding.instance;
+  static TestDefaultBinaryMessengerBinding? get _testBinaryMessengerBinding => TestDefaultBinaryMessengerBinding.instance;
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
 
   Future<void> awaitMapReady(int viewId);
@@ -558,52 +546,19 @@ abstract class TestMapViewApi {
 
   LatLngBoundsDto getVisibleRegion(int viewId);
 
-  void followMyLocation(
-    int viewId,
-    CameraPerspectiveDto perspective,
-    double? zoomLevel,
-  );
+  void followMyLocation(int viewId, CameraPerspectiveDto perspective, double? zoomLevel);
 
-  Future<bool> animateCameraToCameraPosition(
-    int viewId,
-    CameraPositionDto cameraPosition,
-    int? duration,
-  );
+  Future<bool> animateCameraToCameraPosition(int viewId, CameraPositionDto cameraPosition, int? duration);
 
-  Future<bool> animateCameraToLatLng(
-    int viewId,
-    LatLngDto point,
-    int? duration,
-  );
+  Future<bool> animateCameraToLatLng(int viewId, LatLngDto point, int? duration);
 
-  Future<bool> animateCameraToLatLngBounds(
-    int viewId,
-    LatLngBoundsDto bounds,
-    double padding,
-    int? duration,
-  );
+  Future<bool> animateCameraToLatLngBounds(int viewId, LatLngBoundsDto bounds, double padding, int? duration);
 
-  Future<bool> animateCameraToLatLngZoom(
-    int viewId,
-    LatLngDto point,
-    double zoom,
-    int? duration,
-  );
+  Future<bool> animateCameraToLatLngZoom(int viewId, LatLngDto point, double zoom, int? duration);
 
-  Future<bool> animateCameraByScroll(
-    int viewId,
-    double scrollByDx,
-    double scrollByDy,
-    int? duration,
-  );
+  Future<bool> animateCameraByScroll(int viewId, double scrollByDx, double scrollByDy, int? duration);
 
-  Future<bool> animateCameraByZoom(
-    int viewId,
-    double zoomBy,
-    double? focusDx,
-    double? focusDy,
-    int? duration,
-  );
+  Future<bool> animateCameraByZoom(int viewId, double zoomBy, double? focusDx, double? focusDy, int? duration);
 
   Future<bool> animateCameraToZoom(int viewId, double zoom, int? duration);
 
@@ -611,22 +566,13 @@ abstract class TestMapViewApi {
 
   void moveCameraToLatLng(int viewId, LatLngDto point);
 
-  void moveCameraToLatLngBounds(
-    int viewId,
-    LatLngBoundsDto bounds,
-    double padding,
-  );
+  void moveCameraToLatLngBounds(int viewId, LatLngBoundsDto bounds, double padding);
 
   void moveCameraToLatLngZoom(int viewId, LatLngDto point, double zoom);
 
   void moveCameraByScroll(int viewId, double scrollByDx, double scrollByDy);
 
-  void moveCameraByZoom(
-    int viewId,
-    double zoomBy,
-    double? focusDx,
-    double? focusDy,
-  );
+  void moveCameraByZoom(int viewId, double zoomBy, double? focusDx, double? focusDy);
 
   void moveCameraToZoom(int viewId, double zoom);
 
@@ -696,4488 +642,2807 @@ abstract class TestMapViewApi {
 
   NavigationForceNightModeDto getForceNightMode(int viewId);
 
-  void setForceNightMode(
-    int viewId,
-    NavigationForceNightModeDto forceNightMode,
-  );
+  void setForceNightMode(int viewId, NavigationForceNightModeDto forceNightMode);
 
-  static void setUp(
-    TestMapViewApi? api, {
-    BinaryMessenger? binaryMessenger,
-    String messageChannelSuffix = '',
-  }) {
-    messageChannelSuffix = messageChannelSuffix.isNotEmpty
-        ? '.$messageChannelSuffix'
-        : '';
+  static void setUp(TestMapViewApi? api, {BinaryMessenger? binaryMessenger, String messageChannelSuffix = '',}) {
+    messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.awaitMapReady$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.awaitMapReady$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.awaitMapReady was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.awaitMapReady was null, expected non-null int.',
-              );
-              try {
-                await api.awaitMapReady(arg_viewId!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationEnabled was null, expected non-null int.',
-              );
-              try {
-                final bool output = api.isMyLocationEnabled(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationEnabled was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.awaitMapReady was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationEnabled was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.awaitMapReady was null, expected non-null int.');
+          try {
+            await api.awaitMapReady(arg_viewId!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationEnabled was null, expected non-null int.');
+          try {
+            final bool output = api.isMyLocationEnabled(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationEnabled was null, expected non-null bool.',
-          );
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationEnabled was null, expected non-null bool.');
           try {
             api.setMyLocationEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMyLocation$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMyLocation$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMyLocation was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMyLocation was null, expected non-null int.',
-              );
-              try {
-                final LatLngDto? output = api.getMyLocation(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapType$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapType was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapType was null, expected non-null int.',
-              );
-              try {
-                final MapTypeDto output = api.getMapType(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapType$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapType was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMyLocation was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapType was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMyLocation was null, expected non-null int.');
+          try {
+            final LatLngDto? output = api.getMyLocation(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapType$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapType was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapType was null, expected non-null int.');
+          try {
+            final MapTypeDto output = api.getMapType(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapType$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapType was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapType was null, expected non-null int.');
           final MapTypeDto? arg_mapType = (args[1] as MapTypeDto?);
-          assert(
-            arg_mapType != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapType was null, expected non-null MapTypeDto.',
-          );
+          assert(arg_mapType != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapType was null, expected non-null MapTypeDto.');
           try {
             api.setMapType(arg_viewId!, arg_mapType!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapStyle$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapStyle$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapStyle was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapStyle was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapStyle was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapStyle was null, expected non-null int.');
           final String? arg_styleJson = (args[1] as String?);
-          assert(
-            arg_styleJson != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapStyle was null, expected non-null String.',
-          );
+          assert(arg_styleJson != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapStyle was null, expected non-null String.');
           try {
             api.setMapStyle(arg_viewId!, arg_styleJson!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationTripProgressBarEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationTripProgressBarEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationTripProgressBarEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationTripProgressBarEnabled was null, expected non-null int.',
-              );
-              try {
-                final bool output = api.isNavigationTripProgressBarEnabled(
-                  arg_viewId!,
-                );
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationTripProgressBarEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationTripProgressBarEnabled was null, expected non-null int.');
+          try {
+            final bool output = api.isNavigationTripProgressBarEnabled(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationTripProgressBarEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationTripProgressBarEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationTripProgressBarEnabled was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationTripProgressBarEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationTripProgressBarEnabled was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationTripProgressBarEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationTripProgressBarEnabled was null, expected non-null bool.',
-          );
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationTripProgressBarEnabled was null, expected non-null bool.');
           try {
             api.setNavigationTripProgressBarEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationHeaderEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationHeaderEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationHeaderEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationHeaderEnabled was null, expected non-null int.',
-              );
-              try {
-                final bool output = api.isNavigationHeaderEnabled(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationHeaderEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationHeaderEnabled was null, expected non-null int.');
+          try {
+            final bool output = api.isNavigationHeaderEnabled(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationHeaderEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationHeaderEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationHeaderEnabled was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationHeaderEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationHeaderEnabled was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationHeaderEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationHeaderEnabled was null, expected non-null bool.',
-          );
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationHeaderEnabled was null, expected non-null bool.');
           try {
             api.setNavigationHeaderEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationFooterEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationFooterEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationFooterEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationFooterEnabled was null, expected non-null int.',
-              );
-              try {
-                final bool output = api.isNavigationFooterEnabled(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationFooterEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationFooterEnabled was null, expected non-null int.');
+          try {
+            final bool output = api.isNavigationFooterEnabled(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationFooterEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationFooterEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationFooterEnabled was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationFooterEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationFooterEnabled was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationFooterEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationFooterEnabled was null, expected non-null bool.',
-          );
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationFooterEnabled was null, expected non-null bool.');
           try {
             api.setNavigationFooterEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRecenterButtonEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRecenterButtonEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRecenterButtonEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRecenterButtonEnabled was null, expected non-null int.',
-              );
-              try {
-                final bool output = api.isRecenterButtonEnabled(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRecenterButtonEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRecenterButtonEnabled was null, expected non-null int.');
+          try {
+            final bool output = api.isRecenterButtonEnabled(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRecenterButtonEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRecenterButtonEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRecenterButtonEnabled was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRecenterButtonEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRecenterButtonEnabled was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRecenterButtonEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRecenterButtonEnabled was null, expected non-null bool.',
-          );
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRecenterButtonEnabled was null, expected non-null bool.');
           try {
             api.setRecenterButtonEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedLimitIconEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedLimitIconEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedLimitIconEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedLimitIconEnabled was null, expected non-null int.',
-              );
-              try {
-                final bool output = api.isSpeedLimitIconEnabled(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedLimitIconEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedLimitIconEnabled was null, expected non-null int.');
+          try {
+            final bool output = api.isSpeedLimitIconEnabled(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedLimitIconEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedLimitIconEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedLimitIconEnabled was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedLimitIconEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedLimitIconEnabled was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedLimitIconEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedLimitIconEnabled was null, expected non-null bool.',
-          );
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedLimitIconEnabled was null, expected non-null bool.');
           try {
             api.setSpeedLimitIconEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedometerEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedometerEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedometerEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedometerEnabled was null, expected non-null int.',
-              );
-              try {
-                final bool output = api.isSpeedometerEnabled(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedometerEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedometerEnabled was null, expected non-null int.');
+          try {
+            final bool output = api.isSpeedometerEnabled(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedometerEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedometerEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedometerEnabled was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedometerEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedometerEnabled was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedometerEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedometerEnabled was null, expected non-null bool.',
-          );
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedometerEnabled was null, expected non-null bool.');
           try {
             api.setSpeedometerEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationUIEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationUIEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationUIEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationUIEnabled was null, expected non-null int.',
-              );
-              try {
-                final bool output = api.isNavigationUIEnabled(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationUIEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationUIEnabled was null, expected non-null int.');
+          try {
+            final bool output = api.isNavigationUIEnabled(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationUIEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationUIEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationUIEnabled was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationUIEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationUIEnabled was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationUIEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationUIEnabled was null, expected non-null bool.',
-          );
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationUIEnabled was null, expected non-null bool.');
           try {
             api.setNavigationUIEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationButtonEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationButtonEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationButtonEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationButtonEnabled was null, expected non-null int.',
-              );
-              try {
-                final bool output = api.isMyLocationButtonEnabled(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationButtonEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationButtonEnabled was null, expected non-null int.');
+          try {
+            final bool output = api.isMyLocationButtonEnabled(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationButtonEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationButtonEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationButtonEnabled was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationButtonEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationButtonEnabled was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationButtonEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationButtonEnabled was null, expected non-null bool.',
-          );
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationButtonEnabled was null, expected non-null bool.');
           try {
             api.setMyLocationButtonEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isConsumeMyLocationButtonClickEventsEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isConsumeMyLocationButtonClickEventsEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isConsumeMyLocationButtonClickEventsEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isConsumeMyLocationButtonClickEventsEnabled was null, expected non-null int.',
-              );
-              try {
-                final bool output = api
-                    .isConsumeMyLocationButtonClickEventsEnabled(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isConsumeMyLocationButtonClickEventsEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isConsumeMyLocationButtonClickEventsEnabled was null, expected non-null int.');
+          try {
+            final bool output = api.isConsumeMyLocationButtonClickEventsEnabled(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setConsumeMyLocationButtonClickEventsEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setConsumeMyLocationButtonClickEventsEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setConsumeMyLocationButtonClickEventsEnabled was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setConsumeMyLocationButtonClickEventsEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setConsumeMyLocationButtonClickEventsEnabled was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setConsumeMyLocationButtonClickEventsEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setConsumeMyLocationButtonClickEventsEnabled was null, expected non-null bool.',
-          );
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setConsumeMyLocationButtonClickEventsEnabled was null, expected non-null bool.');
           try {
-            api.setConsumeMyLocationButtonClickEventsEnabled(
-              arg_viewId!,
-              arg_enabled!,
-            );
+            api.setConsumeMyLocationButtonClickEventsEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomGesturesEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomGesturesEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomGesturesEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomGesturesEnabled was null, expected non-null int.',
-              );
-              try {
-                final bool output = api.isZoomGesturesEnabled(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomGesturesEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomGesturesEnabled was null, expected non-null int.');
+          try {
+            final bool output = api.isZoomGesturesEnabled(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomGesturesEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomGesturesEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomGesturesEnabled was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomGesturesEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomGesturesEnabled was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomGesturesEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomGesturesEnabled was null, expected non-null bool.',
-          );
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomGesturesEnabled was null, expected non-null bool.');
           try {
             api.setZoomGesturesEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomControlsEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomControlsEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomControlsEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomControlsEnabled was null, expected non-null int.',
-              );
-              try {
-                final bool output = api.isZoomControlsEnabled(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomControlsEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomControlsEnabled was null, expected non-null int.');
+          try {
+            final bool output = api.isZoomControlsEnabled(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomControlsEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomControlsEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomControlsEnabled was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomControlsEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomControlsEnabled was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomControlsEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomControlsEnabled was null, expected non-null bool.',
-          );
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomControlsEnabled was null, expected non-null bool.');
           try {
             api.setZoomControlsEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isCompassEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isCompassEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isCompassEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isCompassEnabled was null, expected non-null int.',
-              );
-              try {
-                final bool output = api.isCompassEnabled(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isCompassEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isCompassEnabled was null, expected non-null int.');
+          try {
+            final bool output = api.isCompassEnabled(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setCompassEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setCompassEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setCompassEnabled was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setCompassEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setCompassEnabled was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setCompassEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setCompassEnabled was null, expected non-null bool.',
-          );
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setCompassEnabled was null, expected non-null bool.');
           try {
             api.setCompassEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRotateGesturesEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRotateGesturesEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRotateGesturesEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRotateGesturesEnabled was null, expected non-null int.',
-              );
-              try {
-                final bool output = api.isRotateGesturesEnabled(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRotateGesturesEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRotateGesturesEnabled was null, expected non-null int.');
+          try {
+            final bool output = api.isRotateGesturesEnabled(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRotateGesturesEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRotateGesturesEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRotateGesturesEnabled was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRotateGesturesEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRotateGesturesEnabled was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRotateGesturesEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRotateGesturesEnabled was null, expected non-null bool.',
-          );
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRotateGesturesEnabled was null, expected non-null bool.');
           try {
             api.setRotateGesturesEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabled was null, expected non-null int.',
-              );
-              try {
-                final bool output = api.isScrollGesturesEnabled(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabled was null, expected non-null int.');
+          try {
+            final bool output = api.isScrollGesturesEnabled(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesEnabled was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesEnabled was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesEnabled was null, expected non-null bool.',
-          );
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesEnabled was null, expected non-null bool.');
           try {
             api.setScrollGesturesEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabledDuringRotateOrZoom$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabledDuringRotateOrZoom$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabledDuringRotateOrZoom was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabledDuringRotateOrZoom was null, expected non-null int.',
-              );
-              try {
-                final bool output = api
-                    .isScrollGesturesEnabledDuringRotateOrZoom(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabledDuringRotateOrZoom was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabledDuringRotateOrZoom was null, expected non-null int.');
+          try {
+            final bool output = api.isScrollGesturesEnabledDuringRotateOrZoom(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesDuringRotateOrZoomEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesDuringRotateOrZoomEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesDuringRotateOrZoomEnabled was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesDuringRotateOrZoomEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesDuringRotateOrZoomEnabled was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesDuringRotateOrZoomEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesDuringRotateOrZoomEnabled was null, expected non-null bool.',
-          );
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesDuringRotateOrZoomEnabled was null, expected non-null bool.');
           try {
-            api.setScrollGesturesDuringRotateOrZoomEnabled(
-              arg_viewId!,
-              arg_enabled!,
-            );
+            api.setScrollGesturesDuringRotateOrZoomEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTiltGesturesEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTiltGesturesEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTiltGesturesEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTiltGesturesEnabled was null, expected non-null int.',
-              );
-              try {
-                final bool output = api.isTiltGesturesEnabled(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTiltGesturesEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTiltGesturesEnabled was null, expected non-null int.');
+          try {
+            final bool output = api.isTiltGesturesEnabled(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTiltGesturesEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTiltGesturesEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTiltGesturesEnabled was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTiltGesturesEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTiltGesturesEnabled was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTiltGesturesEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTiltGesturesEnabled was null, expected non-null bool.',
-          );
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTiltGesturesEnabled was null, expected non-null bool.');
           try {
             api.setTiltGesturesEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMapToolbarEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMapToolbarEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMapToolbarEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMapToolbarEnabled was null, expected non-null int.',
-              );
-              try {
-                final bool output = api.isMapToolbarEnabled(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMapToolbarEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMapToolbarEnabled was null, expected non-null int.');
+          try {
+            final bool output = api.isMapToolbarEnabled(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapToolbarEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapToolbarEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapToolbarEnabled was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapToolbarEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapToolbarEnabled was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapToolbarEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapToolbarEnabled was null, expected non-null bool.',
-          );
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapToolbarEnabled was null, expected non-null bool.');
           try {
             api.setMapToolbarEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficEnabled was null, expected non-null int.',
-              );
-              try {
-                final bool output = api.isTrafficEnabled(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficEnabled was null, expected non-null int.');
+          try {
+            final bool output = api.isTrafficEnabled(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficEnabled was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficEnabled was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficEnabled was null, expected non-null bool.',
-          );
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficEnabled was null, expected non-null bool.');
           try {
             api.setTrafficEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficIncidentCardsEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficIncidentCardsEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficIncidentCardsEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficIncidentCardsEnabled was null, expected non-null int.',
-              );
-              try {
-                final bool output = api.isTrafficIncidentCardsEnabled(
-                  arg_viewId!,
-                );
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficIncidentCardsEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficIncidentCardsEnabled was null, expected non-null int.');
+          try {
+            final bool output = api.isTrafficIncidentCardsEnabled(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficIncidentCardsEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficIncidentCardsEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficIncidentCardsEnabled was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficIncidentCardsEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficIncidentCardsEnabled was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficIncidentCardsEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficIncidentCardsEnabled was null, expected non-null bool.',
-          );
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficIncidentCardsEnabled was null, expected non-null bool.');
           try {
             api.setTrafficIncidentCardsEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficPromptsEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficPromptsEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficPromptsEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficPromptsEnabled was null, expected non-null int.',
-              );
-              try {
-                final bool output = api.isTrafficPromptsEnabled(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficPromptsEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficPromptsEnabled was null, expected non-null int.');
+          try {
+            final bool output = api.isTrafficPromptsEnabled(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficPromptsEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficPromptsEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficPromptsEnabled was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficPromptsEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficPromptsEnabled was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficPromptsEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficPromptsEnabled was null, expected non-null bool.',
-          );
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficPromptsEnabled was null, expected non-null bool.');
           try {
             api.setTrafficPromptsEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isReportIncidentButtonEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isReportIncidentButtonEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isReportIncidentButtonEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isReportIncidentButtonEnabled was null, expected non-null int.',
-              );
-              try {
-                final bool output = api.isReportIncidentButtonEnabled(
-                  arg_viewId!,
-                );
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isReportIncidentButtonEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isReportIncidentButtonEnabled was null, expected non-null int.');
+          try {
+            final bool output = api.isReportIncidentButtonEnabled(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setReportIncidentButtonEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setReportIncidentButtonEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setReportIncidentButtonEnabled was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setReportIncidentButtonEnabled was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setReportIncidentButtonEnabled was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setReportIncidentButtonEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setReportIncidentButtonEnabled was null, expected non-null bool.',
-          );
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setReportIncidentButtonEnabled was null, expected non-null bool.');
           try {
             api.setReportIncidentButtonEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIncidentReportingAvailable$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIncidentReportingAvailable$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIncidentReportingAvailable was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIncidentReportingAvailable was null, expected non-null int.',
-              );
-              try {
-                final bool output = api.isIncidentReportingAvailable(
-                  arg_viewId!,
-                );
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showReportIncidentsPanel$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showReportIncidentsPanel was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showReportIncidentsPanel was null, expected non-null int.',
-              );
-              try {
-                api.showReportIncidentsPanel(arg_viewId!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isBuildingsEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isBuildingsEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isBuildingsEnabled was null, expected non-null int.',
-              );
-              try {
-                final bool output = api.isBuildingsEnabled(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setBuildingsEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setBuildingsEnabled was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIncidentReportingAvailable was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setBuildingsEnabled was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIncidentReportingAvailable was null, expected non-null int.');
+          try {
+            final bool output = api.isIncidentReportingAvailable(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showReportIncidentsPanel$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showReportIncidentsPanel was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showReportIncidentsPanel was null, expected non-null int.');
+          try {
+            api.showReportIncidentsPanel(arg_viewId!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isBuildingsEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isBuildingsEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isBuildingsEnabled was null, expected non-null int.');
+          try {
+            final bool output = api.isBuildingsEnabled(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setBuildingsEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setBuildingsEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setBuildingsEnabled was null, expected non-null int.');
           final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setBuildingsEnabled was null, expected non-null bool.',
-          );
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setBuildingsEnabled was null, expected non-null bool.');
           try {
             api.setBuildingsEnabled(arg_viewId!, arg_enabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCameraPosition$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCameraPosition$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCameraPosition was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCameraPosition was null, expected non-null int.',
-              );
-              try {
-                final CameraPositionDto output = api.getCameraPosition(
-                  arg_viewId!,
-                );
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getVisibleRegion$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getVisibleRegion was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getVisibleRegion was null, expected non-null int.',
-              );
-              try {
-                final LatLngBoundsDto output = api.getVisibleRegion(
-                  arg_viewId!,
-                );
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.followMyLocation$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.followMyLocation was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCameraPosition was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.followMyLocation was null, expected non-null int.',
-          );
-          final CameraPerspectiveDto? arg_perspective =
-              (args[1] as CameraPerspectiveDto?);
-          assert(
-            arg_perspective != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.followMyLocation was null, expected non-null CameraPerspectiveDto.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCameraPosition was null, expected non-null int.');
+          try {
+            final CameraPositionDto output = api.getCameraPosition(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getVisibleRegion$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getVisibleRegion was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getVisibleRegion was null, expected non-null int.');
+          try {
+            final LatLngBoundsDto output = api.getVisibleRegion(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.followMyLocation$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.followMyLocation was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.followMyLocation was null, expected non-null int.');
+          final CameraPerspectiveDto? arg_perspective = (args[1] as CameraPerspectiveDto?);
+          assert(arg_perspective != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.followMyLocation was null, expected non-null CameraPerspectiveDto.');
           final double? arg_zoomLevel = (args[2] as double?);
           try {
             api.followMyLocation(arg_viewId!, arg_perspective!, arg_zoomLevel);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToCameraPosition$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToCameraPosition$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToCameraPosition was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToCameraPosition was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToCameraPosition was null, expected non-null int.',
-          );
-          final CameraPositionDto? arg_cameraPosition =
-              (args[1] as CameraPositionDto?);
-          assert(
-            arg_cameraPosition != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToCameraPosition was null, expected non-null CameraPositionDto.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToCameraPosition was null, expected non-null int.');
+          final CameraPositionDto? arg_cameraPosition = (args[1] as CameraPositionDto?);
+          assert(arg_cameraPosition != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToCameraPosition was null, expected non-null CameraPositionDto.');
           final int? arg_duration = (args[2] as int?);
           try {
-            final bool output = await api.animateCameraToCameraPosition(
-              arg_viewId!,
-              arg_cameraPosition!,
-              arg_duration,
-            );
+            final bool output = await api.animateCameraToCameraPosition(arg_viewId!, arg_cameraPosition!, arg_duration);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLng$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLng$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLng was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLng was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLng was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLng was null, expected non-null int.');
           final LatLngDto? arg_point = (args[1] as LatLngDto?);
-          assert(
-            arg_point != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLng was null, expected non-null LatLngDto.',
-          );
+          assert(arg_point != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLng was null, expected non-null LatLngDto.');
           final int? arg_duration = (args[2] as int?);
           try {
-            final bool output = await api.animateCameraToLatLng(
-              arg_viewId!,
-              arg_point!,
-              arg_duration,
-            );
+            final bool output = await api.animateCameraToLatLng(arg_viewId!, arg_point!, arg_duration);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngBounds$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngBounds$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngBounds was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngBounds was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngBounds was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngBounds was null, expected non-null int.');
           final LatLngBoundsDto? arg_bounds = (args[1] as LatLngBoundsDto?);
-          assert(
-            arg_bounds != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngBounds was null, expected non-null LatLngBoundsDto.',
-          );
+          assert(arg_bounds != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngBounds was null, expected non-null LatLngBoundsDto.');
           final double? arg_padding = (args[2] as double?);
-          assert(
-            arg_padding != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngBounds was null, expected non-null double.',
-          );
+          assert(arg_padding != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngBounds was null, expected non-null double.');
           final int? arg_duration = (args[3] as int?);
           try {
-            final bool output = await api.animateCameraToLatLngBounds(
-              arg_viewId!,
-              arg_bounds!,
-              arg_padding!,
-              arg_duration,
-            );
+            final bool output = await api.animateCameraToLatLngBounds(arg_viewId!, arg_bounds!, arg_padding!, arg_duration);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngZoom$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngZoom$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngZoom was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngZoom was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngZoom was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngZoom was null, expected non-null int.');
           final LatLngDto? arg_point = (args[1] as LatLngDto?);
-          assert(
-            arg_point != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngZoom was null, expected non-null LatLngDto.',
-          );
+          assert(arg_point != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngZoom was null, expected non-null LatLngDto.');
           final double? arg_zoom = (args[2] as double?);
-          assert(
-            arg_zoom != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngZoom was null, expected non-null double.',
-          );
+          assert(arg_zoom != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngZoom was null, expected non-null double.');
           final int? arg_duration = (args[3] as int?);
           try {
-            final bool output = await api.animateCameraToLatLngZoom(
-              arg_viewId!,
-              arg_point!,
-              arg_zoom!,
-              arg_duration,
-            );
+            final bool output = await api.animateCameraToLatLngZoom(arg_viewId!, arg_point!, arg_zoom!, arg_duration);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByScroll$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByScroll$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByScroll was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByScroll was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByScroll was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByScroll was null, expected non-null int.');
           final double? arg_scrollByDx = (args[1] as double?);
-          assert(
-            arg_scrollByDx != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByScroll was null, expected non-null double.',
-          );
+          assert(arg_scrollByDx != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByScroll was null, expected non-null double.');
           final double? arg_scrollByDy = (args[2] as double?);
-          assert(
-            arg_scrollByDy != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByScroll was null, expected non-null double.',
-          );
+          assert(arg_scrollByDy != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByScroll was null, expected non-null double.');
           final int? arg_duration = (args[3] as int?);
           try {
-            final bool output = await api.animateCameraByScroll(
-              arg_viewId!,
-              arg_scrollByDx!,
-              arg_scrollByDy!,
-              arg_duration,
-            );
+            final bool output = await api.animateCameraByScroll(arg_viewId!, arg_scrollByDx!, arg_scrollByDy!, arg_duration);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByZoom$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByZoom$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByZoom was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByZoom was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByZoom was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByZoom was null, expected non-null int.');
           final double? arg_zoomBy = (args[1] as double?);
-          assert(
-            arg_zoomBy != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByZoom was null, expected non-null double.',
-          );
+          assert(arg_zoomBy != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByZoom was null, expected non-null double.');
           final double? arg_focusDx = (args[2] as double?);
           final double? arg_focusDy = (args[3] as double?);
           final int? arg_duration = (args[4] as int?);
           try {
-            final bool output = await api.animateCameraByZoom(
-              arg_viewId!,
-              arg_zoomBy!,
-              arg_focusDx,
-              arg_focusDy,
-              arg_duration,
-            );
+            final bool output = await api.animateCameraByZoom(arg_viewId!, arg_zoomBy!, arg_focusDx, arg_focusDy, arg_duration);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToZoom$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToZoom$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToZoom was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToZoom was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToZoom was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToZoom was null, expected non-null int.');
           final double? arg_zoom = (args[1] as double?);
-          assert(
-            arg_zoom != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToZoom was null, expected non-null double.',
-          );
+          assert(arg_zoom != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToZoom was null, expected non-null double.');
           final int? arg_duration = (args[2] as int?);
           try {
-            final bool output = await api.animateCameraToZoom(
-              arg_viewId!,
-              arg_zoom!,
-              arg_duration,
-            );
+            final bool output = await api.animateCameraToZoom(arg_viewId!, arg_zoom!, arg_duration);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToCameraPosition$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToCameraPosition$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToCameraPosition was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToCameraPosition was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToCameraPosition was null, expected non-null int.',
-          );
-          final CameraPositionDto? arg_cameraPosition =
-              (args[1] as CameraPositionDto?);
-          assert(
-            arg_cameraPosition != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToCameraPosition was null, expected non-null CameraPositionDto.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToCameraPosition was null, expected non-null int.');
+          final CameraPositionDto? arg_cameraPosition = (args[1] as CameraPositionDto?);
+          assert(arg_cameraPosition != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToCameraPosition was null, expected non-null CameraPositionDto.');
           try {
             api.moveCameraToCameraPosition(arg_viewId!, arg_cameraPosition!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLng$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLng$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLng was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLng was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLng was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLng was null, expected non-null int.');
           final LatLngDto? arg_point = (args[1] as LatLngDto?);
-          assert(
-            arg_point != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLng was null, expected non-null LatLngDto.',
-          );
+          assert(arg_point != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLng was null, expected non-null LatLngDto.');
           try {
             api.moveCameraToLatLng(arg_viewId!, arg_point!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngBounds$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngBounds$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngBounds was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngBounds was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngBounds was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngBounds was null, expected non-null int.');
           final LatLngBoundsDto? arg_bounds = (args[1] as LatLngBoundsDto?);
-          assert(
-            arg_bounds != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngBounds was null, expected non-null LatLngBoundsDto.',
-          );
+          assert(arg_bounds != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngBounds was null, expected non-null LatLngBoundsDto.');
           final double? arg_padding = (args[2] as double?);
-          assert(
-            arg_padding != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngBounds was null, expected non-null double.',
-          );
+          assert(arg_padding != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngBounds was null, expected non-null double.');
           try {
-            api.moveCameraToLatLngBounds(
-              arg_viewId!,
-              arg_bounds!,
-              arg_padding!,
-            );
+            api.moveCameraToLatLngBounds(arg_viewId!, arg_bounds!, arg_padding!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngZoom$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngZoom$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngZoom was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngZoom was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngZoom was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngZoom was null, expected non-null int.');
           final LatLngDto? arg_point = (args[1] as LatLngDto?);
-          assert(
-            arg_point != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngZoom was null, expected non-null LatLngDto.',
-          );
+          assert(arg_point != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngZoom was null, expected non-null LatLngDto.');
           final double? arg_zoom = (args[2] as double?);
-          assert(
-            arg_zoom != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngZoom was null, expected non-null double.',
-          );
+          assert(arg_zoom != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngZoom was null, expected non-null double.');
           try {
             api.moveCameraToLatLngZoom(arg_viewId!, arg_point!, arg_zoom!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByScroll$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByScroll$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByScroll was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByScroll was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByScroll was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByScroll was null, expected non-null int.');
           final double? arg_scrollByDx = (args[1] as double?);
-          assert(
-            arg_scrollByDx != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByScroll was null, expected non-null double.',
-          );
+          assert(arg_scrollByDx != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByScroll was null, expected non-null double.');
           final double? arg_scrollByDy = (args[2] as double?);
-          assert(
-            arg_scrollByDy != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByScroll was null, expected non-null double.',
-          );
+          assert(arg_scrollByDy != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByScroll was null, expected non-null double.');
           try {
-            api.moveCameraByScroll(
-              arg_viewId!,
-              arg_scrollByDx!,
-              arg_scrollByDy!,
-            );
+            api.moveCameraByScroll(arg_viewId!, arg_scrollByDx!, arg_scrollByDy!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByZoom$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByZoom$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByZoom was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByZoom was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByZoom was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByZoom was null, expected non-null int.');
           final double? arg_zoomBy = (args[1] as double?);
-          assert(
-            arg_zoomBy != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByZoom was null, expected non-null double.',
-          );
+          assert(arg_zoomBy != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByZoom was null, expected non-null double.');
           final double? arg_focusDx = (args[2] as double?);
           final double? arg_focusDy = (args[3] as double?);
           try {
-            api.moveCameraByZoom(
-              arg_viewId!,
-              arg_zoomBy!,
-              arg_focusDx,
-              arg_focusDy,
-            );
+            api.moveCameraByZoom(arg_viewId!, arg_zoomBy!, arg_focusDx, arg_focusDy);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToZoom$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToZoom$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToZoom was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToZoom was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToZoom was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToZoom was null, expected non-null int.');
           final double? arg_zoom = (args[1] as double?);
-          assert(
-            arg_zoom != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToZoom was null, expected non-null double.',
-          );
+          assert(arg_zoom != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToZoom was null, expected non-null double.');
           try {
             api.moveCameraToZoom(arg_viewId!, arg_zoom!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showRouteOverview$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showRouteOverview$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showRouteOverview was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showRouteOverview was null, expected non-null int.',
-              );
-              try {
-                api.showRouteOverview(arg_viewId!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMinZoomPreference$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMinZoomPreference was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMinZoomPreference was null, expected non-null int.',
-              );
-              try {
-                final double output = api.getMinZoomPreference(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMaxZoomPreference$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMaxZoomPreference was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMaxZoomPreference was null, expected non-null int.',
-              );
-              try {
-                final double output = api.getMaxZoomPreference(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.resetMinMaxZoomPreference$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.resetMinMaxZoomPreference was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.resetMinMaxZoomPreference was null, expected non-null int.',
-              );
-              try {
-                api.resetMinMaxZoomPreference(arg_viewId!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMinZoomPreference$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMinZoomPreference was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showRouteOverview was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMinZoomPreference was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showRouteOverview was null, expected non-null int.');
+          try {
+            api.showRouteOverview(arg_viewId!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMinZoomPreference$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMinZoomPreference was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMinZoomPreference was null, expected non-null int.');
+          try {
+            final double output = api.getMinZoomPreference(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMaxZoomPreference$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMaxZoomPreference was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMaxZoomPreference was null, expected non-null int.');
+          try {
+            final double output = api.getMaxZoomPreference(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.resetMinMaxZoomPreference$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.resetMinMaxZoomPreference was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.resetMinMaxZoomPreference was null, expected non-null int.');
+          try {
+            api.resetMinMaxZoomPreference(arg_viewId!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMinZoomPreference$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMinZoomPreference was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMinZoomPreference was null, expected non-null int.');
           final double? arg_minZoomPreference = (args[1] as double?);
-          assert(
-            arg_minZoomPreference != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMinZoomPreference was null, expected non-null double.',
-          );
+          assert(arg_minZoomPreference != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMinZoomPreference was null, expected non-null double.');
           try {
             api.setMinZoomPreference(arg_viewId!, arg_minZoomPreference!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMaxZoomPreference$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMaxZoomPreference$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMaxZoomPreference was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMaxZoomPreference was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMaxZoomPreference was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMaxZoomPreference was null, expected non-null int.');
           final double? arg_maxZoomPreference = (args[1] as double?);
-          assert(
-            arg_maxZoomPreference != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMaxZoomPreference was null, expected non-null double.',
-          );
+          assert(arg_maxZoomPreference != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMaxZoomPreference was null, expected non-null double.');
           try {
             api.setMaxZoomPreference(arg_viewId!, arg_maxZoomPreference!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMarkers$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMarkers$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMarkers was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMarkers was null, expected non-null int.',
-              );
-              try {
-                final List<MarkerDto> output = api.getMarkers(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addMarkers$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addMarkers was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMarkers was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addMarkers was null, expected non-null int.',
-          );
-          final List<MarkerDto>? arg_markers = (args[1] as List<Object?>?)
-              ?.cast<MarkerDto>();
-          assert(
-            arg_markers != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addMarkers was null, expected non-null List<MarkerDto>.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMarkers was null, expected non-null int.');
           try {
-            final List<MarkerDto> output = api.addMarkers(
-              arg_viewId!,
-              arg_markers!,
-            );
+            final List<MarkerDto> output = api.getMarkers(arg_viewId!);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateMarkers$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addMarkers$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateMarkers was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addMarkers was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateMarkers was null, expected non-null int.',
-          );
-          final List<MarkerDto>? arg_markers = (args[1] as List<Object?>?)
-              ?.cast<MarkerDto>();
-          assert(
-            arg_markers != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateMarkers was null, expected non-null List<MarkerDto>.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addMarkers was null, expected non-null int.');
+          final List<MarkerDto>? arg_markers = (args[1] as List<Object?>?)?.cast<MarkerDto>();
+          assert(arg_markers != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addMarkers was null, expected non-null List<MarkerDto>.');
           try {
-            final List<MarkerDto> output = api.updateMarkers(
-              arg_viewId!,
-              arg_markers!,
-            );
+            final List<MarkerDto> output = api.addMarkers(arg_viewId!, arg_markers!);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeMarkers$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateMarkers$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeMarkers was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateMarkers was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeMarkers was null, expected non-null int.',
-          );
-          final List<MarkerDto>? arg_markers = (args[1] as List<Object?>?)
-              ?.cast<MarkerDto>();
-          assert(
-            arg_markers != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeMarkers was null, expected non-null List<MarkerDto>.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateMarkers was null, expected non-null int.');
+          final List<MarkerDto>? arg_markers = (args[1] as List<Object?>?)?.cast<MarkerDto>();
+          assert(arg_markers != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateMarkers was null, expected non-null List<MarkerDto>.');
+          try {
+            final List<MarkerDto> output = api.updateMarkers(arg_viewId!, arg_markers!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeMarkers$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeMarkers was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeMarkers was null, expected non-null int.');
+          final List<MarkerDto>? arg_markers = (args[1] as List<Object?>?)?.cast<MarkerDto>();
+          assert(arg_markers != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeMarkers was null, expected non-null List<MarkerDto>.');
           try {
             api.removeMarkers(arg_viewId!, arg_markers!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearMarkers$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearMarkers$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearMarkers was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearMarkers was null, expected non-null int.',
-              );
-              try {
-                api.clearMarkers(arg_viewId!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clear$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clear was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clear was null, expected non-null int.',
-              );
-              try {
-                api.clear(arg_viewId!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolygons$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolygons was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolygons was null, expected non-null int.',
-              );
-              try {
-                final List<PolygonDto> output = api.getPolygons(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolygons$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolygons was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearMarkers was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolygons was null, expected non-null int.',
-          );
-          final List<PolygonDto>? arg_polygons = (args[1] as List<Object?>?)
-              ?.cast<PolygonDto>();
-          assert(
-            arg_polygons != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolygons was null, expected non-null List<PolygonDto>.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearMarkers was null, expected non-null int.');
           try {
-            final List<PolygonDto> output = api.addPolygons(
-              arg_viewId!,
-              arg_polygons!,
-            );
+            api.clearMarkers(arg_viewId!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clear$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clear was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clear was null, expected non-null int.');
+          try {
+            api.clear(arg_viewId!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolygons$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolygons was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolygons was null, expected non-null int.');
+          try {
+            final List<PolygonDto> output = api.getPolygons(arg_viewId!);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolygons$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolygons$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolygons was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolygons was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolygons was null, expected non-null int.',
-          );
-          final List<PolygonDto>? arg_polygons = (args[1] as List<Object?>?)
-              ?.cast<PolygonDto>();
-          assert(
-            arg_polygons != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolygons was null, expected non-null List<PolygonDto>.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolygons was null, expected non-null int.');
+          final List<PolygonDto>? arg_polygons = (args[1] as List<Object?>?)?.cast<PolygonDto>();
+          assert(arg_polygons != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolygons was null, expected non-null List<PolygonDto>.');
           try {
-            final List<PolygonDto> output = api.updatePolygons(
-              arg_viewId!,
-              arg_polygons!,
-            );
+            final List<PolygonDto> output = api.addPolygons(arg_viewId!, arg_polygons!);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolygons$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolygons$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolygons was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolygons was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolygons was null, expected non-null int.',
-          );
-          final List<PolygonDto>? arg_polygons = (args[1] as List<Object?>?)
-              ?.cast<PolygonDto>();
-          assert(
-            arg_polygons != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolygons was null, expected non-null List<PolygonDto>.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolygons was null, expected non-null int.');
+          final List<PolygonDto>? arg_polygons = (args[1] as List<Object?>?)?.cast<PolygonDto>();
+          assert(arg_polygons != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolygons was null, expected non-null List<PolygonDto>.');
+          try {
+            final List<PolygonDto> output = api.updatePolygons(arg_viewId!, arg_polygons!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolygons$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolygons was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolygons was null, expected non-null int.');
+          final List<PolygonDto>? arg_polygons = (args[1] as List<Object?>?)?.cast<PolygonDto>();
+          assert(arg_polygons != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolygons was null, expected non-null List<PolygonDto>.');
           try {
             api.removePolygons(arg_viewId!, arg_polygons!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolygons$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolygons$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolygons was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolygons was null, expected non-null int.',
-              );
-              try {
-                api.clearPolygons(arg_viewId!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolylines$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolylines was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolylines was null, expected non-null int.',
-              );
-              try {
-                final List<PolylineDto> output = api.getPolylines(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolylines$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolylines was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolygons was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolylines was null, expected non-null int.',
-          );
-          final List<PolylineDto>? arg_polylines = (args[1] as List<Object?>?)
-              ?.cast<PolylineDto>();
-          assert(
-            arg_polylines != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolylines was null, expected non-null List<PolylineDto>.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolygons was null, expected non-null int.');
           try {
-            final List<PolylineDto> output = api.addPolylines(
-              arg_viewId!,
-              arg_polylines!,
-            );
+            api.clearPolygons(arg_viewId!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolylines$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolylines was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolylines was null, expected non-null int.');
+          try {
+            final List<PolylineDto> output = api.getPolylines(arg_viewId!);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolylines$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolylines$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolylines was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolylines was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolylines was null, expected non-null int.',
-          );
-          final List<PolylineDto>? arg_polylines = (args[1] as List<Object?>?)
-              ?.cast<PolylineDto>();
-          assert(
-            arg_polylines != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolylines was null, expected non-null List<PolylineDto>.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolylines was null, expected non-null int.');
+          final List<PolylineDto>? arg_polylines = (args[1] as List<Object?>?)?.cast<PolylineDto>();
+          assert(arg_polylines != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolylines was null, expected non-null List<PolylineDto>.');
           try {
-            final List<PolylineDto> output = api.updatePolylines(
-              arg_viewId!,
-              arg_polylines!,
-            );
+            final List<PolylineDto> output = api.addPolylines(arg_viewId!, arg_polylines!);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolylines$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolylines$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolylines was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolylines was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolylines was null, expected non-null int.',
-          );
-          final List<PolylineDto>? arg_polylines = (args[1] as List<Object?>?)
-              ?.cast<PolylineDto>();
-          assert(
-            arg_polylines != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolylines was null, expected non-null List<PolylineDto>.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolylines was null, expected non-null int.');
+          final List<PolylineDto>? arg_polylines = (args[1] as List<Object?>?)?.cast<PolylineDto>();
+          assert(arg_polylines != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolylines was null, expected non-null List<PolylineDto>.');
+          try {
+            final List<PolylineDto> output = api.updatePolylines(arg_viewId!, arg_polylines!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolylines$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolylines was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolylines was null, expected non-null int.');
+          final List<PolylineDto>? arg_polylines = (args[1] as List<Object?>?)?.cast<PolylineDto>();
+          assert(arg_polylines != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolylines was null, expected non-null List<PolylineDto>.');
           try {
             api.removePolylines(arg_viewId!, arg_polylines!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolylines$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolylines$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolylines was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolylines was null, expected non-null int.',
-              );
-              try {
-                api.clearPolylines(arg_viewId!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCircles$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCircles was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCircles was null, expected non-null int.',
-              );
-              try {
-                final List<CircleDto> output = api.getCircles(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addCircles$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addCircles was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolylines was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addCircles was null, expected non-null int.',
-          );
-          final List<CircleDto>? arg_circles = (args[1] as List<Object?>?)
-              ?.cast<CircleDto>();
-          assert(
-            arg_circles != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addCircles was null, expected non-null List<CircleDto>.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolylines was null, expected non-null int.');
           try {
-            final List<CircleDto> output = api.addCircles(
-              arg_viewId!,
-              arg_circles!,
-            );
+            api.clearPolylines(arg_viewId!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCircles$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCircles was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCircles was null, expected non-null int.');
+          try {
+            final List<CircleDto> output = api.getCircles(arg_viewId!);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateCircles$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addCircles$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateCircles was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addCircles was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateCircles was null, expected non-null int.',
-          );
-          final List<CircleDto>? arg_circles = (args[1] as List<Object?>?)
-              ?.cast<CircleDto>();
-          assert(
-            arg_circles != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateCircles was null, expected non-null List<CircleDto>.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addCircles was null, expected non-null int.');
+          final List<CircleDto>? arg_circles = (args[1] as List<Object?>?)?.cast<CircleDto>();
+          assert(arg_circles != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addCircles was null, expected non-null List<CircleDto>.');
           try {
-            final List<CircleDto> output = api.updateCircles(
-              arg_viewId!,
-              arg_circles!,
-            );
+            final List<CircleDto> output = api.addCircles(arg_viewId!, arg_circles!);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeCircles$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateCircles$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeCircles was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateCircles was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeCircles was null, expected non-null int.',
-          );
-          final List<CircleDto>? arg_circles = (args[1] as List<Object?>?)
-              ?.cast<CircleDto>();
-          assert(
-            arg_circles != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeCircles was null, expected non-null List<CircleDto>.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateCircles was null, expected non-null int.');
+          final List<CircleDto>? arg_circles = (args[1] as List<Object?>?)?.cast<CircleDto>();
+          assert(arg_circles != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateCircles was null, expected non-null List<CircleDto>.');
+          try {
+            final List<CircleDto> output = api.updateCircles(arg_viewId!, arg_circles!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeCircles$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeCircles was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeCircles was null, expected non-null int.');
+          final List<CircleDto>? arg_circles = (args[1] as List<Object?>?)?.cast<CircleDto>();
+          assert(arg_circles != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeCircles was null, expected non-null List<CircleDto>.');
           try {
             api.removeCircles(arg_viewId!, arg_circles!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearCircles$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearCircles$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearCircles was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearCircles was null, expected non-null int.',
-              );
-              try {
-                api.clearCircles(arg_viewId!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.enableOnCameraChangedEvents$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.enableOnCameraChangedEvents was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.enableOnCameraChangedEvents was null, expected non-null int.',
-              );
-              try {
-                api.enableOnCameraChangedEvents(arg_viewId!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setPadding$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setPadding was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearCircles was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setPadding was null, expected non-null int.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearCircles was null, expected non-null int.');
+          try {
+            api.clearCircles(arg_viewId!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.enableOnCameraChangedEvents$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.enableOnCameraChangedEvents was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.enableOnCameraChangedEvents was null, expected non-null int.');
+          try {
+            api.enableOnCameraChangedEvents(arg_viewId!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setPadding$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setPadding was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setPadding was null, expected non-null int.');
           final MapPaddingDto? arg_padding = (args[1] as MapPaddingDto?);
-          assert(
-            arg_padding != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setPadding was null, expected non-null MapPaddingDto.',
-          );
+          assert(arg_padding != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setPadding was null, expected non-null MapPaddingDto.');
           try {
             api.setPadding(arg_viewId!, arg_padding!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPadding$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPadding$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPadding was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPadding was null, expected non-null int.',
-              );
-              try {
-                final MapPaddingDto output = api.getPadding(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapColorScheme$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapColorScheme was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapColorScheme was null, expected non-null int.',
-              );
-              try {
-                final MapColorSchemeDto output = api.getMapColorScheme(
-                  arg_viewId!,
-                );
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapColorScheme$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapColorScheme was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPadding was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapColorScheme was null, expected non-null int.',
-          );
-          final MapColorSchemeDto? arg_mapColorScheme =
-              (args[1] as MapColorSchemeDto?);
-          assert(
-            arg_mapColorScheme != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapColorScheme was null, expected non-null MapColorSchemeDto.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPadding was null, expected non-null int.');
+          try {
+            final MapPaddingDto output = api.getPadding(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapColorScheme$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapColorScheme was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapColorScheme was null, expected non-null int.');
+          try {
+            final MapColorSchemeDto output = api.getMapColorScheme(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapColorScheme$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapColorScheme was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapColorScheme was null, expected non-null int.');
+          final MapColorSchemeDto? arg_mapColorScheme = (args[1] as MapColorSchemeDto?);
+          assert(arg_mapColorScheme != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapColorScheme was null, expected non-null MapColorSchemeDto.');
           try {
             api.setMapColorScheme(arg_viewId!, arg_mapColorScheme!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getForceNightMode$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getForceNightMode$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getForceNightMode was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getForceNightMode was null, expected non-null int.',
-              );
-              try {
-                final NavigationForceNightModeDto output = api
-                    .getForceNightMode(arg_viewId!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getForceNightMode was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getForceNightMode was null, expected non-null int.');
+          try {
+            final NavigationForceNightModeDto output = api.getForceNightMode(arg_viewId!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setForceNightMode$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setForceNightMode$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setForceNightMode was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setForceNightMode was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setForceNightMode was null, expected non-null int.',
-          );
-          final NavigationForceNightModeDto? arg_forceNightMode =
-              (args[1] as NavigationForceNightModeDto?);
-          assert(
-            arg_forceNightMode != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setForceNightMode was null, expected non-null NavigationForceNightModeDto.',
-          );
+          assert(arg_viewId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setForceNightMode was null, expected non-null int.');
+          final NavigationForceNightModeDto? arg_forceNightMode = (args[1] as NavigationForceNightModeDto?);
+          assert(arg_forceNightMode != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setForceNightMode was null, expected non-null NavigationForceNightModeDto.');
           try {
             api.setForceNightMode(arg_viewId!, arg_forceNightMode!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
@@ -5186,17 +3451,10 @@ abstract class TestMapViewApi {
 }
 
 abstract class TestImageRegistryApi {
-  static TestDefaultBinaryMessengerBinding? get _testBinaryMessengerBinding =>
-      TestDefaultBinaryMessengerBinding.instance;
+  static TestDefaultBinaryMessengerBinding? get _testBinaryMessengerBinding => TestDefaultBinaryMessengerBinding.instance;
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
 
-  ImageDescriptorDto registerBitmapImage(
-    String imageId,
-    Uint8List bytes,
-    double imagePixelRatio,
-    double? width,
-    double? height,
-  );
+  ImageDescriptorDto registerBitmapImage(String imageId, Uint8List bytes, double imagePixelRatio, double? width, double? height);
 
   void unregisterImage(ImageDescriptorDto imageDescriptor);
 
@@ -5206,248 +3464,147 @@ abstract class TestImageRegistryApi {
 
   Uint8List? getRegisteredImageData(ImageDescriptorDto imageDescriptor);
 
-  static void setUp(
-    TestImageRegistryApi? api, {
-    BinaryMessenger? binaryMessenger,
-    String messageChannelSuffix = '',
-  }) {
-    messageChannelSuffix = messageChannelSuffix.isNotEmpty
-        ? '.$messageChannelSuffix'
-        : '';
+  static void setUp(TestImageRegistryApi? api, {BinaryMessenger? binaryMessenger, String messageChannelSuffix = '',}) {
+    messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.registerBitmapImage$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.registerBitmapImage$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.registerBitmapImage was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.registerBitmapImage was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final String? arg_imageId = (args[0] as String?);
-          assert(
-            arg_imageId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.registerBitmapImage was null, expected non-null String.',
-          );
+          assert(arg_imageId != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.registerBitmapImage was null, expected non-null String.');
           final Uint8List? arg_bytes = (args[1] as Uint8List?);
-          assert(
-            arg_bytes != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.registerBitmapImage was null, expected non-null Uint8List.',
-          );
+          assert(arg_bytes != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.registerBitmapImage was null, expected non-null Uint8List.');
           final double? arg_imagePixelRatio = (args[2] as double?);
-          assert(
-            arg_imagePixelRatio != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.registerBitmapImage was null, expected non-null double.',
-          );
+          assert(arg_imagePixelRatio != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.registerBitmapImage was null, expected non-null double.');
           final double? arg_width = (args[3] as double?);
           final double? arg_height = (args[4] as double?);
           try {
-            final ImageDescriptorDto output = api.registerBitmapImage(
-              arg_imageId!,
-              arg_bytes!,
-              arg_imagePixelRatio!,
-              arg_width,
-              arg_height,
-            );
+            final ImageDescriptorDto output = api.registerBitmapImage(arg_imageId!, arg_bytes!, arg_imagePixelRatio!, arg_width, arg_height);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.unregisterImage$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.unregisterImage$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.unregisterImage was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final ImageDescriptorDto? arg_imageDescriptor =
-                  (args[0] as ImageDescriptorDto?);
-              assert(
-                arg_imageDescriptor != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.unregisterImage was null, expected non-null ImageDescriptorDto.',
-              );
-              try {
-                api.unregisterImage(arg_imageDescriptor!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.unregisterImage was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final ImageDescriptorDto? arg_imageDescriptor = (args[0] as ImageDescriptorDto?);
+          assert(arg_imageDescriptor != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.unregisterImage was null, expected non-null ImageDescriptorDto.');
+          try {
+            api.unregisterImage(arg_imageDescriptor!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.getRegisteredImages$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.getRegisteredImages$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final List<ImageDescriptorDto> output = api
-                    .getRegisteredImages();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final List<ImageDescriptorDto> output = api.getRegisteredImages();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.clearRegisteredImages$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.clearRegisteredImages$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.clearRegisteredImages was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final RegisteredImageTypeDto? arg_filter =
-                  (args[0] as RegisteredImageTypeDto?);
-              try {
-                api.clearRegisteredImages(arg_filter);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.clearRegisteredImages was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final RegisteredImageTypeDto? arg_filter = (args[0] as RegisteredImageTypeDto?);
+          try {
+            api.clearRegisteredImages(arg_filter);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.getRegisteredImageData$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.getRegisteredImageData$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.getRegisteredImageData was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final ImageDescriptorDto? arg_imageDescriptor =
-                  (args[0] as ImageDescriptorDto?);
-              assert(
-                arg_imageDescriptor != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.getRegisteredImageData was null, expected non-null ImageDescriptorDto.',
-              );
-              try {
-                final Uint8List? output = api.getRegisteredImageData(
-                  arg_imageDescriptor!,
-                );
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.getRegisteredImageData was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final ImageDescriptorDto? arg_imageDescriptor = (args[0] as ImageDescriptorDto?);
+          assert(arg_imageDescriptor != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.getRegisteredImageData was null, expected non-null ImageDescriptorDto.');
+          try {
+            final Uint8List? output = api.getRegisteredImageData(arg_imageDescriptor!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
   }
 }
 
 abstract class TestNavigationSessionApi {
-  static TestDefaultBinaryMessengerBinding? get _testBinaryMessengerBinding =>
-      TestDefaultBinaryMessengerBinding.instance;
+  static TestDefaultBinaryMessengerBinding? get _testBinaryMessengerBinding => TestDefaultBinaryMessengerBinding.instance;
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
 
-  Future<void> createNavigationSession(
-    bool abnormalTerminationReportingEnabled,
-    TaskRemovedBehaviorDto behavior,
-  );
+  Future<void> createNavigationSession(bool abnormalTerminationReportingEnabled, TaskRemovedBehaviorDto behavior);
 
   bool isInitialized();
 
   void cleanup(bool resetSession);
 
-  Future<bool> showTermsAndConditionsDialog(
-    String title,
-    String companyName,
-    bool shouldOnlyShowDriverAwarenessDisclaimer,
-    TermsAndConditionsUIParamsDto? uiParams,
-  );
+  Future<bool> showTermsAndConditionsDialog(String title, String companyName, bool shouldOnlyShowDriverAwarenessDisclaimer, TermsAndConditionsUIParamsDto? uiParams);
 
   bool areTermsAccepted();
 
@@ -5485,25 +3642,13 @@ abstract class TestNavigationSessionApi {
 
   void simulateLocationsAlongExistingRoute();
 
-  void simulateLocationsAlongExistingRouteWithOptions(
-    SimulationOptionsDto options,
-  );
+  void simulateLocationsAlongExistingRouteWithOptions(SimulationOptionsDto options);
 
-  Future<RouteStatusDto> simulateLocationsAlongNewRoute(
-    List<NavigationWaypointDto> waypoints,
-  );
+  Future<RouteStatusDto> simulateLocationsAlongNewRoute(List<NavigationWaypointDto> waypoints);
 
-  Future<RouteStatusDto> simulateLocationsAlongNewRouteWithRoutingOptions(
-    List<NavigationWaypointDto> waypoints,
-    RoutingOptionsDto routingOptions,
-  );
+  Future<RouteStatusDto> simulateLocationsAlongNewRouteWithRoutingOptions(List<NavigationWaypointDto> waypoints, RoutingOptionsDto routingOptions);
 
-  Future<RouteStatusDto>
-  simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
-    List<NavigationWaypointDto> waypoints,
-    RoutingOptionsDto routingOptions,
-    SimulationOptionsDto simulationOptions,
-  );
+  Future<RouteStatusDto> simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(List<NavigationWaypointDto> waypoints, RoutingOptionsDto routingOptions, SimulationOptionsDto simulationOptions);
 
   void pauseSimulation();
 
@@ -5516,1274 +3661,761 @@ abstract class TestNavigationSessionApi {
 
   void disableRoadSnappedLocationUpdates();
 
-  void enableTurnByTurnNavigationEvents(
-    int? numNextStepsToPreview,
-    StepImageGenerationOptionsDto? options,
-  );
+  void enableTurnByTurnNavigationEvents(int? numNextStepsToPreview, StepImageGenerationOptionsDto? options);
 
   void disableTurnByTurnNavigationEvents();
 
-  void registerRemainingTimeOrDistanceChangedListener(
-    int remainingTimeThresholdSeconds,
-    int remainingDistanceThresholdMeters,
-  );
+  void registerRemainingTimeOrDistanceChangedListener(int remainingTimeThresholdSeconds, int remainingDistanceThresholdMeters);
 
-  static void setUp(
-    TestNavigationSessionApi? api, {
-    BinaryMessenger? binaryMessenger,
-    String messageChannelSuffix = '',
-  }) {
-    messageChannelSuffix = messageChannelSuffix.isNotEmpty
-        ? '.$messageChannelSuffix'
-        : '';
+  static void setUp(TestNavigationSessionApi? api, {BinaryMessenger? binaryMessenger, String messageChannelSuffix = '',}) {
+    messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final bool? arg_abnormalTerminationReportingEnabled =
-              (args[0] as bool?);
-          assert(
-            arg_abnormalTerminationReportingEnabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession was null, expected non-null bool.',
-          );
-          final TaskRemovedBehaviorDto? arg_behavior =
-              (args[1] as TaskRemovedBehaviorDto?);
-          assert(
-            arg_behavior != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession was null, expected non-null TaskRemovedBehaviorDto.',
-          );
+          final bool? arg_abnormalTerminationReportingEnabled = (args[0] as bool?);
+          assert(arg_abnormalTerminationReportingEnabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession was null, expected non-null bool.');
+          final TaskRemovedBehaviorDto? arg_behavior = (args[1] as TaskRemovedBehaviorDto?);
+          assert(arg_behavior != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession was null, expected non-null TaskRemovedBehaviorDto.');
           try {
-            await api.createNavigationSession(
-              arg_abnormalTerminationReportingEnabled!,
-              arg_behavior!,
-            );
+            await api.createNavigationSession(arg_abnormalTerminationReportingEnabled!, arg_behavior!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.isInitialized$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.isInitialized$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final bool output = api.isInitialized();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final bool output = api.isInitialized();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.cleanup$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.cleanup$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.cleanup was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final bool? arg_resetSession = (args[0] as bool?);
-              assert(
-                arg_resetSession != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.cleanup was null, expected non-null bool.',
-              );
-              try {
-                api.cleanup(arg_resetSession!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.cleanup was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_resetSession = (args[0] as bool?);
+          assert(arg_resetSession != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.cleanup was null, expected non-null bool.');
+          try {
+            api.cleanup(arg_resetSession!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.showTermsAndConditionsDialog$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.showTermsAndConditionsDialog$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.showTermsAndConditionsDialog was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.showTermsAndConditionsDialog was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final String? arg_title = (args[0] as String?);
-          assert(
-            arg_title != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.showTermsAndConditionsDialog was null, expected non-null String.',
-          );
+          assert(arg_title != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.showTermsAndConditionsDialog was null, expected non-null String.');
           final String? arg_companyName = (args[1] as String?);
-          assert(
-            arg_companyName != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.showTermsAndConditionsDialog was null, expected non-null String.',
-          );
-          final bool? arg_shouldOnlyShowDriverAwarenessDisclaimer =
-              (args[2] as bool?);
-          assert(
-            arg_shouldOnlyShowDriverAwarenessDisclaimer != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.showTermsAndConditionsDialog was null, expected non-null bool.',
-          );
-          final TermsAndConditionsUIParamsDto? arg_uiParams =
-              (args[3] as TermsAndConditionsUIParamsDto?);
+          assert(arg_companyName != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.showTermsAndConditionsDialog was null, expected non-null String.');
+          final bool? arg_shouldOnlyShowDriverAwarenessDisclaimer = (args[2] as bool?);
+          assert(arg_shouldOnlyShowDriverAwarenessDisclaimer != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.showTermsAndConditionsDialog was null, expected non-null bool.');
+          final TermsAndConditionsUIParamsDto? arg_uiParams = (args[3] as TermsAndConditionsUIParamsDto?);
           try {
-            final bool output = await api.showTermsAndConditionsDialog(
-              arg_title!,
-              arg_companyName!,
-              arg_shouldOnlyShowDriverAwarenessDisclaimer!,
-              arg_uiParams,
-            );
+            final bool output = await api.showTermsAndConditionsDialog(arg_title!, arg_companyName!, arg_shouldOnlyShowDriverAwarenessDisclaimer!, arg_uiParams);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.areTermsAccepted$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.areTermsAccepted$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final bool output = api.areTermsAccepted();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.resetTermsAccepted$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                api.resetTermsAccepted();
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getNavSDKVersion$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final String output = api.getNavSDKVersion();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.isGuidanceRunning$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final bool output = api.isGuidanceRunning();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.startGuidance$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                api.startGuidance();
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.stopGuidance$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                api.stopGuidance();
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setDestinations$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setDestinations was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final DestinationsDto? arg_destinations =
-                  (args[0] as DestinationsDto?);
-              assert(
-                arg_destinations != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setDestinations was null, expected non-null DestinationsDto.',
-              );
-              try {
-                final RouteStatusDto output = await api.setDestinations(
-                  arg_destinations!,
-                );
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.clearDestinations$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                api.clearDestinations();
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.continueToNextDestination$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final ContinueToNextDestinationResponseDto output = await api
-                    .continueToNextDestination();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getCurrentTimeAndDistance$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final NavigationTimeAndDistanceDto output = api
-                    .getCurrentTimeAndDistance();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setAudioGuidance$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setAudioGuidance was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final NavigationAudioGuidanceSettingsDto? arg_settings =
-                  (args[0] as NavigationAudioGuidanceSettingsDto?);
-              assert(
-                arg_settings != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setAudioGuidance was null, expected non-null NavigationAudioGuidanceSettingsDto.',
-              );
-              try {
-                api.setAudioGuidance(arg_settings!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setSpeedAlertOptions$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setSpeedAlertOptions was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final SpeedAlertOptionsDto? arg_options =
-                  (args[0] as SpeedAlertOptionsDto?);
-              assert(
-                arg_options != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setSpeedAlertOptions was null, expected non-null SpeedAlertOptionsDto.',
-              );
-              try {
-                api.setSpeedAlertOptions(arg_options!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getRouteSegments$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final List<RouteSegmentDto> output = api.getRouteSegments();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getTraveledRoute$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final List<LatLngDto> output = api.getTraveledRoute();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getCurrentRouteSegment$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final RouteSegmentDto? output = api.getCurrentRouteSegment();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setUserLocation$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setUserLocation was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final LatLngDto? arg_location = (args[0] as LatLngDto?);
-              assert(
-                arg_location != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setUserLocation was null, expected non-null LatLngDto.',
-              );
-              try {
-                api.setUserLocation(arg_location!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.removeUserLocation$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                api.removeUserLocation();
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongExistingRoute$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                api.simulateLocationsAlongExistingRoute();
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongExistingRouteWithOptions$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongExistingRouteWithOptions was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final SimulationOptionsDto? arg_options =
-                  (args[0] as SimulationOptionsDto?);
-              assert(
-                arg_options != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongExistingRouteWithOptions was null, expected non-null SimulationOptionsDto.',
-              );
-              try {
-                api.simulateLocationsAlongExistingRouteWithOptions(
-                  arg_options!,
-                );
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRoute$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRoute was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final List<NavigationWaypointDto>? arg_waypoints =
-                  (args[0] as List<Object?>?)?.cast<NavigationWaypointDto>();
-              assert(
-                arg_waypoints != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRoute was null, expected non-null List<NavigationWaypointDto>.',
-              );
-              try {
-                final RouteStatusDto output = await api
-                    .simulateLocationsAlongNewRoute(arg_waypoints!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingOptions$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingOptions was null.',
-          );
-          final List<Object?> args = (message as List<Object?>?)!;
-          final List<NavigationWaypointDto>? arg_waypoints =
-              (args[0] as List<Object?>?)?.cast<NavigationWaypointDto>();
-          assert(
-            arg_waypoints != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingOptions was null, expected non-null List<NavigationWaypointDto>.',
-          );
-          final RoutingOptionsDto? arg_routingOptions =
-              (args[1] as RoutingOptionsDto?);
-          assert(
-            arg_routingOptions != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingOptions was null, expected non-null RoutingOptionsDto.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
           try {
-            final RouteStatusDto output = await api
-                .simulateLocationsAlongNewRouteWithRoutingOptions(
-                  arg_waypoints!,
-                  arg_routingOptions!,
-                );
+            final bool output = api.areTermsAccepted();
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.resetTermsAccepted$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions was null.',
-          );
-          final List<Object?> args = (message as List<Object?>?)!;
-          final List<NavigationWaypointDto>? arg_waypoints =
-              (args[0] as List<Object?>?)?.cast<NavigationWaypointDto>();
-          assert(
-            arg_waypoints != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions was null, expected non-null List<NavigationWaypointDto>.',
-          );
-          final RoutingOptionsDto? arg_routingOptions =
-              (args[1] as RoutingOptionsDto?);
-          assert(
-            arg_routingOptions != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions was null, expected non-null RoutingOptionsDto.',
-          );
-          final SimulationOptionsDto? arg_simulationOptions =
-              (args[2] as SimulationOptionsDto?);
-          assert(
-            arg_simulationOptions != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions was null, expected non-null SimulationOptionsDto.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
           try {
-            final RouteStatusDto output = await api
-                .simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
-                  arg_waypoints!,
-                  arg_routingOptions!,
-                  arg_simulationOptions!,
-                );
-            return <Object?>[output];
-          } on PlatformException catch (e) {
-            return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
-          }
-        });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.pauseSimulation$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                api.pauseSimulation();
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.resumeSimulation$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                api.resumeSimulation();
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.allowBackgroundLocationUpdates$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.allowBackgroundLocationUpdates was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final bool? arg_allow = (args[0] as bool?);
-              assert(
-                arg_allow != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.allowBackgroundLocationUpdates was null, expected non-null bool.',
-              );
-              try {
-                api.allowBackgroundLocationUpdates(arg_allow!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.enableRoadSnappedLocationUpdates$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                api.enableRoadSnappedLocationUpdates();
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.disableRoadSnappedLocationUpdates$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                api.disableRoadSnappedLocationUpdates();
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.enableTurnByTurnNavigationEvents$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.enableTurnByTurnNavigationEvents was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_numNextStepsToPreview = (args[0] as int?);
-              final StepImageGenerationOptionsDto? arg_options =
-                  (args[1] as StepImageGenerationOptionsDto?);
-              try {
-                api.enableTurnByTurnNavigationEvents(
-                  arg_numNextStepsToPreview,
-                  arg_options,
-                );
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.disableTurnByTurnNavigationEvents$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                api.disableTurnByTurnNavigationEvents();
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.registerRemainingTimeOrDistanceChangedListener$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.registerRemainingTimeOrDistanceChangedListener was null.',
-          );
-          final List<Object?> args = (message as List<Object?>?)!;
-          final int? arg_remainingTimeThresholdSeconds = (args[0] as int?);
-          assert(
-            arg_remainingTimeThresholdSeconds != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.registerRemainingTimeOrDistanceChangedListener was null, expected non-null int.',
-          );
-          final int? arg_remainingDistanceThresholdMeters = (args[1] as int?);
-          assert(
-            arg_remainingDistanceThresholdMeters != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.registerRemainingTimeOrDistanceChangedListener was null, expected non-null int.',
-          );
-          try {
-            api.registerRemainingTimeOrDistanceChangedListener(
-              arg_remainingTimeThresholdSeconds!,
-              arg_remainingDistanceThresholdMeters!,
-            );
+            api.resetTermsAccepted();
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getNavSDKVersion$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final String output = api.getNavSDKVersion();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.isGuidanceRunning$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final bool output = api.isGuidanceRunning();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.startGuidance$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            api.startGuidance();
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.stopGuidance$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            api.stopGuidance();
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setDestinations$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setDestinations was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final DestinationsDto? arg_destinations = (args[0] as DestinationsDto?);
+          assert(arg_destinations != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setDestinations was null, expected non-null DestinationsDto.');
+          try {
+            final RouteStatusDto output = await api.setDestinations(arg_destinations!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.clearDestinations$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            api.clearDestinations();
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.continueToNextDestination$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final ContinueToNextDestinationResponseDto output = await api.continueToNextDestination();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getCurrentTimeAndDistance$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final NavigationTimeAndDistanceDto output = api.getCurrentTimeAndDistance();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setAudioGuidance$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setAudioGuidance was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final NavigationAudioGuidanceSettingsDto? arg_settings = (args[0] as NavigationAudioGuidanceSettingsDto?);
+          assert(arg_settings != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setAudioGuidance was null, expected non-null NavigationAudioGuidanceSettingsDto.');
+          try {
+            api.setAudioGuidance(arg_settings!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setSpeedAlertOptions$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setSpeedAlertOptions was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final SpeedAlertOptionsDto? arg_options = (args[0] as SpeedAlertOptionsDto?);
+          assert(arg_options != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setSpeedAlertOptions was null, expected non-null SpeedAlertOptionsDto.');
+          try {
+            api.setSpeedAlertOptions(arg_options!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getRouteSegments$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final List<RouteSegmentDto> output = api.getRouteSegments();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getTraveledRoute$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final List<LatLngDto> output = api.getTraveledRoute();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getCurrentRouteSegment$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final RouteSegmentDto? output = api.getCurrentRouteSegment();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setUserLocation$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setUserLocation was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final LatLngDto? arg_location = (args[0] as LatLngDto?);
+          assert(arg_location != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setUserLocation was null, expected non-null LatLngDto.');
+          try {
+            api.setUserLocation(arg_location!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.removeUserLocation$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            api.removeUserLocation();
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongExistingRoute$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            api.simulateLocationsAlongExistingRoute();
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongExistingRouteWithOptions$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongExistingRouteWithOptions was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final SimulationOptionsDto? arg_options = (args[0] as SimulationOptionsDto?);
+          assert(arg_options != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongExistingRouteWithOptions was null, expected non-null SimulationOptionsDto.');
+          try {
+            api.simulateLocationsAlongExistingRouteWithOptions(arg_options!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRoute$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRoute was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final List<NavigationWaypointDto>? arg_waypoints = (args[0] as List<Object?>?)?.cast<NavigationWaypointDto>();
+          assert(arg_waypoints != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRoute was null, expected non-null List<NavigationWaypointDto>.');
+          try {
+            final RouteStatusDto output = await api.simulateLocationsAlongNewRoute(arg_waypoints!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingOptions$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingOptions was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final List<NavigationWaypointDto>? arg_waypoints = (args[0] as List<Object?>?)?.cast<NavigationWaypointDto>();
+          assert(arg_waypoints != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingOptions was null, expected non-null List<NavigationWaypointDto>.');
+          final RoutingOptionsDto? arg_routingOptions = (args[1] as RoutingOptionsDto?);
+          assert(arg_routingOptions != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingOptions was null, expected non-null RoutingOptionsDto.');
+          try {
+            final RouteStatusDto output = await api.simulateLocationsAlongNewRouteWithRoutingOptions(arg_waypoints!, arg_routingOptions!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final List<NavigationWaypointDto>? arg_waypoints = (args[0] as List<Object?>?)?.cast<NavigationWaypointDto>();
+          assert(arg_waypoints != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions was null, expected non-null List<NavigationWaypointDto>.');
+          final RoutingOptionsDto? arg_routingOptions = (args[1] as RoutingOptionsDto?);
+          assert(arg_routingOptions != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions was null, expected non-null RoutingOptionsDto.');
+          final SimulationOptionsDto? arg_simulationOptions = (args[2] as SimulationOptionsDto?);
+          assert(arg_simulationOptions != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions was null, expected non-null SimulationOptionsDto.');
+          try {
+            final RouteStatusDto output = await api.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(arg_waypoints!, arg_routingOptions!, arg_simulationOptions!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.pauseSimulation$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            api.pauseSimulation();
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.resumeSimulation$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            api.resumeSimulation();
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.allowBackgroundLocationUpdates$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.allowBackgroundLocationUpdates was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_allow = (args[0] as bool?);
+          assert(arg_allow != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.allowBackgroundLocationUpdates was null, expected non-null bool.');
+          try {
+            api.allowBackgroundLocationUpdates(arg_allow!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.enableRoadSnappedLocationUpdates$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            api.enableRoadSnappedLocationUpdates();
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.disableRoadSnappedLocationUpdates$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            api.disableRoadSnappedLocationUpdates();
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.enableTurnByTurnNavigationEvents$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.enableTurnByTurnNavigationEvents was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_numNextStepsToPreview = (args[0] as int?);
+          final StepImageGenerationOptionsDto? arg_options = (args[1] as StepImageGenerationOptionsDto?);
+          try {
+            api.enableTurnByTurnNavigationEvents(arg_numNextStepsToPreview, arg_options);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.disableTurnByTurnNavigationEvents$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            api.disableTurnByTurnNavigationEvents();
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.registerRemainingTimeOrDistanceChangedListener$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.registerRemainingTimeOrDistanceChangedListener was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_remainingTimeThresholdSeconds = (args[0] as int?);
+          assert(arg_remainingTimeThresholdSeconds != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.registerRemainingTimeOrDistanceChangedListener was null, expected non-null int.');
+          final int? arg_remainingDistanceThresholdMeters = (args[1] as int?);
+          assert(arg_remainingDistanceThresholdMeters != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.registerRemainingTimeOrDistanceChangedListener was null, expected non-null int.');
+          try {
+            api.registerRemainingTimeOrDistanceChangedListener(arg_remainingTimeThresholdSeconds!, arg_remainingDistanceThresholdMeters!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
@@ -6792,8 +4424,7 @@ abstract class TestNavigationSessionApi {
 }
 
 abstract class TestAutoMapViewApi {
-  static TestDefaultBinaryMessengerBinding? get _testBinaryMessengerBinding =>
-      TestDefaultBinaryMessengerBinding.instance;
+  static TestDefaultBinaryMessengerBinding? get _testBinaryMessengerBinding => TestDefaultBinaryMessengerBinding.instance;
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
 
   /// Sets the map options to be used for Android Auto and CarPlay views.
@@ -6819,37 +4450,17 @@ abstract class TestAutoMapViewApi {
 
   void followMyLocation(CameraPerspectiveDto perspective, double? zoomLevel);
 
-  Future<bool> animateCameraToCameraPosition(
-    CameraPositionDto cameraPosition,
-    int? duration,
-  );
+  Future<bool> animateCameraToCameraPosition(CameraPositionDto cameraPosition, int? duration);
 
   Future<bool> animateCameraToLatLng(LatLngDto point, int? duration);
 
-  Future<bool> animateCameraToLatLngBounds(
-    LatLngBoundsDto bounds,
-    double padding,
-    int? duration,
-  );
+  Future<bool> animateCameraToLatLngBounds(LatLngBoundsDto bounds, double padding, int? duration);
 
-  Future<bool> animateCameraToLatLngZoom(
-    LatLngDto point,
-    double zoom,
-    int? duration,
-  );
+  Future<bool> animateCameraToLatLngZoom(LatLngDto point, double zoom, int? duration);
 
-  Future<bool> animateCameraByScroll(
-    double scrollByDx,
-    double scrollByDy,
-    int? duration,
-  );
+  Future<bool> animateCameraByScroll(double scrollByDx, double scrollByDy, int? duration);
 
-  Future<bool> animateCameraByZoom(
-    double zoomBy,
-    double? focusDx,
-    double? focusDy,
-    int? duration,
-  );
+  Future<bool> animateCameraByZoom(double zoomBy, double? focusDx, double? focusDy, int? duration);
 
   Future<bool> animateCameraToZoom(double zoom, int? duration);
 
@@ -6941,6 +4552,10 @@ abstract class TestAutoMapViewApi {
 
   bool isSpeedometerEnabled();
 
+  bool isNavigationUIEnabled();
+
+  void setNavigationUIEnabled(bool enabled);
+
   void showRouteOverview();
 
   List<MarkerDto> getMarkers();
@@ -7003,3464 +4618,2147 @@ abstract class TestAutoMapViewApi {
 
   void sendCustomNavigationAutoEvent(String event, Object data);
 
-  static void setUp(
-    TestAutoMapViewApi? api, {
-    BinaryMessenger? binaryMessenger,
-    String messageChannelSuffix = '',
-  }) {
-    messageChannelSuffix = messageChannelSuffix.isNotEmpty
-        ? '.$messageChannelSuffix'
-        : '';
+  static void setUp(TestAutoMapViewApi? api, {BinaryMessenger? binaryMessenger, String messageChannelSuffix = '',}) {
+    messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setAutoMapOptions$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setAutoMapOptions$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setAutoMapOptions was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final AutoMapOptionsDto? arg_mapOptions =
-                  (args[0] as AutoMapOptionsDto?);
-              assert(
-                arg_mapOptions != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setAutoMapOptions was null, expected non-null AutoMapOptionsDto.',
-              );
-              try {
-                api.setAutoMapOptions(arg_mapOptions!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMyLocationEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final bool output = api.isMyLocationEnabled();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMyLocationEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMyLocationEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final bool? arg_enabled = (args[0] as bool?);
-              assert(
-                arg_enabled != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMyLocationEnabled was null, expected non-null bool.',
-              );
-              try {
-                api.setMyLocationEnabled(arg_enabled!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMyLocation$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final LatLngDto? output = api.getMyLocation();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMapType$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final MapTypeDto output = api.getMapType();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapType$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapType was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final MapTypeDto? arg_mapType = (args[0] as MapTypeDto?);
-              assert(
-                arg_mapType != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapType was null, expected non-null MapTypeDto.',
-              );
-              try {
-                api.setMapType(arg_mapType!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapStyle$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapStyle was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final String? arg_styleJson = (args[0] as String?);
-              assert(
-                arg_styleJson != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapStyle was null, expected non-null String.',
-              );
-              try {
-                api.setMapStyle(arg_styleJson!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getCameraPosition$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final CameraPositionDto output = api.getCameraPosition();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getVisibleRegion$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final LatLngBoundsDto output = api.getVisibleRegion();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.followMyLocation$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.followMyLocation was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final CameraPerspectiveDto? arg_perspective =
-                  (args[0] as CameraPerspectiveDto?);
-              assert(
-                arg_perspective != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.followMyLocation was null, expected non-null CameraPerspectiveDto.',
-              );
-              final double? arg_zoomLevel = (args[1] as double?);
-              try {
-                api.followMyLocation(arg_perspective!, arg_zoomLevel);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToCameraPosition$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToCameraPosition was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final CameraPositionDto? arg_cameraPosition =
-                  (args[0] as CameraPositionDto?);
-              assert(
-                arg_cameraPosition != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToCameraPosition was null, expected non-null CameraPositionDto.',
-              );
-              final int? arg_duration = (args[1] as int?);
-              try {
-                final bool output = await api.animateCameraToCameraPosition(
-                  arg_cameraPosition!,
-                  arg_duration,
-                );
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLng$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLng was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final LatLngDto? arg_point = (args[0] as LatLngDto?);
-              assert(
-                arg_point != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLng was null, expected non-null LatLngDto.',
-              );
-              final int? arg_duration = (args[1] as int?);
-              try {
-                final bool output = await api.animateCameraToLatLng(
-                  arg_point!,
-                  arg_duration,
-                );
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngBounds$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngBounds was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setAutoMapOptions was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final LatLngBoundsDto? arg_bounds = (args[0] as LatLngBoundsDto?);
-          assert(
-            arg_bounds != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngBounds was null, expected non-null LatLngBoundsDto.',
-          );
-          final double? arg_padding = (args[1] as double?);
-          assert(
-            arg_padding != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngBounds was null, expected non-null double.',
-          );
-          final int? arg_duration = (args[2] as int?);
+          final AutoMapOptionsDto? arg_mapOptions = (args[0] as AutoMapOptionsDto?);
+          assert(arg_mapOptions != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setAutoMapOptions was null, expected non-null AutoMapOptionsDto.');
           try {
-            final bool output = await api.animateCameraToLatLngBounds(
-              arg_bounds!,
-              arg_padding!,
-              arg_duration,
-            );
-            return <Object?>[output];
+            api.setAutoMapOptions(arg_mapOptions!);
+            return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngZoom$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMyLocationEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngZoom was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final bool output = api.isMyLocationEnabled();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMyLocationEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMyLocationEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_enabled = (args[0] as bool?);
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMyLocationEnabled was null, expected non-null bool.');
+          try {
+            api.setMyLocationEnabled(arg_enabled!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMyLocation$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final LatLngDto? output = api.getMyLocation();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMapType$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final MapTypeDto output = api.getMapType();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapType$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapType was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final MapTypeDto? arg_mapType = (args[0] as MapTypeDto?);
+          assert(arg_mapType != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapType was null, expected non-null MapTypeDto.');
+          try {
+            api.setMapType(arg_mapType!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapStyle$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapStyle was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final String? arg_styleJson = (args[0] as String?);
+          assert(arg_styleJson != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapStyle was null, expected non-null String.');
+          try {
+            api.setMapStyle(arg_styleJson!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getCameraPosition$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final CameraPositionDto output = api.getCameraPosition();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getVisibleRegion$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final LatLngBoundsDto output = api.getVisibleRegion();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.followMyLocation$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.followMyLocation was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final CameraPerspectiveDto? arg_perspective = (args[0] as CameraPerspectiveDto?);
+          assert(arg_perspective != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.followMyLocation was null, expected non-null CameraPerspectiveDto.');
+          final double? arg_zoomLevel = (args[1] as double?);
+          try {
+            api.followMyLocation(arg_perspective!, arg_zoomLevel);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToCameraPosition$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToCameraPosition was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final CameraPositionDto? arg_cameraPosition = (args[0] as CameraPositionDto?);
+          assert(arg_cameraPosition != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToCameraPosition was null, expected non-null CameraPositionDto.');
+          final int? arg_duration = (args[1] as int?);
+          try {
+            final bool output = await api.animateCameraToCameraPosition(arg_cameraPosition!, arg_duration);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLng$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLng was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final LatLngDto? arg_point = (args[0] as LatLngDto?);
-          assert(
-            arg_point != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngZoom was null, expected non-null LatLngDto.',
-          );
-          final double? arg_zoom = (args[1] as double?);
-          assert(
-            arg_zoom != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngZoom was null, expected non-null double.',
-          );
-          final int? arg_duration = (args[2] as int?);
+          assert(arg_point != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLng was null, expected non-null LatLngDto.');
+          final int? arg_duration = (args[1] as int?);
           try {
-            final bool output = await api.animateCameraToLatLngZoom(
-              arg_point!,
-              arg_zoom!,
-              arg_duration,
-            );
+            final bool output = await api.animateCameraToLatLng(arg_point!, arg_duration);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByScroll$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngBounds$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByScroll was null.',
-          );
-          final List<Object?> args = (message as List<Object?>?)!;
-          final double? arg_scrollByDx = (args[0] as double?);
-          assert(
-            arg_scrollByDx != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByScroll was null, expected non-null double.',
-          );
-          final double? arg_scrollByDy = (args[1] as double?);
-          assert(
-            arg_scrollByDy != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByScroll was null, expected non-null double.',
-          );
-          final int? arg_duration = (args[2] as int?);
-          try {
-            final bool output = await api.animateCameraByScroll(
-              arg_scrollByDx!,
-              arg_scrollByDy!,
-              arg_duration,
-            );
-            return <Object?>[output];
-          } on PlatformException catch (e) {
-            return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
-          }
-        });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByZoom$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByZoom was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final double? arg_zoomBy = (args[0] as double?);
-              assert(
-                arg_zoomBy != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByZoom was null, expected non-null double.',
-              );
-              final double? arg_focusDx = (args[1] as double?);
-              final double? arg_focusDy = (args[2] as double?);
-              final int? arg_duration = (args[3] as int?);
-              try {
-                final bool output = await api.animateCameraByZoom(
-                  arg_zoomBy!,
-                  arg_focusDx,
-                  arg_focusDy,
-                  arg_duration,
-                );
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToZoom$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToZoom was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final double? arg_zoom = (args[0] as double?);
-              assert(
-                arg_zoom != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToZoom was null, expected non-null double.',
-              );
-              final int? arg_duration = (args[1] as int?);
-              try {
-                final bool output = await api.animateCameraToZoom(
-                  arg_zoom!,
-                  arg_duration,
-                );
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToCameraPosition$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToCameraPosition was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final CameraPositionDto? arg_cameraPosition =
-                  (args[0] as CameraPositionDto?);
-              assert(
-                arg_cameraPosition != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToCameraPosition was null, expected non-null CameraPositionDto.',
-              );
-              try {
-                api.moveCameraToCameraPosition(arg_cameraPosition!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLng$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLng was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final LatLngDto? arg_point = (args[0] as LatLngDto?);
-              assert(
-                arg_point != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLng was null, expected non-null LatLngDto.',
-              );
-              try {
-                api.moveCameraToLatLng(arg_point!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngBounds$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngBounds was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngBounds was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final LatLngBoundsDto? arg_bounds = (args[0] as LatLngBoundsDto?);
-          assert(
-            arg_bounds != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngBounds was null, expected non-null LatLngBoundsDto.',
-          );
+          assert(arg_bounds != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngBounds was null, expected non-null LatLngBoundsDto.');
           final double? arg_padding = (args[1] as double?);
-          assert(
-            arg_padding != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngBounds was null, expected non-null double.',
-          );
+          assert(arg_padding != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngBounds was null, expected non-null double.');
+          final int? arg_duration = (args[2] as int?);
+          try {
+            final bool output = await api.animateCameraToLatLngBounds(arg_bounds!, arg_padding!, arg_duration);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngZoom$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngZoom was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final LatLngDto? arg_point = (args[0] as LatLngDto?);
+          assert(arg_point != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngZoom was null, expected non-null LatLngDto.');
+          final double? arg_zoom = (args[1] as double?);
+          assert(arg_zoom != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngZoom was null, expected non-null double.');
+          final int? arg_duration = (args[2] as int?);
+          try {
+            final bool output = await api.animateCameraToLatLngZoom(arg_point!, arg_zoom!, arg_duration);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByScroll$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByScroll was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final double? arg_scrollByDx = (args[0] as double?);
+          assert(arg_scrollByDx != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByScroll was null, expected non-null double.');
+          final double? arg_scrollByDy = (args[1] as double?);
+          assert(arg_scrollByDy != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByScroll was null, expected non-null double.');
+          final int? arg_duration = (args[2] as int?);
+          try {
+            final bool output = await api.animateCameraByScroll(arg_scrollByDx!, arg_scrollByDy!, arg_duration);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByZoom$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByZoom was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final double? arg_zoomBy = (args[0] as double?);
+          assert(arg_zoomBy != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByZoom was null, expected non-null double.');
+          final double? arg_focusDx = (args[1] as double?);
+          final double? arg_focusDy = (args[2] as double?);
+          final int? arg_duration = (args[3] as int?);
+          try {
+            final bool output = await api.animateCameraByZoom(arg_zoomBy!, arg_focusDx, arg_focusDy, arg_duration);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToZoom$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToZoom was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final double? arg_zoom = (args[0] as double?);
+          assert(arg_zoom != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToZoom was null, expected non-null double.');
+          final int? arg_duration = (args[1] as int?);
+          try {
+            final bool output = await api.animateCameraToZoom(arg_zoom!, arg_duration);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToCameraPosition$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToCameraPosition was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final CameraPositionDto? arg_cameraPosition = (args[0] as CameraPositionDto?);
+          assert(arg_cameraPosition != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToCameraPosition was null, expected non-null CameraPositionDto.');
+          try {
+            api.moveCameraToCameraPosition(arg_cameraPosition!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLng$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLng was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final LatLngDto? arg_point = (args[0] as LatLngDto?);
+          assert(arg_point != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLng was null, expected non-null LatLngDto.');
+          try {
+            api.moveCameraToLatLng(arg_point!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngBounds$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngBounds was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final LatLngBoundsDto? arg_bounds = (args[0] as LatLngBoundsDto?);
+          assert(arg_bounds != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngBounds was null, expected non-null LatLngBoundsDto.');
+          final double? arg_padding = (args[1] as double?);
+          assert(arg_padding != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngBounds was null, expected non-null double.');
           try {
             api.moveCameraToLatLngBounds(arg_bounds!, arg_padding!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngZoom$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngZoom$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngZoom was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngZoom was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final LatLngDto? arg_point = (args[0] as LatLngDto?);
-          assert(
-            arg_point != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngZoom was null, expected non-null LatLngDto.',
-          );
+          assert(arg_point != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngZoom was null, expected non-null LatLngDto.');
           final double? arg_zoom = (args[1] as double?);
-          assert(
-            arg_zoom != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngZoom was null, expected non-null double.',
-          );
+          assert(arg_zoom != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngZoom was null, expected non-null double.');
           try {
             api.moveCameraToLatLngZoom(arg_point!, arg_zoom!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByScroll$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByScroll$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByScroll was null.',
-          );
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByScroll was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final double? arg_scrollByDx = (args[0] as double?);
-          assert(
-            arg_scrollByDx != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByScroll was null, expected non-null double.',
-          );
+          assert(arg_scrollByDx != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByScroll was null, expected non-null double.');
           final double? arg_scrollByDy = (args[1] as double?);
-          assert(
-            arg_scrollByDy != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByScroll was null, expected non-null double.',
-          );
+          assert(arg_scrollByDy != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByScroll was null, expected non-null double.');
           try {
             api.moveCameraByScroll(arg_scrollByDx!, arg_scrollByDy!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByZoom$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByZoom was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final double? arg_zoomBy = (args[0] as double?);
-              assert(
-                arg_zoomBy != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByZoom was null, expected non-null double.',
-              );
-              final double? arg_focusDx = (args[1] as double?);
-              final double? arg_focusDy = (args[2] as double?);
-              try {
-                api.moveCameraByZoom(arg_zoomBy!, arg_focusDx, arg_focusDy);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToZoom$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToZoom was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final double? arg_zoom = (args[0] as double?);
-              assert(
-                arg_zoom != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToZoom was null, expected non-null double.',
-              );
-              try {
-                api.moveCameraToZoom(arg_zoom!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMinZoomPreference$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final double output = api.getMinZoomPreference();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMaxZoomPreference$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final double output = api.getMaxZoomPreference();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.resetMinMaxZoomPreference$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                api.resetMinMaxZoomPreference();
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMinZoomPreference$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMinZoomPreference was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final double? arg_minZoomPreference = (args[0] as double?);
-              assert(
-                arg_minZoomPreference != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMinZoomPreference was null, expected non-null double.',
-              );
-              try {
-                api.setMinZoomPreference(arg_minZoomPreference!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMaxZoomPreference$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMaxZoomPreference was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final double? arg_maxZoomPreference = (args[0] as double?);
-              assert(
-                arg_maxZoomPreference != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMaxZoomPreference was null, expected non-null double.',
-              );
-              try {
-                api.setMaxZoomPreference(arg_maxZoomPreference!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMyLocationButtonEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMyLocationButtonEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final bool? arg_enabled = (args[0] as bool?);
-              assert(
-                arg_enabled != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMyLocationButtonEnabled was null, expected non-null bool.',
-              );
-              try {
-                api.setMyLocationButtonEnabled(arg_enabled!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setConsumeMyLocationButtonClickEventsEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setConsumeMyLocationButtonClickEventsEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final bool? arg_enabled = (args[0] as bool?);
-              assert(
-                arg_enabled != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setConsumeMyLocationButtonClickEventsEnabled was null, expected non-null bool.',
-              );
-              try {
-                api.setConsumeMyLocationButtonClickEventsEnabled(arg_enabled!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setZoomGesturesEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setZoomGesturesEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final bool? arg_enabled = (args[0] as bool?);
-              assert(
-                arg_enabled != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setZoomGesturesEnabled was null, expected non-null bool.',
-              );
-              try {
-                api.setZoomGesturesEnabled(arg_enabled!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setZoomControlsEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setZoomControlsEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final bool? arg_enabled = (args[0] as bool?);
-              assert(
-                arg_enabled != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setZoomControlsEnabled was null, expected non-null bool.',
-              );
-              try {
-                api.setZoomControlsEnabled(arg_enabled!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setCompassEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setCompassEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final bool? arg_enabled = (args[0] as bool?);
-              assert(
-                arg_enabled != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setCompassEnabled was null, expected non-null bool.',
-              );
-              try {
-                api.setCompassEnabled(arg_enabled!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setRotateGesturesEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setRotateGesturesEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final bool? arg_enabled = (args[0] as bool?);
-              assert(
-                arg_enabled != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setRotateGesturesEnabled was null, expected non-null bool.',
-              );
-              try {
-                api.setRotateGesturesEnabled(arg_enabled!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setScrollGesturesEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setScrollGesturesEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final bool? arg_enabled = (args[0] as bool?);
-              assert(
-                arg_enabled != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setScrollGesturesEnabled was null, expected non-null bool.',
-              );
-              try {
-                api.setScrollGesturesEnabled(arg_enabled!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setScrollGesturesDuringRotateOrZoomEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setScrollGesturesDuringRotateOrZoomEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final bool? arg_enabled = (args[0] as bool?);
-              assert(
-                arg_enabled != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setScrollGesturesDuringRotateOrZoomEnabled was null, expected non-null bool.',
-              );
-              try {
-                api.setScrollGesturesDuringRotateOrZoomEnabled(arg_enabled!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTiltGesturesEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTiltGesturesEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final bool? arg_enabled = (args[0] as bool?);
-              assert(
-                arg_enabled != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTiltGesturesEnabled was null, expected non-null bool.',
-              );
-              try {
-                api.setTiltGesturesEnabled(arg_enabled!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapToolbarEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapToolbarEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final bool? arg_enabled = (args[0] as bool?);
-              assert(
-                arg_enabled != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapToolbarEnabled was null, expected non-null bool.',
-              );
-              try {
-                api.setMapToolbarEnabled(arg_enabled!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final bool? arg_enabled = (args[0] as bool?);
-              assert(
-                arg_enabled != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficEnabled was null, expected non-null bool.',
-              );
-              try {
-                api.setTrafficEnabled(arg_enabled!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficPromptsEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficPromptsEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final bool? arg_enabled = (args[0] as bool?);
-              assert(
-                arg_enabled != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficPromptsEnabled was null, expected non-null bool.',
-              );
-              try {
-                api.setTrafficPromptsEnabled(arg_enabled!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficIncidentCardsEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficIncidentCardsEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final bool? arg_enabled = (args[0] as bool?);
-              assert(
-                arg_enabled != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficIncidentCardsEnabled was null, expected non-null bool.',
-              );
-              try {
-                api.setTrafficIncidentCardsEnabled(arg_enabled!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationTripProgressBarEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationTripProgressBarEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final bool? arg_enabled = (args[0] as bool?);
-              assert(
-                arg_enabled != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationTripProgressBarEnabled was null, expected non-null bool.',
-              );
-              try {
-                api.setNavigationTripProgressBarEnabled(arg_enabled!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setSpeedLimitIconEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setSpeedLimitIconEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final bool? arg_enabled = (args[0] as bool?);
-              assert(
-                arg_enabled != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setSpeedLimitIconEnabled was null, expected non-null bool.',
-              );
-              try {
-                api.setSpeedLimitIconEnabled(arg_enabled!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setSpeedometerEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setSpeedometerEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final bool? arg_enabled = (args[0] as bool?);
-              assert(
-                arg_enabled != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setSpeedometerEnabled was null, expected non-null bool.',
-              );
-              try {
-                api.setSpeedometerEnabled(arg_enabled!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMyLocationButtonEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final bool output = api.isMyLocationButtonEnabled();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isConsumeMyLocationButtonClickEventsEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final bool output = api
-                    .isConsumeMyLocationButtonClickEventsEnabled();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isZoomGesturesEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final bool output = api.isZoomGesturesEnabled();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isZoomControlsEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final bool output = api.isZoomControlsEnabled();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isCompassEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final bool output = api.isCompassEnabled();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isRotateGesturesEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final bool output = api.isRotateGesturesEnabled();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isScrollGesturesEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final bool output = api.isScrollGesturesEnabled();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isScrollGesturesEnabledDuringRotateOrZoom$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final bool output = api
-                    .isScrollGesturesEnabledDuringRotateOrZoom();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isTiltGesturesEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final bool output = api.isTiltGesturesEnabled();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMapToolbarEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final bool output = api.isMapToolbarEnabled();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isTrafficEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final bool output = api.isTrafficEnabled();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isTrafficPromptsEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final bool output = api.isTrafficPromptsEnabled();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isTrafficIncidentCardsEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final bool output = api.isTrafficIncidentCardsEnabled();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isNavigationTripProgressBarEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final bool output = api.isNavigationTripProgressBarEnabled();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isSpeedLimitIconEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final bool output = api.isSpeedLimitIconEnabled();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isSpeedometerEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final bool output = api.isSpeedometerEnabled();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.showRouteOverview$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                api.showRouteOverview();
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMarkers$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final List<MarkerDto> output = api.getMarkers();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addMarkers$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addMarkers was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final List<MarkerDto>? arg_markers = (args[0] as List<Object?>?)
-                  ?.cast<MarkerDto>();
-              assert(
-                arg_markers != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addMarkers was null, expected non-null List<MarkerDto>.',
-              );
-              try {
-                final List<MarkerDto> output = api.addMarkers(arg_markers!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updateMarkers$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updateMarkers was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final List<MarkerDto>? arg_markers = (args[0] as List<Object?>?)
-                  ?.cast<MarkerDto>();
-              assert(
-                arg_markers != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updateMarkers was null, expected non-null List<MarkerDto>.',
-              );
-              try {
-                final List<MarkerDto> output = api.updateMarkers(arg_markers!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removeMarkers$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removeMarkers was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final List<MarkerDto>? arg_markers = (args[0] as List<Object?>?)
-                  ?.cast<MarkerDto>();
-              assert(
-                arg_markers != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removeMarkers was null, expected non-null List<MarkerDto>.',
-              );
-              try {
-                api.removeMarkers(arg_markers!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearMarkers$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                api.clearMarkers();
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clear$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                api.clear();
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPolygons$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final List<PolygonDto> output = api.getPolygons();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addPolygons$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addPolygons was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final List<PolygonDto>? arg_polygons = (args[0] as List<Object?>?)
-                  ?.cast<PolygonDto>();
-              assert(
-                arg_polygons != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addPolygons was null, expected non-null List<PolygonDto>.',
-              );
-              try {
-                final List<PolygonDto> output = api.addPolygons(arg_polygons!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updatePolygons$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updatePolygons was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final List<PolygonDto>? arg_polygons = (args[0] as List<Object?>?)
-                  ?.cast<PolygonDto>();
-              assert(
-                arg_polygons != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updatePolygons was null, expected non-null List<PolygonDto>.',
-              );
-              try {
-                final List<PolygonDto> output = api.updatePolygons(
-                  arg_polygons!,
-                );
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removePolygons$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removePolygons was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final List<PolygonDto>? arg_polygons = (args[0] as List<Object?>?)
-                  ?.cast<PolygonDto>();
-              assert(
-                arg_polygons != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removePolygons was null, expected non-null List<PolygonDto>.',
-              );
-              try {
-                api.removePolygons(arg_polygons!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearPolygons$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                api.clearPolygons();
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPolylines$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final List<PolylineDto> output = api.getPolylines();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addPolylines$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addPolylines was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final List<PolylineDto>? arg_polylines =
-                  (args[0] as List<Object?>?)?.cast<PolylineDto>();
-              assert(
-                arg_polylines != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addPolylines was null, expected non-null List<PolylineDto>.',
-              );
-              try {
-                final List<PolylineDto> output = api.addPolylines(
-                  arg_polylines!,
-                );
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updatePolylines$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updatePolylines was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final List<PolylineDto>? arg_polylines =
-                  (args[0] as List<Object?>?)?.cast<PolylineDto>();
-              assert(
-                arg_polylines != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updatePolylines was null, expected non-null List<PolylineDto>.',
-              );
-              try {
-                final List<PolylineDto> output = api.updatePolylines(
-                  arg_polylines!,
-                );
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removePolylines$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removePolylines was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final List<PolylineDto>? arg_polylines =
-                  (args[0] as List<Object?>?)?.cast<PolylineDto>();
-              assert(
-                arg_polylines != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removePolylines was null, expected non-null List<PolylineDto>.',
-              );
-              try {
-                api.removePolylines(arg_polylines!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearPolylines$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                api.clearPolylines();
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getCircles$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final List<CircleDto> output = api.getCircles();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addCircles$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addCircles was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final List<CircleDto>? arg_circles = (args[0] as List<Object?>?)
-                  ?.cast<CircleDto>();
-              assert(
-                arg_circles != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addCircles was null, expected non-null List<CircleDto>.',
-              );
-              try {
-                final List<CircleDto> output = api.addCircles(arg_circles!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updateCircles$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updateCircles was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final List<CircleDto>? arg_circles = (args[0] as List<Object?>?)
-                  ?.cast<CircleDto>();
-              assert(
-                arg_circles != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updateCircles was null, expected non-null List<CircleDto>.',
-              );
-              try {
-                final List<CircleDto> output = api.updateCircles(arg_circles!);
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removeCircles$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removeCircles was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final List<CircleDto>? arg_circles = (args[0] as List<Object?>?)
-                  ?.cast<CircleDto>();
-              assert(
-                arg_circles != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removeCircles was null, expected non-null List<CircleDto>.',
-              );
-              try {
-                api.removeCircles(arg_circles!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearCircles$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                api.clearCircles();
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.enableOnCameraChangedEvents$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                api.enableOnCameraChangedEvents();
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isAutoScreenAvailable$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final bool output = api.isAutoScreenAvailable();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setPadding$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setPadding was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final MapPaddingDto? arg_padding = (args[0] as MapPaddingDto?);
-              assert(
-                arg_padding != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setPadding was null, expected non-null MapPaddingDto.',
-              );
-              try {
-                api.setPadding(arg_padding!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPadding$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final MapPaddingDto output = api.getPadding();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMapColorScheme$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final MapColorSchemeDto output = api.getMapColorScheme();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapColorScheme$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapColorScheme was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final MapColorSchemeDto? arg_mapColorScheme =
-                  (args[0] as MapColorSchemeDto?);
-              assert(
-                arg_mapColorScheme != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapColorScheme was null, expected non-null MapColorSchemeDto.',
-              );
-              try {
-                api.setMapColorScheme(arg_mapColorScheme!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getForceNightMode$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              try {
-                final NavigationForceNightModeDto output = api
-                    .getForceNightMode();
-                return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setForceNightMode$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setForceNightMode was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final NavigationForceNightModeDto? arg_forceNightMode =
-                  (args[0] as NavigationForceNightModeDto?);
-              assert(
-                arg_forceNightMode != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setForceNightMode was null, expected non-null NavigationForceNightModeDto.',
-              );
-              try {
-                api.setForceNightMode(arg_forceNightMode!);
-                return wrapResponse(empty: true);
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.sendCustomNavigationAutoEvent$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.sendCustomNavigationAutoEvent was null.',
-          );
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByZoom$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByZoom was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final double? arg_zoomBy = (args[0] as double?);
+          assert(arg_zoomBy != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByZoom was null, expected non-null double.');
+          final double? arg_focusDx = (args[1] as double?);
+          final double? arg_focusDy = (args[2] as double?);
+          try {
+            api.moveCameraByZoom(arg_zoomBy!, arg_focusDx, arg_focusDy);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToZoom$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToZoom was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final double? arg_zoom = (args[0] as double?);
+          assert(arg_zoom != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToZoom was null, expected non-null double.');
+          try {
+            api.moveCameraToZoom(arg_zoom!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMinZoomPreference$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final double output = api.getMinZoomPreference();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMaxZoomPreference$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final double output = api.getMaxZoomPreference();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.resetMinMaxZoomPreference$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            api.resetMinMaxZoomPreference();
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMinZoomPreference$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMinZoomPreference was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final double? arg_minZoomPreference = (args[0] as double?);
+          assert(arg_minZoomPreference != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMinZoomPreference was null, expected non-null double.');
+          try {
+            api.setMinZoomPreference(arg_minZoomPreference!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMaxZoomPreference$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMaxZoomPreference was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final double? arg_maxZoomPreference = (args[0] as double?);
+          assert(arg_maxZoomPreference != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMaxZoomPreference was null, expected non-null double.');
+          try {
+            api.setMaxZoomPreference(arg_maxZoomPreference!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMyLocationButtonEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMyLocationButtonEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_enabled = (args[0] as bool?);
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMyLocationButtonEnabled was null, expected non-null bool.');
+          try {
+            api.setMyLocationButtonEnabled(arg_enabled!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setConsumeMyLocationButtonClickEventsEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setConsumeMyLocationButtonClickEventsEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_enabled = (args[0] as bool?);
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setConsumeMyLocationButtonClickEventsEnabled was null, expected non-null bool.');
+          try {
+            api.setConsumeMyLocationButtonClickEventsEnabled(arg_enabled!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setZoomGesturesEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setZoomGesturesEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_enabled = (args[0] as bool?);
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setZoomGesturesEnabled was null, expected non-null bool.');
+          try {
+            api.setZoomGesturesEnabled(arg_enabled!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setZoomControlsEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setZoomControlsEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_enabled = (args[0] as bool?);
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setZoomControlsEnabled was null, expected non-null bool.');
+          try {
+            api.setZoomControlsEnabled(arg_enabled!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setCompassEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setCompassEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_enabled = (args[0] as bool?);
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setCompassEnabled was null, expected non-null bool.');
+          try {
+            api.setCompassEnabled(arg_enabled!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setRotateGesturesEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setRotateGesturesEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_enabled = (args[0] as bool?);
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setRotateGesturesEnabled was null, expected non-null bool.');
+          try {
+            api.setRotateGesturesEnabled(arg_enabled!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setScrollGesturesEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setScrollGesturesEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_enabled = (args[0] as bool?);
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setScrollGesturesEnabled was null, expected non-null bool.');
+          try {
+            api.setScrollGesturesEnabled(arg_enabled!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setScrollGesturesDuringRotateOrZoomEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setScrollGesturesDuringRotateOrZoomEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_enabled = (args[0] as bool?);
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setScrollGesturesDuringRotateOrZoomEnabled was null, expected non-null bool.');
+          try {
+            api.setScrollGesturesDuringRotateOrZoomEnabled(arg_enabled!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTiltGesturesEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTiltGesturesEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_enabled = (args[0] as bool?);
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTiltGesturesEnabled was null, expected non-null bool.');
+          try {
+            api.setTiltGesturesEnabled(arg_enabled!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapToolbarEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapToolbarEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_enabled = (args[0] as bool?);
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapToolbarEnabled was null, expected non-null bool.');
+          try {
+            api.setMapToolbarEnabled(arg_enabled!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_enabled = (args[0] as bool?);
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficEnabled was null, expected non-null bool.');
+          try {
+            api.setTrafficEnabled(arg_enabled!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficPromptsEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficPromptsEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_enabled = (args[0] as bool?);
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficPromptsEnabled was null, expected non-null bool.');
+          try {
+            api.setTrafficPromptsEnabled(arg_enabled!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficIncidentCardsEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficIncidentCardsEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_enabled = (args[0] as bool?);
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficIncidentCardsEnabled was null, expected non-null bool.');
+          try {
+            api.setTrafficIncidentCardsEnabled(arg_enabled!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationTripProgressBarEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationTripProgressBarEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_enabled = (args[0] as bool?);
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationTripProgressBarEnabled was null, expected non-null bool.');
+          try {
+            api.setNavigationTripProgressBarEnabled(arg_enabled!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setSpeedLimitIconEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setSpeedLimitIconEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_enabled = (args[0] as bool?);
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setSpeedLimitIconEnabled was null, expected non-null bool.');
+          try {
+            api.setSpeedLimitIconEnabled(arg_enabled!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setSpeedometerEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setSpeedometerEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_enabled = (args[0] as bool?);
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setSpeedometerEnabled was null, expected non-null bool.');
+          try {
+            api.setSpeedometerEnabled(arg_enabled!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMyLocationButtonEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final bool output = api.isMyLocationButtonEnabled();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isConsumeMyLocationButtonClickEventsEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final bool output = api.isConsumeMyLocationButtonClickEventsEnabled();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isZoomGesturesEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final bool output = api.isZoomGesturesEnabled();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isZoomControlsEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final bool output = api.isZoomControlsEnabled();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isCompassEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final bool output = api.isCompassEnabled();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isRotateGesturesEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final bool output = api.isRotateGesturesEnabled();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isScrollGesturesEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final bool output = api.isScrollGesturesEnabled();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isScrollGesturesEnabledDuringRotateOrZoom$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final bool output = api.isScrollGesturesEnabledDuringRotateOrZoom();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isTiltGesturesEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final bool output = api.isTiltGesturesEnabled();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMapToolbarEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final bool output = api.isMapToolbarEnabled();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isTrafficEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final bool output = api.isTrafficEnabled();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isTrafficPromptsEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final bool output = api.isTrafficPromptsEnabled();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isTrafficIncidentCardsEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final bool output = api.isTrafficIncidentCardsEnabled();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isNavigationTripProgressBarEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final bool output = api.isNavigationTripProgressBarEnabled();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isSpeedLimitIconEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final bool output = api.isSpeedLimitIconEnabled();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isSpeedometerEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final bool output = api.isSpeedometerEnabled();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isNavigationUIEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final bool output = api.isNavigationUIEnabled();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationUIEnabled$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationUIEnabled was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_enabled = (args[0] as bool?);
+          assert(arg_enabled != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationUIEnabled was null, expected non-null bool.');
+          try {
+            api.setNavigationUIEnabled(arg_enabled!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.showRouteOverview$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            api.showRouteOverview();
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMarkers$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final List<MarkerDto> output = api.getMarkers();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addMarkers$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addMarkers was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final List<MarkerDto>? arg_markers = (args[0] as List<Object?>?)?.cast<MarkerDto>();
+          assert(arg_markers != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addMarkers was null, expected non-null List<MarkerDto>.');
+          try {
+            final List<MarkerDto> output = api.addMarkers(arg_markers!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updateMarkers$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updateMarkers was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final List<MarkerDto>? arg_markers = (args[0] as List<Object?>?)?.cast<MarkerDto>();
+          assert(arg_markers != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updateMarkers was null, expected non-null List<MarkerDto>.');
+          try {
+            final List<MarkerDto> output = api.updateMarkers(arg_markers!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removeMarkers$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removeMarkers was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final List<MarkerDto>? arg_markers = (args[0] as List<Object?>?)?.cast<MarkerDto>();
+          assert(arg_markers != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removeMarkers was null, expected non-null List<MarkerDto>.');
+          try {
+            api.removeMarkers(arg_markers!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearMarkers$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            api.clearMarkers();
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clear$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            api.clear();
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPolygons$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final List<PolygonDto> output = api.getPolygons();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addPolygons$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addPolygons was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final List<PolygonDto>? arg_polygons = (args[0] as List<Object?>?)?.cast<PolygonDto>();
+          assert(arg_polygons != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addPolygons was null, expected non-null List<PolygonDto>.');
+          try {
+            final List<PolygonDto> output = api.addPolygons(arg_polygons!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updatePolygons$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updatePolygons was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final List<PolygonDto>? arg_polygons = (args[0] as List<Object?>?)?.cast<PolygonDto>();
+          assert(arg_polygons != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updatePolygons was null, expected non-null List<PolygonDto>.');
+          try {
+            final List<PolygonDto> output = api.updatePolygons(arg_polygons!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removePolygons$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removePolygons was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final List<PolygonDto>? arg_polygons = (args[0] as List<Object?>?)?.cast<PolygonDto>();
+          assert(arg_polygons != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removePolygons was null, expected non-null List<PolygonDto>.');
+          try {
+            api.removePolygons(arg_polygons!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearPolygons$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            api.clearPolygons();
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPolylines$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final List<PolylineDto> output = api.getPolylines();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addPolylines$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addPolylines was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final List<PolylineDto>? arg_polylines = (args[0] as List<Object?>?)?.cast<PolylineDto>();
+          assert(arg_polylines != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addPolylines was null, expected non-null List<PolylineDto>.');
+          try {
+            final List<PolylineDto> output = api.addPolylines(arg_polylines!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updatePolylines$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updatePolylines was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final List<PolylineDto>? arg_polylines = (args[0] as List<Object?>?)?.cast<PolylineDto>();
+          assert(arg_polylines != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updatePolylines was null, expected non-null List<PolylineDto>.');
+          try {
+            final List<PolylineDto> output = api.updatePolylines(arg_polylines!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removePolylines$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removePolylines was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final List<PolylineDto>? arg_polylines = (args[0] as List<Object?>?)?.cast<PolylineDto>();
+          assert(arg_polylines != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removePolylines was null, expected non-null List<PolylineDto>.');
+          try {
+            api.removePolylines(arg_polylines!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearPolylines$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            api.clearPolylines();
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getCircles$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final List<CircleDto> output = api.getCircles();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addCircles$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addCircles was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final List<CircleDto>? arg_circles = (args[0] as List<Object?>?)?.cast<CircleDto>();
+          assert(arg_circles != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addCircles was null, expected non-null List<CircleDto>.');
+          try {
+            final List<CircleDto> output = api.addCircles(arg_circles!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updateCircles$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updateCircles was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final List<CircleDto>? arg_circles = (args[0] as List<Object?>?)?.cast<CircleDto>();
+          assert(arg_circles != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updateCircles was null, expected non-null List<CircleDto>.');
+          try {
+            final List<CircleDto> output = api.updateCircles(arg_circles!);
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removeCircles$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removeCircles was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final List<CircleDto>? arg_circles = (args[0] as List<Object?>?)?.cast<CircleDto>();
+          assert(arg_circles != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removeCircles was null, expected non-null List<CircleDto>.');
+          try {
+            api.removeCircles(arg_circles!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearCircles$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            api.clearCircles();
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.enableOnCameraChangedEvents$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            api.enableOnCameraChangedEvents();
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isAutoScreenAvailable$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final bool output = api.isAutoScreenAvailable();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setPadding$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setPadding was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final MapPaddingDto? arg_padding = (args[0] as MapPaddingDto?);
+          assert(arg_padding != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setPadding was null, expected non-null MapPaddingDto.');
+          try {
+            api.setPadding(arg_padding!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPadding$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final MapPaddingDto output = api.getPadding();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMapColorScheme$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final MapColorSchemeDto output = api.getMapColorScheme();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapColorScheme$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapColorScheme was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final MapColorSchemeDto? arg_mapColorScheme = (args[0] as MapColorSchemeDto?);
+          assert(arg_mapColorScheme != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapColorScheme was null, expected non-null MapColorSchemeDto.');
+          try {
+            api.setMapColorScheme(arg_mapColorScheme!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getForceNightMode$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          try {
+            final NavigationForceNightModeDto output = api.getForceNightMode();
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setForceNightMode$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setForceNightMode was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final NavigationForceNightModeDto? arg_forceNightMode = (args[0] as NavigationForceNightModeDto?);
+          assert(arg_forceNightMode != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setForceNightMode was null, expected non-null NavigationForceNightModeDto.');
+          try {
+            api.setForceNightMode(arg_forceNightMode!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.sendCustomNavigationAutoEvent$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.sendCustomNavigationAutoEvent was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final String? arg_event = (args[0] as String?);
-          assert(
-            arg_event != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.sendCustomNavigationAutoEvent was null, expected non-null String.',
-          );
+          assert(arg_event != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.sendCustomNavigationAutoEvent was null, expected non-null String.');
           final Object? arg_data = (args[1] as Object?);
-          assert(
-            arg_data != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.sendCustomNavigationAutoEvent was null, expected non-null Object.',
-          );
+          assert(arg_data != null,
+              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.sendCustomNavigationAutoEvent was null, expected non-null Object.');
           try {
             api.sendCustomNavigationAutoEvent(arg_event!, arg_data!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }

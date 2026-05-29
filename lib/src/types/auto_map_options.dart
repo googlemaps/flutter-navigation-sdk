@@ -26,12 +26,15 @@ class AutoMapOptions {
   /// [mapType] - The type of map to display (normal, satellite, terrain, hybrid).
   /// [mapColorScheme] - The color scheme for the map (light, dark, or follow system).
   /// [forceNightMode] - Forces night mode (dark theme) regardless of system settings.
+  /// [navigationUIEnabledPreference] - Determines the initial navigation UI visibility.
   const AutoMapOptions({
     this.cameraPosition,
     this.mapId,
     this.mapType,
     this.mapColorScheme,
     this.forceNightMode,
+    this.navigationUIEnabledPreference =
+        NavigationUIEnabledPreference.automatic,
   });
 
   /// The initial positioning of the camera in the map view.
@@ -65,4 +68,14 @@ class AutoMapOptions {
   ///
   /// Use [NavigationForceNightMode.auto] to automatically switch based on time of day.
   final NavigationForceNightMode? forceNightMode;
+
+  /// Determines the initial visibility of the navigation UI on map initialization.
+  ///
+  /// Defaults to [NavigationUIEnabledPreference.automatic], meaning the
+  /// navigation UI gets enabled if the navigation session has already been
+  /// successfully started.
+  ///
+  /// If set to [NavigationUIEnabledPreference.disabled], the auto view
+  /// initially displays a classic map view.
+  final NavigationUIEnabledPreference navigationUIEnabledPreference;
 }

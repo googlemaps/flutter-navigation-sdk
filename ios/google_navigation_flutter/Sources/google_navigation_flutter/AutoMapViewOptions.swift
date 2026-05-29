@@ -34,14 +34,19 @@ public struct AutoMapViewOptions {
   /// Forces night mode regardless of system settings.
   public let forceNightMode: GMSNavigationLightingMode?
 
+  /// Determines the initial visibility of the navigation UI on map initialization.
+  public let navigationUIEnabledPreference: NavigationUIEnabledPreference
+
   public init(
     cameraPosition: GMSCameraPosition? = nil, mapId: String? = nil, mapType: GMSMapViewType? = nil,
-    mapColorScheme: UIUserInterfaceStyle? = nil, forceNightMode: GMSNavigationLightingMode? = nil
+    mapColorScheme: UIUserInterfaceStyle? = nil, forceNightMode: GMSNavigationLightingMode? = nil,
+    navigationUIEnabledPreference: NavigationUIEnabledPreference = .automatic
   ) {
     self.cameraPosition = cameraPosition
     self.mapId = mapId
     self.mapType = mapType
     self.mapColorScheme = mapColorScheme
     self.forceNightMode = forceNightMode
+    self.navigationUIEnabledPreference = navigationUIEnabledPreference
   }
 }

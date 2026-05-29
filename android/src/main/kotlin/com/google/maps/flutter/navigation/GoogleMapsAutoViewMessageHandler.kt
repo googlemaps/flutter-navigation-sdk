@@ -43,6 +43,12 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
           mapOptions.mapColorScheme?.let { Convert.convertMapColorSchemeFromDto(it) },
         forceNightMode =
           mapOptions.forceNightMode?.let { Convert.convertNavigationForceNightModeFromDto(it) },
+        navigationUIEnabledPreference =
+          when (mapOptions.navigationUIEnabledPreference) {
+            NavigationUIEnabledPreferenceDto.AUTOMATIC -> NavigationUIEnabledPreference.AUTOMATIC
+            NavigationUIEnabledPreferenceDto.DISABLED -> NavigationUIEnabledPreference.DISABLED
+            null -> NavigationUIEnabledPreference.AUTOMATIC
+          },
       )
     AndroidAutoBaseScreen.mapOptions = options
   }
@@ -145,6 +151,14 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
 
   override fun setSpeedometerEnabled(enabled: Boolean) {
     getView().setSpeedometerEnabled(enabled)
+  }
+
+  override fun isNavigationUIEnabled(): Boolean {
+    return getView().isNavigationUIEnabled()
+  }
+
+  override fun setNavigationUIEnabled(enabled: Boolean) {
+    getView().setNavigationUIEnabled(enabled)
   }
 
   override fun showRouteOverview() {

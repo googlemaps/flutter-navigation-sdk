@@ -35,4 +35,7 @@ public data class AutoMapViewOptions(
 
   /** Forces night mode regardless of system settings. */
   val forceNightMode: Int? = null,
+
+  /** Determines the initial visibility of the navigation UI on map initialization. */
+  val navigationUIEnabledPreference: NavigationUIEnabledPreference? = null,
 )

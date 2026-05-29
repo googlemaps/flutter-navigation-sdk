@@ -124,6 +124,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   bool _autoNavigationTripProgressBarEnabled = false;
   bool _autoSpeedLimitIconEnabled = false;
   bool _autoSpeedometerEnabled = false;
+  bool _autoNavigationUIEnabled = false;
   bool _autoTrafficPromptsEnabled = true;
   bool _autoTrafficIncidentCardsEnabled = true;
   MapColorScheme _autoMapColorScheme = MapColorScheme.followSystem;
@@ -220,6 +221,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
     _isAutoScreenAvailable = await _autoViewController.isAutoScreenAvailable();
     if (!mounted) return;
+    if (_isAutoScreenAvailable) {
+      unawaited(_syncAutoNavigationUI());
+    }
     _autoViewController.listenForAutoScreenAvailibilityChangedEvent((event) {
       if (!mounted) return;
       debugPrint(
@@ -230,6 +234,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       setState(() {
         _isAutoScreenAvailable = event.isAvailable;
       });
+      if (event.isAvailable) {
+        unawaited(_syncAutoNavigationUI());
+      }
     });
 
     // Listen for prompt visibility changes on Android Auto / CarPlay
@@ -293,6 +300,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       await _setupListeners();
       await _updateNavigatorInitializationState();
       await _restorePossibleNavigatorState();
+      unawaited(_syncAutoNavigationUI());
       unawaited(_simulateDefaultUserLocationAfterDelay());
       debugPrint('Navigator has been initialized: $_navigatorInitialized');
     }
@@ -321,6 +329,21 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       ),
     );
     await _autoViewController.addMarkers([markerOptions]);
+  }
+
+  Future<void> _syncAutoNavigationUI() async {
+    final bool enabled = _guidanceRunning;
+    if (mounted) {
+      setState(() {
+        _autoNavigationUIEnabled = enabled;
+      });
+    }
+    if (!_isAutoScreenAvailable) return;
+    try {
+      await _autoViewController.setNavigationUIEnabled(enabled);
+    } catch (e) {
+      _showMessage('Failed to sync auto navigation UI: $e');
+    }
   }
 
   /// iOS emulator does not update location and does not fire roadsnapping
@@ -741,6 +764,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         const Duration(milliseconds: _disableNavigationUIDelay),
         () async {
           await _navigationViewController!.setNavigationUIEnabled(false);
+          await _syncAutoNavigationUI();
         },
       ),
     );
@@ -1230,6 +1254,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     setState(() {
       _guidanceRunning = true;
     });
+    await _syncAutoNavigationUI();
   }
 
   Future<void> _stopGuidance() async {
@@ -1237,6 +1262,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     setState(() {
       _guidanceRunning = false;
     });
+    await _syncAutoNavigationUI();
   }
 
   Future<void> _showNativeNavigatorState() async {
@@ -2172,6 +2198,16 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   'Navigation UI Controls',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
+              ),
+              ExampleSwitch(
+                title: 'Enable Navigation UI',
+                initialValue: _autoNavigationUIEnabled,
+                onChanged: (bool newValue) async {
+                  await _autoViewController.setNavigationUIEnabled(newValue);
+                  setState(() {
+                    _autoNavigationUIEnabled = newValue;
+                  });
+                },
               ),
               ExampleSwitch(
                 title: 'Trip progress bar',

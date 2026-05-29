@@ -35,6 +35,7 @@ internal constructor(
   private var _isNavigationTripProgressBarEnabled: Boolean = false
   private var _isSpeedLimitIconEnabled: Boolean = false
   private var _isSpeedometerEnabled: Boolean = false
+  private var _isNavigationUIEnabled: Boolean = false
   private var _forceNightMode: Int = 0
 
   override fun getView(): View {
@@ -42,6 +43,7 @@ internal constructor(
   }
 
   init {
+    _isNavigationUIEnabled = navigationView.isNavigationUiEnabled
     setMap(map)
     initListeners()
     imageRegistry.mapViewInitializationComplete()
@@ -101,6 +103,28 @@ internal constructor(
   override fun setSpeedometerEnabled(enabled: Boolean) {
     navigationView.setSpeedometerEnabled(enabled)
     _isSpeedometerEnabled = enabled
+  }
+
+  override fun isNavigationUIEnabled(): Boolean {
+    return _isNavigationUIEnabled
+  }
+
+  override fun setNavigationUIEnabled(enabled: Boolean) {
+    if (navigationView.isNavigationUiEnabled != enabled) {
+      navigationView.isNavigationUiEnabled = enabled
+      if (!enabled) {
+        val camera = getMap().cameraPosition
+        val resetCamera =
+          com.google.android.gms.maps.model.CameraPosition.Builder(camera)
+            .bearing(0f)
+            .tilt(0f)
+            .build()
+        getMap().moveCamera(
+          com.google.android.gms.maps.CameraUpdateFactory.newCameraPosition(resetCamera),
+        )
+      }
+    }
+    _isNavigationUIEnabled = enabled
   }
 
   override fun showRouteOverview() {
