@@ -110,21 +110,7 @@ internal constructor(
   }
 
   override fun setNavigationUIEnabled(enabled: Boolean) {
-    if (navigationView.isNavigationUiEnabled != enabled) {
-      navigationView.isNavigationUiEnabled = enabled
-      if (!enabled) {
-        val camera = getMap().cameraPosition
-        val resetCamera =
-          com.google.android.gms.maps.model.CameraPosition.Builder(camera)
-            .bearing(0f)
-            .tilt(0f)
-            .build()
-        getMap()
-          .moveCamera(
-            com.google.android.gms.maps.CameraUpdateFactory.newCameraPosition(resetCamera)
-          )
-      }
-    }
+    navigationView.isNavigationUiEnabled = enabled
     _isNavigationUIEnabled = enabled
   }
 
