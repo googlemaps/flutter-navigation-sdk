@@ -119,9 +119,10 @@ internal constructor(
             .bearing(0f)
             .tilt(0f)
             .build()
-        getMap().moveCamera(
-          com.google.android.gms.maps.CameraUpdateFactory.newCameraPosition(resetCamera),
-        )
+        getMap()
+          .moveCamera(
+            com.google.android.gms.maps.CameraUpdateFactory.newCameraPosition(resetCamera)
+          )
       }
     }
     _isNavigationUIEnabled = enabled

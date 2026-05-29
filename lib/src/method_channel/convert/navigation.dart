@@ -261,7 +261,8 @@ extension ConvertNavigationViewOptions on NavigationViewOptions {
   }
 }
 
-extension ConvertNavigationUIEnabledPreference on NavigationUIEnabledPreference {
+extension ConvertNavigationUIEnabledPreference
+    on NavigationUIEnabledPreference {
   NavigationUIEnabledPreferenceDto toDto() {
     switch (this) {
       case NavigationUIEnabledPreference.automatic:

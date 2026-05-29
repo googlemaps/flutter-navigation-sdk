@@ -94,8 +94,8 @@ class AutoMapViewAPIImpl {
       mapType: mapOptions.mapType?.toDto(),
       mapColorScheme: mapOptions.mapColorScheme?.toDto(),
       forceNightMode: mapOptions.forceNightMode?.toDto(),
-      navigationUIEnabledPreference:
-          mapOptions.navigationUIEnabledPreference.toDto(),
+      navigationUIEnabledPreference: mapOptions.navigationUIEnabledPreference
+          .toDto(),
     );
     return _viewApi.setAutoMapOptions(mapOptionsDto);
   }
