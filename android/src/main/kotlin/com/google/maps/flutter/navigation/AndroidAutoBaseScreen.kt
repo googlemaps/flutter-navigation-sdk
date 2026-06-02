@@ -68,7 +68,7 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
    *   return AutoMapViewOptions(
    *     mapId = "your-map-id",
    *     mapType = GoogleMap.MAP_TYPE_SATELLITE,
-   *     mapColorScheme = UIUserInterfaceStyle.DARK,
+   *     mapColorScheme = MapColorSchemeDto.DARK.raw,
    *     forceNightMode = NavigationView.FORCE_NIGHT_MODE_AUTO
    *   )
    * }
@@ -158,6 +158,9 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
 
         // Apply map color scheme if provided
         autoMapOptions?.mapColorScheme?.let { colorScheme -> mapColorScheme(colorScheme) }
+
+        // Apply camera position if provided
+        autoMapOptions?.cameraPosition?.let { position -> camera(Convert.convertCameraPositionFromDto(position))  }
       }
 
     // Create NavigationView with the configured options
