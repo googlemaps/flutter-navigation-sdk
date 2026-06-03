@@ -160,7 +160,9 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
         autoMapOptions?.mapColorScheme?.let { colorScheme -> mapColorScheme(colorScheme) }
 
         // Apply camera position if provided
-        autoMapOptions?.cameraPosition?.let { position -> camera(Convert.convertCameraPositionFromDto(position))  }
+        autoMapOptions?.cameraPosition?.let { position ->
+          camera(Convert.convertCameraPositionFromDto(position))
+        }
       }
 
     // Create NavigationView with the configured options
