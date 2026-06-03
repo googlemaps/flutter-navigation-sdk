@@ -117,7 +117,7 @@ jobs:
         working-directory: ${{ env.working_directory }}
         run: flutter build ios --config-only
       - name: "Run iOS native unit tests"
-        run: TEST_DEVICE='iPhone 16 Pro' TEST_OS='26.4' melos run test:ios
+        run: TEST_DEVICE='iPhone 17 Pro' TEST_OS='26.4' melos run test:ios
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
@@ -347,7 +347,7 @@ jobs:
         run: sudo xcode-select -s '/Applications/Xcode_26.4.1.app/Contents/Developer'
       - name: Start iOS simulator
         run: |
-          SIMULATOR_NAME="iPhone 16 Pro"
+          SIMULATOR_NAME="iPhone 17 Pro"
 
           # Find the UUID of the existing simulator by name and iOS version using the correct filter command
           DEVICE_ID=$(xcrun simctl list devices $IOS_VERSION | grep "$SIMULATOR_NAME (" | grep -Eo "\([A-F0-9-]+\)" | head -n 1 | tr -d "()")
