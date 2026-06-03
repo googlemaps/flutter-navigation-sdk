@@ -7704,6 +7704,8 @@ interface AutoMapViewApi {
 
   fun setSpeedometerEnabled(enabled: Boolean)
 
+  fun setNavigationUIEnabled(enabled: Boolean)
+
   fun isMyLocationButtonEnabled(): Boolean
 
   fun isConsumeMyLocationButtonClickEventsEnabled(): Boolean
@@ -7737,8 +7739,6 @@ interface AutoMapViewApi {
   fun isSpeedometerEnabled(): Boolean
 
   fun isNavigationUIEnabled(): Boolean
-
-  fun setNavigationUIEnabled(enabled: Boolean)
 
   fun showRouteOverview()
 
@@ -8906,6 +8906,30 @@ interface AutoMapViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationUIEnabled$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            val wrapped: List<Any?> =
+              try {
+                api.setNavigationUIEnabled(enabledArg)
+                listOf(null)
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMyLocationButtonEnabled$separatedMessageChannelSuffix",
             codec,
           )
@@ -9250,30 +9274,6 @@ interface AutoMapViewApi {
             val wrapped: List<Any?> =
               try {
                 listOf(api.isNavigationUIEnabled())
-              } catch (exception: Throwable) {
-                MessagesPigeonUtils.wrapError(exception)
-              }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel =
-          BasicMessageChannel<Any?>(
-            binaryMessenger,
-            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationUIEnabled$separatedMessageChannelSuffix",
-            codec,
-          )
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val enabledArg = args[0] as Boolean
-            val wrapped: List<Any?> =
-              try {
-                api.setNavigationUIEnabled(enabledArg)
-                listOf(null)
               } catch (exception: Throwable) {
                 MessagesPigeonUtils.wrapError(exception)
               }

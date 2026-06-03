@@ -1642,6 +1642,12 @@ class MockTestAutoMapViewApi extends _i1.Mock
   );
 
   @override
+  void setNavigationUIEnabled(bool? enabled) => super.noSuchMethod(
+    Invocation.method(#setNavigationUIEnabled, [enabled]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
   bool isMyLocationButtonEnabled() =>
       (super.noSuchMethod(
             Invocation.method(#isMyLocationButtonEnabled, []),
@@ -1765,6 +1771,14 @@ class MockTestAutoMapViewApi extends _i1.Mock
   bool isSpeedometerEnabled() =>
       (super.noSuchMethod(
             Invocation.method(#isSpeedometerEnabled, []),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  bool isNavigationUIEnabled() =>
+      (super.noSuchMethod(
+            Invocation.method(#isNavigationUIEnabled, []),
             returnValue: false,
           )
           as bool);

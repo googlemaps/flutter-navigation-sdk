@@ -22,7 +22,7 @@ import android.content.res.Resources
 class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewRegistry) :
   AutoMapViewApi {
 
-  private fun getView(): GoogleMapsBaseMapView {
+  private fun getView(): GoogleMapsBaseNavigationView {
     val view = viewRegistry.getAndroidAutoView()
     if (view != null) {
       return view

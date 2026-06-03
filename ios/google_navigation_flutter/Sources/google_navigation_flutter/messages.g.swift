@@ -6522,6 +6522,7 @@ protocol AutoMapViewApi {
   func setNavigationTripProgressBarEnabled(enabled: Bool) throws
   func setSpeedLimitIconEnabled(enabled: Bool) throws
   func setSpeedometerEnabled(enabled: Bool) throws
+  func setNavigationUIEnabled(enabled: Bool) throws
   func isMyLocationButtonEnabled() throws -> Bool
   func isConsumeMyLocationButtonClickEventsEnabled() throws -> Bool
   func isZoomGesturesEnabled() throws -> Bool
@@ -6539,7 +6540,6 @@ protocol AutoMapViewApi {
   func isSpeedLimitIconEnabled() throws -> Bool
   func isSpeedometerEnabled() throws -> Bool
   func isNavigationUIEnabled() throws -> Bool
-  func setNavigationUIEnabled(enabled: Bool) throws
   func showRouteOverview() throws
   func getMarkers() throws -> [MarkerDto]
   func addMarkers(markers: [MarkerDto]) throws -> [MarkerDto]
@@ -7418,6 +7418,24 @@ class AutoMapViewApiSetup {
     } else {
       setSpeedometerEnabledChannel.setMessageHandler(nil)
     }
+    let setNavigationUIEnabledChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationUIEnabled\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setNavigationUIEnabledChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let enabledArg = args[0] as! Bool
+        do {
+          try api.setNavigationUIEnabled(enabled: enabledArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setNavigationUIEnabledChannel.setMessageHandler(nil)
+    }
     let isMyLocationButtonEnabledChannel = FlutterBasicMessageChannel(
       name:
         "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMyLocationButtonEnabled\(channelSuffix)",
@@ -7689,24 +7707,6 @@ class AutoMapViewApiSetup {
       }
     } else {
       isNavigationUIEnabledChannel.setMessageHandler(nil)
-    }
-    let setNavigationUIEnabledChannel = FlutterBasicMessageChannel(
-      name:
-        "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationUIEnabled\(channelSuffix)",
-      binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      setNavigationUIEnabledChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let enabledArg = args[0] as! Bool
-        do {
-          try api.setNavigationUIEnabled(enabled: enabledArg)
-          reply(wrapResult(nil))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      setNavigationUIEnabledChannel.setMessageHandler(nil)
     }
     let showRouteOverviewChannel = FlutterBasicMessageChannel(
       name:

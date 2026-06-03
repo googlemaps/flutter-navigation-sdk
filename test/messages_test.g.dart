@@ -6909,6 +6909,8 @@ abstract class TestAutoMapViewApi {
 
   void setSpeedometerEnabled(bool enabled);
 
+  void setNavigationUIEnabled(bool enabled);
+
   bool isMyLocationButtonEnabled();
 
   bool isConsumeMyLocationButtonClickEventsEnabled();
@@ -6942,8 +6944,6 @@ abstract class TestAutoMapViewApi {
   bool isSpeedometerEnabled();
 
   bool isNavigationUIEnabled();
-
-  void setNavigationUIEnabled(bool enabled);
 
   void showRouteOverview();
 
@@ -8831,6 +8831,47 @@ abstract class TestAutoMapViewApi {
     {
       final BasicMessageChannel<Object?>
       pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationUIEnabled$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
+              Object? message,
+            ) async {
+              assert(
+                message != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationUIEnabled was null.',
+              );
+              final List<Object?> args = (message as List<Object?>?)!;
+              final bool? arg_enabled = (args[0] as bool?);
+              assert(
+                arg_enabled != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationUIEnabled was null, expected non-null bool.',
+              );
+              try {
+                api.setNavigationUIEnabled(arg_enabled!);
+                return wrapResponse(empty: true);
+              } on PlatformException catch (e) {
+                return wrapResponse(error: e);
+              } catch (e) {
+                return wrapResponse(
+                  error: PlatformException(
+                    code: 'error',
+                    message: e.toString(),
+                  ),
+                );
+              }
+            });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMyLocationButtonEnabled$messageChannelSuffix',
         pigeonChannelCodec,
         binaryMessenger: binaryMessenger,
@@ -9344,47 +9385,6 @@ abstract class TestAutoMapViewApi {
               try {
                 final bool output = api.isNavigationUIEnabled();
                 return <Object?>[output];
-              } on PlatformException catch (e) {
-                return wrapResponse(error: e);
-              } catch (e) {
-                return wrapResponse(
-                  error: PlatformException(
-                    code: 'error',
-                    message: e.toString(),
-                  ),
-                );
-              }
-            });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationUIEnabled$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
-      } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger
-            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
-              Object? message,
-            ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationUIEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final bool? arg_enabled = (args[0] as bool?);
-              assert(
-                arg_enabled != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationUIEnabled was null, expected non-null bool.',
-              );
-              try {
-                api.setNavigationUIEnabled(arg_enabled!);
-                return wrapResponse(empty: true);
               } on PlatformException catch (e) {
                 return wrapResponse(error: e);
               } catch (e) {

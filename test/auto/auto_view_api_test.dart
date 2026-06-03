@@ -1,4 +1,4 @@
-// Copyright 2025 Google LLC
+// Copyright 2026 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -126,6 +126,25 @@ void main() {
                 .showRouteOverview();
 
             verify(autoViewMockApi.showRouteOverview()).called(1);
+          });
+
+          test('isNavigationUIEnabled returns value', () async {
+            when(autoViewMockApi.isNavigationUIEnabled()).thenReturn(true);
+
+            final bool result = await GoogleMapsNavigationPlatform
+                .instance
+                .autoAPI
+                .isNavigationUIEnabled();
+
+            expect(result, true);
+            verify(autoViewMockApi.isNavigationUIEnabled()).called(1);
+          });
+
+          test('setNavigationUIEnabled sends correct value', () async {
+            await GoogleMapsNavigationPlatform.instance.autoAPI
+                .setNavigationUIEnabled(enabled: true);
+
+            verify(autoViewMockApi.setNavigationUIEnabled(true)).called(1);
           });
         });
 

@@ -1605,6 +1605,7 @@ abstract class AutoMapViewApi {
   void setNavigationTripProgressBarEnabled(bool enabled);
   void setSpeedLimitIconEnabled(bool enabled);
   void setSpeedometerEnabled(bool enabled);
+  void setNavigationUIEnabled(bool enabled);
 
   bool isMyLocationButtonEnabled();
   bool isConsumeMyLocationButtonClickEventsEnabled();
@@ -1623,7 +1624,6 @@ abstract class AutoMapViewApi {
   bool isSpeedLimitIconEnabled();
   bool isSpeedometerEnabled();
   bool isNavigationUIEnabled();
-  void setNavigationUIEnabled(bool enabled);
 
   void showRouteOverview();
 
