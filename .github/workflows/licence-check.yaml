@@ -45,7 +45,7 @@ jobs:
           channel: "stable"
           cache: true
       - name: Install Melos
-        uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
+        uses: bluefireteam/melos-action@ef13f68118735113cb48b82cd5ba876da9c3f17c
         with:
           # Running `melos bootstrap` is not needed because we use Melos just
           # for the `check-license-header` script.
