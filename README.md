@@ -23,7 +23,7 @@ This repository contains a Flutter plugin that provides a [Google Navigation](ht
   *  If you are not a Mobility Services developer, refer to [Setup Google Cloud Project](https://developers.google.com/maps/documentation/navigation/android-sdk/cloud-setup) for instructions.
 * An [API key](https://console.cloud.google.com/google/maps-apis/credentials) from the project above
   * The API key must be configured for both Android and iOS. Refer to [Android Using Api Keys](https://developers.google.com/maps/documentation/navigation/android-sdk/get-api-key) and [iOS Using Api Keys](https://developers.google.com/maps/documentation/navigation/ios-sdk/get-api-key) respectively for instructions.
-* If targeting Android, [Google Play Services](https://developers.google.com/android/guides/overview) installed and enabled and minimum Kotlin version 2.0
+* If targeting Android, [Google Play Services](https://developers.google.com/android/guides/overview) installed and enabled and minimum Kotlin version 2.0 (Kotlin 2.2.20 or newer recommended for Flutter 3.44+)
 * [Attributions and licensing text](https://developers.google.com/maps/documentation/navigation/android-sdk/set-up-project#include_the_required_attributions_in_your_app) added to your app
 
 > [!IMPORTANT]
@@ -79,7 +79,7 @@ dependencies {
 
 Add your API key to the Flutter project using [these instructions for the corresponding Android (build.gradle) and iOS (AppDelegate.swift) files](https://developers.google.com/maps/flutter-package/config#step_4_add_your_api_key_to_the_project). The instructions for this step in the google_maps_flutter package documentation apply to the google_navigation_flutter package as well.
 
-  See the example configuration for Secrets Gradle Plugin in the example app's [build.gradle](./example/android/app/build.gradle) file.
+  See the example configuration for Secrets Gradle Plugin in the example app's [build.gradle.kts](./example/android/app/build.gradle.kts) file.
   To securely load your API key, use the [Secrets Gradle Plugin](https://developers.google.com/maps/documentation/android-sdk/secrets-gradle-plugin). This plugin helps manage API keys without exposing them in your app's source code.
 
 For more details, see [Google Navigation SDK Documentation](https://developers.google.com/maps/documentation/navigation).
