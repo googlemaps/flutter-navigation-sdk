@@ -226,7 +226,7 @@ jobs:
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
       PATROL_ANALYTICS_ENABLED: false
-      patrol_cli_version: "4.3.1"
+      patrol_cli_version: "4.4.0"
       working_directory: "example"
     steps:
       - name: Fail if workflow has no access to API key
@@ -326,7 +326,7 @@ jobs:
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
       PATROL_ANALYTICS_ENABLED: false
-      patrol_cli_version: "4.3.1"
+      patrol_cli_version: "4.4.0"
       working_directory: "example"
       IOS_VERSION: "26.5"
     steps:
