@@ -136,26 +136,32 @@ class SampleAndroidAutoScreen(carContext: CarContext): AndroidAutoBaseScreen(car
         // "android.permission.ACCESS_COARSE_LOCATION" or "android.permission.ACCESS_FINE_LOCATION", as
         // these permissions are already handled elsewhere.
         @SuppressLint("MissingPermission")
+        val actionStripBuilder = ActionStrip.Builder()
+
+        // The Re-center action calls GoogleMap.followMyLocation, which requires the navigator to be
+        // initialized.
+        if (mIsNavigationReady) {
+            actionStripBuilder.addAction(
+                Action.Builder()
+                    .setTitle("Re-center")
+                    .setOnClickListener {
+                        if (mGoogleMap == null) return@setOnClickListener
+                        mGoogleMap!!.followMyLocation(GoogleMap.CameraPerspective.TILTED)
+                    }
+                    .build())
+        }
+
+        actionStripBuilder.addAction(
+            Action.Builder()
+                .setTitle("Custom event")
+                .setOnClickListener {
+                    sendCustomNavigationAutoEvent("CustomAndroidAutoEvent", mapOf("sampleDataKey" to "sampleDataContent"))
+                }
+                .build())
+
         val navigationTemplateBuilder =
             NavigationTemplate.Builder()
-                .setActionStrip(
-                    ActionStrip.Builder()
-                        .addAction(
-                            Action.Builder()
-                                .setTitle("Re-center")
-                                .setOnClickListener {
-                                    if (mGoogleMap == null) return@setOnClickListener
-                                    mGoogleMap!!.followMyLocation(GoogleMap.CameraPerspective.TILTED)
-                                }
-                                .build())
-                        .addAction(
-                            Action.Builder()
-                                .setTitle("Custom event")
-                                .setOnClickListener {
-                                    sendCustomNavigationAutoEvent("CustomAndroidAutoEvent", mapOf("sampleDataKey" to "sampleDataContent"))
-                                }
-                                .build())
-                        .build())
+                .setActionStrip(actionStripBuilder.build())
                 .setMapActionStrip(ActionStrip.Builder().addAction(Action.PAN).build())
 
 

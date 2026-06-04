@@ -129,6 +129,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   bool _autoTrafficIncidentCardsEnabled = true;
   MapColorScheme _autoMapColorScheme = MapColorScheme.followSystem;
   NavigationForceNightMode _autoForceNightMode = NavigationForceNightMode.auto;
+  MapType _autoMapType = MapType.normal;
 
   bool _validRoute = false;
   bool _errorOnSetDestinations = false;
@@ -140,6 +141,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   final List<NavigationWaypoint> _waypoints = <NavigationWaypoint>[];
   MapColorScheme _mapColorScheme = MapColorScheme.followSystem;
   NavigationForceNightMode _forceNightMode = NavigationForceNightMode.auto;
+  MapType _mapType = MapType.normal;
 
   /// If true, route tokens and Routes API are used to calculate the route.
   bool _routeTokensEnabled = false;
@@ -307,8 +309,44 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     setState(() {});
   }
 
-  Future<void> _setMapTypeForAutoToSatellite() async {
-    await _autoViewController.setMapType(mapType: MapType.satellite);
+  Widget _buildMapTypeChip(MapType type, String label) {
+    final bool isSelected = _mapType == type;
+    return FilterChip(
+      label: Text(label),
+      selected: isSelected,
+      onSelected: (bool selected) async {
+        if (selected) {
+          setState(() {
+            _mapType = type;
+          });
+          try {
+            await _navigationViewController?.setMapType(mapType: type);
+          } catch (e) {
+            _showMessage('Failed to set map type: $e');
+          }
+        }
+      },
+    );
+  }
+
+  Widget _buildAutoMapTypeChip(MapType type, String label) {
+    final bool isSelected = _autoMapType == type;
+    return FilterChip(
+      label: Text(label),
+      selected: isSelected,
+      onSelected: (bool selected) async {
+        if (selected) {
+          setState(() {
+            _autoMapType = type;
+          });
+          try {
+            await _autoViewController.setMapType(mapType: type);
+          } catch (e) {
+            _showMessage('Failed to set auto map type: $e');
+          }
+        }
+      },
+    );
   }
 
   Future<void> _moveCameraForAuto() async {
@@ -2024,6 +2062,28 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      const Text('Map Type:', style: TextStyle(fontSize: 16)),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        children: <Widget>[
+                          _buildMapTypeChip(MapType.normal, 'Normal'),
+                          _buildMapTypeChip(MapType.satellite, 'Satellite'),
+                          _buildMapTypeChip(MapType.terrain, 'Terrain'),
+                          _buildMapTypeChip(MapType.hybrid, 'Hybrid'),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
                       const Text(
                         'Map Color Scheme:',
                         style: TextStyle(fontSize: 16),
@@ -2169,9 +2229,27 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
               !_isAutoScreenAvailable,
             ),
             children: <Widget>[
-              ElevatedButton(
-                onPressed: () => _setMapTypeForAutoToSatellite(),
-                child: const Text('Set map type to satellite'),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Text('Map Type:', style: TextStyle(fontSize: 16)),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 8,
+                      children: <Widget>[
+                        _buildAutoMapTypeChip(MapType.normal, 'Normal'),
+                        _buildAutoMapTypeChip(MapType.satellite, 'Satellite'),
+                        _buildAutoMapTypeChip(MapType.terrain, 'Terrain'),
+                        _buildAutoMapTypeChip(MapType.hybrid, 'Hybrid'),
+                      ],
+                    ),
+                  ],
+                ),
               ),
               ElevatedButton(
                 onPressed: () => _moveCameraForAuto(),
