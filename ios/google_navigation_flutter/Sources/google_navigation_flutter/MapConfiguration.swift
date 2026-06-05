@@ -16,7 +16,7 @@ import Foundation
 import GoogleMaps
 
 // Determines the initial visibility of the navigation UI on map initialization.
-enum NavigationUIEnabledPreference {
+public enum NavigationUIEnabledPreference {
   // Navigation UI gets enabled if the navigation
   // session has already been successfully started.
   case automatic

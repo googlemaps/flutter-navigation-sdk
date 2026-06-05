@@ -20,7 +20,6 @@ import android.content.Context
 import android.content.res.Configuration
 import android.view.View
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.libraries.navigation.ForceNightMode
 import com.google.android.libraries.navigation.NavigationView
 import com.google.android.libraries.navigation.OnNavigationUiChangedListener
 import com.google.android.libraries.navigation.PromptVisibilityChangedListener
@@ -35,20 +34,8 @@ internal constructor(
   private val viewRegistry: GoogleMapsViewRegistry,
   viewEventApi: ViewEventApi,
   private val imageRegistry: ImageRegistry,
-) : PlatformView, GoogleMapsBaseMapView(viewId, mapOptions, viewEventApi, imageRegistry) {
-  private val _navigationView: NavigationView = NavigationView(context, mapOptions.googleMapOptions)
-
-  /// Default values for UI features.
-  private var _forceNightMode: Int = ForceNightMode.AUTO
-  private var _isNavigationTripProgressBarEnabled: Boolean = false
-  private var _isNavigationHeaderEnabled: Boolean = true
-  private var _isNavigationFooterEnabled: Boolean = true
-  private var _isRecenterButtonEnabled: Boolean = true
-  private var _isSpeedLimitIconEnabled: Boolean = false
-  private var _isSpeedometerEnabled: Boolean = false
-  private var _isTrafficIncidentCardsEnabled: Boolean = true
-  private var _isReportIncidentButtonEnabled: Boolean = true
-  private var _isTrafficPromptsEnabled: Boolean = true
+) : PlatformView, GoogleMapsBaseNavigationView(viewId, mapOptions, viewEventApi, imageRegistry) {
+  override val navigationView: NavigationView = NavigationView(context, mapOptions.googleMapOptions)
 
   private var _onRecenterButtonClickedListener: NavigationView.OnRecenterButtonClickedListener? =
     null
@@ -57,13 +44,13 @@ internal constructor(
   private var _onPromptVisibilityChanged: PromptVisibilityChangedListener? = null
 
   override fun getView(): View {
-    return _navigationView
+    return navigationView
   }
 
   init {
     // Call all of these three lifecycle functions in sequence to fully
     // initialize the navigation view.
-    _navigationView.onCreate(context.applicationInfo.metaData)
+    navigationView.onCreate(context.applicationInfo.metaData)
     onStart()
     onResume()
 
@@ -76,17 +63,14 @@ internal constructor(
     ) {
       navigationViewEnabled = true
     }
-    _navigationView.isNavigationUiEnabled = navigationViewEnabled
+    navigationView.isNavigationUiEnabled = navigationViewEnabled
 
     // Initialize force night mode if provided
-    navigationOptions?.forceNightMode?.let { forceNightMode ->
-      _forceNightMode = forceNightMode
-      _navigationView.setForceNightMode(forceNightMode)
-    }
+    navigationOptions?.forceNightMode?.let { forceNightMode -> setForceNightMode(forceNightMode) }
 
     viewRegistry.registerNavigationView(viewId, this)
 
-    _navigationView.getMapAsync { map ->
+    navigationView.getMapAsync { map ->
       setMap(map)
 
       initListeners()
@@ -94,7 +78,7 @@ internal constructor(
 
       // Re set navigation view enabled state as sometimes earlier value is not
       // respected.
-      _navigationView.isNavigationUiEnabled = navigationViewEnabled
+      navigationView.isNavigationUiEnabled = navigationViewEnabled
       if (!navigationViewEnabled) {
         map.moveCamera(CameraUpdateFactory.newCameraPosition(mapOptions.googleMapOptions.camera))
       }
@@ -114,15 +98,15 @@ internal constructor(
 
     // Remove navigation view specific listeners
     if (_onRecenterButtonClickedListener != null) {
-      _navigationView.removeOnRecenterButtonClickedListener(_onRecenterButtonClickedListener)
+      navigationView.removeOnRecenterButtonClickedListener(_onRecenterButtonClickedListener)
       _onRecenterButtonClickedListener = null
     }
     if (_onNavigationUIEnabledChanged != null) {
-      _navigationView.removeOnNavigationUiChangedListener(_onNavigationUIEnabledChanged)
+      navigationView.removeOnNavigationUiChangedListener(_onNavigationUIEnabledChanged)
       _onNavigationUIEnabledChanged = null
     }
     if (_onPromptVisibilityChanged != null) {
-      _navigationView.removePromptVisibilityChangedListener(_onPromptVisibilityChanged)
+      navigationView.removePromptVisibilityChangedListener(_onPromptVisibilityChanged)
       _onPromptVisibilityChanged = null
     }
 
@@ -131,12 +115,12 @@ internal constructor(
     onPause()
     onStop()
     super.onDispose()
-    _navigationView.onDestroy()
+    navigationView.onDestroy()
   }
 
   override fun onStart(): Boolean {
     if (super.onStart()) {
-      _navigationView.onStart()
+      navigationView.onStart()
       return true
     }
     return false
@@ -144,7 +128,7 @@ internal constructor(
 
   override fun onResume(): Boolean {
     if (super.onResume()) {
-      _navigationView.onResume()
+      navigationView.onResume()
       return true
     }
     return false
@@ -152,7 +136,7 @@ internal constructor(
 
   override fun onStop(): Boolean {
     if (super.onStop()) {
-      _navigationView.onStop()
+      navigationView.onStop()
       return true
     }
     return false
@@ -160,18 +144,18 @@ internal constructor(
 
   override fun onPause(): Boolean {
     if (super.onPause()) {
-      _navigationView.onPause()
+      navigationView.onPause()
       return true
     }
     return false
   }
 
   fun onConfigurationChanged(configuration: Configuration) {
-    _navigationView.onConfigurationChanged(configuration)
+    navigationView.onConfigurationChanged(configuration)
   }
 
   fun onTrimMemory(level: Int) {
-    _navigationView.onTrimMemory(level)
+    navigationView.onTrimMemory(level)
   }
 
   override fun initListeners() {
@@ -179,130 +163,18 @@ internal constructor(
       NavigationView.OnRecenterButtonClickedListener {
         viewEventApi?.onRecenterButtonClicked(getViewId().toLong()) {}
       }
-    _navigationView.addOnRecenterButtonClickedListener(_onRecenterButtonClickedListener)
+    navigationView.addOnRecenterButtonClickedListener(_onRecenterButtonClickedListener)
 
     _onNavigationUIEnabledChanged = OnNavigationUiChangedListener {
       viewEventApi?.onNavigationUIEnabledChanged(getViewId().toLong(), it) {}
     }
-    _navigationView.addOnNavigationUiChangedListener(_onNavigationUIEnabledChanged)
+    navigationView.addOnNavigationUiChangedListener(_onNavigationUIEnabledChanged)
 
     _onPromptVisibilityChanged = PromptVisibilityChangedListener { promptVisible ->
       viewEventApi?.onPromptVisibilityChanged(getViewId().toLong(), promptVisible) {}
     }
-    _navigationView.addPromptVisibilityChangedListener(_onPromptVisibilityChanged)
+    navigationView.addPromptVisibilityChangedListener(_onPromptVisibilityChanged)
 
     super.initListeners()
-  }
-
-  fun isNavigationTripProgressBarEnabled(): Boolean {
-    return _isNavigationTripProgressBarEnabled
-  }
-
-  fun setNavigationTripProgressBarEnabled(enabled: Boolean) {
-    _navigationView.setTripProgressBarEnabled(enabled)
-    _isNavigationTripProgressBarEnabled = enabled
-  }
-
-  fun isNavigationHeaderEnabled(): Boolean {
-    return _isNavigationHeaderEnabled
-  }
-
-  fun setNavigationHeaderEnabled(enabled: Boolean) {
-    _navigationView.setHeaderEnabled(enabled)
-    _isNavigationHeaderEnabled = enabled
-  }
-
-  fun isNavigationFooterEnabled(): Boolean {
-    return _isNavigationFooterEnabled
-  }
-
-  fun setNavigationFooterEnabled(enabled: Boolean) {
-    _navigationView.setEtaCardEnabled(enabled)
-    _isNavigationFooterEnabled = enabled
-  }
-
-  fun isRecenterButtonEnabled(): Boolean {
-    return _isRecenterButtonEnabled
-  }
-
-  fun setRecenterButtonEnabled(enabled: Boolean) {
-    _navigationView.setRecenterButtonEnabled(enabled)
-    _isRecenterButtonEnabled = enabled
-  }
-
-  fun isSpeedLimitIconEnabled(): Boolean {
-    return _isSpeedLimitIconEnabled
-  }
-
-  fun setSpeedLimitIconEnabled(enabled: Boolean) {
-    _navigationView.setSpeedLimitIconEnabled(enabled)
-    _isSpeedLimitIconEnabled = enabled
-  }
-
-  fun isSpeedometerEnabled(): Boolean {
-    return _isSpeedometerEnabled
-  }
-
-  fun setSpeedometerEnabled(enabled: Boolean) {
-    _navigationView.setSpeedometerEnabled(enabled)
-    _isSpeedometerEnabled = enabled
-  }
-
-  fun isTrafficIncidentCardsEnabled(): Boolean {
-    return _isTrafficIncidentCardsEnabled
-  }
-
-  fun setTrafficIncidentCardsEnabled(enabled: Boolean) {
-    _navigationView.setTrafficIncidentCardsEnabled(enabled)
-    _isTrafficIncidentCardsEnabled = enabled
-  }
-
-  fun isReportIncidentButtonEnabled(): Boolean {
-    return _isReportIncidentButtonEnabled
-  }
-
-  fun setReportIncidentButtonEnabled(enabled: Boolean) {
-    _navigationView.setReportIncidentButtonEnabled(enabled)
-    _isReportIncidentButtonEnabled = enabled
-  }
-
-  fun isIncidentReportingAvailable(): Boolean {
-    return _navigationView.isIncidentReportingAvailable()
-  }
-
-  fun showReportIncidentsPanel() {
-    _navigationView.showReportIncidentsPanel()
-  }
-
-  fun isTrafficPromptsEnabled(): Boolean {
-    return _isTrafficPromptsEnabled
-  }
-
-  fun setTrafficPromptsEnabled(enabled: Boolean) {
-    _navigationView.setTrafficPromptsEnabled(enabled)
-    _isTrafficPromptsEnabled = enabled
-  }
-
-  fun isNavigationUIEnabled(): Boolean {
-    return _navigationView.isNavigationUiEnabled
-  }
-
-  fun setNavigationUIEnabled(enabled: Boolean) {
-    if (_navigationView.isNavigationUiEnabled != enabled) {
-      _navigationView.isNavigationUiEnabled = enabled
-    }
-  }
-
-  fun showRouteOverview() {
-    _navigationView.showRouteOverview()
-  }
-
-  fun getForceNightMode(): Int {
-    return _forceNightMode
-  }
-
-  fun setForceNightMode(forceNightMode: Int) {
-    _forceNightMode = forceNightMode
-    _navigationView.setForceNightMode(forceNightMode)
   }
 }

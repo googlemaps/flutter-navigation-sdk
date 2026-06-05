@@ -17,19 +17,22 @@
 package com.google.maps.flutter.navigation
 
 import android.view.View
+import android.view.ViewGroup
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.libraries.navigation.NavigationViewForAuto
+import com.google.android.libraries.navigation.NavigationView
 
 class GoogleMapsAutoMapView
 internal constructor(
   mapOptions: MapOptions,
   viewRegistry: GoogleMapsViewRegistry,
   imageRegistry: ImageRegistry,
-  private val mapView: NavigationViewForAuto,
+  override val navigationView: NavigationView,
+  private val viewGroup: ViewGroup,
   map: GoogleMap,
-) : GoogleMapsBaseMapView(null, mapOptions, null, imageRegistry) {
+) : GoogleMapsBaseNavigationView(null, mapOptions, null, imageRegistry) {
+
   override fun getView(): View {
-    return mapView
+    return viewGroup
   }
 
   init {

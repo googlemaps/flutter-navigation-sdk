@@ -120,6 +120,17 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   bool _isAutoScreenAvailable = false;
 
+  // Auto view state variables
+  bool _autoNavigationTripProgressBarEnabled = false;
+  bool _autoSpeedLimitIconEnabled = false;
+  bool _autoSpeedometerEnabled = false;
+  bool _autoNavigationUIEnabled = false;
+  bool _autoTrafficPromptsEnabled = true;
+  bool _autoTrafficIncidentCardsEnabled = true;
+  MapColorScheme _autoMapColorScheme = MapColorScheme.followSystem;
+  NavigationForceNightMode _autoForceNightMode = NavigationForceNightMode.auto;
+  MapType _autoMapType = MapType.normal;
+
   bool _validRoute = false;
   bool _errorOnSetDestinations = false;
   bool _navigatorInitialized = false;
@@ -130,6 +141,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   final List<NavigationWaypoint> _waypoints = <NavigationWaypoint>[];
   MapColorScheme _mapColorScheme = MapColorScheme.followSystem;
   NavigationForceNightMode _forceNightMode = NavigationForceNightMode.auto;
+  MapType _mapType = MapType.normal;
 
   /// If true, route tokens and Routes API are used to calculate the route.
   bool _routeTokensEnabled = false;
@@ -176,7 +188,11 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   @override
   void dispose() {
     _clearListeners();
-    GoogleMapsNavigator.cleanup();
+    try {
+      GoogleMapsNavigator.cleanup();
+    } on SessionNotInitializedException catch (_) {
+      // Session was not initialized, continue.
+    }
     clearRegisteredImages();
     super.dispose();
   }
@@ -201,11 +217,17 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     }
 
     _autoViewController.listenForCustomNavigationAutoEvents((event) {
+      if (!mounted) return;
       _showMessage("Received event: ${event.event}");
     });
 
     _isAutoScreenAvailable = await _autoViewController.isAutoScreenAvailable();
+    if (!mounted) return;
+    if (_isAutoScreenAvailable) {
+      unawaited(_syncAutoNavigationUI());
+    }
     _autoViewController.listenForAutoScreenAvailibilityChangedEvent((event) {
+      if (!mounted) return;
       debugPrint(
         event.isAvailable
             ? "Auto screen is available"
@@ -214,6 +236,26 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       setState(() {
         _isAutoScreenAvailable = event.isAvailable;
       });
+      if (event.isAvailable) {
+        unawaited(_syncAutoNavigationUI());
+      }
+    });
+
+    // Listen for prompt visibility changes on Android Auto / CarPlay
+    _autoViewController.listenForPromptVisibilityChangedEvent((event) {
+      if (!mounted) return;
+      debugPrint(
+        event.promptVisible
+            ? "Traffic prompt is now visible on auto screen"
+            : "Traffic prompt is now hidden on auto screen",
+      );
+
+      // Example: Send a custom event back to native to adjust UI
+      _autoViewController
+          .sendCustomNavigationAutoEvent('PromptVisibilityChanged', {
+            'promptVisible': event.promptVisible,
+            'timestamp': DateTime.now().millisecondsSinceEpoch,
+          });
     });
   }
 
@@ -260,14 +302,51 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       await _setupListeners();
       await _updateNavigatorInitializationState();
       await _restorePossibleNavigatorState();
+      unawaited(_syncAutoNavigationUI());
       unawaited(_simulateDefaultUserLocationAfterDelay());
       debugPrint('Navigator has been initialized: $_navigatorInitialized');
     }
     setState(() {});
   }
 
-  Future<void> _setMapTypeForAutoToSatellite() async {
-    await _autoViewController.setMapType(mapType: MapType.satellite);
+  Widget _buildMapTypeChip(MapType type, String label) {
+    final bool isSelected = _mapType == type;
+    return FilterChip(
+      label: Text(label),
+      selected: isSelected,
+      onSelected: (bool selected) async {
+        if (selected) {
+          setState(() {
+            _mapType = type;
+          });
+          try {
+            await _navigationViewController?.setMapType(mapType: type);
+          } catch (e) {
+            _showMessage('Failed to set map type: $e');
+          }
+        }
+      },
+    );
+  }
+
+  Widget _buildAutoMapTypeChip(MapType type, String label) {
+    final bool isSelected = _autoMapType == type;
+    return FilterChip(
+      label: Text(label),
+      selected: isSelected,
+      onSelected: (bool selected) async {
+        if (selected) {
+          setState(() {
+            _autoMapType = type;
+          });
+          try {
+            await _autoViewController.setMapType(mapType: type);
+          } catch (e) {
+            _showMessage('Failed to set auto map type: $e');
+          }
+        }
+      },
+    );
   }
 
   Future<void> _moveCameraForAuto() async {
@@ -288,6 +367,21 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       ),
     );
     await _autoViewController.addMarkers([markerOptions]);
+  }
+
+  Future<void> _syncAutoNavigationUI() async {
+    final bool enabled = _guidanceRunning;
+    if (mounted) {
+      setState(() {
+        _autoNavigationUIEnabled = enabled;
+      });
+    }
+    if (!_isAutoScreenAvailable) return;
+    try {
+      await _autoViewController.setNavigationUIEnabled(enabled);
+    } catch (e) {
+      _showMessage('Failed to sync auto navigation UI: $e');
+    }
   }
 
   /// iOS emulator does not update location and does not fire roadsnapping
@@ -686,7 +780,11 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
     // Cleanup navigation session.
     // This will also clear destinations, stop simulation, stop guidance
-    await GoogleMapsNavigator.cleanup();
+    try {
+      await GoogleMapsNavigator.cleanup();
+    } on SessionNotInitializedException catch (_) {
+      // Session was not initialized, continue.
+    }
     await _removeNewWaypointMarker();
     await _removeDestinationWaypointMarkers();
     _waypoints.clear();
@@ -704,6 +802,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         const Duration(milliseconds: _disableNavigationUIDelay),
         () async {
           await _navigationViewController!.setNavigationUIEnabled(false);
+          await _syncAutoNavigationUI();
         },
       ),
     );
@@ -1193,6 +1292,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     setState(() {
       _guidanceRunning = true;
     });
+    await _syncAutoNavigationUI();
   }
 
   Future<void> _stopGuidance() async {
@@ -1200,6 +1300,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     setState(() {
       _guidanceRunning = false;
     });
+    await _syncAutoNavigationUI();
   }
 
   Future<void> _showNativeNavigatorState() async {
@@ -1961,6 +2062,28 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      const Text('Map Type:', style: TextStyle(fontSize: 16)),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        children: <Widget>[
+                          _buildMapTypeChip(MapType.normal, 'Normal'),
+                          _buildMapTypeChip(MapType.satellite, 'Satellite'),
+                          _buildMapTypeChip(MapType.terrain, 'Terrain'),
+                          _buildMapTypeChip(MapType.hybrid, 'Hybrid'),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
                       const Text(
                         'Map Color Scheme:',
                         style: TextStyle(fontSize: 16),
@@ -2106,9 +2229,27 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
               !_isAutoScreenAvailable,
             ),
             children: <Widget>[
-              ElevatedButton(
-                onPressed: () => _setMapTypeForAutoToSatellite(),
-                child: const Text('Set map type to satellite'),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Text('Map Type:', style: TextStyle(fontSize: 16)),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 8,
+                      children: <Widget>[
+                        _buildAutoMapTypeChip(MapType.normal, 'Normal'),
+                        _buildAutoMapTypeChip(MapType.satellite, 'Satellite'),
+                        _buildAutoMapTypeChip(MapType.terrain, 'Terrain'),
+                        _buildAutoMapTypeChip(MapType.hybrid, 'Hybrid'),
+                      ],
+                    ),
+                  ],
+                ),
               ),
               ElevatedButton(
                 onPressed: () => _moveCameraForAuto(),
@@ -2117,6 +2258,167 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
               ElevatedButton(
                 onPressed: () => _addMarkerForAuto(),
                 child: const Text('Add marker'),
+              ),
+              ElevatedButton(
+                onPressed: () => _autoViewController.showRouteOverview(),
+                child: const Text('Show route overview'),
+              ),
+              ElevatedButton(
+                onPressed: () => _autoViewController.followMyLocation(
+                  CameraPerspective.tilted,
+                ),
+                child: const Text('Follow my location'),
+              ),
+              const Divider(),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  'Navigation UI Controls',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              ExampleSwitch(
+                title: 'Enable Navigation UI',
+                initialValue: _autoNavigationUIEnabled,
+                onChanged: (bool newValue) async {
+                  await _autoViewController.setNavigationUIEnabled(newValue);
+                  setState(() {
+                    _autoNavigationUIEnabled = newValue;
+                  });
+                },
+              ),
+              ExampleSwitch(
+                title: 'Trip progress bar',
+                initialValue: _autoNavigationTripProgressBarEnabled,
+                onChanged: (bool newValue) async {
+                  await _autoViewController.setNavigationTripProgressBarEnabled(
+                    newValue,
+                  );
+                  setState(() {
+                    _autoNavigationTripProgressBarEnabled = newValue;
+                  });
+                },
+              ),
+              ExampleSwitch(
+                title: 'Speed limit icon',
+                initialValue: _autoSpeedLimitIconEnabled,
+                onChanged: (bool newValue) async {
+                  await _autoViewController.setSpeedLimitIconEnabled(newValue);
+                  setState(() {
+                    _autoSpeedLimitIconEnabled = newValue;
+                  });
+                },
+              ),
+              ExampleSwitch(
+                title: 'Speedometer',
+                initialValue: _autoSpeedometerEnabled,
+                onChanged: (bool newValue) async {
+                  await _autoViewController.setSpeedometerEnabled(newValue);
+                  setState(() {
+                    _autoSpeedometerEnabled = newValue;
+                  });
+                },
+              ),
+              ExampleSwitch(
+                title: 'Traffic prompts',
+                initialValue: _autoTrafficPromptsEnabled,
+                onChanged: (bool newValue) async {
+                  await _autoViewController.setTrafficPromptsEnabled(newValue);
+                  setState(() {
+                    _autoTrafficPromptsEnabled = newValue;
+                  });
+                },
+              ),
+              ExampleSwitch(
+                title: 'Traffic incident cards',
+                initialValue: _autoTrafficIncidentCardsEnabled,
+                onChanged: (bool newValue) async {
+                  await _autoViewController.setTrafficIncidentCardsEnabled(
+                    newValue,
+                  );
+                  setState(() {
+                    _autoTrafficIncidentCardsEnabled = newValue;
+                  });
+                },
+              ),
+              const Divider(),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  'Theme Controls',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Text(
+                      'Map Color Scheme:',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 8,
+                      children: <Widget>[
+                        _buildAutoColorSchemeChip(
+                          MapColorScheme.followSystem,
+                          'Auto',
+                        ),
+                        _buildAutoColorSchemeChip(
+                          MapColorScheme.light,
+                          'Light',
+                        ),
+                        _buildAutoColorSchemeChip(MapColorScheme.dark, 'Dark'),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Text(
+                      'Navigation Night Mode:',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 8,
+                      children: <Widget>[
+                        _buildAutoNightModeChip(
+                          NavigationForceNightMode.auto,
+                          'Auto',
+                        ),
+                        _buildAutoNightModeChip(
+                          NavigationForceNightMode.forceDay,
+                          'Day',
+                        ),
+                        _buildAutoNightModeChip(
+                          NavigationForceNightMode.forceNight,
+                          'Night',
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  'Map Padding',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
               Text('Map left padding: ${_autoViewMapPadding.left}'),
               Slider(
@@ -2408,6 +2710,46 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
             await _navigationViewController?.setForceNightMode(mode);
           } catch (e) {
             _showMessage('Failed to set force night mode: $e');
+          }
+        }
+      },
+    );
+  }
+
+  Widget _buildAutoColorSchemeChip(MapColorScheme scheme, String label) {
+    final bool isSelected = _autoMapColorScheme == scheme;
+    return FilterChip(
+      label: Text(label),
+      selected: isSelected,
+      onSelected: (bool selected) async {
+        if (selected) {
+          setState(() {
+            _autoMapColorScheme = scheme;
+          });
+          try {
+            await _autoViewController.setMapColorScheme(scheme);
+          } catch (e) {
+            _showMessage('Failed to set auto map color scheme: $e');
+          }
+        }
+      },
+    );
+  }
+
+  Widget _buildAutoNightModeChip(NavigationForceNightMode mode, String label) {
+    final bool isSelected = _autoForceNightMode == mode;
+    return FilterChip(
+      label: Text(label),
+      selected: isSelected,
+      onSelected: (bool selected) async {
+        if (selected) {
+          setState(() {
+            _autoForceNightMode = mode;
+          });
+          try {
+            await _autoViewController.setForceNightMode(mode);
+          } catch (e) {
+            _showMessage('Failed to set auto force night mode: $e');
           }
         }
       },
