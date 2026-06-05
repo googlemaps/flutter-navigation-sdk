@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.3](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.9.2...0.9.3) (2026-06-05)
+
+
+### Features
+
+* add missing features for Android Auto and CarPlay ([#568](https://github.com/googlemaps/flutter-navigation-sdk/issues/568)) ([0329316](https://github.com/googlemaps/flutter-navigation-sdk/commit/0329316569e9efda591db1868506a55e680acb90))
+* modernize Android build toolchain ([#711](https://github.com/googlemaps/flutter-navigation-sdk/issues/711)) ([02426c7](https://github.com/googlemaps/flutter-navigation-sdk/commit/02426c7f51b5e6955669172338eece7a2bd03c89))
+
 ## [0.9.2](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.9.1...0.9.2) (2026-05-25)
 
 
