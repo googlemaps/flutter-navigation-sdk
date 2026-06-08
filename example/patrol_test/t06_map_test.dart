@@ -78,8 +78,6 @@ void main() {
             initialZoomControlsEnabled: false,
             initialScrollGesturesEnabledDuringRotateOrZoom: false,
             initialMapToolbarEnabled: false,
-            initialIndoorEnabled: false,
-            initialIndoorLevelPickerEnabled: false,
             onViewCreated: (GoogleMapViewController viewController) {
               controllerCompleter.complete(viewController);
             },
@@ -101,8 +99,6 @@ void main() {
             initialZoomControlsEnabled: false,
             initialScrollGesturesEnabledDuringRotateOrZoom: false,
             initialMapToolbarEnabled: false,
-            initialIndoorEnabled: false,
-            initialIndoorLevelPickerEnabled: false,
             onViewCreated: (GoogleNavigationViewController viewController) {
               controllerCompleter.complete(viewController);
             },
@@ -124,8 +120,6 @@ void main() {
       await controller.settings.isScrollGesturesEnabledDuringRotateOrZoom(),
       false,
     );
-    expect(await controller.isIndoorEnabled(), false);
-    expect(await controller.settings.isIndoorLevelPickerEnabled(), false);
 
     if (Platform.isAndroid) {
       expect(await controller.settings.isZoomControlsEnabled(), false);

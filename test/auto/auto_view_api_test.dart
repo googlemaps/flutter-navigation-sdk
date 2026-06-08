@@ -259,7 +259,7 @@ void main() {
 
         group('Indoor controls', () {
           test('isIndoorEnabled returns value', () async {
-            when(autoViewMockApi.isIndoorEnabled(any)).thenReturn(true);
+            when(autoViewMockApi.isIndoorEnabled(0)).thenReturn(true);
 
             final bool result = await GoogleMapsNavigationPlatform
                 .instance
@@ -291,7 +291,7 @@ void main() {
               isUnderground: false,
             );
             when(
-              autoViewMockApi.getFocusedIndoorBuilding(any),
+              autoViewMockApi.getFocusedIndoorBuilding(0),
             ).thenReturn(buildingDto);
 
             final IndoorBuilding? building = await GoogleMapsNavigationPlatform
