@@ -242,5 +242,60 @@ void main() {
         expect(promptEvents[1].promptVisible, false);
       },
     );
+
+    test('IndoorFocusedBuildingChangedEvent stream receives events', () async {
+      IndoorFocusedBuildingChangedEvent? receivedEvent;
+      final IndoorBuildingDto buildingDto = IndoorBuildingDto(
+        levels: <IndoorLevelDto>[
+          IndoorLevelDto(name: 'Level 1', shortName: 'L1'),
+          IndoorLevelDto(name: 'Level 2', shortName: 'L2'),
+        ],
+        activeLevelIndex: 1,
+        defaultLevelIndex: 0,
+        isUnderground: false,
+      );
+
+      testAutoApi.getIndoorFocusedBuildingChangedEventStream().listen((
+        IndoorFocusedBuildingChangedEvent event,
+      ) {
+        receivedEvent = event;
+      });
+      await Future<void>.delayed(Duration.zero);
+
+      testAutoApi.testEventApi.onIndoorFocusedBuildingChanged(buildingDto);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(receivedEvent, isNotNull);
+      expect(receivedEvent!.building, isNotNull);
+      expect(receivedEvent!.building!.levels.length, 2);
+      expect(receivedEvent!.building!.activeLevelIndex, 1);
+    });
+
+    test('IndoorActiveLevelChangedEvent stream receives events', () async {
+      IndoorActiveLevelChangedEvent? receivedEvent;
+      final IndoorBuildingDto buildingDto = IndoorBuildingDto(
+        levels: <IndoorLevelDto>[
+          IndoorLevelDto(name: 'Level 1', shortName: 'L1'),
+          IndoorLevelDto(name: 'Level 2', shortName: 'L2'),
+        ],
+        activeLevelIndex: 0,
+        defaultLevelIndex: 0,
+        isUnderground: false,
+      );
+
+      testAutoApi.getIndoorActiveLevelChangedEventStream().listen((
+        IndoorActiveLevelChangedEvent event,
+      ) {
+        receivedEvent = event;
+      });
+      await Future<void>.delayed(Duration.zero);
+
+      testAutoApi.testEventApi.onIndoorActiveLevelChanged(buildingDto);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(receivedEvent, isNotNull);
+      expect(receivedEvent!.building, isNotNull);
+      expect(receivedEvent!.building!.activeLevelIndex, 0);
+    });
   });
 }

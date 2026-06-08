@@ -438,6 +438,30 @@ class GoogleMapsNavigationViewMessageHandler: MapViewApi {
     try getView(viewId).setBuildingsEnabled(enabled)
   }
 
+  func isIndoorEnabled(viewId: Int64) throws -> Bool {
+    try getView(viewId).isIndoorEnabled()
+  }
+
+  func setIndoorEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setIndoorEnabled(enabled)
+  }
+
+  func isIndoorLevelPickerEnabled(viewId: Int64) throws -> Bool {
+    try getView(viewId).isIndoorLevelPickerEnabled()
+  }
+
+  func setIndoorLevelPickerEnabled(viewId: Int64, enabled: Bool) throws {
+    try getView(viewId).setIndoorLevelPickerEnabled(enabled)
+  }
+
+  func getFocusedIndoorBuilding(viewId: Int64) throws -> IndoorBuildingDto? {
+    try getView(viewId).getFocusedIndoorBuilding()
+  }
+
+  func activateIndoorLevel(viewId: Int64, levelIndex: Int64) throws {
+    try getView(viewId).activateIndoorLevel(Int(levelIndex))
+  }
+
   func isTrafficPromptsEnabled(viewId: Int64) throws -> Bool {
     try getView(viewId).isTrafficPromptsEnabled()
   }

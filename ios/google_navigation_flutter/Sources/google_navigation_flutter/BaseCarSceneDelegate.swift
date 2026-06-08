@@ -148,11 +148,22 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
           self?.onPromptVisibilityChanged(promptVisible: promptVisible)
         }
 
+        self.navView?.indoorFocusedBuildingChangedCallback = { [weak self] building in
+          self?.sendIndoorFocusedBuildingChangedEvent(building: building)
+        }
+
+        self.navView?.indoorActiveLevelChangedCallback = { [weak self] building in
+          self?.sendIndoorActiveLevelChangedEvent(building: building)
+        }
+
         self.navView?.setNavigationHeaderEnabled(false)
         self.navView?.setRecenterButtonEnabled(false)
         self.navView?.setNavigationFooterEnabled(false)
         self.navView?.setSpeedometerEnabled(false)
         self.navView?.setReportIncidentButtonEnabled(false)
+        // Indoor level picker is not user-operable on CarPlay,
+        // so keep it disabled by default for car surfaces.
+        self.navView?.setIndoorLevelPickerEnabled(false)
         self.navViewController = UIViewController()
         self.navViewController?.view = self.navView?.view()
         self.carWindow?.rootViewController = self.navViewController
@@ -267,5 +278,14 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
 
   func sendAutoScreenAvailabilityChangedEvent(isAvailable: Bool) {
     autoViewEventApi?.onAutoScreenAvailabilityChanged(isAvailable: isAvailable) { _ in }
+  }
+
+  func sendIndoorFocusedBuildingChangedEvent(building: IndoorBuildingDto?) {
+    autoViewEventApi?.onIndoorFocusedBuildingChanged(building: building) { _ in
+    }
+  }
+
+  func sendIndoorActiveLevelChangedEvent(building: IndoorBuildingDto?) {
+    autoViewEventApi?.onIndoorActiveLevelChanged(building: building) { _ in }
   }
 }

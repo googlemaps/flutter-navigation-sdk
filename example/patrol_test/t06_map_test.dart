@@ -78,6 +78,8 @@ void main() {
             initialZoomControlsEnabled: false,
             initialScrollGesturesEnabledDuringRotateOrZoom: false,
             initialMapToolbarEnabled: false,
+            initialIndoorEnabled: false,
+            initialIndoorLevelPickerEnabled: false,
             onViewCreated: (GoogleMapViewController viewController) {
               controllerCompleter.complete(viewController);
             },
@@ -99,6 +101,8 @@ void main() {
             initialZoomControlsEnabled: false,
             initialScrollGesturesEnabledDuringRotateOrZoom: false,
             initialMapToolbarEnabled: false,
+            initialIndoorEnabled: false,
+            initialIndoorLevelPickerEnabled: false,
             onViewCreated: (GoogleNavigationViewController viewController) {
               controllerCompleter.complete(viewController);
             },
@@ -120,6 +124,8 @@ void main() {
       await controller.settings.isScrollGesturesEnabledDuringRotateOrZoom(),
       false,
     );
+    expect(await controller.isIndoorEnabled(), false);
+    expect(await controller.settings.isIndoorLevelPickerEnabled(), false);
 
     if (Platform.isAndroid) {
       expect(await controller.settings.isZoomControlsEnabled(), false);
@@ -229,6 +235,8 @@ void main() {
       true,
     );
     expect(await controller.settings.isTiltGesturesEnabled(), true);
+    expect(await controller.isIndoorEnabled(), true);
+    expect(await controller.settings.isIndoorLevelPickerEnabled(), true);
     if (Platform.isAndroid) {
       expect(await controller.settings.isMapToolbarEnabled(), true);
     }
@@ -301,6 +309,20 @@ void main() {
         await controller.settings.isTrafficEnabled(),
         result,
         reason: buildReasonForToggle('TrafficEnabled', result),
+      );
+
+      await controller.setIndoorEnabled(result);
+      expect(
+        await controller.isIndoorEnabled(),
+        result,
+        reason: buildReasonForToggle('IndoorEnabled', result),
+      );
+
+      await controller.settings.setIndoorLevelPickerEnabled(result);
+      expect(
+        await controller.settings.isIndoorLevelPickerEnabled(),
+        result,
+        reason: buildReasonForToggle('IndoorLevelPickerEnabled', result),
       );
 
       if (Platform.isAndroid) {

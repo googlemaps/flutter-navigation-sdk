@@ -137,6 +137,29 @@ enum Convert {
     LatLngDto(latitude: point.latitude, longitude: point.longitude)
   }
 
+  static func convertIndoorLevel(level: GMSIndoorLevel) -> IndoorLevelDto {
+    IndoorLevelDto(name: level.name, shortName: level.shortName)
+  }
+
+  static func convertIndoorBuilding(building: GMSIndoorBuilding, activeLevel: GMSIndoorLevel?)
+    -> IndoorBuildingDto
+  {
+    let levels = building.levels.map { convertIndoorLevel(level: $0) }
+    let activeLevelIndex: Int64? = {
+      guard let activeLevel else { return nil }
+      guard let index = building.levels.firstIndex(where: { $0 === activeLevel }) else {
+        return nil
+      }
+      return Int64(index)
+    }()
+    return IndoorBuildingDto(
+      levels: levels,
+      activeLevelIndex: activeLevelIndex,
+      defaultLevelIndex: Int64(building.defaultLevelIndex),
+      isUnderground: building.isUnderground
+    )
+  }
+
   static func convertLatLngBounds(bounds: LatLngBoundsDto) -> GMSCoordinateBounds {
     GMSCoordinateBounds(
       coordinate: CLLocationCoordinate2D(

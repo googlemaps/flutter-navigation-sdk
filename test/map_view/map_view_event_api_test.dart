@@ -569,6 +569,81 @@ void main() {
       });
     });
 
+    group('Indoor Events', () {
+      test(
+        'onIndoorFocusedBuildingChanged fires and delivers correct data',
+        () async {
+          final List<IndoorFocusedBuildingChangedEvent> receivedEvents =
+              <IndoorFocusedBuildingChangedEvent>[];
+          final StreamSubscription<IndoorFocusedBuildingChangedEvent>
+          subscription = testMapViewApi
+              .getIndoorFocusedBuildingChangedEventStream(viewId: testViewId)
+              .listen(receivedEvents.add);
+
+          final IndoorBuildingDto building = IndoorBuildingDto(
+            levels: <IndoorLevelDto>[
+              IndoorLevelDto(name: 'Level 1', shortName: 'L1'),
+              IndoorLevelDto(name: 'Level 2', shortName: 'L2'),
+            ],
+            activeLevelIndex: 0,
+            defaultLevelIndex: 0,
+            isUnderground: false,
+          );
+
+          testMapViewApi.testEventApi.onIndoorFocusedBuildingChanged(
+            testViewId,
+            building,
+          );
+
+          await Future<void>.delayed(const Duration(milliseconds: 10));
+
+          expect(receivedEvents.length, 1);
+          expect(receivedEvents[0].building, isNotNull);
+          expect(receivedEvents[0].building!.levels.length, 2);
+          expect(receivedEvents[0].building!.levels[0].shortName, 'L1');
+          expect(receivedEvents[0].building!.activeLevelIndex, 0);
+
+          await subscription.cancel();
+        },
+      );
+
+      test(
+        'onIndoorActiveLevelChanged fires and delivers correct data',
+        () async {
+          final List<IndoorActiveLevelChangedEvent> receivedEvents =
+              <IndoorActiveLevelChangedEvent>[];
+          final StreamSubscription<IndoorActiveLevelChangedEvent> subscription =
+              testMapViewApi
+                  .getIndoorActiveLevelChangedEventStream(viewId: testViewId)
+                  .listen(receivedEvents.add);
+
+          final IndoorBuildingDto building = IndoorBuildingDto(
+            levels: <IndoorLevelDto>[
+              IndoorLevelDto(name: 'B1', shortName: 'B1'),
+              IndoorLevelDto(name: 'B2', shortName: 'B2'),
+            ],
+            activeLevelIndex: 1,
+            defaultLevelIndex: 0,
+            isUnderground: true,
+          );
+
+          testMapViewApi.testEventApi.onIndoorActiveLevelChanged(
+            testViewId,
+            building,
+          );
+
+          await Future<void>.delayed(const Duration(milliseconds: 10));
+
+          expect(receivedEvents.length, 1);
+          expect(receivedEvents[0].building, isNotNull);
+          expect(receivedEvents[0].building!.activeLevelIndex, 1);
+          expect(receivedEvents[0].building!.isUnderground, true);
+
+          await subscription.cancel();
+        },
+      );
+    });
+
     group('Camera Changed Events', () {
       test('onCameraChanged fires with move started', () async {
         final List<CameraChangedEvent> receivedEvents = <CameraChangedEvent>[];

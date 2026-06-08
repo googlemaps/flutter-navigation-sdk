@@ -203,6 +203,37 @@ class GoogleMapViewController {
     );
   }
 
+  /// Checks if the indoor maps layer is enabled.
+  Future<bool> isIndoorEnabled() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI.isIndoorEnabled(
+      viewId: _viewId,
+    );
+  }
+
+  /// Enable or disable the indoor maps layer.
+  Future<void> setIndoorEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI.setIndoorEnabled(
+      viewId: _viewId,
+      enabled: enabled,
+    );
+  }
+
+  /// Gets the currently focused indoor building, if available.
+  Future<IndoorBuilding?> getFocusedIndoorBuilding() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .getFocusedIndoorBuilding(viewId: _viewId);
+  }
+
+  /// Activates an indoor level within the currently focused indoor building.
+  ///
+  /// Throws if no building is currently focused or the index is out of range.
+  Future<void> activateIndoorLevel(IndoorLevel indoorLevel) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI.activateIndoorLevel(
+      viewId: _viewId,
+      levelIndex: indoorLevel.levelIndex,
+    );
+  }
+
   /// Returns the minimum zoom level preference from the map view.
   /// If minimum zoom preference is not set previously, returns minimum possible
   /// zoom level for the current map type.

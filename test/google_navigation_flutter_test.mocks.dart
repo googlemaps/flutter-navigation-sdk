@@ -798,6 +798,48 @@ class MockTestMapViewApi extends _i1.Mock implements _i3.TestMapViewApi {
   );
 
   @override
+  bool isIndoorEnabled(int? viewId) =>
+      (super.noSuchMethod(
+            Invocation.method(#isIndoorEnabled, [viewId]),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  void setIndoorEnabled(int? viewId, bool? enabled) => super.noSuchMethod(
+    Invocation.method(#setIndoorEnabled, [viewId, enabled]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  bool isIndoorLevelPickerEnabled(int? viewId) =>
+      (super.noSuchMethod(
+            Invocation.method(#isIndoorLevelPickerEnabled, [viewId]),
+            returnValue: false,
+          )
+          as bool);
+
+  @override
+  void setIndoorLevelPickerEnabled(int? viewId, bool? enabled) =>
+      super.noSuchMethod(
+        Invocation.method(#setIndoorLevelPickerEnabled, [viewId, enabled]),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i2.IndoorBuildingDto? getFocusedIndoorBuilding(int? viewId) =>
+      (super.noSuchMethod(
+            Invocation.method(#getFocusedIndoorBuilding, [viewId]),
+          )
+          as _i2.IndoorBuildingDto?);
+
+  @override
+  void activateIndoorLevel(int? viewId, int? levelIndex) => super.noSuchMethod(
+    Invocation.method(#activateIndoorLevel, [viewId, levelIndex]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
   _i2.CameraPositionDto getCameraPosition(int? viewId) =>
       (super.noSuchMethod(
             Invocation.method(#getCameraPosition, [viewId]),

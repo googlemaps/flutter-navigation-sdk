@@ -81,6 +81,8 @@ class GoogleMapsNavigationView extends GoogleMapsBaseMapView {
     super.onPolylineClicked,
     super.onCircleClicked,
     super.onPoiClicked,
+    super.onIndoorFocusedBuildingChanged,
+    super.onIndoorActiveLevelChanged,
     this.onNavigationUIEnabledChanged,
     this.onPromptVisibilityChanged,
     super.onMyLocationClicked,

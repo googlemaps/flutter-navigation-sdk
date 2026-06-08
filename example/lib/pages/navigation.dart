@@ -101,6 +101,10 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   int _onNavigationUIEnabledChangedEventCallCount = 0;
   int _onNewNavigationSessionEventCallCount = 0;
   int _onPromptVisibilityChangedEventCallCount = 0;
+  int _onIndoorFocusedBuildingChangedEventCallCount = 0;
+  int _onIndoorActiveLevelChangedEventCallCount = 0;
+
+  IndoorBuilding? _focusedIndoorBuilding;
 
   bool _navigationHeaderEnabled = true;
   bool _navigationFooterEnabled = true;
@@ -113,6 +117,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   bool _trafficPromptsEnabled = true;
   bool _reportIncidentButtonEnabled = true;
   bool _buildingsEnabled = true;
+  bool _indoorEnabled = true;
+  bool _indoorLevelPickerEnabled = true;
 
   bool _termsAndConditionsAccepted = false;
   bool _locationPermissionsAccepted = false;
@@ -167,6 +173,10 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   StreamSubscription<RoadSnappedRawLocationUpdatedEvent>?
   _roadSnappedRawLocationUpdatedSubscription;
   StreamSubscription<void>? _newNavigationSessionSubscription;
+
+  // Indoor event subscriptions are set up via widget-level callbacks
+  // (onIndoorFocusedBuildingChanged / onIndoorActiveLevelChanged) and
+  // do not need separate StreamSubscription fields here.
 
   int _nextWaypointIndex = 0;
 
@@ -657,6 +667,36 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     });
   }
 
+  void _onIndoorFocusedBuildingChanged(IndoorBuilding? building) {
+    if (!mounted) return;
+    setState(() {
+      _focusedIndoorBuilding = building;
+      _onIndoorFocusedBuildingChangedEventCallCount += 1;
+    });
+    final String msg = building == null
+        ? 'Indoor focus lost'
+        : 'Focused building: ${building.levels.length} level(s), '
+              'active index: ${building.activeLevelIndex}';
+    debugPrint('Indoor focused building changed: $msg');
+  }
+
+  void _onIndoorActiveLevelChanged(IndoorBuilding? building) {
+    if (!mounted) return;
+    setState(() {
+      _focusedIndoorBuilding = building;
+      _onIndoorActiveLevelChangedEventCallCount += 1;
+    });
+    final int? active = building?.activeLevelIndex;
+    final String levelName =
+        (active != null &&
+            building != null &&
+            active >= 0 &&
+            active < building.levels.length)
+        ? (building.levels[active].name ?? 'unknown')
+        : 'none';
+    debugPrint('Indoor active level changed: $levelName');
+  }
+
   Future<void> _onViewCreated(GoogleNavigationViewController controller) async {
     setState(() {
       _navigationViewController = controller;
@@ -722,6 +762,11 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
           .isReportIncidentButtonEnabled();
       final bool buildingsEnabled = await _navigationViewController!
           .isBuildingsEnabled();
+      final bool indoorEnabled = await _navigationViewController!
+          .isIndoorEnabled();
+      final bool indoorLevelPickerEnabled = await _navigationViewController!
+          .settings
+          .isIndoorLevelPickerEnabled();
 
       setState(() {
         _navigationHeaderEnabled = navigationHeaderEnabled;
@@ -735,6 +780,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         _trafficPromptsEnabled = trafficPromptsEnabled;
         _reportIncidentButtonEnabled = reportIncidentButtonEnabled;
         _buildingsEnabled = buildingsEnabled;
+        _indoorEnabled = indoorEnabled;
+        _indoorLevelPickerEnabled = indoorLevelPickerEnabled;
       });
     }
   }
@@ -938,15 +985,19 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       final String waypointTitle = _lastClickedPoi != null
           ? '${_lastClickedPoi!.name} (Waypoint $_nextWaypointIndex)'
           : 'Waypoint $_nextWaypointIndex';
-      _waypoints.add(
-        NavigationWaypoint.withLatLngTarget(
-          title: waypointTitle,
-          target: LatLng(
-            latitude: _newWaypointMarker!.options.position.latitude,
-            longitude: _newWaypointMarker!.options.position.longitude,
-          ),
-        ),
-      );
+      final NavigationWaypoint waypoint = _lastClickedPoi != null
+          ? NavigationWaypoint.withPlaceID(
+              title: waypointTitle,
+              placeID: _lastClickedPoi!.placeID,
+            )
+          : NavigationWaypoint.withLatLngTarget(
+              title: waypointTitle,
+              target: LatLng(
+                latitude: _newWaypointMarker!.options.position.latitude,
+                longitude: _newWaypointMarker!.options.position.longitude,
+              ),
+            );
+      _waypoints.add(waypoint);
 
       // Convert new waypoint marker to destination marker.
       await _convertNewWaypointMarkerToDestinationMarker(_nextWaypointIndex);
@@ -1330,6 +1381,35 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     }
   }
 
+  Future<void> _simulateUserLocationToCurrentCamera() async {
+    if (_navigationViewController == null) {
+      _showMessage('Navigation view is not ready yet.');
+      return;
+    }
+
+    if (!_navigatorInitialized) {
+      await _initializeNavigator();
+      if (!_navigatorInitialized) {
+        _showMessage(
+          'Navigation session could not be initialized for simulation.',
+        );
+        return;
+      }
+    }
+
+    final LatLng cameraTarget =
+        (await _navigationViewController!.getCameraPosition()).target;
+    await _simulateStationaryUserLocation(cameraTarget);
+
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _userLocation = cameraTarget;
+    });
+    _showMessage('Simulated user location to current camera location.');
+  }
+
   Future<void> _simulateStationaryUserLocation(LatLng? location) async {
     if (location == null) {
       return;
@@ -1432,6 +1512,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                         onNavigationUIEnabledChanged:
                             _onNavigationUIEnabledChanged,
                         onPromptVisibilityChanged: _onPromptVisibilityChanged,
+                        onIndoorFocusedBuildingChanged:
+                            _onIndoorFocusedBuildingChanged,
+                        onIndoorActiveLevelChanged: _onIndoorActiveLevelChanged,
                         initialCameraPosition: CameraPosition(
                           // Initialize map to user location.
                           target: _userLocation!,
@@ -1744,6 +1827,26 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   ),
                 ),
               ),
+              Card(
+                child: ListTile(
+                  title: const Text(
+                    'Indoor focused building changed event call count',
+                  ),
+                  trailing: Text(
+                    _onIndoorFocusedBuildingChangedEventCallCount.toString(),
+                  ),
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  title: const Text(
+                    'Indoor active level changed event call count',
+                  ),
+                  trailing: Text(
+                    _onIndoorActiveLevelChangedEventCallCount.toString(),
+                  ),
+                ),
+              ),
             ],
           ),
         );
@@ -1878,39 +1981,42 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
             ],
           ),
         ),
-        IgnorePointer(
-          ignoring: !_navigatorInitialized,
-          child: Card(
-            child: ExpansionTile(
-              title: const Text('Simulation'),
-              collapsedTextColor: getExpansionTileTextColor(
-                !_navigatorInitialized,
+        Card(
+          child: ExpansionTile(
+            title: const Text('Simulation'),
+            children: <Widget>[
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 10,
+                children: <Widget>[
+                  if (_simulationState == SimulationState.running)
+                    ElevatedButton(
+                      onPressed: _pauseSimulation,
+                      child: const Text('Pause simulation'),
+                    )
+                  else if (_simulationState == SimulationState.paused)
+                    ElevatedButton(
+                      onPressed: _resumeSimulation,
+                      child: const Text('Resume simulation'),
+                    )
+                  else
+                    SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        _simulationState.description,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ElevatedButton(
+                    onPressed: _navigationViewController == null
+                        ? null
+                        : _simulateUserLocationToCurrentCamera,
+                    child: const Text('Set user to camera'),
+                  ),
+                ],
               ),
-              collapsedIconColor: getExpansionTileTextColor(
-                !_navigatorInitialized,
-              ),
-              children: <Widget>[
-                Wrap(
-                  alignment: WrapAlignment.center,
-                  spacing: 10,
-                  children: <Widget>[
-                    if (_simulationState == SimulationState.running)
-                      ElevatedButton(
-                        onPressed: _pauseSimulation,
-                        child: const Text('Pause simulation'),
-                      )
-                    else if (_simulationState == SimulationState.paused)
-                      ElevatedButton(
-                        onPressed: _resumeSimulation,
-                        child: const Text('Resume simulation'),
-                      )
-                    else
-                      Text(_simulationState.description),
-                  ],
-                ),
-                const SizedBox(height: 10),
-              ],
-            ),
+              const SizedBox(height: 10),
+            ],
           ),
         ),
         IgnorePointer(
@@ -2054,6 +2160,81 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     });
                   },
                 ),
+                ExampleSwitch(
+                  title: 'Enable indoor maps',
+                  initialValue: _indoorEnabled,
+                  onChanged: (bool newValue) async {
+                    await _navigationViewController!.setIndoorEnabled(newValue);
+                    setState(() {
+                      _indoorEnabled = newValue;
+                    });
+                  },
+                ),
+                ExampleSwitch(
+                  title: 'Show indoor level picker',
+                  initialValue: _indoorLevelPickerEnabled,
+                  onChanged: (bool newValue) async {
+                    await _navigationViewController!.settings
+                        .setIndoorLevelPickerEnabled(newValue);
+                    setState(() {
+                      _indoorLevelPickerEnabled = newValue;
+                    });
+                  },
+                ),
+                if (_focusedIndoorBuilding != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'Focused building: '
+                          '${_focusedIndoorBuilding!.levels.length} level(s)',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Wrap(
+                          spacing: 6,
+                          children: <Widget>[
+                            for (final IndoorLevel level
+                                in _focusedIndoorBuilding!.levels)
+                              ActionChip(
+                                label: Text(
+                                  level.shortName ?? 'L${level.levelIndex}',
+                                ),
+                                backgroundColor:
+                                    _focusedIndoorBuilding!.activeLevelIndex ==
+                                        level.levelIndex
+                                    ? Theme.of(
+                                        context,
+                                      ).colorScheme.primaryContainer
+                                    : null,
+                                onPressed: () async {
+                                  try {
+                                    await _navigationViewController!
+                                        .activateIndoorLevel(level);
+                                  } catch (e) {
+                                    _showMessage(
+                                      'Failed to activate level: $e',
+                                    );
+                                  }
+                                },
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                if (_focusedIndoorBuilding == null && _indoorEnabled)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    child: Text(
+                      'Navigate to an indoor area to see level controls.',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,

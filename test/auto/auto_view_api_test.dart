@@ -257,6 +257,65 @@ void main() {
           });
         });
 
+        group('Indoor controls', () {
+          test('isIndoorEnabled returns value', () async {
+            when(autoViewMockApi.isIndoorEnabled(any)).thenReturn(true);
+
+            final bool result = await GoogleMapsNavigationPlatform
+                .instance
+                .autoAPI
+                .isIndoorEnabled();
+
+            expect(result, true);
+            verify(autoViewMockApi.isIndoorEnabled(0)).called(1);
+          });
+
+          test(
+            'setIndoorEnabled sends correct value and default viewId',
+            () async {
+              await GoogleMapsNavigationPlatform.instance.autoAPI
+                  .setIndoorEnabled(enabled: true);
+
+              verify(autoViewMockApi.setIndoorEnabled(0, true)).called(1);
+            },
+          );
+
+          test('getFocusedIndoorBuilding returns converted building', () async {
+            final IndoorBuildingDto buildingDto = IndoorBuildingDto(
+              levels: <IndoorLevelDto>[
+                IndoorLevelDto(name: 'Level 1', shortName: 'L1'),
+                IndoorLevelDto(name: 'Level 2', shortName: 'L2'),
+              ],
+              activeLevelIndex: 1,
+              defaultLevelIndex: 0,
+              isUnderground: false,
+            );
+            when(
+              autoViewMockApi.getFocusedIndoorBuilding(any),
+            ).thenReturn(buildingDto);
+
+            final IndoorBuilding? building = await GoogleMapsNavigationPlatform
+                .instance
+                .autoAPI
+                .getFocusedIndoorBuilding();
+
+            expect(building, isNotNull);
+            expect(building!.levels.length, 2);
+            expect(building.activeLevelIndex, 1);
+            verify(autoViewMockApi.getFocusedIndoorBuilding(0)).called(1);
+          });
+
+          test(
+            'activateIndoorLevel sends level index and default viewId',
+            () async {
+              await GoogleMapsNavigationPlatform.instance.autoAPI
+                  .activateIndoorLevel(levelIndex: 2);
+
+              verify(autoViewMockApi.activateIndoorLevel(0, 2)).called(1);
+            },
+          );
+        });
+
         group('Custom events', () {
           test('sendCustomNavigationAutoEvent sends event and data', () async {
             await GoogleMapsNavigationPlatform.instance.autoAPI

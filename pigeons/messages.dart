@@ -337,6 +337,39 @@ class PointOfInterestDto {
   final LatLngDto latLng;
 }
 
+/// Represents one indoor level of a focused indoor building.
+class IndoorLevelDto {
+  const IndoorLevelDto({required this.name, required this.shortName});
+
+  /// Full display name of the level.
+  final String? name;
+
+  /// Short display name of the level.
+  final String? shortName;
+}
+
+/// Represents focused indoor building metadata.
+class IndoorBuildingDto {
+  const IndoorBuildingDto({
+    required this.levels,
+    this.activeLevelIndex,
+    this.defaultLevelIndex,
+    this.isUnderground,
+  });
+
+  /// All levels available in the focused building.
+  final List<IndoorLevelDto?> levels;
+
+  /// Currently active level index in [levels], if known.
+  final int? activeLevelIndex;
+
+  /// Default level index in [levels], if known.
+  final int? defaultLevelIndex;
+
+  /// Whether building is mostly underground, if known.
+  final bool? isUnderground;
+}
+
 class PolygonDto {
   const PolygonDto({required this.polygonId, required this.options});
 
@@ -574,6 +607,19 @@ abstract class MapViewApi {
   bool isBuildingsEnabled(int viewId);
   void setBuildingsEnabled(int viewId, bool enabled);
 
+  bool isIndoorEnabled(int viewId);
+  void setIndoorEnabled(int viewId, bool enabled);
+
+  bool isIndoorLevelPickerEnabled(int viewId);
+  void setIndoorLevelPickerEnabled(int viewId, bool enabled);
+
+  IndoorBuildingDto? getFocusedIndoorBuilding(int viewId);
+
+  /// Activates the indoor level at [levelIndex] within the currently focused
+  /// indoor building. Throws if no building is focused or the index is out of
+  /// range.
+  void activateIndoorLevel(int viewId, int levelIndex);
+
   CameraPositionDto getCameraPosition(int viewId);
   LatLngBoundsDto getVisibleRegion(int viewId);
 
@@ -719,6 +765,8 @@ abstract class ViewEventApi {
   void onPromptVisibilityChanged(int viewId, bool promptVisible);
   void onMyLocationClicked(int viewId);
   void onMyLocationButtonClicked(int viewId);
+  void onIndoorFocusedBuildingChanged(int viewId, IndoorBuildingDto? building);
+  void onIndoorActiveLevelChanged(int viewId, IndoorBuildingDto? building);
   void onCameraChanged(
     int viewId,
     CameraEventTypeDto eventType,
@@ -1625,6 +1673,11 @@ abstract class AutoMapViewApi {
   bool isSpeedometerEnabled();
   bool isNavigationUIEnabled();
 
+  bool isIndoorEnabled(int viewId);
+  void setIndoorEnabled(int viewId, bool enabled);
+  IndoorBuildingDto? getFocusedIndoorBuilding(int viewId);
+  void activateIndoorLevel(int viewId, int levelIndex);
+
   void showRouteOverview();
 
   List<MarkerDto> getMarkers();
@@ -1670,6 +1723,8 @@ abstract class AutoViewEventApi {
   void onCustomNavigationAutoEvent(String event, Object data);
   void onAutoScreenAvailabilityChanged(bool isAvailable);
   void onPromptVisibilityChanged(bool promptVisible);
+  void onIndoorFocusedBuildingChanged(IndoorBuildingDto? building);
+  void onIndoorActiveLevelChanged(IndoorBuildingDto? building);
 }
 
 @HostApi()

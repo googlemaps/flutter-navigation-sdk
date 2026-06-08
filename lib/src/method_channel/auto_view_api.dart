@@ -67,9 +67,8 @@ class AutoMapViewAPIImpl {
   }
 
   Stream<T> _unwrapEventStream<T>() {
-    // If event that does not
     return _autoEventStreamController.stream
-        .where((_AutoEventWrapper wrapper) => (wrapper.event is T))
+        .where((_AutoEventWrapper wrapper) => wrapper.event is T)
         .map<T>((_AutoEventWrapper wrapper) => wrapper.event as T);
   }
 
@@ -738,6 +737,26 @@ class AutoMapViewAPIImpl {
   Future<bool> isAutoScreenAvailable() =>
       _viewApi.isAutoScreenAvailable().wrapPlatformException();
 
+  /// Gets whether indoor maps are enabled for the auto view.
+  Future<bool> isIndoorEnabled() =>
+      _viewApi.isIndoorEnabled(0).wrapPlatformException();
+
+  /// Enables or disables indoor maps for the auto view.
+  Future<void> setIndoorEnabled({required bool enabled}) =>
+      _viewApi.setIndoorEnabled(0, enabled).wrapPlatformException();
+
+  /// Returns the currently focused indoor building, if available.
+  Future<IndoorBuilding?> getFocusedIndoorBuilding() async {
+    final IndoorBuildingDto? building = await _viewApi
+        .getFocusedIndoorBuilding(0)
+        .wrapPlatformException();
+    return building?.toIndoorBuilding();
+  }
+
+  /// Activates an indoor level in the currently focused indoor building.
+  Future<void> activateIndoorLevel({required int levelIndex}) =>
+      _viewApi.activateIndoorLevel(0, levelIndex).wrapPlatformException();
+
   /// Get custom navigation auto event stream from the auto view.
   Stream<CustomNavigationAutoEvent> getCustomNavigationAutoEventStream() {
     return _unwrapEventStream<CustomNavigationAutoEvent>();
@@ -752,6 +771,18 @@ class AutoMapViewAPIImpl {
   /// Get prompt visibility changed event stream from the auto view.
   Stream<PromptVisibilityChangedEvent> getPromptVisibilityChangedEventStream() {
     return _unwrapEventStream<PromptVisibilityChangedEvent>();
+  }
+
+  /// Get focused indoor building changed event stream from the auto view.
+  Stream<IndoorFocusedBuildingChangedEvent>
+  getIndoorFocusedBuildingChangedEventStream() {
+    return _unwrapEventStream<IndoorFocusedBuildingChangedEvent>();
+  }
+
+  /// Get active indoor level changed event stream from the auto view.
+  Stream<IndoorActiveLevelChangedEvent>
+  getIndoorActiveLevelChangedEventStream() {
+    return _unwrapEventStream<IndoorActiveLevelChangedEvent>();
   }
 
   Future<void> setTrafficPromptsEnabled({required bool enabled}) {
@@ -863,6 +894,24 @@ class AutoViewEventApiImpl implements AutoViewEventApi {
   void onPromptVisibilityChanged(bool promptVisible) {
     _viewEventStreamController.add(
       _AutoEventWrapper(PromptVisibilityChangedEvent(promptVisible)),
+    );
+  }
+
+  @override
+  void onIndoorFocusedBuildingChanged(IndoorBuildingDto? building) {
+    _viewEventStreamController.add(
+      _AutoEventWrapper(
+        IndoorFocusedBuildingChangedEvent(building?.toIndoorBuilding()),
+      ),
+    );
+  }
+
+  @override
+  void onIndoorActiveLevelChanged(IndoorBuildingDto? building) {
+    _viewEventStreamController.add(
+      _AutoEventWrapper(
+        IndoorActiveLevelChangedEvent(building?.toIndoorBuilding()),
+      ),
     );
   }
 }

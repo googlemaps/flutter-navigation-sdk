@@ -35,6 +35,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMapOptions
+import com.google.android.gms.maps.model.IndoorBuilding
 import com.google.android.libraries.navigation.NavigationView
 import com.google.android.libraries.navigation.PromptVisibilityChangedListener
 
@@ -201,6 +202,10 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
       // Guard against race condition where surface is destroyed before getMapAsync completes
       if (mIsSurfaceDestroyed) return@getMapAsync
 
+      // Indoor level picker is not user-operable on Android Auto,
+      // so keep it disabled by default for auto surfaces.
+      googleMap.uiSettings.isIndoorLevelPickerEnabled = false
+
       val viewRegistry = GoogleMapsNavigationPlugin.getInstance()?.viewRegistry
       val imageRegistry = GoogleMapsNavigationPlugin.getInstance()?.imageRegistry
       if (viewRegistry != null && imageRegistry != null) {
@@ -216,6 +221,18 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
             navigationView,
             googleMap,
           )
+
+        googleMap.setOnIndoorStateChangeListener(
+          object : GoogleMap.OnIndoorStateChangeListener {
+            override fun onIndoorBuildingFocused() {
+              sendIndoorFocusedBuildingChangedEvent(mAutoMapView?.getFocusedIndoorBuilding())
+            }
+
+            override fun onIndoorLevelActivated(indoorBuilding: IndoorBuilding) {
+              sendIndoorActiveLevelChangedEvent(Convert.convertIndoorBuildingToDto(indoorBuilding))
+            }
+          }
+        )
 
         // Set up prompt visibility listener with direct access to NavigationView
         mPromptVisibilityListener = PromptVisibilityChangedListener { promptVisible ->
@@ -234,6 +251,8 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
     super.onSurfaceDestroyed(surfaceContainer)
     mIsSurfaceDestroyed = true
     sendAutoScreenAvailabilityChangedEvent(false)
+
+    mGoogleMap?.setOnIndoorStateChangeListener(null)
 
     // Clean up prompt visibility listener
     if (mPromptVisibilityListener != null && mNavigationView != null) {
@@ -288,6 +307,18 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
   private fun sendAutoScreenAvailabilityChangedEvent(isAvailable: Boolean) {
     GoogleMapsNavigationPlugin.getInstance()?.autoViewEventApi?.onAutoScreenAvailabilityChanged(
       isAvailable
+    ) {}
+  }
+
+  private fun sendIndoorFocusedBuildingChangedEvent(building: IndoorBuildingDto?) {
+    GoogleMapsNavigationPlugin.getInstance()?.autoViewEventApi?.onIndoorFocusedBuildingChanged(
+      building
+    ) {}
+  }
+
+  private fun sendIndoorActiveLevelChangedEvent(building: IndoorBuildingDto?) {
+    GoogleMapsNavigationPlugin.getInstance()?.autoViewEventApi?.onIndoorActiveLevelChanged(
+      building
     ) {}
   }
 

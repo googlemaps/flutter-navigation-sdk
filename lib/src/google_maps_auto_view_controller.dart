@@ -412,6 +412,31 @@ class GoogleMapsAutoViewController {
         .isAutoScreenAvailable();
   }
 
+  /// Returns whether indoor maps are enabled on the Android Auto or CarPlay map view.
+  Future<bool> isIndoorEnabled() {
+    return GoogleMapsNavigationPlatform.instance.autoAPI.isIndoorEnabled();
+  }
+
+  /// Enables or disables indoor maps on the Android Auto or CarPlay map view.
+  Future<void> setIndoorEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.autoAPI.setIndoorEnabled(
+      enabled: enabled,
+    );
+  }
+
+  /// Gets metadata for the currently focused indoor building, if available.
+  Future<IndoorBuilding?> getFocusedIndoorBuilding() {
+    return GoogleMapsNavigationPlatform.instance.autoAPI
+        .getFocusedIndoorBuilding();
+  }
+
+  /// Activates an indoor level on the currently focused indoor building.
+  Future<void> activateIndoorLevel(IndoorLevel indoorLevel) {
+    return GoogleMapsNavigationPlatform.instance.autoAPI.activateIndoorLevel(
+      levelIndex: indoorLevel.levelIndex,
+    );
+  }
+
   /// Enable or disable traffic prompts on the Android Auto or CarPlay map view.
   ///
   /// When enabled, traffic prompts are displayed on the map during navigation
@@ -707,6 +732,28 @@ class GoogleMapsAutoViewController {
     GoogleMapsNavigationPlatform.instance.autoAPI
         .getPromptVisibilityChangedEventStream()
         .listen((PromptVisibilityChangedEvent event) {
+          func(event);
+        });
+  }
+
+  /// Listens for focused indoor building changes on Android Auto or CarPlay.
+  void listenForIndoorFocusedBuildingChangedEvent(
+    void Function(IndoorFocusedBuildingChangedEvent event) func,
+  ) {
+    GoogleMapsNavigationPlatform.instance.autoAPI
+        .getIndoorFocusedBuildingChangedEventStream()
+        .listen((IndoorFocusedBuildingChangedEvent event) {
+          func(event);
+        });
+  }
+
+  /// Listens for active indoor level changes on Android Auto or CarPlay.
+  void listenForIndoorActiveLevelChangedEvent(
+    void Function(IndoorActiveLevelChangedEvent event) func,
+  ) {
+    GoogleMapsNavigationPlatform.instance.autoAPI
+        .getIndoorActiveLevelChangedEventStream()
+        .listen((IndoorActiveLevelChangedEvent event) {
           func(event);
         });
   }

@@ -623,6 +623,45 @@ class MapViewAPIImpl {
     required bool enabled,
   }) => _viewApi.setBuildingsEnabled(viewId, enabled).wrapPlatformException();
 
+  /// Checks if indoor maps layer is enabled.
+  Future<bool> isIndoorEnabled({required int viewId}) =>
+      _viewApi.isIndoorEnabled(viewId).wrapPlatformException();
+
+  /// Turns indoor maps layer on or off.
+  Future<void> setIndoorEnabled({required int viewId, required bool enabled}) =>
+      _viewApi.setIndoorEnabled(viewId, enabled).wrapPlatformException();
+
+  /// Checks if indoor level picker is enabled.
+  Future<bool> isIndoorLevelPickerEnabled({required int viewId}) =>
+      _viewApi.isIndoorLevelPickerEnabled(viewId).wrapPlatformException();
+
+  /// Turns indoor level picker on or off.
+  Future<void> setIndoorLevelPickerEnabled({
+    required int viewId,
+    required bool enabled,
+  }) => _viewApi
+      .setIndoorLevelPickerEnabled(viewId, enabled)
+      .wrapPlatformException();
+
+  /// Gets currently focused indoor building, if any.
+  Future<IndoorBuilding?> getFocusedIndoorBuilding({
+    required int viewId,
+  }) async {
+    final IndoorBuildingDto? building = await _viewApi
+        .getFocusedIndoorBuilding(viewId)
+        .wrapPlatformException();
+    return building?.toIndoorBuilding();
+  }
+
+  /// Activates the indoor level at [levelIndex] in the currently focused building.
+  ///
+  /// Throws if no building is currently focused or the index is out of range.
+  Future<void> activateIndoorLevel({
+    required int viewId,
+    required int levelIndex,
+  }) =>
+      _viewApi.activateIndoorLevel(viewId, levelIndex).wrapPlatformException();
+
   /// Are the traffic prompts displayed.
   Future<bool> isTrafficPromptsEnabled({required int viewId}) =>
       _viewApi.isTrafficPromptsEnabled(viewId).wrapPlatformException();
@@ -1143,6 +1182,21 @@ class MapViewAPIImpl {
   }) {
     return _unwrapEventStream<CameraChangedEvent>(viewId: viewId);
   }
+
+  /// Get focused indoor building changed event stream from the map view.
+  Stream<IndoorFocusedBuildingChangedEvent>
+  getIndoorFocusedBuildingChangedEventStream({required int viewId}) {
+    return _unwrapEventStream<IndoorFocusedBuildingChangedEvent>(
+      viewId: viewId,
+    );
+  }
+
+  /// Get indoor active level changed event stream from the map view.
+  Stream<IndoorActiveLevelChangedEvent> getIndoorActiveLevelChangedEventStream({
+    required int viewId,
+  }) {
+    return _unwrapEventStream<IndoorActiveLevelChangedEvent>(viewId: viewId);
+  }
 }
 
 /// Implementation for navigation view event API event handling.
@@ -1267,6 +1321,26 @@ class ViewEventApiImpl implements ViewEventApi {
   void onMyLocationButtonClicked(int viewId) {
     _viewEventStreamController.add(
       _ViewIdEventWrapper(viewId, MyLocationButtonClickedEvent()),
+    );
+  }
+
+  @override
+  void onIndoorFocusedBuildingChanged(int viewId, IndoorBuildingDto? building) {
+    _viewEventStreamController.add(
+      _ViewIdEventWrapper(
+        viewId,
+        IndoorFocusedBuildingChangedEvent(building?.toIndoorBuilding()),
+      ),
+    );
+  }
+
+  @override
+  void onIndoorActiveLevelChanged(int viewId, IndoorBuildingDto? building) {
+    _viewEventStreamController.add(
+      _ViewIdEventWrapper(
+        viewId,
+        IndoorActiveLevelChangedEvent(building?.toIndoorBuilding()),
+      ),
     );
   }
 

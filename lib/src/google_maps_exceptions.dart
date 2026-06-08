@@ -217,6 +217,28 @@ class ImageDecodingFailedException
   static const platformCode = 'imageDecodingFailed';
 }
 
+/// [GoogleNavigationViewController.activateIndoorLevel] failed.
+///
+/// The failure reason is described by the exception message (for example,
+/// no focused indoor building or level index out of range).
+/// {@category Navigation View}
+/// {@category Map View}
+class IndoorLevelActivationException
+    extends GoogleMapsNavigationPlatformException {
+  /// Creates an [IndoorLevelActivationException] from an original
+  /// [PlatformException].
+  IndoorLevelActivationException({required PlatformException exception})
+    : assert(exception.code == platformCode),
+      super(
+        code: exception.code,
+        message: exception.message ?? 'Indoor level activation failed.',
+        details: exception.details,
+        stacktrace: exception.stacktrace,
+      );
+
+  static const platformCode = 'indoorLevelActivationFailed';
+}
+
 /// Platform code for unsupported features.
 ///
 /// Used internally by [convertPlatformException] to convert
@@ -247,6 +269,8 @@ Object convertPlatformException(Object exception, StackTrace stacktrace) {
         return MinZoomRangeException(exception: exception);
       case ImageDecodingFailedException.platformCode:
         return ImageDecodingFailedException(exception: exception);
+      case IndoorLevelActivationException.platformCode:
+        return IndoorLevelActivationException(exception: exception);
       case ViewNotFoundException.platformCode:
         return ViewNotFoundException(
           exception: exception,

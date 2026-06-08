@@ -460,6 +460,22 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
     return viewRegistry.getAndroidAutoView() != null
   }
 
+  override fun isIndoorEnabled(viewId: Long): Boolean {
+    return getView().isIndoorEnabled()
+  }
+
+  override fun setIndoorEnabled(viewId: Long, enabled: Boolean) {
+    getView().setIndoorEnabled(enabled)
+  }
+
+  override fun getFocusedIndoorBuilding(viewId: Long): IndoorBuildingDto? {
+    return getView().getFocusedIndoorBuilding()
+  }
+
+  override fun activateIndoorLevel(viewId: Long, levelIndex: Long) {
+    getView().activateIndoorLevel(levelIndex.toInt())
+  }
+
   override fun setPadding(padding: MapPaddingDto) {
     getView().setPadding(padding)
   }
