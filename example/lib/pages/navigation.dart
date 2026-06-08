@@ -174,10 +174,6 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   _roadSnappedRawLocationUpdatedSubscription;
   StreamSubscription<void>? _newNavigationSessionSubscription;
 
-  // Indoor event subscriptions are set up via widget-level callbacks
-  // (onIndoorFocusedBuildingChanged / onIndoorActiveLevelChanged) and
-  // do not need separate StreamSubscription fields here.
-
   int _nextWaypointIndex = 0;
 
   /// Track when user has arrived at a waypoint but hasn't continued yet
