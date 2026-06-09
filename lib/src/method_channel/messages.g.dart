@@ -11100,7 +11100,7 @@ class AutoMapViewApi {
     }
   }
 
-  Future<bool> isIndoorEnabled(int viewId) async {
+  Future<bool> isIndoorEnabled() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isIndoorEnabled$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -11109,9 +11109,7 @@ class AutoMapViewApi {
           pigeonChannelCodec,
           binaryMessenger: pigeonVar_binaryMessenger,
         );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
-      <Object?>[viewId],
-    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -11132,7 +11130,7 @@ class AutoMapViewApi {
     }
   }
 
-  Future<void> setIndoorEnabled(int viewId, bool enabled) async {
+  Future<void> setIndoorEnabled(bool enabled) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setIndoorEnabled$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -11142,7 +11140,7 @@ class AutoMapViewApi {
           binaryMessenger: pigeonVar_binaryMessenger,
         );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
-      <Object?>[viewId, enabled],
+      <Object?>[enabled],
     );
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -11159,7 +11157,7 @@ class AutoMapViewApi {
     }
   }
 
-  Future<IndoorBuildingDto?> getFocusedIndoorBuilding(int viewId) async {
+  Future<IndoorBuildingDto?> getFocusedIndoorBuilding() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getFocusedIndoorBuilding$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -11168,9 +11166,7 @@ class AutoMapViewApi {
           pigeonChannelCodec,
           binaryMessenger: pigeonVar_binaryMessenger,
         );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
-      <Object?>[viewId],
-    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -11186,7 +11182,7 @@ class AutoMapViewApi {
     }
   }
 
-  Future<void> activateIndoorLevel(int viewId, int levelIndex) async {
+  Future<void> activateIndoorLevel(int levelIndex) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.activateIndoorLevel$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -11196,7 +11192,7 @@ class AutoMapViewApi {
           binaryMessenger: pigeonVar_binaryMessenger,
         );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
-      <Object?>[viewId, levelIndex],
+      <Object?>[levelIndex],
     );
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;

@@ -1826,29 +1826,22 @@ class MockTestAutoMapViewApi extends _i1.Mock
           as bool);
 
   @override
-  bool isIndoorEnabled(int? viewId) =>
+  bool isIndoorEnabled() =>
       (super.noSuchMethod(
-            Invocation.method(#isIndoorEnabled, [viewId]),
+            Invocation.method(#isIndoorEnabled, []),
             returnValue: false,
           )
           as bool);
 
   @override
-  void setIndoorEnabled(int? viewId, bool? enabled) => super.noSuchMethod(
-    Invocation.method(#setIndoorEnabled, [viewId, enabled]),
+  void setIndoorEnabled(bool? enabled) => super.noSuchMethod(
+    Invocation.method(#setIndoorEnabled, [enabled]),
     returnValueForMissingStub: null,
   );
 
   @override
-  _i2.IndoorBuildingDto? getFocusedIndoorBuilding(int? viewId) =>
-      (super.noSuchMethod(
-            Invocation.method(#getFocusedIndoorBuilding, [viewId]),
-          )
-          as _i2.IndoorBuildingDto?);
-
-  @override
-  void activateIndoorLevel(int? viewId, int? levelIndex) => super.noSuchMethod(
-    Invocation.method(#activateIndoorLevel, [viewId, levelIndex]),
+  void activateIndoorLevel(int? levelIndex) => super.noSuchMethod(
+    Invocation.method(#activateIndoorLevel, [levelIndex]),
     returnValueForMissingStub: null,
   );
 

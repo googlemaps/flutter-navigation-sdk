@@ -6801,10 +6801,10 @@ protocol AutoMapViewApi {
   func isSpeedLimitIconEnabled() throws -> Bool
   func isSpeedometerEnabled() throws -> Bool
   func isNavigationUIEnabled() throws -> Bool
-  func isIndoorEnabled(viewId: Int64) throws -> Bool
-  func setIndoorEnabled(viewId: Int64, enabled: Bool) throws
-  func getFocusedIndoorBuilding(viewId: Int64) throws -> IndoorBuildingDto?
-  func activateIndoorLevel(viewId: Int64, levelIndex: Int64) throws
+  func isIndoorEnabled() throws -> Bool
+  func setIndoorEnabled(enabled: Bool) throws
+  func getFocusedIndoorBuilding() throws -> IndoorBuildingDto?
+  func activateIndoorLevel(levelIndex: Int64) throws
   func showRouteOverview() throws
   func getMarkers() throws -> [MarkerDto]
   func addMarkers(markers: [MarkerDto]) throws -> [MarkerDto]
@@ -7978,11 +7978,9 @@ class AutoMapViewApiSetup {
         "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isIndoorEnabled\(channelSuffix)",
       binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      isIndoorEnabledChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let viewIdArg = args[0] as! Int64
+      isIndoorEnabledChannel.setMessageHandler { _, reply in
         do {
-          let result = try api.isIndoorEnabled(viewId: viewIdArg)
+          let result = try api.isIndoorEnabled()
           reply(wrapResult(result))
         } catch {
           reply(wrapError(error))
@@ -7998,10 +7996,9 @@ class AutoMapViewApiSetup {
     if let api = api {
       setIndoorEnabledChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let viewIdArg = args[0] as! Int64
-        let enabledArg = args[1] as! Bool
+        let enabledArg = args[0] as! Bool
         do {
-          try api.setIndoorEnabled(viewId: viewIdArg, enabled: enabledArg)
+          try api.setIndoorEnabled(enabled: enabledArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
@@ -8015,11 +8012,9 @@ class AutoMapViewApiSetup {
         "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getFocusedIndoorBuilding\(channelSuffix)",
       binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      getFocusedIndoorBuildingChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let viewIdArg = args[0] as! Int64
+      getFocusedIndoorBuildingChannel.setMessageHandler { _, reply in
         do {
-          let result = try api.getFocusedIndoorBuilding(viewId: viewIdArg)
+          let result = try api.getFocusedIndoorBuilding()
           reply(wrapResult(result))
         } catch {
           reply(wrapError(error))
@@ -8035,10 +8030,9 @@ class AutoMapViewApiSetup {
     if let api = api {
       activateIndoorLevelChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let viewIdArg = args[0] as! Int64
-        let levelIndexArg = args[1] as! Int64
+        let levelIndexArg = args[0] as! Int64
         do {
-          try api.activateIndoorLevel(viewId: viewIdArg, levelIndex: levelIndexArg)
+          try api.activateIndoorLevel(levelIndex: levelIndexArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))

@@ -655,12 +655,17 @@ class MapViewAPIImpl {
 
   /// Activates the indoor level at [levelIndex] in the currently focused building.
   ///
-  /// Throws if no building is currently focused or the index is out of range.
+  /// Asserts that [levelIndex] is greater than or equal to 0.
+  /// Native code throws if no building is currently focused or the index is out of range.
   Future<void> activateIndoorLevel({
     required int viewId,
     required int levelIndex,
-  }) =>
-      _viewApi.activateIndoorLevel(viewId, levelIndex).wrapPlatformException();
+  }) {
+    assert(levelIndex >= 0, 'levelIndex must be greater than or equal to 0');
+    return _viewApi
+        .activateIndoorLevel(viewId, levelIndex)
+        .wrapPlatformException();
+  }
 
   /// Are the traffic prompts displayed.
   Future<bool> isTrafficPromptsEnabled({required int viewId}) =>

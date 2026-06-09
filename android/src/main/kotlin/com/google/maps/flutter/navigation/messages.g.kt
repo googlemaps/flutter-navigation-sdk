@@ -8038,13 +8038,13 @@ interface AutoMapViewApi {
 
   fun isNavigationUIEnabled(): Boolean
 
-  fun isIndoorEnabled(viewId: Long): Boolean
+  fun isIndoorEnabled(): Boolean
 
-  fun setIndoorEnabled(viewId: Long, enabled: Boolean)
+  fun setIndoorEnabled(enabled: Boolean)
 
-  fun getFocusedIndoorBuilding(viewId: Long): IndoorBuildingDto?
+  fun getFocusedIndoorBuilding(): IndoorBuildingDto?
 
-  fun activateIndoorLevel(viewId: Long, levelIndex: Long)
+  fun activateIndoorLevel(levelIndex: Long)
 
   fun showRouteOverview()
 
@@ -9597,12 +9597,10 @@ interface AutoMapViewApi {
             codec,
           )
         if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0] as Long
+          channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> =
               try {
-                listOf(api.isIndoorEnabled(viewIdArg))
+                listOf(api.isIndoorEnabled())
               } catch (exception: Throwable) {
                 MessagesPigeonUtils.wrapError(exception)
               }
@@ -9622,11 +9620,10 @@ interface AutoMapViewApi {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val viewIdArg = args[0] as Long
-            val enabledArg = args[1] as Boolean
+            val enabledArg = args[0] as Boolean
             val wrapped: List<Any?> =
               try {
-                api.setIndoorEnabled(viewIdArg, enabledArg)
+                api.setIndoorEnabled(enabledArg)
                 listOf(null)
               } catch (exception: Throwable) {
                 MessagesPigeonUtils.wrapError(exception)
@@ -9645,12 +9642,10 @@ interface AutoMapViewApi {
             codec,
           )
         if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val viewIdArg = args[0] as Long
+          channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> =
               try {
-                listOf(api.getFocusedIndoorBuilding(viewIdArg))
+                listOf(api.getFocusedIndoorBuilding())
               } catch (exception: Throwable) {
                 MessagesPigeonUtils.wrapError(exception)
               }
@@ -9670,11 +9665,10 @@ interface AutoMapViewApi {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val viewIdArg = args[0] as Long
-            val levelIndexArg = args[1] as Long
+            val levelIndexArg = args[0] as Long
             val wrapped: List<Any?> =
               try {
-                api.activateIndoorLevel(viewIdArg, levelIndexArg)
+                api.activateIndoorLevel(levelIndexArg)
                 listOf(null)
               } catch (exception: Throwable) {
                 MessagesPigeonUtils.wrapError(exception)

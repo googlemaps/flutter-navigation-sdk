@@ -901,6 +901,34 @@ void main() {
           );
         });
 
+        test(
+          'Indoor activation rejects negative indexes at package level',
+          () async {
+            const int viewId = 1;
+            final GoogleMapViewController mapController =
+                GoogleMapViewController(viewId);
+
+            expect(
+              () => GoogleMapsNavigationPlatform.instance.viewAPI
+                  .activateIndoorLevel(viewId: viewId, levelIndex: -1),
+              throwsA(isA<AssertionError>()),
+            );
+            verifyNever(viewMockApi.activateIndoorLevel(any, any));
+
+            expect(
+              () => mapController.activateIndoorLevel(
+                const IndoorLevel(
+                  levelIndex: -1,
+                  name: 'Basement',
+                  shortName: 'B1',
+                ),
+              ),
+              throwsA(isA<AssertionError>()),
+            );
+            verifyNever(viewMockApi.activateIndoorLevel(any, any));
+          },
+        );
+
         test('Test incident reporting APIs', () async {
           const int viewId = 1;
           final GoogleNavigationViewController controller =

@@ -739,23 +739,27 @@ class AutoMapViewAPIImpl {
 
   /// Gets whether indoor maps are enabled for the auto view.
   Future<bool> isIndoorEnabled() =>
-      _viewApi.isIndoorEnabled(0).wrapPlatformException();
+      _viewApi.isIndoorEnabled().wrapPlatformException();
 
   /// Enables or disables indoor maps for the auto view.
   Future<void> setIndoorEnabled({required bool enabled}) =>
-      _viewApi.setIndoorEnabled(0, enabled).wrapPlatformException();
+      _viewApi.setIndoorEnabled(enabled).wrapPlatformException();
 
   /// Returns the currently focused indoor building, if available.
   Future<IndoorBuilding?> getFocusedIndoorBuilding() async {
     final IndoorBuildingDto? building = await _viewApi
-        .getFocusedIndoorBuilding(0)
+        .getFocusedIndoorBuilding()
         .wrapPlatformException();
     return building?.toIndoorBuilding();
   }
 
   /// Activates an indoor level in the currently focused indoor building.
-  Future<void> activateIndoorLevel({required int levelIndex}) =>
-      _viewApi.activateIndoorLevel(0, levelIndex).wrapPlatformException();
+  ///
+  /// Asserts that [levelIndex] is greater than or equal to 0.
+  Future<void> activateIndoorLevel({required int levelIndex}) {
+    assert(levelIndex >= 0, 'levelIndex must be greater than or equal to 0');
+    return _viewApi.activateIndoorLevel(levelIndex).wrapPlatformException();
+  }
 
   /// Get custom navigation auto event stream from the auto view.
   Stream<CustomNavigationAutoEvent> getCustomNavigationAutoEventStream() {

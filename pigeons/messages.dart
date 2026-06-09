@@ -1673,10 +1673,10 @@ abstract class AutoMapViewApi {
   bool isSpeedometerEnabled();
   bool isNavigationUIEnabled();
 
-  bool isIndoorEnabled(int viewId);
-  void setIndoorEnabled(int viewId, bool enabled);
-  IndoorBuildingDto? getFocusedIndoorBuilding(int viewId);
-  void activateIndoorLevel(int viewId, int levelIndex);
+  bool isIndoorEnabled();
+  void setIndoorEnabled(bool enabled);
+  IndoorBuildingDto? getFocusedIndoorBuilding();
+  void activateIndoorLevel(int levelIndex);
 
   void showRouteOverview();
 

@@ -7221,13 +7221,13 @@ abstract class TestAutoMapViewApi {
 
   bool isNavigationUIEnabled();
 
-  bool isIndoorEnabled(int viewId);
+  bool isIndoorEnabled();
 
-  void setIndoorEnabled(int viewId, bool enabled);
+  void setIndoorEnabled(bool enabled);
 
-  IndoorBuildingDto? getFocusedIndoorBuilding(int viewId);
+  IndoorBuildingDto? getFocusedIndoorBuilding();
 
-  void activateIndoorLevel(int viewId, int levelIndex);
+  void activateIndoorLevel(int levelIndex);
 
   void showRouteOverview();
 
@@ -9697,18 +9697,8 @@ abstract class TestAutoMapViewApi {
             .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
               Object? message,
             ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isIndoorEnabled was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isIndoorEnabled was null, expected non-null int.',
-              );
               try {
-                final bool output = api.isIndoorEnabled(arg_viewId!);
+                final bool output = api.isIndoorEnabled();
                 return <Object?>[output];
               } on PlatformException catch (e) {
                 return wrapResponse(error: e);
@@ -9734,35 +9724,34 @@ abstract class TestAutoMapViewApi {
         _testBinaryMessengerBinding!.defaultBinaryMessenger
             .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setIndoorEnabled was null.',
-          );
-          final List<Object?> args = (message as List<Object?>?)!;
-          final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setIndoorEnabled was null, expected non-null int.',
-          );
-          final bool? arg_enabled = (args[1] as bool?);
-          assert(
-            arg_enabled != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setIndoorEnabled was null, expected non-null bool.',
-          );
-          try {
-            api.setIndoorEnabled(arg_viewId!, arg_enabled!);
-            return wrapResponse(empty: true);
-          } on PlatformException catch (e) {
-            return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
-          }
-        });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
+              Object? message,
+            ) async {
+              assert(
+                message != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setIndoorEnabled was null.',
+              );
+              final List<Object?> args = (message as List<Object?>?)!;
+              final bool? arg_enabled = (args[0] as bool?);
+              assert(
+                arg_enabled != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setIndoorEnabled was null, expected non-null bool.',
+              );
+              try {
+                api.setIndoorEnabled(arg_enabled!);
+                return wrapResponse(empty: true);
+              } on PlatformException catch (e) {
+                return wrapResponse(error: e);
+              } catch (e) {
+                return wrapResponse(
+                  error: PlatformException(
+                    code: 'error',
+                    message: e.toString(),
+                  ),
+                );
+              }
+            });
       }
     }
     {
@@ -9780,20 +9769,9 @@ abstract class TestAutoMapViewApi {
             .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
               Object? message,
             ) async {
-              assert(
-                message != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getFocusedIndoorBuilding was null.',
-              );
-              final List<Object?> args = (message as List<Object?>?)!;
-              final int? arg_viewId = (args[0] as int?);
-              assert(
-                arg_viewId != null,
-                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getFocusedIndoorBuilding was null, expected non-null int.',
-              );
               try {
-                final IndoorBuildingDto? output = api.getFocusedIndoorBuilding(
-                  arg_viewId!,
-                );
+                final IndoorBuildingDto? output = api
+                    .getFocusedIndoorBuilding();
                 return <Object?>[output];
               } on PlatformException catch (e) {
                 return wrapResponse(error: e);
@@ -9819,35 +9797,34 @@ abstract class TestAutoMapViewApi {
         _testBinaryMessengerBinding!.defaultBinaryMessenger
             .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
-          Object?
-        >(pigeonVar_channel, (Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.activateIndoorLevel was null.',
-          );
-          final List<Object?> args = (message as List<Object?>?)!;
-          final int? arg_viewId = (args[0] as int?);
-          assert(
-            arg_viewId != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.activateIndoorLevel was null, expected non-null int.',
-          );
-          final int? arg_levelIndex = (args[1] as int?);
-          assert(
-            arg_levelIndex != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.activateIndoorLevel was null, expected non-null int.',
-          );
-          try {
-            api.activateIndoorLevel(arg_viewId!, arg_levelIndex!);
-            return wrapResponse(empty: true);
-          } on PlatformException catch (e) {
-            return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
-          }
-        });
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
+              Object? message,
+            ) async {
+              assert(
+                message != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.activateIndoorLevel was null.',
+              );
+              final List<Object?> args = (message as List<Object?>?)!;
+              final int? arg_levelIndex = (args[0] as int?);
+              assert(
+                arg_levelIndex != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.activateIndoorLevel was null, expected non-null int.',
+              );
+              try {
+                api.activateIndoorLevel(arg_levelIndex!);
+                return wrapResponse(empty: true);
+              } on PlatformException catch (e) {
+                return wrapResponse(error: e);
+              } catch (e) {
+                return wrapResponse(
+                  error: PlatformException(
+                    code: 'error',
+                    message: e.toString(),
+                  ),
+                );
+              }
+            });
       }
     }
     {
