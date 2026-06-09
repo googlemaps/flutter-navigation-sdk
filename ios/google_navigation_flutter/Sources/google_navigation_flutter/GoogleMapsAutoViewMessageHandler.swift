@@ -591,12 +591,6 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
   }
 
   func sendCustomNavigationAutoEvent(event: String, data: Any) throws {
-    // This method receives custom events from Flutter.
-    // The implementation is left empty by design, as developers should handle
-    // custom events in their BaseCarSceneDelegate subclass by overriding
-    // onCustomNavigationAutoEventFromFlutter method.
-    //
-    // Note: If you need to handle events here, you would need to maintain a reference
-    // to your CarSceneDelegate instance and call a method on it.
+    try getView().sendCustomNavigationAutoEventFromFlutter(event: event, data: data)
   }
 }

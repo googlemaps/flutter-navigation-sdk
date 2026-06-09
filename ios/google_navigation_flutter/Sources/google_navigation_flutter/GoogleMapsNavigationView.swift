@@ -47,7 +47,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   private var _imageRegistry: ImageRegistry
   private var _consumeMyLocationButtonClickEventsEnabled: Bool = false
   private var _listenCameraChanges = false
-  var isAttachedToSession: Bool = false
+  public private(set) var isAttachedToSession: Bool = false
   private let _isCarPlayView: Bool
 
   // As prompt visibility settings is handled by the navigator, value is
@@ -65,6 +65,18 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   // Callbacks for CarPlay views to handle indoor state changes.
   var indoorFocusedBuildingChangedCallback: ((IndoorBuildingDto?) -> Void)?
   var indoorActiveLevelChangedCallback: ((IndoorBuildingDto?) -> Void)?
+
+  // Callback for CarPlay views to handle custom events sent from Flutter
+  // This allows BaseCarSceneDelegate to intercept and handle the event
+  var customNavigationAutoEventFromFlutterCallback: ((String, Any) -> Void)?
+
+  // Callback for CarPlay views to handle navigation UI state changes
+  // This allows BaseCarSceneDelegate subclasses to react when UI state changes
+  var navigationUIEnabledChangedCallback: ((Bool) -> Void)?
+
+  // Callback for CarPlay views to handle session attachment state changes
+  // This allows BaseCarSceneDelegate subclasses to react when session attachment changes
+  var sessionAttachmentChangedCallback: ((Bool) -> Void)?
 
   public func view() -> UIView {
     _mapView
@@ -569,7 +581,12 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     session.navigator?.shouldDisplayPrompts = _isTrafficPromptsEnabled
 
     _mapView.navigationUIDelegate = self
+    let wasAttachedToSession = isAttachedToSession
     isAttachedToSession = true
+
+    if !wasAttachedToSession {
+      sessionAttachmentChangedCallback?(true)
+    }
 
     return result
   }
@@ -676,13 +693,16 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     return _isPromptVisible
   }
 
-  func isNavigationUIEnabled() -> Bool {
+  public func isNavigationUIEnabled() -> Bool {
     _mapView.isNavigationEnabled
   }
 
   func setNavigationUIEnabled(_ enabled: Bool) {
     if _mapView.isNavigationEnabled != enabled {
       _mapView.isNavigationEnabled = enabled
+      if _isCarPlayView {
+        navigationUIEnabledChangedCallback?(enabled)
+      }
       if let viewId = _viewId {
         getViewEventApi()?
           .onNavigationUIEnabledChanged(viewId: viewId, navigationUIEnabled: enabled) { _ in }
@@ -1187,6 +1207,11 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
         completion: { _ in }
       )
     }
+  }
+
+  func sendCustomNavigationAutoEventFromFlutter(event: String, data: Any) {
+    guard _isCarPlayView else { return }
+    customNavigationAutoEventFromFlutterCallback?(event, data)
   }
 }
 

@@ -218,8 +218,10 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
             viewRegistry,
             imageRegistry,
             navigationView,
-            navigationView,
             googleMap,
+            onFlutterCustomNavigationAutoEvent = { event, data ->
+              onCustomNavigationAutoEventFromFlutter(event, data)
+            },
           )
 
         googleMap.setOnIndoorStateChangeListener(
