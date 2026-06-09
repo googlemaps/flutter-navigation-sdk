@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.4](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.9.3...0.9.4) (2026-06-09)
+
+
+### Features
+
+* add indoor map controls for map and navigation views ([#716](https://github.com/googlemaps/flutter-navigation-sdk/issues/716)) ([d2c3319](https://github.com/googlemaps/flutter-navigation-sdk/commit/d2c33196aea539a623d785a126da4cb09639ed8b))
+* support custom Flutter messages to auto views ([#719](https://github.com/googlemaps/flutter-navigation-sdk/issues/719)) ([6b810b0](https://github.com/googlemaps/flutter-navigation-sdk/commit/6b810b00a0663cec84a882a0db8f5a2db55eb34b))
+
 ## [0.9.3](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.9.2...0.9.3) (2026-06-05)
 
 
