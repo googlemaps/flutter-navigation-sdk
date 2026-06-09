@@ -255,13 +255,6 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
             ? "Traffic prompt is now visible on auto screen"
             : "Traffic prompt is now hidden on auto screen",
       );
-
-      // Example: Send a custom event back to native to adjust UI
-      _autoViewController
-          .sendCustomNavigationAutoEvent('PromptVisibilityChanged', {
-            'promptVisible': event.promptVisible,
-            'timestamp': DateTime.now().millisecondsSinceEpoch,
-          });
     });
   }
 
@@ -373,6 +366,21 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       ),
     );
     await _autoViewController.addMarkers([markerOptions]);
+  }
+
+  Future<void> _sendCustomEventForAuto() async {
+    final Map<String, Object> data = <String, Object>{
+      'message': 'Hello from Flutter!',
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+    };
+
+    await _autoViewController.sendCustomNavigationAutoEvent(
+      'ManualAutoViewEvent',
+      data,
+    );
+
+    if (!mounted) return;
+    _showMessage('Sent custom event to the auto view');
   }
 
   Future<void> _syncAutoNavigationUI() async {
@@ -2435,6 +2443,10 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
               ElevatedButton(
                 onPressed: () => _addMarkerForAuto(),
                 child: const Text('Add marker'),
+              ),
+              ElevatedButton(
+                onPressed: () => _sendCustomEventForAuto(),
+                child: const Text('Send custom event'),
               ),
               ElevatedButton(
                 onPressed: () => _autoViewController.showRouteOverview(),

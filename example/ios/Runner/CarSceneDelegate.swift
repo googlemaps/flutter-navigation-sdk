@@ -32,13 +32,22 @@ class CarSceneDelegate: BaseCarSceneDelegate {
         zoomLevel: nil
       )
     }
-    template.leadingNavigationBarButtons = [customEventButton, recenterButton]
+
+    let navView = getNavView()
+    var leadingButtons = [customEventButton]
+    if (navView?.isAttachedToSession ?? false) && (navView?.isNavigationUIEnabled() ?? false) {
+      leadingButtons.append(recenterButton)
+    }
+    template.leadingNavigationBarButtons = leadingButtons
     return template
   }
 
   // Example of handling custom events from Flutter
   override func onCustomNavigationAutoEventFromFlutter(event: String, data: Any) {
     NSLog("CarSceneDelegate: Received custom event from Flutter: event=\(event), data=\(data)")
+
+    let message = (data as? [String: Any])?["message"] as? String ?? "No message"
+    showCarPlayMessage(String(message.prefix(120)))
   }
 
   // Example of providing custom map options from native code
@@ -83,5 +92,33 @@ class CarSceneDelegate: BaseCarSceneDelegate {
     //   }
     //   mapTemplate?.leadingNavigationBarButtons = [customEventButton, recenterButton]
     // }
+  }
+
+  override func onNavigationUIEnabledChanged(isEnabled: Bool) {
+    refreshTemplate()
+  }
+
+  override func onSessionAttachmentChanged(isAttachedToSession: Bool) {
+    refreshTemplate()
+  }
+
+  private func showCarPlayMessage(_ message: String) {
+    DispatchQueue.main.async {
+      guard
+        let interfaceController = UIApplication.shared.connectedScenes
+          .compactMap({ $0 as? CPTemplateApplicationScene })
+          .first?
+          .interfaceController
+      else {
+        return
+      }
+
+      let alertAction = CPAlertAction(title: "OK", style: .default) { _ in
+        interfaceController.dismissTemplate(animated: true, completion: nil)
+      }
+      let alert = CPAlertTemplate(titleVariants: [message], actions: [alertAction])
+
+      interfaceController.presentTemplate(alert, animated: true, completion: nil)
+    }
   }
 }

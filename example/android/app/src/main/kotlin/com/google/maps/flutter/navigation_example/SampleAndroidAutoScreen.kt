@@ -19,6 +19,7 @@ package com.google.maps.flutter.navigation_example
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.car.app.CarContext
+import androidx.car.app.CarToast
 import androidx.car.app.model.Action
 import androidx.car.app.model.ActionStrip
 import androidx.car.app.model.CarIcon
@@ -113,8 +114,15 @@ class SampleAndroidAutoScreen(carContext: CarContext): AndroidAutoBaseScreen(car
 
     // Example of handling custom events from Flutter
     override fun onCustomNavigationAutoEventFromFlutter(event: String, data: Any) {
-        super.onCustomNavigationAutoEventFromFlutter(event, data)
         Log.d("SampleAndroidAutoScreen", "Received custom event from Flutter: event=$event, data=$data")
+
+        val message = (data as? Map<*, *>)?.get("message")?.toString()?.take(120)
+            ?: "No message"
+        CarToast.makeText(
+            carContext,
+            message,
+            CarToast.LENGTH_SHORT,
+        ).show()
     }
 
     // Example of providing custom map options from native code

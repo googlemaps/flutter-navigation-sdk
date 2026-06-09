@@ -82,6 +82,14 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
     return template
   }
 
+  /// Rebuilds and applies the current CarPlay map template.
+  public func refreshTemplate(animated: Bool = true) {
+    mapTemplate = getTemplate()
+    mapTemplate?.mapDelegate = self
+    guard let mapTemplate else { return }
+    interfaceController?.setRootTemplate(mapTemplate, animated: animated) { _, _ in }
+  }
+
   open func templateApplicationScene(
     _ templateApplicationScene: CPTemplateApplicationScene,
     didDisconnect interfaceController: CPInterfaceController,
@@ -154,6 +162,21 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
 
         self.navView?.indoorActiveLevelChangedCallback = { [weak self] building in
           self?.sendIndoorActiveLevelChangedEvent(building: building)
+        }
+
+        // Set up custom event callback from Flutter to allow override
+        self.navView?.customNavigationAutoEventFromFlutterCallback = { [weak self] event, data in
+          self?.onCustomNavigationAutoEventFromFlutter(event: event, data: data)
+        }
+
+        // Set up navigation UI enabled callback to allow override
+        self.navView?.navigationUIEnabledChangedCallback = { [weak self] isEnabled in
+          self?.onNavigationUIEnabledChanged(isEnabled: isEnabled)
+        }
+
+        // Set up session attachment callback to allow override
+        self.navView?.sessionAttachmentChangedCallback = { [weak self] isAttachedToSession in
+          self?.onSessionAttachmentChanged(isAttachedToSession: isAttachedToSession)
         }
 
         self.navView?.setNavigationHeaderEnabled(false)
@@ -274,6 +297,20 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
   open func onCustomNavigationAutoEventFromFlutter(event: String, data: Any) {
     // Default implementation does nothing
     // Subclasses can override to handle custom events
+  }
+
+  // Called when CarPlay navigation UI enabled state changes.
+  // Override this method in your CarSceneDelegate subclass to handle the state change.
+  open func onNavigationUIEnabledChanged(isEnabled: Bool) {
+    // Default implementation does nothing
+    // Subclasses can override to handle state changes
+  }
+
+  // Called when CarPlay navigation view attaches to or detaches from a navigation session.
+  // Override this method in your CarSceneDelegate subclass to handle the state change.
+  open func onSessionAttachmentChanged(isAttachedToSession: Bool) {
+    // Default implementation does nothing
+    // Subclasses can override to handle state changes
   }
 
   func sendAutoScreenAvailabilityChangedEvent(isAvailable: Bool) {

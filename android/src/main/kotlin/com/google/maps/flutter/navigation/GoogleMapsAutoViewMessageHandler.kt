@@ -22,13 +22,9 @@ import android.content.res.Resources
 class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewRegistry) :
   AutoMapViewApi {
 
-  private fun getView(): GoogleMapsBaseNavigationView {
-    val view = viewRegistry.getAndroidAutoView()
-    if (view != null) {
-      return view
-    } else {
-      throw FlutterError("viewNotFound", "No valid android auto view found")
-    }
+  private fun getView(): GoogleMapsAutoMapView {
+    return viewRegistry.getAndroidAutoView()
+      ?: throw FlutterError("viewNotFound", "No valid android auto view found")
   }
 
   override fun setAutoMapOptions(mapOptions: AutoMapOptionsDto) {
@@ -505,12 +501,6 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
   }
 
   override fun sendCustomNavigationAutoEvent(event: String, data: Any) {
-    // This method receives custom events from Flutter.
-    // The implementation is left empty by design, as developers should handle
-    // custom events in their AndroidAutoBaseScreen subclass by overriding
-    // onCustomNavigationAutoEventFromFlutter method.
-    //
-    // Note: If you need to handle events here, you would need to maintain a reference
-    // to your AndroidAutoBaseScreen instance and call a method on it.
+    getView().onCustomNavigationAutoEventFromFlutter(event, data)
   }
 }
