@@ -149,6 +149,48 @@ void main() {
       expect(typed.message, 'Failed to decode image');
     });
 
+    test(
+      'converts indoorLevelActivationFailed (no focused building) to IndoorLevelActivationException',
+      () {
+        final PlatformException exception = PlatformException(
+          code: IndoorLevelActivationException.platformCode,
+          message: 'No indoor building is currently focused',
+        );
+
+        final Object result = convertPlatformException(
+          exception,
+          testStackTrace,
+        );
+
+        expect(result, isA<IndoorLevelActivationException>());
+        final IndoorLevelActivationException typed =
+            result as IndoorLevelActivationException;
+        expect(typed.code, IndoorLevelActivationException.platformCode);
+        expect(typed.message, 'No indoor building is currently focused');
+      },
+    );
+
+    test(
+      'converts indoorLevelActivationFailed (index out of range) to IndoorLevelActivationException',
+      () {
+        final PlatformException exception = PlatformException(
+          code: IndoorLevelActivationException.platformCode,
+          message: 'Level index 10 is out of range',
+        );
+
+        final Object result = convertPlatformException(
+          exception,
+          testStackTrace,
+        );
+
+        expect(result, isA<IndoorLevelActivationException>());
+        final IndoorLevelActivationException typed =
+            result as IndoorLevelActivationException;
+        expect(typed.code, IndoorLevelActivationException.platformCode);
+        expect(typed.message, 'Level index 10 is out of range');
+      },
+    );
+
     group('notSupported code', () {
       test('converts to UnsupportedError with message from exception', () {
         final PlatformException exception = PlatformException(
@@ -413,6 +455,12 @@ void main() {
                   message: 'test',
                 ),
               ),
+              IndoorLevelActivationException(
+                exception: PlatformException(
+                  code: IndoorLevelActivationException.platformCode,
+                  message: 'test',
+                ),
+              ),
             ];
 
         for (final GoogleMapsNavigationPlatformException exception
@@ -472,11 +520,12 @@ void main() {
         MaxZoomRangeException.platformCode,
         MinZoomRangeException.platformCode,
         ImageDecodingFailedException.platformCode,
+        IndoorLevelActivationException.platformCode,
         unsupportedPlatformCode,
       };
 
       // If all codes are unique, the set size equals the number of codes
-      expect(codes.length, 10);
+      expect(codes.length, 11);
     });
   });
 }

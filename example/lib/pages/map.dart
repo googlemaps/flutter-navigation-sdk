@@ -49,6 +49,9 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
   bool isScrollGesturesEnabledDuringRotateOrZoom = true;
   bool isTiltGesturesEnabled = true;
   bool isTrafficEnabled = false;
+  bool isIndoorEnabled = true;
+  bool isIndoorLevelPickerEnabled = true;
+  IndoorBuilding? _focusedIndoorBuilding;
   MapType mapType = MapType.normal;
   MapColorScheme mapColorScheme = MapColorScheme.followSystem;
 
@@ -129,6 +132,32 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
     _showMessage('My location button clicked');
   }
 
+  void _onIndoorFocusedBuildingChanged(IndoorBuilding? building) {
+    setState(() {
+      _focusedIndoorBuilding = building;
+    });
+    final String msg = building == null
+        ? 'Indoor focus lost'
+        : 'Focused building: ${building.levels.length} level(s), '
+              'active: ${building.activeLevelIndex}';
+    _showMessage(msg);
+  }
+
+  void _onIndoorActiveLevelChanged(IndoorBuilding? building) {
+    setState(() {
+      _focusedIndoorBuilding = building;
+    });
+    final int? active = building?.activeLevelIndex;
+    final String levelName =
+        (active != null &&
+            building != null &&
+            active >= 0 &&
+            active < building.levels.length)
+        ? (building.levels[active].name ?? 'Level $active')
+        : 'none';
+    _showMessage('Active indoor level: $levelName');
+  }
+
   @override
   Widget build(BuildContext context) {
     final ButtonStyle mapTypeStyle = ElevatedButton.styleFrom(
@@ -144,6 +173,8 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
             onViewCreated: _onViewCreated,
             onMyLocationClicked: _onMyLocationClicked,
             onMyLocationButtonClicked: _onMyLocationButtonClicked,
+            onIndoorFocusedBuildingChanged: _onIndoorFocusedBuildingChanged,
+            onIndoorActiveLevelChanged: _onIndoorActiveLevelChanged,
             mapId: MapIdManager.instance.mapId,
           ),
           Padding(
@@ -422,6 +453,74 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
           title: const Text('Enable traffic'),
           value: isTrafficEnabled,
         ),
+        SwitchListTile(
+          onChanged: (bool newValue) async {
+            await _mapViewController.setIndoorEnabled(newValue);
+            setState(() {
+              isIndoorEnabled = newValue;
+              if (!newValue) {
+                _focusedIndoorBuilding = null;
+              }
+            });
+          },
+          title: const Text('Enable indoor maps'),
+          value: isIndoorEnabled,
+        ),
+        SwitchListTile(
+          onChanged: isIndoorEnabled
+              ? (bool newValue) async {
+                  await _mapViewController.settings.setIndoorLevelPickerEnabled(
+                    newValue,
+                  );
+                  setState(() {
+                    isIndoorLevelPickerEnabled = newValue;
+                  });
+                }
+              : null,
+          title: const Text('Show indoor level picker'),
+          value: isIndoorLevelPickerEnabled,
+        ),
+        if (_focusedIndoorBuilding != null)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Focused building: '
+                  '${_focusedIndoorBuilding!.levels.length} level(s)',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                if (Platform.isAndroid)
+                  Wrap(
+                    spacing: 6,
+                    children: <Widget>[
+                      for (final IndoorLevel level
+                          in _focusedIndoorBuilding!.levels)
+                        ActionChip(
+                          label: Text(
+                            level.shortName ?? 'L${level.levelIndex}',
+                          ),
+                          backgroundColor:
+                              _focusedIndoorBuilding!.activeLevelIndex ==
+                                  level.levelIndex
+                              ? Theme.of(context).colorScheme.primaryContainer
+                              : null,
+                          onPressed: () async {
+                            try {
+                              await _mapViewController.activateIndoorLevel(
+                                level,
+                              );
+                            } catch (e) {
+                              _showMessage('Failed to activate level: $e');
+                            }
+                          },
+                        ),
+                    ],
+                  ),
+              ],
+            ),
+          ),
         const Divider(),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

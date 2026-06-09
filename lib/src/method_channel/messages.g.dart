@@ -1130,6 +1130,110 @@ class PointOfInterestDto {
   int get hashCode => Object.hashAll(_toList());
 }
 
+/// Represents one indoor level of a focused indoor building.
+class IndoorLevelDto {
+  IndoorLevelDto({this.name, this.shortName});
+
+  /// Full display name of the level.
+  String? name;
+
+  /// Short display name of the level.
+  String? shortName;
+
+  List<Object?> _toList() {
+    return <Object?>[name, shortName];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static IndoorLevelDto decode(Object result) {
+    result as List<Object?>;
+    return IndoorLevelDto(
+      name: result[0] as String?,
+      shortName: result[1] as String?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! IndoorLevelDto || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(encode(), other.encode());
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Represents focused indoor building metadata.
+class IndoorBuildingDto {
+  IndoorBuildingDto({
+    required this.levels,
+    this.activeLevelIndex,
+    this.defaultLevelIndex,
+    this.isUnderground,
+  });
+
+  /// All levels available in the focused building.
+  List<IndoorLevelDto?> levels;
+
+  /// Currently active level index in [levels], if known.
+  int? activeLevelIndex;
+
+  /// Default level index in [levels], if known.
+  int? defaultLevelIndex;
+
+  /// Whether building is mostly underground, if known.
+  bool? isUnderground;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      levels,
+      activeLevelIndex,
+      defaultLevelIndex,
+      isUnderground,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static IndoorBuildingDto decode(Object result) {
+    result as List<Object?>;
+    return IndoorBuildingDto(
+      levels: (result[0] as List<Object?>?)!.cast<IndoorLevelDto?>(),
+      activeLevelIndex: result[1] as int?,
+      defaultLevelIndex: result[2] as int?,
+      isUnderground: result[3] as bool?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! IndoorBuildingDto || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(encode(), other.encode());
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
 class PolygonDto {
   PolygonDto({required this.polygonId, required this.options});
 
@@ -3126,110 +3230,116 @@ class _PigeonCodec extends StandardMessageCodec {
     } else if (value is PointOfInterestDto) {
       buffer.putUint8(165);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonDto) {
+    } else if (value is IndoorLevelDto) {
       buffer.putUint8(166);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonOptionsDto) {
+    } else if (value is IndoorBuildingDto) {
       buffer.putUint8(167);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonHoleDto) {
+    } else if (value is PolygonDto) {
       buffer.putUint8(168);
       writeValue(buffer, value.encode());
-    } else if (value is StyleSpanStrokeStyleDto) {
+    } else if (value is PolygonOptionsDto) {
       buffer.putUint8(169);
       writeValue(buffer, value.encode());
-    } else if (value is StyleSpanDto) {
+    } else if (value is PolygonHoleDto) {
       buffer.putUint8(170);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineDto) {
+    } else if (value is StyleSpanStrokeStyleDto) {
       buffer.putUint8(171);
       writeValue(buffer, value.encode());
-    } else if (value is PatternItemDto) {
+    } else if (value is StyleSpanDto) {
       buffer.putUint8(172);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineOptionsDto) {
+    } else if (value is PolylineDto) {
       buffer.putUint8(173);
       writeValue(buffer, value.encode());
-    } else if (value is CircleDto) {
+    } else if (value is PatternItemDto) {
       buffer.putUint8(174);
       writeValue(buffer, value.encode());
-    } else if (value is CircleOptionsDto) {
+    } else if (value is PolylineOptionsDto) {
       buffer.putUint8(175);
       writeValue(buffer, value.encode());
-    } else if (value is MapPaddingDto) {
+    } else if (value is CircleDto) {
       buffer.putUint8(176);
       writeValue(buffer, value.encode());
-    } else if (value is RouteTokenOptionsDto) {
+    } else if (value is CircleOptionsDto) {
       buffer.putUint8(177);
       writeValue(buffer, value.encode());
-    } else if (value is DestinationsDto) {
+    } else if (value is MapPaddingDto) {
       buffer.putUint8(178);
       writeValue(buffer, value.encode());
-    } else if (value is RoutingOptionsDto) {
+    } else if (value is RouteTokenOptionsDto) {
       buffer.putUint8(179);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationDisplayOptionsDto) {
+    } else if (value is DestinationsDto) {
       buffer.putUint8(180);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationWaypointDto) {
+    } else if (value is RoutingOptionsDto) {
       buffer.putUint8(181);
       writeValue(buffer, value.encode());
-    } else if (value is ContinueToNextDestinationResponseDto) {
+    } else if (value is NavigationDisplayOptionsDto) {
       buffer.putUint8(182);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationTimeAndDistanceDto) {
+    } else if (value is NavigationWaypointDto) {
       buffer.putUint8(183);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationAudioGuidanceSettingsDto) {
+    } else if (value is ContinueToNextDestinationResponseDto) {
       buffer.putUint8(184);
       writeValue(buffer, value.encode());
-    } else if (value is SimulationOptionsDto) {
+    } else if (value is NavigationTimeAndDistanceDto) {
       buffer.putUint8(185);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngDto) {
+    } else if (value is NavigationAudioGuidanceSettingsDto) {
       buffer.putUint8(186);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngBoundsDto) {
+    } else if (value is SimulationOptionsDto) {
       buffer.putUint8(187);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedingUpdatedEventDto) {
+    } else if (value is LatLngDto) {
       buffer.putUint8(188);
       writeValue(buffer, value.encode());
-    } else if (value is GpsAvailabilityChangeEventDto) {
+    } else if (value is LatLngBoundsDto) {
       buffer.putUint8(189);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
+    } else if (value is SpeedingUpdatedEventDto) {
       buffer.putUint8(190);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsDto) {
+    } else if (value is GpsAvailabilityChangeEventDto) {
       buffer.putUint8(191);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
+    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
       buffer.putUint8(192);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataDto) {
+    } else if (value is SpeedAlertOptionsDto) {
       buffer.putUint8(193);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentDto) {
+    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
       buffer.putUint8(194);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDirectionDto) {
+    } else if (value is RouteSegmentTrafficDataDto) {
       buffer.putUint8(195);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDto) {
+    } else if (value is RouteSegmentDto) {
       buffer.putUint8(196);
       writeValue(buffer, value.encode());
-    } else if (value is StepInfoDto) {
+    } else if (value is LaneDirectionDto) {
       buffer.putUint8(197);
       writeValue(buffer, value.encode());
-    } else if (value is NavInfoDto) {
+    } else if (value is LaneDto) {
       buffer.putUint8(198);
       writeValue(buffer, value.encode());
-    } else if (value is TermsAndConditionsUIParamsDto) {
+    } else if (value is StepInfoDto) {
       buffer.putUint8(199);
       writeValue(buffer, value.encode());
-    } else if (value is StepImageGenerationOptionsDto) {
+    } else if (value is NavInfoDto) {
       buffer.putUint8(200);
+      writeValue(buffer, value.encode());
+    } else if (value is TermsAndConditionsUIParamsDto) {
+      buffer.putUint8(201);
+      writeValue(buffer, value.encode());
+    } else if (value is StepImageGenerationOptionsDto) {
+      buffer.putUint8(202);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -3347,78 +3457,82 @@ class _PigeonCodec extends StandardMessageCodec {
       case 165:
         return PointOfInterestDto.decode(readValue(buffer)!);
       case 166:
-        return PolygonDto.decode(readValue(buffer)!);
+        return IndoorLevelDto.decode(readValue(buffer)!);
       case 167:
-        return PolygonOptionsDto.decode(readValue(buffer)!);
+        return IndoorBuildingDto.decode(readValue(buffer)!);
       case 168:
-        return PolygonHoleDto.decode(readValue(buffer)!);
+        return PolygonDto.decode(readValue(buffer)!);
       case 169:
-        return StyleSpanStrokeStyleDto.decode(readValue(buffer)!);
+        return PolygonOptionsDto.decode(readValue(buffer)!);
       case 170:
-        return StyleSpanDto.decode(readValue(buffer)!);
+        return PolygonHoleDto.decode(readValue(buffer)!);
       case 171:
-        return PolylineDto.decode(readValue(buffer)!);
+        return StyleSpanStrokeStyleDto.decode(readValue(buffer)!);
       case 172:
-        return PatternItemDto.decode(readValue(buffer)!);
+        return StyleSpanDto.decode(readValue(buffer)!);
       case 173:
-        return PolylineOptionsDto.decode(readValue(buffer)!);
+        return PolylineDto.decode(readValue(buffer)!);
       case 174:
-        return CircleDto.decode(readValue(buffer)!);
+        return PatternItemDto.decode(readValue(buffer)!);
       case 175:
-        return CircleOptionsDto.decode(readValue(buffer)!);
+        return PolylineOptionsDto.decode(readValue(buffer)!);
       case 176:
-        return MapPaddingDto.decode(readValue(buffer)!);
+        return CircleDto.decode(readValue(buffer)!);
       case 177:
-        return RouteTokenOptionsDto.decode(readValue(buffer)!);
+        return CircleOptionsDto.decode(readValue(buffer)!);
       case 178:
-        return DestinationsDto.decode(readValue(buffer)!);
+        return MapPaddingDto.decode(readValue(buffer)!);
       case 179:
-        return RoutingOptionsDto.decode(readValue(buffer)!);
+        return RouteTokenOptionsDto.decode(readValue(buffer)!);
       case 180:
-        return NavigationDisplayOptionsDto.decode(readValue(buffer)!);
+        return DestinationsDto.decode(readValue(buffer)!);
       case 181:
-        return NavigationWaypointDto.decode(readValue(buffer)!);
+        return RoutingOptionsDto.decode(readValue(buffer)!);
       case 182:
-        return ContinueToNextDestinationResponseDto.decode(readValue(buffer)!);
+        return NavigationDisplayOptionsDto.decode(readValue(buffer)!);
       case 183:
-        return NavigationTimeAndDistanceDto.decode(readValue(buffer)!);
+        return NavigationWaypointDto.decode(readValue(buffer)!);
       case 184:
-        return NavigationAudioGuidanceSettingsDto.decode(readValue(buffer)!);
+        return ContinueToNextDestinationResponseDto.decode(readValue(buffer)!);
       case 185:
-        return SimulationOptionsDto.decode(readValue(buffer)!);
+        return NavigationTimeAndDistanceDto.decode(readValue(buffer)!);
       case 186:
-        return LatLngDto.decode(readValue(buffer)!);
+        return NavigationAudioGuidanceSettingsDto.decode(readValue(buffer)!);
       case 187:
-        return LatLngBoundsDto.decode(readValue(buffer)!);
+        return SimulationOptionsDto.decode(readValue(buffer)!);
       case 188:
-        return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
+        return LatLngDto.decode(readValue(buffer)!);
       case 189:
-        return GpsAvailabilityChangeEventDto.decode(readValue(buffer)!);
+        return LatLngBoundsDto.decode(readValue(buffer)!);
       case 190:
+        return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
+      case 191:
+        return GpsAvailabilityChangeEventDto.decode(readValue(buffer)!);
+      case 192:
         return SpeedAlertOptionsThresholdPercentageDto.decode(
           readValue(buffer)!,
         );
-      case 191:
+      case 193:
         return SpeedAlertOptionsDto.decode(readValue(buffer)!);
-      case 192:
+      case 194:
         return RouteSegmentTrafficDataRoadStretchRenderingDataDto.decode(
           readValue(buffer)!,
         );
-      case 193:
-        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
-      case 194:
-        return RouteSegmentDto.decode(readValue(buffer)!);
       case 195:
-        return LaneDirectionDto.decode(readValue(buffer)!);
+        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
       case 196:
-        return LaneDto.decode(readValue(buffer)!);
+        return RouteSegmentDto.decode(readValue(buffer)!);
       case 197:
-        return StepInfoDto.decode(readValue(buffer)!);
+        return LaneDirectionDto.decode(readValue(buffer)!);
       case 198:
-        return NavInfoDto.decode(readValue(buffer)!);
+        return LaneDto.decode(readValue(buffer)!);
       case 199:
-        return TermsAndConditionsUIParamsDto.decode(readValue(buffer)!);
+        return StepInfoDto.decode(readValue(buffer)!);
       case 200:
+        return NavInfoDto.decode(readValue(buffer)!);
+      case 201:
+        return TermsAndConditionsUIParamsDto.decode(readValue(buffer)!);
+      case 202:
         return StepImageGenerationOptionsDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -5043,6 +5157,181 @@ class MapViewApi {
         );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
       <Object?>[viewId, enabled],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<bool> isIndoorEnabled(int viewId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIndoorEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  Future<void> setIndoorEnabled(int viewId, bool enabled) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setIndoorEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<bool> isIndoorLevelPickerEnabled(int viewId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIndoorLevelPickerEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  Future<void> setIndoorLevelPickerEnabled(int viewId, bool enabled) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setIndoorLevelPickerEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<IndoorBuildingDto?> getFocusedIndoorBuilding(int viewId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getFocusedIndoorBuilding$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return (pigeonVar_replyList[0] as IndoorBuildingDto?);
+    }
+  }
+
+  /// Activates the indoor level at [levelIndex] within the currently focused
+  /// indoor building. Throws if no building is focused or the index is out of
+  /// range.
+  Future<void> activateIndoorLevel(int viewId, int levelIndex) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.activateIndoorLevel$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, levelIndex],
     );
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -6864,6 +7153,10 @@ abstract class ViewEventApi {
 
   void onMyLocationButtonClicked(int viewId);
 
+  void onIndoorFocusedBuildingChanged(int viewId, IndoorBuildingDto? building);
+
+  void onIndoorActiveLevelChanged(int viewId, IndoorBuildingDto? building);
+
   void onCameraChanged(
     int viewId,
     CameraEventTypeDto eventType,
@@ -7385,6 +7678,78 @@ abstract class ViewEventApi {
           );
           try {
             api.onMyLocationButtonClicked(arg_viewId!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onIndoorFocusedBuildingChanged$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        pigeonVar_channel.setMessageHandler(null);
+      } else {
+        pigeonVar_channel.setMessageHandler((Object? message) async {
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onIndoorFocusedBuildingChanged was null.',
+          );
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onIndoorFocusedBuildingChanged was null, expected non-null int.',
+          );
+          final IndoorBuildingDto? arg_building =
+              (args[1] as IndoorBuildingDto?);
+          try {
+            api.onIndoorFocusedBuildingChanged(arg_viewId!, arg_building);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onIndoorActiveLevelChanged$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        pigeonVar_channel.setMessageHandler(null);
+      } else {
+        pigeonVar_channel.setMessageHandler((Object? message) async {
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onIndoorActiveLevelChanged was null.',
+          );
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onIndoorActiveLevelChanged was null, expected non-null int.',
+          );
+          final IndoorBuildingDto? arg_building =
+              (args[1] as IndoorBuildingDto?);
+          try {
+            api.onIndoorActiveLevelChanged(arg_viewId!, arg_building);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -10735,6 +11100,115 @@ class AutoMapViewApi {
     }
   }
 
+  Future<bool> isIndoorEnabled() async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isIndoorEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  Future<void> setIndoorEnabled(bool enabled) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setIndoorEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[enabled],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<IndoorBuildingDto?> getFocusedIndoorBuilding() async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getFocusedIndoorBuilding$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return (pigeonVar_replyList[0] as IndoorBuildingDto?);
+    }
+  }
+
+  Future<void> activateIndoorLevel(int levelIndex) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.activateIndoorLevel$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[levelIndex],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
   Future<void> showRouteOverview() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.showRouteOverview$pigeonVar_messageChannelSuffix';
@@ -11634,6 +12108,10 @@ abstract class AutoViewEventApi {
 
   void onPromptVisibilityChanged(bool promptVisible);
 
+  void onIndoorFocusedBuildingChanged(IndoorBuildingDto? building);
+
+  void onIndoorActiveLevelChanged(IndoorBuildingDto? building);
+
   static void setUp(
     AutoViewEventApi? api, {
     BinaryMessenger? binaryMessenger,
@@ -11738,6 +12216,68 @@ abstract class AutoViewEventApi {
           );
           try {
             api.onPromptVisibilityChanged(arg_promptVisible!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onIndoorFocusedBuildingChanged$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        pigeonVar_channel.setMessageHandler(null);
+      } else {
+        pigeonVar_channel.setMessageHandler((Object? message) async {
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onIndoorFocusedBuildingChanged was null.',
+          );
+          final List<Object?> args = (message as List<Object?>?)!;
+          final IndoorBuildingDto? arg_building =
+              (args[0] as IndoorBuildingDto?);
+          try {
+            api.onIndoorFocusedBuildingChanged(arg_building);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onIndoorActiveLevelChanged$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        pigeonVar_channel.setMessageHandler(null);
+      } else {
+        pigeonVar_channel.setMessageHandler((Object? message) async {
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onIndoorActiveLevelChanged was null.',
+          );
+          final List<Object?> args = (message as List<Object?>?)!;
+          final IndoorBuildingDto? arg_building =
+              (args[0] as IndoorBuildingDto?);
+          try {
+            api.onIndoorActiveLevelChanged(arg_building);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

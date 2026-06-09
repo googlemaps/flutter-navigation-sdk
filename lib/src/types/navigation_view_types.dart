@@ -289,6 +289,123 @@ class PoiClickedEvent {
   String toString() => 'PoiClickedEvent(pointOfInterest: $pointOfInterest)';
 }
 
+/// Represents one indoor level in a focused indoor building.
+/// {@category Navigation View}
+/// {@category Map View}
+@immutable
+class IndoorLevel {
+  /// Creates an [IndoorLevel] object.
+  const IndoorLevel({
+    required this.levelIndex,
+    required this.name,
+    required this.shortName,
+  });
+
+  /// Stable index of this level within the containing focused building levels list.
+  final int levelIndex;
+
+  /// Full display name of the level.
+  final String? name;
+
+  /// Short display name of the level.
+  final String? shortName;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is IndoorLevel &&
+        levelIndex == other.levelIndex &&
+        name == other.name &&
+        shortName == other.shortName;
+  }
+
+  @override
+  int get hashCode => Object.hash(levelIndex, name, shortName);
+
+  @override
+  String toString() =>
+      'IndoorLevel(levelIndex: $levelIndex, name: $name, shortName: $shortName)';
+}
+
+/// Represents focused indoor building metadata.
+/// {@category Navigation View}
+/// {@category Map View}
+@immutable
+class IndoorBuilding {
+  /// Creates an [IndoorBuilding] object.
+  const IndoorBuilding({
+    required this.levels,
+    this.activeLevelIndex,
+    this.defaultLevelIndex,
+    this.isUnderground,
+  });
+
+  /// All levels available in the focused building.
+  final List<IndoorLevel> levels;
+
+  /// Currently active level index in [levels], if known.
+  final int? activeLevelIndex;
+
+  /// Default level index in [levels], if known.
+  final int? defaultLevelIndex;
+
+  /// Whether the building is underground, if known.
+  final bool? isUnderground;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other.runtimeType != runtimeType) {
+      return false;
+    }
+    return other is IndoorBuilding &&
+        listEquals(levels, other.levels) &&
+        activeLevelIndex == other.activeLevelIndex &&
+        defaultLevelIndex == other.defaultLevelIndex &&
+        isUnderground == other.isUnderground;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    Object.hashAll(levels),
+    activeLevelIndex,
+    defaultLevelIndex,
+    isUnderground,
+  );
+
+  @override
+  String toString() =>
+      'IndoorBuilding(levels: $levels, activeLevelIndex: $activeLevelIndex, '
+      'defaultLevelIndex: $defaultLevelIndex, isUnderground: $isUnderground)';
+}
+
+/// Event emitted when focused indoor building changes.
+/// {@category Navigation View}
+/// {@category Map View}
+@immutable
+class IndoorFocusedBuildingChangedEvent {
+  const IndoorFocusedBuildingChangedEvent(this.building);
+
+  final IndoorBuilding? building;
+}
+
+/// Event emitted when active indoor level changes.
+/// {@category Navigation View}
+/// {@category Map View}
+@immutable
+class IndoorActiveLevelChangedEvent {
+  const IndoorActiveLevelChangedEvent(this.building);
+
+  final IndoorBuilding? building;
+}
+
 /// Traffic data statuses
 /// {@category Navigation View}
 enum RouteSegmentTrafficDataStatus {

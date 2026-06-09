@@ -62,6 +62,10 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   // This allows BaseCarSceneDelegate to intercept and handle the event
   var promptVisibilityCallback: ((Bool) -> Void)?
 
+  // Callbacks for CarPlay views to handle indoor state changes.
+  var indoorFocusedBuildingChangedCallback: ((IndoorBuildingDto?) -> Void)?
+  var indoorActiveLevelChangedCallback: ((IndoorBuildingDto?) -> Void)?
+
   public func view() -> UIView {
     _mapView
   }
@@ -109,6 +113,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
 
     _mapView.delegate = self
     _mapView.viewSettledDelegate = self
+    _mapView.indoorDisplay.delegate = self
 
     _navigationUIEnabledPreference = navigationUIEnabledPreference
     applyNavigationUIEnabledPreference()
@@ -122,6 +127,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
   deinit {
     unregisterView()
     _mapView.delegate = nil
+    _mapView.indoorDisplay.delegate = nil
   }
 
   func registerView() {
@@ -395,6 +401,53 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
 
   func setBuildingsEnabled(_ enabled: Bool) {
     _mapView.isBuildingsEnabled = enabled
+  }
+
+  func isIndoorEnabled() -> Bool {
+    _mapView.isIndoorEnabled
+  }
+
+  func setIndoorEnabled(_ enabled: Bool) {
+    _mapView.isIndoorEnabled = enabled
+  }
+
+  func isIndoorLevelPickerEnabled() -> Bool {
+    _mapView.settings.indoorPicker
+  }
+
+  func setIndoorLevelPickerEnabled(_ enabled: Bool) {
+    _mapView.settings.indoorPicker = enabled
+  }
+
+  func getFocusedIndoorBuilding() -> IndoorBuildingDto? {
+    guard let building = _mapView.indoorDisplay.activeBuilding else {
+      return nil
+    }
+    return Convert.convertIndoorBuilding(
+      building: building,
+      activeLevel: _mapView.indoorDisplay.activeLevel
+    )
+  }
+
+  func activateIndoorLevel(_ levelIndex: Int) throws {
+    guard let building = _mapView.indoorDisplay.activeBuilding else {
+      throw PigeonError(
+        code: "indoorLevelActivationFailed",
+        message: "No indoor building is currently focused",
+        details: nil
+      )
+    }
+
+    if levelIndex < 0 || levelIndex >= building.levels.count {
+      throw PigeonError(
+        code: "indoorLevelActivationFailed",
+        message:
+          "Level index \(levelIndex) is out of range (building has \(building.levels.count) levels)",
+        details: nil
+      )
+    }
+
+    _mapView.indoorDisplay.activeLevel = building.levels[levelIndex]
   }
 
   func showRouteOverview() {
@@ -1131,6 +1184,48 @@ extension GoogleMapsNavigationView: GMSMapViewDelegate {
       getViewEventApi()?.onPromptVisibilityChanged(
         viewId: _viewId!,
         promptVisible: promptVisible,
+        completion: { _ in }
+      )
+    }
+  }
+}
+
+extension GoogleMapsNavigationView: GMSIndoorDisplayDelegate {
+  public func didChangeActiveBuilding(_ building: GMSIndoorBuilding?) {
+    let buildingDto: IndoorBuildingDto? = {
+      guard let building else { return nil }
+      return Convert.convertIndoorBuilding(
+        building: building,
+        activeLevel: _mapView.indoorDisplay.activeLevel
+      )
+    }()
+
+    if _isCarPlayView {
+      indoorFocusedBuildingChangedCallback?(buildingDto)
+    } else {
+      getViewEventApi()?.onIndoorFocusedBuildingChanged(
+        viewId: _viewId!,
+        building: buildingDto,
+        completion: { _ in }
+      )
+    }
+  }
+
+  public func didChangeActiveLevel(_ level: GMSIndoorLevel?) {
+    let buildingDto: IndoorBuildingDto? = {
+      guard let building = _mapView.indoorDisplay.activeBuilding else { return nil }
+      return Convert.convertIndoorBuilding(
+        building: building,
+        activeLevel: level
+      )
+    }()
+
+    if _isCarPlayView {
+      indoorActiveLevelChangedCallback?(buildingDto)
+    } else {
+      getViewEventApi()?.onIndoorActiveLevelChanged(
+        viewId: _viewId!,
+        building: buildingDto,
         completion: { _ in }
       )
     }

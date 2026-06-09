@@ -1147,6 +1147,84 @@ data class PointOfInterestDto(
   override fun hashCode(): Int = toList().hashCode()
 }
 
+/**
+ * Represents one indoor level of a focused indoor building.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class IndoorLevelDto(
+  /** Full display name of the level. */
+  val name: String? = null,
+  /** Short display name of the level. */
+  val shortName: String? = null,
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): IndoorLevelDto {
+      val name = pigeonVar_list[0] as String?
+      val shortName = pigeonVar_list[1] as String?
+      return IndoorLevelDto(name, shortName)
+    }
+  }
+
+  fun toList(): List<Any?> {
+    return listOf(name, shortName)
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (other !is IndoorLevelDto) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Represents focused indoor building metadata.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class IndoorBuildingDto(
+  /** All levels available in the focused building. */
+  val levels: List<IndoorLevelDto?>,
+  /** Currently active level index in [levels], if known. */
+  val activeLevelIndex: Long? = null,
+  /** Default level index in [levels], if known. */
+  val defaultLevelIndex: Long? = null,
+  /** Whether building is mostly underground, if known. */
+  val isUnderground: Boolean? = null,
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): IndoorBuildingDto {
+      val levels = pigeonVar_list[0] as List<IndoorLevelDto?>
+      val activeLevelIndex = pigeonVar_list[1] as Long?
+      val defaultLevelIndex = pigeonVar_list[2] as Long?
+      val isUnderground = pigeonVar_list[3] as Boolean?
+      return IndoorBuildingDto(levels, activeLevelIndex, defaultLevelIndex, isUnderground)
+    }
+  }
+
+  fun toList(): List<Any?> {
+    return listOf(levels, activeLevelIndex, defaultLevelIndex, isUnderground)
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (other !is IndoorBuildingDto) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
 /** Generated class from Pigeon that represents data sent in messages. */
 data class PolygonDto(val polygonId: String, val options: PolygonOptionsDto) {
   companion object {
@@ -2668,120 +2746,126 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
         return (readValue(buffer) as? List<Any?>)?.let { PointOfInterestDto.fromList(it) }
       }
       166.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolygonDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { IndoorLevelDto.fromList(it) }
       }
       167.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolygonOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { IndoorBuildingDto.fromList(it) }
       }
       168.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolygonHoleDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonDto.fromList(it) }
       }
       169.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { StyleSpanStrokeStyleDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonOptionsDto.fromList(it) }
       }
       170.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { StyleSpanDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolygonHoleDto.fromList(it) }
       }
       171.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolylineDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { StyleSpanStrokeStyleDto.fromList(it) }
       }
       172.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PatternItemDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { StyleSpanDto.fromList(it) }
       }
       173.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { PolylineOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolylineDto.fromList(it) }
       }
       174.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { CircleDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PatternItemDto.fromList(it) }
       }
       175.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { CircleOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { PolylineOptionsDto.fromList(it) }
       }
       176.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { MapPaddingDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { CircleDto.fromList(it) }
       }
       177.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { RouteTokenOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { CircleOptionsDto.fromList(it) }
       }
       178.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { DestinationsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { MapPaddingDto.fromList(it) }
       }
       179.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { RoutingOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { RouteTokenOptionsDto.fromList(it) }
       }
       180.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { NavigationDisplayOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { DestinationsDto.fromList(it) }
       }
       181.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { NavigationWaypointDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { RoutingOptionsDto.fromList(it) }
       }
       182.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { NavigationDisplayOptionsDto.fromList(it) }
+      }
+      183.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { NavigationWaypointDto.fromList(it) }
+      }
+      184.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           ContinueToNextDestinationResponseDto.fromList(it)
         }
       }
-      183.toByte() -> {
+      185.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavigationTimeAndDistanceDto.fromList(it) }
       }
-      184.toByte() -> {
+      186.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           NavigationAudioGuidanceSettingsDto.fromList(it)
         }
       }
-      185.toByte() -> {
+      187.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SimulationOptionsDto.fromList(it) }
       }
-      186.toByte() -> {
+      188.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LatLngDto.fromList(it) }
       }
-      187.toByte() -> {
+      189.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LatLngBoundsDto.fromList(it) }
       }
-      188.toByte() -> {
+      190.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SpeedingUpdatedEventDto.fromList(it) }
       }
-      189.toByte() -> {
+      191.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           GpsAvailabilityChangeEventDto.fromList(it)
         }
       }
-      190.toByte() -> {
+      192.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           SpeedAlertOptionsThresholdPercentageDto.fromList(it)
         }
       }
-      191.toByte() -> {
+      193.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SpeedAlertOptionsDto.fromList(it) }
       }
-      192.toByte() -> {
+      194.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(it)
         }
       }
-      193.toByte() -> {
+      195.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentTrafficDataDto.fromList(it) }
       }
-      194.toByte() -> {
+      196.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentDto.fromList(it) }
       }
-      195.toByte() -> {
+      197.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LaneDirectionDto.fromList(it) }
       }
-      196.toByte() -> {
+      198.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LaneDto.fromList(it) }
       }
-      197.toByte() -> {
+      199.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { StepInfoDto.fromList(it) }
       }
-      198.toByte() -> {
+      200.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavInfoDto.fromList(it) }
       }
-      199.toByte() -> {
+      201.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           TermsAndConditionsUIParamsDto.fromList(it)
         }
       }
-      200.toByte() -> {
+      202.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           StepImageGenerationOptionsDto.fromList(it)
         }
@@ -2940,144 +3024,152 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
         stream.write(165)
         writeValue(stream, value.toList())
       }
-      is PolygonDto -> {
+      is IndoorLevelDto -> {
         stream.write(166)
         writeValue(stream, value.toList())
       }
-      is PolygonOptionsDto -> {
+      is IndoorBuildingDto -> {
         stream.write(167)
         writeValue(stream, value.toList())
       }
-      is PolygonHoleDto -> {
+      is PolygonDto -> {
         stream.write(168)
         writeValue(stream, value.toList())
       }
-      is StyleSpanStrokeStyleDto -> {
+      is PolygonOptionsDto -> {
         stream.write(169)
         writeValue(stream, value.toList())
       }
-      is StyleSpanDto -> {
+      is PolygonHoleDto -> {
         stream.write(170)
         writeValue(stream, value.toList())
       }
-      is PolylineDto -> {
+      is StyleSpanStrokeStyleDto -> {
         stream.write(171)
         writeValue(stream, value.toList())
       }
-      is PatternItemDto -> {
+      is StyleSpanDto -> {
         stream.write(172)
         writeValue(stream, value.toList())
       }
-      is PolylineOptionsDto -> {
+      is PolylineDto -> {
         stream.write(173)
         writeValue(stream, value.toList())
       }
-      is CircleDto -> {
+      is PatternItemDto -> {
         stream.write(174)
         writeValue(stream, value.toList())
       }
-      is CircleOptionsDto -> {
+      is PolylineOptionsDto -> {
         stream.write(175)
         writeValue(stream, value.toList())
       }
-      is MapPaddingDto -> {
+      is CircleDto -> {
         stream.write(176)
         writeValue(stream, value.toList())
       }
-      is RouteTokenOptionsDto -> {
+      is CircleOptionsDto -> {
         stream.write(177)
         writeValue(stream, value.toList())
       }
-      is DestinationsDto -> {
+      is MapPaddingDto -> {
         stream.write(178)
         writeValue(stream, value.toList())
       }
-      is RoutingOptionsDto -> {
+      is RouteTokenOptionsDto -> {
         stream.write(179)
         writeValue(stream, value.toList())
       }
-      is NavigationDisplayOptionsDto -> {
+      is DestinationsDto -> {
         stream.write(180)
         writeValue(stream, value.toList())
       }
-      is NavigationWaypointDto -> {
+      is RoutingOptionsDto -> {
         stream.write(181)
         writeValue(stream, value.toList())
       }
-      is ContinueToNextDestinationResponseDto -> {
+      is NavigationDisplayOptionsDto -> {
         stream.write(182)
         writeValue(stream, value.toList())
       }
-      is NavigationTimeAndDistanceDto -> {
+      is NavigationWaypointDto -> {
         stream.write(183)
         writeValue(stream, value.toList())
       }
-      is NavigationAudioGuidanceSettingsDto -> {
+      is ContinueToNextDestinationResponseDto -> {
         stream.write(184)
         writeValue(stream, value.toList())
       }
-      is SimulationOptionsDto -> {
+      is NavigationTimeAndDistanceDto -> {
         stream.write(185)
         writeValue(stream, value.toList())
       }
-      is LatLngDto -> {
+      is NavigationAudioGuidanceSettingsDto -> {
         stream.write(186)
         writeValue(stream, value.toList())
       }
-      is LatLngBoundsDto -> {
+      is SimulationOptionsDto -> {
         stream.write(187)
         writeValue(stream, value.toList())
       }
-      is SpeedingUpdatedEventDto -> {
+      is LatLngDto -> {
         stream.write(188)
         writeValue(stream, value.toList())
       }
-      is GpsAvailabilityChangeEventDto -> {
+      is LatLngBoundsDto -> {
         stream.write(189)
         writeValue(stream, value.toList())
       }
-      is SpeedAlertOptionsThresholdPercentageDto -> {
+      is SpeedingUpdatedEventDto -> {
         stream.write(190)
         writeValue(stream, value.toList())
       }
-      is SpeedAlertOptionsDto -> {
+      is GpsAvailabilityChangeEventDto -> {
         stream.write(191)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentTrafficDataRoadStretchRenderingDataDto -> {
+      is SpeedAlertOptionsThresholdPercentageDto -> {
         stream.write(192)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentTrafficDataDto -> {
+      is SpeedAlertOptionsDto -> {
         stream.write(193)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentDto -> {
+      is RouteSegmentTrafficDataRoadStretchRenderingDataDto -> {
         stream.write(194)
         writeValue(stream, value.toList())
       }
-      is LaneDirectionDto -> {
+      is RouteSegmentTrafficDataDto -> {
         stream.write(195)
         writeValue(stream, value.toList())
       }
-      is LaneDto -> {
+      is RouteSegmentDto -> {
         stream.write(196)
         writeValue(stream, value.toList())
       }
-      is StepInfoDto -> {
+      is LaneDirectionDto -> {
         stream.write(197)
         writeValue(stream, value.toList())
       }
-      is NavInfoDto -> {
+      is LaneDto -> {
         stream.write(198)
         writeValue(stream, value.toList())
       }
-      is TermsAndConditionsUIParamsDto -> {
+      is StepInfoDto -> {
         stream.write(199)
         writeValue(stream, value.toList())
       }
-      is StepImageGenerationOptionsDto -> {
+      is NavInfoDto -> {
         stream.write(200)
+        writeValue(stream, value.toList())
+      }
+      is TermsAndConditionsUIParamsDto -> {
+        stream.write(201)
+        writeValue(stream, value.toList())
+      }
+      is StepImageGenerationOptionsDto -> {
+        stream.write(202)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -3247,6 +3339,22 @@ interface MapViewApi {
   fun isBuildingsEnabled(viewId: Long): Boolean
 
   fun setBuildingsEnabled(viewId: Long, enabled: Boolean)
+
+  fun isIndoorEnabled(viewId: Long): Boolean
+
+  fun setIndoorEnabled(viewId: Long, enabled: Boolean)
+
+  fun isIndoorLevelPickerEnabled(viewId: Long): Boolean
+
+  fun setIndoorLevelPickerEnabled(viewId: Long, enabled: Boolean)
+
+  fun getFocusedIndoorBuilding(viewId: Long): IndoorBuildingDto?
+
+  /**
+   * Activates the indoor level at [levelIndex] within the currently focused indoor building. Throws
+   * if no building is focused or the index is out of range.
+   */
+  fun activateIndoorLevel(viewId: Long, levelIndex: Long)
 
   fun getCameraPosition(viewId: Long): CameraPositionDto
 
@@ -4664,6 +4772,150 @@ interface MapViewApi {
             val wrapped: List<Any?> =
               try {
                 api.setBuildingsEnabled(viewIdArg, enabledArg)
+                listOf(null)
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIndoorEnabled$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val wrapped: List<Any?> =
+              try {
+                listOf(api.isIndoorEnabled(viewIdArg))
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setIndoorEnabled$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val enabledArg = args[1] as Boolean
+            val wrapped: List<Any?> =
+              try {
+                api.setIndoorEnabled(viewIdArg, enabledArg)
+                listOf(null)
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIndoorLevelPickerEnabled$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val wrapped: List<Any?> =
+              try {
+                listOf(api.isIndoorLevelPickerEnabled(viewIdArg))
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setIndoorLevelPickerEnabled$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val enabledArg = args[1] as Boolean
+            val wrapped: List<Any?> =
+              try {
+                api.setIndoorLevelPickerEnabled(viewIdArg, enabledArg)
+                listOf(null)
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getFocusedIndoorBuilding$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val wrapped: List<Any?> =
+              try {
+                listOf(api.getFocusedIndoorBuilding(viewIdArg))
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.activateIndoorLevel$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val levelIndexArg = args[1] as Long
+            val wrapped: List<Any?> =
+              try {
+                api.activateIndoorLevel(viewIdArg, levelIndexArg)
                 listOf(null)
               } catch (exception: Throwable) {
                 MessagesPigeonUtils.wrapError(exception)
@@ -6389,6 +6641,52 @@ class ViewEventApi(
     }
   }
 
+  fun onIndoorFocusedBuildingChanged(
+    viewIdArg: Long,
+    buildingArg: IndoorBuildingDto?,
+    callback: (Result<Unit>) -> Unit,
+  ) {
+    val separatedMessageChannelSuffix =
+      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName =
+      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onIndoorFocusedBuildingChanged$separatedMessageChannelSuffix"
+    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
+    channel.send(listOf(viewIdArg, buildingArg)) {
+      if (it is List<*>) {
+        if (it.size > 1) {
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+        } else {
+          callback(Result.success(Unit))
+        }
+      } else {
+        callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
+      }
+    }
+  }
+
+  fun onIndoorActiveLevelChanged(
+    viewIdArg: Long,
+    buildingArg: IndoorBuildingDto?,
+    callback: (Result<Unit>) -> Unit,
+  ) {
+    val separatedMessageChannelSuffix =
+      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName =
+      "dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onIndoorActiveLevelChanged$separatedMessageChannelSuffix"
+    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
+    channel.send(listOf(viewIdArg, buildingArg)) {
+      if (it is List<*>) {
+        if (it.size > 1) {
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+        } else {
+          callback(Result.success(Unit))
+        }
+      } else {
+        callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
+      }
+    }
+  }
+
   fun onCameraChanged(
     viewIdArg: Long,
     eventTypeArg: CameraEventTypeDto,
@@ -7739,6 +8037,14 @@ interface AutoMapViewApi {
   fun isSpeedometerEnabled(): Boolean
 
   fun isNavigationUIEnabled(): Boolean
+
+  fun isIndoorEnabled(): Boolean
+
+  fun setIndoorEnabled(enabled: Boolean)
+
+  fun getFocusedIndoorBuilding(): IndoorBuildingDto?
+
+  fun activateIndoorLevel(levelIndex: Long)
 
   fun showRouteOverview()
 
@@ -9287,6 +9593,96 @@ interface AutoMapViewApi {
         val channel =
           BasicMessageChannel<Any?>(
             binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isIndoorEnabled$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> =
+              try {
+                listOf(api.isIndoorEnabled())
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setIndoorEnabled$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            val wrapped: List<Any?> =
+              try {
+                api.setIndoorEnabled(enabledArg)
+                listOf(null)
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getFocusedIndoorBuilding$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> =
+              try {
+                listOf(api.getFocusedIndoorBuilding())
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.activateIndoorLevel$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val levelIndexArg = args[0] as Long
+            val wrapped: List<Any?> =
+              try {
+                api.activateIndoorLevel(levelIndexArg)
+                listOf(null)
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
             "dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.showRouteOverview$separatedMessageChannelSuffix",
             codec,
           )
@@ -10045,6 +10441,50 @@ class AutoViewEventApi(
       "dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onPromptVisibilityChanged$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(promptVisibleArg)) {
+      if (it is List<*>) {
+        if (it.size > 1) {
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+        } else {
+          callback(Result.success(Unit))
+        }
+      } else {
+        callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
+      }
+    }
+  }
+
+  fun onIndoorFocusedBuildingChanged(
+    buildingArg: IndoorBuildingDto?,
+    callback: (Result<Unit>) -> Unit,
+  ) {
+    val separatedMessageChannelSuffix =
+      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName =
+      "dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onIndoorFocusedBuildingChanged$separatedMessageChannelSuffix"
+    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
+    channel.send(listOf(buildingArg)) {
+      if (it is List<*>) {
+        if (it.size > 1) {
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+        } else {
+          callback(Result.success(Unit))
+        }
+      } else {
+        callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
+      }
+    }
+  }
+
+  fun onIndoorActiveLevelChanged(
+    buildingArg: IndoorBuildingDto?,
+    callback: (Result<Unit>) -> Unit,
+  ) {
+    val separatedMessageChannelSuffix =
+      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName =
+      "dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onIndoorActiveLevelChanged$separatedMessageChannelSuffix"
+    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
+    channel.send(listOf(buildingArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))

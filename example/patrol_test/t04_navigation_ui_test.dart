@@ -278,6 +278,29 @@ void main() {
       );
     }
 
+    /// Test enabling and disabling indoor maps layer.
+    for (final bool result in results) {
+      await viewController.setIndoorEnabled(result);
+      final bool isEnabled = await viewController.isIndoorEnabled();
+      expect(
+        isEnabled,
+        result,
+        reason: buildReasonForToggle('IndoorEnabled', result),
+      );
+    }
+
+    /// Test enabling and disabling indoor level picker.
+    for (final bool result in results) {
+      await viewController.settings.setIndoorLevelPickerEnabled(result);
+      final bool isEnabled = await viewController.settings
+          .isIndoorLevelPickerEnabled();
+      expect(
+        isEnabled,
+        result,
+        reason: buildReasonForToggle('IndoorLevelPickerEnabled', result),
+      );
+    }
+
     /// Test map color scheme getter and setter.
     final List<MapColorScheme> mapColorSchemes = <MapColorScheme>[
       MapColorScheme.followSystem,

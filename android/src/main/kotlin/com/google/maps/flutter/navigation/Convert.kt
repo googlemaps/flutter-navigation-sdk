@@ -25,6 +25,8 @@ import com.google.android.gms.maps.model.Circle
 import com.google.android.gms.maps.model.Dash
 import com.google.android.gms.maps.model.Dot
 import com.google.android.gms.maps.model.Gap
+import com.google.android.gms.maps.model.IndoorBuilding
+import com.google.android.gms.maps.model.IndoorLevel
 import com.google.android.gms.maps.model.JointType
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
@@ -214,6 +216,31 @@ object Convert {
    */
   private fun convertLatLngToDto(point: LatLng): LatLngDto {
     return LatLngDto(point.latitude, point.longitude)
+  }
+
+  /**
+   * Converts Google Maps [IndoorLevel] to Pigeon [IndoorLevelDto].
+   *
+   * @param level Google Maps [IndoorLevel].
+   * @return Pigeon [IndoorLevelDto].
+   */
+  private fun convertIndoorLevelToDto(level: IndoorLevel): IndoorLevelDto {
+    return IndoorLevelDto(level.name, level.shortName)
+  }
+
+  /**
+   * Converts Google Maps [IndoorBuilding] to Pigeon [IndoorBuildingDto].
+   *
+   * @param building Google Maps [IndoorBuilding].
+   * @return Pigeon [IndoorBuildingDto].
+   */
+  fun convertIndoorBuildingToDto(building: IndoorBuilding): IndoorBuildingDto {
+    return IndoorBuildingDto(
+      levels = building.levels.map { convertIndoorLevelToDto(it) },
+      activeLevelIndex = building.activeLevelIndex.toLong(),
+      defaultLevelIndex = building.defaultLevelIndex.toLong(),
+      isUnderground = building.isUnderground,
+    )
   }
 
   /**

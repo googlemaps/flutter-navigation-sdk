@@ -452,6 +452,67 @@ void main() {
       expect(myLocationButtonClicked, isTrue);
     });
 
+    testWidgets('indoor callbacks receive events', (WidgetTester tester) async {
+      IndoorBuilding? focusedBuilding;
+      IndoorBuilding? activeLevelBuilding;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: GoogleMapsMapView(
+            onViewCreated: (_) {},
+            onIndoorFocusedBuildingChanged: (IndoorBuilding? building) {
+              focusedBuilding = building;
+            },
+            onIndoorActiveLevelChanged: (IndoorBuilding? building) {
+              activeLevelBuilding = building;
+            },
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      final int testViewId = getViewId();
+
+      final IndoorBuildingDto focusedDto = IndoorBuildingDto(
+        levels: <IndoorLevelDto>[
+          IndoorLevelDto(name: 'Level 1', shortName: 'L1'),
+          IndoorLevelDto(name: 'Level 2', shortName: 'L2'),
+        ],
+        activeLevelIndex: 0,
+        defaultLevelIndex: 0,
+        isUnderground: false,
+      );
+      final IndoorBuildingDto activeLevelDto = IndoorBuildingDto(
+        levels: <IndoorLevelDto>[
+          IndoorLevelDto(name: 'Level 1', shortName: 'L1'),
+          IndoorLevelDto(name: 'Level 2', shortName: 'L2'),
+        ],
+        activeLevelIndex: 1,
+        defaultLevelIndex: 0,
+        isUnderground: false,
+      );
+
+      testMapViewApi.testEventApi.onIndoorFocusedBuildingChanged(
+        testViewId,
+        focusedDto,
+      );
+      testMapViewApi.testEventApi.onIndoorActiveLevelChanged(
+        testViewId,
+        activeLevelDto,
+      );
+
+      await tester.pump();
+
+      expect(focusedBuilding, isNotNull);
+      expect(focusedBuilding!.activeLevelIndex, 0);
+      expect(focusedBuilding!.levels.length, 2);
+
+      expect(activeLevelBuilding, isNotNull);
+      expect(activeLevelBuilding!.activeLevelIndex, 1);
+      expect(activeLevelBuilding!.levels[1].shortName, 'L2');
+    });
+
     testWidgets('onCameraMove callback receives event', (
       WidgetTester tester,
     ) async {

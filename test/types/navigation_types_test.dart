@@ -761,4 +761,56 @@ void main() {
       expect(event.pointOfInterest.latLng.longitude, -122.083922);
     });
   });
+
+  group('Indoor building tests', () {
+    test('tests IndoorBuilding conversion from DTO', () {
+      final IndoorBuildingDto dto = IndoorBuildingDto(
+        levels: <IndoorLevelDto>[
+          IndoorLevelDto(name: 'Level 1', shortName: 'L1'),
+          IndoorLevelDto(name: 'Level 2', shortName: 'L2'),
+        ],
+        activeLevelIndex: 1,
+        defaultLevelIndex: 0,
+        isUnderground: false,
+      );
+
+      final IndoorBuilding building = dto.toIndoorBuilding();
+
+      expect(building.levels.length, 2);
+      expect(building.levels[0].levelIndex, 0);
+      expect(building.levels[0].name, 'Level 1');
+      expect(building.levels[0].shortName, 'L1');
+      expect(building.levels[1].levelIndex, 1);
+      expect(building.levels[1].name, 'Level 2');
+      expect(building.levels[1].shortName, 'L2');
+      expect(building.activeLevelIndex, 1);
+      expect(building.defaultLevelIndex, 0);
+      expect(building.isUnderground, false);
+    });
+
+    test('tests IndoorBuilding equality', () {
+      final IndoorBuilding building1 = IndoorBuilding(
+        levels: const <IndoorLevel>[
+          IndoorLevel(levelIndex: 0, name: 'Level 1', shortName: 'L1'),
+          IndoorLevel(levelIndex: 1, name: 'Level 2', shortName: 'L2'),
+        ],
+        activeLevelIndex: 1,
+        defaultLevelIndex: 0,
+        isUnderground: false,
+      );
+
+      final IndoorBuilding building2 = IndoorBuilding(
+        levels: const <IndoorLevel>[
+          IndoorLevel(levelIndex: 0, name: 'Level 1', shortName: 'L1'),
+          IndoorLevel(levelIndex: 1, name: 'Level 2', shortName: 'L2'),
+        ],
+        activeLevelIndex: 1,
+        defaultLevelIndex: 0,
+        isUnderground: false,
+      );
+
+      expect(building1, building2);
+      expect(building1.hashCode, building2.hashCode);
+    });
+  });
 }

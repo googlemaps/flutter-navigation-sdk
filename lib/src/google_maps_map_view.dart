@@ -62,6 +62,8 @@ abstract class GoogleMapsBaseMapView extends StatefulWidget {
     this.onPolylineClicked,
     this.onCircleClicked,
     this.onPoiClicked,
+    this.onIndoorFocusedBuildingChanged,
+    this.onIndoorActiveLevelChanged,
     this.onMyLocationClicked,
     this.onMyLocationButtonClicked,
     this.onCameraMoveStarted,
@@ -227,6 +229,12 @@ abstract class GoogleMapsBaseMapView extends StatefulWidget {
   /// On POI (Point of Interest) clicked callback.
   final OnPoiClicked? onPoiClicked;
 
+  /// On focused indoor building changed callback.
+  final OnIndoorFocusedBuildingChanged? onIndoorFocusedBuildingChanged;
+
+  /// On active indoor level changed callback.
+  final OnIndoorActiveLevelChanged? onIndoorActiveLevelChanged;
+
   /// On my location clicked callback.
   final OnMyLocationClicked? onMyLocationClicked;
 
@@ -304,6 +312,8 @@ class GoogleMapsMapView extends GoogleMapsBaseMapView {
     super.onPolylineClicked,
     super.onCircleClicked,
     super.onPoiClicked,
+    super.onIndoorFocusedBuildingChanged,
+    super.onIndoorActiveLevelChanged,
     super.onMyLocationClicked,
     super.onMyLocationButtonClicked,
     super.onCameraMoveStarted,
@@ -431,6 +441,22 @@ abstract class MapViewState<T extends GoogleMapsBaseMapView> extends State<T> {
           .getPoiClickedEventStream(viewId: viewId)
           .listen((PoiClickedEvent event) {
             widget.onPoiClicked?.call(event.pointOfInterest);
+          });
+    }
+
+    if (widget.onIndoorFocusedBuildingChanged != null) {
+      GoogleMapsNavigationPlatform.instance.viewAPI
+          .getIndoorFocusedBuildingChangedEventStream(viewId: viewId)
+          .listen((IndoorFocusedBuildingChangedEvent event) {
+            widget.onIndoorFocusedBuildingChanged?.call(event.building);
+          });
+    }
+
+    if (widget.onIndoorActiveLevelChanged != null) {
+      GoogleMapsNavigationPlatform.instance.viewAPI
+          .getIndoorActiveLevelChangedEventStream(viewId: viewId)
+          .listen((IndoorActiveLevelChangedEvent event) {
+            widget.onIndoorActiveLevelChanged?.call(event.building);
           });
     }
 

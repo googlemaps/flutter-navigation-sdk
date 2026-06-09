@@ -384,6 +384,30 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
     getView(viewId.toInt()).setBuildingsEnabled(enabled)
   }
 
+  override fun isIndoorEnabled(viewId: Long): Boolean {
+    return getView(viewId.toInt()).isIndoorEnabled()
+  }
+
+  override fun setIndoorEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setIndoorEnabled(enabled)
+  }
+
+  override fun isIndoorLevelPickerEnabled(viewId: Long): Boolean {
+    return getView(viewId.toInt()).isIndoorLevelPickerEnabled()
+  }
+
+  override fun setIndoorLevelPickerEnabled(viewId: Long, enabled: Boolean) {
+    getView(viewId.toInt()).setIndoorLevelPickerEnabled(enabled)
+  }
+
+  override fun getFocusedIndoorBuilding(viewId: Long): IndoorBuildingDto? {
+    return getView(viewId.toInt()).getFocusedIndoorBuilding()
+  }
+
+  override fun activateIndoorLevel(viewId: Long, levelIndex: Long) {
+    getView(viewId.toInt()).activateIndoorLevel(levelIndex.toInt())
+  }
+
   override fun isTrafficPromptsEnabled(viewId: Long): Boolean {
     return getNavigationView(viewId.toInt()).isTrafficPromptsEnabled()
   }

@@ -676,6 +676,19 @@ void main() {
           when(viewMockApi.isReportIncidentButtonEnabled(any)).thenReturn(true);
           when(viewMockApi.isIncidentReportingAvailable(any)).thenReturn(true);
           when(viewMockApi.isBuildingsEnabled(any)).thenReturn(false);
+          when(viewMockApi.isIndoorEnabled(any)).thenReturn(true);
+          when(viewMockApi.isIndoorLevelPickerEnabled(any)).thenReturn(true);
+          when(viewMockApi.getFocusedIndoorBuilding(any)).thenReturn(
+            IndoorBuildingDto(
+              levels: <IndoorLevelDto>[
+                IndoorLevelDto(name: 'Level 1', shortName: 'L1'),
+                IndoorLevelDto(name: 'Level 2', shortName: 'L2'),
+              ],
+              activeLevelIndex: 1,
+              defaultLevelIndex: 0,
+              isUnderground: false,
+            ),
+          );
           when(viewMockApi.isNavigationHeaderEnabled(any)).thenReturn(true);
           when(viewMockApi.isNavigationFooterEnabled(any)).thenReturn(true);
           when(viewMockApi.isSpeedLimitIconEnabled(any)).thenReturn(true);
@@ -701,6 +714,14 @@ void main() {
           expect(await controller.isTrafficPromptsEnabled(), true);
           expect(await controller.isReportIncidentButtonEnabled(), true);
           expect(await controller.isIncidentReportingAvailable(), true);
+          expect(await controller.isIndoorEnabled(), true);
+          expect(await controller.settings.isIndoorLevelPickerEnabled(), true);
+          final IndoorBuilding? focusedIndoorBuilding = await controller
+              .getFocusedIndoorBuilding();
+          expect(focusedIndoorBuilding, isNotNull);
+          expect(focusedIndoorBuilding!.levels.length, 2);
+          expect(focusedIndoorBuilding.activeLevelIndex, 1);
+          await controller.activateIndoorLevel(focusedIndoorBuilding.levels[0]);
           expect(await controller.isNavigationHeaderEnabled(), true);
           expect(await controller.isNavigationFooterEnabled(), true);
           expect(await controller.isSpeedLimitIconEnabled(), true);
@@ -724,6 +745,10 @@ void main() {
           verify(viewMockApi.isTrafficPromptsEnabled(captureAny));
           verify(viewMockApi.isReportIncidentButtonEnabled(captureAny));
           verify(viewMockApi.isIncidentReportingAvailable(captureAny));
+          verify(viewMockApi.isIndoorEnabled(captureAny));
+          verify(viewMockApi.isIndoorLevelPickerEnabled(captureAny));
+          verify(viewMockApi.getFocusedIndoorBuilding(captureAny));
+          verify(viewMockApi.activateIndoorLevel(captureAny, captureAny));
           verify(viewMockApi.isNavigationHeaderEnabled(captureAny));
           verify(viewMockApi.isNavigationFooterEnabled(captureAny));
           verify(viewMockApi.isSpeedLimitIconEnabled(captureAny));
@@ -748,6 +773,8 @@ void main() {
           await controller.setReportIncidentButtonEnabled(true);
           await controller.showReportIncidentsPanel();
           await controller.setBuildingsEnabled(true);
+          await controller.setIndoorEnabled(true);
+          await controller.settings.setIndoorLevelPickerEnabled(true);
           await controller.setNavigationHeaderEnabled(true);
           await controller.setNavigationFooterEnabled(true);
           await controller.setSpeedLimitIconEnabled(true);
@@ -828,6 +855,16 @@ void main() {
             true,
           );
           verifyEnabled(
+            verify(viewMockApi.setIndoorEnabled(captureAny, captureAny)),
+            true,
+          );
+          verifyEnabled(
+            verify(
+              viewMockApi.setIndoorLevelPickerEnabled(captureAny, captureAny),
+            ),
+            true,
+          );
+          verifyEnabled(
             verify(
               viewMockApi.setNavigationHeaderEnabled(captureAny, captureAny),
             ),
@@ -863,6 +900,34 @@ void main() {
             true,
           );
         });
+
+        test(
+          'Indoor activation rejects negative indexes at package level',
+          () async {
+            const int viewId = 1;
+            final GoogleMapViewController mapController =
+                GoogleMapViewController(viewId);
+
+            expect(
+              () => GoogleMapsNavigationPlatform.instance.viewAPI
+                  .activateIndoorLevel(viewId: viewId, levelIndex: -1),
+              throwsA(isA<AssertionError>()),
+            );
+            verifyNever(viewMockApi.activateIndoorLevel(any, any));
+
+            expect(
+              () => mapController.activateIndoorLevel(
+                const IndoorLevel(
+                  levelIndex: -1,
+                  name: 'Basement',
+                  shortName: 'B1',
+                ),
+              ),
+              throwsA(isA<AssertionError>()),
+            );
+            verifyNever(viewMockApi.activateIndoorLevel(any, any));
+          },
+        );
 
         test('Test incident reporting APIs', () async {
           const int viewId = 1;

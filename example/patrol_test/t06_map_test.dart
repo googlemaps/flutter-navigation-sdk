@@ -229,6 +229,8 @@ void main() {
       true,
     );
     expect(await controller.settings.isTiltGesturesEnabled(), true);
+    expect(await controller.isIndoorEnabled(), true);
+    expect(await controller.settings.isIndoorLevelPickerEnabled(), true);
     if (Platform.isAndroid) {
       expect(await controller.settings.isMapToolbarEnabled(), true);
     }
@@ -301,6 +303,20 @@ void main() {
         await controller.settings.isTrafficEnabled(),
         result,
         reason: buildReasonForToggle('TrafficEnabled', result),
+      );
+
+      await controller.setIndoorEnabled(result);
+      expect(
+        await controller.isIndoorEnabled(),
+        result,
+        reason: buildReasonForToggle('IndoorEnabled', result),
+      );
+
+      await controller.settings.setIndoorLevelPickerEnabled(result);
+      expect(
+        await controller.settings.isIndoorLevelPickerEnabled(),
+        result,
+        reason: buildReasonForToggle('IndoorLevelPickerEnabled', result),
       );
 
       if (Platform.isAndroid) {

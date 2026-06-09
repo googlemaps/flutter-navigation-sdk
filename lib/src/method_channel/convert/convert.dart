@@ -15,6 +15,7 @@
 export 'camera.dart';
 export 'circle.dart';
 export 'destinations.dart';
+export 'indoor.dart';
 export 'latlng.dart';
 export 'latlng_bounds.dart';
 export 'map_color_scheme.dart';

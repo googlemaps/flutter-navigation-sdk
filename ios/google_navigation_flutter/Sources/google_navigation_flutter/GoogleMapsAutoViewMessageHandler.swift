@@ -544,6 +544,22 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
     viewRegistry.getCarPlayView() != nil
   }
 
+  func isIndoorEnabled() throws -> Bool {
+    try getView().isIndoorEnabled()
+  }
+
+  func setIndoorEnabled(enabled: Bool) throws {
+    try getView().setIndoorEnabled(enabled)
+  }
+
+  func getFocusedIndoorBuilding() throws -> IndoorBuildingDto? {
+    try getView().getFocusedIndoorBuilding()
+  }
+
+  func activateIndoorLevel(levelIndex: Int64) throws {
+    try getView().activateIndoorLevel(Int(levelIndex))
+  }
+
   func setPadding(padding: MapPaddingDto) throws {
     try getView().setPadding(padding: padding)
   }

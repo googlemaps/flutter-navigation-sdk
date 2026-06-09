@@ -116,6 +116,13 @@ typedef OnCircleClicked = void Function(String circleId);
 /// POIs include parks, schools, government buildings, and businesses.
 typedef OnPoiClicked = void Function(PointOfInterest pointOfInterest);
 
+/// Called when the focused indoor building changes.
+typedef OnIndoorFocusedBuildingChanged =
+    void Function(IndoorBuilding? building);
+
+/// Called when the active indoor level changes.
+typedef OnIndoorActiveLevelChanged = void Function(IndoorBuilding? building);
+
 /// Called when the [GoogleNavigationViewController.isNavigationUIEnabled] status changes.
 typedef OnNavigationUIEnabledChanged = void Function(bool navigationUIEnabled);
 
@@ -301,6 +308,12 @@ class NavigationViewUISettings {
     );
   }
 
+  /// Enables or disables the indoor level picker.
+  Future<void> setIndoorLevelPickerEnabled(bool enabled) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .setIndoorLevelPickerEnabled(viewId: _viewId, enabled: enabled);
+  }
+
   /// Checks if the my location button is enabled.
   Future<bool> isMyLocationButtonEnabled() async {
     return GoogleMapsNavigationPlatform.instance.viewAPI
@@ -369,6 +382,12 @@ class NavigationViewUISettings {
     return GoogleMapsNavigationPlatform.instance.viewAPI.isMapToolbarEnabled(
       viewId: _viewId,
     );
+  }
+
+  /// Checks if the indoor level picker is enabled.
+  Future<bool> isIndoorLevelPickerEnabled() async {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .isIndoorLevelPickerEnabled(viewId: _viewId);
   }
 
   /// Checks if the map is displaying traffic data.
