@@ -99,6 +99,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   int _onRecenterButtonClickedEventCallCount = 0;
   int _onRemainingTimeOrDistanceChangedEventCallCount = 0;
   int _onNavigationUIEnabledChangedEventCallCount = 0;
+  int _onAutoNavigationUIEnabledChangedEventCallCount = 0;
   int _onNewNavigationSessionEventCallCount = 0;
   int _onPromptVisibilityChangedEventCallCount = 0;
   int _onIndoorFocusedBuildingChangedEventCallCount = 0;
@@ -136,6 +137,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   MapColorScheme _autoMapColorScheme = MapColorScheme.followSystem;
   NavigationForceNightMode _autoForceNightMode = NavigationForceNightMode.auto;
   MapType _autoMapType = MapType.normal;
+  bool _autoIndoorEnabled = true;
+  IndoorBuilding? _autoFocusedIndoorBuilding;
 
   bool _validRoute = false;
   bool _errorOnSetDestinations = false;
@@ -231,6 +234,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     if (!mounted) return;
     if (_isAutoScreenAvailable) {
       unawaited(_syncAutoNavigationUI());
+      unawaited(_syncAutoIndoorState());
     }
     _autoViewController.listenForAutoScreenAvailibilityChangedEvent((event) {
       if (!mounted) return;
@@ -244,6 +248,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       });
       if (event.isAvailable) {
         unawaited(_syncAutoNavigationUI());
+        unawaited(_syncAutoIndoorState());
       }
     });
 
@@ -255,6 +260,31 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
             ? "Traffic prompt is now visible on auto screen"
             : "Traffic prompt is now hidden on auto screen",
       );
+    });
+
+    _autoViewController.listenForIndoorFocusedBuildingChangedEvent((event) {
+      if (!mounted) return;
+      setState(() {
+        _autoFocusedIndoorBuilding = event.building;
+      });
+    });
+
+    _autoViewController.listenForIndoorActiveLevelChangedEvent((event) {
+      if (!mounted) return;
+      setState(() {
+        _autoFocusedIndoorBuilding = event.building;
+      });
+    });
+
+    // Listen for navigation UI enabled changes on Android Auto / CarPlay
+    _autoViewController.listenForNavigationUIEnabledChangedEvent((event) {
+      if (!mounted) return;
+      debugPrint(
+        event.navigationUIEnabled
+            ? "Auto navigation UI is now enabled"
+            : "Auto navigation UI is now disabled",
+      );
+      _onAutoNavigationUIEnabledChanged(event.navigationUIEnabled);
     });
   }
 
@@ -395,6 +425,26 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       await _autoViewController.setNavigationUIEnabled(enabled);
     } catch (e) {
       _showMessage('Failed to sync auto navigation UI: $e');
+    }
+  }
+
+  Future<void> _syncAutoIndoorState() async {
+    if (!_isAutoScreenAvailable) return;
+    try {
+      final bool indoorEnabled = await _autoViewController.isIndoorEnabled();
+      final bool navigationUIEnabled = await _autoViewController
+          .isNavigationUIEnabled();
+      final IndoorBuilding? focusedBuilding = await _autoViewController
+          .getFocusedIndoorBuilding();
+
+      if (!mounted) return;
+      setState(() {
+        _autoIndoorEnabled = indoorEnabled;
+        _autoNavigationUIEnabled = navigationUIEnabled;
+        _autoFocusedIndoorBuilding = focusedBuilding;
+      });
+    } catch (e) {
+      _showMessage('Failed to sync auto indoor state: $e');
     }
   }
 
@@ -803,6 +853,15 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       setState(() {
         _navigationUIEnabled = enabled;
         _onNavigationUIEnabledChangedEventCallCount += 1;
+      });
+    }
+  }
+
+  void _onAutoNavigationUIEnabledChanged(bool enabled) {
+    if (mounted) {
+      setState(() {
+        _autoNavigationUIEnabled = enabled;
+        _onAutoNavigationUIEnabledChangedEventCallCount += 1;
       });
     }
   }
@@ -1815,6 +1874,16 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
               ),
               Card(
                 child: ListTile(
+                  title: const Text(
+                    'On auto navigation UI enabled changed event call count',
+                  ),
+                  trailing: Text(
+                    _onAutoNavigationUIEnabledChangedEventCallCount.toString(),
+                  ),
+                ),
+              ),
+              Card(
+                child: ListTile(
                   title: const Text('New navigation session event call count'),
                   trailing: Text(
                     _onNewNavigationSessionEventCallCount.toString(),
@@ -2185,60 +2254,20 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     });
                   },
                 ),
-                if (_focusedIndoorBuilding != null)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Focused building: '
-                          '${_focusedIndoorBuilding!.levels.length} level(s)',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Wrap(
-                          spacing: 6,
-                          children: <Widget>[
-                            for (final IndoorLevel level
-                                in _focusedIndoorBuilding!.levels)
-                              ActionChip(
-                                label: Text(
-                                  level.shortName ?? 'L${level.levelIndex}',
-                                ),
-                                backgroundColor:
-                                    _focusedIndoorBuilding!.activeLevelIndex ==
-                                        level.levelIndex
-                                    ? Theme.of(
-                                        context,
-                                      ).colorScheme.primaryContainer
-                                    : null,
-                                onPressed: () async {
-                                  try {
-                                    await _navigationViewController!
-                                        .activateIndoorLevel(level);
-                                  } catch (e) {
-                                    _showMessage(
-                                      'Failed to activate level: $e',
-                                    );
-                                  }
-                                },
-                              ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                if (_focusedIndoorBuilding == null && _indoorEnabled)
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                    child: Text(
-                      'Navigate to an indoor area to see level controls.',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
+                _buildIndoorFloorSelector(
+                  _focusedIndoorBuilding,
+                  _indoorEnabled,
+                  _navigationUIEnabled,
+                  (level) async {
+                    try {
+                      await _navigationViewController!.activateIndoorLevel(
+                        level,
+                      );
+                    } catch (e) {
+                      _showMessage('Failed to activate level: $e');
+                    }
+                  },
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
@@ -2528,6 +2557,44 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   setState(() {
                     _autoTrafficIncidentCardsEnabled = newValue;
                   });
+                },
+              ),
+              const Divider(),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  'Indoor Controls',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              ExampleSwitch(
+                title: 'Enable indoor maps',
+                initialValue: _autoIndoorEnabled,
+                onChanged: (bool newValue) async {
+                  await _autoViewController.setIndoorEnabled(newValue);
+                  if (!mounted) return;
+                  setState(() {
+                    _autoIndoorEnabled = newValue;
+                    if (!newValue) {
+                      _autoFocusedIndoorBuilding = null;
+                    }
+                  });
+                  if (newValue) {
+                    await _syncAutoIndoorState();
+                  }
+                },
+              ),
+              _buildIndoorFloorSelector(
+                _autoFocusedIndoorBuilding,
+                _autoIndoorEnabled,
+                _autoNavigationUIEnabled,
+                (level) async {
+                  try {
+                    await _autoViewController.activateIndoorLevel(level);
+                    await _syncAutoIndoorState();
+                  } catch (e) {
+                    _showMessage('Failed to activate auto level: $e');
+                  }
                 },
               ),
               const Divider(),
@@ -2942,6 +3009,72 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
           }
         }
       },
+    );
+  }
+
+  /// Builds a shared indoor floor selector widget for focused building display.
+  ///
+  /// Shows the focused building with interactive level chips if available,
+  /// or displays a message when no building is focused.
+  ///
+  /// Parameters:
+  /// - [building]: The currently focused indoor building, or null
+  /// - [indoorEnabled]: Whether indoor mode is enabled
+  /// - [isNavigationUIEnabled]: Whether navigation UI is enabled
+  /// - [onFloorActivated]: Callback when a floor level is selected
+  Widget _buildIndoorFloorSelector(
+    IndoorBuilding? building,
+    bool indoorEnabled,
+    bool isNavigationUIEnabled,
+    Future<void> Function(IndoorLevel) onFloorActivated,
+  ) {
+    if (building == null) {
+      if (!isNavigationUIEnabled) {
+        return const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          child: Text(
+            'Indoor floors are visible only when navigation UI is disabled.',
+            style: TextStyle(color: Colors.grey),
+          ),
+        );
+      }
+      if (!indoorEnabled) {
+        return const SizedBox.shrink();
+      }
+      return const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        child: Text(
+          'Move camera to an indoor area to see floor controls.',
+          style: TextStyle(color: Colors.grey),
+        ),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Focused building: ${building.levels.length} level(s)',
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 6,
+            children: <Widget>[
+              for (final IndoorLevel level in building.levels)
+                ActionChip(
+                  label: Text(level.shortName ?? 'L${level.levelIndex}'),
+                  backgroundColor: building.activeLevelIndex == level.levelIndex
+                      ? Theme.of(context).colorScheme.primaryContainer
+                      : null,
+                  onPressed: () => onFloorActivated(level),
+                ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 

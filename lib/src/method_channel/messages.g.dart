@@ -12108,6 +12108,8 @@ abstract class AutoViewEventApi {
 
   void onPromptVisibilityChanged(bool promptVisible);
 
+  void onNavigationUIEnabledChanged(bool navigationUIEnabled);
+
   void onIndoorFocusedBuildingChanged(IndoorBuildingDto? building);
 
   void onIndoorActiveLevelChanged(IndoorBuildingDto? building);
@@ -12216,6 +12218,40 @@ abstract class AutoViewEventApi {
           );
           try {
             api.onPromptVisibilityChanged(arg_promptVisible!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onNavigationUIEnabledChanged$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        pigeonVar_channel.setMessageHandler(null);
+      } else {
+        pigeonVar_channel.setMessageHandler((Object? message) async {
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onNavigationUIEnabledChanged was null.',
+          );
+          final List<Object?> args = (message as List<Object?>?)!;
+          final bool? arg_navigationUIEnabled = (args[0] as bool?);
+          assert(
+            arg_navigationUIEnabled != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onNavigationUIEnabledChanged was null, expected non-null bool.',
+          );
+          try {
+            api.onNavigationUIEnabledChanged(arg_navigationUIEnabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

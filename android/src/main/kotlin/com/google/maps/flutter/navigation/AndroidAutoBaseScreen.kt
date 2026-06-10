@@ -37,6 +37,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.model.IndoorBuilding
 import com.google.android.libraries.navigation.NavigationView
+import com.google.android.libraries.navigation.OnNavigationUiChangedListener
 import com.google.android.libraries.navigation.PromptVisibilityChangedListener
 
 open class AndroidAutoBaseScreen(carContext: CarContext) :
@@ -86,6 +87,7 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
   private var mAutoMapView: GoogleMapsAutoMapView? = null
   private var mViewRegistry: GoogleMapsViewRegistry? = null
   private var mPromptVisibilityListener: PromptVisibilityChangedListener? = null
+  private var mNavigationUIChangedListener: OnNavigationUiChangedListener? = null
   protected var mIsNavigationReady: Boolean = false
   var mGoogleMap: GoogleMap? = null
   private var mIsPromptVisible: Boolean = false
@@ -206,6 +208,10 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
       // so keep it disabled by default for auto surfaces.
       googleMap.uiSettings.isIndoorLevelPickerEnabled = false
 
+      // My location button is non user-operable on Android Auto,
+      // so keep it disabled by default for auto surfaces.
+      googleMap.uiSettings.isMyLocationButtonEnabled = false
+
       val viewRegistry = GoogleMapsNavigationPlugin.getInstance()?.viewRegistry
       val imageRegistry = GoogleMapsNavigationPlugin.getInstance()?.imageRegistry
       if (viewRegistry != null && imageRegistry != null) {
@@ -243,6 +249,12 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
         }
         navigationView.addPromptVisibilityChangedListener(mPromptVisibilityListener)
 
+        // Set up navigation UI state listener
+        mNavigationUIChangedListener = OnNavigationUiChangedListener { enabled ->
+          onNavigationUIEnabledChanged(enabled)
+        }
+        navigationView.addOnNavigationUiChangedListener(mNavigationUIChangedListener)
+
         sendAutoScreenAvailabilityChangedEvent(true)
         invalidate()
       }
@@ -260,6 +272,10 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
     if (mPromptVisibilityListener != null && mNavigationView != null) {
       mNavigationView?.removePromptVisibilityChangedListener(mPromptVisibilityListener)
       mPromptVisibilityListener = null
+    }
+    if (mNavigationUIChangedListener != null && mNavigationView != null) {
+      mNavigationView?.removeOnNavigationUiChangedListener(mNavigationUIChangedListener)
+      mNavigationUIChangedListener = null
     }
     mIsPromptVisible = false
 
@@ -378,6 +394,20 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
     // Send event to Flutter by default
     GoogleMapsNavigationPlugin.getInstance()?.autoViewEventApi?.onPromptVisibilityChanged(
       promptVisible
+    ) {}
+  }
+
+  /**
+   * Called when navigation UI enabled state changes on the Android Auto screen.
+   *
+   * Override this method to add custom behavior when navigation UI is enabled/disabled.
+   *
+   * @param enabled true if navigation UI is enabled, false if disabled
+   */
+  open fun onNavigationUIEnabledChanged(enabled: Boolean) {
+    // Send event to Flutter by default
+    GoogleMapsNavigationPlugin.getInstance()?.autoViewEventApi?.onNavigationUIEnabledChanged(
+      enabled
     ) {}
   }
 }

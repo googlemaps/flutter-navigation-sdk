@@ -789,6 +789,12 @@ class AutoMapViewAPIImpl {
     return _unwrapEventStream<IndoorActiveLevelChangedEvent>();
   }
 
+  /// Get navigation UI enabled changed event stream from the auto view.
+  Stream<NavigationUIEnabledChangedEvent>
+  getNavigationUIEnabledChangedEventStream() {
+    return _unwrapEventStream<NavigationUIEnabledChangedEvent>();
+  }
+
   Future<void> setTrafficPromptsEnabled({required bool enabled}) {
     return _viewApi.setTrafficPromptsEnabled(enabled);
   }
@@ -898,6 +904,13 @@ class AutoViewEventApiImpl implements AutoViewEventApi {
   void onPromptVisibilityChanged(bool promptVisible) {
     _viewEventStreamController.add(
       _AutoEventWrapper(PromptVisibilityChangedEvent(promptVisible)),
+    );
+  }
+
+  @override
+  void onNavigationUIEnabledChanged(bool navigationUIEnabled) {
+    _viewEventStreamController.add(
+      _AutoEventWrapper(NavigationUIEnabledChangedEvent(navigationUIEnabled)),
     );
   }
 

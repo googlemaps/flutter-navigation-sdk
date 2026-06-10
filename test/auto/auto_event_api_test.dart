@@ -194,6 +194,57 @@ void main() {
       expect(receivedEvents[2].promptVisible, true);
     });
 
+    test('NavigationUIEnabledChangedEvent stream receives events', () async {
+      NavigationUIEnabledChangedEvent? receivedEvent;
+      const bool testNavigationUIEnabled = true;
+
+      // Subscribe directly to the test API's stream
+      testAutoApi.getNavigationUIEnabledChangedEventStream().listen((
+        NavigationUIEnabledChangedEvent event,
+      ) {
+        receivedEvent = event;
+      });
+      await Future<void>.delayed(Duration.zero);
+
+      // Inject event via test API
+      testAutoApi.testEventApi.onNavigationUIEnabledChanged(
+        testNavigationUIEnabled,
+      );
+      await Future<void>.delayed(Duration.zero);
+
+      // Verify event was received
+      expect(receivedEvent, isNotNull);
+      expect(receivedEvent!.navigationUIEnabled, testNavigationUIEnabled);
+    });
+
+    test(
+      'Multiple NavigationUIEnabledChangedEvent events are received',
+      () async {
+        final List<NavigationUIEnabledChangedEvent> receivedEvents =
+            <NavigationUIEnabledChangedEvent>[];
+
+        // Subscribe directly to the test API's stream
+        testAutoApi.getNavigationUIEnabledChangedEventStream().listen((
+          NavigationUIEnabledChangedEvent event,
+        ) {
+          receivedEvents.add(event);
+        });
+        await Future<void>.delayed(Duration.zero);
+
+        // Inject multiple events with different navigation UI states
+        testAutoApi.testEventApi.onNavigationUIEnabledChanged(true);
+        testAutoApi.testEventApi.onNavigationUIEnabledChanged(false);
+        testAutoApi.testEventApi.onNavigationUIEnabledChanged(true);
+        await Future<void>.delayed(Duration.zero);
+
+        // Verify all events were received
+        expect(receivedEvents.length, 3);
+        expect(receivedEvents[0].navigationUIEnabled, true);
+        expect(receivedEvents[1].navigationUIEnabled, false);
+        expect(receivedEvents[2].navigationUIEnabled, true);
+      },
+    );
+
     test(
       'Event streams filter correctly between different event types',
       () async {

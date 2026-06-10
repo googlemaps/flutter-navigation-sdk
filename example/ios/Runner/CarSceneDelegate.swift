@@ -95,6 +95,7 @@ class CarSceneDelegate: BaseCarSceneDelegate {
   }
 
   override func onNavigationUIEnabledChanged(isEnabled: Bool) {
+    super.onNavigationUIEnabledChanged(isEnabled: isEnabled)
     refreshTemplate()
   }
 
