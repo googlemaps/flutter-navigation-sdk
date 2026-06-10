@@ -51,6 +51,7 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
     _navigationViewController = controller;
     // Sync official UI state with current custom UI toggle
     await _updateUIState();
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -102,11 +103,13 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
       );
 
       _hideMessage();
+      if (!mounted) return;
       setState(() {
         _navigationRunning = true;
       });
     } else {
       _showMessage('Starting navigation failed.');
+      if (!mounted) return;
       setState(() {});
     }
     _updateUIState();
@@ -156,6 +159,7 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
         // Session was not initialized, continue.
       }
 
+      if (!mounted) return;
       setState(() {
         _navigationRunning = false;
       });
@@ -386,6 +390,7 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
   }
 
   void _showMessage(String message) {
+    if (!mounted) return;
     _hideMessage();
     if (isOverlayVisible) {
       showOverlaySnackBar(message);

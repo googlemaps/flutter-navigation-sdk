@@ -242,9 +242,7 @@ class _PolylinesPageState extends ExamplePageState<PolylinesPage> {
   }
 
   void _showMessage(String message) {
-    if (!mounted) {
-      return;
-    }
+    if (!mounted) return;
     _hideMessage();
     if (isOverlayVisible) {
       showOverlaySnackBar(message);

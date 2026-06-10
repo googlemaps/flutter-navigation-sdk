@@ -196,11 +196,13 @@ class _MultiplexState extends ExamplePageState<MultipleMapViewsPage> {
 
   Future<void> _showTermsAndConditionsDialogIfNeeded() async {
     _termsAndConditionsAccepted = await requestTermsAndConditionsAcceptance();
+    if (!mounted) return;
     setState(() {});
   }
 
   Future<void> _askLocationPermissionsIfNeeded() async {
     _locationPermissionsAccepted = await requestLocationDialogAcceptance();
+    if (!mounted) return;
     setState(() {});
   }
 

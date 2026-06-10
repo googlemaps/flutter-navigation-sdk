@@ -197,12 +197,14 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   @override
   void dispose() {
     _clearListeners();
-    try {
-      GoogleMapsNavigator.cleanup();
-    } on SessionNotInitializedException catch (_) {
-      // Session was not initialized, continue.
-    }
-    clearRegisteredImages();
+    unawaited(() async {
+      try {
+        await GoogleMapsNavigator.cleanup();
+      } on SessionNotInitializedException {
+        // Ignore.
+      }
+      await clearRegisteredImages();
+    }());
     super.dispose();
   }
 
@@ -512,11 +514,13 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   Future<void> _showTermsAndConditionsDialogIfNeeded() async {
     _termsAndConditionsAccepted = await requestTermsAndConditionsAcceptance();
+    if (!mounted) return;
     setState(() {});
   }
 
   Future<void> _askLocationPermissionsIfNeeded() async {
     _locationPermissionsAccepted = await requestLocationDialogAcceptance();
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -525,11 +529,13 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     if (_navigatorInitialized) {
       _navigatorInitializedAtLeastOnce = true;
     }
+    if (!mounted) return;
     setState(() {});
   }
 
   Future<void> _updateTermsAcceptedState() async {
     _termsAndConditionsAccepted = await GoogleMapsNavigator.areTermsAccepted();
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -1025,6 +1031,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
     // Unregister custom marker images
     await clearRegisteredImages();
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -1074,11 +1081,13 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   Future<void> _updateNavigationDestinationsAndNavigationViewState() async {
     final bool success = await _updateNavigationDestinations();
     if (success) {
+      if (!mounted) return;
       await _navigationViewController!.setNavigationUIEnabled(true);
 
       if (!_guidanceRunning) {
         await _navigationViewController!.showRouteOverview();
       }
+      if (!mounted) return;
       setState(() {
         _validRoute = true;
       });
@@ -1236,6 +1245,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   Future<void> _clearNavigationWaypoints() async {
     // Stopping guided navigation will also clear the waypoints.
     await _stopGuidedNavigation();
+    if (!mounted) return;
     setState(() {
       _waypoints.clear();
     });
@@ -1403,6 +1413,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   Future<void> _startGuidance() async {
     await GoogleMapsNavigator.startGuidance();
+    if (!mounted) return;
     setState(() {
       _guidanceRunning = true;
     });
@@ -1411,6 +1422,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   Future<void> _stopGuidance() async {
     await GoogleMapsNavigator.stopGuidance();
+    if (!mounted) return;
     setState(() {
       _guidanceRunning = false;
     });
@@ -1438,6 +1450,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
             SimulationOptions(speedMultiplier: simulationSpeedMultiplier),
           );
 
+      if (!mounted) return;
       setState(() {
         _simulationState = SimulationState.running;
       });
@@ -1488,6 +1501,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   Future<void> _stopSimulation() async {
     await GoogleMapsNavigator.simulator.removeUserLocation();
+    if (!mounted) return;
     setState(() {
       _simulationState = SimulationState.notRunning;
     });
@@ -1495,6 +1509,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   Future<void> _pauseSimulation() async {
     await GoogleMapsNavigator.simulator.pauseSimulation();
+    if (!mounted) return;
     setState(() {
       _simulationState = SimulationState.paused;
     });
@@ -1503,6 +1518,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   Future<void> _resumeSimulation() async {
     assert(_simulationState == SimulationState.paused);
     await GoogleMapsNavigator.simulator.resumeSimulation();
+    if (!mounted) return;
     setState(() {
       _simulationState = SimulationState.running;
     });
@@ -1535,6 +1551,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   Future<void> _setPadding(EdgeInsets padding) async {
     try {
       await _navigationViewController!.setPadding(padding);
+      if (!mounted) return;
       setState(() {
         _mapPadding = padding;
       });
@@ -1546,6 +1563,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   Future<void> _setAutoViewPadding(EdgeInsets padding) async {
     try {
       await _autoViewController.setPadding(padding);
+      if (!mounted) return;
       setState(() {
         _autoViewMapPadding = padding;
       });
@@ -2111,6 +2129,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     await _navigationViewController!.setNavigationHeaderEnabled(
                       newValue,
                     );
+                    if (!mounted) return;
                     setState(() {
                       _navigationHeaderEnabled = newValue;
                     });
@@ -2123,6 +2142,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     await _navigationViewController!.setNavigationFooterEnabled(
                       newValue,
                     );
+                    if (!mounted) return;
                     setState(() {
                       _navigationFooterEnabled = newValue;
                     });
@@ -2134,6 +2154,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   onChanged: (bool newValue) async {
                     await _navigationViewController!
                         .setNavigationTripProgressBarEnabled(newValue);
+                    if (!mounted) return;
                     setState(() {
                       _navigationTripProgressBarEnabled = newValue;
                     });
@@ -2146,6 +2167,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     await _navigationViewController!.setNavigationUIEnabled(
                       newValue,
                     );
+                    if (!mounted) return;
                     setState(() {
                       _navigationUIEnabled = newValue;
                     });
@@ -2158,6 +2180,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     await _navigationViewController!.setRecenterButtonEnabled(
                       newValue,
                     );
+                    if (!mounted) return;
                     setState(() {
                       _recenterButtonEnabled = newValue;
                     });
@@ -2170,6 +2193,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     await _navigationViewController!.setSpeedLimitIconEnabled(
                       newValue,
                     );
+                    if (!mounted) return;
                     setState(() {
                       _speedLimitIconEnabled = newValue;
                     });
@@ -2182,6 +2206,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     await _navigationViewController!.setSpeedometerEnabled(
                       newValue,
                     );
+                    if (!mounted) return;
                     setState(() {
                       _speedometerEnabled = newValue;
                     });
@@ -2193,6 +2218,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   onChanged: (bool newValue) async {
                     await _navigationViewController!
                         .setTrafficIncidentCardsEnabled(newValue);
+                    if (!mounted) return;
                     setState(() {
                       _trafficIndicentCardsEnabled = newValue;
                     });
@@ -2205,6 +2231,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     await _navigationViewController!.setTrafficPromptsEnabled(
                       newValue,
                     );
+                    if (!mounted) return;
                     setState(() {
                       _trafficPromptsEnabled = newValue;
                     });
@@ -2216,6 +2243,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   onChanged: (bool newValue) async {
                     await _navigationViewController!
                         .setReportIncidentButtonEnabled(newValue);
+                    if (!mounted) return;
                     setState(() {
                       _reportIncidentButtonEnabled = newValue;
                     });
@@ -2228,6 +2256,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     await _navigationViewController!.setBuildingsEnabled(
                       newValue,
                     );
+                    if (!mounted) return;
                     setState(() {
                       _buildingsEnabled = newValue;
                     });
@@ -2238,6 +2267,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   initialValue: _indoorEnabled,
                   onChanged: (bool newValue) async {
                     await _navigationViewController!.setIndoorEnabled(newValue);
+                    if (!mounted) return;
                     setState(() {
                       _indoorEnabled = newValue;
                     });
@@ -2249,6 +2279,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   onChanged: (bool newValue) async {
                     await _navigationViewController!.settings
                         .setIndoorLevelPickerEnabled(newValue);
+                    if (!mounted) return;
                     setState(() {
                       _indoorLevelPickerEnabled = newValue;
                     });
@@ -2500,6 +2531,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                 initialValue: _autoNavigationUIEnabled,
                 onChanged: (bool newValue) async {
                   await _autoViewController.setNavigationUIEnabled(newValue);
+                  if (!mounted) return;
                   setState(() {
                     _autoNavigationUIEnabled = newValue;
                   });
@@ -2512,6 +2544,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   await _autoViewController.setNavigationTripProgressBarEnabled(
                     newValue,
                   );
+                  if (!mounted) return;
                   setState(() {
                     _autoNavigationTripProgressBarEnabled = newValue;
                   });
@@ -2522,6 +2555,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                 initialValue: _autoSpeedLimitIconEnabled,
                 onChanged: (bool newValue) async {
                   await _autoViewController.setSpeedLimitIconEnabled(newValue);
+                  if (!mounted) return;
                   setState(() {
                     _autoSpeedLimitIconEnabled = newValue;
                   });
@@ -2532,6 +2566,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                 initialValue: _autoSpeedometerEnabled,
                 onChanged: (bool newValue) async {
                   await _autoViewController.setSpeedometerEnabled(newValue);
+                  if (!mounted) return;
                   setState(() {
                     _autoSpeedometerEnabled = newValue;
                   });
@@ -2542,6 +2577,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                 initialValue: _autoTrafficPromptsEnabled,
                 onChanged: (bool newValue) async {
                   await _autoViewController.setTrafficPromptsEnabled(newValue);
+                  if (!mounted) return;
                   setState(() {
                     _autoTrafficPromptsEnabled = newValue;
                   });
@@ -2554,6 +2590,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   await _autoViewController.setTrafficIncidentCardsEnabled(
                     newValue,
                   );
+                  if (!mounted) return;
                   setState(() {
                     _autoTrafficIncidentCardsEnabled = newValue;
                   });
@@ -3079,6 +3116,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   }
 
   void _showMessage(String message) {
+    if (!mounted) return;
     if (isOverlayVisible) {
       showOverlaySnackBar(message);
     } else {
