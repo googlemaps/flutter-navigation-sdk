@@ -184,6 +184,7 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
         self.navView?.setNavigationFooterEnabled(false)
         self.navView?.setSpeedometerEnabled(false)
         self.navView?.setReportIncidentButtonEnabled(false)
+        try? self.navView?.setMyLocationButtonEnabled(false)
         // Indoor level picker is not user-operable on CarPlay,
         // so keep it disabled by default for car surfaces.
         self.navView?.setIndoorLevelPickerEnabled(false)
@@ -302,8 +303,11 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
   // Called when CarPlay navigation UI enabled state changes.
   // Override this method in your CarSceneDelegate subclass to handle the state change.
   open func onNavigationUIEnabledChanged(isEnabled: Bool) {
-    // Default implementation does nothing
-    // Subclasses can override to handle state changes
+    // Default implementation: send onNavigationUIEnabledChanged event to Flutter
+    autoViewEventApi?.onNavigationUIEnabledChanged(
+      navigationUIEnabled: isEnabled,
+      completion: { _ in }
+    )
   }
 
   // Called when CarPlay navigation view attaches to or detaches from a navigation session.

@@ -422,6 +422,7 @@ class _PolygonsPageState extends ExamplePageState<PolygonsPage> {
   }
 
   void _showMessage(String message) {
+    if (!mounted) return;
     final SnackBar snackBar = SnackBar(content: Text(message));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }

@@ -737,6 +737,24 @@ class GoogleMapsAutoViewController {
   }
 
   /// Listens for focused indoor building changes on Android Auto or CarPlay.
+  ///
+  /// The [func] callback will be invoked whenever the currently focused
+  /// indoor building changes (for example, when moving the camera into or out
+  /// of an indoor area).
+  ///
+  /// Example:
+  /// ```dart
+  /// autoViewController.listenForIndoorFocusedBuildingChangedEvent((event) {
+  ///   final building = event.building;
+  ///   if (building == null) {
+  ///     print('No focused indoor building');
+  ///     return;
+  ///   }
+  ///
+  ///   print('Focused building has ${building.levels.length} level(s)');
+  ///   print('Active level index: ${building.activeLevelIndex}');
+  /// });
+  /// ```
   void listenForIndoorFocusedBuildingChangedEvent(
     void Function(IndoorFocusedBuildingChangedEvent event) func,
   ) {
@@ -748,12 +766,57 @@ class GoogleMapsAutoViewController {
   }
 
   /// Listens for active indoor level changes on Android Auto or CarPlay.
+  ///
+  /// The [func] callback will be invoked whenever the active indoor level
+  /// changes in the currently focused building.
+  ///
+  /// Example:
+  /// ```dart
+  /// autoViewController.listenForIndoorActiveLevelChangedEvent((event) {
+  ///   final building = event.building;
+  ///   if (building == null) {
+  ///     print('No focused building for active level updates');
+  ///     return;
+  ///   }
+  ///
+  ///   final activeIndex = building.activeLevelIndex;
+  ///   final activeLevel = building.levels.firstWhere(
+  ///     (level) => level.levelIndex == activeIndex,
+  ///   );
+  ///   print('Active indoor level: ${activeLevel.shortName ?? activeLevel.name}');
+  /// });
+  /// ```
   void listenForIndoorActiveLevelChangedEvent(
     void Function(IndoorActiveLevelChangedEvent event) func,
   ) {
     GoogleMapsNavigationPlatform.instance.autoAPI
         .getIndoorActiveLevelChangedEventStream()
         .listen((IndoorActiveLevelChangedEvent event) {
+          func(event);
+        });
+  }
+
+  /// Listens for navigation UI enabled state changes on Android Auto or CarPlay.
+  ///
+  /// The [func] callback will be invoked whenever the navigation UI is
+  /// enabled or disabled on the auto screen.
+  ///
+  /// Example:
+  /// ```dart
+  /// autoViewController.listenForNavigationUIEnabledChangedEvent((event) {
+  ///   if (event.navigationUIEnabled) {
+  ///     print('Auto navigation UI enabled');
+  ///   } else {
+  ///     print('Auto navigation UI disabled');
+  ///   }
+  /// });
+  /// ```
+  void listenForNavigationUIEnabledChangedEvent(
+    void Function(NavigationUIEnabledChangedEvent event) func,
+  ) {
+    GoogleMapsNavigationPlatform.instance.autoAPI
+        .getNavigationUIEnabledChangedEventStream()
+        .listen((NavigationUIEnabledChangedEvent event) {
           func(event);
         });
   }

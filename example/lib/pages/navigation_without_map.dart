@@ -52,6 +52,7 @@ class _NavigationWithoutMapPageState
 
   Future<void> checkTermsAcceptance() async {
     final bool accepted = await GoogleMapsNavigator.areTermsAccepted();
+    if (!mounted) return;
     setState(() {
       termsAccepted = accepted;
     });
@@ -89,6 +90,7 @@ class _NavigationWithoutMapPageState
           ),
         );
     _showMessage(accepted ? 'Terms accepted' : 'Terms not accepted');
+    if (!mounted) return;
     setState(() {
       termsAccepted = accepted;
     });
@@ -97,6 +99,7 @@ class _NavigationWithoutMapPageState
   Future<void> initializeNavigationSession() async {
     try {
       await GoogleMapsNavigator.initializeNavigationSession();
+      if (!mounted) return;
       setState(() {
         sessionInitialized = true;
       });
@@ -122,6 +125,7 @@ class _NavigationWithoutMapPageState
     } on SessionNotInitializedException catch (_) {
       // Session was not initialized, continue.
     }
+    if (!mounted) return;
     setState(() {
       routeCalculated = false;
       guidanceRunning = false;
@@ -211,6 +215,7 @@ class _NavigationWithoutMapPageState
   Future<void> clearDestinations() async {
     try {
       await GoogleMapsNavigator.clearDestinations();
+      if (!mounted) return;
       setState(() {
         routeCalculated = false;
       });
@@ -225,6 +230,7 @@ class _NavigationWithoutMapPageState
     try {
       await GoogleMapsNavigator.startGuidance();
       if (await GoogleMapsNavigator.isGuidanceRunning()) {
+        if (!mounted) return;
         setState(() {
           guidanceRunning = true;
         });
@@ -240,6 +246,7 @@ class _NavigationWithoutMapPageState
     try {
       await GoogleMapsNavigator.stopGuidance();
       if (!await GoogleMapsNavigator.isGuidanceRunning()) {
+        if (!mounted) return;
         setState(() {
           guidanceRunning = false;
         });
@@ -309,6 +316,7 @@ class _NavigationWithoutMapPageState
   }
 
   void _showMessage(String message) {
+    if (!mounted) return;
     _hideMessage();
 
     final SnackBar snackBar = SnackBar(
@@ -347,6 +355,7 @@ class _NavigationWithoutMapPageState
                   ? null
                   : () async {
                       if (await resetTermsAccepted()) {
+                        if (!mounted) return;
                         setState(() {
                           termsAccepted = false;
                         });

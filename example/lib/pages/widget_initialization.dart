@@ -84,6 +84,7 @@ class _ViewInitializationPageState
 
   Future<void> _updateNavigationInitializationState() async {
     _navigationInitialized = await GoogleMapsNavigator.isInitialized();
+    if (!mounted) return;
     setState(() {});
   }
 

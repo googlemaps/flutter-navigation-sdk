@@ -99,6 +99,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   int _onRecenterButtonClickedEventCallCount = 0;
   int _onRemainingTimeOrDistanceChangedEventCallCount = 0;
   int _onNavigationUIEnabledChangedEventCallCount = 0;
+  int _onAutoNavigationUIEnabledChangedEventCallCount = 0;
   int _onNewNavigationSessionEventCallCount = 0;
   int _onPromptVisibilityChangedEventCallCount = 0;
   int _onIndoorFocusedBuildingChangedEventCallCount = 0;
@@ -136,6 +137,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   MapColorScheme _autoMapColorScheme = MapColorScheme.followSystem;
   NavigationForceNightMode _autoForceNightMode = NavigationForceNightMode.auto;
   MapType _autoMapType = MapType.normal;
+  bool _autoIndoorEnabled = true;
+  IndoorBuilding? _autoFocusedIndoorBuilding;
 
   bool _validRoute = false;
   bool _errorOnSetDestinations = false;
@@ -194,12 +197,14 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   @override
   void dispose() {
     _clearListeners();
-    try {
-      GoogleMapsNavigator.cleanup();
-    } on SessionNotInitializedException catch (_) {
-      // Session was not initialized, continue.
-    }
-    clearRegisteredImages();
+    unawaited(() async {
+      try {
+        await GoogleMapsNavigator.cleanup();
+      } on SessionNotInitializedException {
+        // Ignore.
+      }
+      await clearRegisteredImages();
+    }());
     super.dispose();
   }
 
@@ -231,6 +236,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     if (!mounted) return;
     if (_isAutoScreenAvailable) {
       unawaited(_syncAutoNavigationUI());
+      unawaited(_syncAutoIndoorState());
     }
     _autoViewController.listenForAutoScreenAvailibilityChangedEvent((event) {
       if (!mounted) return;
@@ -244,6 +250,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       });
       if (event.isAvailable) {
         unawaited(_syncAutoNavigationUI());
+        unawaited(_syncAutoIndoorState());
       }
     });
 
@@ -255,6 +262,31 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
             ? "Traffic prompt is now visible on auto screen"
             : "Traffic prompt is now hidden on auto screen",
       );
+    });
+
+    _autoViewController.listenForIndoorFocusedBuildingChangedEvent((event) {
+      if (!mounted) return;
+      setState(() {
+        _autoFocusedIndoorBuilding = event.building;
+      });
+    });
+
+    _autoViewController.listenForIndoorActiveLevelChangedEvent((event) {
+      if (!mounted) return;
+      setState(() {
+        _autoFocusedIndoorBuilding = event.building;
+      });
+    });
+
+    // Listen for navigation UI enabled changes on Android Auto / CarPlay
+    _autoViewController.listenForNavigationUIEnabledChangedEvent((event) {
+      if (!mounted) return;
+      debugPrint(
+        event.navigationUIEnabled
+            ? "Auto navigation UI is now enabled"
+            : "Auto navigation UI is now disabled",
+      );
+      _onAutoNavigationUIEnabledChanged(event.navigationUIEnabled);
     });
   }
 
@@ -398,6 +430,26 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     }
   }
 
+  Future<void> _syncAutoIndoorState() async {
+    if (!_isAutoScreenAvailable) return;
+    try {
+      final bool indoorEnabled = await _autoViewController.isIndoorEnabled();
+      final bool navigationUIEnabled = await _autoViewController
+          .isNavigationUIEnabled();
+      final IndoorBuilding? focusedBuilding = await _autoViewController
+          .getFocusedIndoorBuilding();
+
+      if (!mounted) return;
+      setState(() {
+        _autoIndoorEnabled = indoorEnabled;
+        _autoNavigationUIEnabled = navigationUIEnabled;
+        _autoFocusedIndoorBuilding = focusedBuilding;
+      });
+    } catch (e) {
+      _showMessage('Failed to sync auto indoor state: $e');
+    }
+  }
+
   /// iOS emulator does not update location and does not fire roadsnapping
   /// events. Initialize user location to [cameraLocationMIT] if user
   /// location is not available after timeout.
@@ -462,11 +514,13 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   Future<void> _showTermsAndConditionsDialogIfNeeded() async {
     _termsAndConditionsAccepted = await requestTermsAndConditionsAcceptance();
+    if (!mounted) return;
     setState(() {});
   }
 
   Future<void> _askLocationPermissionsIfNeeded() async {
     _locationPermissionsAccepted = await requestLocationDialogAcceptance();
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -475,11 +529,13 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     if (_navigatorInitialized) {
       _navigatorInitializedAtLeastOnce = true;
     }
+    if (!mounted) return;
     setState(() {});
   }
 
   Future<void> _updateTermsAcceptedState() async {
     _termsAndConditionsAccepted = await GoogleMapsNavigator.areTermsAccepted();
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -807,6 +863,15 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     }
   }
 
+  void _onAutoNavigationUIEnabledChanged(bool enabled) {
+    if (mounted) {
+      setState(() {
+        _autoNavigationUIEnabled = enabled;
+        _onAutoNavigationUIEnabledChangedEventCallCount += 1;
+      });
+    }
+  }
+
   void _onPromptVisibilityChanged(bool promptVisible) {
     if (mounted) {
       setState(() {
@@ -966,6 +1031,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
     // Unregister custom marker images
     await clearRegisteredImages();
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -1015,11 +1081,13 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   Future<void> _updateNavigationDestinationsAndNavigationViewState() async {
     final bool success = await _updateNavigationDestinations();
     if (success) {
+      if (!mounted) return;
       await _navigationViewController!.setNavigationUIEnabled(true);
 
       if (!_guidanceRunning) {
         await _navigationViewController!.showRouteOverview();
       }
+      if (!mounted) return;
       setState(() {
         _validRoute = true;
       });
@@ -1177,6 +1245,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   Future<void> _clearNavigationWaypoints() async {
     // Stopping guided navigation will also clear the waypoints.
     await _stopGuidedNavigation();
+    if (!mounted) return;
     setState(() {
       _waypoints.clear();
     });
@@ -1344,6 +1413,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   Future<void> _startGuidance() async {
     await GoogleMapsNavigator.startGuidance();
+    if (!mounted) return;
     setState(() {
       _guidanceRunning = true;
     });
@@ -1352,6 +1422,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   Future<void> _stopGuidance() async {
     await GoogleMapsNavigator.stopGuidance();
+    if (!mounted) return;
     setState(() {
       _guidanceRunning = false;
     });
@@ -1379,6 +1450,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
             SimulationOptions(speedMultiplier: simulationSpeedMultiplier),
           );
 
+      if (!mounted) return;
       setState(() {
         _simulationState = SimulationState.running;
       });
@@ -1429,6 +1501,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   Future<void> _stopSimulation() async {
     await GoogleMapsNavigator.simulator.removeUserLocation();
+    if (!mounted) return;
     setState(() {
       _simulationState = SimulationState.notRunning;
     });
@@ -1436,6 +1509,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
   Future<void> _pauseSimulation() async {
     await GoogleMapsNavigator.simulator.pauseSimulation();
+    if (!mounted) return;
     setState(() {
       _simulationState = SimulationState.paused;
     });
@@ -1444,6 +1518,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   Future<void> _resumeSimulation() async {
     assert(_simulationState == SimulationState.paused);
     await GoogleMapsNavigator.simulator.resumeSimulation();
+    if (!mounted) return;
     setState(() {
       _simulationState = SimulationState.running;
     });
@@ -1476,6 +1551,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   Future<void> _setPadding(EdgeInsets padding) async {
     try {
       await _navigationViewController!.setPadding(padding);
+      if (!mounted) return;
       setState(() {
         _mapPadding = padding;
       });
@@ -1487,6 +1563,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   Future<void> _setAutoViewPadding(EdgeInsets padding) async {
     try {
       await _autoViewController.setPadding(padding);
+      if (!mounted) return;
       setState(() {
         _autoViewMapPadding = padding;
       });
@@ -1815,6 +1892,16 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
               ),
               Card(
                 child: ListTile(
+                  title: const Text(
+                    'On auto navigation UI enabled changed event call count',
+                  ),
+                  trailing: Text(
+                    _onAutoNavigationUIEnabledChangedEventCallCount.toString(),
+                  ),
+                ),
+              ),
+              Card(
+                child: ListTile(
                   title: const Text('New navigation session event call count'),
                   trailing: Text(
                     _onNewNavigationSessionEventCallCount.toString(),
@@ -2042,6 +2129,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     await _navigationViewController!.setNavigationHeaderEnabled(
                       newValue,
                     );
+                    if (!mounted) return;
                     setState(() {
                       _navigationHeaderEnabled = newValue;
                     });
@@ -2054,6 +2142,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     await _navigationViewController!.setNavigationFooterEnabled(
                       newValue,
                     );
+                    if (!mounted) return;
                     setState(() {
                       _navigationFooterEnabled = newValue;
                     });
@@ -2065,6 +2154,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   onChanged: (bool newValue) async {
                     await _navigationViewController!
                         .setNavigationTripProgressBarEnabled(newValue);
+                    if (!mounted) return;
                     setState(() {
                       _navigationTripProgressBarEnabled = newValue;
                     });
@@ -2077,6 +2167,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     await _navigationViewController!.setNavigationUIEnabled(
                       newValue,
                     );
+                    if (!mounted) return;
                     setState(() {
                       _navigationUIEnabled = newValue;
                     });
@@ -2089,6 +2180,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     await _navigationViewController!.setRecenterButtonEnabled(
                       newValue,
                     );
+                    if (!mounted) return;
                     setState(() {
                       _recenterButtonEnabled = newValue;
                     });
@@ -2101,6 +2193,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     await _navigationViewController!.setSpeedLimitIconEnabled(
                       newValue,
                     );
+                    if (!mounted) return;
                     setState(() {
                       _speedLimitIconEnabled = newValue;
                     });
@@ -2113,6 +2206,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     await _navigationViewController!.setSpeedometerEnabled(
                       newValue,
                     );
+                    if (!mounted) return;
                     setState(() {
                       _speedometerEnabled = newValue;
                     });
@@ -2124,6 +2218,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   onChanged: (bool newValue) async {
                     await _navigationViewController!
                         .setTrafficIncidentCardsEnabled(newValue);
+                    if (!mounted) return;
                     setState(() {
                       _trafficIndicentCardsEnabled = newValue;
                     });
@@ -2136,6 +2231,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     await _navigationViewController!.setTrafficPromptsEnabled(
                       newValue,
                     );
+                    if (!mounted) return;
                     setState(() {
                       _trafficPromptsEnabled = newValue;
                     });
@@ -2147,6 +2243,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   onChanged: (bool newValue) async {
                     await _navigationViewController!
                         .setReportIncidentButtonEnabled(newValue);
+                    if (!mounted) return;
                     setState(() {
                       _reportIncidentButtonEnabled = newValue;
                     });
@@ -2159,6 +2256,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                     await _navigationViewController!.setBuildingsEnabled(
                       newValue,
                     );
+                    if (!mounted) return;
                     setState(() {
                       _buildingsEnabled = newValue;
                     });
@@ -2169,6 +2267,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   initialValue: _indoorEnabled,
                   onChanged: (bool newValue) async {
                     await _navigationViewController!.setIndoorEnabled(newValue);
+                    if (!mounted) return;
                     setState(() {
                       _indoorEnabled = newValue;
                     });
@@ -2180,65 +2279,26 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   onChanged: (bool newValue) async {
                     await _navigationViewController!.settings
                         .setIndoorLevelPickerEnabled(newValue);
+                    if (!mounted) return;
                     setState(() {
                       _indoorLevelPickerEnabled = newValue;
                     });
                   },
                 ),
-                if (_focusedIndoorBuilding != null)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Focused building: '
-                          '${_focusedIndoorBuilding!.levels.length} level(s)',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Wrap(
-                          spacing: 6,
-                          children: <Widget>[
-                            for (final IndoorLevel level
-                                in _focusedIndoorBuilding!.levels)
-                              ActionChip(
-                                label: Text(
-                                  level.shortName ?? 'L${level.levelIndex}',
-                                ),
-                                backgroundColor:
-                                    _focusedIndoorBuilding!.activeLevelIndex ==
-                                        level.levelIndex
-                                    ? Theme.of(
-                                        context,
-                                      ).colorScheme.primaryContainer
-                                    : null,
-                                onPressed: () async {
-                                  try {
-                                    await _navigationViewController!
-                                        .activateIndoorLevel(level);
-                                  } catch (e) {
-                                    _showMessage(
-                                      'Failed to activate level: $e',
-                                    );
-                                  }
-                                },
-                              ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                if (_focusedIndoorBuilding == null && _indoorEnabled)
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                    child: Text(
-                      'Navigate to an indoor area to see level controls.',
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
+                _buildIndoorFloorSelector(
+                  _focusedIndoorBuilding,
+                  _indoorEnabled,
+                  _navigationUIEnabled,
+                  (level) async {
+                    try {
+                      await _navigationViewController!.activateIndoorLevel(
+                        level,
+                      );
+                    } catch (e) {
+                      _showMessage('Failed to activate level: $e');
+                    }
+                  },
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
@@ -2471,6 +2531,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                 initialValue: _autoNavigationUIEnabled,
                 onChanged: (bool newValue) async {
                   await _autoViewController.setNavigationUIEnabled(newValue);
+                  if (!mounted) return;
                   setState(() {
                     _autoNavigationUIEnabled = newValue;
                   });
@@ -2483,6 +2544,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   await _autoViewController.setNavigationTripProgressBarEnabled(
                     newValue,
                   );
+                  if (!mounted) return;
                   setState(() {
                     _autoNavigationTripProgressBarEnabled = newValue;
                   });
@@ -2493,6 +2555,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                 initialValue: _autoSpeedLimitIconEnabled,
                 onChanged: (bool newValue) async {
                   await _autoViewController.setSpeedLimitIconEnabled(newValue);
+                  if (!mounted) return;
                   setState(() {
                     _autoSpeedLimitIconEnabled = newValue;
                   });
@@ -2503,6 +2566,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                 initialValue: _autoSpeedometerEnabled,
                 onChanged: (bool newValue) async {
                   await _autoViewController.setSpeedometerEnabled(newValue);
+                  if (!mounted) return;
                   setState(() {
                     _autoSpeedometerEnabled = newValue;
                   });
@@ -2513,6 +2577,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                 initialValue: _autoTrafficPromptsEnabled,
                 onChanged: (bool newValue) async {
                   await _autoViewController.setTrafficPromptsEnabled(newValue);
+                  if (!mounted) return;
                   setState(() {
                     _autoTrafficPromptsEnabled = newValue;
                   });
@@ -2525,9 +2590,48 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                   await _autoViewController.setTrafficIncidentCardsEnabled(
                     newValue,
                   );
+                  if (!mounted) return;
                   setState(() {
                     _autoTrafficIncidentCardsEnabled = newValue;
                   });
+                },
+              ),
+              const Divider(),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  'Indoor Controls',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              ExampleSwitch(
+                title: 'Enable indoor maps',
+                initialValue: _autoIndoorEnabled,
+                onChanged: (bool newValue) async {
+                  await _autoViewController.setIndoorEnabled(newValue);
+                  if (!mounted) return;
+                  setState(() {
+                    _autoIndoorEnabled = newValue;
+                    if (!newValue) {
+                      _autoFocusedIndoorBuilding = null;
+                    }
+                  });
+                  if (newValue) {
+                    await _syncAutoIndoorState();
+                  }
+                },
+              ),
+              _buildIndoorFloorSelector(
+                _autoFocusedIndoorBuilding,
+                _autoIndoorEnabled,
+                _autoNavigationUIEnabled,
+                (level) async {
+                  try {
+                    await _autoViewController.activateIndoorLevel(level);
+                    await _syncAutoIndoorState();
+                  } catch (e) {
+                    _showMessage('Failed to activate auto level: $e');
+                  }
                 },
               ),
               const Divider(),
@@ -2945,7 +3049,74 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     );
   }
 
+  /// Builds a shared indoor floor selector widget for focused building display.
+  ///
+  /// Shows the focused building with interactive level chips if available,
+  /// or displays a message when no building is focused.
+  ///
+  /// Parameters:
+  /// - [building]: The currently focused indoor building, or null
+  /// - [indoorEnabled]: Whether indoor mode is enabled
+  /// - [isNavigationUIEnabled]: Whether navigation UI is enabled
+  /// - [onFloorActivated]: Callback when a floor level is selected
+  Widget _buildIndoorFloorSelector(
+    IndoorBuilding? building,
+    bool indoorEnabled,
+    bool isNavigationUIEnabled,
+    Future<void> Function(IndoorLevel) onFloorActivated,
+  ) {
+    if (building == null) {
+      if (!isNavigationUIEnabled) {
+        return const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          child: Text(
+            'Indoor floors are visible only when navigation UI is disabled.',
+            style: TextStyle(color: Colors.grey),
+          ),
+        );
+      }
+      if (!indoorEnabled) {
+        return const SizedBox.shrink();
+      }
+      return const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        child: Text(
+          'Move camera to an indoor area to see floor controls.',
+          style: TextStyle(color: Colors.grey),
+        ),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            'Focused building: ${building.levels.length} level(s)',
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 6,
+            children: <Widget>[
+              for (final IndoorLevel level in building.levels)
+                ActionChip(
+                  label: Text(level.shortName ?? 'L${level.levelIndex}'),
+                  backgroundColor: building.activeLevelIndex == level.levelIndex
+                      ? Theme.of(context).colorScheme.primaryContainer
+                      : null,
+                  onPressed: () => onFloorActivated(level),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   void _showMessage(String message) {
+    if (!mounted) return;
     if (isOverlayVisible) {
       showOverlaySnackBar(message);
     } else {

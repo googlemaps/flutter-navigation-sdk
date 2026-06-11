@@ -1723,6 +1723,7 @@ abstract class AutoViewEventApi {
   void onCustomNavigationAutoEvent(String event, Object data);
   void onAutoScreenAvailabilityChanged(bool isAvailable);
   void onPromptVisibilityChanged(bool promptVisible);
+  void onNavigationUIEnabledChanged(bool navigationUIEnabled);
   void onIndoorFocusedBuildingChanged(IndoorBuildingDto? building);
   void onIndoorActiveLevelChanged(IndoorBuildingDto? building);
 }

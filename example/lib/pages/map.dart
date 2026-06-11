@@ -58,6 +58,7 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
   Future<void> setMapType(MapType type) async {
     mapType = type;
     await _mapViewController.setMapType(mapType: type);
+    if (!mounted) return;
     setState(() {});
   }
 
@@ -93,6 +94,7 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
   Future<void> getMapColorScheme() async {
     final MapColorScheme colorScheme = await _mapViewController
         .getMapColorScheme();
+    if (!mounted) return;
     setState(() {
       mapColorScheme = colorScheme;
     });
@@ -116,6 +118,7 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
   }
 
   void _showMessage(String message) {
+    if (!mounted) return;
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
     final SnackBar snackBar = SnackBar(
       duration: const Duration(milliseconds: 2000),
@@ -306,6 +309,7 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
             await _mapViewController.settings.setCompassEnabled(newValue);
             final bool enabled = await _mapViewController.settings
                 .isCompassEnabled();
+            if (!mounted) return;
             setState(() {
               isCompassEnabled = enabled;
             });
@@ -320,6 +324,7 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
           onChanged: (bool newValue) async {
             await _mapViewController.setMyLocationEnabled(newValue);
             final bool enabled = await _mapViewController.isMyLocationEnabled();
+            if (!mounted) return;
             setState(() {
               isMyLocationEnabled = enabled;
             });
@@ -337,6 +342,7 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
                   );
                   final bool enabled = await _mapViewController.settings
                       .isMyLocationButtonEnabled();
+                  if (!mounted) return;
                   setState(() {
                     isMyLocationButtonEnabled = enabled;
                   });
@@ -354,6 +360,7 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
                       .setConsumeMyLocationButtonClickEventsEnabled(newValue);
                   final bool enabled = await _mapViewController.settings
                       .isConsumeMyLocationButtonClickEventsEnabled();
+                  if (!mounted) return;
                   setState(() {
                     consumeMyLocationButtonClickEvent = enabled;
                   });
@@ -366,6 +373,7 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
             await _mapViewController.settings.setZoomGesturesEnabled(newValue);
             final bool enabled = await _mapViewController.settings
                 .isZoomGesturesEnabled();
+            if (!mounted) return;
             setState(() {
               isZoomGesturesEnabled = enabled;
             });
@@ -381,6 +389,7 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
               );
               final bool enabled = await _mapViewController.settings
                   .isZoomControlsEnabled();
+              if (!mounted) return;
               setState(() {
                 isZoomControlsEnabled = enabled;
               });
@@ -395,6 +404,7 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
             );
             final bool enabled = await _mapViewController.settings
                 .isRotateGesturesEnabled();
+            if (!mounted) return;
             setState(() {
               isRotateGesturesEnabled = enabled;
             });
@@ -409,6 +419,7 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
             );
             final bool enabled = await _mapViewController.settings
                 .isScrollGesturesEnabled();
+            if (!mounted) return;
             setState(() {
               isScrollGesturesEnabled = enabled;
             });
@@ -422,6 +433,7 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
                 .setScrollGesturesDuringRotateOrZoomEnabled(newValue);
             final bool enabled = await _mapViewController.settings
                 .isScrollGesturesEnabledDuringRotateOrZoom();
+            if (!mounted) return;
             setState(() {
               isScrollGesturesEnabledDuringRotateOrZoom = enabled;
             });
@@ -434,6 +446,7 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
             await _mapViewController.settings.setTiltGesturesEnabled(newValue);
             final bool enabled = await _mapViewController.settings
                 .isTiltGesturesEnabled();
+            if (!mounted) return;
             setState(() {
               isTiltGesturesEnabled = enabled;
             });
@@ -446,6 +459,7 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
             await _mapViewController.settings.setTrafficEnabled(newValue);
             final bool enabled = await _mapViewController.settings
                 .isTrafficEnabled();
+            if (!mounted) return;
             setState(() {
               isTrafficEnabled = enabled;
             });
@@ -456,6 +470,7 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
         SwitchListTile(
           onChanged: (bool newValue) async {
             await _mapViewController.setIndoorEnabled(newValue);
+            if (!mounted) return;
             setState(() {
               isIndoorEnabled = newValue;
               if (!newValue) {
@@ -472,6 +487,7 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
                   await _mapViewController.settings.setIndoorLevelPickerEnabled(
                     newValue,
                   );
+                  if (!mounted) return;
                   setState(() {
                     isIndoorLevelPickerEnabled = newValue;
                   });

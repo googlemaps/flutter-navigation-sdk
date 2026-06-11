@@ -62,6 +62,7 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
         .addMarkers(<MarkerOptions>[options]);
     if (addedMarkers.isNotEmpty) {
       final Marker marker = addedMarkers.first!;
+      if (!mounted) return;
       setState(() {
         _markers.add(marker);
         _markers = _markers + <Marker>[marker];
@@ -79,6 +80,7 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
       return;
     }
 
+    if (!mounted) return;
     setState(() {
       _markers.remove(_selectedMarker);
       _selectedMarker = null;
@@ -87,6 +89,7 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
 
   Future<void> clearMarkers() async {
     await _navigationViewController.clearMarkers();
+    if (!mounted) return;
     setState(() {
       _markers.clear();
     });
@@ -108,6 +111,7 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
 
     final Marker? marker = markers.firstOrNull;
     if (marker != null) {
+      if (!mounted) return;
       setState(() {
         _markers = _markers
             .where((Marker element) => element != _selectedMarker)
@@ -453,7 +457,7 @@ class _MarkersPageState extends ExamplePageState<MarkersPage> {
   }
 
   void _showMessage(String message) {
-    if (_displayMarkerUpdates) {
+    if (_displayMarkerUpdates && mounted) {
       final SnackBar snackBar = SnackBar(content: Text(message));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }

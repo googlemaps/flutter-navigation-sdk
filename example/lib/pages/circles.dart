@@ -355,6 +355,7 @@ class _CirclesPageState extends ExamplePageState<CirclesPage> {
   }
 
   void _showMessage(String message) {
+    if (!mounted) return;
     final SnackBar snackBar = SnackBar(content: Text(message));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
