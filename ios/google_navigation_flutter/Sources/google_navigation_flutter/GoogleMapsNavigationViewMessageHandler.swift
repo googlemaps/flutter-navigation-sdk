@@ -168,6 +168,20 @@ class GoogleMapsNavigationViewMessageHandler: MapViewApi {
     try Convert.convertCameraPosition(position: getView(viewId).getCameraPosition())
   }
 
+  func getScreenCoordinate(viewId: Int64, latLng: LatLngDto) throws -> ScreenCoordinateDto {
+    try Convert.convertScreenCoordinate(
+      point: getView(viewId).getScreenCoordinate(point: Convert.convertLatLngFromDto(point: latLng))
+    )
+  }
+
+  func getLatLng(viewId: Int64, screenCoordinate: ScreenCoordinateDto) throws -> LatLngDto {
+    try Convert.convertLatLngToDto(
+      point: getView(viewId).getLatLng(
+        screenCoordinate: Convert.convertScreenCoordinate(screenCoordinate: screenCoordinate)
+      )
+    )
+  }
+
   func getVisibleRegion(viewId: Int64) throws -> LatLngBoundsDto {
     try Convert.convertLatLngBounds(bounds: getView(viewId).getVisibleRegion())
   }

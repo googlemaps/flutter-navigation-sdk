@@ -245,6 +245,22 @@ class AutoMapViewAPIImpl {
     return position.toCameraPosition();
   }
 
+  /// Projects a geographical coordinate to a screen coordinate in logical pixels.
+  Future<ScreenCoordinate> getScreenCoordinate({required LatLng latLng}) async {
+    final ScreenCoordinateDto screenCoordinate = await _viewApi
+        .getScreenCoordinate(latLng.toDto())
+        .wrapPlatformException();
+    return screenCoordinate.toScreenCoordinate();
+  }
+
+  /// Projects a screen coordinate in logical pixels to a geographical coordinate.
+  Future<LatLng> getLatLng({required ScreenCoordinate screenCoordinate}) async {
+    final LatLngDto latLng = await _viewApi
+        .getLatLng(screenCoordinate.toDto())
+        .wrapPlatformException();
+    return latLng.toLatLng();
+  }
+
   /// Gets the current visible area / camera bounds.
   Future<LatLngBounds> getVisibleRegion() async {
     final LatLngBoundsDto bounds = await _viewApi

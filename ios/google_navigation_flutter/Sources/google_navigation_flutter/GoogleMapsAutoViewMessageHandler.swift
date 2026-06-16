@@ -237,6 +237,20 @@ class GoogleMapsAutoViewMessageHandler: AutoMapViewApi {
     try Convert.convertCameraPosition(position: getView().getCameraPosition())
   }
 
+  func getScreenCoordinate(latLng: LatLngDto) throws -> ScreenCoordinateDto {
+    try Convert.convertScreenCoordinate(
+      point: getView().getScreenCoordinate(point: Convert.convertLatLngFromDto(point: latLng))
+    )
+  }
+
+  func getLatLng(screenCoordinate: ScreenCoordinateDto) throws -> LatLngDto {
+    try Convert.convertLatLngToDto(
+      point: getView().getLatLng(
+        screenCoordinate: Convert.convertScreenCoordinate(screenCoordinate: screenCoordinate)
+      )
+    )
+  }
+
   func getVisibleRegion() throws -> LatLngBoundsDto {
     try Convert.convertLatLngBounds(bounds: getView().getVisibleRegion())
   }

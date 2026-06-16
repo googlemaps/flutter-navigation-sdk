@@ -621,6 +621,8 @@ abstract class MapViewApi {
   void activateIndoorLevel(int viewId, int levelIndex);
 
   CameraPositionDto getCameraPosition(int viewId);
+  ScreenCoordinateDto getScreenCoordinate(int viewId, LatLngDto latLng);
+  LatLngDto getLatLng(int viewId, ScreenCoordinateDto screenCoordinate);
   LatLngBoundsDto getVisibleRegion(int viewId);
 
   void followMyLocation(
@@ -923,6 +925,13 @@ class LatLngDto {
 
   final double latitude;
   final double longitude;
+}
+
+class ScreenCoordinateDto {
+  const ScreenCoordinateDto({required this.x, required this.y});
+
+  final double x;
+  final double y;
 }
 
 class LatLngBoundsDto {
@@ -1590,6 +1599,8 @@ abstract class AutoMapViewApi {
   void setMapStyle(String styleJson);
 
   CameraPositionDto getCameraPosition();
+  ScreenCoordinateDto getScreenCoordinate(LatLngDto latLng);
+  LatLngDto getLatLng(ScreenCoordinateDto screenCoordinate);
   LatLngBoundsDto getVisibleRegion();
 
   void followMyLocation(CameraPerspectiveDto perspective, double? zoomLevel);

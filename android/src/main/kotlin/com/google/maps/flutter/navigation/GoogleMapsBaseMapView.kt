@@ -622,6 +622,14 @@ abstract class GoogleMapsBaseMapView(
     return getMap().cameraPosition ?: CameraPosition(LatLng(0.0, 0.0), 0.0F, 0.0F, 0.0F)
   }
 
+  fun getScreenCoordinate(latLng: LatLng): Point {
+    return getMap().projection.toScreenLocation(latLng)
+  }
+
+  fun getLatLng(screenCoordinate: Point): LatLng {
+    return getMap().projection.fromScreenLocation(screenCoordinate)
+  }
+
   fun getVisibleRegion(): LatLngBounds {
     return getMap().projection.visibleRegion.latLngBounds
   }

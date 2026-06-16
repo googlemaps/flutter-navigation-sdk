@@ -30,5 +30,6 @@ export 'navinfo.dart';
 export 'pattern.dart';
 export 'poi.dart';
 export 'polygon.dart';
+export 'screen_coordinate.dart';
 export 'polyline.dart';
 export 'simulation.dart';

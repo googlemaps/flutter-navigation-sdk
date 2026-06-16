@@ -593,6 +593,40 @@ void main() {
     );
   });
 
+  patrol('Test projection methods', (PatrolIntegrationTester $) async {
+    final GoogleNavigationViewController controller =
+        await startNavigationWithoutDestination(
+          $,
+          initializeNavigation: true,
+          simulateLocation: true,
+        );
+
+    final CameraPosition cameraPosition = await controller.getCameraPosition();
+    final ScreenCoordinate screenCoordinate = await controller
+        .getScreenCoordinate(cameraPosition.target);
+    final LatLng projectedBack = await controller.getLatLng(screenCoordinate);
+    final LatLngBounds visibleRegion = await controller.getVisibleRegion();
+
+    expect(screenCoordinate.x, greaterThanOrEqualTo(0));
+    expect(screenCoordinate.y, greaterThanOrEqualTo(0));
+    expect(
+      projectedBack.latitude,
+      closeTo(cameraPosition.target.latitude, latLngTestThreshold),
+    );
+    expect(
+      projectedBack.longitude,
+      closeTo(cameraPosition.target.longitude, latLngTestThreshold),
+    );
+    expect(
+      visibleRegion.center.latitude,
+      closeTo(cameraPosition.target.latitude, latLngTestThreshold),
+    );
+    expect(
+      visibleRegion.center.longitude,
+      closeTo(cameraPosition.target.longitude, latLngTestThreshold),
+    );
+  });
+
   patrol(
     'Test moveCamera() and animateCamera() with various options',
     (PatrolIntegrationTester $) async {

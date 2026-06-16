@@ -212,47 +212,50 @@ class _PigeonCodec extends StandardMessageCodec {
     } else if (value is LatLngDto) {
       buffer.putUint8(188);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngBoundsDto) {
+    } else if (value is ScreenCoordinateDto) {
       buffer.putUint8(189);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedingUpdatedEventDto) {
+    } else if (value is LatLngBoundsDto) {
       buffer.putUint8(190);
       writeValue(buffer, value.encode());
-    } else if (value is GpsAvailabilityChangeEventDto) {
+    } else if (value is SpeedingUpdatedEventDto) {
       buffer.putUint8(191);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
+    } else if (value is GpsAvailabilityChangeEventDto) {
       buffer.putUint8(192);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsDto) {
+    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
       buffer.putUint8(193);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
+    } else if (value is SpeedAlertOptionsDto) {
       buffer.putUint8(194);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataDto) {
+    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
       buffer.putUint8(195);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentDto) {
+    } else if (value is RouteSegmentTrafficDataDto) {
       buffer.putUint8(196);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDirectionDto) {
+    } else if (value is RouteSegmentDto) {
       buffer.putUint8(197);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDto) {
+    } else if (value is LaneDirectionDto) {
       buffer.putUint8(198);
       writeValue(buffer, value.encode());
-    } else if (value is StepInfoDto) {
+    } else if (value is LaneDto) {
       buffer.putUint8(199);
       writeValue(buffer, value.encode());
-    } else if (value is NavInfoDto) {
+    } else if (value is StepInfoDto) {
       buffer.putUint8(200);
       writeValue(buffer, value.encode());
-    } else if (value is TermsAndConditionsUIParamsDto) {
+    } else if (value is NavInfoDto) {
       buffer.putUint8(201);
       writeValue(buffer, value.encode());
-    } else if (value is StepImageGenerationOptionsDto) {
+    } else if (value is TermsAndConditionsUIParamsDto) {
       buffer.putUint8(202);
+      writeValue(buffer, value.encode());
+    } else if (value is StepImageGenerationOptionsDto) {
+      buffer.putUint8(203);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -416,36 +419,38 @@ class _PigeonCodec extends StandardMessageCodec {
       case 188:
         return LatLngDto.decode(readValue(buffer)!);
       case 189:
-        return LatLngBoundsDto.decode(readValue(buffer)!);
+        return ScreenCoordinateDto.decode(readValue(buffer)!);
       case 190:
-        return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
+        return LatLngBoundsDto.decode(readValue(buffer)!);
       case 191:
-        return GpsAvailabilityChangeEventDto.decode(readValue(buffer)!);
+        return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
       case 192:
+        return GpsAvailabilityChangeEventDto.decode(readValue(buffer)!);
+      case 193:
         return SpeedAlertOptionsThresholdPercentageDto.decode(
           readValue(buffer)!,
         );
-      case 193:
-        return SpeedAlertOptionsDto.decode(readValue(buffer)!);
       case 194:
+        return SpeedAlertOptionsDto.decode(readValue(buffer)!);
+      case 195:
         return RouteSegmentTrafficDataRoadStretchRenderingDataDto.decode(
           readValue(buffer)!,
         );
-      case 195:
-        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
       case 196:
-        return RouteSegmentDto.decode(readValue(buffer)!);
+        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
       case 197:
-        return LaneDirectionDto.decode(readValue(buffer)!);
+        return RouteSegmentDto.decode(readValue(buffer)!);
       case 198:
-        return LaneDto.decode(readValue(buffer)!);
+        return LaneDirectionDto.decode(readValue(buffer)!);
       case 199:
-        return StepInfoDto.decode(readValue(buffer)!);
+        return LaneDto.decode(readValue(buffer)!);
       case 200:
-        return NavInfoDto.decode(readValue(buffer)!);
+        return StepInfoDto.decode(readValue(buffer)!);
       case 201:
-        return TermsAndConditionsUIParamsDto.decode(readValue(buffer)!);
+        return NavInfoDto.decode(readValue(buffer)!);
       case 202:
+        return TermsAndConditionsUIParamsDto.decode(readValue(buffer)!);
+      case 203:
         return StepImageGenerationOptionsDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -580,6 +585,10 @@ abstract class TestMapViewApi {
   void activateIndoorLevel(int viewId, int levelIndex);
 
   CameraPositionDto getCameraPosition(int viewId);
+
+  ScreenCoordinateDto getScreenCoordinate(int viewId, LatLngDto latLng);
+
+  LatLngDto getLatLng(int viewId, ScreenCoordinateDto screenCoordinate);
 
   LatLngBoundsDto getVisibleRegion(int viewId);
 
@@ -3240,6 +3249,97 @@ abstract class TestMapViewApi {
                 );
               }
             });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getScreenCoordinate$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
+          Object?
+        >(pigeonVar_channel, (Object? message) async {
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getScreenCoordinate was null.',
+          );
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getScreenCoordinate was null, expected non-null int.',
+          );
+          final LatLngDto? arg_latLng = (args[1] as LatLngDto?);
+          assert(
+            arg_latLng != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getScreenCoordinate was null, expected non-null LatLngDto.',
+          );
+          try {
+            final ScreenCoordinateDto output = api.getScreenCoordinate(
+              arg_viewId!,
+              arg_latLng!,
+            );
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getLatLng$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
+          Object?
+        >(pigeonVar_channel, (Object? message) async {
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getLatLng was null.',
+          );
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_viewId = (args[0] as int?);
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getLatLng was null, expected non-null int.',
+          );
+          final ScreenCoordinateDto? arg_screenCoordinate =
+              (args[1] as ScreenCoordinateDto?);
+          assert(
+            arg_screenCoordinate != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getLatLng was null, expected non-null ScreenCoordinateDto.',
+          );
+          try {
+            final LatLngDto output = api.getLatLng(
+              arg_viewId!,
+              arg_screenCoordinate!,
+            );
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
+          }
+        });
       }
     }
     {
@@ -7091,6 +7191,10 @@ abstract class TestAutoMapViewApi {
 
   CameraPositionDto getCameraPosition();
 
+  ScreenCoordinateDto getScreenCoordinate(LatLngDto latLng);
+
+  LatLngDto getLatLng(ScreenCoordinateDto screenCoordinate);
+
   LatLngBoundsDto getVisibleRegion();
 
   void followMyLocation(CameraPerspectiveDto perspective, double? zoomLevel);
@@ -7574,6 +7678,91 @@ abstract class TestAutoMapViewApi {
             ) async {
               try {
                 final CameraPositionDto output = api.getCameraPosition();
+                return <Object?>[output];
+              } on PlatformException catch (e) {
+                return wrapResponse(error: e);
+              } catch (e) {
+                return wrapResponse(
+                  error: PlatformException(
+                    code: 'error',
+                    message: e.toString(),
+                  ),
+                );
+              }
+            });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getScreenCoordinate$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
+              Object? message,
+            ) async {
+              assert(
+                message != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getScreenCoordinate was null.',
+              );
+              final List<Object?> args = (message as List<Object?>?)!;
+              final LatLngDto? arg_latLng = (args[0] as LatLngDto?);
+              assert(
+                arg_latLng != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getScreenCoordinate was null, expected non-null LatLngDto.',
+              );
+              try {
+                final ScreenCoordinateDto output = api.getScreenCoordinate(
+                  arg_latLng!,
+                );
+                return <Object?>[output];
+              } on PlatformException catch (e) {
+                return wrapResponse(error: e);
+              } catch (e) {
+                return wrapResponse(
+                  error: PlatformException(
+                    code: 'error',
+                    message: e.toString(),
+                  ),
+                );
+              }
+            });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getLatLng$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (
+              Object? message,
+            ) async {
+              assert(
+                message != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getLatLng was null.',
+              );
+              final List<Object?> args = (message as List<Object?>?)!;
+              final ScreenCoordinateDto? arg_screenCoordinate =
+                  (args[0] as ScreenCoordinateDto?);
+              assert(
+                arg_screenCoordinate != null,
+                'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getLatLng was null, expected non-null ScreenCoordinateDto.',
+              );
+              try {
+                final LatLngDto output = api.getLatLng(arg_screenCoordinate!);
                 return <Object?>[output];
               } on PlatformException catch (e) {
                 return wrapResponse(error: e);

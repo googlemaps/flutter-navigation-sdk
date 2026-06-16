@@ -127,6 +127,22 @@ class GoogleMapViewController {
     );
   }
 
+  /// Projects a geographical coordinate to a screen coordinate in logical pixels.
+  Future<ScreenCoordinate> getScreenCoordinate(LatLng latLng) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI.getScreenCoordinate(
+      viewId: _viewId,
+      latLng: latLng,
+    );
+  }
+
+  /// Projects a screen coordinate in logical pixels to a geographical coordinate.
+  Future<LatLng> getLatLng(ScreenCoordinate screenCoordinate) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI.getLatLng(
+      viewId: _viewId,
+      screenCoordinate: screenCoordinate,
+    );
+  }
+
   /// Animates the movement of the camera from the current position
   /// to the position defined in the [cameraUpdate].
   ///

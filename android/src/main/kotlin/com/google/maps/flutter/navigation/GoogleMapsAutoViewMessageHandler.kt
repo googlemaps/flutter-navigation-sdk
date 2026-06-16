@@ -222,6 +222,20 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
     return Convert.convertCameraPositionToDto(getView().getCameraPosition())
   }
 
+  override fun getScreenCoordinate(latLng: LatLngDto): ScreenCoordinateDto {
+    val density = Resources.getSystem().displayMetrics.density
+    return Convert.convertScreenCoordinateToDto(
+      getView().getScreenCoordinate(Convert.convertLatLngFromDto(latLng)),
+      density,
+    )
+  }
+
+  override fun getLatLng(screenCoordinate: ScreenCoordinateDto): LatLngDto {
+    val density = Resources.getSystem().displayMetrics.density
+    val latLng = getView().getLatLng(Convert.convertScreenCoordinateFromDto(screenCoordinate, density))
+    return LatLngDto(latLng.latitude, latLng.longitude)
+  }
+
   override fun getVisibleRegion(): LatLngBoundsDto {
     return Convert.convertLatLngBoundsToDto(getView().getVisibleRegion())
   }

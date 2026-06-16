@@ -168,6 +168,23 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
     return Convert.convertCameraPositionToDto(getView(viewId.toInt()).getCameraPosition())
   }
 
+  override fun getScreenCoordinate(viewId: Long, latLng: LatLngDto): ScreenCoordinateDto {
+    val density = Resources.getSystem().displayMetrics.density
+    return Convert.convertScreenCoordinateToDto(
+      getView(viewId.toInt()).getScreenCoordinate(Convert.convertLatLngFromDto(latLng)),
+      density,
+    )
+  }
+
+  override fun getLatLng(viewId: Long, screenCoordinate: ScreenCoordinateDto): LatLngDto {
+    val density = Resources.getSystem().displayMetrics.density
+    val latLng =
+      getView(viewId.toInt()).getLatLng(
+        Convert.convertScreenCoordinateFromDto(screenCoordinate, density)
+      )
+    return LatLngDto(latLng.latitude, latLng.longitude)
+  }
+
   override fun getVisibleRegion(viewId: Long): LatLngBoundsDto {
     return Convert.convertLatLngBoundsToDto(getView(viewId.toInt()).getVisibleRegion())
   }

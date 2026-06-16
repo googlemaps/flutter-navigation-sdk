@@ -39,7 +39,9 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
   late double _minZoomLevel;
   late double _maxZoomLevel;
   bool _showCameraUpdates = false;
+  bool _showProjection = false;
   String _latestCameraUpdate = '';
+  String _latestProjectionUpdate = 'Tap the map to inspect projection values';
   bool _isFollowingLocation = false;
   bool _ready = false;
 
@@ -156,6 +158,7 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
           initialNavigationUIEnabledPreference:
               NavigationUIEnabledPreference.disabled,
           onViewCreated: _onViewCreated,
+          onMapClicked: _onMapClicked,
           onCameraMoveStarted: _onCameraMoveStarted,
           onCameraMove: _onCameraMove,
           onCameraIdle: _onCameraIdle,
@@ -173,9 +176,31 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
             decoration: const BoxDecoration(color: Colors.white),
             child: Text(_latestCameraUpdate),
           ),
+        if (_showProjection)
+          Positioned(
+            top: 12,
+            left: 12,
+            child: Container(
+              key: const Key('camera_projection_result'),
+              width: 220,
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.92),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(_latestProjectionUpdate),
+            ),
+          ),
       ],
     ),
   );
+
+  void _onMapClicked(LatLng latLng) {
+    if (!_showProjection) {
+      return;
+    }
+    _updateProjectionValues(latLng);
+  }
 
   void _onCameraMoveStarted(CameraPosition position, bool gesture) {
     if (!mounted) {
@@ -258,6 +283,28 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
     if (_displayAnimationFinished) {
       _showMessage(success ? 'Animation finished' : 'Animation canceled');
     }
+  }
+
+  String _formatLatLng(LatLng latLng) {
+    return '${latLng.latitude.toStringAsFixed(5)}, ${latLng.longitude.toStringAsFixed(5)}';
+  }
+
+  Future<void> _updateProjectionValues(LatLng latLng) async {
+    final ScreenCoordinate screenCoordinate = await _navigationViewController
+        .getScreenCoordinate(latLng);
+    final LatLng latLngFromScreen = await _navigationViewController.getLatLng(
+      screenCoordinate,
+    );
+    final LatLngBounds bounds = await _navigationViewController
+        .getVisibleRegion();
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      // Updates the projection data labels on the info layer on top of the map.
+      _latestProjectionUpdate =
+          'LatLng to Screen\nLatLng: ${_formatLatLng(latLng)}\nScreen: x=${screenCoordinate.x.toStringAsFixed(1)}, y=${screenCoordinate.y.toStringAsFixed(1)}\n\nScreen to LatLng\nScreen: x=${screenCoordinate.x.toStringAsFixed(1)}, y=${screenCoordinate.y.toStringAsFixed(1)}\nLatLng: ${_formatLatLng(latLngFromScreen)}\n\nVisible region\nSW: ${_formatLatLng(bounds.southwest)}\nNE: ${_formatLatLng(bounds.northeast)}';
+    });
   }
 
   Future<void> _setMinZoomLevel(double newMinZoomLevel) async {
@@ -354,6 +401,19 @@ class _CameraPageState extends ExamplePageState<CameraPage> {
           onChanged: (bool value) {
             setState(() {
               _showCameraUpdates = value;
+            });
+          },
+        ),
+        SwitchListTile(
+          title: const Text('Projection'),
+          value: _showProjection,
+          onChanged: (bool value) {
+            setState(() {
+              _showProjection = value;
+              if (!value) {
+                _latestProjectionUpdate =
+                    'Tap the map to inspect projection values';
+              }
             });
           },
         ),

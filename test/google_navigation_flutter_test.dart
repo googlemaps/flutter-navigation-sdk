@@ -177,6 +177,41 @@ void main() {
           expect(zoomLevelOut, 5.0);
         });
 
+        test('Projection methods convert values correctly', () async {
+          const int viewId = 1;
+          final GoogleNavigationViewController controller =
+              GoogleNavigationViewController(viewId);
+          const LatLng latLng = LatLng(
+            latitude: 37.4219999,
+            longitude: -122.0840575,
+          );
+          const ScreenCoordinate screenCoordinate = ScreenCoordinate(
+            x: 12.5,
+            y: 34.5,
+          );
+
+          when(viewMockApi.getScreenCoordinate(any, any)).thenReturn(
+            ScreenCoordinateDto(x: screenCoordinate.x, y: screenCoordinate.y),
+          );
+          when(viewMockApi.getLatLng(any, any)).thenReturn(
+            LatLngDto(latitude: latLng.latitude, longitude: latLng.longitude),
+          );
+
+          final ScreenCoordinate screenCoordinateOut = await controller
+              .getScreenCoordinate(latLng);
+          final LatLng latLngOut = await controller.getLatLng(screenCoordinate);
+
+          expect(screenCoordinateOut, screenCoordinate);
+          expect(latLngOut, latLng);
+
+          verify(
+            viewMockApi.getScreenCoordinate(viewId, latLng.toDto()),
+          ).called(1);
+          verify(
+            viewMockApi.getLatLng(viewId, screenCoordinate.toDto()),
+          ).called(1);
+        });
+
         testWidgets('Test camera animations', (WidgetTester tester) async {
           const int viewId = 1;
           final GoogleNavigationViewController controller =

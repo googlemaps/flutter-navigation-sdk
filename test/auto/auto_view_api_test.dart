@@ -54,6 +54,53 @@ void main() {
           GoogleMapsNavigationPlatform.instance = platform;
         });
 
+        group('Projection methods', () {
+          test(
+            'getScreenCoordinate and getLatLng convert values correctly',
+            () async {
+              const LatLng latLng = LatLng(
+                latitude: 37.4219999,
+                longitude: -122.0840575,
+              );
+              const ScreenCoordinate screenCoordinate = ScreenCoordinate(
+                x: 12.5,
+                y: 34.5,
+              );
+
+              when(autoViewMockApi.getScreenCoordinate(any)).thenReturn(
+                ScreenCoordinateDto(
+                  x: screenCoordinate.x,
+                  y: screenCoordinate.y,
+                ),
+              );
+              when(autoViewMockApi.getLatLng(any)).thenReturn(
+                LatLngDto(
+                  latitude: latLng.latitude,
+                  longitude: latLng.longitude,
+                ),
+              );
+
+              final ScreenCoordinate screenCoordinateOut =
+                  await GoogleMapsNavigationPlatform.instance.autoAPI
+                      .getScreenCoordinate(latLng: latLng);
+              final LatLng latLngOut = await GoogleMapsNavigationPlatform
+                  .instance
+                  .autoAPI
+                  .getLatLng(screenCoordinate: screenCoordinate);
+
+              expect(screenCoordinateOut, screenCoordinate);
+              expect(latLngOut, latLng);
+
+              verify(
+                autoViewMockApi.getScreenCoordinate(latLng.toDto()),
+              ).called(1);
+              verify(
+                autoViewMockApi.getLatLng(screenCoordinate.toDto()),
+              ).called(1);
+            },
+          );
+        });
+
         group('Navigation UI features', () {
           test('isNavigationTripProgressBarEnabled returns value', () async {
             when(

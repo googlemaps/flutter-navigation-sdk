@@ -137,6 +137,14 @@ enum Convert {
     LatLngDto(latitude: point.latitude, longitude: point.longitude)
   }
 
+  static func convertScreenCoordinate(screenCoordinate: ScreenCoordinateDto) -> CGPoint {
+    CGPoint(x: screenCoordinate.x, y: screenCoordinate.y)
+  }
+
+  static func convertScreenCoordinate(point: CGPoint) -> ScreenCoordinateDto {
+    ScreenCoordinateDto(x: point.x, y: point.y)
+  }
+
   static func convertIndoorLevel(level: GMSIndoorLevel) -> IndoorLevelDto {
     IndoorLevelDto(name: level.name, shortName: level.shortName)
   }

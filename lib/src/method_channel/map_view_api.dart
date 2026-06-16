@@ -329,6 +329,28 @@ class MapViewAPIImpl {
     return position.toCameraPosition();
   }
 
+  /// Projects a geographical coordinate to a screen coordinate in logical pixels.
+  Future<ScreenCoordinate> getScreenCoordinate({
+    required int viewId,
+    required LatLng latLng,
+  }) async {
+    final ScreenCoordinateDto screenCoordinate = await _viewApi
+        .getScreenCoordinate(viewId, latLng.toDto())
+        .wrapPlatformException();
+    return screenCoordinate.toScreenCoordinate();
+  }
+
+  /// Projects a screen coordinate in logical pixels to a geographical coordinate.
+  Future<LatLng> getLatLng({
+    required int viewId,
+    required ScreenCoordinate screenCoordinate,
+  }) async {
+    final LatLngDto latLng = await _viewApi
+        .getLatLng(viewId, screenCoordinate.toDto())
+        .wrapPlatformException();
+    return latLng.toLatLng();
+  }
+
   /// Gets the current visible area / camera bounds.
   Future<LatLngBounds> getVisibleRegion({required int viewId}) async {
     final LatLngBoundsDto bounds = await _viewApi

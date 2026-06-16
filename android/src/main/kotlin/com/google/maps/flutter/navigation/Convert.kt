@@ -219,6 +219,26 @@ object Convert {
   }
 
   /**
+   * Converts Pigeon [ScreenCoordinateDto] to Android [Point].
+   */
+  fun convertScreenCoordinateFromDto(screenCoordinate: ScreenCoordinateDto, density: Float): Point {
+    return Point(
+      convertLogicalToScreenPixel(screenCoordinate.x, density).toInt(),
+      convertLogicalToScreenPixel(screenCoordinate.y, density).toInt(),
+    )
+  }
+
+  /**
+   * Converts Android [Point] to Pigeon [ScreenCoordinateDto].
+   */
+  fun convertScreenCoordinateToDto(point: Point, density: Float): ScreenCoordinateDto {
+    return ScreenCoordinateDto(
+      convertScreenToLogicalPixel(point.x.toDouble(), density),
+      convertScreenToLogicalPixel(point.y.toDouble(), density),
+    )
+  }
+
+  /**
    * Converts Google Maps [IndoorLevel] to Pigeon [IndoorLevelDto].
    *
    * @param level Google Maps [IndoorLevel].
