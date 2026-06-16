@@ -232,7 +232,8 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
 
   override fun getLatLng(screenCoordinate: ScreenCoordinateDto): LatLngDto {
     val density = Resources.getSystem().displayMetrics.density
-    val latLng = getView().getLatLng(Convert.convertScreenCoordinateFromDto(screenCoordinate, density))
+    val latLng =
+      getView().getLatLng(Convert.convertScreenCoordinateFromDto(screenCoordinate, density))
     return LatLngDto(latLng.latitude, latLng.longitude)
   }
 

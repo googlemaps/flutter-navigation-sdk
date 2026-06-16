@@ -218,9 +218,7 @@ object Convert {
     return LatLngDto(point.latitude, point.longitude)
   }
 
-  /**
-   * Converts Pigeon [ScreenCoordinateDto] to Android [Point].
-   */
+  /** Converts Pigeon [ScreenCoordinateDto] to Android [Point]. */
   fun convertScreenCoordinateFromDto(screenCoordinate: ScreenCoordinateDto, density: Float): Point {
     return Point(
       convertLogicalToScreenPixel(screenCoordinate.x, density).toInt(),
@@ -228,9 +226,7 @@ object Convert {
     )
   }
 
-  /**
-   * Converts Android [Point] to Pigeon [ScreenCoordinateDto].
-   */
+  /** Converts Android [Point] to Pigeon [ScreenCoordinateDto]. */
   fun convertScreenCoordinateToDto(point: Point, density: Float): ScreenCoordinateDto {
     return ScreenCoordinateDto(
       convertScreenToLogicalPixel(point.x.toDouble(), density),
