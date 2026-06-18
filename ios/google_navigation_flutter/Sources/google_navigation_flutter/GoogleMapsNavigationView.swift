@@ -619,6 +619,26 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     _mapView.settings.isNavigationHeaderEnabled = enabled
   }
 
+  func getNavigationHeaderStylingOptions() -> NavigationHeaderStylingOptionsDto {
+    NavigationHeaderStylingOptionsDto(
+      primaryDayModeBackgroundColor: _mapView.settings.navigationHeaderPrimaryBackgroundColor?.toRgb(),
+      secondaryDayModeBackgroundColor: _mapView.settings.navigationHeaderSecondaryBackgroundColor?.toRgb(),
+      primaryNightModeBackgroundColor: _mapView.settings.navigationHeaderPrimaryBackgroundColorNightMode?.toRgb(),
+      secondaryNightModeBackgroundColor: _mapView.settings.navigationHeaderSecondaryBackgroundColorNightMode?.toRgb()
+    )
+  }
+
+  func setNavigationHeaderStylingOptions(_ stylingOptions: NavigationHeaderStylingOptionsDto) {
+    _mapView.settings.navigationHeaderPrimaryBackgroundColor = stylingOptions
+      .primaryDayModeBackgroundColor.map { UIColor(from: $0) }
+    _mapView.settings.navigationHeaderSecondaryBackgroundColor = stylingOptions
+      .secondaryDayModeBackgroundColor.map { UIColor(from: $0) }
+    _mapView.settings.navigationHeaderPrimaryBackgroundColorNightMode = stylingOptions
+      .primaryNightModeBackgroundColor.map { UIColor(from: $0) }
+    _mapView.settings.navigationHeaderSecondaryBackgroundColorNightMode = stylingOptions
+      .secondaryNightModeBackgroundColor.map { UIColor(from: $0) }
+  }
+
   func isNavigationFooterEnabled() -> Bool {
     _mapView.settings.isNavigationFooterEnabled
   }

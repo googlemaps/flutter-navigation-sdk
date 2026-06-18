@@ -51,6 +51,25 @@ class GoogleNavigationViewController extends GoogleMapViewController {
         .isNavigationHeaderEnabled(viewId: getViewId());
   }
 
+  /// Returns the native navigation header background colors.
+  Future<NavigationHeaderStylingOptions> getNavigationHeaderStylingOptions() {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .getNavigationHeaderStylingOptions(viewId: getViewId());
+  }
+
+  /// Sets the native navigation header background colors.
+  ///
+  /// Any null color resets that specific color to the native SDK default.
+  Future<void> setNavigationHeaderStylingOptions(
+    NavigationHeaderStylingOptions stylingOptions,
+  ) {
+    return GoogleMapsNavigationPlatform.instance.viewAPI
+        .setNavigationHeaderStylingOptions(
+          viewId: getViewId(),
+          stylingOptions: stylingOptions,
+        );
+  }
+
   /// Enable or disable the navigation header.
   ///
   /// By default, the navigation header is enabled.

@@ -525,6 +525,24 @@ class MapViewAPIImpl {
   Future<bool> isNavigationHeaderEnabled({required int viewId}) =>
       _viewApi.isNavigationHeaderEnabled(viewId).wrapPlatformException();
 
+  /// Gets the navigation header background colors.
+  Future<NavigationHeaderStylingOptions> getNavigationHeaderStylingOptions({
+    required int viewId,
+  }) async {
+    final NavigationHeaderStylingOptionsDto stylingOptions = await _viewApi
+        .getNavigationHeaderStylingOptions(viewId)
+        .wrapPlatformException();
+    return stylingOptions.toNavigationHeaderStylingOptions();
+  }
+
+  /// Sets the navigation header background colors.
+  Future<void> setNavigationHeaderStylingOptions({
+    required int viewId,
+    required NavigationHeaderStylingOptions stylingOptions,
+  }) => _viewApi
+      .setNavigationHeaderStylingOptions(viewId, stylingOptions.toDto())
+      .wrapPlatformException();
+
   /// Enable navigation header.
   Future<void> setNavigationHeaderEnabled({
     required int viewId,

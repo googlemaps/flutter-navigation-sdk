@@ -690,6 +690,14 @@ void main() {
             ),
           );
           when(viewMockApi.isNavigationHeaderEnabled(any)).thenReturn(true);
+          when(viewMockApi.getNavigationHeaderStylingOptions(any)).thenReturn(
+            NavigationHeaderStylingOptionsDto(
+              primaryDayModeBackgroundColor: Colors.blue.toARGB32(),
+              secondaryDayModeBackgroundColor: Colors.red.toARGB32(),
+              primaryNightModeBackgroundColor: Colors.black.toARGB32(),
+              secondaryNightModeBackgroundColor: Colors.grey.toARGB32(),
+            ),
+          );
           when(viewMockApi.isNavigationFooterEnabled(any)).thenReturn(true);
           when(viewMockApi.isSpeedLimitIconEnabled(any)).thenReturn(true);
           when(viewMockApi.isSpeedometerEnabled(any)).thenReturn(true);
@@ -723,6 +731,15 @@ void main() {
           expect(focusedIndoorBuilding.activeLevelIndex, 1);
           await controller.activateIndoorLevel(focusedIndoorBuilding.levels[0]);
           expect(await controller.isNavigationHeaderEnabled(), true);
+          expect(
+            await controller.getNavigationHeaderStylingOptions(),
+            const NavigationHeaderStylingOptions(
+              primaryDayModeBackgroundColor: Colors.blue,
+              secondaryDayModeBackgroundColor: Colors.red,
+              primaryNightModeBackgroundColor: Colors.black,
+              secondaryNightModeBackgroundColor: Colors.grey,
+            ),
+          );
           expect(await controller.isNavigationFooterEnabled(), true);
           expect(await controller.isSpeedLimitIconEnabled(), true);
           expect(await controller.isSpeedometerEnabled(), true);
@@ -750,6 +767,7 @@ void main() {
           verify(viewMockApi.getFocusedIndoorBuilding(captureAny));
           verify(viewMockApi.activateIndoorLevel(captureAny, captureAny));
           verify(viewMockApi.isNavigationHeaderEnabled(captureAny));
+          verify(viewMockApi.getNavigationHeaderStylingOptions(captureAny));
           verify(viewMockApi.isNavigationFooterEnabled(captureAny));
           verify(viewMockApi.isSpeedLimitIconEnabled(captureAny));
           verify(viewMockApi.isSpeedometerEnabled(captureAny));
@@ -776,6 +794,14 @@ void main() {
           await controller.setIndoorEnabled(true);
           await controller.settings.setIndoorLevelPickerEnabled(true);
           await controller.setNavigationHeaderEnabled(true);
+          await controller.setNavigationHeaderStylingOptions(
+            const NavigationHeaderStylingOptions(
+              primaryDayModeBackgroundColor: Colors.green,
+              secondaryDayModeBackgroundColor: Colors.orange,
+              primaryNightModeBackgroundColor: Colors.white,
+              secondaryNightModeBackgroundColor: Colors.purple,
+            ),
+          );
           await controller.setNavigationFooterEnabled(true);
           await controller.setSpeedLimitIconEnabled(true);
           await controller.setSpeedometerEnabled(true);
@@ -869,6 +895,31 @@ void main() {
               viewMockApi.setNavigationHeaderEnabled(captureAny, captureAny),
             ),
             true,
+          );
+          final VerificationResult headerStylingResult = verify(
+            viewMockApi.setNavigationHeaderStylingOptions(
+              captureAny,
+              captureAny,
+            ),
+          );
+          final NavigationHeaderStylingOptionsDto headerStylingOut =
+              headerStylingResult.captured[1]
+                  as NavigationHeaderStylingOptionsDto;
+          expect(
+            headerStylingOut.primaryDayModeBackgroundColor,
+            Colors.green.toARGB32(),
+          );
+          expect(
+            headerStylingOut.secondaryDayModeBackgroundColor,
+            Colors.orange.toARGB32(),
+          );
+          expect(
+            headerStylingOut.primaryNightModeBackgroundColor,
+            Colors.white.toARGB32(),
+          );
+          expect(
+            headerStylingOut.secondaryNightModeBackgroundColor,
+            Colors.purple.toARGB32(),
           );
           verifyEnabled(
             verify(

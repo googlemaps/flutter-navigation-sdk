@@ -108,6 +108,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   IndoorBuilding? _focusedIndoorBuilding;
 
   bool _navigationHeaderEnabled = true;
+  NavigationHeaderStylingOptions _navigationHeaderStylingOptions =
+      const NavigationHeaderStylingOptions();
   bool _navigationFooterEnabled = true;
   bool _navigationTripProgressBarEnabled = true;
   bool _navigationUIEnabled = true;
@@ -802,6 +804,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     if (_navigationViewController != null) {
       final bool navigationHeaderEnabled = await _navigationViewController!
           .isNavigationHeaderEnabled();
+      final NavigationHeaderStylingOptions navigationHeaderStylingOptions =
+          await _navigationViewController!.getNavigationHeaderStylingOptions();
       final bool navigationFooterEnabled = await _navigationViewController!
           .isNavigationFooterEnabled();
       final bool navigationTripProgressBarEnabled =
@@ -830,6 +834,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
       setState(() {
         _navigationHeaderEnabled = navigationHeaderEnabled;
+        _navigationHeaderStylingOptions = navigationHeaderStylingOptions;
         _navigationFooterEnabled = navigationFooterEnabled;
         _navigationTripProgressBarEnabled = navigationTripProgressBarEnabled;
         _navigationUIEnabled = navigationUIEnabled;
@@ -844,6 +849,21 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         _indoorLevelPickerEnabled = indoorLevelPickerEnabled;
       });
     }
+  }
+
+  Future<void> _applyNavigationHeaderStyling(
+    NavigationHeaderStylingOptions stylingOptions,
+  ) async {
+    if (_navigationViewController == null) {
+      return;
+    }
+    await _navigationViewController!.setNavigationHeaderStylingOptions(
+      stylingOptions,
+    );
+    if (!mounted) return;
+    setState(() {
+      _navigationHeaderStylingOptions = stylingOptions;
+    });
   }
 
   void _onRecenterButtonClickedEvent(
@@ -2134,6 +2154,51 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                       _navigationHeaderEnabled = newValue;
                     });
                   },
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Header styling example',
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: <Widget>[
+                          ElevatedButton(
+                            onPressed: () => _applyNavigationHeaderStyling(
+                              const NavigationHeaderStylingOptions(
+                                primaryDayModeBackgroundColor: Colors.blue,
+                                secondaryDayModeBackgroundColor: Colors.red,
+                                primaryNightModeBackgroundColor: Colors.black,
+                                secondaryNightModeBackgroundColor:
+                                    Colors.blueGrey,
+                              ),
+                            ),
+                            child: const Text('Apply sample colors'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => _applyNavigationHeaderStyling(
+                              const NavigationHeaderStylingOptions(),
+                            ),
+                            child: const Text('Reset header colors'),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Current primary day color: '
+                        '${_navigationHeaderStylingOptions.primaryDayModeBackgroundColor ?? 'default'}',
+                      ),
+                    ],
+                  ),
                 ),
                 ExampleSwitch(
                   title: 'Enable footer',

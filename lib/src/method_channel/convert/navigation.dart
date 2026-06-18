@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:ui';
+
 import '../../../google_navigation_flutter.dart';
 import '../method_channel.dart';
 
@@ -218,6 +220,30 @@ extension ConvertContinueToNextDestinationResponseDto
         waypoint: waypoint?.toNavigationWaypoint(),
         routeStatus: routeStatus?.toNavigationRouteStatus(),
       );
+}
+
+/// [NavigationHeaderStylingOptionsDto] convert extension.
+/// @nodoc
+extension ConvertNavigationHeaderStylingOptionsDto
+    on NavigationHeaderStylingOptionsDto {
+  /// Converts [NavigationHeaderStylingOptionsDto] to [NavigationHeaderStylingOptions].
+  NavigationHeaderStylingOptions toNavigationHeaderStylingOptions() {
+    return NavigationHeaderStylingOptions(
+      primaryDayModeBackgroundColor: primaryDayModeBackgroundColor != null
+          ? Color(primaryDayModeBackgroundColor!)
+          : null,
+      secondaryDayModeBackgroundColor: secondaryDayModeBackgroundColor != null
+          ? Color(secondaryDayModeBackgroundColor!)
+          : null,
+      primaryNightModeBackgroundColor: primaryNightModeBackgroundColor != null
+          ? Color(primaryNightModeBackgroundColor!)
+          : null,
+      secondaryNightModeBackgroundColor:
+          secondaryNightModeBackgroundColor != null
+          ? Color(secondaryNightModeBackgroundColor!)
+          : null,
+    );
+  }
 }
 
 /// [RouteSegmentDto] convert extension.

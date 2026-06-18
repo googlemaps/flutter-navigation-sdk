@@ -18,6 +18,7 @@ package com.google.maps.flutter.navigation
 
 import com.google.android.libraries.navigation.ForceNightMode
 import com.google.android.libraries.navigation.NavigationView
+import com.google.android.libraries.navigation.StylingOptions
 
 /**
  * Base class for map views backed by a [NavigationView] from the Navigation SDK.
@@ -45,6 +46,7 @@ abstract class GoogleMapsBaseNavigationView(
   private var _isTrafficIncidentCardsEnabled: Boolean = true
   private var _isTrafficPromptsEnabled: Boolean = true
   private var _isNavigationHeaderEnabled: Boolean = true
+  private var _navigationHeaderStylingOptions = NavigationHeaderStylingOptionsDto()
   private var _isNavigationFooterEnabled: Boolean = true
   private var _isRecenterButtonEnabled: Boolean = true
   private var _isReportIncidentButtonEnabled: Boolean = true
@@ -114,6 +116,30 @@ abstract class GoogleMapsBaseNavigationView(
   fun setNavigationHeaderEnabled(enabled: Boolean) {
     navigationView.setHeaderEnabled(enabled)
     _isNavigationHeaderEnabled = enabled
+  }
+
+  fun getNavigationHeaderStylingOptions(): NavigationHeaderStylingOptionsDto {
+    return _navigationHeaderStylingOptions
+  }
+
+  fun setNavigationHeaderStylingOptions(stylingOptions: NavigationHeaderStylingOptionsDto) {
+    val builder = StylingOptions()
+
+    stylingOptions.primaryDayModeBackgroundColor?.let {
+      builder.primaryDayModeThemeColor(it.toInt())
+    }
+    stylingOptions.secondaryDayModeBackgroundColor?.let {
+      builder.secondaryDayModeThemeColor(it.toInt())
+    }
+    stylingOptions.primaryNightModeBackgroundColor?.let {
+      builder.primaryNightModeThemeColor(it.toInt())
+    }
+    stylingOptions.secondaryNightModeBackgroundColor?.let {
+      builder.secondaryNightModeThemeColor(it.toInt())
+    }
+
+    navigationView.setStylingOptions(builder)
+    _navigationHeaderStylingOptions = stylingOptions
   }
 
   fun isNavigationFooterEnabled(): Boolean {

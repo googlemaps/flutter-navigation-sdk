@@ -525,6 +525,24 @@ class MapPaddingDto {
   final int right;
 }
 
+/// Navigation header background colors.
+///
+/// All color values are 32-bit ARGB integers (format: 0xAARRGGBB).
+/// Any null value resets that specific color to the native SDK default.
+class NavigationHeaderStylingOptionsDto {
+  NavigationHeaderStylingOptionsDto({
+    this.primaryDayModeBackgroundColor,
+    this.secondaryDayModeBackgroundColor,
+    this.primaryNightModeBackgroundColor,
+    this.secondaryNightModeBackgroundColor,
+  });
+
+  final int? primaryDayModeBackgroundColor;
+  final int? secondaryDayModeBackgroundColor;
+  final int? primaryNightModeBackgroundColor;
+  final int? secondaryNightModeBackgroundColor;
+}
+
 @HostApi(dartHostTestHandler: 'TestMapViewApi')
 abstract class MapViewApi {
   @async
@@ -543,6 +561,14 @@ abstract class MapViewApi {
 
   bool isNavigationHeaderEnabled(int viewId);
   void setNavigationHeaderEnabled(int viewId, bool enabled);
+
+  NavigationHeaderStylingOptionsDto getNavigationHeaderStylingOptions(
+    int viewId,
+  );
+  void setNavigationHeaderStylingOptions(
+    int viewId,
+    NavigationHeaderStylingOptionsDto stylingOptions,
+  );
 
   bool isNavigationFooterEnabled(int viewId);
   void setNavigationFooterEnabled(int viewId, bool enabled);
