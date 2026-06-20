@@ -126,7 +126,7 @@ dependencies {
     implementation("androidx.startup:startup-runtime:1.2.0")
     implementation("com.google.android.libraries.navigation:navigation:7.6.1")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation("io.mockk:mockk:1.13.8")
+    testImplementation("io.mockk:mockk:1.14.11")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.14.1")
 }
