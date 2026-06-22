@@ -621,10 +621,14 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
 
   func getNavigationHeaderStylingOptions() -> NavigationHeaderStylingOptionsDto {
     NavigationHeaderStylingOptionsDto(
-      primaryDayModeBackgroundColor: _mapView.settings.navigationHeaderPrimaryBackgroundColor?.toRgb(),
-      secondaryDayModeBackgroundColor: _mapView.settings.navigationHeaderSecondaryBackgroundColor?.toRgb(),
-      primaryNightModeBackgroundColor: _mapView.settings.navigationHeaderPrimaryBackgroundColorNightMode?.toRgb(),
-      secondaryNightModeBackgroundColor: _mapView.settings.navigationHeaderSecondaryBackgroundColorNightMode?.toRgb()
+      primaryDayModeBackgroundColor: _mapView.settings.navigationHeaderPrimaryBackgroundColor?
+        .toRgb(),
+      secondaryDayModeBackgroundColor: _mapView.settings.navigationHeaderSecondaryBackgroundColor?
+        .toRgb(),
+      primaryNightModeBackgroundColor: _mapView.settings
+        .navigationHeaderPrimaryBackgroundColorNightMode?.toRgb(),
+      secondaryNightModeBackgroundColor: _mapView.settings
+        .navigationHeaderSecondaryBackgroundColorNightMode?.toRgb()
     )
   }
 

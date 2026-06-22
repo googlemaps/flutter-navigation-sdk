@@ -689,8 +689,12 @@ void main() {
               isUnderground: false,
             ),
           );
-          when(viewMockApi.isNavigationHeaderEnabled(any)).thenReturn(true);
-          when(viewMockApi.getNavigationHeaderStylingOptions(any)).thenReturn(
+          when(
+            viewMockApi.isNavigationHeaderEnabled(any as int),
+          ).thenReturn(true);
+          when(
+            viewMockApi.getNavigationHeaderStylingOptions(any as int),
+          ).thenReturn(
             NavigationHeaderStylingOptionsDto(
               primaryDayModeBackgroundColor: Colors.blue.toARGB32(),
               secondaryDayModeBackgroundColor: Colors.red.toARGB32(),
@@ -766,8 +770,10 @@ void main() {
           verify(viewMockApi.isIndoorLevelPickerEnabled(captureAny));
           verify(viewMockApi.getFocusedIndoorBuilding(captureAny));
           verify(viewMockApi.activateIndoorLevel(captureAny, captureAny));
-          verify(viewMockApi.isNavigationHeaderEnabled(captureAny));
-          verify(viewMockApi.getNavigationHeaderStylingOptions(captureAny));
+          verify(viewMockApi.isNavigationHeaderEnabled(captureAny as int));
+          verify(
+            viewMockApi.getNavigationHeaderStylingOptions(captureAny as int),
+          );
           verify(viewMockApi.isNavigationFooterEnabled(captureAny));
           verify(viewMockApi.isSpeedLimitIconEnabled(captureAny));
           verify(viewMockApi.isSpeedometerEnabled(captureAny));
@@ -898,8 +904,8 @@ void main() {
           );
           final VerificationResult headerStylingResult = verify(
             viewMockApi.setNavigationHeaderStylingOptions(
-              captureAny,
-              captureAny,
+              captureAny as int,
+              captureAny as NavigationHeaderStylingOptionsDto,
             ),
           );
           final NavigationHeaderStylingOptionsDto headerStylingOut =

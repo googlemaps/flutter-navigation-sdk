@@ -358,7 +358,8 @@ class GoogleMapsNavigationViewMessageHandler: MapViewApi {
     try getView(viewId).setNavigationHeaderEnabled(enabled)
   }
 
-  func getNavigationHeaderStylingOptions(viewId: Int64) throws -> NavigationHeaderStylingOptionsDto {
+  func getNavigationHeaderStylingOptions(viewId: Int64) throws -> NavigationHeaderStylingOptionsDto
+  {
     try getView(viewId).getNavigationHeaderStylingOptions()
   }
 
