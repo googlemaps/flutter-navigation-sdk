@@ -124,7 +124,7 @@ dependencies {
     implementation("androidx.car.app:app:1.7.0")
     implementation("androidx.car.app:app-projected:1.7.0")
     implementation("androidx.startup:startup-runtime:1.2.0")
-    implementation("com.google.android.libraries.navigation:navigation:7.6.1")
+    implementation("com.google.android.libraries.navigation:navigation:7.7.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("io.mockk:mockk:1.13.8")
     testImplementation("junit:junit:4.13.2")
