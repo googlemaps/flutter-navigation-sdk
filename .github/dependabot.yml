@@ -18,34 +18,55 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 3
     commit-message:
       prefix: chore(deps)
+    groups:
+      flutter-dependencies:
+        patterns:
+          - "*"
   - package-ecosystem: "pub"
     directory: "/example" # Location of package manifests
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 3
     commit-message:
       prefix: chore(deps)
+    groups:
+      example-flutter-dependencies:
+        patterns:
+          - "*"
   - package-ecosystem: "gradle"
     directory: "/android" # Location of package manifests
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 3
     commit-message:
       prefix: chore(deps)
+    groups:
+      android-dependencies:
+        patterns:
+          - "*"
   - package-ecosystem: "gradle"
     directory: "/example/android" # Location of package manifests
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 3
     commit-message:
       prefix: chore(deps)
+    groups:
+      example-android-dependencies:
+        patterns:
+          - "*"
   - package-ecosystem: "github-actions"
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 3
     commit-message:
       prefix: chore(deps)
+    groups:
+      actions-dependencies:
+        patterns:
+          - "*"
+
