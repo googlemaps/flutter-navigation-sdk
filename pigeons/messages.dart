@@ -525,22 +525,49 @@ class MapPaddingDto {
   final int right;
 }
 
-/// Navigation header background colors.
+/// Navigation header styling options.
 ///
 /// All color values are 32-bit ARGB integers (format: 0xAARRGGBB).
-/// Any null value resets that specific color to the native SDK default.
+/// All text size values are logical pixels.
+/// Any null value resets that specific field to the native SDK default.
+///
+/// Text size fields are currently Android only and are ignored on iOS.
 class NavigationHeaderStylingOptionsDto {
   NavigationHeaderStylingOptionsDto({
     this.primaryDayModeBackgroundColor,
     this.secondaryDayModeBackgroundColor,
     this.primaryNightModeBackgroundColor,
     this.secondaryNightModeBackgroundColor,
+    this.largeManeuverIconColor,
+    this.smallManeuverIconColor,
+    this.nextStepTextColor,
+    this.nextStepTextSize,
+    this.distanceValueTextColor,
+    this.distanceUnitsTextColor,
+    this.distanceValueTextSize,
+    this.distanceUnitsTextSize,
+    this.instructionsTextColor,
+    this.instructionsFirstRowTextSize,
+    this.instructionsSecondRowTextSize,
+    this.guidanceRecommendedLaneColor,
   });
 
   final int? primaryDayModeBackgroundColor;
   final int? secondaryDayModeBackgroundColor;
   final int? primaryNightModeBackgroundColor;
   final int? secondaryNightModeBackgroundColor;
+  final int? largeManeuverIconColor;
+  final int? smallManeuverIconColor;
+  final int? nextStepTextColor;
+  final double? nextStepTextSize;
+  final int? distanceValueTextColor;
+  final int? distanceUnitsTextColor;
+  final double? distanceValueTextSize;
+  final double? distanceUnitsTextSize;
+  final int? instructionsTextColor;
+  final double? instructionsFirstRowTextSize;
+  final double? instructionsSecondRowTextSize;
+  final int? guidanceRecommendedLaneColor;
 }
 
 @HostApi(dartHostTestHandler: 'TestMapViewApi')

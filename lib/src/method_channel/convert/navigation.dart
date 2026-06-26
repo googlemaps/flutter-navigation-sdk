@@ -242,6 +242,32 @@ extension ConvertNavigationHeaderStylingOptionsDto
           secondaryNightModeBackgroundColor != null
           ? Color(secondaryNightModeBackgroundColor!)
           : null,
+      largeManeuverIconColor: largeManeuverIconColor != null
+          ? Color(largeManeuverIconColor!)
+          : null,
+      smallManeuverIconColor: smallManeuverIconColor != null
+          ? Color(smallManeuverIconColor!)
+          : null,
+      nextStepTextColor: nextStepTextColor != null
+          ? Color(nextStepTextColor!)
+          : null,
+      nextStepTextSize: nextStepTextSize,
+      distanceValueTextColor: distanceValueTextColor != null
+          ? Color(distanceValueTextColor!)
+          : null,
+      distanceUnitsTextColor: distanceUnitsTextColor != null
+          ? Color(distanceUnitsTextColor!)
+          : null,
+      distanceValueTextSize: distanceValueTextSize,
+      distanceUnitsTextSize: distanceUnitsTextSize,
+      instructionsTextColor: instructionsTextColor != null
+          ? Color(instructionsTextColor!)
+          : null,
+      instructionsFirstRowTextSize: instructionsFirstRowTextSize,
+      instructionsSecondRowTextSize: instructionsSecondRowTextSize,
+      guidanceRecommendedLaneColor: guidanceRecommendedLaneColor != null
+          ? Color(guidanceRecommendedLaneColor!)
+          : null,
     );
   }
 }

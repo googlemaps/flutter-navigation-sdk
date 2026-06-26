@@ -2182,13 +2182,39 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                                     Colors.blueGrey,
                               ),
                             ),
-                            child: const Text('Apply sample colors'),
+                            child: const Text('Apply background colors'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => _applyNavigationHeaderStyling(
+                              const NavigationHeaderStylingOptions(
+                                primaryDayModeBackgroundColor: Colors.indigo,
+                                secondaryDayModeBackgroundColor:
+                                    Colors.deepPurple,
+                                primaryNightModeBackgroundColor: Colors.black,
+                                secondaryNightModeBackgroundColor:
+                                    Colors.indigo,
+                                largeManeuverIconColor: Colors.orange,
+                                smallManeuverIconColor: Colors.amber,
+                                nextStepTextColor: Colors.yellow,
+                                nextStepTextSize: 18,
+                                distanceValueTextColor: Colors.white,
+                                distanceUnitsTextColor: Colors.white70,
+                                distanceValueTextSize: 24,
+                                distanceUnitsTextSize: 16,
+                                instructionsTextColor: Colors.cyanAccent,
+                                instructionsFirstRowTextSize: 28,
+                                instructionsSecondRowTextSize: 22,
+                                guidanceRecommendedLaneColor:
+                                    Colors.lightGreenAccent,
+                              ),
+                            ),
+                            child: const Text('Apply full styling sample'),
                           ),
                           ElevatedButton(
                             onPressed: () => _applyNavigationHeaderStyling(
                               const NavigationHeaderStylingOptions(),
                             ),
-                            child: const Text('Reset header colors'),
+                            child: const Text('Reset header styling'),
                           ),
                         ],
                       ),
@@ -2196,6 +2222,15 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                       Text(
                         'Current primary day color: '
                         '${_navigationHeaderStylingOptions.primaryDayModeBackgroundColor ?? 'default'}',
+                      ),
+                      Text(
+                        'Current large maneuver icon color: '
+                        '${_navigationHeaderStylingOptions.largeManeuverIconColor ?? 'default'}',
+                      ),
+                      Text(
+                        'Current next-step text size: '
+                        '${_navigationHeaderStylingOptions.nextStepTextSize ?? 'default'} '
+                        '(Android only)',
                       ),
                     ],
                   ),

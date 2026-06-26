@@ -1815,16 +1815,31 @@ class MapPaddingDto {
   int get hashCode => Object.hashAll(_toList());
 }
 
-/// Navigation header background colors.
+/// Navigation header styling options.
 ///
 /// All color values are 32-bit ARGB integers (format: 0xAARRGGBB).
-/// Any null value resets that specific color to the native SDK default.
+/// All text size values are logical pixels.
+/// Any null value resets that specific field to the native SDK default.
+///
+/// Text size fields are currently Android only and are ignored on iOS.
 class NavigationHeaderStylingOptionsDto {
   NavigationHeaderStylingOptionsDto({
     this.primaryDayModeBackgroundColor,
     this.secondaryDayModeBackgroundColor,
     this.primaryNightModeBackgroundColor,
     this.secondaryNightModeBackgroundColor,
+    this.largeManeuverIconColor,
+    this.smallManeuverIconColor,
+    this.nextStepTextColor,
+    this.nextStepTextSize,
+    this.distanceValueTextColor,
+    this.distanceUnitsTextColor,
+    this.distanceValueTextSize,
+    this.distanceUnitsTextSize,
+    this.instructionsTextColor,
+    this.instructionsFirstRowTextSize,
+    this.instructionsSecondRowTextSize,
+    this.guidanceRecommendedLaneColor,
   });
 
   int? primaryDayModeBackgroundColor;
@@ -1835,12 +1850,48 @@ class NavigationHeaderStylingOptionsDto {
 
   int? secondaryNightModeBackgroundColor;
 
+  int? largeManeuverIconColor;
+
+  int? smallManeuverIconColor;
+
+  int? nextStepTextColor;
+
+  double? nextStepTextSize;
+
+  int? distanceValueTextColor;
+
+  int? distanceUnitsTextColor;
+
+  double? distanceValueTextSize;
+
+  double? distanceUnitsTextSize;
+
+  int? instructionsTextColor;
+
+  double? instructionsFirstRowTextSize;
+
+  double? instructionsSecondRowTextSize;
+
+  int? guidanceRecommendedLaneColor;
+
   List<Object?> _toList() {
     return <Object?>[
       primaryDayModeBackgroundColor,
       secondaryDayModeBackgroundColor,
       primaryNightModeBackgroundColor,
       secondaryNightModeBackgroundColor,
+      largeManeuverIconColor,
+      smallManeuverIconColor,
+      nextStepTextColor,
+      nextStepTextSize,
+      distanceValueTextColor,
+      distanceUnitsTextColor,
+      distanceValueTextSize,
+      distanceUnitsTextSize,
+      instructionsTextColor,
+      instructionsFirstRowTextSize,
+      instructionsSecondRowTextSize,
+      guidanceRecommendedLaneColor,
     ];
   }
 
@@ -1855,6 +1906,18 @@ class NavigationHeaderStylingOptionsDto {
       secondaryDayModeBackgroundColor: result[1] as int?,
       primaryNightModeBackgroundColor: result[2] as int?,
       secondaryNightModeBackgroundColor: result[3] as int?,
+      largeManeuverIconColor: result[4] as int?,
+      smallManeuverIconColor: result[5] as int?,
+      nextStepTextColor: result[6] as int?,
+      nextStepTextSize: result[7] as double?,
+      distanceValueTextColor: result[8] as int?,
+      distanceUnitsTextColor: result[9] as int?,
+      distanceValueTextSize: result[10] as double?,
+      distanceUnitsTextSize: result[11] as double?,
+      instructionsTextColor: result[12] as int?,
+      instructionsFirstRowTextSize: result[13] as double?,
+      instructionsSecondRowTextSize: result[14] as double?,
+      guidanceRecommendedLaneColor: result[15] as int?,
     );
   }
 

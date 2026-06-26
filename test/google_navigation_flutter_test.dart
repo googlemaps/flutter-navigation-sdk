@@ -62,6 +62,16 @@ void main() {
     TestImageRegistryApi.setUp(imageRegistryMockApi);
   });
 
+  T anyAs<T>() {
+    // ignore: cast_from_null_always_fails
+    return any as T;
+  }
+
+  T captureAnyAs<T>() {
+    // ignore: cast_from_null_always_fails
+    return captureAny as T;
+  }
+
   void verifyEnabled(VerificationResult result, bool enabled) {
     final bool enabledOut = result.captured[1] as bool;
     expect(enabledOut, enabled);
@@ -690,16 +700,28 @@ void main() {
             ),
           );
           when(
-            viewMockApi.isNavigationHeaderEnabled(any as int),
+            viewMockApi.isNavigationHeaderEnabled(anyAs<int>()),
           ).thenReturn(true);
           when(
-            viewMockApi.getNavigationHeaderStylingOptions(any as int),
+            viewMockApi.getNavigationHeaderStylingOptions(anyAs<int>()),
           ).thenReturn(
             NavigationHeaderStylingOptionsDto(
               primaryDayModeBackgroundColor: Colors.blue.toARGB32(),
               secondaryDayModeBackgroundColor: Colors.red.toARGB32(),
               primaryNightModeBackgroundColor: Colors.black.toARGB32(),
               secondaryNightModeBackgroundColor: Colors.grey.toARGB32(),
+              largeManeuverIconColor: Colors.orange.toARGB32(),
+              smallManeuverIconColor: Colors.pink.toARGB32(),
+              nextStepTextColor: Colors.yellow.toARGB32(),
+              nextStepTextSize: 18,
+              distanceValueTextColor: Colors.green.toARGB32(),
+              distanceUnitsTextColor: Colors.lime.toARGB32(),
+              distanceValueTextSize: 24,
+              distanceUnitsTextSize: 14,
+              instructionsTextColor: Colors.cyan.toARGB32(),
+              instructionsFirstRowTextSize: 30,
+              instructionsSecondRowTextSize: 20,
+              guidanceRecommendedLaneColor: Colors.teal.toARGB32(),
             ),
           );
           when(viewMockApi.isNavigationFooterEnabled(any)).thenReturn(true);
@@ -742,6 +764,18 @@ void main() {
               secondaryDayModeBackgroundColor: Colors.red,
               primaryNightModeBackgroundColor: Colors.black,
               secondaryNightModeBackgroundColor: Colors.grey,
+              largeManeuverIconColor: Colors.orange,
+              smallManeuverIconColor: Colors.pink,
+              nextStepTextColor: Colors.yellow,
+              nextStepTextSize: 18,
+              distanceValueTextColor: Colors.green,
+              distanceUnitsTextColor: Colors.lime,
+              distanceValueTextSize: 24,
+              distanceUnitsTextSize: 14,
+              instructionsTextColor: Colors.cyan,
+              instructionsFirstRowTextSize: 30,
+              instructionsSecondRowTextSize: 20,
+              guidanceRecommendedLaneColor: Colors.teal,
             ),
           );
           expect(await controller.isNavigationFooterEnabled(), true);
@@ -770,9 +804,9 @@ void main() {
           verify(viewMockApi.isIndoorLevelPickerEnabled(captureAny));
           verify(viewMockApi.getFocusedIndoorBuilding(captureAny));
           verify(viewMockApi.activateIndoorLevel(captureAny, captureAny));
-          verify(viewMockApi.isNavigationHeaderEnabled(captureAny as int));
+          verify(viewMockApi.isNavigationHeaderEnabled(captureAnyAs<int>()));
           verify(
-            viewMockApi.getNavigationHeaderStylingOptions(captureAny as int),
+            viewMockApi.getNavigationHeaderStylingOptions(captureAnyAs<int>()),
           );
           verify(viewMockApi.isNavigationFooterEnabled(captureAny));
           verify(viewMockApi.isSpeedLimitIconEnabled(captureAny));
@@ -806,6 +840,18 @@ void main() {
               secondaryDayModeBackgroundColor: Colors.orange,
               primaryNightModeBackgroundColor: Colors.white,
               secondaryNightModeBackgroundColor: Colors.purple,
+              largeManeuverIconColor: Colors.amber,
+              smallManeuverIconColor: Colors.deepOrange,
+              nextStepTextColor: Colors.brown,
+              nextStepTextSize: 19,
+              distanceValueTextColor: Colors.indigo,
+              distanceUnitsTextColor: Colors.deepPurple,
+              distanceValueTextSize: 25,
+              distanceUnitsTextSize: 15,
+              instructionsTextColor: Colors.lightBlue,
+              instructionsFirstRowTextSize: 31,
+              instructionsSecondRowTextSize: 21,
+              guidanceRecommendedLaneColor: Colors.lightGreen,
             ),
           );
           await controller.setNavigationFooterEnabled(true);
@@ -904,8 +950,8 @@ void main() {
           );
           final VerificationResult headerStylingResult = verify(
             viewMockApi.setNavigationHeaderStylingOptions(
-              captureAny as int,
-              captureAny as NavigationHeaderStylingOptionsDto,
+              captureAnyAs<int>(),
+              captureAnyAs<NavigationHeaderStylingOptionsDto>(),
             ),
           );
           final NavigationHeaderStylingOptionsDto headerStylingOut =
@@ -926,6 +972,36 @@ void main() {
           expect(
             headerStylingOut.secondaryNightModeBackgroundColor,
             Colors.purple.toARGB32(),
+          );
+          expect(
+            headerStylingOut.largeManeuverIconColor,
+            Colors.amber.toARGB32(),
+          );
+          expect(
+            headerStylingOut.smallManeuverIconColor,
+            Colors.deepOrange.toARGB32(),
+          );
+          expect(headerStylingOut.nextStepTextColor, Colors.brown.toARGB32());
+          expect(headerStylingOut.nextStepTextSize, 19);
+          expect(
+            headerStylingOut.distanceValueTextColor,
+            Colors.indigo.toARGB32(),
+          );
+          expect(
+            headerStylingOut.distanceUnitsTextColor,
+            Colors.deepPurple.toARGB32(),
+          );
+          expect(headerStylingOut.distanceValueTextSize, 25);
+          expect(headerStylingOut.distanceUnitsTextSize, 15);
+          expect(
+            headerStylingOut.instructionsTextColor,
+            Colors.lightBlue.toARGB32(),
+          );
+          expect(headerStylingOut.instructionsFirstRowTextSize, 31);
+          expect(headerStylingOut.instructionsSecondRowTextSize, 21);
+          expect(
+            headerStylingOut.guidanceRecommendedLaneColor,
+            Colors.lightGreen.toARGB32(),
           );
           verifyEnabled(
             verify(

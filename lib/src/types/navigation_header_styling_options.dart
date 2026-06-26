@@ -16,7 +16,10 @@ import 'package:flutter/widgets.dart';
 
 import '../method_channel/messages.g.dart';
 
-/// Background colors for the native navigation header.
+/// Styling options for the native navigation header.
+///
+/// Text size properties are currently supported on Android only. On iOS they
+/// are ignored.
 /// {@category Navigation View}
 class NavigationHeaderStylingOptions {
   /// Creates navigation header styling options.
@@ -25,6 +28,18 @@ class NavigationHeaderStylingOptions {
     this.secondaryDayModeBackgroundColor,
     this.primaryNightModeBackgroundColor,
     this.secondaryNightModeBackgroundColor,
+    this.largeManeuverIconColor,
+    this.smallManeuverIconColor,
+    this.nextStepTextColor,
+    this.nextStepTextSize,
+    this.distanceValueTextColor,
+    this.distanceUnitsTextColor,
+    this.distanceValueTextSize,
+    this.distanceUnitsTextSize,
+    this.instructionsTextColor,
+    this.instructionsFirstRowTextSize,
+    this.instructionsSecondRowTextSize,
+    this.guidanceRecommendedLaneColor,
   });
 
   /// Background color of the primary header area in day mode.
@@ -39,12 +54,70 @@ class NavigationHeaderStylingOptions {
   /// Background color of the secondary header area in night mode.
   final Color? secondaryNightModeBackgroundColor;
 
+  /// Color of the large maneuver icon in the header.
+  final Color? largeManeuverIconColor;
+
+  /// Color of the small maneuver icon in the header.
+  final Color? smallManeuverIconColor;
+
+  /// Color of the next-step text in the header.
+  final Color? nextStepTextColor;
+
+  /// Size of the next-step text in logical pixels.
+  ///
+  /// Android only. Ignored on iOS.
+  final double? nextStepTextSize;
+
+  /// Color of the distance value text in the header.
+  final Color? distanceValueTextColor;
+
+  /// Color of the distance units text in the header.
+  final Color? distanceUnitsTextColor;
+
+  /// Size of the distance value text in logical pixels.
+  ///
+  /// Android only. Ignored on iOS.
+  final double? distanceValueTextSize;
+
+  /// Size of the distance units text in logical pixels.
+  ///
+  /// Android only. Ignored on iOS.
+  final double? distanceUnitsTextSize;
+
+  /// Color of the instructions text in the header.
+  final Color? instructionsTextColor;
+
+  /// Size of the first row of the instructions text in logical pixels.
+  ///
+  /// Android only. Ignored on iOS.
+  final double? instructionsFirstRowTextSize;
+
+  /// Size of the second row of the instructions text in logical pixels.
+  ///
+  /// Android only. Ignored on iOS.
+  final double? instructionsSecondRowTextSize;
+
+  /// Color of the recommended lane highlight in the header.
+  final Color? guidanceRecommendedLaneColor;
+
   /// Returns a copy with selected fields replaced.
   NavigationHeaderStylingOptions copyWith({
     Color? primaryDayModeBackgroundColor,
     Color? secondaryDayModeBackgroundColor,
     Color? primaryNightModeBackgroundColor,
     Color? secondaryNightModeBackgroundColor,
+    Color? largeManeuverIconColor,
+    Color? smallManeuverIconColor,
+    Color? nextStepTextColor,
+    double? nextStepTextSize,
+    Color? distanceValueTextColor,
+    Color? distanceUnitsTextColor,
+    double? distanceValueTextSize,
+    double? distanceUnitsTextSize,
+    Color? instructionsTextColor,
+    double? instructionsFirstRowTextSize,
+    double? instructionsSecondRowTextSize,
+    Color? guidanceRecommendedLaneColor,
   }) {
     return NavigationHeaderStylingOptions(
       primaryDayModeBackgroundColor:
@@ -58,6 +131,28 @@ class NavigationHeaderStylingOptions {
       secondaryNightModeBackgroundColor:
           secondaryNightModeBackgroundColor ??
           this.secondaryNightModeBackgroundColor,
+      largeManeuverIconColor:
+          largeManeuverIconColor ?? this.largeManeuverIconColor,
+      smallManeuverIconColor:
+          smallManeuverIconColor ?? this.smallManeuverIconColor,
+      nextStepTextColor: nextStepTextColor ?? this.nextStepTextColor,
+      nextStepTextSize: nextStepTextSize ?? this.nextStepTextSize,
+      distanceValueTextColor:
+          distanceValueTextColor ?? this.distanceValueTextColor,
+      distanceUnitsTextColor:
+          distanceUnitsTextColor ?? this.distanceUnitsTextColor,
+      distanceValueTextSize:
+          distanceValueTextSize ?? this.distanceValueTextSize,
+      distanceUnitsTextSize:
+          distanceUnitsTextSize ?? this.distanceUnitsTextSize,
+      instructionsTextColor:
+          instructionsTextColor ?? this.instructionsTextColor,
+      instructionsFirstRowTextSize:
+          instructionsFirstRowTextSize ?? this.instructionsFirstRowTextSize,
+      instructionsSecondRowTextSize:
+          instructionsSecondRowTextSize ?? this.instructionsSecondRowTextSize,
+      guidanceRecommendedLaneColor:
+          guidanceRecommendedLaneColor ?? this.guidanceRecommendedLaneColor,
     );
   }
 
@@ -71,6 +166,18 @@ class NavigationHeaderStylingOptions {
           ?.toARGB32(),
       secondaryNightModeBackgroundColor: secondaryNightModeBackgroundColor
           ?.toARGB32(),
+      largeManeuverIconColor: largeManeuverIconColor?.toARGB32(),
+      smallManeuverIconColor: smallManeuverIconColor?.toARGB32(),
+      nextStepTextColor: nextStepTextColor?.toARGB32(),
+      nextStepTextSize: nextStepTextSize,
+      distanceValueTextColor: distanceValueTextColor?.toARGB32(),
+      distanceUnitsTextColor: distanceUnitsTextColor?.toARGB32(),
+      distanceValueTextSize: distanceValueTextSize,
+      distanceUnitsTextSize: distanceUnitsTextSize,
+      instructionsTextColor: instructionsTextColor?.toARGB32(),
+      instructionsFirstRowTextSize: instructionsFirstRowTextSize,
+      instructionsSecondRowTextSize: instructionsSecondRowTextSize,
+      guidanceRecommendedLaneColor: guidanceRecommendedLaneColor?.toARGB32(),
     );
   }
 
@@ -87,7 +194,19 @@ class NavigationHeaderStylingOptions {
         other.primaryNightModeBackgroundColor ==
             primaryNightModeBackgroundColor &&
         other.secondaryNightModeBackgroundColor ==
-            secondaryNightModeBackgroundColor;
+            secondaryNightModeBackgroundColor &&
+        other.largeManeuverIconColor == largeManeuverIconColor &&
+        other.smallManeuverIconColor == smallManeuverIconColor &&
+        other.nextStepTextColor == nextStepTextColor &&
+        other.nextStepTextSize == nextStepTextSize &&
+        other.distanceValueTextColor == distanceValueTextColor &&
+        other.distanceUnitsTextColor == distanceUnitsTextColor &&
+        other.distanceValueTextSize == distanceValueTextSize &&
+        other.distanceUnitsTextSize == distanceUnitsTextSize &&
+        other.instructionsTextColor == instructionsTextColor &&
+        other.instructionsFirstRowTextSize == instructionsFirstRowTextSize &&
+        other.instructionsSecondRowTextSize == instructionsSecondRowTextSize &&
+        other.guidanceRecommendedLaneColor == guidanceRecommendedLaneColor;
   }
 
   @override
@@ -96,6 +215,18 @@ class NavigationHeaderStylingOptions {
     secondaryDayModeBackgroundColor,
     primaryNightModeBackgroundColor,
     secondaryNightModeBackgroundColor,
+    largeManeuverIconColor,
+    smallManeuverIconColor,
+    nextStepTextColor,
+    nextStepTextSize,
+    distanceValueTextColor,
+    distanceUnitsTextColor,
+    distanceValueTextSize,
+    distanceUnitsTextSize,
+    instructionsTextColor,
+    instructionsFirstRowTextSize,
+    instructionsSecondRowTextSize,
+    guidanceRecommendedLaneColor,
   );
 
   @override
@@ -104,7 +235,19 @@ class NavigationHeaderStylingOptions {
         'primaryDayModeBackgroundColor: $primaryDayModeBackgroundColor, '
         'secondaryDayModeBackgroundColor: $secondaryDayModeBackgroundColor, '
         'primaryNightModeBackgroundColor: $primaryNightModeBackgroundColor, '
-        'secondaryNightModeBackgroundColor: $secondaryNightModeBackgroundColor'
+        'secondaryNightModeBackgroundColor: $secondaryNightModeBackgroundColor, '
+        'largeManeuverIconColor: $largeManeuverIconColor, '
+        'smallManeuverIconColor: $smallManeuverIconColor, '
+        'nextStepTextColor: $nextStepTextColor, '
+        'nextStepTextSize: $nextStepTextSize, '
+        'distanceValueTextColor: $distanceValueTextColor, '
+        'distanceUnitsTextColor: $distanceUnitsTextColor, '
+        'distanceValueTextSize: $distanceValueTextSize, '
+        'distanceUnitsTextSize: $distanceUnitsTextSize, '
+        'instructionsTextColor: $instructionsTextColor, '
+        'instructionsFirstRowTextSize: $instructionsFirstRowTextSize, '
+        'instructionsSecondRowTextSize: $instructionsSecondRowTextSize, '
+        'guidanceRecommendedLaneColor: $guidanceRecommendedLaneColor'
         ')';
   }
 }

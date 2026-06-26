@@ -137,6 +137,42 @@ abstract class GoogleMapsBaseNavigationView(
     stylingOptions.secondaryNightModeBackgroundColor?.let {
       builder.secondaryNightModeThemeColor(it.toInt())
     }
+    stylingOptions.largeManeuverIconColor?.let {
+      builder.headerLargeManeuverIconColor(it.toInt())
+    }
+    stylingOptions.smallManeuverIconColor?.let {
+      builder.headerSmallManeuverIconColor(it.toInt())
+    }
+    stylingOptions.nextStepTextColor?.let {
+      builder.headerNextStepTextColor(it.toInt())
+    }
+    stylingOptions.nextStepTextSize?.let {
+      builder.headerNextStepTextSize(it.toFloat())
+    }
+    stylingOptions.distanceValueTextColor?.let {
+      builder.headerDistanceValueTextColor(it.toInt())
+    }
+    stylingOptions.distanceUnitsTextColor?.let {
+      builder.headerDistanceUnitsTextColor(it.toInt())
+    }
+    stylingOptions.distanceValueTextSize?.let {
+      builder.headerDistanceValueTextSize(it.toFloat())
+    }
+    stylingOptions.distanceUnitsTextSize?.let {
+      builder.headerDistanceUnitsTextSize(it.toFloat())
+    }
+    stylingOptions.instructionsTextColor?.let {
+      builder.headerInstructionsTextColor(it.toInt())
+    }
+    stylingOptions.instructionsFirstRowTextSize?.let {
+      builder.headerInstructionsFirstRowTextSize(it.toFloat())
+    }
+    stylingOptions.instructionsSecondRowTextSize?.let {
+      builder.headerInstructionsSecondRowTextSize(it.toFloat())
+    }
+    stylingOptions.guidanceRecommendedLaneColor?.let {
+      builder.headerGuidanceRecommendedLaneColor(it.toInt())
+    }
 
     navigationView.setStylingOptions(builder)
     _navigationHeaderStylingOptions = stylingOptions
