@@ -24,8 +24,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test-dart:
-    name: Run dart unit tests
+  test-dart-and-android:
+    name: Run Dart and Android unit tests
     timeout-minutes: 45
     runs-on:
       labels: ubuntu-latest
@@ -45,37 +45,15 @@ jobs:
           channel: "stable"
           cache: true
       - uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
+        name: Setup melos
         with:
           melos-version: "6.3.2"
-      - name: "Run flutter test"
-        run: melos run test:dart
-
-  test-android:
-    name: Run Android native unit tests
-    timeout-minutes: 45
-    runs-on:
-      labels: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - name: Setup java
-        uses: actions/setup-java@v4
-        with:
-          distribution: "temurin"
-          java-version: "17"
-          cache: "gradle"
-      - name: Setup flutter
-        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
-        with:
-          flutter-version: "3.38.x"
-          channel: "stable"
-          cache: true
-      - name: Setup melos
-        uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
-        with:
-          melos-version: "6.3.2"
-      - name: "Run Android native unit tests"
-        run: melos run test:android
+      - name: Run tests in parallel
+        parallel:
+          - name: Run dart unit tests
+            run: melos run test:dart
+          - name: Run Android native unit tests
+            run: melos run test:android
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
@@ -128,7 +106,7 @@ jobs:
 
   build-android:
     name: Build Android
-    needs: [test-dart, test-android]
+    needs: [test-dart-and-android, test-ios]
     if: contains(github.base_ref, 'main')
     timeout-minutes: 45
     runs-on:
@@ -171,7 +149,7 @@ jobs:
 
   build-ios:
     name: Build iOS
-    needs: [test-dart, test-ios]
+    needs: [test-dart-and-android, test-ios]
     if: contains(github.base_ref, 'main')
     timeout-minutes: 90
     runs-on:
