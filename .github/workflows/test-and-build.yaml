@@ -106,7 +106,7 @@ jobs:
 
   build-android:
     name: Build Android
-    needs: [test-dart-and-android, test-ios]
+    needs: [test-dart-and-android]
     if: contains(github.base_ref, 'main')
     timeout-minutes: 45
     runs-on:
