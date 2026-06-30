@@ -20,6 +20,8 @@
 // For more information about Flutter integration tests, please see
 // https://docs.flutter.dev/cookbook/testing/integration/introduction
 
+// ignore_for_file: experimental_member_use
+
 import 'package:flutter/material.dart';
 
 import 'shared.dart';
