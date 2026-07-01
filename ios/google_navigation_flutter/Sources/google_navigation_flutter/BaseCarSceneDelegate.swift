@@ -148,7 +148,8 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
             mapColorScheme: autoMapOptions?.mapColorScheme ?? .unspecified
           ),
           imageRegistry: imageRegistry,
-          isCarPlayView: true
+          isCarPlayView: true,
+          screen: templateApplicationScene.carWindow.screen
         )
 
         // Set up prompt visibility callback to allow override
