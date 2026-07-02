@@ -101,7 +101,8 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     navigationHeaderStylingOptions: NavigationHeaderStylingOptionsDto?,
     mapConfiguration: MapConfiguration,
     imageRegistry: ImageRegistry,
-    isCarPlayView: Bool
+    isCarPlayView: Bool,
+    screen: UIScreen? = nil
   ) {
     if !isCarPlayView, viewId == nil || viewEventApi == nil {
       fatalError("For non-carplay map view viewId and viewEventApi is required")
@@ -118,6 +119,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
 
     let mapViewOptions = GMSMapViewOptions()
     _mapConfiguration.apply(to: mapViewOptions, withFrame: frame)
+    mapViewOptions.screen = screen
     _mapView = ViewStateAwareGMSMapView(options: mapViewOptions)
     _mapConfiguration.apply(to: _mapView)
 
