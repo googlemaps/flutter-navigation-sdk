@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.10.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.9.4...0.10.0) (2026-07-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* upgrade android sdk to 7.7.0 and ios sdk to 10.14.0 ([#735](https://github.com/googlemaps/flutter-navigation-sdk/issues/735))
+
+### Features
+
+* add navigation UI enabled listener for auto views ([#721](https://github.com/googlemaps/flutter-navigation-sdk/issues/721)) ([2e6f838](https://github.com/googlemaps/flutter-navigation-sdk/commit/2e6f838d50567509e750ae2b59d86afb89225012))
+* navigation header styling support ([#728](https://github.com/googlemaps/flutter-navigation-sdk/issues/728)) ([b5c2805](https://github.com/googlemaps/flutter-navigation-sdk/commit/b5c28059974bac0e72d213c9882657bf7d13a277))
+* upgrade android sdk to 7.7.0 and ios sdk to 10.14.0 ([#735](https://github.com/googlemaps/flutter-navigation-sdk/issues/735)) ([e04e3fe](https://github.com/googlemaps/flutter-navigation-sdk/commit/e04e3fe7a06454f6452e21701aef3180a48da9b8))
+
+
+### Bug Fixes
+
+* bind carplay screen to GMSMapView ([#740](https://github.com/googlemaps/flutter-navigation-sdk/issues/740)) ([e6f8e68](https://github.com/googlemaps/flutter-navigation-sdk/commit/e6f8e68783b65b288f9cbed61511ced1bc81a648))
+
 ## [0.9.4](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.9.3...0.9.4) (2026-06-09)
 
 
