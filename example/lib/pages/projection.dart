@@ -129,12 +129,13 @@ class _ProjectionPageState extends ExamplePageState<ProjectionPage> {
   Future<void> _testCenterCoordinate() async {
     // Get screen center first before async call
     final RenderBox? box = context.findRenderObject() as RenderBox?;
-    final Offset? screenCenter =
-        box != null ? Offset(box.size.width / 2, box.size.height / 2) : null;
+    final Offset? screenCenter = box != null
+        ? Offset(box.size.width / 2, box.size.height / 2)
+        : null;
 
     // Get the center of the map
-    final CameraPosition position =
-        await _mapViewController.getCameraPosition();
+    final CameraPosition position = await _mapViewController
+        .getCameraPosition();
 
     if (_mode == ProjectionMode.latLngToScreen) {
       await _onMapClicked(position.target);
@@ -169,11 +170,11 @@ class _ProjectionPageState extends ExamplePageState<ProjectionPage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.9),
+        color: color.withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(6),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -251,10 +252,9 @@ class _ProjectionPageState extends ExamplePageState<ProjectionPage> {
             left: 10,
             child: _buildCoordinateLabel(
               title: 'Geographic (LatLng)',
-              content:
-                  _lastLatLng != null
-                      ? 'Lat: ${_lastLatLng!.latitude.toStringAsFixed(6)}\nLng: ${_lastLatLng!.longitude.toStringAsFixed(6)}'
-                      : 'Tap map to see coordinates',
+              content: _lastLatLng != null
+                  ? 'Lat: ${_lastLatLng!.latitude.toStringAsFixed(6)}\nLng: ${_lastLatLng!.longitude.toStringAsFixed(6)}'
+                  : 'Tap map to see coordinates',
               color: Colors.blue.shade700,
             ),
           ),
@@ -264,10 +264,9 @@ class _ProjectionPageState extends ExamplePageState<ProjectionPage> {
             right: 10,
             child: _buildCoordinateLabel(
               title: 'Screen (pixels)',
-              content:
-                  _lastScreenCoordinate != null
-                      ? 'X: ${_lastScreenCoordinate!.x.toStringAsFixed(1)}\nY: ${_lastScreenCoordinate!.y.toStringAsFixed(1)}'
-                      : 'Tap map to see coordinates',
+              content: _lastScreenCoordinate != null
+                  ? 'X: ${_lastScreenCoordinate!.x.toStringAsFixed(1)}\nY: ${_lastScreenCoordinate!.y.toStringAsFixed(1)}'
+                  : 'Tap map to see coordinates',
               color: Colors.green.shade700,
             ),
           ),
@@ -283,7 +282,7 @@ class _ProjectionPageState extends ExamplePageState<ProjectionPage> {
                 borderRadius: BorderRadius.circular(8),
                 boxShadow: <BoxShadow>[
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
+                    color: Colors.black.withValues(alpha: 0.2),
                     blurRadius: 6,
                     offset: const Offset(0, 2),
                   ),
@@ -293,20 +292,16 @@ class _ProjectionPageState extends ExamplePageState<ProjectionPage> {
                 children: <Widget>[
                   Expanded(
                     child: ElevatedButton(
-                      onPressed:
-                          _mode == ProjectionMode.latLngToScreen
-                              ? null
-                              : () =>
-                                  _switchMode(ProjectionMode.latLngToScreen),
+                      onPressed: _mode == ProjectionMode.latLngToScreen
+                          ? null
+                          : () => _switchMode(ProjectionMode.latLngToScreen),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            _mode == ProjectionMode.latLngToScreen
-                                ? Theme.of(context).colorScheme.primary
-                                : null,
-                        foregroundColor:
-                            _mode == ProjectionMode.latLngToScreen
-                                ? Colors.white
-                                : null,
+                        backgroundColor: _mode == ProjectionMode.latLngToScreen
+                            ? Theme.of(context).colorScheme.primary
+                            : null,
+                        foregroundColor: _mode == ProjectionMode.latLngToScreen
+                            ? Colors.white
+                            : null,
                       ),
                       child: const Text('LatLng -> Screen'),
                     ),
@@ -314,20 +309,16 @@ class _ProjectionPageState extends ExamplePageState<ProjectionPage> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed:
-                          _mode == ProjectionMode.screenToLatLng
-                              ? null
-                              : () =>
-                                  _switchMode(ProjectionMode.screenToLatLng),
+                      onPressed: _mode == ProjectionMode.screenToLatLng
+                          ? null
+                          : () => _switchMode(ProjectionMode.screenToLatLng),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            _mode == ProjectionMode.screenToLatLng
-                                ? Theme.of(context).colorScheme.primary
-                                : null,
-                        foregroundColor:
-                            _mode == ProjectionMode.screenToLatLng
-                                ? Colors.white
-                                : null,
+                        backgroundColor: _mode == ProjectionMode.screenToLatLng
+                            ? Theme.of(context).colorScheme.primary
+                            : null,
+                        foregroundColor: _mode == ProjectionMode.screenToLatLng
+                            ? Colors.white
+                            : null,
                       ),
                       child: const Text('Screen -> LatLng'),
                     ),
