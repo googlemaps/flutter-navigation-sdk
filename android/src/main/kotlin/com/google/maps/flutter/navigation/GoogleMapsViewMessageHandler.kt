@@ -320,6 +320,17 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
     getNavigationView(viewId.toInt()).setNavigationHeaderEnabled(enabled)
   }
 
+  override fun getNavigationHeaderStylingOptions(viewId: Long): NavigationHeaderStylingOptionsDto {
+    return getNavigationView(viewId.toInt()).getNavigationHeaderStylingOptions()
+  }
+
+  override fun setNavigationHeaderStylingOptions(
+    viewId: Long,
+    stylingOptions: NavigationHeaderStylingOptionsDto,
+  ) {
+    getNavigationView(viewId.toInt()).setNavigationHeaderStylingOptions(stylingOptions)
+  }
+
   override fun isNavigationFooterEnabled(viewId: Long): Boolean {
     return getNavigationView(viewId.toInt()).isNavigationFooterEnabled()
   }

@@ -807,17 +807,24 @@ data class NavigationViewOptionsDto(
   val navigationUIEnabledPreference: NavigationUIEnabledPreferenceDto,
   /** Controls the navigation night mode for Navigation UI. */
   val forceNightMode: NavigationForceNightModeDto,
+  /** Controls the initial navigation header styling. */
+  val headerStylingOptions: NavigationHeaderStylingOptionsDto? = null,
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): NavigationViewOptionsDto {
       val navigationUIEnabledPreference = pigeonVar_list[0] as NavigationUIEnabledPreferenceDto
       val forceNightMode = pigeonVar_list[1] as NavigationForceNightModeDto
-      return NavigationViewOptionsDto(navigationUIEnabledPreference, forceNightMode)
+      val headerStylingOptions = pigeonVar_list[2] as NavigationHeaderStylingOptionsDto?
+      return NavigationViewOptionsDto(
+        navigationUIEnabledPreference,
+        forceNightMode,
+        headerStylingOptions,
+      )
     }
   }
 
   fun toList(): List<Any?> {
-    return listOf(navigationUIEnabledPreference, forceNightMode)
+    return listOf(navigationUIEnabledPreference, forceNightMode, headerStylingOptions)
   }
 
   override fun equals(other: Any?): Boolean {
@@ -1637,6 +1644,107 @@ data class MapPaddingDto(val top: Long, val left: Long, val bottom: Long, val ri
 
   override fun equals(other: Any?): Boolean {
     if (other !is MapPaddingDto) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
+ * Navigation header styling options.
+ *
+ * All color values are 32-bit ARGB integers (format: 0xAARRGGBB). All text size values are logical
+ * pixels. Any null value resets that specific field to the native SDK default.
+ *
+ * Text size fields are currently Android only and are ignored on iOS.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class NavigationHeaderStylingOptionsDto(
+  val primaryDayModeBackgroundColor: Long? = null,
+  val secondaryDayModeBackgroundColor: Long? = null,
+  val primaryNightModeBackgroundColor: Long? = null,
+  val secondaryNightModeBackgroundColor: Long? = null,
+  val largeManeuverIconColor: Long? = null,
+  val smallManeuverIconColor: Long? = null,
+  val nextStepTextColor: Long? = null,
+  val nextStepTextSize: Double? = null,
+  val distanceValueTextColor: Long? = null,
+  val distanceUnitsTextColor: Long? = null,
+  val distanceValueTextSize: Double? = null,
+  val distanceUnitsTextSize: Double? = null,
+  val instructionsTextColor: Long? = null,
+  val instructionsFirstRowTextSize: Double? = null,
+  val instructionsSecondRowTextSize: Double? = null,
+  val guidanceRecommendedLaneColor: Long? = null,
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): NavigationHeaderStylingOptionsDto {
+      val primaryDayModeBackgroundColor = pigeonVar_list[0] as Long?
+      val secondaryDayModeBackgroundColor = pigeonVar_list[1] as Long?
+      val primaryNightModeBackgroundColor = pigeonVar_list[2] as Long?
+      val secondaryNightModeBackgroundColor = pigeonVar_list[3] as Long?
+      val largeManeuverIconColor = pigeonVar_list[4] as Long?
+      val smallManeuverIconColor = pigeonVar_list[5] as Long?
+      val nextStepTextColor = pigeonVar_list[6] as Long?
+      val nextStepTextSize = pigeonVar_list[7] as Double?
+      val distanceValueTextColor = pigeonVar_list[8] as Long?
+      val distanceUnitsTextColor = pigeonVar_list[9] as Long?
+      val distanceValueTextSize = pigeonVar_list[10] as Double?
+      val distanceUnitsTextSize = pigeonVar_list[11] as Double?
+      val instructionsTextColor = pigeonVar_list[12] as Long?
+      val instructionsFirstRowTextSize = pigeonVar_list[13] as Double?
+      val instructionsSecondRowTextSize = pigeonVar_list[14] as Double?
+      val guidanceRecommendedLaneColor = pigeonVar_list[15] as Long?
+      return NavigationHeaderStylingOptionsDto(
+        primaryDayModeBackgroundColor,
+        secondaryDayModeBackgroundColor,
+        primaryNightModeBackgroundColor,
+        secondaryNightModeBackgroundColor,
+        largeManeuverIconColor,
+        smallManeuverIconColor,
+        nextStepTextColor,
+        nextStepTextSize,
+        distanceValueTextColor,
+        distanceUnitsTextColor,
+        distanceValueTextSize,
+        distanceUnitsTextSize,
+        instructionsTextColor,
+        instructionsFirstRowTextSize,
+        instructionsSecondRowTextSize,
+        guidanceRecommendedLaneColor,
+      )
+    }
+  }
+
+  fun toList(): List<Any?> {
+    return listOf(
+      primaryDayModeBackgroundColor,
+      secondaryDayModeBackgroundColor,
+      primaryNightModeBackgroundColor,
+      secondaryNightModeBackgroundColor,
+      largeManeuverIconColor,
+      smallManeuverIconColor,
+      nextStepTextColor,
+      nextStepTextSize,
+      distanceValueTextColor,
+      distanceUnitsTextColor,
+      distanceValueTextSize,
+      distanceUnitsTextSize,
+      instructionsTextColor,
+      instructionsFirstRowTextSize,
+      instructionsSecondRowTextSize,
+      guidanceRecommendedLaneColor,
+    )
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (other !is NavigationHeaderStylingOptionsDto) {
       return false
     }
     if (this === other) {
@@ -2785,87 +2893,92 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
         return (readValue(buffer) as? List<Any?>)?.let { MapPaddingDto.fromList(it) }
       }
       179.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { RouteTokenOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let {
+          NavigationHeaderStylingOptionsDto.fromList(it)
+        }
       }
       180.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { DestinationsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { RouteTokenOptionsDto.fromList(it) }
       }
       181.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { RoutingOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { DestinationsDto.fromList(it) }
       }
       182.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { NavigationDisplayOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { RoutingOptionsDto.fromList(it) }
       }
       183.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { NavigationWaypointDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { NavigationDisplayOptionsDto.fromList(it) }
       }
       184.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { NavigationWaypointDto.fromList(it) }
+      }
+      185.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           ContinueToNextDestinationResponseDto.fromList(it)
         }
       }
-      185.toByte() -> {
+      186.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavigationTimeAndDistanceDto.fromList(it) }
       }
-      186.toByte() -> {
+      187.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           NavigationAudioGuidanceSettingsDto.fromList(it)
         }
       }
-      187.toByte() -> {
+      188.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SimulationOptionsDto.fromList(it) }
       }
-      188.toByte() -> {
+      189.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LatLngDto.fromList(it) }
       }
-      189.toByte() -> {
+      190.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LatLngBoundsDto.fromList(it) }
       }
-      190.toByte() -> {
+      191.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SpeedingUpdatedEventDto.fromList(it) }
       }
-      191.toByte() -> {
+      192.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           GpsAvailabilityChangeEventDto.fromList(it)
         }
       }
-      192.toByte() -> {
+      193.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           SpeedAlertOptionsThresholdPercentageDto.fromList(it)
         }
       }
-      193.toByte() -> {
+      194.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SpeedAlertOptionsDto.fromList(it) }
       }
-      194.toByte() -> {
+      195.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(it)
         }
       }
-      195.toByte() -> {
+      196.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentTrafficDataDto.fromList(it) }
       }
-      196.toByte() -> {
+      197.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentDto.fromList(it) }
       }
-      197.toByte() -> {
+      198.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LaneDirectionDto.fromList(it) }
       }
-      198.toByte() -> {
+      199.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LaneDto.fromList(it) }
       }
-      199.toByte() -> {
+      200.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { StepInfoDto.fromList(it) }
       }
-      200.toByte() -> {
+      201.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavInfoDto.fromList(it) }
       }
-      201.toByte() -> {
+      202.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           TermsAndConditionsUIParamsDto.fromList(it)
         }
       }
-      202.toByte() -> {
+      203.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           StepImageGenerationOptionsDto.fromList(it)
         }
@@ -3076,100 +3189,104 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
         stream.write(178)
         writeValue(stream, value.toList())
       }
-      is RouteTokenOptionsDto -> {
+      is NavigationHeaderStylingOptionsDto -> {
         stream.write(179)
         writeValue(stream, value.toList())
       }
-      is DestinationsDto -> {
+      is RouteTokenOptionsDto -> {
         stream.write(180)
         writeValue(stream, value.toList())
       }
-      is RoutingOptionsDto -> {
+      is DestinationsDto -> {
         stream.write(181)
         writeValue(stream, value.toList())
       }
-      is NavigationDisplayOptionsDto -> {
+      is RoutingOptionsDto -> {
         stream.write(182)
         writeValue(stream, value.toList())
       }
-      is NavigationWaypointDto -> {
+      is NavigationDisplayOptionsDto -> {
         stream.write(183)
         writeValue(stream, value.toList())
       }
-      is ContinueToNextDestinationResponseDto -> {
+      is NavigationWaypointDto -> {
         stream.write(184)
         writeValue(stream, value.toList())
       }
-      is NavigationTimeAndDistanceDto -> {
+      is ContinueToNextDestinationResponseDto -> {
         stream.write(185)
         writeValue(stream, value.toList())
       }
-      is NavigationAudioGuidanceSettingsDto -> {
+      is NavigationTimeAndDistanceDto -> {
         stream.write(186)
         writeValue(stream, value.toList())
       }
-      is SimulationOptionsDto -> {
+      is NavigationAudioGuidanceSettingsDto -> {
         stream.write(187)
         writeValue(stream, value.toList())
       }
-      is LatLngDto -> {
+      is SimulationOptionsDto -> {
         stream.write(188)
         writeValue(stream, value.toList())
       }
-      is LatLngBoundsDto -> {
+      is LatLngDto -> {
         stream.write(189)
         writeValue(stream, value.toList())
       }
-      is SpeedingUpdatedEventDto -> {
+      is LatLngBoundsDto -> {
         stream.write(190)
         writeValue(stream, value.toList())
       }
-      is GpsAvailabilityChangeEventDto -> {
+      is SpeedingUpdatedEventDto -> {
         stream.write(191)
         writeValue(stream, value.toList())
       }
-      is SpeedAlertOptionsThresholdPercentageDto -> {
+      is GpsAvailabilityChangeEventDto -> {
         stream.write(192)
         writeValue(stream, value.toList())
       }
-      is SpeedAlertOptionsDto -> {
+      is SpeedAlertOptionsThresholdPercentageDto -> {
         stream.write(193)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentTrafficDataRoadStretchRenderingDataDto -> {
+      is SpeedAlertOptionsDto -> {
         stream.write(194)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentTrafficDataDto -> {
+      is RouteSegmentTrafficDataRoadStretchRenderingDataDto -> {
         stream.write(195)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentDto -> {
+      is RouteSegmentTrafficDataDto -> {
         stream.write(196)
         writeValue(stream, value.toList())
       }
-      is LaneDirectionDto -> {
+      is RouteSegmentDto -> {
         stream.write(197)
         writeValue(stream, value.toList())
       }
-      is LaneDto -> {
+      is LaneDirectionDto -> {
         stream.write(198)
         writeValue(stream, value.toList())
       }
-      is StepInfoDto -> {
+      is LaneDto -> {
         stream.write(199)
         writeValue(stream, value.toList())
       }
-      is NavInfoDto -> {
+      is StepInfoDto -> {
         stream.write(200)
         writeValue(stream, value.toList())
       }
-      is TermsAndConditionsUIParamsDto -> {
+      is NavInfoDto -> {
         stream.write(201)
         writeValue(stream, value.toList())
       }
-      is StepImageGenerationOptionsDto -> {
+      is TermsAndConditionsUIParamsDto -> {
         stream.write(202)
+        writeValue(stream, value.toList())
+      }
+      is StepImageGenerationOptionsDto -> {
+        stream.write(203)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -3255,6 +3372,13 @@ interface MapViewApi {
   fun isNavigationHeaderEnabled(viewId: Long): Boolean
 
   fun setNavigationHeaderEnabled(viewId: Long, enabled: Boolean)
+
+  fun getNavigationHeaderStylingOptions(viewId: Long): NavigationHeaderStylingOptionsDto
+
+  fun setNavigationHeaderStylingOptions(
+    viewId: Long,
+    stylingOptions: NavigationHeaderStylingOptionsDto,
+  )
 
   fun isNavigationFooterEnabled(viewId: Long): Boolean
 
@@ -3765,6 +3889,54 @@ interface MapViewApi {
             val wrapped: List<Any?> =
               try {
                 api.setNavigationHeaderEnabled(viewIdArg, enabledArg)
+                listOf(null)
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getNavigationHeaderStylingOptions$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val wrapped: List<Any?> =
+              try {
+                listOf(api.getNavigationHeaderStylingOptions(viewIdArg))
+              } catch (exception: Throwable) {
+                MessagesPigeonUtils.wrapError(exception)
+              }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationHeaderStylingOptions$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val viewIdArg = args[0] as Long
+            val stylingOptionsArg = args[1] as NavigationHeaderStylingOptionsDto
+            val wrapped: List<Any?> =
+              try {
+                api.setNavigationHeaderStylingOptions(viewIdArg, stylingOptionsArg)
                 listOf(null)
               } catch (exception: Throwable) {
                 MessagesPigeonUtils.wrapError(exception)

@@ -358,6 +358,18 @@ class GoogleMapsNavigationViewMessageHandler: MapViewApi {
     try getView(viewId).setNavigationHeaderEnabled(enabled)
   }
 
+  func getNavigationHeaderStylingOptions(viewId: Int64) throws -> NavigationHeaderStylingOptionsDto
+  {
+    try getView(viewId).getNavigationHeaderStylingOptions()
+  }
+
+  func setNavigationHeaderStylingOptions(
+    viewId: Int64,
+    stylingOptions: NavigationHeaderStylingOptionsDto
+  ) throws {
+    try getView(viewId).setNavigationHeaderStylingOptions(stylingOptions)
+  }
+
   func setNavigationFooterEnabled(viewId: Int64, enabled: Bool) throws {
     try getView(viewId).setNavigationFooterEnabled(enabled)
   }

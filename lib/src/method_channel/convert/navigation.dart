@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:ui';
+
 import '../../../google_navigation_flutter.dart';
 import '../method_channel.dart';
 
@@ -220,6 +222,56 @@ extension ConvertContinueToNextDestinationResponseDto
       );
 }
 
+/// [NavigationHeaderStylingOptionsDto] convert extension.
+/// @nodoc
+extension ConvertNavigationHeaderStylingOptionsDto
+    on NavigationHeaderStylingOptionsDto {
+  /// Converts [NavigationHeaderStylingOptionsDto] to [NavigationHeaderStylingOptions].
+  NavigationHeaderStylingOptions toNavigationHeaderStylingOptions() {
+    return NavigationHeaderStylingOptions(
+      primaryDayModeBackgroundColor: primaryDayModeBackgroundColor != null
+          ? Color(primaryDayModeBackgroundColor!)
+          : null,
+      secondaryDayModeBackgroundColor: secondaryDayModeBackgroundColor != null
+          ? Color(secondaryDayModeBackgroundColor!)
+          : null,
+      primaryNightModeBackgroundColor: primaryNightModeBackgroundColor != null
+          ? Color(primaryNightModeBackgroundColor!)
+          : null,
+      secondaryNightModeBackgroundColor:
+          secondaryNightModeBackgroundColor != null
+          ? Color(secondaryNightModeBackgroundColor!)
+          : null,
+      largeManeuverIconColor: largeManeuverIconColor != null
+          ? Color(largeManeuverIconColor!)
+          : null,
+      smallManeuverIconColor: smallManeuverIconColor != null
+          ? Color(smallManeuverIconColor!)
+          : null,
+      nextStepTextColor: nextStepTextColor != null
+          ? Color(nextStepTextColor!)
+          : null,
+      nextStepTextSize: nextStepTextSize,
+      distanceValueTextColor: distanceValueTextColor != null
+          ? Color(distanceValueTextColor!)
+          : null,
+      distanceUnitsTextColor: distanceUnitsTextColor != null
+          ? Color(distanceUnitsTextColor!)
+          : null,
+      distanceValueTextSize: distanceValueTextSize,
+      distanceUnitsTextSize: distanceUnitsTextSize,
+      instructionsTextColor: instructionsTextColor != null
+          ? Color(instructionsTextColor!)
+          : null,
+      instructionsFirstRowTextSize: instructionsFirstRowTextSize,
+      instructionsSecondRowTextSize: instructionsSecondRowTextSize,
+      guidanceRecommendedLaneColor: guidanceRecommendedLaneColor != null
+          ? Color(guidanceRecommendedLaneColor!)
+          : null,
+    );
+  }
+}
+
 /// [RouteSegmentDto] convert extension.
 /// @nodoc
 extension ConvertRouteSegmentDto on RouteSegmentDto {
@@ -257,6 +309,7 @@ extension ConvertNavigationViewOptions on NavigationViewOptions {
     return NavigationViewOptionsDto(
       navigationUIEnabledPreference: preference,
       forceNightMode: forceNightMode.toDto(),
+      headerStylingOptions: headerStylingOptions?.toDto(),
     );
   }
 }

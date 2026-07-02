@@ -68,6 +68,11 @@ internal constructor(
     // Initialize force night mode if provided
     navigationOptions?.forceNightMode?.let { forceNightMode -> setForceNightMode(forceNightMode) }
 
+    // Initialize header styling if provided.
+    navigationOptions?.headerStylingOptions?.let { stylingOptions ->
+      setNavigationHeaderStylingOptions(stylingOptions)
+    }
+
     viewRegistry.registerNavigationView(viewId, this)
 
     navigationView.getMapAsync { map ->

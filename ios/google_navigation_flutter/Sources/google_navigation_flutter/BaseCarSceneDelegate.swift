@@ -131,6 +131,7 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
           navigationUIEnabledPreference:
             autoMapOptions?.navigationUIEnabledPreference ?? .automatic,
           forceNightMode: autoMapOptions?.forceNightMode,
+          navigationHeaderStylingOptions: nil,
           mapConfiguration: MapConfiguration(
             cameraPosition: autoMapOptions?.cameraPosition,
             mapType: autoMapOptions?.mapType ?? .normal,
@@ -148,7 +149,8 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
             mapColorScheme: autoMapOptions?.mapColorScheme ?? .unspecified
           ),
           imageRegistry: imageRegistry,
-          isCarPlayView: true
+          isCarPlayView: true,
+          screen: templateApplicationScene.carWindow.screen
         )
 
         // Set up prompt visibility callback to allow override

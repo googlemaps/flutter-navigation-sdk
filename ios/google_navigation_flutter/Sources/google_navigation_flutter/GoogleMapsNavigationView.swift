@@ -98,9 +98,11 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     viewEventApi: ViewEventApi?,
     navigationUIEnabledPreference: NavigationUIEnabledPreference,
     forceNightMode: GMSNavigationLightingMode?,
+    navigationHeaderStylingOptions: NavigationHeaderStylingOptionsDto?,
     mapConfiguration: MapConfiguration,
     imageRegistry: ImageRegistry,
-    isCarPlayView: Bool
+    isCarPlayView: Bool,
+    screen: UIScreen? = nil
   ) {
     if !isCarPlayView, viewId == nil || viewEventApi == nil {
       fatalError("For non-carplay map view viewId and viewEventApi is required")
@@ -117,6 +119,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
 
     let mapViewOptions = GMSMapViewOptions()
     _mapConfiguration.apply(to: mapViewOptions, withFrame: frame)
+    mapViewOptions.screen = screen
     _mapView = ViewStateAwareGMSMapView(options: mapViewOptions)
     _mapConfiguration.apply(to: _mapView)
 
@@ -133,6 +136,9 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     // Apply force night mode if this is a navigation view
     if _isNavigationView {
       applyForceNightMode()
+      if let navigationHeaderStylingOptions {
+        setNavigationHeaderStylingOptions(navigationHeaderStylingOptions)
+      }
     }
   }
 
@@ -617,6 +623,57 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
 
   func setNavigationHeaderEnabled(_ enabled: Bool) {
     _mapView.settings.isNavigationHeaderEnabled = enabled
+  }
+
+  func getNavigationHeaderStylingOptions() -> NavigationHeaderStylingOptionsDto {
+    NavigationHeaderStylingOptionsDto(
+      primaryDayModeBackgroundColor: _mapView.settings.navigationHeaderPrimaryBackgroundColor?
+        .toRgb(),
+      secondaryDayModeBackgroundColor: _mapView.settings.navigationHeaderSecondaryBackgroundColor?
+        .toRgb(),
+      primaryNightModeBackgroundColor: _mapView.settings
+        .navigationHeaderPrimaryBackgroundColorNightMode?.toRgb(),
+      secondaryNightModeBackgroundColor: _mapView.settings
+        .navigationHeaderSecondaryBackgroundColorNightMode?.toRgb(),
+      largeManeuverIconColor: _mapView.settings.navigationHeaderLargeManeuverIconColor?
+        .toRgb(),
+      smallManeuverIconColor: _mapView.settings.navigationHeaderSmallManeuverIconColor?
+        .toRgb(),
+      nextStepTextColor: _mapView.settings.navigationHeaderNextStepTextColor?.toRgb(),
+      distanceValueTextColor: _mapView.settings.navigationHeaderDistanceValueTextColor?
+        .toRgb(),
+      distanceUnitsTextColor: _mapView.settings.navigationHeaderDistanceUnitsTextColor?
+        .toRgb(),
+      instructionsTextColor: _mapView.settings.navigationHeaderInstructionsTextColor?
+        .toRgb(),
+      guidanceRecommendedLaneColor: _mapView.settings
+        .navigationHeaderGuidanceRecommendedLaneColor?.toRgb()
+    )
+  }
+
+  func setNavigationHeaderStylingOptions(_ stylingOptions: NavigationHeaderStylingOptionsDto) {
+    _mapView.settings.navigationHeaderPrimaryBackgroundColor = stylingOptions
+      .primaryDayModeBackgroundColor.map { UIColor(from: $0) }
+    _mapView.settings.navigationHeaderSecondaryBackgroundColor = stylingOptions
+      .secondaryDayModeBackgroundColor.map { UIColor(from: $0) }
+    _mapView.settings.navigationHeaderPrimaryBackgroundColorNightMode = stylingOptions
+      .primaryNightModeBackgroundColor.map { UIColor(from: $0) }
+    _mapView.settings.navigationHeaderSecondaryBackgroundColorNightMode = stylingOptions
+      .secondaryNightModeBackgroundColor.map { UIColor(from: $0) }
+    _mapView.settings.navigationHeaderLargeManeuverIconColor = stylingOptions
+      .largeManeuverIconColor.map { UIColor(from: $0) }
+    _mapView.settings.navigationHeaderSmallManeuverIconColor = stylingOptions
+      .smallManeuverIconColor.map { UIColor(from: $0) }
+    _mapView.settings.navigationHeaderNextStepTextColor = stylingOptions
+      .nextStepTextColor.map { UIColor(from: $0) }
+    _mapView.settings.navigationHeaderDistanceValueTextColor = stylingOptions
+      .distanceValueTextColor.map { UIColor(from: $0) }
+    _mapView.settings.navigationHeaderDistanceUnitsTextColor = stylingOptions
+      .distanceUnitsTextColor.map { UIColor(from: $0) }
+    _mapView.settings.navigationHeaderInstructionsTextColor = stylingOptions
+      .instructionsTextColor.map { UIColor(from: $0) }
+    _mapView.settings.navigationHeaderGuidanceRecommendedLaneColor = stylingOptions
+      .guidanceRecommendedLaneColor.map { UIColor(from: $0) }
   }
 
   func isNavigationFooterEnabled() -> Bool {
