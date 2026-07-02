@@ -20,6 +20,8 @@
 // For more information about Flutter integration tests, please see
 // https://docs.flutter.dev/cookbook/testing/integration/introduction
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'shared.dart';
@@ -373,5 +375,75 @@ void main() {
     }
 
     await GoogleMapsNavigator.cleanup();
+  });
+
+  patrol('Test navigation header styling round-trip with all values', (
+    PatrolIntegrationTester $,
+  ) async {
+    final ControllerCompleter<GoogleNavigationViewController>
+    viewControllerCompleter = ControllerCompleter();
+
+    await checkLocationDialogAndTosAcceptance($);
+
+    await pumpNavigationView(
+      $,
+      GoogleMapsNavigationView(
+        onViewCreated: (GoogleNavigationViewController controller) {
+          viewControllerCompleter.complete(controller);
+        },
+      ),
+    );
+
+    final GoogleNavigationViewController viewController =
+        await viewControllerCompleter.future;
+
+    const NavigationHeaderStylingOptions stylingOptions =
+        NavigationHeaderStylingOptions(
+          primaryDayModeBackgroundColor: Color(0xFF2196F3),
+          secondaryDayModeBackgroundColor: Color(0xFFF44336),
+          primaryNightModeBackgroundColor: Color(0xFF000000),
+          secondaryNightModeBackgroundColor: Color(0xFF9E9E9E),
+          largeManeuverIconColor: Color(0xFFFF9800),
+          smallManeuverIconColor: Color(0xFFE91E63),
+          nextStepTextColor: Color(0xFFFFEB3B),
+          nextStepTextSize: 18,
+          distanceValueTextColor: Color(0xFF4CAF50),
+          distanceUnitsTextColor: Color(0xFFCDDC39),
+          distanceValueTextSize: 24,
+          distanceUnitsTextSize: 14,
+          instructionsTextColor: Color(0xFF00BCD4),
+          instructionsFirstRowTextSize: 30,
+          instructionsSecondRowTextSize: 20,
+          guidanceRecommendedLaneColor: Color(0xFF009688),
+        );
+
+    await viewController.setNavigationHeaderStylingOptions(stylingOptions);
+    await $.pumpAndSettle();
+
+    final NavigationHeaderStylingOptions stylingOptionsOut =
+        await viewController.getNavigationHeaderStylingOptions();
+
+    final NavigationHeaderStylingOptions expectedStylingOptions = Platform.isIOS
+        ? const NavigationHeaderStylingOptions(
+            primaryDayModeBackgroundColor: Color(0xFF2196F3),
+            secondaryDayModeBackgroundColor: Color(0xFFF44336),
+            primaryNightModeBackgroundColor: Color(0xFF000000),
+            secondaryNightModeBackgroundColor: Color(0xFF9E9E9E),
+            largeManeuverIconColor: Color(0xFFFF9800),
+            smallManeuverIconColor: Color(0xFFE91E63),
+            nextStepTextColor: Color(0xFFFFEB3B),
+            distanceValueTextColor: Color(0xFF4CAF50),
+            distanceUnitsTextColor: Color(0xFFCDDC39),
+            instructionsTextColor: Color(0xFF00BCD4),
+            guidanceRecommendedLaneColor: Color(0xFF009688),
+          )
+        : stylingOptions;
+
+    expect(
+      stylingOptionsOut,
+      expectedStylingOptions,
+      reason:
+          'Navigation header styling should round-trip all supported values.',
+    );
   });
 }
