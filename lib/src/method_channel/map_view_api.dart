@@ -346,7 +346,8 @@ class MapViewAPIImpl {
     required LatLng latLng,
   }) async {
     final ScreenCoordinateDto screenCoordinate = await _viewApi
-        .getScreenCoordinate(viewId, latLng.toDto());
+        .getScreenCoordinate(viewId, latLng.toDto())
+        .wrapPlatformException();
     return screenCoordinate.toScreenCoordinate();
   }
 
@@ -355,10 +356,9 @@ class MapViewAPIImpl {
     required int viewId,
     required ScreenCoordinate screenCoordinate,
   }) async {
-    final LatLngDto latLng = await _viewApi.getLatLng(
-      viewId,
-      screenCoordinate.toDto(),
-    );
+    final LatLngDto latLng = await _viewApi
+        .getLatLng(viewId, screenCoordinate.toDto())
+        .wrapPlatformException();
     return latLng.toLatLng();
   }
 
