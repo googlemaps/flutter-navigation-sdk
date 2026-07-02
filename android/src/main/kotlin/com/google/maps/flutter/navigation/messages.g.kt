@@ -807,17 +807,24 @@ data class NavigationViewOptionsDto(
   val navigationUIEnabledPreference: NavigationUIEnabledPreferenceDto,
   /** Controls the navigation night mode for Navigation UI. */
   val forceNightMode: NavigationForceNightModeDto,
+  /** Controls the initial navigation header styling. */
+  val headerStylingOptions: NavigationHeaderStylingOptionsDto? = null,
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): NavigationViewOptionsDto {
       val navigationUIEnabledPreference = pigeonVar_list[0] as NavigationUIEnabledPreferenceDto
       val forceNightMode = pigeonVar_list[1] as NavigationForceNightModeDto
-      return NavigationViewOptionsDto(navigationUIEnabledPreference, forceNightMode)
+      val headerStylingOptions = pigeonVar_list[2] as NavigationHeaderStylingOptionsDto?
+      return NavigationViewOptionsDto(
+        navigationUIEnabledPreference,
+        forceNightMode,
+        headerStylingOptions,
+      )
     }
   }
 
   fun toList(): List<Any?> {
-    return listOf(navigationUIEnabledPreference, forceNightMode)
+    return listOf(navigationUIEnabledPreference, forceNightMode, headerStylingOptions)
   }
 
   override fun equals(other: Any?): Boolean {

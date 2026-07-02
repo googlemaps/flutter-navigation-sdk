@@ -153,6 +153,7 @@ class NavigationViewOptionsDto {
   NavigationViewOptionsDto({
     required this.navigationUIEnabledPreference,
     required this.forceNightMode,
+    this.headerStylingOptions,
   });
 
   /// Determines the initial visibility of the navigation UI on map initialization.
@@ -160,6 +161,9 @@ class NavigationViewOptionsDto {
 
   /// Controls the navigation night mode for Navigation UI.
   final NavigationForceNightModeDto forceNightMode;
+
+  /// Controls the initial navigation header styling.
+  final NavigationHeaderStylingOptionsDto? headerStylingOptions;
 }
 
 /// A message for creating a new navigation view.

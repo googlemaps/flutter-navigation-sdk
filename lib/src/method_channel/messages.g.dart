@@ -664,6 +664,7 @@ class NavigationViewOptionsDto {
   NavigationViewOptionsDto({
     required this.navigationUIEnabledPreference,
     required this.forceNightMode,
+    this.headerStylingOptions,
   });
 
   /// Determines the initial visibility of the navigation UI on map initialization.
@@ -672,8 +673,15 @@ class NavigationViewOptionsDto {
   /// Controls the navigation night mode for Navigation UI.
   NavigationForceNightModeDto forceNightMode;
 
+  /// Controls the initial navigation header styling.
+  NavigationHeaderStylingOptionsDto? headerStylingOptions;
+
   List<Object?> _toList() {
-    return <Object?>[navigationUIEnabledPreference, forceNightMode];
+    return <Object?>[
+      navigationUIEnabledPreference,
+      forceNightMode,
+      headerStylingOptions,
+    ];
   }
 
   Object encode() {
@@ -686,6 +694,7 @@ class NavigationViewOptionsDto {
       navigationUIEnabledPreference:
           result[0]! as NavigationUIEnabledPreferenceDto,
       forceNightMode: result[1]! as NavigationForceNightModeDto,
+      headerStylingOptions: result[2] as NavigationHeaderStylingOptionsDto?,
     );
   }
 

@@ -103,6 +103,57 @@ void main() {
         expect(find.byType(GoogleMapsMapView), findsOneWidget);
       });
 
+      test(
+        'includes initial header styling in navigation view creation params',
+        () {
+          final MapViewAPIImpl api = MapViewAPIImpl();
+          const NavigationHeaderStylingOptions stylingOptions =
+              NavigationHeaderStylingOptions(
+                nextStepTextColor: Color(0xFF123456),
+                nextStepTextSize: 18,
+              );
+
+          final ViewCreationOptionsDto creationOptions = api
+              .buildPlatformViewCreationOptions(
+                MapViewType.navigation,
+                const MapViewInitializationOptions(
+                  layoutDirection: TextDirection.ltr,
+                  mapOptions: MapOptions(),
+                  navigationViewOptions: NavigationViewOptions(
+                    headerStylingOptions: stylingOptions,
+                  ),
+                ),
+              );
+
+          expect(
+            creationOptions.navigationViewOptions?.headerStylingOptions,
+            NavigationHeaderStylingOptionsDto(
+              nextStepTextColor: const Color(0xFF123456).toARGB32(),
+              nextStepTextSize: 18,
+            ),
+          );
+        },
+      );
+
+      test('omits initial header styling when not provided', () {
+        final MapViewAPIImpl api = MapViewAPIImpl();
+
+        final ViewCreationOptionsDto creationOptions = api
+            .buildPlatformViewCreationOptions(
+              MapViewType.navigation,
+              const MapViewInitializationOptions(
+                layoutDirection: TextDirection.ltr,
+                mapOptions: MapOptions(),
+                navigationViewOptions: NavigationViewOptions(),
+              ),
+            );
+
+        expect(
+          creationOptions.navigationViewOptions?.headerStylingOptions,
+          isNull,
+        );
+      });
+
       group('Navigation view API', () {
         test('Await map ready api call', () async {
           // Mock api response

@@ -309,6 +309,7 @@ extension ConvertNavigationViewOptions on NavigationViewOptions {
     return NavigationViewOptionsDto(
       navigationUIEnabledPreference: preference,
       forceNightMode: forceNightMode.toDto(),
+      headerStylingOptions: headerStylingOptions?.toDto(),
     );
   }
 }

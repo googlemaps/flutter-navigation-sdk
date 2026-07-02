@@ -667,21 +667,26 @@ struct NavigationViewOptionsDto: Hashable {
   var navigationUIEnabledPreference: NavigationUIEnabledPreferenceDto
   /// Controls the navigation night mode for Navigation UI.
   var forceNightMode: NavigationForceNightModeDto
+  /// Controls the initial navigation header styling.
+  var headerStylingOptions: NavigationHeaderStylingOptionsDto? = nil
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> NavigationViewOptionsDto? {
     let navigationUIEnabledPreference = pigeonVar_list[0] as! NavigationUIEnabledPreferenceDto
     let forceNightMode = pigeonVar_list[1] as! NavigationForceNightModeDto
+    let headerStylingOptions: NavigationHeaderStylingOptionsDto? = nilOrValue(pigeonVar_list[2])
 
     return NavigationViewOptionsDto(
       navigationUIEnabledPreference: navigationUIEnabledPreference,
-      forceNightMode: forceNightMode
+      forceNightMode: forceNightMode,
+      headerStylingOptions: headerStylingOptions
     )
   }
   func toList() -> [Any?] {
     return [
       navigationUIEnabledPreference,
       forceNightMode,
+      headerStylingOptions,
     ]
   }
   static func == (lhs: NavigationViewOptionsDto, rhs: NavigationViewOptionsDto) -> Bool {

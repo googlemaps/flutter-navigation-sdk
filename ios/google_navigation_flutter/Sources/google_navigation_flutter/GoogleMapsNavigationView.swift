@@ -98,6 +98,7 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     viewEventApi: ViewEventApi?,
     navigationUIEnabledPreference: NavigationUIEnabledPreference,
     forceNightMode: GMSNavigationLightingMode?,
+    navigationHeaderStylingOptions: NavigationHeaderStylingOptionsDto?,
     mapConfiguration: MapConfiguration,
     imageRegistry: ImageRegistry,
     isCarPlayView: Bool
@@ -133,6 +134,9 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     // Apply force night mode if this is a navigation view
     if _isNavigationView {
       applyForceNightMode()
+      if let navigationHeaderStylingOptions {
+        setNavigationHeaderStylingOptions(navigationHeaderStylingOptions)
+      }
     }
   }
 

@@ -276,6 +276,7 @@ class NavigationViewOptions {
     this.navigationUIEnabledPreference =
         NavigationUIEnabledPreference.automatic,
     this.forceNightMode = NavigationForceNightMode.auto,
+    this.headerStylingOptions,
   });
 
   /// Determines the initial visibility of the navigation UI on map initialization.
@@ -302,10 +303,16 @@ class NavigationViewOptions {
   /// determine day or night mode based on time and location.
   final NavigationForceNightMode forceNightMode;
 
+  /// Controls the initial navigation header styling.
+  ///
+  /// If null, the native SDK defaults are preserved.
+  final NavigationHeaderStylingOptions? headerStylingOptions;
+
   @override
   String toString() =>
       'NavigationViewOptions('
       'navigationUIEnabledPreference: $navigationUIEnabledPreference, '
-      'forceNightMode: $forceNightMode'
+      'forceNightMode: $forceNightMode, '
+      'headerStylingOptions: $headerStylingOptions'
       ')';
 }
