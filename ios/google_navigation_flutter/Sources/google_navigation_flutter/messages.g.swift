@@ -667,21 +667,26 @@ struct NavigationViewOptionsDto: Hashable {
   var navigationUIEnabledPreference: NavigationUIEnabledPreferenceDto
   /// Controls the navigation night mode for Navigation UI.
   var forceNightMode: NavigationForceNightModeDto
+  /// Controls the initial navigation header styling.
+  var headerStylingOptions: NavigationHeaderStylingOptionsDto? = nil
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> NavigationViewOptionsDto? {
     let navigationUIEnabledPreference = pigeonVar_list[0] as! NavigationUIEnabledPreferenceDto
     let forceNightMode = pigeonVar_list[1] as! NavigationForceNightModeDto
+    let headerStylingOptions: NavigationHeaderStylingOptionsDto? = nilOrValue(pigeonVar_list[2])
 
     return NavigationViewOptionsDto(
       navigationUIEnabledPreference: navigationUIEnabledPreference,
-      forceNightMode: forceNightMode
+      forceNightMode: forceNightMode,
+      headerStylingOptions: headerStylingOptions
     )
   }
   func toList() -> [Any?] {
     return [
       navigationUIEnabledPreference,
       forceNightMode,
+      headerStylingOptions,
     ]
   }
   static func == (lhs: NavigationViewOptionsDto, rhs: NavigationViewOptionsDto) -> Bool {
@@ -1492,6 +1497,101 @@ struct MapPaddingDto: Hashable {
     ]
   }
   static func == (lhs: MapPaddingDto, rhs: MapPaddingDto) -> Bool {
+    return deepEqualsmessages(lhs.toList(), rhs.toList())
+  }
+  func hash(into hasher: inout Hasher) {
+    deepHashmessages(value: toList(), hasher: &hasher)
+  }
+}
+
+/// Navigation header styling options.
+///
+/// All color values are 32-bit ARGB integers (format: 0xAARRGGBB).
+/// All text size values are logical pixels.
+/// Any null value resets that specific field to the native SDK default.
+///
+/// Text size fields are currently Android only and are ignored on iOS.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct NavigationHeaderStylingOptionsDto: Hashable {
+  var primaryDayModeBackgroundColor: Int64? = nil
+  var secondaryDayModeBackgroundColor: Int64? = nil
+  var primaryNightModeBackgroundColor: Int64? = nil
+  var secondaryNightModeBackgroundColor: Int64? = nil
+  var largeManeuverIconColor: Int64? = nil
+  var smallManeuverIconColor: Int64? = nil
+  var nextStepTextColor: Int64? = nil
+  var nextStepTextSize: Double? = nil
+  var distanceValueTextColor: Int64? = nil
+  var distanceUnitsTextColor: Int64? = nil
+  var distanceValueTextSize: Double? = nil
+  var distanceUnitsTextSize: Double? = nil
+  var instructionsTextColor: Int64? = nil
+  var instructionsFirstRowTextSize: Double? = nil
+  var instructionsSecondRowTextSize: Double? = nil
+  var guidanceRecommendedLaneColor: Int64? = nil
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> NavigationHeaderStylingOptionsDto? {
+    let primaryDayModeBackgroundColor: Int64? = nilOrValue(pigeonVar_list[0])
+    let secondaryDayModeBackgroundColor: Int64? = nilOrValue(pigeonVar_list[1])
+    let primaryNightModeBackgroundColor: Int64? = nilOrValue(pigeonVar_list[2])
+    let secondaryNightModeBackgroundColor: Int64? = nilOrValue(pigeonVar_list[3])
+    let largeManeuverIconColor: Int64? = nilOrValue(pigeonVar_list[4])
+    let smallManeuverIconColor: Int64? = nilOrValue(pigeonVar_list[5])
+    let nextStepTextColor: Int64? = nilOrValue(pigeonVar_list[6])
+    let nextStepTextSize: Double? = nilOrValue(pigeonVar_list[7])
+    let distanceValueTextColor: Int64? = nilOrValue(pigeonVar_list[8])
+    let distanceUnitsTextColor: Int64? = nilOrValue(pigeonVar_list[9])
+    let distanceValueTextSize: Double? = nilOrValue(pigeonVar_list[10])
+    let distanceUnitsTextSize: Double? = nilOrValue(pigeonVar_list[11])
+    let instructionsTextColor: Int64? = nilOrValue(pigeonVar_list[12])
+    let instructionsFirstRowTextSize: Double? = nilOrValue(pigeonVar_list[13])
+    let instructionsSecondRowTextSize: Double? = nilOrValue(pigeonVar_list[14])
+    let guidanceRecommendedLaneColor: Int64? = nilOrValue(pigeonVar_list[15])
+
+    return NavigationHeaderStylingOptionsDto(
+      primaryDayModeBackgroundColor: primaryDayModeBackgroundColor,
+      secondaryDayModeBackgroundColor: secondaryDayModeBackgroundColor,
+      primaryNightModeBackgroundColor: primaryNightModeBackgroundColor,
+      secondaryNightModeBackgroundColor: secondaryNightModeBackgroundColor,
+      largeManeuverIconColor: largeManeuverIconColor,
+      smallManeuverIconColor: smallManeuverIconColor,
+      nextStepTextColor: nextStepTextColor,
+      nextStepTextSize: nextStepTextSize,
+      distanceValueTextColor: distanceValueTextColor,
+      distanceUnitsTextColor: distanceUnitsTextColor,
+      distanceValueTextSize: distanceValueTextSize,
+      distanceUnitsTextSize: distanceUnitsTextSize,
+      instructionsTextColor: instructionsTextColor,
+      instructionsFirstRowTextSize: instructionsFirstRowTextSize,
+      instructionsSecondRowTextSize: instructionsSecondRowTextSize,
+      guidanceRecommendedLaneColor: guidanceRecommendedLaneColor
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      primaryDayModeBackgroundColor,
+      secondaryDayModeBackgroundColor,
+      primaryNightModeBackgroundColor,
+      secondaryNightModeBackgroundColor,
+      largeManeuverIconColor,
+      smallManeuverIconColor,
+      nextStepTextColor,
+      nextStepTextSize,
+      distanceValueTextColor,
+      distanceUnitsTextColor,
+      distanceValueTextSize,
+      distanceUnitsTextSize,
+      instructionsTextColor,
+      instructionsFirstRowTextSize,
+      instructionsSecondRowTextSize,
+      guidanceRecommendedLaneColor,
+    ]
+  }
+  static func == (lhs: NavigationHeaderStylingOptionsDto, rhs: NavigationHeaderStylingOptionsDto)
+    -> Bool
+  {
     return deepEqualsmessages(lhs.toList(), rhs.toList())
   }
   func hash(into hasher: inout Hasher) {
@@ -2631,53 +2731,55 @@ private class MessagesPigeonCodecReader: FlutterStandardReader {
     case 178:
       return MapPaddingDto.fromList(self.readValue() as! [Any?])
     case 179:
-      return RouteTokenOptionsDto.fromList(self.readValue() as! [Any?])
+      return NavigationHeaderStylingOptionsDto.fromList(self.readValue() as! [Any?])
     case 180:
-      return DestinationsDto.fromList(self.readValue() as! [Any?])
+      return RouteTokenOptionsDto.fromList(self.readValue() as! [Any?])
     case 181:
-      return RoutingOptionsDto.fromList(self.readValue() as! [Any?])
+      return DestinationsDto.fromList(self.readValue() as! [Any?])
     case 182:
-      return NavigationDisplayOptionsDto.fromList(self.readValue() as! [Any?])
+      return RoutingOptionsDto.fromList(self.readValue() as! [Any?])
     case 183:
-      return NavigationWaypointDto.fromList(self.readValue() as! [Any?])
+      return NavigationDisplayOptionsDto.fromList(self.readValue() as! [Any?])
     case 184:
-      return ContinueToNextDestinationResponseDto.fromList(self.readValue() as! [Any?])
+      return NavigationWaypointDto.fromList(self.readValue() as! [Any?])
     case 185:
-      return NavigationTimeAndDistanceDto.fromList(self.readValue() as! [Any?])
+      return ContinueToNextDestinationResponseDto.fromList(self.readValue() as! [Any?])
     case 186:
-      return NavigationAudioGuidanceSettingsDto.fromList(self.readValue() as! [Any?])
+      return NavigationTimeAndDistanceDto.fromList(self.readValue() as! [Any?])
     case 187:
-      return SimulationOptionsDto.fromList(self.readValue() as! [Any?])
+      return NavigationAudioGuidanceSettingsDto.fromList(self.readValue() as! [Any?])
     case 188:
-      return LatLngDto.fromList(self.readValue() as! [Any?])
+      return SimulationOptionsDto.fromList(self.readValue() as! [Any?])
     case 189:
-      return LatLngBoundsDto.fromList(self.readValue() as! [Any?])
+      return LatLngDto.fromList(self.readValue() as! [Any?])
     case 190:
-      return SpeedingUpdatedEventDto.fromList(self.readValue() as! [Any?])
+      return LatLngBoundsDto.fromList(self.readValue() as! [Any?])
     case 191:
-      return GpsAvailabilityChangeEventDto.fromList(self.readValue() as! [Any?])
+      return SpeedingUpdatedEventDto.fromList(self.readValue() as! [Any?])
     case 192:
-      return SpeedAlertOptionsThresholdPercentageDto.fromList(self.readValue() as! [Any?])
+      return GpsAvailabilityChangeEventDto.fromList(self.readValue() as! [Any?])
     case 193:
-      return SpeedAlertOptionsDto.fromList(self.readValue() as! [Any?])
+      return SpeedAlertOptionsThresholdPercentageDto.fromList(self.readValue() as! [Any?])
     case 194:
+      return SpeedAlertOptionsDto.fromList(self.readValue() as! [Any?])
+    case 195:
       return RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(
         self.readValue() as! [Any?])
-    case 195:
-      return RouteSegmentTrafficDataDto.fromList(self.readValue() as! [Any?])
     case 196:
-      return RouteSegmentDto.fromList(self.readValue() as! [Any?])
+      return RouteSegmentTrafficDataDto.fromList(self.readValue() as! [Any?])
     case 197:
-      return LaneDirectionDto.fromList(self.readValue() as! [Any?])
+      return RouteSegmentDto.fromList(self.readValue() as! [Any?])
     case 198:
-      return LaneDto.fromList(self.readValue() as! [Any?])
+      return LaneDirectionDto.fromList(self.readValue() as! [Any?])
     case 199:
-      return StepInfoDto.fromList(self.readValue() as! [Any?])
+      return LaneDto.fromList(self.readValue() as! [Any?])
     case 200:
-      return NavInfoDto.fromList(self.readValue() as! [Any?])
+      return StepInfoDto.fromList(self.readValue() as! [Any?])
     case 201:
-      return TermsAndConditionsUIParamsDto.fromList(self.readValue() as! [Any?])
+      return NavInfoDto.fromList(self.readValue() as! [Any?])
     case 202:
+      return TermsAndConditionsUIParamsDto.fromList(self.readValue() as! [Any?])
+    case 203:
       return StepImageGenerationOptionsDto.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -2837,77 +2939,80 @@ private class MessagesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? MapPaddingDto {
       super.writeByte(178)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteTokenOptionsDto {
+    } else if let value = value as? NavigationHeaderStylingOptionsDto {
       super.writeByte(179)
       super.writeValue(value.toList())
-    } else if let value = value as? DestinationsDto {
+    } else if let value = value as? RouteTokenOptionsDto {
       super.writeByte(180)
       super.writeValue(value.toList())
-    } else if let value = value as? RoutingOptionsDto {
+    } else if let value = value as? DestinationsDto {
       super.writeByte(181)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationDisplayOptionsDto {
+    } else if let value = value as? RoutingOptionsDto {
       super.writeByte(182)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationWaypointDto {
+    } else if let value = value as? NavigationDisplayOptionsDto {
       super.writeByte(183)
       super.writeValue(value.toList())
-    } else if let value = value as? ContinueToNextDestinationResponseDto {
+    } else if let value = value as? NavigationWaypointDto {
       super.writeByte(184)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationTimeAndDistanceDto {
+    } else if let value = value as? ContinueToNextDestinationResponseDto {
       super.writeByte(185)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationAudioGuidanceSettingsDto {
+    } else if let value = value as? NavigationTimeAndDistanceDto {
       super.writeByte(186)
       super.writeValue(value.toList())
-    } else if let value = value as? SimulationOptionsDto {
+    } else if let value = value as? NavigationAudioGuidanceSettingsDto {
       super.writeByte(187)
       super.writeValue(value.toList())
-    } else if let value = value as? LatLngDto {
+    } else if let value = value as? SimulationOptionsDto {
       super.writeByte(188)
       super.writeValue(value.toList())
-    } else if let value = value as? LatLngBoundsDto {
+    } else if let value = value as? LatLngDto {
       super.writeByte(189)
       super.writeValue(value.toList())
-    } else if let value = value as? SpeedingUpdatedEventDto {
+    } else if let value = value as? LatLngBoundsDto {
       super.writeByte(190)
       super.writeValue(value.toList())
-    } else if let value = value as? GpsAvailabilityChangeEventDto {
+    } else if let value = value as? SpeedingUpdatedEventDto {
       super.writeByte(191)
       super.writeValue(value.toList())
-    } else if let value = value as? SpeedAlertOptionsThresholdPercentageDto {
+    } else if let value = value as? GpsAvailabilityChangeEventDto {
       super.writeByte(192)
       super.writeValue(value.toList())
-    } else if let value = value as? SpeedAlertOptionsDto {
+    } else if let value = value as? SpeedAlertOptionsThresholdPercentageDto {
       super.writeByte(193)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteSegmentTrafficDataRoadStretchRenderingDataDto {
+    } else if let value = value as? SpeedAlertOptionsDto {
       super.writeByte(194)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteSegmentTrafficDataDto {
+    } else if let value = value as? RouteSegmentTrafficDataRoadStretchRenderingDataDto {
       super.writeByte(195)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteSegmentDto {
+    } else if let value = value as? RouteSegmentTrafficDataDto {
       super.writeByte(196)
       super.writeValue(value.toList())
-    } else if let value = value as? LaneDirectionDto {
+    } else if let value = value as? RouteSegmentDto {
       super.writeByte(197)
       super.writeValue(value.toList())
-    } else if let value = value as? LaneDto {
+    } else if let value = value as? LaneDirectionDto {
       super.writeByte(198)
       super.writeValue(value.toList())
-    } else if let value = value as? StepInfoDto {
+    } else if let value = value as? LaneDto {
       super.writeByte(199)
       super.writeValue(value.toList())
-    } else if let value = value as? NavInfoDto {
+    } else if let value = value as? StepInfoDto {
       super.writeByte(200)
       super.writeValue(value.toList())
-    } else if let value = value as? TermsAndConditionsUIParamsDto {
+    } else if let value = value as? NavInfoDto {
       super.writeByte(201)
       super.writeValue(value.toList())
-    } else if let value = value as? StepImageGenerationOptionsDto {
+    } else if let value = value as? TermsAndConditionsUIParamsDto {
       super.writeByte(202)
+      super.writeValue(value.toList())
+    } else if let value = value as? StepImageGenerationOptionsDto {
+      super.writeByte(203)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -2982,6 +3087,9 @@ protocol MapViewApi {
   func setNavigationTripProgressBarEnabled(viewId: Int64, enabled: Bool) throws
   func isNavigationHeaderEnabled(viewId: Int64) throws -> Bool
   func setNavigationHeaderEnabled(viewId: Int64, enabled: Bool) throws
+  func getNavigationHeaderStylingOptions(viewId: Int64) throws -> NavigationHeaderStylingOptionsDto
+  func setNavigationHeaderStylingOptions(
+    viewId: Int64, stylingOptions: NavigationHeaderStylingOptionsDto) throws
   func isNavigationFooterEnabled(viewId: Int64) throws -> Bool
   func setNavigationFooterEnabled(viewId: Int64, enabled: Bool) throws
   func isRecenterButtonEnabled(viewId: Int64) throws -> Bool
@@ -3307,6 +3415,44 @@ class MapViewApiSetup {
       }
     } else {
       setNavigationHeaderEnabledChannel.setMessageHandler(nil)
+    }
+    let getNavigationHeaderStylingOptionsChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getNavigationHeaderStylingOptions\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getNavigationHeaderStylingOptionsChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] as! Int64
+        do {
+          let result = try api.getNavigationHeaderStylingOptions(viewId: viewIdArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getNavigationHeaderStylingOptionsChannel.setMessageHandler(nil)
+    }
+    let setNavigationHeaderStylingOptionsChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationHeaderStylingOptions\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setNavigationHeaderStylingOptionsChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let viewIdArg = args[0] as! Int64
+        let stylingOptionsArg = args[1] as! NavigationHeaderStylingOptionsDto
+        do {
+          try api.setNavigationHeaderStylingOptions(
+            viewId: viewIdArg, stylingOptions: stylingOptionsArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setNavigationHeaderStylingOptionsChannel.setMessageHandler(nil)
     }
     let isNavigationFooterEnabledChannel = FlutterBasicMessageChannel(
       name:

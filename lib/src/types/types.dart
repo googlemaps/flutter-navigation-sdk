@@ -20,6 +20,7 @@ export 'lat_lng_bounds.dart';
 export 'markers.dart';
 export 'navigation.dart';
 export 'navigation_destinations.dart';
+export 'navigation_header_styling_options.dart';
 export 'navigation_initialization_params.dart';
 export 'navigation_view_types.dart';
 export 'navinfo.dart';

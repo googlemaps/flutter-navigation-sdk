@@ -62,6 +62,16 @@ void main() {
     TestImageRegistryApi.setUp(imageRegistryMockApi);
   });
 
+  T anyAs<T>() {
+    // ignore: cast_from_null_always_fails
+    return any as T;
+  }
+
+  T captureAnyAs<T>() {
+    // ignore: cast_from_null_always_fails
+    return captureAny as T;
+  }
+
   void verifyEnabled(VerificationResult result, bool enabled) {
     final bool enabledOut = result.captured[1] as bool;
     expect(enabledOut, enabled);
@@ -91,6 +101,57 @@ void main() {
           MaterialApp(home: GoogleMapsMapView(onViewCreated: onMapViewCreated)),
         );
         expect(find.byType(GoogleMapsMapView), findsOneWidget);
+      });
+
+      test(
+        'includes initial header styling in navigation view creation params',
+        () {
+          final MapViewAPIImpl api = MapViewAPIImpl();
+          const NavigationHeaderStylingOptions stylingOptions =
+              NavigationHeaderStylingOptions(
+                nextStepTextColor: Color(0xFF123456),
+                nextStepTextSize: 18,
+              );
+
+          final ViewCreationOptionsDto creationOptions = api
+              .buildPlatformViewCreationOptions(
+                MapViewType.navigation,
+                const MapViewInitializationOptions(
+                  layoutDirection: TextDirection.ltr,
+                  mapOptions: MapOptions(),
+                  navigationViewOptions: NavigationViewOptions(
+                    headerStylingOptions: stylingOptions,
+                  ),
+                ),
+              );
+
+          expect(
+            creationOptions.navigationViewOptions?.headerStylingOptions,
+            NavigationHeaderStylingOptionsDto(
+              nextStepTextColor: const Color(0xFF123456).toARGB32(),
+              nextStepTextSize: 18,
+            ),
+          );
+        },
+      );
+
+      test('omits initial header styling when not provided', () {
+        final MapViewAPIImpl api = MapViewAPIImpl();
+
+        final ViewCreationOptionsDto creationOptions = api
+            .buildPlatformViewCreationOptions(
+              MapViewType.navigation,
+              const MapViewInitializationOptions(
+                layoutDirection: TextDirection.ltr,
+                mapOptions: MapOptions(),
+                navigationViewOptions: NavigationViewOptions(),
+              ),
+            );
+
+        expect(
+          creationOptions.navigationViewOptions?.headerStylingOptions,
+          isNull,
+        );
       });
 
       group('Navigation view API', () {
@@ -689,7 +750,31 @@ void main() {
               isUnderground: false,
             ),
           );
-          when(viewMockApi.isNavigationHeaderEnabled(any)).thenReturn(true);
+          when(
+            viewMockApi.isNavigationHeaderEnabled(anyAs<int>()),
+          ).thenReturn(true);
+          when(
+            viewMockApi.getNavigationHeaderStylingOptions(anyAs<int>()),
+          ).thenReturn(
+            NavigationHeaderStylingOptionsDto(
+              primaryDayModeBackgroundColor: Colors.blue.toARGB32(),
+              secondaryDayModeBackgroundColor: Colors.red.toARGB32(),
+              primaryNightModeBackgroundColor: Colors.black.toARGB32(),
+              secondaryNightModeBackgroundColor: Colors.grey.toARGB32(),
+              largeManeuverIconColor: Colors.orange.toARGB32(),
+              smallManeuverIconColor: Colors.pink.toARGB32(),
+              nextStepTextColor: Colors.yellow.toARGB32(),
+              nextStepTextSize: 18,
+              distanceValueTextColor: Colors.green.toARGB32(),
+              distanceUnitsTextColor: Colors.lime.toARGB32(),
+              distanceValueTextSize: 24,
+              distanceUnitsTextSize: 14,
+              instructionsTextColor: Colors.cyan.toARGB32(),
+              instructionsFirstRowTextSize: 30,
+              instructionsSecondRowTextSize: 20,
+              guidanceRecommendedLaneColor: Colors.teal.toARGB32(),
+            ),
+          );
           when(viewMockApi.isNavigationFooterEnabled(any)).thenReturn(true);
           when(viewMockApi.isSpeedLimitIconEnabled(any)).thenReturn(true);
           when(viewMockApi.isSpeedometerEnabled(any)).thenReturn(true);
@@ -723,6 +808,27 @@ void main() {
           expect(focusedIndoorBuilding.activeLevelIndex, 1);
           await controller.activateIndoorLevel(focusedIndoorBuilding.levels[0]);
           expect(await controller.isNavigationHeaderEnabled(), true);
+          expect(
+            await controller.getNavigationHeaderStylingOptions(),
+            const NavigationHeaderStylingOptions(
+              primaryDayModeBackgroundColor: Colors.blue,
+              secondaryDayModeBackgroundColor: Colors.red,
+              primaryNightModeBackgroundColor: Colors.black,
+              secondaryNightModeBackgroundColor: Colors.grey,
+              largeManeuverIconColor: Colors.orange,
+              smallManeuverIconColor: Colors.pink,
+              nextStepTextColor: Colors.yellow,
+              nextStepTextSize: 18,
+              distanceValueTextColor: Colors.green,
+              distanceUnitsTextColor: Colors.lime,
+              distanceValueTextSize: 24,
+              distanceUnitsTextSize: 14,
+              instructionsTextColor: Colors.cyan,
+              instructionsFirstRowTextSize: 30,
+              instructionsSecondRowTextSize: 20,
+              guidanceRecommendedLaneColor: Colors.teal,
+            ),
+          );
           expect(await controller.isNavigationFooterEnabled(), true);
           expect(await controller.isSpeedLimitIconEnabled(), true);
           expect(await controller.isSpeedometerEnabled(), true);
@@ -749,7 +855,10 @@ void main() {
           verify(viewMockApi.isIndoorLevelPickerEnabled(captureAny));
           verify(viewMockApi.getFocusedIndoorBuilding(captureAny));
           verify(viewMockApi.activateIndoorLevel(captureAny, captureAny));
-          verify(viewMockApi.isNavigationHeaderEnabled(captureAny));
+          verify(viewMockApi.isNavigationHeaderEnabled(captureAnyAs<int>()));
+          verify(
+            viewMockApi.getNavigationHeaderStylingOptions(captureAnyAs<int>()),
+          );
           verify(viewMockApi.isNavigationFooterEnabled(captureAny));
           verify(viewMockApi.isSpeedLimitIconEnabled(captureAny));
           verify(viewMockApi.isSpeedometerEnabled(captureAny));
@@ -776,6 +885,26 @@ void main() {
           await controller.setIndoorEnabled(true);
           await controller.settings.setIndoorLevelPickerEnabled(true);
           await controller.setNavigationHeaderEnabled(true);
+          await controller.setNavigationHeaderStylingOptions(
+            const NavigationHeaderStylingOptions(
+              primaryDayModeBackgroundColor: Colors.green,
+              secondaryDayModeBackgroundColor: Colors.orange,
+              primaryNightModeBackgroundColor: Colors.white,
+              secondaryNightModeBackgroundColor: Colors.purple,
+              largeManeuverIconColor: Colors.amber,
+              smallManeuverIconColor: Colors.deepOrange,
+              nextStepTextColor: Colors.brown,
+              nextStepTextSize: 19,
+              distanceValueTextColor: Colors.indigo,
+              distanceUnitsTextColor: Colors.deepPurple,
+              distanceValueTextSize: 25,
+              distanceUnitsTextSize: 15,
+              instructionsTextColor: Colors.lightBlue,
+              instructionsFirstRowTextSize: 31,
+              instructionsSecondRowTextSize: 21,
+              guidanceRecommendedLaneColor: Colors.lightGreen,
+            ),
+          );
           await controller.setNavigationFooterEnabled(true);
           await controller.setSpeedLimitIconEnabled(true);
           await controller.setSpeedometerEnabled(true);
@@ -869,6 +998,61 @@ void main() {
               viewMockApi.setNavigationHeaderEnabled(captureAny, captureAny),
             ),
             true,
+          );
+          final VerificationResult headerStylingResult = verify(
+            viewMockApi.setNavigationHeaderStylingOptions(
+              captureAnyAs<int>(),
+              captureAnyAs<NavigationHeaderStylingOptionsDto>(),
+            ),
+          );
+          final NavigationHeaderStylingOptionsDto headerStylingOut =
+              headerStylingResult.captured[1]
+                  as NavigationHeaderStylingOptionsDto;
+          expect(
+            headerStylingOut.primaryDayModeBackgroundColor,
+            Colors.green.toARGB32(),
+          );
+          expect(
+            headerStylingOut.secondaryDayModeBackgroundColor,
+            Colors.orange.toARGB32(),
+          );
+          expect(
+            headerStylingOut.primaryNightModeBackgroundColor,
+            Colors.white.toARGB32(),
+          );
+          expect(
+            headerStylingOut.secondaryNightModeBackgroundColor,
+            Colors.purple.toARGB32(),
+          );
+          expect(
+            headerStylingOut.largeManeuverIconColor,
+            Colors.amber.toARGB32(),
+          );
+          expect(
+            headerStylingOut.smallManeuverIconColor,
+            Colors.deepOrange.toARGB32(),
+          );
+          expect(headerStylingOut.nextStepTextColor, Colors.brown.toARGB32());
+          expect(headerStylingOut.nextStepTextSize, 19);
+          expect(
+            headerStylingOut.distanceValueTextColor,
+            Colors.indigo.toARGB32(),
+          );
+          expect(
+            headerStylingOut.distanceUnitsTextColor,
+            Colors.deepPurple.toARGB32(),
+          );
+          expect(headerStylingOut.distanceValueTextSize, 25);
+          expect(headerStylingOut.distanceUnitsTextSize, 15);
+          expect(
+            headerStylingOut.instructionsTextColor,
+            Colors.lightBlue.toARGB32(),
+          );
+          expect(headerStylingOut.instructionsFirstRowTextSize, 31);
+          expect(headerStylingOut.instructionsSecondRowTextSize, 21);
+          expect(
+            headerStylingOut.guidanceRecommendedLaneColor,
+            Colors.lightGreen.toARGB32(),
           );
           verifyEnabled(
             verify(

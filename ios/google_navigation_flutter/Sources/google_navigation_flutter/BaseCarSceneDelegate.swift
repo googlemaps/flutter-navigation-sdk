@@ -131,6 +131,7 @@ open class BaseCarSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate
           navigationUIEnabledPreference:
             autoMapOptions?.navigationUIEnabledPreference ?? .automatic,
           forceNightMode: autoMapOptions?.forceNightMode,
+          navigationHeaderStylingOptions: nil,
           mapConfiguration: MapConfiguration(
             cameraPosition: autoMapOptions?.cameraPosition,
             mapType: autoMapOptions?.mapType ?? .normal,

@@ -664,6 +664,7 @@ class NavigationViewOptionsDto {
   NavigationViewOptionsDto({
     required this.navigationUIEnabledPreference,
     required this.forceNightMode,
+    this.headerStylingOptions,
   });
 
   /// Determines the initial visibility of the navigation UI on map initialization.
@@ -672,8 +673,15 @@ class NavigationViewOptionsDto {
   /// Controls the navigation night mode for Navigation UI.
   NavigationForceNightModeDto forceNightMode;
 
+  /// Controls the initial navigation header styling.
+  NavigationHeaderStylingOptionsDto? headerStylingOptions;
+
   List<Object?> _toList() {
-    return <Object?>[navigationUIEnabledPreference, forceNightMode];
+    return <Object?>[
+      navigationUIEnabledPreference,
+      forceNightMode,
+      headerStylingOptions,
+    ];
   }
 
   Object encode() {
@@ -686,6 +694,7 @@ class NavigationViewOptionsDto {
       navigationUIEnabledPreference:
           result[0]! as NavigationUIEnabledPreferenceDto,
       forceNightMode: result[1]! as NavigationForceNightModeDto,
+      headerStylingOptions: result[2] as NavigationHeaderStylingOptionsDto?,
     );
   }
 
@@ -1802,6 +1811,130 @@ class MapPaddingDto {
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
     if (other is! MapPaddingDto || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(encode(), other.encode());
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+/// Navigation header styling options.
+///
+/// All color values are 32-bit ARGB integers (format: 0xAARRGGBB).
+/// All text size values are logical pixels.
+/// Any null value resets that specific field to the native SDK default.
+///
+/// Text size fields are currently Android only and are ignored on iOS.
+class NavigationHeaderStylingOptionsDto {
+  NavigationHeaderStylingOptionsDto({
+    this.primaryDayModeBackgroundColor,
+    this.secondaryDayModeBackgroundColor,
+    this.primaryNightModeBackgroundColor,
+    this.secondaryNightModeBackgroundColor,
+    this.largeManeuverIconColor,
+    this.smallManeuverIconColor,
+    this.nextStepTextColor,
+    this.nextStepTextSize,
+    this.distanceValueTextColor,
+    this.distanceUnitsTextColor,
+    this.distanceValueTextSize,
+    this.distanceUnitsTextSize,
+    this.instructionsTextColor,
+    this.instructionsFirstRowTextSize,
+    this.instructionsSecondRowTextSize,
+    this.guidanceRecommendedLaneColor,
+  });
+
+  int? primaryDayModeBackgroundColor;
+
+  int? secondaryDayModeBackgroundColor;
+
+  int? primaryNightModeBackgroundColor;
+
+  int? secondaryNightModeBackgroundColor;
+
+  int? largeManeuverIconColor;
+
+  int? smallManeuverIconColor;
+
+  int? nextStepTextColor;
+
+  double? nextStepTextSize;
+
+  int? distanceValueTextColor;
+
+  int? distanceUnitsTextColor;
+
+  double? distanceValueTextSize;
+
+  double? distanceUnitsTextSize;
+
+  int? instructionsTextColor;
+
+  double? instructionsFirstRowTextSize;
+
+  double? instructionsSecondRowTextSize;
+
+  int? guidanceRecommendedLaneColor;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      primaryDayModeBackgroundColor,
+      secondaryDayModeBackgroundColor,
+      primaryNightModeBackgroundColor,
+      secondaryNightModeBackgroundColor,
+      largeManeuverIconColor,
+      smallManeuverIconColor,
+      nextStepTextColor,
+      nextStepTextSize,
+      distanceValueTextColor,
+      distanceUnitsTextColor,
+      distanceValueTextSize,
+      distanceUnitsTextSize,
+      instructionsTextColor,
+      instructionsFirstRowTextSize,
+      instructionsSecondRowTextSize,
+      guidanceRecommendedLaneColor,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static NavigationHeaderStylingOptionsDto decode(Object result) {
+    result as List<Object?>;
+    return NavigationHeaderStylingOptionsDto(
+      primaryDayModeBackgroundColor: result[0] as int?,
+      secondaryDayModeBackgroundColor: result[1] as int?,
+      primaryNightModeBackgroundColor: result[2] as int?,
+      secondaryNightModeBackgroundColor: result[3] as int?,
+      largeManeuverIconColor: result[4] as int?,
+      smallManeuverIconColor: result[5] as int?,
+      nextStepTextColor: result[6] as int?,
+      nextStepTextSize: result[7] as double?,
+      distanceValueTextColor: result[8] as int?,
+      distanceUnitsTextColor: result[9] as int?,
+      distanceValueTextSize: result[10] as double?,
+      distanceUnitsTextSize: result[11] as double?,
+      instructionsTextColor: result[12] as int?,
+      instructionsFirstRowTextSize: result[13] as double?,
+      instructionsSecondRowTextSize: result[14] as double?,
+      guidanceRecommendedLaneColor: result[15] as int?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! NavigationHeaderStylingOptionsDto ||
+        other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
@@ -3269,77 +3402,80 @@ class _PigeonCodec extends StandardMessageCodec {
     } else if (value is MapPaddingDto) {
       buffer.putUint8(178);
       writeValue(buffer, value.encode());
-    } else if (value is RouteTokenOptionsDto) {
+    } else if (value is NavigationHeaderStylingOptionsDto) {
       buffer.putUint8(179);
       writeValue(buffer, value.encode());
-    } else if (value is DestinationsDto) {
+    } else if (value is RouteTokenOptionsDto) {
       buffer.putUint8(180);
       writeValue(buffer, value.encode());
-    } else if (value is RoutingOptionsDto) {
+    } else if (value is DestinationsDto) {
       buffer.putUint8(181);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationDisplayOptionsDto) {
+    } else if (value is RoutingOptionsDto) {
       buffer.putUint8(182);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationWaypointDto) {
+    } else if (value is NavigationDisplayOptionsDto) {
       buffer.putUint8(183);
       writeValue(buffer, value.encode());
-    } else if (value is ContinueToNextDestinationResponseDto) {
+    } else if (value is NavigationWaypointDto) {
       buffer.putUint8(184);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationTimeAndDistanceDto) {
+    } else if (value is ContinueToNextDestinationResponseDto) {
       buffer.putUint8(185);
       writeValue(buffer, value.encode());
-    } else if (value is NavigationAudioGuidanceSettingsDto) {
+    } else if (value is NavigationTimeAndDistanceDto) {
       buffer.putUint8(186);
       writeValue(buffer, value.encode());
-    } else if (value is SimulationOptionsDto) {
+    } else if (value is NavigationAudioGuidanceSettingsDto) {
       buffer.putUint8(187);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngDto) {
+    } else if (value is SimulationOptionsDto) {
       buffer.putUint8(188);
       writeValue(buffer, value.encode());
-    } else if (value is LatLngBoundsDto) {
+    } else if (value is LatLngDto) {
       buffer.putUint8(189);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedingUpdatedEventDto) {
+    } else if (value is LatLngBoundsDto) {
       buffer.putUint8(190);
       writeValue(buffer, value.encode());
-    } else if (value is GpsAvailabilityChangeEventDto) {
+    } else if (value is SpeedingUpdatedEventDto) {
       buffer.putUint8(191);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
+    } else if (value is GpsAvailabilityChangeEventDto) {
       buffer.putUint8(192);
       writeValue(buffer, value.encode());
-    } else if (value is SpeedAlertOptionsDto) {
+    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
       buffer.putUint8(193);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
+    } else if (value is SpeedAlertOptionsDto) {
       buffer.putUint8(194);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentTrafficDataDto) {
+    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
       buffer.putUint8(195);
       writeValue(buffer, value.encode());
-    } else if (value is RouteSegmentDto) {
+    } else if (value is RouteSegmentTrafficDataDto) {
       buffer.putUint8(196);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDirectionDto) {
+    } else if (value is RouteSegmentDto) {
       buffer.putUint8(197);
       writeValue(buffer, value.encode());
-    } else if (value is LaneDto) {
+    } else if (value is LaneDirectionDto) {
       buffer.putUint8(198);
       writeValue(buffer, value.encode());
-    } else if (value is StepInfoDto) {
+    } else if (value is LaneDto) {
       buffer.putUint8(199);
       writeValue(buffer, value.encode());
-    } else if (value is NavInfoDto) {
+    } else if (value is StepInfoDto) {
       buffer.putUint8(200);
       writeValue(buffer, value.encode());
-    } else if (value is TermsAndConditionsUIParamsDto) {
+    } else if (value is NavInfoDto) {
       buffer.putUint8(201);
       writeValue(buffer, value.encode());
-    } else if (value is StepImageGenerationOptionsDto) {
+    } else if (value is TermsAndConditionsUIParamsDto) {
       buffer.putUint8(202);
+      writeValue(buffer, value.encode());
+    } else if (value is StepImageGenerationOptionsDto) {
+      buffer.putUint8(203);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -3483,56 +3619,58 @@ class _PigeonCodec extends StandardMessageCodec {
       case 178:
         return MapPaddingDto.decode(readValue(buffer)!);
       case 179:
-        return RouteTokenOptionsDto.decode(readValue(buffer)!);
+        return NavigationHeaderStylingOptionsDto.decode(readValue(buffer)!);
       case 180:
-        return DestinationsDto.decode(readValue(buffer)!);
+        return RouteTokenOptionsDto.decode(readValue(buffer)!);
       case 181:
-        return RoutingOptionsDto.decode(readValue(buffer)!);
+        return DestinationsDto.decode(readValue(buffer)!);
       case 182:
-        return NavigationDisplayOptionsDto.decode(readValue(buffer)!);
+        return RoutingOptionsDto.decode(readValue(buffer)!);
       case 183:
-        return NavigationWaypointDto.decode(readValue(buffer)!);
+        return NavigationDisplayOptionsDto.decode(readValue(buffer)!);
       case 184:
-        return ContinueToNextDestinationResponseDto.decode(readValue(buffer)!);
+        return NavigationWaypointDto.decode(readValue(buffer)!);
       case 185:
-        return NavigationTimeAndDistanceDto.decode(readValue(buffer)!);
+        return ContinueToNextDestinationResponseDto.decode(readValue(buffer)!);
       case 186:
-        return NavigationAudioGuidanceSettingsDto.decode(readValue(buffer)!);
+        return NavigationTimeAndDistanceDto.decode(readValue(buffer)!);
       case 187:
-        return SimulationOptionsDto.decode(readValue(buffer)!);
+        return NavigationAudioGuidanceSettingsDto.decode(readValue(buffer)!);
       case 188:
-        return LatLngDto.decode(readValue(buffer)!);
+        return SimulationOptionsDto.decode(readValue(buffer)!);
       case 189:
-        return LatLngBoundsDto.decode(readValue(buffer)!);
+        return LatLngDto.decode(readValue(buffer)!);
       case 190:
-        return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
+        return LatLngBoundsDto.decode(readValue(buffer)!);
       case 191:
-        return GpsAvailabilityChangeEventDto.decode(readValue(buffer)!);
+        return SpeedingUpdatedEventDto.decode(readValue(buffer)!);
       case 192:
+        return GpsAvailabilityChangeEventDto.decode(readValue(buffer)!);
+      case 193:
         return SpeedAlertOptionsThresholdPercentageDto.decode(
           readValue(buffer)!,
         );
-      case 193:
-        return SpeedAlertOptionsDto.decode(readValue(buffer)!);
       case 194:
+        return SpeedAlertOptionsDto.decode(readValue(buffer)!);
+      case 195:
         return RouteSegmentTrafficDataRoadStretchRenderingDataDto.decode(
           readValue(buffer)!,
         );
-      case 195:
-        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
       case 196:
-        return RouteSegmentDto.decode(readValue(buffer)!);
+        return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
       case 197:
-        return LaneDirectionDto.decode(readValue(buffer)!);
+        return RouteSegmentDto.decode(readValue(buffer)!);
       case 198:
-        return LaneDto.decode(readValue(buffer)!);
+        return LaneDirectionDto.decode(readValue(buffer)!);
       case 199:
-        return StepInfoDto.decode(readValue(buffer)!);
+        return LaneDto.decode(readValue(buffer)!);
       case 200:
-        return NavInfoDto.decode(readValue(buffer)!);
+        return StepInfoDto.decode(readValue(buffer)!);
       case 201:
-        return TermsAndConditionsUIParamsDto.decode(readValue(buffer)!);
+        return NavInfoDto.decode(readValue(buffer)!);
       case 202:
+        return TermsAndConditionsUIParamsDto.decode(readValue(buffer)!);
+      case 203:
         return StepImageGenerationOptionsDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -3912,6 +4050,70 @@ class MapViewApi {
         );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
       <Object?>[viewId, enabled],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<NavigationHeaderStylingOptionsDto> getNavigationHeaderStylingOptions(
+    int viewId,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getNavigationHeaderStylingOptions$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as NavigationHeaderStylingOptionsDto?)!;
+    }
+  }
+
+  Future<void> setNavigationHeaderStylingOptions(
+    int viewId,
+    NavigationHeaderStylingOptionsDto stylingOptions,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationHeaderStylingOptions$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, stylingOptions],
     );
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;

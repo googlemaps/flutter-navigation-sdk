@@ -153,6 +153,7 @@ class NavigationViewOptionsDto {
   NavigationViewOptionsDto({
     required this.navigationUIEnabledPreference,
     required this.forceNightMode,
+    this.headerStylingOptions,
   });
 
   /// Determines the initial visibility of the navigation UI on map initialization.
@@ -160,6 +161,9 @@ class NavigationViewOptionsDto {
 
   /// Controls the navigation night mode for Navigation UI.
   final NavigationForceNightModeDto forceNightMode;
+
+  /// Controls the initial navigation header styling.
+  final NavigationHeaderStylingOptionsDto? headerStylingOptions;
 }
 
 /// A message for creating a new navigation view.
@@ -525,6 +529,51 @@ class MapPaddingDto {
   final int right;
 }
 
+/// Navigation header styling options.
+///
+/// All color values are 32-bit ARGB integers (format: 0xAARRGGBB).
+/// All text size values are logical pixels.
+/// Any null value resets that specific field to the native SDK default.
+///
+/// Text size fields are currently Android only and are ignored on iOS.
+class NavigationHeaderStylingOptionsDto {
+  NavigationHeaderStylingOptionsDto({
+    this.primaryDayModeBackgroundColor,
+    this.secondaryDayModeBackgroundColor,
+    this.primaryNightModeBackgroundColor,
+    this.secondaryNightModeBackgroundColor,
+    this.largeManeuverIconColor,
+    this.smallManeuverIconColor,
+    this.nextStepTextColor,
+    this.nextStepTextSize,
+    this.distanceValueTextColor,
+    this.distanceUnitsTextColor,
+    this.distanceValueTextSize,
+    this.distanceUnitsTextSize,
+    this.instructionsTextColor,
+    this.instructionsFirstRowTextSize,
+    this.instructionsSecondRowTextSize,
+    this.guidanceRecommendedLaneColor,
+  });
+
+  final int? primaryDayModeBackgroundColor;
+  final int? secondaryDayModeBackgroundColor;
+  final int? primaryNightModeBackgroundColor;
+  final int? secondaryNightModeBackgroundColor;
+  final int? largeManeuverIconColor;
+  final int? smallManeuverIconColor;
+  final int? nextStepTextColor;
+  final double? nextStepTextSize;
+  final int? distanceValueTextColor;
+  final int? distanceUnitsTextColor;
+  final double? distanceValueTextSize;
+  final double? distanceUnitsTextSize;
+  final int? instructionsTextColor;
+  final double? instructionsFirstRowTextSize;
+  final double? instructionsSecondRowTextSize;
+  final int? guidanceRecommendedLaneColor;
+}
+
 @HostApi(dartHostTestHandler: 'TestMapViewApi')
 abstract class MapViewApi {
   @async
@@ -543,6 +592,14 @@ abstract class MapViewApi {
 
   bool isNavigationHeaderEnabled(int viewId);
   void setNavigationHeaderEnabled(int viewId, bool enabled);
+
+  NavigationHeaderStylingOptionsDto getNavigationHeaderStylingOptions(
+    int viewId,
+  );
+  void setNavigationHeaderStylingOptions(
+    int viewId,
+    NavigationHeaderStylingOptionsDto stylingOptions,
+  );
 
   bool isNavigationFooterEnabled(int viewId);
   void setNavigationFooterEnabled(int viewId, bool enabled);

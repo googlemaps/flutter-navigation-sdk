@@ -121,6 +121,7 @@ object Convert {
       navigationUiEnabledPreference =
         convertNavigationUIEnabledPreferenceFromDto(options.navigationUIEnabledPreference),
       forceNightMode = convertNavigationForceNightModeFromDto(options.forceNightMode),
+      headerStylingOptions = options.headerStylingOptions,
     )
   }
 
