@@ -5,7 +5,7 @@
 
 ### ⚠ BREAKING CHANGES
 
-* upgrade android sdk to 7.7.0 and ios sdk to 10.14.0 ([#735](https://github.com/googlemaps/flutter-navigation-sdk/issues/735))
+* updated the minimum Kotlin version to 2.3.0 ([#735](https://github.com/googlemaps/flutter-navigation-sdk/issues/735))
 
 ### Features
 
