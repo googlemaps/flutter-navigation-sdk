@@ -30,6 +30,7 @@ import androidx.car.app.navigation.model.Maneuver
 import androidx.car.app.navigation.model.NavigationTemplate
 import androidx.car.app.navigation.model.RoutingInfo
 import androidx.car.app.navigation.model.Step
+import androidx.car.app.navigation.model.TravelEstimate
 import androidx.car.app.SurfaceContainer
 import androidx.core.graphics.drawable.IconCompat
 import androidx.lifecycle.Observer
@@ -40,6 +41,7 @@ import com.google.android.libraries.mapsplatform.turnbyturn.model.StepInfo
 import com.google.maps.flutter.navigation.AndroidAutoBaseScreen
 import com.google.maps.flutter.navigation.AutoMapViewOptions
 import com.google.maps.flutter.navigation.GoogleMapsNavigatorHolder
+import java.time.ZonedDateTime
 import kotlin.math.max
 
 
@@ -76,6 +78,9 @@ class SampleAndroidAutoScreen(carContext: CarContext): AndroidAutoBaseScreen(car
 
     /** The latest turn-by-turn guidance converted into an Android Auto [RoutingInfo], or null. */
     private var mNavInfo: RoutingInfo? = null
+
+    /** Trip-level ETA/distance shown by Android Auto for the destination. */
+    private var mDestinationTravelEstimate: TravelEstimate? = null
 
     /** Whether the turn-by-turn updates service is currently registered. */
     private var hasRegisteredTurnByTurnService: Boolean = false
@@ -147,13 +152,13 @@ class SampleAndroidAutoScreen(carContext: CarContext): AndroidAutoBaseScreen(car
 
         val app = carContext.applicationContext as? Application ?: return
 
-        // Register nav updates with no generated step images; we use the bitmaps already provided on
-        // the NavInfo steps (maneuverBitmap/lanesBitmap) when available.
+        // Ask the Navigation SDK to generate step bitmaps so Android Auto can display maneuver
+        // and lane images when the route has them.
         hasRegisteredTurnByTurnService =
             GoogleMapsNavigatorHolder.registerTurnByTurnService(
                 app,
                 1,
-                GeneratedStepImagesType.NONE,
+                GeneratedStepImagesType.BITMAP,
             )
         if (!hasRegisteredTurnByTurnService) {
             Log.w("SampleAndroidAutoScreen", "Failed to register turn-by-turn nav updates service")
@@ -173,8 +178,9 @@ class SampleAndroidAutoScreen(carContext: CarContext): AndroidAutoBaseScreen(car
         if (navInfo == null || navInfo.currentStep == null) {
             // No active step means guidance is not (or no longer) running. Clear any stale turn
             // card and refresh the template.
-            if (mNavInfo != null) {
+            if (mNavInfo != null || mDestinationTravelEstimate != null) {
                 mNavInfo = null
+                mDestinationTravelEstimate = null
                 invalidate()
             }
             return
@@ -203,6 +209,20 @@ class SampleAndroidAutoScreen(carContext: CarContext): AndroidAutoBaseScreen(car
         }
 
         mNavInfo = routingInfoBuilder.build()
+
+        val distanceToDestination =
+            Distance.create(
+                max(navInfo.distanceToFinalDestinationMeters?.toDouble() ?: 0.0, 0.0),
+                Distance.UNIT_METERS,
+            )
+        val remainingTimeSeconds = max(navInfo.timeToFinalDestinationSeconds?.toLong() ?: 0L, 0L)
+        mDestinationTravelEstimate =
+            TravelEstimate.Builder(
+                distanceToDestination,
+                ZonedDateTime.now().plusSeconds(remainingTimeSeconds),
+            )
+                .setRemainingTimeSeconds(remainingTimeSeconds)
+                .build()
 
         // Invalidate the current template, which leads to another onGetTemplate call that renders
         // the updated turn card.
@@ -393,6 +413,9 @@ class SampleAndroidAutoScreen(carContext: CarContext): AndroidAutoBaseScreen(car
         // Show the turn card when guidance info is available (populated by buildNavInfo).
         if (mNavInfo != null) {
             navigationTemplateBuilder.setNavigationInfo(mNavInfo!!)
+        }
+        if (mDestinationTravelEstimate != null) {
+            navigationTemplateBuilder.setDestinationTravelEstimate(mDestinationTravelEstimate!!)
         }
 
         return navigationTemplateBuilder.build()
