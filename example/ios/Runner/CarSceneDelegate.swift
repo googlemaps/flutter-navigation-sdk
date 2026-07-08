@@ -83,6 +83,23 @@ class CarSceneDelegate: BaseCarSceneDelegate, GMSNavigatorListener {
     var isLaneGuidance: Bool
   }
 
+  /// Cached signature of the maneuver card currently rendered by CarPlay. Used
+  /// to avoid re-sending identical maneuvers on every navigator callback, which
+  /// causes the maneuver card to visibly refresh even when nothing changed.
+  private var lastRenderedManeuverState: ManeuverRenderState?
+
+  /// The currently displayed primary maneuver. Reused for step estimate updates
+  /// so we don't need to rebuild the maneuver card on every callback.
+  private var activePrimaryManeuver: CPManeuver?
+
+  private struct ManeuverRenderState: Equatable {
+    let maneuver: GMSNavigationManeuver
+    let instructionText: String
+    let roadName: String
+    let roundaboutTurnNumber: Int
+    let hasLaneGuidance: Bool
+  }
+
   // MARK: - CarPlay template
 
   /// Builds the root `CPMapTemplate` shown on the CarPlay screen.
@@ -332,45 +349,55 @@ class CarSceneDelegate: BaseCarSceneDelegate, GMSNavigatorListener {
 
     // Start the navigation session lazily the first time we have guidance. A
     // `CPNavigationSession` is always associated with a `CPTrip`.
-    if activeNavigationSession == nil || activeTrip == nil {
+    let startedNewSession = activeNavigationSession == nil || activeTrip == nil
+    if startedNewSession {
       let trip = makeTrip(navigator: navigator, navInfo: navInfo)
       activeTrip = trip
       activeNavigationSession = mapTemplate.startNavigationSession(for: trip)
+      lastRenderedManeuverState = nil
     }
 
-    let maneuver = makeManeuver(for: currentStep, navInfo: navInfo)
-    maneuver.initialTravelEstimates = makeStepTravelEstimates(navInfo: navInfo)
+    let maneuverState = makeManeuverRenderState(for: currentStep)
+    let shouldRefreshManeuvers = maneuverState != lastRenderedManeuverState
+    if shouldRefreshManeuvers {
+      let maneuver = makeManeuver(for: currentStep, navInfo: navInfo)
+      maneuver.initialTravelEstimates = makeStepTravelEstimates(navInfo: navInfo)
+      activePrimaryManeuver = maneuver
 
-    // Build the list of maneuvers shown in the guidance card. The current
-    // maneuver is shown first, optionally followed by a lane guidance maneuver
-    // that only displays the lanes image.
-    var upcomingManeuvers = [maneuver]
-    if let laneGuidance = makeLaneGuidanceManeuver(for: currentStep) {
-      upcomingManeuvers.append(laneGuidance)
-    }
-
-    if #available(iOS 17.4, *) {
-      // On iOS 17.4+ maneuvers must first be registered with the session via
-      // `add(_:)` before they can be shown through `upcomingManeuvers`.
-      activeNavigationSession?.add(upcomingManeuvers)
-      let roadName = currentStep.fullRoadName
-      if !roadName.isEmpty {
-        activeNavigationSession?.currentRoadNameVariants = [roadName]
+      // Build the list of maneuvers shown in the guidance card. The current
+      // maneuver is shown first, optionally followed by a lane guidance maneuver
+      // that only displays the lanes image.
+      var upcomingManeuvers = [maneuver]
+      if let laneGuidance = makeLaneGuidanceManeuver(for: currentStep) {
+        upcomingManeuvers.append(laneGuidance)
       }
+
+      if #available(iOS 17.4, *) {
+        // On iOS 17.4+ maneuvers must first be registered with the session via
+        // `add(_:)` before they can be shown through `upcomingManeuvers`.
+        activeNavigationSession?.add(upcomingManeuvers)
+        let roadName = currentStep.fullRoadName
+        if !roadName.isEmpty {
+          activeNavigationSession?.currentRoadNameVariants = [roadName]
+        }
+      }
+      // The display list of maneuvers. Available since iOS 12; on 17.4+ these must
+      // have been added above first.
+      activeNavigationSession?.upcomingManeuvers = upcomingManeuvers
+      lastRenderedManeuverState = maneuverState
     }
-    // The display list of maneuvers. Available since iOS 12; on 17.4+ these must
-    // have been added above first.
-    activeNavigationSession?.upcomingManeuvers = upcomingManeuvers
 
     // Trip-level estimates drive the "time/distance to destination" UI.
     if let trip = activeTrip {
       mapTemplate.updateEstimates(makeTripTravelEstimates(navInfo: navInfo), for: trip)
     }
     // Step-level estimates drive the "distance to next maneuver" UI.
-    activeNavigationSession?.updateEstimates(
-      makeStepTravelEstimates(navInfo: navInfo),
-      for: maneuver
-    )
+    if let activePrimaryManeuver {
+      activeNavigationSession?.updateEstimates(
+        makeStepTravelEstimates(navInfo: navInfo),
+        for: activePrimaryManeuver
+      )
+    }
   }
 
   /// Builds the `CPTrip` describing the current route's origin and destination.
@@ -409,6 +436,16 @@ class CarSceneDelegate: BaseCarSceneDelegate, GMSNavigatorListener {
       trip.destinationNameVariants = [destinationTitle]
     }
     return trip
+  }
+
+  private func makeManeuverRenderState(for step: GMSNavigationStepInfo) -> ManeuverRenderState {
+    ManeuverRenderState(
+      maneuver: step.maneuver,
+      instructionText: step.fullInstructionText,
+      roadName: step.fullRoadName,
+      roundaboutTurnNumber: step.roundaboutTurnNumber ?? 0,
+      hasLaneGuidance: step.lanesImage(with: instructionOptions.imageOptions) != nil
+    )
   }
 
   // Builds a CPManeuver for the given step. Uses the attributed instruction
@@ -507,6 +544,8 @@ class CarSceneDelegate: BaseCarSceneDelegate, GMSNavigatorListener {
     activeNavigationSession?.cancelTrip()
     activeNavigationSession = nil
     activeTrip = nil
+    activePrimaryManeuver = nil
+    lastRenderedManeuverState = nil
   }
 
   // Presents a simple dismissible alert on the CarPlay screen. Used here to
