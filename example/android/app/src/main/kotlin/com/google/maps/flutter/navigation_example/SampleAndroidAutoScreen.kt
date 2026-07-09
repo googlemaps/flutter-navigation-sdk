@@ -21,6 +21,8 @@ import android.app.Application
 import android.util.Log
 import androidx.car.app.CarContext
 import androidx.car.app.CarToast
+import androidx.car.app.navigation.NavigationManager
+import androidx.car.app.navigation.NavigationManagerCallback
 import androidx.car.app.model.Action
 import androidx.car.app.model.ActionStrip
 import androidx.car.app.model.CarIcon
@@ -90,6 +92,26 @@ class SampleAndroidAutoScreen(carContext: CarContext): AndroidAutoBaseScreen(car
 
     /** Whether the Android Auto drawing surface is currently available. */
     private var isAutoSurfaceAvailable: Boolean = false
+
+    /** Whether we've told the Android Auto host that active navigation has started. */
+    private var hasStartedHostNavigation: Boolean = false
+
+    /** Android Auto host callback for stop-navigation requests (for example, ETA chip X button). */
+    private val navigationManagerCallback =
+        object : NavigationManagerCallback {
+            override fun onStopNavigation() {
+                Log.i("SampleAndroidAutoScreen", "Host requested stop navigation")
+                GoogleMapsNavigatorHolder.getNavigator()?.stopGuidance()
+                sendCustomNavigationAutoEvent(
+                    "HostStopNavigation",
+                    mapOf("" to ""),
+                )
+                endHostNavigationIfNeeded()
+                mNavInfo = null
+                mDestinationTravelEstimate = null
+                invalidate()
+            }
+        }
 
     /** Observer that converts each [NavInfo] update into Android Auto data structures. */
     private val navInfoObserver = Observer<NavInfo> { navInfo: NavInfo? ->
@@ -167,6 +189,41 @@ class SampleAndroidAutoScreen(carContext: CarContext): AndroidAutoBaseScreen(car
 
     // endregion
 
+    // region Android Auto host navigation lifecycle
+
+    private fun getNavigationManager(): NavigationManager {
+        return carContext.getCarService(NavigationManager::class.java)
+    }
+
+    private fun ensureNavigationManagerCallbackRegistered() {
+        getNavigationManager().setNavigationManagerCallback(navigationManagerCallback)
+    }
+
+    private fun startHostNavigationIfNeeded() {
+        if (hasStartedHostNavigation) {
+            return
+        }
+        ensureNavigationManagerCallbackRegistered()
+        getNavigationManager().navigationStarted()
+        hasStartedHostNavigation = true
+    }
+
+    private fun endHostNavigationIfNeeded() {
+        if (!hasStartedHostNavigation) {
+            return
+        }
+        getNavigationManager().navigationEnded()
+        hasStartedHostNavigation = false
+    }
+
+    private fun clearNavigationManagerCallbackIfPossible() {
+        if (!hasStartedHostNavigation) {
+            getNavigationManager().clearNavigationManagerCallback()
+        }
+    }
+
+    // endregion
+
     // region Converting NavInfo into Android Auto data structures
 
     /**
@@ -181,10 +238,13 @@ class SampleAndroidAutoScreen(carContext: CarContext): AndroidAutoBaseScreen(car
             if (mNavInfo != null || mDestinationTravelEstimate != null) {
                 mNavInfo = null
                 mDestinationTravelEstimate = null
+                endHostNavigationIfNeeded()
                 invalidate()
             }
             return
         }
+
+        startHostNavigationIfNeeded()
 
         // Convert the current step and its distance into Android Auto types.
         val currentStep: Step = buildStepFromStepInfo(navInfo.currentStep!!)
@@ -287,6 +347,8 @@ class SampleAndroidAutoScreen(carContext: CarContext): AndroidAutoBaseScreen(car
             startListeningNavInfoIfPossible()
         } else {
             stopListeningNavInfo()
+            endHostNavigationIfNeeded()
+            clearNavigationManagerCallbackIfPossible()
         }
         // Invalidate template layout because of conditional rendering in the
         // onGetTemplate method.
@@ -297,6 +359,7 @@ class SampleAndroidAutoScreen(carContext: CarContext): AndroidAutoBaseScreen(car
     override fun onSurfaceAvailable(surfaceContainer: SurfaceContainer) {
         super.onSurfaceAvailable(surfaceContainer)
         isAutoSurfaceAvailable = true
+        ensureNavigationManagerCallbackRegistered()
         startListeningNavInfoIfPossible()
     }
 
@@ -305,6 +368,8 @@ class SampleAndroidAutoScreen(carContext: CarContext): AndroidAutoBaseScreen(car
         super.onSurfaceDestroyed(surfaceContainer)
         isAutoSurfaceAvailable = false
         stopListeningNavInfo()
+        endHostNavigationIfNeeded()
+        clearNavigationManagerCallbackIfPossible()
     }
 
     // endregion
