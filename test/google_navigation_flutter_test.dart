@@ -1303,11 +1303,25 @@ void main() {
           // Initialize session and session controller.
           await GoogleMapsNavigator.initializeNavigationSession(
             abnormalTerminationReportingEnabled: false,
+            notificationOptions: const NavigationNotificationOptions(
+              notificationId: 1234,
+              defaultMessage: 'Navigation is active',
+              resumeAppOnTap: true,
+            ),
           );
           VerificationResult result = verify(
-            sessionMockApi.createNavigationSession(captureAny, captureAny),
+            sessionMockApi.createNavigationSession(
+              captureAny,
+              captureAny,
+              captureAny,
+              captureAny,
+              captureAny,
+            ),
           );
           expect(result.captured[0] as bool, false);
+          expect(result.captured[2], 1234);
+          expect(result.captured[3], 'Navigation is active');
+          expect(result.captured[4], true);
 
           // Start/stop guidance.
 

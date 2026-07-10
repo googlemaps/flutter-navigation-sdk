@@ -313,7 +313,13 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     if (!_navigatorInitialized) {
       debugPrint('Initializing new navigation session...');
       try {
-        await GoogleMapsNavigator.initializeNavigationSession();
+        await GoogleMapsNavigator.initializeNavigationSession(
+          notificationOptions: const NavigationNotificationOptions(
+            notificationId: 1234,
+            defaultMessage: 'Navigation is active',
+            resumeAppOnTap: true,
+          ),
+        );
       } on SessionInitializationException catch (e) {
         switch (e.code) {
           case SessionInitializationError.termsNotAccepted:

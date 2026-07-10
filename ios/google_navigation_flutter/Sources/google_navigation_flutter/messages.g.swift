@@ -5880,6 +5880,7 @@ class ViewEventApi: ViewEventApiProtocol {
 protocol NavigationSessionApi {
   func createNavigationSession(
     abnormalTerminationReportingEnabled: Bool, behavior: TaskRemovedBehaviorDto,
+    notificationId: Int64?, defaultMessage: String?, resumeAppOnTap: Bool?,
     completion: @escaping (Result<Void, Error>) -> Void)
   func isInitialized() throws -> Bool
   func cleanup(resetSession: Bool) throws
@@ -5948,9 +5949,15 @@ class NavigationSessionApiSetup {
         let args = message as! [Any?]
         let abnormalTerminationReportingEnabledArg = args[0] as! Bool
         let behaviorArg = args[1] as! TaskRemovedBehaviorDto
+        let notificationIdArg: Int64? = nilOrValue(args[2])
+        let defaultMessageArg: String? = nilOrValue(args[3])
+        let resumeAppOnTapArg: Bool? = nilOrValue(args[4])
         api.createNavigationSession(
           abnormalTerminationReportingEnabled: abnormalTerminationReportingEnabledArg,
-          behavior: behaviorArg
+          behavior: behaviorArg,
+          notificationId: notificationIdArg,
+          defaultMessage: defaultMessageArg,
+          resumeAppOnTap: resumeAppOnTapArg
         ) { result in
           switch result {
           case .success:

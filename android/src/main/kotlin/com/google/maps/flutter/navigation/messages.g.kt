@@ -6889,6 +6889,9 @@ interface NavigationSessionApi {
   fun createNavigationSession(
     abnormalTerminationReportingEnabled: Boolean,
     behavior: TaskRemovedBehaviorDto,
+    notificationId: Long?,
+    defaultMessage: String?,
+    resumeAppOnTap: Boolean?,
     callback: (Result<Unit>) -> Unit,
   )
 
@@ -7011,7 +7014,16 @@ interface NavigationSessionApi {
             val args = message as List<Any?>
             val abnormalTerminationReportingEnabledArg = args[0] as Boolean
             val behaviorArg = args[1] as TaskRemovedBehaviorDto
-            api.createNavigationSession(abnormalTerminationReportingEnabledArg, behaviorArg) {
+            val notificationIdArg = args[2] as Long?
+            val defaultMessageArg = args[3] as String?
+            val resumeAppOnTapArg = args[4] as Boolean?
+            api.createNavigationSession(
+              abnormalTerminationReportingEnabledArg,
+              behaviorArg,
+              notificationIdArg,
+              defaultMessageArg,
+              resumeAppOnTapArg,
+            ) {
               result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {

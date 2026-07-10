@@ -8032,6 +8032,9 @@ class NavigationSessionApi {
   Future<void> createNavigationSession(
     bool abnormalTerminationReportingEnabled,
     TaskRemovedBehaviorDto behavior,
+    int? notificationId,
+    String? defaultMessage,
+    bool? resumeAppOnTap,
   ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession$pigeonVar_messageChannelSuffix';
@@ -8041,9 +8044,14 @@ class NavigationSessionApi {
           pigeonChannelCodec,
           binaryMessenger: pigeonVar_binaryMessenger,
         );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
-      <Object?>[abnormalTerminationReportingEnabled, behavior],
-    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel
+        .send(<Object?>[
+          abnormalTerminationReportingEnabled,
+          behavior,
+          notificationId,
+          defaultMessage,
+          resumeAppOnTap,
+        ]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {

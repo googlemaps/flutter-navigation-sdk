@@ -175,6 +175,25 @@ The `taskRemovedBehavior` parameter of navigation session initialization defines
 
 This parameter has only an effect on Android.
 
+#### Android navigation notification
+
+Configure the built-in Android navigation notification when creating the first
+navigation session. The options are ignored on iOS.
+
+```dart
+await GoogleMapsNavigator.initializeNavigationSession(
+  notificationOptions: const NavigationNotificationOptions(
+    notificationId: 1234,
+    defaultMessage: 'Navigation is active',
+    resumeAppOnTap: true,
+  ),
+);
+```
+
+`resumeAppOnTap` makes a notification tap launch or resume the application.
+These options retain the Navigation SDK's turn-by-turn notification content;
+custom notification layouts are not supported.
+
 ### Add a map view
 
 ```dart

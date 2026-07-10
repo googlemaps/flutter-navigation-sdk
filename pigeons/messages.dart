@@ -1527,6 +1527,9 @@ abstract class NavigationSessionApi {
   void createNavigationSession(
     bool abnormalTerminationReportingEnabled,
     TaskRemovedBehaviorDto behavior,
+    int? notificationId,
+    String? defaultMessage,
+    bool? resumeAppOnTap,
   );
   bool isInitialized();
   void cleanup(bool resetSession);

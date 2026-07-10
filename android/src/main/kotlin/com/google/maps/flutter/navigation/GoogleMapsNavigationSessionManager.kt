@@ -18,6 +18,7 @@ package com.google.maps.flutter.navigation
 
 import android.app.Activity
 import android.app.Application
+import android.content.Intent
 import android.content.res.Resources
 import android.location.Location
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -61,6 +62,7 @@ constructor(
 ) : DefaultLifecycleObserver {
   companion object {
     var navigationReadyListener: NavigationReadyListener? = null
+    private var foregroundServiceManagerInitialized = false
   }
 
   private var arrivalListener: Navigator.ArrivalListener? = null
@@ -131,6 +133,9 @@ constructor(
   fun createNavigationSession(
     abnormalTerminationReportingEnabled: Boolean,
     behavior: TaskRemovedBehaviorDto,
+    notificationId: Long?,
+    defaultMessage: String?,
+    resumeAppOnTap: Boolean?,
     callback: (Result<Unit>) -> Unit,
   ) {
     val currentState = GoogleMapsNavigatorHolder.getInitializationState()
@@ -175,6 +180,13 @@ constructor(
           )
         )
       )
+      return
+    }
+
+    try {
+      initializeForegroundServiceManager(notificationId, defaultMessage, resumeAppOnTap)
+    } catch (error: Throwable) {
+      callback(Result.failure(error))
       return
     }
 
@@ -288,6 +300,7 @@ constructor(
       // As unregisterListeners() is removing all listeners, we need to re-register them when
       // navigator is re-initialized. This is done in createNavigationSession() method.
       GoogleMapsNavigatorHolder.reset()
+      clearForegroundServiceManager()
       navigationReadyListener?.onNavigationReady(false)
     }
   }
@@ -414,6 +427,47 @@ constructor(
       navigationSessionListener =
         Navigator.NavigationSessionListener { navigationSessionEventApi.onNewNavigationSession {} }
       navigator.addNavigationSessionListener(navigationSessionListener)
+    }
+  }
+
+  private fun initializeForegroundServiceManager(
+    notificationId: Long?,
+    defaultMessage: String?,
+    resumeAppOnTap: Boolean?,
+  ) {
+    if (resumeAppOnTap == null || foregroundServiceManagerInitialized) return
+
+    val androidNotificationId =
+      notificationId?.let {
+        if (it !in Int.MIN_VALUE.toLong()..Int.MAX_VALUE.toLong()) {
+          throw FlutterError("invalidNotificationId", "notificationId must fit in a 32-bit integer.")
+        }
+        it.toInt()
+      }
+
+    val resumeIntent =
+      if (resumeAppOnTap) {
+        application.packageManager
+          .getLaunchIntentForPackage(application.packageName)
+          ?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+      } else {
+        null
+      }
+
+    // This must happen before NavigationApi.getNavigator(), which can create the manager.
+    NavigationApi.initForegroundServiceManagerMessageAndIntent(
+      application,
+      androidNotificationId,
+      defaultMessage,
+      resumeIntent,
+    )
+    foregroundServiceManagerInitialized = true
+  }
+
+  private fun clearForegroundServiceManager() {
+    if (foregroundServiceManagerInitialized) {
+      NavigationApi.clearForegroundServiceManager()
+      foregroundServiceManagerInitialized = false
     }
   }
 

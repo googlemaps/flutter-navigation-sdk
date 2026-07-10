@@ -5814,6 +5814,9 @@ abstract class TestNavigationSessionApi {
   Future<void> createNavigationSession(
     bool abnormalTerminationReportingEnabled,
     TaskRemovedBehaviorDto behavior,
+    int? notificationId,
+    String? defaultMessage,
+    bool? resumeAppOnTap,
   );
 
   bool isInitialized();
@@ -5945,10 +5948,16 @@ abstract class TestNavigationSessionApi {
             arg_behavior != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession was null, expected non-null TaskRemovedBehaviorDto.',
           );
+          final int? arg_notificationId = args[2] as int?;
+          final String? arg_defaultMessage = args[3] as String?;
+          final bool? arg_resumeAppOnTap = args[4] as bool?;
           try {
             await api.createNavigationSession(
               arg_abnormalTerminationReportingEnabled!,
               arg_behavior!,
+              arg_notificationId,
+              arg_defaultMessage,
+              arg_resumeAppOnTap,
             );
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {

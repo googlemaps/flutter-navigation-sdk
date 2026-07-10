@@ -55,6 +55,7 @@ class NavigationSessionAPIImpl {
   Future<void> createNavigationSession(
     bool abnormalTerminationReportingEnabled,
     TaskRemovedBehavior taskRemovedBehavior,
+    NavigationNotificationOptions? notificationOptions,
   ) async {
     // Setup session API streams.
     ensureSessionAPISetUp();
@@ -63,6 +64,9 @@ class NavigationSessionAPIImpl {
       await _sessionApi.createNavigationSession(
         abnormalTerminationReportingEnabled,
         taskRemovedBehavior.toDto(),
+        notificationOptions?.notificationId,
+        notificationOptions?.defaultMessage,
+        notificationOptions?.resumeAppOnTap,
       );
     } on PlatformException catch (e) {
       switch (e.code) {
