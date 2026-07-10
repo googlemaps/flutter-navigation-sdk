@@ -69,9 +69,7 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
     // taskRemovedBehaviourValue is Android only value and not used on
     // iOS.
     behavior: TaskRemovedBehaviorDto,
-    notificationId: Int64?,
-    defaultMessage: String?,
-    resumeAppOnTap: Bool?,
+    notificationOptions: NavigationNotificationOptionsDto?,
     completion: @escaping (Result<Void, Error>) -> Void
   ) {
     do {

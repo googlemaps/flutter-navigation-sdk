@@ -1314,14 +1314,14 @@ void main() {
               captureAny,
               captureAny,
               captureAny,
-              captureAny,
-              captureAny,
             ),
           );
           expect(result.captured[0] as bool, false);
-          expect(result.captured[2], 1234);
-          expect(result.captured[3], 'Navigation is active');
-          expect(result.captured[4], true);
+          final NavigationNotificationOptionsDto notificationOptions =
+              result.captured[2] as NavigationNotificationOptionsDto;
+          expect(notificationOptions.notificationId, 1234);
+          expect(notificationOptions.defaultMessage, 'Navigation is active');
+          expect(notificationOptions.resumeAppOnTap, true);
 
           // Start/stop guidance.
 

@@ -64,9 +64,7 @@ class NavigationSessionAPIImpl {
       await _sessionApi.createNavigationSession(
         abnormalTerminationReportingEnabled,
         taskRemovedBehavior.toDto(),
-        notificationOptions?.notificationId,
-        notificationOptions?.defaultMessage,
-        notificationOptions?.resumeAppOnTap,
+        notificationOptions?.toDto(),
       );
     } on PlatformException catch (e) {
       switch (e.code) {

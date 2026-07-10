@@ -1505,6 +1505,21 @@ enum TaskRemovedBehaviorDto {
   quitService,
 }
 
+/// Android foreground-service notification configuration.
+///
+/// This preserves the Navigation SDK's built-in turn-by-turn notification.
+class NavigationNotificationOptionsDto {
+  NavigationNotificationOptionsDto({
+    this.notificationId,
+    this.defaultMessage,
+    required this.resumeAppOnTap,
+  });
+
+  final int? notificationId;
+  final String? defaultMessage;
+  final bool resumeAppOnTap;
+}
+
 /// Options for step image generation in turn-by-turn navigation events.
 class StepImageGenerationOptionsDto {
   StepImageGenerationOptionsDto({
@@ -1527,9 +1542,7 @@ abstract class NavigationSessionApi {
   void createNavigationSession(
     bool abnormalTerminationReportingEnabled,
     TaskRemovedBehaviorDto behavior,
-    int? notificationId,
-    String? defaultMessage,
-    bool? resumeAppOnTap,
+    NavigationNotificationOptionsDto? notificationOptions,
   );
   bool isInitialized();
   void cleanup(bool resetSession);

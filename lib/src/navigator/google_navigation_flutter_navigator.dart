@@ -49,8 +49,8 @@ class GoogleMapsNavigator {
   /// Optional parameter [abnormalTerminationReportingEnabled] can be used enables/disables
   /// reporting abnormal SDK terminations such as the app crashes while the SDK is still running.
   ///
-  /// [notificationOptions] configures Android's built-in navigation notification
-  /// and is ignored on iOS.
+  /// [notificationOptions] configures Android's built-in navigation notification.
+  /// It is not available on iOS and is ignored there.
   static Future<void> initializeNavigationSession({
     bool abnormalTerminationReportingEnabled = true,
     TaskRemovedBehavior taskRemovedBehavior =

@@ -15,7 +15,8 @@
 /// Configures the Android navigation foreground-service notification.
 ///
 /// These options preserve the Navigation SDK's built-in turn-by-turn
-/// notification. They are ignored on iOS.
+/// notification. This Android-only configuration is not available on iOS and
+/// is ignored there.
 /// {@category Navigation}
 class NavigationNotificationOptions {
   /// Creates Android navigation notification options.

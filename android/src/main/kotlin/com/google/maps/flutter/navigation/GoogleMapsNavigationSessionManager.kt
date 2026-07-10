@@ -133,9 +133,7 @@ constructor(
   fun createNavigationSession(
     abnormalTerminationReportingEnabled: Boolean,
     behavior: TaskRemovedBehaviorDto,
-    notificationId: Long?,
-    defaultMessage: String?,
-    resumeAppOnTap: Boolean?,
+    notificationOptions: NavigationNotificationOptionsDto?,
     callback: (Result<Unit>) -> Unit,
   ) {
     val currentState = GoogleMapsNavigatorHolder.getInitializationState()
@@ -184,7 +182,7 @@ constructor(
     }
 
     try {
-      initializeForegroundServiceManager(notificationId, defaultMessage, resumeAppOnTap)
+      initializeForegroundServiceManager(notificationOptions)
     } catch (error: Throwable) {
       callback(Result.failure(error))
       return
@@ -431,14 +429,12 @@ constructor(
   }
 
   private fun initializeForegroundServiceManager(
-    notificationId: Long?,
-    defaultMessage: String?,
-    resumeAppOnTap: Boolean?,
+    options: NavigationNotificationOptionsDto?
   ) {
-    if (resumeAppOnTap == null || foregroundServiceManagerInitialized) return
+    if (options == null || foregroundServiceManagerInitialized) return
 
     val androidNotificationId =
-      notificationId?.let {
+      options.notificationId?.let {
         if (it !in Int.MIN_VALUE.toLong()..Int.MAX_VALUE.toLong()) {
           throw FlutterError("invalidNotificationId", "notificationId must fit in a 32-bit integer.")
         }
@@ -446,7 +442,7 @@ constructor(
       }
 
     val resumeIntent =
-      if (resumeAppOnTap) {
+      if (options.resumeAppOnTap) {
         application.packageManager
           .getLaunchIntentForPackage(application.packageName)
           ?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
@@ -458,7 +454,7 @@ constructor(
     NavigationApi.initForegroundServiceManagerMessageAndIntent(
       application,
       androidNotificationId,
-      defaultMessage,
+      options.defaultMessage,
       resumeIntent,
     )
     foregroundServiceManagerInitialized = true

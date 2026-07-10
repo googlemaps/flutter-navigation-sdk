@@ -17,6 +17,17 @@ import 'dart:ui';
 import '../../../google_navigation_flutter.dart';
 import '../method_channel.dart';
 
+/// [NavigationNotificationOptions] convert extension.
+/// @nodoc
+extension ConvertNavigationNotificationOptions on NavigationNotificationOptions {
+  /// Converts [NavigationNotificationOptions] to its platform representation.
+  NavigationNotificationOptionsDto toDto() => NavigationNotificationOptionsDto(
+    notificationId: notificationId,
+    defaultMessage: defaultMessage,
+    resumeAppOnTap: resumeAppOnTap,
+  );
+}
+
 /// [SpeedAlertSeverityDto] convert extension.
 /// @nodoc
 extension ConvertSpeedAlertSeverityDto on SpeedAlertSeverityDto {
