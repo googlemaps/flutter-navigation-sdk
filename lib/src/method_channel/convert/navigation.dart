@@ -19,7 +19,8 @@ import '../method_channel.dart';
 
 /// [NavigationNotificationOptions] convert extension.
 /// @nodoc
-extension ConvertNavigationNotificationOptions on NavigationNotificationOptions {
+extension ConvertNavigationNotificationOptions
+    on NavigationNotificationOptions {
   /// Converts [NavigationNotificationOptions] to its platform representation.
   NavigationNotificationOptionsDto toDto() => NavigationNotificationOptionsDto(
     notificationId: notificationId,

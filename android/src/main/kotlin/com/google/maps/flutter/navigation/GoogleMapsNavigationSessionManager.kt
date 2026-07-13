@@ -428,15 +428,16 @@ constructor(
     }
   }
 
-  private fun initializeForegroundServiceManager(
-    options: NavigationNotificationOptionsDto?
-  ) {
+  private fun initializeForegroundServiceManager(options: NavigationNotificationOptionsDto?) {
     if (options == null || foregroundServiceManagerInitialized) return
 
     val androidNotificationId =
       options.notificationId?.let {
         if (it !in Int.MIN_VALUE.toLong()..Int.MAX_VALUE.toLong()) {
-          throw FlutterError("invalidNotificationId", "notificationId must fit in a 32-bit integer.")
+          throw FlutterError(
+            "invalidNotificationId",
+            "notificationId must fit in a 32-bit integer.",
+          )
         }
         it.toInt()
       }
@@ -450,7 +451,7 @@ constructor(
         null
       }
 
-    // This must happen before NavigationApi.getNavigator(), which can create the manager.
+    // This must happen before NavigationApi.getNavigator()
     NavigationApi.initForegroundServiceManagerMessageAndIntent(
       application,
       androidNotificationId,

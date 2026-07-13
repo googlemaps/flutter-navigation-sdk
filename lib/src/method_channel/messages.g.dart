@@ -29,7 +29,11 @@ PlatformException _createConnectionError(String channelName) {
   );
 }
 
-List<Object?> wrapResponse({Object? result, PlatformException? error, bool empty = false}) {
+List<Object?> wrapResponse({
+  Object? result,
+  PlatformException? error,
+  bool empty = false,
+}) {
   if (empty) {
     return <Object?>[];
   }
@@ -38,25 +42,30 @@ List<Object?> wrapResponse({Object? result, PlatformException? error, bool empty
   }
   return <Object?>[error.code, error.message, error.details];
 }
+
 bool _deepEquals(Object? a, Object? b) {
   if (a is List && b is List) {
     return a.length == b.length &&
-        a.indexed
-        .every(((int, dynamic) item) => _deepEquals(item.$2, b[item.$1]));
+        a.indexed.every(
+          ((int, dynamic) item) => _deepEquals(item.$2, b[item.$1]),
+        );
   }
   if (a is Map && b is Map) {
-    return a.length == b.length && a.entries.every((MapEntry<Object?, Object?> entry) =>
-        (b as Map<Object?, Object?>).containsKey(entry.key) &&
-        _deepEquals(entry.value, b[entry.key]));
+    return a.length == b.length &&
+        a.entries.every(
+          (MapEntry<Object?, Object?> entry) =>
+              (b as Map<Object?, Object?>).containsKey(entry.key) &&
+              _deepEquals(entry.value, b[entry.key]),
+        );
   }
   return a == b;
 }
-
 
 /// Describes the type of map to construct.
 enum MapViewTypeDto {
   /// Navigation view supports navigation overlay, and current navigation session is displayed on the map.
   navigation,
+
   /// Classic map view, without navigation overlay.
   map,
 }
@@ -66,24 +75,21 @@ enum NavigationUIEnabledPreferenceDto {
   /// Navigation UI gets enabled if the navigation
   /// session has already been successfully started.
   automatic,
+
   /// Navigation UI is disabled.
   disabled,
 }
 
-enum MapTypeDto {
-  none,
-  normal,
-  satellite,
-  terrain,
-  hybrid,
-}
+enum MapTypeDto { none, normal, satellite, terrain, hybrid }
 
 /// Map color scheme mode.
 enum MapColorSchemeDto {
   /// Follow system or SDK default (automatic).
   followSystem,
+
   /// Force light color scheme.
   light,
+
   /// Force dark color scheme.
   dark,
 }
@@ -92,23 +98,23 @@ enum MapColorSchemeDto {
 enum NavigationForceNightModeDto {
   /// Let the SDK automatically determine day or night.
   auto,
+
   /// Force day mode regardless of time or location.
   forceDay,
+
   /// Force night mode regardless of time or location.
   forceNight,
 }
 
-enum CameraPerspectiveDto {
-  tilted,
-  topDownHeadingUp,
-  topDownNorthUp,
-}
+enum CameraPerspectiveDto { tilted, topDownHeadingUp, topDownNorthUp }
 
 enum RegisteredImageTypeDto {
   /// Default type used when custom bitmaps are uploaded to registry
   regular,
+
   /// Maneuver image generated from StepInfo data
   maneuver,
+
   /// Lanes guidance image generated from StepInfo data
   lanes,
 }
@@ -120,23 +126,11 @@ enum MarkerEventTypeDto {
   infoWindowLongClicked,
 }
 
-enum MarkerDragEventTypeDto {
-  drag,
-  dragStart,
-  dragEnd,
-}
+enum MarkerDragEventTypeDto { drag, dragStart, dragEnd }
 
-enum StrokeJointTypeDto {
-  bevel,
-  defaultJoint,
-  round,
-}
+enum StrokeJointTypeDto { bevel, defaultJoint, round }
 
-enum PatternTypeDto {
-  dash,
-  dot,
-  gap,
-}
+enum PatternTypeDto { dash, dot, gap }
 
 enum CameraEventTypeDto {
   moveStartedByApi,
@@ -147,25 +141,11 @@ enum CameraEventTypeDto {
   onCameraStoppedFollowingLocation,
 }
 
-enum AlternateRoutesStrategyDto {
-  all,
-  none,
-  one,
-}
+enum AlternateRoutesStrategyDto { all, none, one }
 
-enum RoutingStrategyDto {
-  defaultBest,
-  deltaToTargetDistance,
-  shorter,
-}
+enum RoutingStrategyDto { defaultBest, deltaToTargetDistance, shorter }
 
-enum TravelModeDto {
-  driving,
-  cycling,
-  walking,
-  twoWheeler,
-  taxi,
-}
+enum TravelModeDto { driving, cycling, walking, twoWheeler, taxi }
 
 enum RouteStatusDto {
   internalError,
@@ -185,30 +165,13 @@ enum RouteStatusDto {
   unknown,
 }
 
-enum TrafficDelaySeverityDto {
-  light,
-  medium,
-  heavy,
-  noData,
-}
+enum TrafficDelaySeverityDto { light, medium, heavy, noData }
 
-enum AudioGuidanceTypeDto {
-  silent,
-  alertsOnly,
-  alertsAndGuidance,
-}
+enum AudioGuidanceTypeDto { silent, alertsOnly, alertsAndGuidance }
 
-enum SpeedAlertSeverityDto {
-  unknown,
-  notSpeeding,
-  minor,
-  major,
-}
+enum SpeedAlertSeverityDto { unknown, notSpeeding, minor, major }
 
-enum RouteSegmentTrafficDataStatusDto {
-  ok,
-  unavailable,
-}
+enum RouteSegmentTrafficDataStatusDto { ok, unavailable }
 
 enum RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto {
   unknown,
@@ -220,134 +183,199 @@ enum RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto {
 enum ManeuverDto {
   /// Arrival at a destination.
   destination,
+
   /// Starting point of the maneuver.
   depart,
+
   /// Arrival at a destination located on the left side of the road.
   destinationLeft,
+
   /// Arrival at a destination located on the right side of the road.
   destinationRight,
+
   /// Take the boat ferry.
   ferryBoat,
+
   /// Take the train ferry.
   ferryTrain,
+
   /// Current road joins another road slightly on the left.
   forkLeft,
+
   /// Current road joins another road slightly on the right.
   forkRight,
+
   /// Current road joins another on the left.
   mergeLeft,
+
   /// Current road joins another on the right.
   mergeRight,
+
   /// Current road joins another.
   mergeUnspecified,
+
   /// The street name changes.
   nameChange,
+
   /// Keep to the left side of the road when exiting a turnpike or freeway as the road diverges.
   offRampKeepLeft,
+
   /// Keep to the right side of the road when exiting a turnpike or freeway as the road diverges.
   offRampKeepRight,
+
   /// Regular left turn to exit a turnpike or freeway.
   offRampLeft,
+
   /// Regular right turn to exit a turnpike or freeway.
   offRampRight,
+
   /// Sharp left turn to exit a turnpike or freeway.
   offRampSharpLeft,
+
   /// Sharp right turn to exit a turnpike or freeway.
   offRampSharpRight,
+
   /// Slight left turn to exit a turnpike or freeway.
   offRampSlightLeft,
+
   /// Slight right turn to exit a turnpike or freeway.
   offRampSlightRight,
+
   /// Exit a turnpike or freeway.
   offRampUnspecified,
+
   /// Clockwise turn onto the opposite side of the street to exit a turnpike or freeway.
   offRampUTurnClockwise,
+
   /// Counterclockwise turn onto the opposite side of the street to exit a turnpike or freeway.
   offRampUTurnCounterclockwise,
+
   /// Keep to the left side of the road when entering a turnpike or freeway as the road diverges.
   onRampKeepLeft,
+
   /// Keep to the right side of the road when entering a turnpike or freeway as the road diverges.
   onRampKeepRight,
+
   /// Regular left turn to enter a turnpike or freeway.
   onRampLeft,
+
   /// Regular right turn to enter a turnpike or freeway.
   onRampRight,
+
   /// Sharp left turn to enter a turnpike or freeway.
   onRampSharpLeft,
+
   /// Sharp right turn to enter a turnpike or freeway.
   onRampSharpRight,
+
   /// Slight left turn to enter a turnpike or freeway.
   onRampSlightLeft,
+
   /// Slight right turn to enter a turnpike or freeway.
   onRampSlightRight,
+
   /// Enter a turnpike or freeway.
   onRampUnspecified,
+
   /// Clockwise turn onto the opposite side of the street to enter a turnpike or freeway.
   onRampUTurnClockwise,
+
   /// Counterclockwise turn onto the opposite side of the street to enter a turnpike or freeway.
   onRampUTurnCounterclockwise,
+
   /// Enter a roundabout in the clockwise direction.
   roundaboutClockwise,
+
   /// Enter a roundabout in the counterclockwise direction.
   roundaboutCounterclockwise,
+
   /// Exit a roundabout in the clockwise direction.
   roundaboutExitClockwise,
+
   /// Exit a roundabout in the counterclockwise direction.
   roundaboutExitCounterclockwise,
+
   /// Enter a roundabout in the clockwise direction and turn left.
   roundaboutLeftClockwise,
+
   /// Enter a roundabout in the counterclockwise direction and turn left.
   roundaboutLeftCounterclockwise,
+
   /// Enter a roundabout in the clockwise direction and turn right.
   roundaboutRightClockwise,
+
   /// Enter a roundabout in the counterclockwise direction and turn right.
   roundaboutRightCounterclockwise,
+
   /// Enter a roundabout in the clockwise direction and turn sharply to the left.
   roundaboutSharpLeftClockwise,
+
   /// Enter a roundabout in the counterclockwise direction and turn sharply to the left.
   roundaboutSharpLeftCounterclockwise,
+
   /// Enter a roundabout in the clockwise direction and turn sharply to the right.
   roundaboutSharpRightClockwise,
+
   /// Enter a roundabout in the counterclockwise direction and turn sharply to the right.
   roundaboutSharpRightCounterclockwise,
+
   /// Enter a roundabout in the clockwise direction and turn slightly left.
   roundaboutSlightLeftClockwise,
+
   /// Enter a roundabout in the counterclockwise direction and turn slightly to the left.
   roundaboutSlightLeftCounterclockwise,
+
   /// Enter a roundabout in the clockwise direction and turn slightly to the right.
   roundaboutSlightRightClockwise,
+
   /// Enter a roundabout in the counterclockwise direction and turn slightly to the right.
   roundaboutSlightRightCounterclockwise,
+
   /// Enter a roundabout in the clockwise direction and continue straight.
   roundaboutStraightClockwise,
+
   /// Enter a roundabout in the counterclockwise direction and continue straight.
   roundaboutStraightCounterclockwise,
+
   /// Enter a roundabout in the clockwise direction and turn clockwise onto the opposite side of the street.
   roundaboutUTurnClockwise,
+
   /// Enter a roundabout in the counterclockwise direction and turn counterclockwise onto the opposite side of the street.
   roundaboutUTurnCounterclockwise,
+
   /// Continue straight.
   straight,
+
   /// Keep left as the road diverges.
   turnKeepLeft,
+
   /// Keep right as the road diverges.
   turnKeepRight,
+
   /// Regular left turn at an intersection.
   turnLeft,
+
   /// Regular right turn at an intersection.
   turnRight,
+
   /// Sharp left turn at an intersection.
   turnSharpLeft,
+
   /// Sharp right turn at an intersection.
   turnSharpRight,
+
   /// Slight left turn at an intersection.
   turnSlightLeft,
+
   /// Slight right turn at an intersection.
   turnSlightRight,
+
   /// Clockwise turn onto the opposite side of the street.
   turnUTurnClockwise,
+
   /// Counterclockwise turn onto the opposite side of the street.
   turnUTurnCounterclockwise,
+
   /// Unknown maneuver.
   unknown,
 }
@@ -356,8 +384,10 @@ enum ManeuverDto {
 enum DrivingSideDto {
   /// Drive-on-left side.
   left,
+
   /// Unspecified side.
   none,
+
   /// Drive-on-right side.
   right,
 }
@@ -366,10 +396,13 @@ enum DrivingSideDto {
 enum NavStateDto {
   /// Actively navigating.
   enroute,
+
   /// Actively navigating but searching for a new route.
   rerouting,
+
   /// Navigation has ended.
   stopped,
+
   /// Error or unspecified state.
   unknown,
 }
@@ -378,22 +411,31 @@ enum NavStateDto {
 enum LaneShapeDto {
   /// Normal left turn (45-135 degrees).
   normalLeft,
+
   /// Normal right turn (45-135 degrees).
   normalRight,
+
   /// Sharp left turn (135-175 degrees).
   sharpLeft,
+
   /// Sharp right turn (135-175 degrees).
   sharpRight,
+
   /// Slight left turn (10-45 degrees).
   slightLeft,
+
   /// Slight right turn (10-45 degrees).
   slightRight,
+
   /// No turn.
   straight,
+
   /// Shape is unknown.
   unknown,
+
   /// A left turn onto the opposite side of the same street (175-180 degrees).
   uTurnLeft,
+
   /// A right turn onto the opposite side of the same street (175-180 degrees).
   uTurnRight,
 }
@@ -403,6 +445,7 @@ enum TaskRemovedBehaviorDto {
   /// The default state, indicating that navigation guidance,
   /// location updates, and notification should persist after user removes the application task.
   continueService,
+
   /// Indicates that navigation guidance, location updates, and notification should shut down immediately when the user removes the application task.
   quitService,
 }
@@ -448,7 +491,8 @@ class AutoMapOptionsDto {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static AutoMapOptionsDto decode(Object result) {
     result as List<Object?>;
@@ -458,7 +502,8 @@ class AutoMapOptionsDto {
       mapType: result[2] as MapTypeDto?,
       mapColorScheme: result[3] as MapColorSchemeDto?,
       forceNightMode: result[4] as NavigationForceNightModeDto?,
-      navigationUIEnabledPreference: result[5] as NavigationUIEnabledPreferenceDto?,
+      navigationUIEnabledPreference:
+          result[5] as NavigationUIEnabledPreferenceDto?,
     );
   }
 
@@ -476,8 +521,7 @@ class AutoMapOptionsDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 /// Object containing map options used to initialize Google Map view.
@@ -573,7 +617,8 @@ class MapOptionsDto {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static MapOptionsDto decode(Object result) {
     result as List<Object?>;
@@ -611,8 +656,7 @@ class MapOptionsDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 /// Object containing navigation options used to initialize Google Navigation view.
@@ -641,12 +685,14 @@ class NavigationViewOptionsDto {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static NavigationViewOptionsDto decode(Object result) {
     result as List<Object?>;
     return NavigationViewOptionsDto(
-      navigationUIEnabledPreference: result[0]! as NavigationUIEnabledPreferenceDto,
+      navigationUIEnabledPreference:
+          result[0]! as NavigationUIEnabledPreferenceDto,
       forceNightMode: result[1]! as NavigationForceNightModeDto,
       headerStylingOptions: result[2] as NavigationHeaderStylingOptionsDto?,
     );
@@ -655,7 +701,8 @@ class NavigationViewOptionsDto {
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! NavigationViewOptionsDto || other.runtimeType != runtimeType) {
+    if (other is! NavigationViewOptionsDto ||
+        other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
@@ -666,8 +713,7 @@ class NavigationViewOptionsDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 /// A message for creating a new navigation view.
@@ -688,15 +734,12 @@ class ViewCreationOptionsDto {
   NavigationViewOptionsDto? navigationViewOptions;
 
   List<Object?> _toList() {
-    return <Object?>[
-      mapViewType,
-      mapOptions,
-      navigationViewOptions,
-    ];
+    return <Object?>[mapViewType, mapOptions, navigationViewOptions];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static ViewCreationOptionsDto decode(Object result) {
     result as List<Object?>;
@@ -721,8 +764,7 @@ class ViewCreationOptionsDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class CameraPositionDto {
@@ -742,16 +784,12 @@ class CameraPositionDto {
   double zoom;
 
   List<Object?> _toList() {
-    return <Object?>[
-      bearing,
-      target,
-      tilt,
-      zoom,
-    ];
+    return <Object?>[bearing, target, tilt, zoom];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static CameraPositionDto decode(Object result) {
     result as List<Object?>;
@@ -777,15 +815,11 @@ class CameraPositionDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class MarkerDto {
-  MarkerDto({
-    required this.markerId,
-    required this.options,
-  });
+  MarkerDto({required this.markerId, required this.options});
 
   /// Identifies marker
   String markerId;
@@ -794,14 +828,12 @@ class MarkerDto {
   MarkerOptionsDto options;
 
   List<Object?> _toList() {
-    return <Object?>[
-      markerId,
-      options,
-    ];
+    return <Object?>[markerId, options];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static MarkerDto decode(Object result) {
     result as List<Object?>;
@@ -825,8 +857,7 @@ class MarkerDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class MarkerOptionsDto {
@@ -883,7 +914,8 @@ class MarkerOptionsDto {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static MarkerOptionsDto decode(Object result) {
     result as List<Object?>;
@@ -916,8 +948,7 @@ class MarkerOptionsDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class ImageDescriptorDto {
@@ -940,17 +971,12 @@ class ImageDescriptorDto {
   RegisteredImageTypeDto type;
 
   List<Object?> _toList() {
-    return <Object?>[
-      registeredImageId,
-      imagePixelRatio,
-      width,
-      height,
-      type,
-    ];
+    return <Object?>[registeredImageId, imagePixelRatio, width, height, type];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static ImageDescriptorDto decode(Object result) {
     result as List<Object?>;
@@ -977,16 +1003,11 @@ class ImageDescriptorDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class InfoWindowDto {
-  InfoWindowDto({
-    this.title,
-    this.snippet,
-    required this.anchor,
-  });
+  InfoWindowDto({this.title, this.snippet, required this.anchor});
 
   String? title;
 
@@ -995,15 +1016,12 @@ class InfoWindowDto {
   MarkerAnchorDto anchor;
 
   List<Object?> _toList() {
-    return <Object?>[
-      title,
-      snippet,
-      anchor,
-    ];
+    return <Object?>[title, snippet, anchor];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static InfoWindowDto decode(Object result) {
     result as List<Object?>;
@@ -1028,36 +1046,27 @@ class InfoWindowDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class MarkerAnchorDto {
-  MarkerAnchorDto({
-    required this.u,
-    required this.v,
-  });
+  MarkerAnchorDto({required this.u, required this.v});
 
   double u;
 
   double v;
 
   List<Object?> _toList() {
-    return <Object?>[
-      u,
-      v,
-    ];
+    return <Object?>[u, v];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static MarkerAnchorDto decode(Object result) {
     result as List<Object?>;
-    return MarkerAnchorDto(
-      u: result[0]! as double,
-      v: result[1]! as double,
-    );
+    return MarkerAnchorDto(u: result[0]! as double, v: result[1]! as double);
   }
 
   @override
@@ -1074,8 +1083,7 @@ class MarkerAnchorDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 /// Represents a point of interest (POI) on the map.
@@ -1098,15 +1106,12 @@ class PointOfInterestDto {
   LatLngDto latLng;
 
   List<Object?> _toList() {
-    return <Object?>[
-      placeID,
-      name,
-      latLng,
-    ];
+    return <Object?>[placeID, name, latLng];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static PointOfInterestDto decode(Object result) {
     result as List<Object?>;
@@ -1131,16 +1136,12 @@ class PointOfInterestDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 /// Represents one indoor level of a focused indoor building.
 class IndoorLevelDto {
-  IndoorLevelDto({
-    this.name,
-    this.shortName,
-  });
+  IndoorLevelDto({this.name, this.shortName});
 
   /// Full display name of the level.
   String? name;
@@ -1149,14 +1150,12 @@ class IndoorLevelDto {
   String? shortName;
 
   List<Object?> _toList() {
-    return <Object?>[
-      name,
-      shortName,
-    ];
+    return <Object?>[name, shortName];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static IndoorLevelDto decode(Object result) {
     result as List<Object?>;
@@ -1180,8 +1179,7 @@ class IndoorLevelDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 /// Represents focused indoor building metadata.
@@ -1215,7 +1213,8 @@ class IndoorBuildingDto {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static IndoorBuildingDto decode(Object result) {
     result as List<Object?>;
@@ -1241,29 +1240,23 @@ class IndoorBuildingDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class PolygonDto {
-  PolygonDto({
-    required this.polygonId,
-    required this.options,
-  });
+  PolygonDto({required this.polygonId, required this.options});
 
   String polygonId;
 
   PolygonOptionsDto options;
 
   List<Object?> _toList() {
-    return <Object?>[
-      polygonId,
-      options,
-    ];
+    return <Object?>[polygonId, options];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static PolygonDto decode(Object result) {
     result as List<Object?>;
@@ -1287,8 +1280,7 @@ class PolygonDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class PolygonOptionsDto {
@@ -1337,7 +1329,8 @@ class PolygonOptionsDto {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static PolygonOptionsDto decode(Object result) {
     result as List<Object?>;
@@ -1368,25 +1361,21 @@ class PolygonOptionsDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class PolygonHoleDto {
-  PolygonHoleDto({
-    required this.points,
-  });
+  PolygonHoleDto({required this.points});
 
   List<LatLngDto?> points;
 
   List<Object?> _toList() {
-    return <Object?>[
-      points,
-    ];
+    return <Object?>[points];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static PolygonHoleDto decode(Object result) {
     result as List<Object?>;
@@ -1409,16 +1398,11 @@ class PolygonHoleDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class StyleSpanStrokeStyleDto {
-  StyleSpanStrokeStyleDto({
-    this.solidColor,
-    this.fromColor,
-    this.toColor,
-  });
+  StyleSpanStrokeStyleDto({this.solidColor, this.fromColor, this.toColor});
 
   int? solidColor;
 
@@ -1427,15 +1411,12 @@ class StyleSpanStrokeStyleDto {
   int? toColor;
 
   List<Object?> _toList() {
-    return <Object?>[
-      solidColor,
-      fromColor,
-      toColor,
-    ];
+    return <Object?>[solidColor, fromColor, toColor];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static StyleSpanStrokeStyleDto decode(Object result) {
     result as List<Object?>;
@@ -1460,29 +1441,23 @@ class StyleSpanStrokeStyleDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class StyleSpanDto {
-  StyleSpanDto({
-    required this.length,
-    required this.style,
-  });
+  StyleSpanDto({required this.length, required this.style});
 
   double length;
 
   StyleSpanStrokeStyleDto style;
 
   List<Object?> _toList() {
-    return <Object?>[
-      length,
-      style,
-    ];
+    return <Object?>[length, style];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static StyleSpanDto decode(Object result) {
     result as List<Object?>;
@@ -1506,29 +1481,23 @@ class StyleSpanDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class PolylineDto {
-  PolylineDto({
-    required this.polylineId,
-    required this.options,
-  });
+  PolylineDto({required this.polylineId, required this.options});
 
   String polylineId;
 
   PolylineOptionsDto options;
 
   List<Object?> _toList() {
-    return <Object?>[
-      polylineId,
-      options,
-    ];
+    return <Object?>[polylineId, options];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static PolylineDto decode(Object result) {
     result as List<Object?>;
@@ -1552,29 +1521,23 @@ class PolylineDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class PatternItemDto {
-  PatternItemDto({
-    required this.type,
-    this.length,
-  });
+  PatternItemDto({required this.type, this.length});
 
   PatternTypeDto type;
 
   double? length;
 
   List<Object?> _toList() {
-    return <Object?>[
-      type,
-      length,
-    ];
+    return <Object?>[type, length];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static PatternItemDto decode(Object result) {
     result as List<Object?>;
@@ -1598,8 +1561,7 @@ class PatternItemDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class PolylineOptionsDto {
@@ -1652,7 +1614,8 @@ class PolylineOptionsDto {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static PolylineOptionsDto decode(Object result) {
     result as List<Object?>;
@@ -1684,15 +1647,11 @@ class PolylineOptionsDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class CircleDto {
-  CircleDto({
-    required this.circleId,
-    required this.options,
-  });
+  CircleDto({required this.circleId, required this.options});
 
   /// Identifies circle.
   String circleId;
@@ -1701,14 +1660,12 @@ class CircleDto {
   CircleOptionsDto options;
 
   List<Object?> _toList() {
-    return <Object?>[
-      circleId,
-      options,
-    ];
+    return <Object?>[circleId, options];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static CircleDto decode(Object result) {
     result as List<Object?>;
@@ -1732,8 +1689,7 @@ class CircleDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class CircleOptionsDto {
@@ -1782,7 +1738,8 @@ class CircleOptionsDto {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static CircleOptionsDto decode(Object result) {
     result as List<Object?>;
@@ -1813,8 +1770,7 @@ class CircleOptionsDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class MapPaddingDto {
@@ -1834,16 +1790,12 @@ class MapPaddingDto {
   int right;
 
   List<Object?> _toList() {
-    return <Object?>[
-      top,
-      left,
-      bottom,
-      right,
-    ];
+    return <Object?>[top, left, bottom, right];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static MapPaddingDto decode(Object result) {
     result as List<Object?>;
@@ -1869,8 +1821,7 @@ class MapPaddingDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 /// Navigation header styling options.
@@ -1954,7 +1905,8 @@ class NavigationHeaderStylingOptionsDto {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static NavigationHeaderStylingOptionsDto decode(Object result) {
     result as List<Object?>;
@@ -1981,7 +1933,8 @@ class NavigationHeaderStylingOptionsDto {
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! NavigationHeaderStylingOptionsDto || other.runtimeType != runtimeType) {
+    if (other is! NavigationHeaderStylingOptionsDto ||
+        other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
@@ -1992,29 +1945,23 @@ class NavigationHeaderStylingOptionsDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class RouteTokenOptionsDto {
-  RouteTokenOptionsDto({
-    required this.routeToken,
-    this.travelMode,
-  });
+  RouteTokenOptionsDto({required this.routeToken, this.travelMode});
 
   String routeToken;
 
   TravelModeDto? travelMode;
 
   List<Object?> _toList() {
-    return <Object?>[
-      routeToken,
-      travelMode,
-    ];
+    return <Object?>[routeToken, travelMode];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static RouteTokenOptionsDto decode(Object result) {
     result as List<Object?>;
@@ -2038,8 +1985,7 @@ class RouteTokenOptionsDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class DestinationsDto {
@@ -2068,7 +2014,8 @@ class DestinationsDto {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static DestinationsDto decode(Object result) {
     result as List<Object?>;
@@ -2094,8 +2041,7 @@ class DestinationsDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class RoutingOptionsDto {
@@ -2140,7 +2086,8 @@ class RoutingOptionsDto {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static RoutingOptionsDto decode(Object result) {
     result as List<Object?>;
@@ -2170,8 +2117,7 @@ class RoutingOptionsDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class NavigationDisplayOptionsDto {
@@ -2190,15 +2136,12 @@ class NavigationDisplayOptionsDto {
   bool? showTrafficLights;
 
   List<Object?> _toList() {
-    return <Object?>[
-      showDestinationMarkers,
-      showStopSigns,
-      showTrafficLights,
-    ];
+    return <Object?>[showDestinationMarkers, showStopSigns, showTrafficLights];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static NavigationDisplayOptionsDto decode(Object result) {
     result as List<Object?>;
@@ -2212,7 +2155,8 @@ class NavigationDisplayOptionsDto {
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! NavigationDisplayOptionsDto || other.runtimeType != runtimeType) {
+    if (other is! NavigationDisplayOptionsDto ||
+        other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
@@ -2223,8 +2167,7 @@ class NavigationDisplayOptionsDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class NavigationWaypointDto {
@@ -2257,7 +2200,8 @@ class NavigationWaypointDto {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static NavigationWaypointDto decode(Object result) {
     result as List<Object?>;
@@ -2284,29 +2228,23 @@ class NavigationWaypointDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class ContinueToNextDestinationResponseDto {
-  ContinueToNextDestinationResponseDto({
-    this.waypoint,
-    this.routeStatus,
-  });
+  ContinueToNextDestinationResponseDto({this.waypoint, this.routeStatus});
 
   NavigationWaypointDto? waypoint;
 
   RouteStatusDto? routeStatus;
 
   List<Object?> _toList() {
-    return <Object?>[
-      waypoint,
-      routeStatus,
-    ];
+    return <Object?>[waypoint, routeStatus];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static ContinueToNextDestinationResponseDto decode(Object result) {
     result as List<Object?>;
@@ -2319,7 +2257,8 @@ class ContinueToNextDestinationResponseDto {
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! ContinueToNextDestinationResponseDto || other.runtimeType != runtimeType) {
+    if (other is! ContinueToNextDestinationResponseDto ||
+        other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
@@ -2330,8 +2269,7 @@ class ContinueToNextDestinationResponseDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class NavigationTimeAndDistanceDto {
@@ -2348,15 +2286,12 @@ class NavigationTimeAndDistanceDto {
   TrafficDelaySeverityDto delaySeverity;
 
   List<Object?> _toList() {
-    return <Object?>[
-      time,
-      distance,
-      delaySeverity,
-    ];
+    return <Object?>[time, distance, delaySeverity];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static NavigationTimeAndDistanceDto decode(Object result) {
     result as List<Object?>;
@@ -2370,7 +2305,8 @@ class NavigationTimeAndDistanceDto {
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! NavigationTimeAndDistanceDto || other.runtimeType != runtimeType) {
+    if (other is! NavigationTimeAndDistanceDto ||
+        other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
@@ -2381,8 +2317,7 @@ class NavigationTimeAndDistanceDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class NavigationAudioGuidanceSettingsDto {
@@ -2399,15 +2334,12 @@ class NavigationAudioGuidanceSettingsDto {
   AudioGuidanceTypeDto? guidanceType;
 
   List<Object?> _toList() {
-    return <Object?>[
-      isBluetoothAudioEnabled,
-      isVibrationEnabled,
-      guidanceType,
-    ];
+    return <Object?>[isBluetoothAudioEnabled, isVibrationEnabled, guidanceType];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static NavigationAudioGuidanceSettingsDto decode(Object result) {
     result as List<Object?>;
@@ -2421,7 +2353,8 @@ class NavigationAudioGuidanceSettingsDto {
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! NavigationAudioGuidanceSettingsDto || other.runtimeType != runtimeType) {
+    if (other is! NavigationAudioGuidanceSettingsDto ||
+        other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
@@ -2432,31 +2365,25 @@ class NavigationAudioGuidanceSettingsDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class SimulationOptionsDto {
-  SimulationOptionsDto({
-    required this.speedMultiplier,
-  });
+  SimulationOptionsDto({required this.speedMultiplier});
 
   double speedMultiplier;
 
   List<Object?> _toList() {
-    return <Object?>[
-      speedMultiplier,
-    ];
+    return <Object?>[speedMultiplier];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static SimulationOptionsDto decode(Object result) {
     result as List<Object?>;
-    return SimulationOptionsDto(
-      speedMultiplier: result[0]! as double,
-    );
+    return SimulationOptionsDto(speedMultiplier: result[0]! as double);
   }
 
   @override
@@ -2473,29 +2400,23 @@ class SimulationOptionsDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class LatLngDto {
-  LatLngDto({
-    required this.latitude,
-    required this.longitude,
-  });
+  LatLngDto({required this.latitude, required this.longitude});
 
   double latitude;
 
   double longitude;
 
   List<Object?> _toList() {
-    return <Object?>[
-      latitude,
-      longitude,
-    ];
+    return <Object?>[latitude, longitude];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static LatLngDto decode(Object result) {
     result as List<Object?>;
@@ -2519,29 +2440,23 @@ class LatLngDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class LatLngBoundsDto {
-  LatLngBoundsDto({
-    required this.southwest,
-    required this.northeast,
-  });
+  LatLngBoundsDto({required this.southwest, required this.northeast});
 
   LatLngDto southwest;
 
   LatLngDto northeast;
 
   List<Object?> _toList() {
-    return <Object?>[
-      southwest,
-      northeast,
-    ];
+    return <Object?>[southwest, northeast];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static LatLngBoundsDto decode(Object result) {
     result as List<Object?>;
@@ -2565,8 +2480,7 @@ class LatLngBoundsDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class SpeedingUpdatedEventDto {
@@ -2580,14 +2494,12 @@ class SpeedingUpdatedEventDto {
   SpeedAlertSeverityDto severity;
 
   List<Object?> _toList() {
-    return <Object?>[
-      percentageAboveLimit,
-      severity,
-    ];
+    return <Object?>[percentageAboveLimit, severity];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static SpeedingUpdatedEventDto decode(Object result) {
     result as List<Object?>;
@@ -2611,8 +2523,7 @@ class SpeedingUpdatedEventDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class GpsAvailabilityChangeEventDto {
@@ -2626,14 +2537,12 @@ class GpsAvailabilityChangeEventDto {
   bool isGpsValidForNavigation;
 
   List<Object?> _toList() {
-    return <Object?>[
-      isGpsLost,
-      isGpsValidForNavigation,
-    ];
+    return <Object?>[isGpsLost, isGpsValidForNavigation];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static GpsAvailabilityChangeEventDto decode(Object result) {
     result as List<Object?>;
@@ -2646,7 +2555,8 @@ class GpsAvailabilityChangeEventDto {
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! GpsAvailabilityChangeEventDto || other.runtimeType != runtimeType) {
+    if (other is! GpsAvailabilityChangeEventDto ||
+        other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
@@ -2657,8 +2567,7 @@ class GpsAvailabilityChangeEventDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class SpeedAlertOptionsThresholdPercentageDto {
@@ -2672,14 +2581,12 @@ class SpeedAlertOptionsThresholdPercentageDto {
   SpeedAlertSeverityDto severity;
 
   List<Object?> _toList() {
-    return <Object?>[
-      percentage,
-      severity,
-    ];
+    return <Object?>[percentage, severity];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static SpeedAlertOptionsThresholdPercentageDto decode(Object result) {
     result as List<Object?>;
@@ -2692,7 +2599,8 @@ class SpeedAlertOptionsThresholdPercentageDto {
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! SpeedAlertOptionsThresholdPercentageDto || other.runtimeType != runtimeType) {
+    if (other is! SpeedAlertOptionsThresholdPercentageDto ||
+        other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
@@ -2703,8 +2611,7 @@ class SpeedAlertOptionsThresholdPercentageDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class SpeedAlertOptionsDto {
@@ -2729,7 +2636,8 @@ class SpeedAlertOptionsDto {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static SpeedAlertOptionsDto decode(Object result) {
     result as List<Object?>;
@@ -2754,8 +2662,7 @@ class SpeedAlertOptionsDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class RouteSegmentTrafficDataRoadStretchRenderingDataDto {
@@ -2772,20 +2679,20 @@ class RouteSegmentTrafficDataRoadStretchRenderingDataDto {
   int offsetMeters;
 
   List<Object?> _toList() {
-    return <Object?>[
-      style,
-      lengthMeters,
-      offsetMeters,
-    ];
+    return <Object?>[style, lengthMeters, offsetMeters];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
-  static RouteSegmentTrafficDataRoadStretchRenderingDataDto decode(Object result) {
+  static RouteSegmentTrafficDataRoadStretchRenderingDataDto decode(
+    Object result,
+  ) {
     result as List<Object?>;
     return RouteSegmentTrafficDataRoadStretchRenderingDataDto(
-      style: result[0]! as RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto,
+      style:
+          result[0]! as RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto,
       lengthMeters: result[1]! as int,
       offsetMeters: result[2]! as int,
     );
@@ -2794,7 +2701,8 @@ class RouteSegmentTrafficDataRoadStretchRenderingDataDto {
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! RouteSegmentTrafficDataRoadStretchRenderingDataDto || other.runtimeType != runtimeType) {
+    if (other is! RouteSegmentTrafficDataRoadStretchRenderingDataDto ||
+        other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
@@ -2805,8 +2713,7 @@ class RouteSegmentTrafficDataRoadStretchRenderingDataDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class RouteSegmentTrafficDataDto {
@@ -2817,30 +2724,31 @@ class RouteSegmentTrafficDataDto {
 
   RouteSegmentTrafficDataStatusDto status;
 
-  List<RouteSegmentTrafficDataRoadStretchRenderingDataDto?> roadStretchRenderingDataList;
+  List<RouteSegmentTrafficDataRoadStretchRenderingDataDto?>
+  roadStretchRenderingDataList;
 
   List<Object?> _toList() {
-    return <Object?>[
-      status,
-      roadStretchRenderingDataList,
-    ];
+    return <Object?>[status, roadStretchRenderingDataList];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static RouteSegmentTrafficDataDto decode(Object result) {
     result as List<Object?>;
     return RouteSegmentTrafficDataDto(
       status: result[0]! as RouteSegmentTrafficDataStatusDto,
-      roadStretchRenderingDataList: (result[1] as List<Object?>?)!.cast<RouteSegmentTrafficDataRoadStretchRenderingDataDto?>(),
+      roadStretchRenderingDataList: (result[1] as List<Object?>?)!
+          .cast<RouteSegmentTrafficDataRoadStretchRenderingDataDto?>(),
     );
   }
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! RouteSegmentTrafficDataDto || other.runtimeType != runtimeType) {
+    if (other is! RouteSegmentTrafficDataDto ||
+        other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
@@ -2851,8 +2759,7 @@ class RouteSegmentTrafficDataDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 class RouteSegmentDto {
@@ -2881,7 +2788,8 @@ class RouteSegmentDto {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static RouteSegmentDto decode(Object result) {
     result as List<Object?>;
@@ -2907,16 +2815,12 @@ class RouteSegmentDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 /// One of the possible directions from a lane at the end of a route step, and whether it is on the recommended route.
 class LaneDirectionDto {
-  LaneDirectionDto({
-    required this.laneShape,
-    required this.isRecommended,
-  });
+  LaneDirectionDto({required this.laneShape, required this.isRecommended});
 
   /// Shape for this lane direction.
   LaneShapeDto laneShape;
@@ -2925,14 +2829,12 @@ class LaneDirectionDto {
   bool isRecommended;
 
   List<Object?> _toList() {
-    return <Object?>[
-      laneShape,
-      isRecommended,
-    ];
+    return <Object?>[laneShape, isRecommended];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static LaneDirectionDto decode(Object result) {
     result as List<Object?>;
@@ -2956,27 +2858,23 @@ class LaneDirectionDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 /// Single lane on the road at the end of a route step.
 class LaneDto {
-  LaneDto({
-    required this.laneDirections,
-  });
+  LaneDto({required this.laneDirections});
 
   /// List of possible directions a driver can follow when using this lane at the end of the respective route step
   List<LaneDirectionDto?> laneDirections;
 
   List<Object?> _toList() {
-    return <Object?>[
-      laneDirections,
-    ];
+    return <Object?>[laneDirections];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static LaneDto decode(Object result) {
     result as List<Object?>;
@@ -2999,8 +2897,7 @@ class LaneDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 /// Information about a single step along a navigation route.
@@ -3082,7 +2979,8 @@ class StepInfoDto {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static StepInfoDto decode(Object result) {
     result as List<Object?>;
@@ -3117,8 +3015,7 @@ class StepInfoDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 /// Contains information about the state of navigation, the current nav step if
@@ -3191,7 +3088,8 @@ class NavInfoDto {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static NavInfoDto decode(Object result) {
     result as List<Object?>;
@@ -3223,8 +3121,7 @@ class NavInfoDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 /// UI customization parameters for the Terms and Conditions dialog.
@@ -3266,7 +3163,8 @@ class TermsAndConditionsUIParamsDto {
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static TermsAndConditionsUIParamsDto decode(Object result) {
     result as List<Object?>;
@@ -3282,7 +3180,8 @@ class TermsAndConditionsUIParamsDto {
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! TermsAndConditionsUIParamsDto || other.runtimeType != runtimeType) {
+    if (other is! TermsAndConditionsUIParamsDto ||
+        other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
@@ -3293,8 +3192,7 @@ class TermsAndConditionsUIParamsDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 /// Android foreground-service notification configuration.
@@ -3314,15 +3212,12 @@ class NavigationNotificationOptionsDto {
   bool resumeAppOnTap;
 
   List<Object?> _toList() {
-    return <Object?>[
-      notificationId,
-      defaultMessage,
-      resumeAppOnTap,
-    ];
+    return <Object?>[notificationId, defaultMessage, resumeAppOnTap];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static NavigationNotificationOptionsDto decode(Object result) {
     result as List<Object?>;
@@ -3336,7 +3231,8 @@ class NavigationNotificationOptionsDto {
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! NavigationNotificationOptionsDto || other.runtimeType != runtimeType) {
+    if (other is! NavigationNotificationOptionsDto ||
+        other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
@@ -3347,8 +3243,7 @@ class NavigationNotificationOptionsDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
 
 /// Options for step image generation in turn-by-turn navigation events.
@@ -3367,14 +3262,12 @@ class StepImageGenerationOptionsDto {
   bool? generateLaneImages;
 
   List<Object?> _toList() {
-    return <Object?>[
-      generateManeuverImages,
-      generateLaneImages,
-    ];
+    return <Object?>[generateManeuverImages, generateLaneImages];
   }
 
   Object encode() {
-    return _toList();  }
+    return _toList();
+  }
 
   static StepImageGenerationOptionsDto decode(Object result) {
     result as List<Object?>;
@@ -3387,7 +3280,8 @@ class StepImageGenerationOptionsDto {
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! StepImageGenerationOptionsDto || other.runtimeType != runtimeType) {
+    if (other is! StepImageGenerationOptionsDto ||
+        other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
@@ -3398,10 +3292,8 @@ class StepImageGenerationOptionsDto {
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
+  int get hashCode => Object.hashAll(_toList());
 }
-
 
 class _PigeonCodec extends StandardMessageCodec {
   const _PigeonCodec();
@@ -3410,232 +3302,233 @@ class _PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    }    else if (value is MapViewTypeDto) {
+    } else if (value is MapViewTypeDto) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
-    }    else if (value is NavigationUIEnabledPreferenceDto) {
+    } else if (value is NavigationUIEnabledPreferenceDto) {
       buffer.putUint8(130);
       writeValue(buffer, value.index);
-    }    else if (value is MapTypeDto) {
+    } else if (value is MapTypeDto) {
       buffer.putUint8(131);
       writeValue(buffer, value.index);
-    }    else if (value is MapColorSchemeDto) {
+    } else if (value is MapColorSchemeDto) {
       buffer.putUint8(132);
       writeValue(buffer, value.index);
-    }    else if (value is NavigationForceNightModeDto) {
+    } else if (value is NavigationForceNightModeDto) {
       buffer.putUint8(133);
       writeValue(buffer, value.index);
-    }    else if (value is CameraPerspectiveDto) {
+    } else if (value is CameraPerspectiveDto) {
       buffer.putUint8(134);
       writeValue(buffer, value.index);
-    }    else if (value is RegisteredImageTypeDto) {
+    } else if (value is RegisteredImageTypeDto) {
       buffer.putUint8(135);
       writeValue(buffer, value.index);
-    }    else if (value is MarkerEventTypeDto) {
+    } else if (value is MarkerEventTypeDto) {
       buffer.putUint8(136);
       writeValue(buffer, value.index);
-    }    else if (value is MarkerDragEventTypeDto) {
+    } else if (value is MarkerDragEventTypeDto) {
       buffer.putUint8(137);
       writeValue(buffer, value.index);
-    }    else if (value is StrokeJointTypeDto) {
+    } else if (value is StrokeJointTypeDto) {
       buffer.putUint8(138);
       writeValue(buffer, value.index);
-    }    else if (value is PatternTypeDto) {
+    } else if (value is PatternTypeDto) {
       buffer.putUint8(139);
       writeValue(buffer, value.index);
-    }    else if (value is CameraEventTypeDto) {
+    } else if (value is CameraEventTypeDto) {
       buffer.putUint8(140);
       writeValue(buffer, value.index);
-    }    else if (value is AlternateRoutesStrategyDto) {
+    } else if (value is AlternateRoutesStrategyDto) {
       buffer.putUint8(141);
       writeValue(buffer, value.index);
-    }    else if (value is RoutingStrategyDto) {
+    } else if (value is RoutingStrategyDto) {
       buffer.putUint8(142);
       writeValue(buffer, value.index);
-    }    else if (value is TravelModeDto) {
+    } else if (value is TravelModeDto) {
       buffer.putUint8(143);
       writeValue(buffer, value.index);
-    }    else if (value is RouteStatusDto) {
+    } else if (value is RouteStatusDto) {
       buffer.putUint8(144);
       writeValue(buffer, value.index);
-    }    else if (value is TrafficDelaySeverityDto) {
+    } else if (value is TrafficDelaySeverityDto) {
       buffer.putUint8(145);
       writeValue(buffer, value.index);
-    }    else if (value is AudioGuidanceTypeDto) {
+    } else if (value is AudioGuidanceTypeDto) {
       buffer.putUint8(146);
       writeValue(buffer, value.index);
-    }    else if (value is SpeedAlertSeverityDto) {
+    } else if (value is SpeedAlertSeverityDto) {
       buffer.putUint8(147);
       writeValue(buffer, value.index);
-    }    else if (value is RouteSegmentTrafficDataStatusDto) {
+    } else if (value is RouteSegmentTrafficDataStatusDto) {
       buffer.putUint8(148);
       writeValue(buffer, value.index);
-    }    else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto) {
+    } else if (value
+        is RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto) {
       buffer.putUint8(149);
       writeValue(buffer, value.index);
-    }    else if (value is ManeuverDto) {
+    } else if (value is ManeuverDto) {
       buffer.putUint8(150);
       writeValue(buffer, value.index);
-    }    else if (value is DrivingSideDto) {
+    } else if (value is DrivingSideDto) {
       buffer.putUint8(151);
       writeValue(buffer, value.index);
-    }    else if (value is NavStateDto) {
+    } else if (value is NavStateDto) {
       buffer.putUint8(152);
       writeValue(buffer, value.index);
-    }    else if (value is LaneShapeDto) {
+    } else if (value is LaneShapeDto) {
       buffer.putUint8(153);
       writeValue(buffer, value.index);
-    }    else if (value is TaskRemovedBehaviorDto) {
+    } else if (value is TaskRemovedBehaviorDto) {
       buffer.putUint8(154);
       writeValue(buffer, value.index);
-    }    else if (value is AutoMapOptionsDto) {
+    } else if (value is AutoMapOptionsDto) {
       buffer.putUint8(155);
       writeValue(buffer, value.encode());
-    }    else if (value is MapOptionsDto) {
+    } else if (value is MapOptionsDto) {
       buffer.putUint8(156);
       writeValue(buffer, value.encode());
-    }    else if (value is NavigationViewOptionsDto) {
+    } else if (value is NavigationViewOptionsDto) {
       buffer.putUint8(157);
       writeValue(buffer, value.encode());
-    }    else if (value is ViewCreationOptionsDto) {
+    } else if (value is ViewCreationOptionsDto) {
       buffer.putUint8(158);
       writeValue(buffer, value.encode());
-    }    else if (value is CameraPositionDto) {
+    } else if (value is CameraPositionDto) {
       buffer.putUint8(159);
       writeValue(buffer, value.encode());
-    }    else if (value is MarkerDto) {
+    } else if (value is MarkerDto) {
       buffer.putUint8(160);
       writeValue(buffer, value.encode());
-    }    else if (value is MarkerOptionsDto) {
+    } else if (value is MarkerOptionsDto) {
       buffer.putUint8(161);
       writeValue(buffer, value.encode());
-    }    else if (value is ImageDescriptorDto) {
+    } else if (value is ImageDescriptorDto) {
       buffer.putUint8(162);
       writeValue(buffer, value.encode());
-    }    else if (value is InfoWindowDto) {
+    } else if (value is InfoWindowDto) {
       buffer.putUint8(163);
       writeValue(buffer, value.encode());
-    }    else if (value is MarkerAnchorDto) {
+    } else if (value is MarkerAnchorDto) {
       buffer.putUint8(164);
       writeValue(buffer, value.encode());
-    }    else if (value is PointOfInterestDto) {
+    } else if (value is PointOfInterestDto) {
       buffer.putUint8(165);
       writeValue(buffer, value.encode());
-    }    else if (value is IndoorLevelDto) {
+    } else if (value is IndoorLevelDto) {
       buffer.putUint8(166);
       writeValue(buffer, value.encode());
-    }    else if (value is IndoorBuildingDto) {
+    } else if (value is IndoorBuildingDto) {
       buffer.putUint8(167);
       writeValue(buffer, value.encode());
-    }    else if (value is PolygonDto) {
+    } else if (value is PolygonDto) {
       buffer.putUint8(168);
       writeValue(buffer, value.encode());
-    }    else if (value is PolygonOptionsDto) {
+    } else if (value is PolygonOptionsDto) {
       buffer.putUint8(169);
       writeValue(buffer, value.encode());
-    }    else if (value is PolygonHoleDto) {
+    } else if (value is PolygonHoleDto) {
       buffer.putUint8(170);
       writeValue(buffer, value.encode());
-    }    else if (value is StyleSpanStrokeStyleDto) {
+    } else if (value is StyleSpanStrokeStyleDto) {
       buffer.putUint8(171);
       writeValue(buffer, value.encode());
-    }    else if (value is StyleSpanDto) {
+    } else if (value is StyleSpanDto) {
       buffer.putUint8(172);
       writeValue(buffer, value.encode());
-    }    else if (value is PolylineDto) {
+    } else if (value is PolylineDto) {
       buffer.putUint8(173);
       writeValue(buffer, value.encode());
-    }    else if (value is PatternItemDto) {
+    } else if (value is PatternItemDto) {
       buffer.putUint8(174);
       writeValue(buffer, value.encode());
-    }    else if (value is PolylineOptionsDto) {
+    } else if (value is PolylineOptionsDto) {
       buffer.putUint8(175);
       writeValue(buffer, value.encode());
-    }    else if (value is CircleDto) {
+    } else if (value is CircleDto) {
       buffer.putUint8(176);
       writeValue(buffer, value.encode());
-    }    else if (value is CircleOptionsDto) {
+    } else if (value is CircleOptionsDto) {
       buffer.putUint8(177);
       writeValue(buffer, value.encode());
-    }    else if (value is MapPaddingDto) {
+    } else if (value is MapPaddingDto) {
       buffer.putUint8(178);
       writeValue(buffer, value.encode());
-    }    else if (value is NavigationHeaderStylingOptionsDto) {
+    } else if (value is NavigationHeaderStylingOptionsDto) {
       buffer.putUint8(179);
       writeValue(buffer, value.encode());
-    }    else if (value is RouteTokenOptionsDto) {
+    } else if (value is RouteTokenOptionsDto) {
       buffer.putUint8(180);
       writeValue(buffer, value.encode());
-    }    else if (value is DestinationsDto) {
+    } else if (value is DestinationsDto) {
       buffer.putUint8(181);
       writeValue(buffer, value.encode());
-    }    else if (value is RoutingOptionsDto) {
+    } else if (value is RoutingOptionsDto) {
       buffer.putUint8(182);
       writeValue(buffer, value.encode());
-    }    else if (value is NavigationDisplayOptionsDto) {
+    } else if (value is NavigationDisplayOptionsDto) {
       buffer.putUint8(183);
       writeValue(buffer, value.encode());
-    }    else if (value is NavigationWaypointDto) {
+    } else if (value is NavigationWaypointDto) {
       buffer.putUint8(184);
       writeValue(buffer, value.encode());
-    }    else if (value is ContinueToNextDestinationResponseDto) {
+    } else if (value is ContinueToNextDestinationResponseDto) {
       buffer.putUint8(185);
       writeValue(buffer, value.encode());
-    }    else if (value is NavigationTimeAndDistanceDto) {
+    } else if (value is NavigationTimeAndDistanceDto) {
       buffer.putUint8(186);
       writeValue(buffer, value.encode());
-    }    else if (value is NavigationAudioGuidanceSettingsDto) {
+    } else if (value is NavigationAudioGuidanceSettingsDto) {
       buffer.putUint8(187);
       writeValue(buffer, value.encode());
-    }    else if (value is SimulationOptionsDto) {
+    } else if (value is SimulationOptionsDto) {
       buffer.putUint8(188);
       writeValue(buffer, value.encode());
-    }    else if (value is LatLngDto) {
+    } else if (value is LatLngDto) {
       buffer.putUint8(189);
       writeValue(buffer, value.encode());
-    }    else if (value is LatLngBoundsDto) {
+    } else if (value is LatLngBoundsDto) {
       buffer.putUint8(190);
       writeValue(buffer, value.encode());
-    }    else if (value is SpeedingUpdatedEventDto) {
+    } else if (value is SpeedingUpdatedEventDto) {
       buffer.putUint8(191);
       writeValue(buffer, value.encode());
-    }    else if (value is GpsAvailabilityChangeEventDto) {
+    } else if (value is GpsAvailabilityChangeEventDto) {
       buffer.putUint8(192);
       writeValue(buffer, value.encode());
-    }    else if (value is SpeedAlertOptionsThresholdPercentageDto) {
+    } else if (value is SpeedAlertOptionsThresholdPercentageDto) {
       buffer.putUint8(193);
       writeValue(buffer, value.encode());
-    }    else if (value is SpeedAlertOptionsDto) {
+    } else if (value is SpeedAlertOptionsDto) {
       buffer.putUint8(194);
       writeValue(buffer, value.encode());
-    }    else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
+    } else if (value is RouteSegmentTrafficDataRoadStretchRenderingDataDto) {
       buffer.putUint8(195);
       writeValue(buffer, value.encode());
-    }    else if (value is RouteSegmentTrafficDataDto) {
+    } else if (value is RouteSegmentTrafficDataDto) {
       buffer.putUint8(196);
       writeValue(buffer, value.encode());
-    }    else if (value is RouteSegmentDto) {
+    } else if (value is RouteSegmentDto) {
       buffer.putUint8(197);
       writeValue(buffer, value.encode());
-    }    else if (value is LaneDirectionDto) {
+    } else if (value is LaneDirectionDto) {
       buffer.putUint8(198);
       writeValue(buffer, value.encode());
-    }    else if (value is LaneDto) {
+    } else if (value is LaneDto) {
       buffer.putUint8(199);
       writeValue(buffer, value.encode());
-    }    else if (value is StepInfoDto) {
+    } else if (value is StepInfoDto) {
       buffer.putUint8(200);
       writeValue(buffer, value.encode());
-    }    else if (value is NavInfoDto) {
+    } else if (value is NavInfoDto) {
       buffer.putUint8(201);
       writeValue(buffer, value.encode());
-    }    else if (value is TermsAndConditionsUIParamsDto) {
+    } else if (value is TermsAndConditionsUIParamsDto) {
       buffer.putUint8(202);
       writeValue(buffer, value.encode());
-    }    else if (value is NavigationNotificationOptionsDto) {
+    } else if (value is NavigationNotificationOptionsDto) {
       buffer.putUint8(203);
       writeValue(buffer, value.encode());
-    }    else if (value is StepImageGenerationOptionsDto) {
+    } else if (value is StepImageGenerationOptionsDto) {
       buffer.putUint8(204);
       writeValue(buffer, value.encode());
     } else {
@@ -3651,7 +3544,9 @@ class _PigeonCodec extends StandardMessageCodec {
         return value == null ? null : MapViewTypeDto.values[value];
       case 130:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : NavigationUIEnabledPreferenceDto.values[value];
+        return value == null
+            ? null
+            : NavigationUIEnabledPreferenceDto.values[value];
       case 131:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : MapTypeDto.values[value];
@@ -3705,10 +3600,15 @@ class _PigeonCodec extends StandardMessageCodec {
         return value == null ? null : SpeedAlertSeverityDto.values[value];
       case 148:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : RouteSegmentTrafficDataStatusDto.values[value];
+        return value == null
+            ? null
+            : RouteSegmentTrafficDataStatusDto.values[value];
       case 149:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto.values[value];
+        return value == null
+            ? null
+            : RouteSegmentTrafficDataRoadStretchRenderingDataStyleDto
+                  .values[value];
       case 150:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : ManeuverDto.values[value];
@@ -3801,11 +3701,15 @@ class _PigeonCodec extends StandardMessageCodec {
       case 192:
         return GpsAvailabilityChangeEventDto.decode(readValue(buffer)!);
       case 193:
-        return SpeedAlertOptionsThresholdPercentageDto.decode(readValue(buffer)!);
+        return SpeedAlertOptionsThresholdPercentageDto.decode(
+          readValue(buffer)!,
+        );
       case 194:
         return SpeedAlertOptionsDto.decode(readValue(buffer)!);
       case 195:
-        return RouteSegmentTrafficDataRoadStretchRenderingDataDto.decode(readValue(buffer)!);
+        return RouteSegmentTrafficDataRoadStretchRenderingDataDto.decode(
+          readValue(buffer)!,
+        );
       case 196:
         return RouteSegmentTrafficDataDto.decode(readValue(buffer)!);
       case 197:
@@ -3840,9 +3744,13 @@ class ViewCreationApi {
   /// Constructor for [ViewCreationApi].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  ViewCreationApi({BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  ViewCreationApi({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
@@ -3850,13 +3758,17 @@ class ViewCreationApi {
   final String pigeonVar_messageChannelSuffix;
 
   Future<void> create(ViewCreationOptionsDto msg) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.ViewCreationApi.create$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.ViewCreationApi.create$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[msg],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[msg]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -3877,9 +3789,13 @@ class MapViewApi {
   /// Constructor for [MapViewApi].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  MapViewApi({BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  MapViewApi({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
@@ -3887,13 +3803,17 @@ class MapViewApi {
   final String pigeonVar_messageChannelSuffix;
 
   Future<void> awaitMapReady(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.awaitMapReady$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.awaitMapReady$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -3910,13 +3830,17 @@ class MapViewApi {
   }
 
   Future<bool> isMyLocationEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -3938,13 +3862,17 @@ class MapViewApi {
   }
 
   Future<void> setMyLocationEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -3961,13 +3889,17 @@ class MapViewApi {
   }
 
   Future<LatLngDto?> getMyLocation(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMyLocation$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMyLocation$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -3984,13 +3916,17 @@ class MapViewApi {
   }
 
   Future<MapTypeDto> getMapType(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapType$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapType$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4012,13 +3948,17 @@ class MapViewApi {
   }
 
   Future<void> setMapType(int viewId, MapTypeDto mapType) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapType$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapType$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, mapType],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, mapType]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4035,13 +3975,17 @@ class MapViewApi {
   }
 
   Future<void> setMapStyle(int viewId, String styleJson) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapStyle$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapStyle$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, styleJson],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, styleJson]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4058,13 +4002,17 @@ class MapViewApi {
   }
 
   Future<bool> isNavigationTripProgressBarEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationTripProgressBarEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationTripProgressBarEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4085,14 +4033,21 @@ class MapViewApi {
     }
   }
 
-  Future<void> setNavigationTripProgressBarEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationTripProgressBarEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> setNavigationTripProgressBarEnabled(
+    int viewId,
+    bool enabled,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationTripProgressBarEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4109,13 +4064,17 @@ class MapViewApi {
   }
 
   Future<bool> isNavigationHeaderEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationHeaderEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationHeaderEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4137,13 +4096,17 @@ class MapViewApi {
   }
 
   Future<void> setNavigationHeaderEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationHeaderEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationHeaderEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4159,14 +4122,20 @@ class MapViewApi {
     }
   }
 
-  Future<NavigationHeaderStylingOptionsDto> getNavigationHeaderStylingOptions(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getNavigationHeaderStylingOptions$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<NavigationHeaderStylingOptionsDto> getNavigationHeaderStylingOptions(
+    int viewId,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getNavigationHeaderStylingOptions$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4187,14 +4156,21 @@ class MapViewApi {
     }
   }
 
-  Future<void> setNavigationHeaderStylingOptions(int viewId, NavigationHeaderStylingOptionsDto stylingOptions) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationHeaderStylingOptions$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> setNavigationHeaderStylingOptions(
+    int viewId,
+    NavigationHeaderStylingOptionsDto stylingOptions,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationHeaderStylingOptions$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, stylingOptions],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, stylingOptions]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4211,13 +4187,17 @@ class MapViewApi {
   }
 
   Future<bool> isNavigationFooterEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationFooterEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationFooterEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4239,13 +4219,17 @@ class MapViewApi {
   }
 
   Future<void> setNavigationFooterEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationFooterEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationFooterEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4262,13 +4246,17 @@ class MapViewApi {
   }
 
   Future<bool> isRecenterButtonEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRecenterButtonEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRecenterButtonEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4290,13 +4278,17 @@ class MapViewApi {
   }
 
   Future<void> setRecenterButtonEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRecenterButtonEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRecenterButtonEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4313,13 +4305,17 @@ class MapViewApi {
   }
 
   Future<bool> isSpeedLimitIconEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedLimitIconEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedLimitIconEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4341,13 +4337,17 @@ class MapViewApi {
   }
 
   Future<void> setSpeedLimitIconEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedLimitIconEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedLimitIconEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4364,13 +4364,17 @@ class MapViewApi {
   }
 
   Future<bool> isSpeedometerEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedometerEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isSpeedometerEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4392,13 +4396,17 @@ class MapViewApi {
   }
 
   Future<void> setSpeedometerEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedometerEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setSpeedometerEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4415,13 +4423,17 @@ class MapViewApi {
   }
 
   Future<bool> isNavigationUIEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationUIEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isNavigationUIEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4443,13 +4455,17 @@ class MapViewApi {
   }
 
   Future<void> setNavigationUIEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationUIEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setNavigationUIEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4466,13 +4482,17 @@ class MapViewApi {
   }
 
   Future<bool> isMyLocationButtonEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationButtonEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMyLocationButtonEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4494,13 +4514,17 @@ class MapViewApi {
   }
 
   Future<void> setMyLocationButtonEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationButtonEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMyLocationButtonEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4517,13 +4541,17 @@ class MapViewApi {
   }
 
   Future<bool> isConsumeMyLocationButtonClickEventsEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isConsumeMyLocationButtonClickEventsEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isConsumeMyLocationButtonClickEventsEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4544,14 +4572,21 @@ class MapViewApi {
     }
   }
 
-  Future<void> setConsumeMyLocationButtonClickEventsEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setConsumeMyLocationButtonClickEventsEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> setConsumeMyLocationButtonClickEventsEnabled(
+    int viewId,
+    bool enabled,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setConsumeMyLocationButtonClickEventsEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4568,13 +4603,17 @@ class MapViewApi {
   }
 
   Future<bool> isZoomGesturesEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomGesturesEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomGesturesEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4596,13 +4635,17 @@ class MapViewApi {
   }
 
   Future<void> setZoomGesturesEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomGesturesEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomGesturesEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4619,13 +4662,17 @@ class MapViewApi {
   }
 
   Future<bool> isZoomControlsEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomControlsEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isZoomControlsEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4647,13 +4694,17 @@ class MapViewApi {
   }
 
   Future<void> setZoomControlsEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomControlsEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setZoomControlsEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4670,13 +4721,17 @@ class MapViewApi {
   }
 
   Future<bool> isCompassEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isCompassEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isCompassEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4698,13 +4753,17 @@ class MapViewApi {
   }
 
   Future<void> setCompassEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setCompassEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setCompassEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4721,13 +4780,17 @@ class MapViewApi {
   }
 
   Future<bool> isRotateGesturesEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRotateGesturesEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isRotateGesturesEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4749,13 +4812,17 @@ class MapViewApi {
   }
 
   Future<void> setRotateGesturesEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRotateGesturesEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setRotateGesturesEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4772,13 +4839,17 @@ class MapViewApi {
   }
 
   Future<bool> isScrollGesturesEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4800,13 +4871,17 @@ class MapViewApi {
   }
 
   Future<void> setScrollGesturesEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4823,13 +4898,17 @@ class MapViewApi {
   }
 
   Future<bool> isScrollGesturesEnabledDuringRotateOrZoom(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabledDuringRotateOrZoom$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isScrollGesturesEnabledDuringRotateOrZoom$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4850,14 +4929,21 @@ class MapViewApi {
     }
   }
 
-  Future<void> setScrollGesturesDuringRotateOrZoomEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesDuringRotateOrZoomEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> setScrollGesturesDuringRotateOrZoomEnabled(
+    int viewId,
+    bool enabled,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setScrollGesturesDuringRotateOrZoomEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4874,13 +4960,17 @@ class MapViewApi {
   }
 
   Future<bool> isTiltGesturesEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTiltGesturesEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTiltGesturesEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4902,13 +4992,17 @@ class MapViewApi {
   }
 
   Future<void> setTiltGesturesEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTiltGesturesEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTiltGesturesEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4925,13 +5019,17 @@ class MapViewApi {
   }
 
   Future<bool> isMapToolbarEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMapToolbarEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isMapToolbarEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4953,13 +5051,17 @@ class MapViewApi {
   }
 
   Future<void> setMapToolbarEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapToolbarEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapToolbarEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -4976,13 +5078,17 @@ class MapViewApi {
   }
 
   Future<bool> isTrafficEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5004,13 +5110,17 @@ class MapViewApi {
   }
 
   Future<void> setTrafficEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5027,13 +5137,17 @@ class MapViewApi {
   }
 
   Future<bool> isTrafficIncidentCardsEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficIncidentCardsEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficIncidentCardsEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5055,13 +5169,17 @@ class MapViewApi {
   }
 
   Future<void> setTrafficIncidentCardsEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficIncidentCardsEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficIncidentCardsEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5078,13 +5196,17 @@ class MapViewApi {
   }
 
   Future<bool> isTrafficPromptsEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficPromptsEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isTrafficPromptsEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5106,13 +5228,17 @@ class MapViewApi {
   }
 
   Future<void> setTrafficPromptsEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficPromptsEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setTrafficPromptsEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5129,13 +5255,17 @@ class MapViewApi {
   }
 
   Future<bool> isReportIncidentButtonEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isReportIncidentButtonEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isReportIncidentButtonEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5157,13 +5287,17 @@ class MapViewApi {
   }
 
   Future<void> setReportIncidentButtonEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setReportIncidentButtonEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setReportIncidentButtonEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5180,13 +5314,17 @@ class MapViewApi {
   }
 
   Future<bool> isIncidentReportingAvailable(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIncidentReportingAvailable$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIncidentReportingAvailable$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5208,13 +5346,17 @@ class MapViewApi {
   }
 
   Future<void> showReportIncidentsPanel(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showReportIncidentsPanel$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showReportIncidentsPanel$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5231,13 +5373,17 @@ class MapViewApi {
   }
 
   Future<bool> isBuildingsEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isBuildingsEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isBuildingsEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5259,13 +5405,17 @@ class MapViewApi {
   }
 
   Future<void> setBuildingsEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setBuildingsEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setBuildingsEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5282,13 +5432,17 @@ class MapViewApi {
   }
 
   Future<bool> isIndoorEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIndoorEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIndoorEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5310,13 +5464,17 @@ class MapViewApi {
   }
 
   Future<void> setIndoorEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setIndoorEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setIndoorEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5333,13 +5491,17 @@ class MapViewApi {
   }
 
   Future<bool> isIndoorLevelPickerEnabled(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIndoorLevelPickerEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.isIndoorLevelPickerEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5361,13 +5523,17 @@ class MapViewApi {
   }
 
   Future<void> setIndoorLevelPickerEnabled(int viewId, bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setIndoorLevelPickerEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setIndoorLevelPickerEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5384,13 +5550,17 @@ class MapViewApi {
   }
 
   Future<IndoorBuildingDto?> getFocusedIndoorBuilding(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getFocusedIndoorBuilding$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getFocusedIndoorBuilding$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5410,13 +5580,17 @@ class MapViewApi {
   /// indoor building. Throws if no building is focused or the index is out of
   /// range.
   Future<void> activateIndoorLevel(int viewId, int levelIndex) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.activateIndoorLevel$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.activateIndoorLevel$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, levelIndex],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, levelIndex]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5433,13 +5607,17 @@ class MapViewApi {
   }
 
   Future<CameraPositionDto> getCameraPosition(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCameraPosition$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCameraPosition$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5461,13 +5639,17 @@ class MapViewApi {
   }
 
   Future<LatLngBoundsDto> getVisibleRegion(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getVisibleRegion$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getVisibleRegion$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5488,14 +5670,22 @@ class MapViewApi {
     }
   }
 
-  Future<void> followMyLocation(int viewId, CameraPerspectiveDto perspective, double? zoomLevel) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.followMyLocation$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> followMyLocation(
+    int viewId,
+    CameraPerspectiveDto perspective,
+    double? zoomLevel,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.followMyLocation$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, perspective, zoomLevel],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, perspective, zoomLevel]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5511,14 +5701,22 @@ class MapViewApi {
     }
   }
 
-  Future<bool> animateCameraToCameraPosition(int viewId, CameraPositionDto cameraPosition, int? duration) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToCameraPosition$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<bool> animateCameraToCameraPosition(
+    int viewId,
+    CameraPositionDto cameraPosition,
+    int? duration,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToCameraPosition$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, cameraPosition, duration],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, cameraPosition, duration]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5539,14 +5737,22 @@ class MapViewApi {
     }
   }
 
-  Future<bool> animateCameraToLatLng(int viewId, LatLngDto point, int? duration) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLng$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<bool> animateCameraToLatLng(
+    int viewId,
+    LatLngDto point,
+    int? duration,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLng$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, point, duration],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, point, duration]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5567,14 +5773,23 @@ class MapViewApi {
     }
   }
 
-  Future<bool> animateCameraToLatLngBounds(int viewId, LatLngBoundsDto bounds, double padding, int? duration) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngBounds$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<bool> animateCameraToLatLngBounds(
+    int viewId,
+    LatLngBoundsDto bounds,
+    double padding,
+    int? duration,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngBounds$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, bounds, padding, duration],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, bounds, padding, duration]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5595,14 +5810,23 @@ class MapViewApi {
     }
   }
 
-  Future<bool> animateCameraToLatLngZoom(int viewId, LatLngDto point, double zoom, int? duration) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngZoom$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<bool> animateCameraToLatLngZoom(
+    int viewId,
+    LatLngDto point,
+    double zoom,
+    int? duration,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToLatLngZoom$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, point, zoom, duration],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, point, zoom, duration]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5623,14 +5847,23 @@ class MapViewApi {
     }
   }
 
-  Future<bool> animateCameraByScroll(int viewId, double scrollByDx, double scrollByDy, int? duration) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByScroll$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<bool> animateCameraByScroll(
+    int viewId,
+    double scrollByDx,
+    double scrollByDy,
+    int? duration,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByScroll$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, scrollByDx, scrollByDy, duration],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, scrollByDx, scrollByDy, duration]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5651,14 +5884,24 @@ class MapViewApi {
     }
   }
 
-  Future<bool> animateCameraByZoom(int viewId, double zoomBy, double? focusDx, double? focusDy, int? duration) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByZoom$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<bool> animateCameraByZoom(
+    int viewId,
+    double zoomBy,
+    double? focusDx,
+    double? focusDy,
+    int? duration,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraByZoom$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, zoomBy, focusDx, focusDy, duration],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, zoomBy, focusDx, focusDy, duration]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5679,14 +5922,22 @@ class MapViewApi {
     }
   }
 
-  Future<bool> animateCameraToZoom(int viewId, double zoom, int? duration) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToZoom$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<bool> animateCameraToZoom(
+    int viewId,
+    double zoom,
+    int? duration,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.animateCameraToZoom$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, zoom, duration],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, zoom, duration]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5707,14 +5958,21 @@ class MapViewApi {
     }
   }
 
-  Future<void> moveCameraToCameraPosition(int viewId, CameraPositionDto cameraPosition) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToCameraPosition$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> moveCameraToCameraPosition(
+    int viewId,
+    CameraPositionDto cameraPosition,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToCameraPosition$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, cameraPosition],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, cameraPosition]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5731,13 +5989,17 @@ class MapViewApi {
   }
 
   Future<void> moveCameraToLatLng(int viewId, LatLngDto point) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLng$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLng$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, point],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, point]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5753,14 +6015,22 @@ class MapViewApi {
     }
   }
 
-  Future<void> moveCameraToLatLngBounds(int viewId, LatLngBoundsDto bounds, double padding) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngBounds$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> moveCameraToLatLngBounds(
+    int viewId,
+    LatLngBoundsDto bounds,
+    double padding,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngBounds$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, bounds, padding],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, bounds, padding]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5776,14 +6046,22 @@ class MapViewApi {
     }
   }
 
-  Future<void> moveCameraToLatLngZoom(int viewId, LatLngDto point, double zoom) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngZoom$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> moveCameraToLatLngZoom(
+    int viewId,
+    LatLngDto point,
+    double zoom,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToLatLngZoom$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, point, zoom],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, point, zoom]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5799,14 +6077,22 @@ class MapViewApi {
     }
   }
 
-  Future<void> moveCameraByScroll(int viewId, double scrollByDx, double scrollByDy) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByScroll$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> moveCameraByScroll(
+    int viewId,
+    double scrollByDx,
+    double scrollByDy,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByScroll$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, scrollByDx, scrollByDy],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, scrollByDx, scrollByDy]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5822,14 +6108,23 @@ class MapViewApi {
     }
   }
 
-  Future<void> moveCameraByZoom(int viewId, double zoomBy, double? focusDx, double? focusDy) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByZoom$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> moveCameraByZoom(
+    int viewId,
+    double zoomBy,
+    double? focusDx,
+    double? focusDy,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraByZoom$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, zoomBy, focusDx, focusDy],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, zoomBy, focusDx, focusDy]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5846,13 +6141,17 @@ class MapViewApi {
   }
 
   Future<void> moveCameraToZoom(int viewId, double zoom) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToZoom$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.moveCameraToZoom$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, zoom],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, zoom]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5869,13 +6168,17 @@ class MapViewApi {
   }
 
   Future<void> showRouteOverview(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showRouteOverview$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.showRouteOverview$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5892,13 +6195,17 @@ class MapViewApi {
   }
 
   Future<double> getMinZoomPreference(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMinZoomPreference$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMinZoomPreference$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5920,13 +6227,17 @@ class MapViewApi {
   }
 
   Future<double> getMaxZoomPreference(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMaxZoomPreference$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMaxZoomPreference$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5948,13 +6259,17 @@ class MapViewApi {
   }
 
   Future<void> resetMinMaxZoomPreference(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.resetMinMaxZoomPreference$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.resetMinMaxZoomPreference$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5970,14 +6285,21 @@ class MapViewApi {
     }
   }
 
-  Future<void> setMinZoomPreference(int viewId, double minZoomPreference) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMinZoomPreference$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> setMinZoomPreference(
+    int viewId,
+    double minZoomPreference,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMinZoomPreference$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, minZoomPreference],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, minZoomPreference]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -5993,14 +6315,21 @@ class MapViewApi {
     }
   }
 
-  Future<void> setMaxZoomPreference(int viewId, double maxZoomPreference) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMaxZoomPreference$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> setMaxZoomPreference(
+    int viewId,
+    double maxZoomPreference,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMaxZoomPreference$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, maxZoomPreference],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, maxZoomPreference]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6017,13 +6346,17 @@ class MapViewApi {
   }
 
   Future<List<MarkerDto>> getMarkers(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMarkers$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMarkers$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6044,14 +6377,21 @@ class MapViewApi {
     }
   }
 
-  Future<List<MarkerDto>> addMarkers(int viewId, List<MarkerDto> markers) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addMarkers$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<List<MarkerDto>> addMarkers(
+    int viewId,
+    List<MarkerDto> markers,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addMarkers$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, markers],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, markers]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6072,14 +6412,21 @@ class MapViewApi {
     }
   }
 
-  Future<List<MarkerDto>> updateMarkers(int viewId, List<MarkerDto> markers) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateMarkers$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<List<MarkerDto>> updateMarkers(
+    int viewId,
+    List<MarkerDto> markers,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateMarkers$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, markers],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, markers]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6101,13 +6448,17 @@ class MapViewApi {
   }
 
   Future<void> removeMarkers(int viewId, List<MarkerDto> markers) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeMarkers$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeMarkers$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, markers],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, markers]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6124,13 +6475,17 @@ class MapViewApi {
   }
 
   Future<void> clearMarkers(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearMarkers$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearMarkers$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6147,13 +6502,17 @@ class MapViewApi {
   }
 
   Future<void> clear(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clear$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clear$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6170,13 +6529,17 @@ class MapViewApi {
   }
 
   Future<List<PolygonDto>> getPolygons(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolygons$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolygons$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6197,14 +6560,21 @@ class MapViewApi {
     }
   }
 
-  Future<List<PolygonDto>> addPolygons(int viewId, List<PolygonDto> polygons) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolygons$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<List<PolygonDto>> addPolygons(
+    int viewId,
+    List<PolygonDto> polygons,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolygons$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, polygons],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, polygons]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6225,14 +6595,21 @@ class MapViewApi {
     }
   }
 
-  Future<List<PolygonDto>> updatePolygons(int viewId, List<PolygonDto> polygons) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolygons$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<List<PolygonDto>> updatePolygons(
+    int viewId,
+    List<PolygonDto> polygons,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolygons$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, polygons],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, polygons]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6254,13 +6631,17 @@ class MapViewApi {
   }
 
   Future<void> removePolygons(int viewId, List<PolygonDto> polygons) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolygons$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolygons$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, polygons],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, polygons]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6277,13 +6658,17 @@ class MapViewApi {
   }
 
   Future<void> clearPolygons(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolygons$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolygons$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6300,13 +6685,17 @@ class MapViewApi {
   }
 
   Future<List<PolylineDto>> getPolylines(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolylines$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPolylines$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6327,14 +6716,21 @@ class MapViewApi {
     }
   }
 
-  Future<List<PolylineDto>> addPolylines(int viewId, List<PolylineDto> polylines) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolylines$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<List<PolylineDto>> addPolylines(
+    int viewId,
+    List<PolylineDto> polylines,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addPolylines$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, polylines],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, polylines]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6355,14 +6751,21 @@ class MapViewApi {
     }
   }
 
-  Future<List<PolylineDto>> updatePolylines(int viewId, List<PolylineDto> polylines) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolylines$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<List<PolylineDto>> updatePolylines(
+    int viewId,
+    List<PolylineDto> polylines,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updatePolylines$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, polylines],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, polylines]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6384,13 +6787,17 @@ class MapViewApi {
   }
 
   Future<void> removePolylines(int viewId, List<PolylineDto> polylines) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolylines$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removePolylines$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, polylines],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, polylines]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6407,13 +6814,17 @@ class MapViewApi {
   }
 
   Future<void> clearPolylines(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolylines$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearPolylines$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6430,13 +6841,17 @@ class MapViewApi {
   }
 
   Future<List<CircleDto>> getCircles(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCircles$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getCircles$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6457,14 +6872,21 @@ class MapViewApi {
     }
   }
 
-  Future<List<CircleDto>> addCircles(int viewId, List<CircleDto> circles) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addCircles$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<List<CircleDto>> addCircles(
+    int viewId,
+    List<CircleDto> circles,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.addCircles$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, circles],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, circles]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6485,14 +6907,21 @@ class MapViewApi {
     }
   }
 
-  Future<List<CircleDto>> updateCircles(int viewId, List<CircleDto> circles) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateCircles$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<List<CircleDto>> updateCircles(
+    int viewId,
+    List<CircleDto> circles,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.updateCircles$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, circles],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, circles]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6514,13 +6943,17 @@ class MapViewApi {
   }
 
   Future<void> removeCircles(int viewId, List<CircleDto> circles) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeCircles$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.removeCircles$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, circles],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, circles]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6537,13 +6970,17 @@ class MapViewApi {
   }
 
   Future<void> clearCircles(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearCircles$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.clearCircles$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6560,13 +6997,17 @@ class MapViewApi {
   }
 
   Future<void> enableOnCameraChangedEvents(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.enableOnCameraChangedEvents$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.enableOnCameraChangedEvents$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6583,13 +7024,17 @@ class MapViewApi {
   }
 
   Future<void> setPadding(int viewId, MapPaddingDto padding) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setPadding$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setPadding$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, padding],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, padding]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6606,13 +7051,17 @@ class MapViewApi {
   }
 
   Future<MapPaddingDto> getPadding(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPadding$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getPadding$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6634,13 +7083,17 @@ class MapViewApi {
   }
 
   Future<MapColorSchemeDto> getMapColorScheme(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapColorScheme$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getMapColorScheme$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6661,14 +7114,21 @@ class MapViewApi {
     }
   }
 
-  Future<void> setMapColorScheme(int viewId, MapColorSchemeDto mapColorScheme) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapColorScheme$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> setMapColorScheme(
+    int viewId,
+    MapColorSchemeDto mapColorScheme,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setMapColorScheme$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, mapColorScheme],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, mapColorScheme]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6685,13 +7145,17 @@ class MapViewApi {
   }
 
   Future<NavigationForceNightModeDto> getForceNightMode(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getForceNightMode$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.getForceNightMode$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6712,14 +7176,21 @@ class MapViewApi {
     }
   }
 
-  Future<void> setForceNightMode(int viewId, NavigationForceNightModeDto forceNightMode) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setForceNightMode$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> setForceNightMode(
+    int viewId,
+    NavigationForceNightModeDto forceNightMode,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.MapViewApi.setForceNightMode$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId, forceNightMode],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId, forceNightMode]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6740,23 +7211,37 @@ class ImageRegistryApi {
   /// Constructor for [ImageRegistryApi].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  ImageRegistryApi({BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  ImageRegistryApi({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
 
   final String pigeonVar_messageChannelSuffix;
 
-  Future<ImageDescriptorDto> registerBitmapImage(String imageId, Uint8List bytes, double imagePixelRatio, double? width, double? height) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.registerBitmapImage$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<ImageDescriptorDto> registerBitmapImage(
+    String imageId,
+    Uint8List bytes,
+    double imagePixelRatio,
+    double? width,
+    double? height,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.registerBitmapImage$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[imageId, bytes, imagePixelRatio, width, height],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[imageId, bytes, imagePixelRatio, width, height]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6778,13 +7263,17 @@ class ImageRegistryApi {
   }
 
   Future<void> unregisterImage(ImageDescriptorDto imageDescriptor) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.unregisterImage$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.unregisterImage$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[imageDescriptor],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[imageDescriptor]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6801,12 +7290,14 @@ class ImageRegistryApi {
   }
 
   Future<List<ImageDescriptorDto>> getRegisteredImages() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.getRegisteredImages$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.getRegisteredImages$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -6824,18 +7315,23 @@ class ImageRegistryApi {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (pigeonVar_replyList[0] as List<Object?>?)!.cast<ImageDescriptorDto>();
+      return (pigeonVar_replyList[0] as List<Object?>?)!
+          .cast<ImageDescriptorDto>();
     }
   }
 
   Future<void> clearRegisteredImages(RegisteredImageTypeDto? filter) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.clearRegisteredImages$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.clearRegisteredImages$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[filter],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[filter]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6851,14 +7347,20 @@ class ImageRegistryApi {
     }
   }
 
-  Future<Uint8List?> getRegisteredImageData(ImageDescriptorDto imageDescriptor) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.getRegisteredImageData$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<Uint8List?> getRegisteredImageData(
+    ImageDescriptorDto imageDescriptor,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.ImageRegistryApi.getRegisteredImageData$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[imageDescriptor],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[imageDescriptor]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -6886,7 +7388,12 @@ abstract class ViewEventApi {
 
   void onMarkerEvent(int viewId, String markerId, MarkerEventTypeDto eventType);
 
-  void onMarkerDragEvent(int viewId, String markerId, MarkerDragEventTypeDto eventType, LatLngDto position);
+  void onMarkerDragEvent(
+    int viewId,
+    String markerId,
+    MarkerDragEventTypeDto eventType,
+    LatLngDto position,
+  );
 
   void onPolygonClicked(int viewId, String polygonId);
 
@@ -6908,453 +7415,652 @@ abstract class ViewEventApi {
 
   void onIndoorActiveLevelChanged(int viewId, IndoorBuildingDto? building);
 
-  void onCameraChanged(int viewId, CameraEventTypeDto eventType, CameraPositionDto position);
+  void onCameraChanged(
+    int viewId,
+    CameraEventTypeDto eventType,
+    CameraPositionDto position,
+  );
 
-  static void setUp(ViewEventApi? api, {BinaryMessenger? binaryMessenger, String messageChannelSuffix = '',}) {
-    messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  static void setUp(
+    ViewEventApi? api, {
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) {
+    messageChannelSuffix = messageChannelSuffix.isNotEmpty
+        ? '.$messageChannelSuffix'
+        : '';
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapClickEvent$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapClickEvent$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapClickEvent was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapClickEvent was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapClickEvent was null, expected non-null int.');
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapClickEvent was null, expected non-null int.',
+          );
           final LatLngDto? arg_latLng = (args[1] as LatLngDto?);
-          assert(arg_latLng != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapClickEvent was null, expected non-null LatLngDto.');
+          assert(
+            arg_latLng != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapClickEvent was null, expected non-null LatLngDto.',
+          );
           try {
             api.onMapClickEvent(arg_viewId!, arg_latLng!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapLongClickEvent$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapLongClickEvent$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapLongClickEvent was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapLongClickEvent was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapLongClickEvent was null, expected non-null int.');
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapLongClickEvent was null, expected non-null int.',
+          );
           final LatLngDto? arg_latLng = (args[1] as LatLngDto?);
-          assert(arg_latLng != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapLongClickEvent was null, expected non-null LatLngDto.');
+          assert(
+            arg_latLng != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMapLongClickEvent was null, expected non-null LatLngDto.',
+          );
           try {
             api.onMapLongClickEvent(arg_viewId!, arg_latLng!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onRecenterButtonClicked$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onRecenterButtonClicked$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onRecenterButtonClicked was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onRecenterButtonClicked was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onRecenterButtonClicked was null, expected non-null int.');
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onRecenterButtonClicked was null, expected non-null int.',
+          );
           try {
             api.onRecenterButtonClicked(arg_viewId!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerEvent$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerEvent$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerEvent was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerEvent was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerEvent was null, expected non-null int.');
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerEvent was null, expected non-null int.',
+          );
           final String? arg_markerId = (args[1] as String?);
-          assert(arg_markerId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerEvent was null, expected non-null String.');
-          final MarkerEventTypeDto? arg_eventType = (args[2] as MarkerEventTypeDto?);
-          assert(arg_eventType != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerEvent was null, expected non-null MarkerEventTypeDto.');
+          assert(
+            arg_markerId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerEvent was null, expected non-null String.',
+          );
+          final MarkerEventTypeDto? arg_eventType =
+              (args[2] as MarkerEventTypeDto?);
+          assert(
+            arg_eventType != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerEvent was null, expected non-null MarkerEventTypeDto.',
+          );
           try {
             api.onMarkerEvent(arg_viewId!, arg_markerId!, arg_eventType!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerDragEvent$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerDragEvent$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerDragEvent was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerDragEvent was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerDragEvent was null, expected non-null int.');
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerDragEvent was null, expected non-null int.',
+          );
           final String? arg_markerId = (args[1] as String?);
-          assert(arg_markerId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerDragEvent was null, expected non-null String.');
-          final MarkerDragEventTypeDto? arg_eventType = (args[2] as MarkerDragEventTypeDto?);
-          assert(arg_eventType != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerDragEvent was null, expected non-null MarkerDragEventTypeDto.');
+          assert(
+            arg_markerId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerDragEvent was null, expected non-null String.',
+          );
+          final MarkerDragEventTypeDto? arg_eventType =
+              (args[2] as MarkerDragEventTypeDto?);
+          assert(
+            arg_eventType != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerDragEvent was null, expected non-null MarkerDragEventTypeDto.',
+          );
           final LatLngDto? arg_position = (args[3] as LatLngDto?);
-          assert(arg_position != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerDragEvent was null, expected non-null LatLngDto.');
+          assert(
+            arg_position != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMarkerDragEvent was null, expected non-null LatLngDto.',
+          );
           try {
-            api.onMarkerDragEvent(arg_viewId!, arg_markerId!, arg_eventType!, arg_position!);
+            api.onMarkerDragEvent(
+              arg_viewId!,
+              arg_markerId!,
+              arg_eventType!,
+              arg_position!,
+            );
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolygonClicked$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolygonClicked$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolygonClicked was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolygonClicked was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolygonClicked was null, expected non-null int.');
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolygonClicked was null, expected non-null int.',
+          );
           final String? arg_polygonId = (args[1] as String?);
-          assert(arg_polygonId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolygonClicked was null, expected non-null String.');
+          assert(
+            arg_polygonId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolygonClicked was null, expected non-null String.',
+          );
           try {
             api.onPolygonClicked(arg_viewId!, arg_polygonId!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolylineClicked$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolylineClicked$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolylineClicked was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolylineClicked was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolylineClicked was null, expected non-null int.');
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolylineClicked was null, expected non-null int.',
+          );
           final String? arg_polylineId = (args[1] as String?);
-          assert(arg_polylineId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolylineClicked was null, expected non-null String.');
+          assert(
+            arg_polylineId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPolylineClicked was null, expected non-null String.',
+          );
           try {
             api.onPolylineClicked(arg_viewId!, arg_polylineId!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCircleClicked$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCircleClicked$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCircleClicked was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCircleClicked was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCircleClicked was null, expected non-null int.');
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCircleClicked was null, expected non-null int.',
+          );
           final String? arg_circleId = (args[1] as String?);
-          assert(arg_circleId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCircleClicked was null, expected non-null String.');
+          assert(
+            arg_circleId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCircleClicked was null, expected non-null String.',
+          );
           try {
             api.onCircleClicked(arg_viewId!, arg_circleId!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPoiClick$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPoiClick$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPoiClick was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPoiClick was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPoiClick was null, expected non-null int.');
-          final PointOfInterestDto? arg_pointOfInterest = (args[1] as PointOfInterestDto?);
-          assert(arg_pointOfInterest != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPoiClick was null, expected non-null PointOfInterestDto.');
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPoiClick was null, expected non-null int.',
+          );
+          final PointOfInterestDto? arg_pointOfInterest =
+              (args[1] as PointOfInterestDto?);
+          assert(
+            arg_pointOfInterest != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPoiClick was null, expected non-null PointOfInterestDto.',
+          );
           try {
             api.onPoiClick(arg_viewId!, arg_pointOfInterest!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onNavigationUIEnabledChanged$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onNavigationUIEnabledChanged$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onNavigationUIEnabledChanged was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onNavigationUIEnabledChanged was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onNavigationUIEnabledChanged was null, expected non-null int.');
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onNavigationUIEnabledChanged was null, expected non-null int.',
+          );
           final bool? arg_navigationUIEnabled = (args[1] as bool?);
-          assert(arg_navigationUIEnabled != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onNavigationUIEnabledChanged was null, expected non-null bool.');
+          assert(
+            arg_navigationUIEnabled != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onNavigationUIEnabledChanged was null, expected non-null bool.',
+          );
           try {
-            api.onNavigationUIEnabledChanged(arg_viewId!, arg_navigationUIEnabled!);
+            api.onNavigationUIEnabledChanged(
+              arg_viewId!,
+              arg_navigationUIEnabled!,
+            );
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged was null, expected non-null int.');
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged was null, expected non-null int.',
+          );
           final bool? arg_promptVisible = (args[1] as bool?);
-          assert(arg_promptVisible != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged was null, expected non-null bool.');
+          assert(
+            arg_promptVisible != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onPromptVisibilityChanged was null, expected non-null bool.',
+          );
           try {
             api.onPromptVisibilityChanged(arg_viewId!, arg_promptVisible!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationClicked$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationClicked$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationClicked was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationClicked was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationClicked was null, expected non-null int.');
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationClicked was null, expected non-null int.',
+          );
           try {
             api.onMyLocationClicked(arg_viewId!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationButtonClicked$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationButtonClicked$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationButtonClicked was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationButtonClicked was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationButtonClicked was null, expected non-null int.');
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onMyLocationButtonClicked was null, expected non-null int.',
+          );
           try {
             api.onMyLocationButtonClicked(arg_viewId!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onIndoorFocusedBuildingChanged$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onIndoorFocusedBuildingChanged$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onIndoorFocusedBuildingChanged was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onIndoorFocusedBuildingChanged was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onIndoorFocusedBuildingChanged was null, expected non-null int.');
-          final IndoorBuildingDto? arg_building = (args[1] as IndoorBuildingDto?);
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onIndoorFocusedBuildingChanged was null, expected non-null int.',
+          );
+          final IndoorBuildingDto? arg_building =
+              (args[1] as IndoorBuildingDto?);
           try {
             api.onIndoorFocusedBuildingChanged(arg_viewId!, arg_building);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onIndoorActiveLevelChanged$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onIndoorActiveLevelChanged$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onIndoorActiveLevelChanged was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onIndoorActiveLevelChanged was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onIndoorActiveLevelChanged was null, expected non-null int.');
-          final IndoorBuildingDto? arg_building = (args[1] as IndoorBuildingDto?);
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onIndoorActiveLevelChanged was null, expected non-null int.',
+          );
+          final IndoorBuildingDto? arg_building =
+              (args[1] as IndoorBuildingDto?);
           try {
             api.onIndoorActiveLevelChanged(arg_viewId!, arg_building);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCameraChanged$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCameraChanged$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCameraChanged was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCameraChanged was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final int? arg_viewId = (args[0] as int?);
-          assert(arg_viewId != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCameraChanged was null, expected non-null int.');
-          final CameraEventTypeDto? arg_eventType = (args[1] as CameraEventTypeDto?);
-          assert(arg_eventType != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCameraChanged was null, expected non-null CameraEventTypeDto.');
-          final CameraPositionDto? arg_position = (args[2] as CameraPositionDto?);
-          assert(arg_position != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCameraChanged was null, expected non-null CameraPositionDto.');
+          assert(
+            arg_viewId != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCameraChanged was null, expected non-null int.',
+          );
+          final CameraEventTypeDto? arg_eventType =
+              (args[1] as CameraEventTypeDto?);
+          assert(
+            arg_eventType != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCameraChanged was null, expected non-null CameraEventTypeDto.',
+          );
+          final CameraPositionDto? arg_position =
+              (args[2] as CameraPositionDto?);
+          assert(
+            arg_position != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.ViewEventApi.onCameraChanged was null, expected non-null CameraPositionDto.',
+          );
           try {
             api.onCameraChanged(arg_viewId!, arg_eventType!, arg_position!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
@@ -7366,23 +8072,39 @@ class NavigationSessionApi {
   /// Constructor for [NavigationSessionApi].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  NavigationSessionApi({BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  NavigationSessionApi({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
 
   final String pigeonVar_messageChannelSuffix;
 
-  Future<void> createNavigationSession(bool abnormalTerminationReportingEnabled, TaskRemovedBehaviorDto behavior, NavigationNotificationOptionsDto? notificationOptions) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> createNavigationSession(
+    bool abnormalTerminationReportingEnabled,
+    TaskRemovedBehaviorDto behavior,
+    NavigationNotificationOptionsDto? notificationOptions,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[
+        abnormalTerminationReportingEnabled,
+        behavior,
+        notificationOptions,
+      ],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[abnormalTerminationReportingEnabled, behavior, notificationOptions]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7399,12 +8121,14 @@ class NavigationSessionApi {
   }
 
   Future<bool> isInitialized() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.isInitialized$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.isInitialized$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -7427,13 +8151,17 @@ class NavigationSessionApi {
   }
 
   Future<void> cleanup(bool resetSession) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.cleanup$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.cleanup$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[resetSession],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[resetSession]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7449,14 +8177,28 @@ class NavigationSessionApi {
     }
   }
 
-  Future<bool> showTermsAndConditionsDialog(String title, String companyName, bool shouldOnlyShowDriverAwarenessDisclaimer, TermsAndConditionsUIParamsDto? uiParams) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.showTermsAndConditionsDialog$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<bool> showTermsAndConditionsDialog(
+    String title,
+    String companyName,
+    bool shouldOnlyShowDriverAwarenessDisclaimer,
+    TermsAndConditionsUIParamsDto? uiParams,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.showTermsAndConditionsDialog$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[
+        title,
+        companyName,
+        shouldOnlyShowDriverAwarenessDisclaimer,
+        uiParams,
+      ],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[title, companyName, shouldOnlyShowDriverAwarenessDisclaimer, uiParams]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7478,12 +8220,14 @@ class NavigationSessionApi {
   }
 
   Future<bool> areTermsAccepted() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.areTermsAccepted$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.areTermsAccepted$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -7506,12 +8250,14 @@ class NavigationSessionApi {
   }
 
   Future<void> resetTermsAccepted() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.resetTermsAccepted$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.resetTermsAccepted$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -7529,12 +8275,14 @@ class NavigationSessionApi {
   }
 
   Future<String> getNavSDKVersion() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getNavSDKVersion$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getNavSDKVersion$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -7557,12 +8305,14 @@ class NavigationSessionApi {
   }
 
   Future<bool> isGuidanceRunning() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.isGuidanceRunning$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.isGuidanceRunning$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -7585,12 +8335,14 @@ class NavigationSessionApi {
   }
 
   Future<void> startGuidance() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.startGuidance$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.startGuidance$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -7608,12 +8360,14 @@ class NavigationSessionApi {
   }
 
   Future<void> stopGuidance() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.stopGuidance$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.stopGuidance$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -7631,13 +8385,17 @@ class NavigationSessionApi {
   }
 
   Future<RouteStatusDto> setDestinations(DestinationsDto destinations) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setDestinations$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setDestinations$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[destinations],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[destinations]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7659,12 +8417,14 @@ class NavigationSessionApi {
   }
 
   Future<void> clearDestinations() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.clearDestinations$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.clearDestinations$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -7681,13 +8441,16 @@ class NavigationSessionApi {
     }
   }
 
-  Future<ContinueToNextDestinationResponseDto> continueToNextDestination() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.continueToNextDestination$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+  Future<ContinueToNextDestinationResponseDto>
+  continueToNextDestination() async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.continueToNextDestination$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -7710,12 +8473,14 @@ class NavigationSessionApi {
   }
 
   Future<NavigationTimeAndDistanceDto> getCurrentTimeAndDistance() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getCurrentTimeAndDistance$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getCurrentTimeAndDistance$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -7737,14 +8502,20 @@ class NavigationSessionApi {
     }
   }
 
-  Future<void> setAudioGuidance(NavigationAudioGuidanceSettingsDto settings) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setAudioGuidance$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> setAudioGuidance(
+    NavigationAudioGuidanceSettingsDto settings,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setAudioGuidance$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[settings],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[settings]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7761,13 +8532,17 @@ class NavigationSessionApi {
   }
 
   Future<void> setSpeedAlertOptions(SpeedAlertOptionsDto options) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setSpeedAlertOptions$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setSpeedAlertOptions$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[options],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[options]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7784,12 +8559,14 @@ class NavigationSessionApi {
   }
 
   Future<List<RouteSegmentDto>> getRouteSegments() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getRouteSegments$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getRouteSegments$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -7807,17 +8584,20 @@ class NavigationSessionApi {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (pigeonVar_replyList[0] as List<Object?>?)!.cast<RouteSegmentDto>();
+      return (pigeonVar_replyList[0] as List<Object?>?)!
+          .cast<RouteSegmentDto>();
     }
   }
 
   Future<List<LatLngDto>> getTraveledRoute() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getTraveledRoute$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getTraveledRoute$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -7840,12 +8620,14 @@ class NavigationSessionApi {
   }
 
   Future<RouteSegmentDto?> getCurrentRouteSegment() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getCurrentRouteSegment$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.getCurrentRouteSegment$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -7863,13 +8645,17 @@ class NavigationSessionApi {
   }
 
   Future<void> setUserLocation(LatLngDto location) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setUserLocation$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setUserLocation$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[location],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[location]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7886,12 +8672,14 @@ class NavigationSessionApi {
   }
 
   Future<void> removeUserLocation() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.removeUserLocation$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.removeUserLocation$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -7909,12 +8697,14 @@ class NavigationSessionApi {
   }
 
   Future<void> simulateLocationsAlongExistingRoute() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongExistingRoute$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongExistingRoute$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -7931,14 +8721,20 @@ class NavigationSessionApi {
     }
   }
 
-  Future<void> simulateLocationsAlongExistingRouteWithOptions(SimulationOptionsDto options) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongExistingRouteWithOptions$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> simulateLocationsAlongExistingRouteWithOptions(
+    SimulationOptionsDto options,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongExistingRouteWithOptions$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[options],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[options]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7954,14 +8750,20 @@ class NavigationSessionApi {
     }
   }
 
-  Future<RouteStatusDto> simulateLocationsAlongNewRoute(List<NavigationWaypointDto> waypoints) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRoute$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<RouteStatusDto> simulateLocationsAlongNewRoute(
+    List<NavigationWaypointDto> waypoints,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRoute$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[waypoints],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[waypoints]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -7982,14 +8784,21 @@ class NavigationSessionApi {
     }
   }
 
-  Future<RouteStatusDto> simulateLocationsAlongNewRouteWithRoutingOptions(List<NavigationWaypointDto> waypoints, RoutingOptionsDto routingOptions) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingOptions$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<RouteStatusDto> simulateLocationsAlongNewRouteWithRoutingOptions(
+    List<NavigationWaypointDto> waypoints,
+    RoutingOptionsDto routingOptions,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingOptions$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[waypoints, routingOptions],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[waypoints, routingOptions]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8010,14 +8819,23 @@ class NavigationSessionApi {
     }
   }
 
-  Future<RouteStatusDto> simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(List<NavigationWaypointDto> waypoints, RoutingOptionsDto routingOptions, SimulationOptionsDto simulationOptions) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<RouteStatusDto>
+  simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
+    List<NavigationWaypointDto> waypoints,
+    RoutingOptionsDto routingOptions,
+    SimulationOptionsDto simulationOptions,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[waypoints, routingOptions, simulationOptions],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[waypoints, routingOptions, simulationOptions]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8039,12 +8857,14 @@ class NavigationSessionApi {
   }
 
   Future<void> pauseSimulation() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.pauseSimulation$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.pauseSimulation$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -8062,12 +8882,14 @@ class NavigationSessionApi {
   }
 
   Future<void> resumeSimulation() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.resumeSimulation$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.resumeSimulation$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -8086,13 +8908,17 @@ class NavigationSessionApi {
 
   /// iOS-only method.
   Future<void> allowBackgroundLocationUpdates(bool allow) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.allowBackgroundLocationUpdates$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.allowBackgroundLocationUpdates$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[allow],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[allow]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8109,12 +8935,14 @@ class NavigationSessionApi {
   }
 
   Future<void> enableRoadSnappedLocationUpdates() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.enableRoadSnappedLocationUpdates$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.enableRoadSnappedLocationUpdates$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -8132,12 +8960,14 @@ class NavigationSessionApi {
   }
 
   Future<void> disableRoadSnappedLocationUpdates() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.disableRoadSnappedLocationUpdates$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.disableRoadSnappedLocationUpdates$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -8154,14 +8984,21 @@ class NavigationSessionApi {
     }
   }
 
-  Future<void> enableTurnByTurnNavigationEvents(int? numNextStepsToPreview, StepImageGenerationOptionsDto? options) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.enableTurnByTurnNavigationEvents$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> enableTurnByTurnNavigationEvents(
+    int? numNextStepsToPreview,
+    StepImageGenerationOptionsDto? options,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.enableTurnByTurnNavigationEvents$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[numNextStepsToPreview, options],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[numNextStepsToPreview, options]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8178,12 +9015,14 @@ class NavigationSessionApi {
   }
 
   Future<void> disableTurnByTurnNavigationEvents() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.disableTurnByTurnNavigationEvents$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.disableTurnByTurnNavigationEvents$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -8200,14 +9039,24 @@ class NavigationSessionApi {
     }
   }
 
-  Future<void> registerRemainingTimeOrDistanceChangedListener(int remainingTimeThresholdSeconds, int remainingDistanceThresholdMeters) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.registerRemainingTimeOrDistanceChangedListener$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> registerRemainingTimeOrDistanceChangedListener(
+    int remainingTimeThresholdSeconds,
+    int remainingDistanceThresholdMeters,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.registerRemainingTimeOrDistanceChangedListener$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[
+        remainingTimeThresholdSeconds,
+        remainingDistanceThresholdMeters,
+      ],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[remainingTimeThresholdSeconds, remainingDistanceThresholdMeters]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8237,7 +9086,11 @@ abstract class NavigationSessionEventApi {
 
   void onRouteChanged();
 
-  void onRemainingTimeOrDistanceChanged(double remainingTime, double remainingDistance, TrafficDelaySeverityDto delaySeverity);
+  void onRemainingTimeOrDistanceChanged(
+    double remainingTime,
+    double remainingDistance,
+    TrafficDelaySeverityDto delaySeverity,
+  );
 
   /// Android-only event.
   void onTrafficUpdated();
@@ -8258,112 +9111,159 @@ abstract class NavigationSessionEventApi {
   /// session starts with active guidance.
   void onNewNavigationSession();
 
-  static void setUp(NavigationSessionEventApi? api, {BinaryMessenger? binaryMessenger, String messageChannelSuffix = '',}) {
-    messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  static void setUp(
+    NavigationSessionEventApi? api, {
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) {
+    messageChannelSuffix = messageChannelSuffix.isNotEmpty
+        ? '.$messageChannelSuffix'
+        : '';
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onSpeedingUpdated$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onSpeedingUpdated$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onSpeedingUpdated was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onSpeedingUpdated was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
-          final SpeedingUpdatedEventDto? arg_msg = (args[0] as SpeedingUpdatedEventDto?);
-          assert(arg_msg != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onSpeedingUpdated was null, expected non-null SpeedingUpdatedEventDto.');
+          final SpeedingUpdatedEventDto? arg_msg =
+              (args[0] as SpeedingUpdatedEventDto?);
+          assert(
+            arg_msg != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onSpeedingUpdated was null, expected non-null SpeedingUpdatedEventDto.',
+          );
           try {
             api.onSpeedingUpdated(arg_msg!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRoadSnappedLocationUpdated$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRoadSnappedLocationUpdated$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRoadSnappedLocationUpdated was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRoadSnappedLocationUpdated was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final LatLngDto? arg_location = (args[0] as LatLngDto?);
-          assert(arg_location != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRoadSnappedLocationUpdated was null, expected non-null LatLngDto.');
+          assert(
+            arg_location != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRoadSnappedLocationUpdated was null, expected non-null LatLngDto.',
+          );
           try {
             api.onRoadSnappedLocationUpdated(arg_location!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRoadSnappedRawLocationUpdated$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRoadSnappedRawLocationUpdated$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRoadSnappedRawLocationUpdated was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRoadSnappedRawLocationUpdated was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final LatLngDto? arg_location = (args[0] as LatLngDto?);
-          assert(arg_location != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRoadSnappedRawLocationUpdated was null, expected non-null LatLngDto.');
+          assert(
+            arg_location != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRoadSnappedRawLocationUpdated was null, expected non-null LatLngDto.',
+          );
           try {
             api.onRoadSnappedRawLocationUpdated(arg_location!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onArrival$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onArrival$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onArrival was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onArrival was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
-          final NavigationWaypointDto? arg_waypoint = (args[0] as NavigationWaypointDto?);
-          assert(arg_waypoint != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onArrival was null, expected non-null NavigationWaypointDto.');
+          final NavigationWaypointDto? arg_waypoint =
+              (args[0] as NavigationWaypointDto?);
+          assert(
+            arg_waypoint != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onArrival was null, expected non-null NavigationWaypointDto.',
+          );
           try {
             api.onArrival(arg_waypoint!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRouteChanged$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRouteChanged$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
@@ -8373,47 +9273,70 @@ abstract class NavigationSessionEventApi {
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRemainingTimeOrDistanceChanged$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRemainingTimeOrDistanceChanged$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRemainingTimeOrDistanceChanged was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRemainingTimeOrDistanceChanged was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final double? arg_remainingTime = (args[0] as double?);
-          assert(arg_remainingTime != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRemainingTimeOrDistanceChanged was null, expected non-null double.');
+          assert(
+            arg_remainingTime != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRemainingTimeOrDistanceChanged was null, expected non-null double.',
+          );
           final double? arg_remainingDistance = (args[1] as double?);
-          assert(arg_remainingDistance != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRemainingTimeOrDistanceChanged was null, expected non-null double.');
-          final TrafficDelaySeverityDto? arg_delaySeverity = (args[2] as TrafficDelaySeverityDto?);
-          assert(arg_delaySeverity != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRemainingTimeOrDistanceChanged was null, expected non-null TrafficDelaySeverityDto.');
+          assert(
+            arg_remainingDistance != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRemainingTimeOrDistanceChanged was null, expected non-null double.',
+          );
+          final TrafficDelaySeverityDto? arg_delaySeverity =
+              (args[2] as TrafficDelaySeverityDto?);
+          assert(
+            arg_delaySeverity != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRemainingTimeOrDistanceChanged was null, expected non-null TrafficDelaySeverityDto.',
+          );
           try {
-            api.onRemainingTimeOrDistanceChanged(arg_remainingTime!, arg_remainingDistance!, arg_delaySeverity!);
+            api.onRemainingTimeOrDistanceChanged(
+              arg_remainingTime!,
+              arg_remainingDistance!,
+              arg_delaySeverity!,
+            );
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onTrafficUpdated$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onTrafficUpdated$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
@@ -8423,16 +9346,21 @@ abstract class NavigationSessionEventApi {
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRerouting$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRerouting$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
@@ -8442,91 +9370,124 @@ abstract class NavigationSessionEventApi {
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityUpdate$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityUpdate$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityUpdate was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityUpdate was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final bool? arg_available = (args[0] as bool?);
-          assert(arg_available != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityUpdate was null, expected non-null bool.');
+          assert(
+            arg_available != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityUpdate was null, expected non-null bool.',
+          );
           try {
             api.onGpsAvailabilityUpdate(arg_available!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityChange$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityChange$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityChange was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityChange was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
-          final GpsAvailabilityChangeEventDto? arg_event = (args[0] as GpsAvailabilityChangeEventDto?);
-          assert(arg_event != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityChange was null, expected non-null GpsAvailabilityChangeEventDto.');
+          final GpsAvailabilityChangeEventDto? arg_event =
+              (args[0] as GpsAvailabilityChangeEventDto?);
+          assert(
+            arg_event != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityChange was null, expected non-null GpsAvailabilityChangeEventDto.',
+          );
           try {
             api.onGpsAvailabilityChange(arg_event!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onNavInfo$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onNavInfo$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onNavInfo was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onNavInfo was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final NavInfoDto? arg_navInfo = (args[0] as NavInfoDto?);
-          assert(arg_navInfo != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onNavInfo was null, expected non-null NavInfoDto.');
+          assert(
+            arg_navInfo != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onNavInfo was null, expected non-null NavInfoDto.',
+          );
           try {
             api.onNavInfo(arg_navInfo!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onNewNavigationSession$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onNewNavigationSession$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
@@ -8536,8 +9497,10 @@ abstract class NavigationSessionEventApi {
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
@@ -8549,9 +9512,13 @@ class AutoMapViewApi {
   /// Constructor for [AutoMapViewApi].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  AutoMapViewApi({BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  AutoMapViewApi({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
@@ -8562,13 +9529,17 @@ class AutoMapViewApi {
   /// Should be called before the Auto/CarPlay screen is created.
   /// This allows customization of mapId and basic map settings.
   Future<void> setAutoMapOptions(AutoMapOptionsDto mapOptions) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setAutoMapOptions$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setAutoMapOptions$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[mapOptions],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mapOptions]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8585,12 +9556,14 @@ class AutoMapViewApi {
   }
 
   Future<bool> isMyLocationEnabled() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMyLocationEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMyLocationEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -8613,13 +9586,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setMyLocationEnabled(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMyLocationEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMyLocationEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8636,12 +9613,14 @@ class AutoMapViewApi {
   }
 
   Future<LatLngDto?> getMyLocation() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMyLocation$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMyLocation$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -8659,12 +9638,14 @@ class AutoMapViewApi {
   }
 
   Future<MapTypeDto> getMapType() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMapType$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMapType$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -8687,13 +9668,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setMapType(MapTypeDto mapType) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapType$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapType$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[mapType],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mapType]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8710,13 +9695,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setMapStyle(String styleJson) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapStyle$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapStyle$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[styleJson],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[styleJson]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8733,12 +9722,14 @@ class AutoMapViewApi {
   }
 
   Future<CameraPositionDto> getCameraPosition() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getCameraPosition$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getCameraPosition$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -8761,12 +9752,14 @@ class AutoMapViewApi {
   }
 
   Future<LatLngBoundsDto> getVisibleRegion() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getVisibleRegion$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getVisibleRegion$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -8788,14 +9781,21 @@ class AutoMapViewApi {
     }
   }
 
-  Future<void> followMyLocation(CameraPerspectiveDto perspective, double? zoomLevel) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.followMyLocation$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> followMyLocation(
+    CameraPerspectiveDto perspective,
+    double? zoomLevel,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.followMyLocation$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[perspective, zoomLevel],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[perspective, zoomLevel]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8811,14 +9811,21 @@ class AutoMapViewApi {
     }
   }
 
-  Future<bool> animateCameraToCameraPosition(CameraPositionDto cameraPosition, int? duration) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToCameraPosition$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<bool> animateCameraToCameraPosition(
+    CameraPositionDto cameraPosition,
+    int? duration,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToCameraPosition$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[cameraPosition, duration],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[cameraPosition, duration]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8840,13 +9847,17 @@ class AutoMapViewApi {
   }
 
   Future<bool> animateCameraToLatLng(LatLngDto point, int? duration) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLng$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLng$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[point, duration],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[point, duration]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8867,14 +9878,22 @@ class AutoMapViewApi {
     }
   }
 
-  Future<bool> animateCameraToLatLngBounds(LatLngBoundsDto bounds, double padding, int? duration) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngBounds$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<bool> animateCameraToLatLngBounds(
+    LatLngBoundsDto bounds,
+    double padding,
+    int? duration,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngBounds$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[bounds, padding, duration],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[bounds, padding, duration]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8895,14 +9914,22 @@ class AutoMapViewApi {
     }
   }
 
-  Future<bool> animateCameraToLatLngZoom(LatLngDto point, double zoom, int? duration) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngZoom$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<bool> animateCameraToLatLngZoom(
+    LatLngDto point,
+    double zoom,
+    int? duration,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToLatLngZoom$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[point, zoom, duration],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[point, zoom, duration]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8923,14 +9950,22 @@ class AutoMapViewApi {
     }
   }
 
-  Future<bool> animateCameraByScroll(double scrollByDx, double scrollByDy, int? duration) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByScroll$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<bool> animateCameraByScroll(
+    double scrollByDx,
+    double scrollByDy,
+    int? duration,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByScroll$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[scrollByDx, scrollByDy, duration],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[scrollByDx, scrollByDy, duration]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8951,14 +9986,23 @@ class AutoMapViewApi {
     }
   }
 
-  Future<bool> animateCameraByZoom(double zoomBy, double? focusDx, double? focusDy, int? duration) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByZoom$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<bool> animateCameraByZoom(
+    double zoomBy,
+    double? focusDx,
+    double? focusDy,
+    int? duration,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraByZoom$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[zoomBy, focusDx, focusDy, duration],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[zoomBy, focusDx, focusDy, duration]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -8980,13 +10024,17 @@ class AutoMapViewApi {
   }
 
   Future<bool> animateCameraToZoom(double zoom, int? duration) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToZoom$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.animateCameraToZoom$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[zoom, duration],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[zoom, duration]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9007,14 +10055,20 @@ class AutoMapViewApi {
     }
   }
 
-  Future<void> moveCameraToCameraPosition(CameraPositionDto cameraPosition) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToCameraPosition$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> moveCameraToCameraPosition(
+    CameraPositionDto cameraPosition,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToCameraPosition$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[cameraPosition],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[cameraPosition]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9031,13 +10085,17 @@ class AutoMapViewApi {
   }
 
   Future<void> moveCameraToLatLng(LatLngDto point) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLng$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLng$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[point],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[point]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9053,14 +10111,21 @@ class AutoMapViewApi {
     }
   }
 
-  Future<void> moveCameraToLatLngBounds(LatLngBoundsDto bounds, double padding) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngBounds$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> moveCameraToLatLngBounds(
+    LatLngBoundsDto bounds,
+    double padding,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngBounds$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[bounds, padding],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[bounds, padding]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9077,13 +10142,17 @@ class AutoMapViewApi {
   }
 
   Future<void> moveCameraToLatLngZoom(LatLngDto point, double zoom) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngZoom$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToLatLngZoom$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[point, zoom],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[point, zoom]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9100,13 +10169,17 @@ class AutoMapViewApi {
   }
 
   Future<void> moveCameraByScroll(double scrollByDx, double scrollByDy) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByScroll$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByScroll$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[scrollByDx, scrollByDy],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[scrollByDx, scrollByDy]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9122,14 +10195,22 @@ class AutoMapViewApi {
     }
   }
 
-  Future<void> moveCameraByZoom(double zoomBy, double? focusDx, double? focusDy) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByZoom$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> moveCameraByZoom(
+    double zoomBy,
+    double? focusDx,
+    double? focusDy,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraByZoom$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[zoomBy, focusDx, focusDy],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[zoomBy, focusDx, focusDy]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9146,13 +10227,17 @@ class AutoMapViewApi {
   }
 
   Future<void> moveCameraToZoom(double zoom) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToZoom$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.moveCameraToZoom$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[zoom],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[zoom]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9169,12 +10254,14 @@ class AutoMapViewApi {
   }
 
   Future<double> getMinZoomPreference() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMinZoomPreference$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMinZoomPreference$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -9197,12 +10284,14 @@ class AutoMapViewApi {
   }
 
   Future<double> getMaxZoomPreference() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMaxZoomPreference$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMaxZoomPreference$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -9225,12 +10314,14 @@ class AutoMapViewApi {
   }
 
   Future<void> resetMinMaxZoomPreference() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.resetMinMaxZoomPreference$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.resetMinMaxZoomPreference$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -9248,13 +10339,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setMinZoomPreference(double minZoomPreference) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMinZoomPreference$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMinZoomPreference$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[minZoomPreference],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[minZoomPreference]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9271,13 +10366,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setMaxZoomPreference(double maxZoomPreference) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMaxZoomPreference$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMaxZoomPreference$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[maxZoomPreference],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[maxZoomPreference]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9294,13 +10393,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setMyLocationButtonEnabled(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMyLocationButtonEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMyLocationButtonEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9316,14 +10419,20 @@ class AutoMapViewApi {
     }
   }
 
-  Future<void> setConsumeMyLocationButtonClickEventsEnabled(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setConsumeMyLocationButtonClickEventsEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> setConsumeMyLocationButtonClickEventsEnabled(
+    bool enabled,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setConsumeMyLocationButtonClickEventsEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9340,13 +10449,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setZoomGesturesEnabled(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setZoomGesturesEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setZoomGesturesEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9363,13 +10476,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setZoomControlsEnabled(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setZoomControlsEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setZoomControlsEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9386,13 +10503,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setCompassEnabled(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setCompassEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setCompassEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9409,13 +10530,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setRotateGesturesEnabled(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setRotateGesturesEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setRotateGesturesEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9432,13 +10557,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setScrollGesturesEnabled(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setScrollGesturesEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setScrollGesturesEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9455,13 +10584,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setScrollGesturesDuringRotateOrZoomEnabled(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setScrollGesturesDuringRotateOrZoomEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setScrollGesturesDuringRotateOrZoomEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9478,13 +10611,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setTiltGesturesEnabled(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTiltGesturesEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTiltGesturesEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9501,13 +10638,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setMapToolbarEnabled(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapToolbarEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapToolbarEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9524,13 +10665,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setTrafficEnabled(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9547,13 +10692,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setTrafficPromptsEnabled(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficPromptsEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficPromptsEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9570,13 +10719,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setTrafficIncidentCardsEnabled(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficIncidentCardsEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setTrafficIncidentCardsEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9593,13 +10746,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setNavigationTripProgressBarEnabled(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationTripProgressBarEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationTripProgressBarEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9616,13 +10773,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setSpeedLimitIconEnabled(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setSpeedLimitIconEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setSpeedLimitIconEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9639,13 +10800,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setSpeedometerEnabled(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setSpeedometerEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setSpeedometerEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9662,13 +10827,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setNavigationUIEnabled(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationUIEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setNavigationUIEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -9685,12 +10854,14 @@ class AutoMapViewApi {
   }
 
   Future<bool> isMyLocationButtonEnabled() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMyLocationButtonEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMyLocationButtonEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -9713,12 +10884,14 @@ class AutoMapViewApi {
   }
 
   Future<bool> isConsumeMyLocationButtonClickEventsEnabled() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isConsumeMyLocationButtonClickEventsEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isConsumeMyLocationButtonClickEventsEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -9741,12 +10914,14 @@ class AutoMapViewApi {
   }
 
   Future<bool> isZoomGesturesEnabled() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isZoomGesturesEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isZoomGesturesEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -9769,12 +10944,14 @@ class AutoMapViewApi {
   }
 
   Future<bool> isZoomControlsEnabled() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isZoomControlsEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isZoomControlsEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -9797,12 +10974,14 @@ class AutoMapViewApi {
   }
 
   Future<bool> isCompassEnabled() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isCompassEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isCompassEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -9825,12 +11004,14 @@ class AutoMapViewApi {
   }
 
   Future<bool> isRotateGesturesEnabled() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isRotateGesturesEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isRotateGesturesEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -9853,12 +11034,14 @@ class AutoMapViewApi {
   }
 
   Future<bool> isScrollGesturesEnabled() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isScrollGesturesEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isScrollGesturesEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -9881,12 +11064,14 @@ class AutoMapViewApi {
   }
 
   Future<bool> isScrollGesturesEnabledDuringRotateOrZoom() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isScrollGesturesEnabledDuringRotateOrZoom$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isScrollGesturesEnabledDuringRotateOrZoom$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -9909,12 +11094,14 @@ class AutoMapViewApi {
   }
 
   Future<bool> isTiltGesturesEnabled() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isTiltGesturesEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isTiltGesturesEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -9937,12 +11124,14 @@ class AutoMapViewApi {
   }
 
   Future<bool> isMapToolbarEnabled() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMapToolbarEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isMapToolbarEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -9965,12 +11154,14 @@ class AutoMapViewApi {
   }
 
   Future<bool> isTrafficEnabled() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isTrafficEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isTrafficEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -9993,12 +11184,14 @@ class AutoMapViewApi {
   }
 
   Future<bool> isTrafficPromptsEnabled() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isTrafficPromptsEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isTrafficPromptsEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -10021,12 +11214,14 @@ class AutoMapViewApi {
   }
 
   Future<bool> isTrafficIncidentCardsEnabled() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isTrafficIncidentCardsEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isTrafficIncidentCardsEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -10049,12 +11244,14 @@ class AutoMapViewApi {
   }
 
   Future<bool> isNavigationTripProgressBarEnabled() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isNavigationTripProgressBarEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isNavigationTripProgressBarEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -10077,12 +11274,14 @@ class AutoMapViewApi {
   }
 
   Future<bool> isSpeedLimitIconEnabled() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isSpeedLimitIconEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isSpeedLimitIconEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -10105,12 +11304,14 @@ class AutoMapViewApi {
   }
 
   Future<bool> isSpeedometerEnabled() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isSpeedometerEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isSpeedometerEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -10133,12 +11334,14 @@ class AutoMapViewApi {
   }
 
   Future<bool> isNavigationUIEnabled() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isNavigationUIEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isNavigationUIEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -10161,12 +11364,14 @@ class AutoMapViewApi {
   }
 
   Future<bool> isIndoorEnabled() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isIndoorEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isIndoorEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -10189,13 +11394,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setIndoorEnabled(bool enabled) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setIndoorEnabled$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setIndoorEnabled$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[enabled],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[enabled]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -10212,12 +11421,14 @@ class AutoMapViewApi {
   }
 
   Future<IndoorBuildingDto?> getFocusedIndoorBuilding() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getFocusedIndoorBuilding$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getFocusedIndoorBuilding$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -10235,13 +11446,17 @@ class AutoMapViewApi {
   }
 
   Future<void> activateIndoorLevel(int levelIndex) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.activateIndoorLevel$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.activateIndoorLevel$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[levelIndex],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[levelIndex]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -10258,12 +11473,14 @@ class AutoMapViewApi {
   }
 
   Future<void> showRouteOverview() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.showRouteOverview$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.showRouteOverview$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -10281,12 +11498,14 @@ class AutoMapViewApi {
   }
 
   Future<List<MarkerDto>> getMarkers() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMarkers$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMarkers$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -10309,13 +11528,17 @@ class AutoMapViewApi {
   }
 
   Future<List<MarkerDto>> addMarkers(List<MarkerDto> markers) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addMarkers$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addMarkers$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[markers],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[markers]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -10337,13 +11560,17 @@ class AutoMapViewApi {
   }
 
   Future<List<MarkerDto>> updateMarkers(List<MarkerDto> markers) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updateMarkers$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updateMarkers$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[markers],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[markers]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -10365,13 +11592,17 @@ class AutoMapViewApi {
   }
 
   Future<void> removeMarkers(List<MarkerDto> markers) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removeMarkers$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removeMarkers$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[markers],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[markers]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -10388,12 +11619,14 @@ class AutoMapViewApi {
   }
 
   Future<void> clearMarkers() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearMarkers$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearMarkers$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -10411,12 +11644,14 @@ class AutoMapViewApi {
   }
 
   Future<void> clear() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clear$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clear$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -10434,12 +11669,14 @@ class AutoMapViewApi {
   }
 
   Future<List<PolygonDto>> getPolygons() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPolygons$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPolygons$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -10462,13 +11699,17 @@ class AutoMapViewApi {
   }
 
   Future<List<PolygonDto>> addPolygons(List<PolygonDto> polygons) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addPolygons$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addPolygons$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[polygons],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[polygons]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -10490,13 +11731,17 @@ class AutoMapViewApi {
   }
 
   Future<List<PolygonDto>> updatePolygons(List<PolygonDto> polygons) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updatePolygons$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updatePolygons$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[polygons],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[polygons]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -10518,13 +11763,17 @@ class AutoMapViewApi {
   }
 
   Future<void> removePolygons(List<PolygonDto> polygons) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removePolygons$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removePolygons$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[polygons],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[polygons]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -10541,12 +11790,14 @@ class AutoMapViewApi {
   }
 
   Future<void> clearPolygons() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearPolygons$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearPolygons$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -10564,12 +11815,14 @@ class AutoMapViewApi {
   }
 
   Future<List<PolylineDto>> getPolylines() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPolylines$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPolylines$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -10592,13 +11845,17 @@ class AutoMapViewApi {
   }
 
   Future<List<PolylineDto>> addPolylines(List<PolylineDto> polylines) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addPolylines$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addPolylines$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[polylines],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[polylines]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -10620,13 +11877,17 @@ class AutoMapViewApi {
   }
 
   Future<List<PolylineDto>> updatePolylines(List<PolylineDto> polylines) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updatePolylines$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updatePolylines$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[polylines],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[polylines]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -10648,13 +11909,17 @@ class AutoMapViewApi {
   }
 
   Future<void> removePolylines(List<PolylineDto> polylines) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removePolylines$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removePolylines$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[polylines],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[polylines]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -10671,12 +11936,14 @@ class AutoMapViewApi {
   }
 
   Future<void> clearPolylines() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearPolylines$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearPolylines$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -10694,12 +11961,14 @@ class AutoMapViewApi {
   }
 
   Future<List<CircleDto>> getCircles() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getCircles$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getCircles$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -10722,13 +11991,17 @@ class AutoMapViewApi {
   }
 
   Future<List<CircleDto>> addCircles(List<CircleDto> circles) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addCircles$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.addCircles$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[circles],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[circles]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -10750,13 +12023,17 @@ class AutoMapViewApi {
   }
 
   Future<List<CircleDto>> updateCircles(List<CircleDto> circles) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updateCircles$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.updateCircles$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[circles],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[circles]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -10778,13 +12055,17 @@ class AutoMapViewApi {
   }
 
   Future<void> removeCircles(List<CircleDto> circles) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removeCircles$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.removeCircles$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[circles],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[circles]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -10801,12 +12082,14 @@ class AutoMapViewApi {
   }
 
   Future<void> clearCircles() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearCircles$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.clearCircles$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -10824,12 +12107,14 @@ class AutoMapViewApi {
   }
 
   Future<void> enableOnCameraChangedEvents() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.enableOnCameraChangedEvents$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.enableOnCameraChangedEvents$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -10847,12 +12132,14 @@ class AutoMapViewApi {
   }
 
   Future<bool> isAutoScreenAvailable() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isAutoScreenAvailable$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.isAutoScreenAvailable$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -10875,13 +12162,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setPadding(MapPaddingDto padding) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setPadding$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setPadding$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[padding],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[padding]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -10898,12 +12189,14 @@ class AutoMapViewApi {
   }
 
   Future<MapPaddingDto> getPadding() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPadding$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getPadding$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -10926,12 +12219,14 @@ class AutoMapViewApi {
   }
 
   Future<MapColorSchemeDto> getMapColorScheme() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMapColorScheme$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getMapColorScheme$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -10954,13 +12249,17 @@ class AutoMapViewApi {
   }
 
   Future<void> setMapColorScheme(MapColorSchemeDto mapColorScheme) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapColorScheme$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setMapColorScheme$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[mapColorScheme],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mapColorScheme]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -10977,12 +12276,14 @@ class AutoMapViewApi {
   }
 
   Future<NavigationForceNightModeDto> getForceNightMode() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getForceNightMode$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.getForceNightMode$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
@@ -11004,14 +12305,20 @@ class AutoMapViewApi {
     }
   }
 
-  Future<void> setForceNightMode(NavigationForceNightModeDto forceNightMode) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setForceNightMode$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+  Future<void> setForceNightMode(
+    NavigationForceNightModeDto forceNightMode,
+  ) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.setForceNightMode$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[forceNightMode],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[forceNightMode]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -11028,13 +12335,17 @@ class AutoMapViewApi {
   }
 
   Future<void> sendCustomNavigationAutoEvent(String event, Object data) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.sendCustomNavigationAutoEvent$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.AutoMapViewApi.sendCustomNavigationAutoEvent$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[event, data],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[event, data]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -11066,153 +12377,213 @@ abstract class AutoViewEventApi {
 
   void onIndoorActiveLevelChanged(IndoorBuildingDto? building);
 
-  static void setUp(AutoViewEventApi? api, {BinaryMessenger? binaryMessenger, String messageChannelSuffix = '',}) {
-    messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  static void setUp(
+    AutoViewEventApi? api, {
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) {
+    messageChannelSuffix = messageChannelSuffix.isNotEmpty
+        ? '.$messageChannelSuffix'
+        : '';
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onCustomNavigationAutoEvent$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onCustomNavigationAutoEvent$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onCustomNavigationAutoEvent was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onCustomNavigationAutoEvent was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final String? arg_event = (args[0] as String?);
-          assert(arg_event != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onCustomNavigationAutoEvent was null, expected non-null String.');
+          assert(
+            arg_event != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onCustomNavigationAutoEvent was null, expected non-null String.',
+          );
           final Object? arg_data = (args[1] as Object?);
-          assert(arg_data != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onCustomNavigationAutoEvent was null, expected non-null Object.');
+          assert(
+            arg_data != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onCustomNavigationAutoEvent was null, expected non-null Object.',
+          );
           try {
             api.onCustomNavigationAutoEvent(arg_event!, arg_data!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onAutoScreenAvailabilityChanged$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onAutoScreenAvailabilityChanged$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onAutoScreenAvailabilityChanged was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onAutoScreenAvailabilityChanged was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final bool? arg_isAvailable = (args[0] as bool?);
-          assert(arg_isAvailable != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onAutoScreenAvailabilityChanged was null, expected non-null bool.');
+          assert(
+            arg_isAvailable != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onAutoScreenAvailabilityChanged was null, expected non-null bool.',
+          );
           try {
             api.onAutoScreenAvailabilityChanged(arg_isAvailable!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onPromptVisibilityChanged$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onPromptVisibilityChanged$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onPromptVisibilityChanged was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onPromptVisibilityChanged was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final bool? arg_promptVisible = (args[0] as bool?);
-          assert(arg_promptVisible != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onPromptVisibilityChanged was null, expected non-null bool.');
+          assert(
+            arg_promptVisible != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onPromptVisibilityChanged was null, expected non-null bool.',
+          );
           try {
             api.onPromptVisibilityChanged(arg_promptVisible!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onNavigationUIEnabledChanged$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onNavigationUIEnabledChanged$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onNavigationUIEnabledChanged was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onNavigationUIEnabledChanged was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
           final bool? arg_navigationUIEnabled = (args[0] as bool?);
-          assert(arg_navigationUIEnabled != null,
-              'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onNavigationUIEnabledChanged was null, expected non-null bool.');
+          assert(
+            arg_navigationUIEnabled != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onNavigationUIEnabledChanged was null, expected non-null bool.',
+          );
           try {
             api.onNavigationUIEnabledChanged(arg_navigationUIEnabled!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onIndoorFocusedBuildingChanged$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onIndoorFocusedBuildingChanged$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onIndoorFocusedBuildingChanged was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onIndoorFocusedBuildingChanged was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
-          final IndoorBuildingDto? arg_building = (args[0] as IndoorBuildingDto?);
+          final IndoorBuildingDto? arg_building =
+              (args[0] as IndoorBuildingDto?);
           try {
             api.onIndoorFocusedBuildingChanged(arg_building);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onIndoorActiveLevelChanged$messageChannelSuffix', pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onIndoorActiveLevelChanged$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
       if (api == null) {
         pigeonVar_channel.setMessageHandler(null);
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-          'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onIndoorActiveLevelChanged was null.');
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.AutoViewEventApi.onIndoorActiveLevelChanged was null.',
+          );
           final List<Object?> args = (message as List<Object?>?)!;
-          final IndoorBuildingDto? arg_building = (args[0] as IndoorBuildingDto?);
+          final IndoorBuildingDto? arg_building =
+              (args[0] as IndoorBuildingDto?);
           try {
             api.onIndoorActiveLevelChanged(arg_building);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
           }
         });
       }
@@ -11224,9 +12595,13 @@ class NavigationInspector {
   /// Constructor for [NavigationInspector].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  NavigationInspector({BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  NavigationInspector({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty
+           ? '.$messageChannelSuffix'
+           : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
@@ -11234,13 +12609,17 @@ class NavigationInspector {
   final String pigeonVar_messageChannelSuffix;
 
   Future<bool> isViewAttachedToSession(int viewId) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.google_navigation_flutter.NavigationInspector.isViewAttachedToSession$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationInspector.isViewAttachedToSession$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
+      <Object?>[viewId],
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[viewId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
