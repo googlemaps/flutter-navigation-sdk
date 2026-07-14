@@ -318,6 +318,13 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
             notificationId: 1234,
             defaultMessage: 'Navigation is active',
             resumeAppOnTap: true,
+            // Custom notifications replace the SDK's turn-by-turn notification content.
+            customNotificationOptions: NavigationCustomNotificationOptions(
+              channelId: 'navigation',
+              title: 'Navigation is active',
+              body: 'Follow the route in the app.',
+              resumeAppOnTap: true,
+            ),
           ),
         );
       } on SessionInitializationException catch (e) {

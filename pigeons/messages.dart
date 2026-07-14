@@ -1505,19 +1505,41 @@ enum TaskRemovedBehaviorDto {
   quitService,
 }
 
+/// Android custom foreground-service notification configuration.
+class NavigationCustomNotificationOptionsDto {
+  NavigationCustomNotificationOptionsDto({
+    required this.channelId,
+    required this.title,
+    required this.body,
+    this.smallIconResourceName,
+    this.color,
+    required this.resumeAppOnTap,
+  });
+
+  final String channelId;
+  final String title;
+  final String body;
+  final String? smallIconResourceName;
+  final int? color;
+  final bool resumeAppOnTap;
+}
+
 /// Android foreground-service notification configuration.
 ///
-/// This preserves the Navigation SDK's built-in turn-by-turn notification.
+/// [customNotificationOptions] replaces the Navigation SDK's built-in
+/// turn-by-turn notification.
 class NavigationNotificationOptionsDto {
   NavigationNotificationOptionsDto({
     this.notificationId,
     this.defaultMessage,
     required this.resumeAppOnTap,
+    this.customNotificationOptions,
   });
 
   final int? notificationId;
   final String? defaultMessage;
   final bool resumeAppOnTap;
+  final NavigationCustomNotificationOptionsDto? customNotificationOptions;
 }
 
 /// Options for step image generation in turn-by-turn navigation events.

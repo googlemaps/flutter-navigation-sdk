@@ -26,7 +26,24 @@ extension ConvertNavigationNotificationOptions
     notificationId: notificationId,
     defaultMessage: defaultMessage,
     resumeAppOnTap: resumeAppOnTap,
+    customNotificationOptions: customNotificationOptions?.toDto(),
   );
+}
+
+/// [NavigationCustomNotificationOptions] convert extension.
+/// @nodoc
+extension ConvertNavigationCustomNotificationOptions
+    on NavigationCustomNotificationOptions {
+  /// Converts [NavigationCustomNotificationOptions] to its platform representation.
+  NavigationCustomNotificationOptionsDto toDto() =>
+      NavigationCustomNotificationOptionsDto(
+        channelId: channelId,
+        title: title,
+        body: body,
+        smallIconResourceName: smallIconResourceName,
+        color: color,
+        resumeAppOnTap: resumeAppOnTap,
+      );
 }
 
 /// [SpeedAlertSeverityDto] convert extension.

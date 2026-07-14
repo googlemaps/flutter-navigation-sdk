@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'navigation_custom_notification_options.dart';
+
 /// Configures the Android navigation foreground-service notification.
 ///
 /// These options preserve the Navigation SDK's built-in turn-by-turn
@@ -24,6 +26,7 @@ class NavigationNotificationOptions {
     this.notificationId,
     this.defaultMessage,
     this.resumeAppOnTap = false,
+    this.customNotificationOptions,
   });
 
   /// The Android notification ID. The Navigation SDK default is used when null.
@@ -34,6 +37,13 @@ class NavigationNotificationOptions {
   /// The Navigation SDK default is used when null.
   final String? defaultMessage;
 
-  /// Whether tapping the notification opens or resumes the application.
+  /// Whether tapping the SDK notification opens or resumes the application.
+  ///
+  /// Ignored when [customNotificationOptions] is supplied.
   final bool resumeAppOnTap;
+
+  /// Replaces the Navigation SDK notification with custom Android content.
+  ///
+  /// This removes the SDK's turn-by-turn notification information.
+  final NavigationCustomNotificationOptions? customNotificationOptions;
 }

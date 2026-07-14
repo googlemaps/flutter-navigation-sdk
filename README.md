@@ -194,6 +194,23 @@ await GoogleMapsNavigator.initializeNavigationSession(
 These options retain the Navigation SDK's turn-by-turn notification content;
 custom notification layouts are not supported.
 
+To replace the SDK notification entirely, supply custom content. The plugin
+creates a low-importance Android notification channel when needed; create it
+in host Android code first to customize its importance, sound, or vibration.
+This removes the SDK's turn-by-turn notification content.
+
+```dart
+notificationOptions: const NavigationNotificationOptions(
+  notificationId: 1234,
+  customNotificationOptions: NavigationCustomNotificationOptions(
+    channelId: 'navigation',
+    title: 'Navigation is active',
+    body: 'Follow the route',
+    resumeAppOnTap: true,
+  ),
+),
+```
+
 ### Add a map view
 
 ```dart

@@ -18,7 +18,12 @@ package com.google.maps.flutter.navigation
 
 import android.app.Activity
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.os.Build
 import android.content.Intent
+import androidx.core.app.NotificationCompat
 import android.content.res.Resources
 import android.location.Location
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -32,6 +37,7 @@ import com.google.android.libraries.navigation.DisplayOptions
 import com.google.android.libraries.navigation.GpsAvailabilityChangeEvent
 import com.google.android.libraries.navigation.NavigationApi
 import com.google.android.libraries.navigation.NavigationApi.NavigatorListener
+import com.google.android.libraries.navigation.NotificationContentProvider
 import com.google.android.libraries.navigation.NavigationUpdatesOptions
 import com.google.android.libraries.navigation.Navigator
 import com.google.android.libraries.navigation.Navigator.TaskRemovedBehavior
@@ -442,23 +448,82 @@ constructor(
         it.toInt()
       }
 
-    val resumeIntent =
-      if (options.resumeAppOnTap) {
-        application.packageManager
-          .getLaunchIntentForPackage(application.packageName)
-          ?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-      } else {
-        null
-      }
-
-    // This must happen before NavigationApi.getNavigator()
-    NavigationApi.initForegroundServiceManagerMessageAndIntent(
-      application,
-      androidNotificationId,
-      options.defaultMessage,
-      resumeIntent,
-    )
+    val customOptions = options.customNotificationOptions
+    if (customOptions != null) {
+      NavigationApi.initForegroundServiceManagerProvider(
+        application,
+        androidNotificationId,
+        createNotificationContentProvider(customOptions),
+      )
+    } else {
+      // This must happen before NavigationApi.getNavigator().
+      NavigationApi.initForegroundServiceManagerMessageAndIntent(
+        application,
+        androidNotificationId,
+        options.defaultMessage,
+        createResumeIntent(options.resumeAppOnTap),
+      )
+    }
     foregroundServiceManagerInitialized = true
+  }
+
+  private fun createNotificationContentProvider(
+    options: NavigationCustomNotificationOptionsDto
+  ): NotificationContentProvider {
+    val iconResourceId =
+      options.smallIconResourceName?.let {
+        application.resources.getIdentifier(it, "drawable", application.packageName)
+      } ?: application.applicationInfo.icon
+    if (iconResourceId == 0) {
+      throw FlutterError("notificationIconNotFound", "A valid small notification icon is required.")
+    }
+
+    createNotificationChannelIfNeeded(options.channelId)
+
+    val notificationColor =
+      options.color?.let {
+        if (it !in Int.MIN_VALUE.toLong()..0xFFFFFFFFL) {
+          throw FlutterError("invalidNotificationColor", "color must be a 32-bit ARGB value.")
+        }
+        it.toInt()
+      }
+    val contentIntent = createResumeIntent(options.resumeAppOnTap)?.let {
+      PendingIntent.getActivity(
+        application,
+        0,
+        it,
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+      )
+    }
+    return NotificationContentProvider {
+      NotificationCompat.Builder(application, options.channelId)
+        .setSmallIcon(iconResourceId)
+        .setContentTitle(options.title)
+        .setContentText(options.body)
+        .setOngoing(true)
+        .apply {
+          notificationColor?.let { setColor(it) }
+          contentIntent?.let { setContentIntent(it) }
+        }
+        .build()
+    }
+  }
+
+  private fun createNotificationChannelIfNeeded(channelId: String) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
+    val notificationManager = application.getSystemService(NotificationManager::class.java)
+    if (notificationManager.getNotificationChannel(channelId) == null) {
+      notificationManager.createNotificationChannel(
+        NotificationChannel(channelId, "Navigation", NotificationManager.IMPORTANCE_LOW)
+      )
+    }
+  }
+
+  private fun createResumeIntent(resumeAppOnTap: Boolean): Intent? {
+    if (!resumeAppOnTap) return null
+    return application.packageManager
+      .getLaunchIntentForPackage(application.packageName)
+      ?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
   }
 
   private fun clearForegroundServiceManager() {

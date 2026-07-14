@@ -1307,6 +1307,13 @@ void main() {
               notificationId: 1234,
               defaultMessage: 'Navigation is active',
               resumeAppOnTap: true,
+              customNotificationOptions:
+                  NavigationCustomNotificationOptions(
+                    channelId: 'navigation',
+                    title: 'Navigation is active',
+                    body: 'Follow the route',
+                    resumeAppOnTap: true,
+                  ),
             ),
           );
           VerificationResult result = verify(
@@ -1322,6 +1329,11 @@ void main() {
           expect(notificationOptions.notificationId, 1234);
           expect(notificationOptions.defaultMessage, 'Navigation is active');
           expect(notificationOptions.resumeAppOnTap, true);
+          expect(notificationOptions.customNotificationOptions?.channelId, 'navigation');
+          expect(
+            notificationOptions.customNotificationOptions?.resumeAppOnTap,
+            true,
+          );
 
           // Start/stop guidance.
 
