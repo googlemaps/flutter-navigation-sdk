@@ -26,6 +26,7 @@ import androidx.lifecycle.Observer
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.mapsplatform.turnbyturn.model.NavInfo
 import com.google.android.libraries.mapsplatform.turnbyturn.model.StepInfo
+import com.google.android.libraries.navigation.AudioGuidanceSettings
 import com.google.android.libraries.navigation.CustomRoutesOptions
 import com.google.android.libraries.navigation.DisplayOptions
 import com.google.android.libraries.navigation.GpsAvailabilityChangeEvent
@@ -515,8 +516,8 @@ constructor(
    * Wraps [Navigator.setAudioGuidance]. See
    * [Google Navigation SDK for Android](https://developers.google.com/maps/documentation/navigation/android-sdk/reference/com/google/android/libraries/navigation/Navigator#setAudioGuidance(int)).
    */
-  fun setAudioGuidance(audioGuidanceSettings: Int) {
-    getNavigator().setAudioGuidance(audioGuidanceSettings)
+  fun setAudioGuidance(audioGuidanceSettings: AudioGuidanceSettings) {
+    getNavigator().setAudioGuidanceSettings(audioGuidanceSettings)
   }
 
   fun setSpeedAlertOptions(options: SpeedAlertOptions) {

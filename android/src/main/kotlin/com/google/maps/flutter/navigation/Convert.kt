@@ -43,6 +43,7 @@ import com.google.android.libraries.mapsplatform.turnbyturn.model.NavInfo
 import com.google.android.libraries.mapsplatform.turnbyturn.model.NavState
 import com.google.android.libraries.mapsplatform.turnbyturn.model.StepInfo
 import com.google.android.libraries.navigation.AlternateRoutesStrategy
+import com.google.android.libraries.navigation.AudioGuidanceSettings
 import com.google.android.libraries.navigation.DisplayOptions
 import com.google.android.libraries.navigation.ForceNightMode
 import com.google.android.libraries.navigation.NavigationRoadStretchRenderingData
@@ -445,21 +446,21 @@ object Convert {
    * @param settings pigeon [NavigationAudioGuidanceSettingsDto].
    * @return Google Navigation [AudioGuidanceTypeDto] int.
    */
-  fun convertAudioGuidanceSettingsToDto(settings: NavigationAudioGuidanceSettingsDto): Int {
-    var base =
+  fun convertAudioGuidanceSettingsToDto(settings: NavigationAudioGuidanceSettingsDto): AudioGuidanceSettings {
+    val guidanceMode =
       when (settings.guidanceType) {
-        AudioGuidanceTypeDto.SILENT -> AudioGuidance.SILENT
-        AudioGuidanceTypeDto.ALERTS_ONLY -> AudioGuidance.VOICE_ALERTS_ONLY
-        AudioGuidanceTypeDto.ALERTS_AND_GUIDANCE -> AudioGuidance.VOICE_ALERTS_AND_GUIDANCE
-        null -> AudioGuidance.SILENT
+        AudioGuidanceTypeDto.SILENT -> AudioGuidanceSettings.GuidanceMode.SILENT
+        AudioGuidanceTypeDto.ALERTS_ONLY -> AudioGuidanceSettings.GuidanceMode.VOICE_ALERTS_ONLY
+        AudioGuidanceTypeDto.ALERTS_AND_GUIDANCE -> AudioGuidanceSettings.GuidanceMode.VOICE_ALERTS_AND_GUIDANCE
+        null -> AudioGuidanceSettings.GuidanceMode.SILENT
       }
-    if (settings.isBluetoothAudioEnabled == true) {
-      base = base or AudioGuidance.BLUETOOTH_AUDIO
-    }
-    if (settings.isVibrationEnabled == true) {
-      base = base or AudioGuidance.VIBRATION
-    }
-    return base
+
+    return AudioGuidanceSettings
+      .builder()
+      .setGuidanceMode(guidanceMode)
+      .setBluetoothAudioEnabled(settings.isBluetoothAudioEnabled == true)
+      .setVibrationEnabled(settings.isVibrationEnabled == true)
+      .build()
   }
 
   /**
