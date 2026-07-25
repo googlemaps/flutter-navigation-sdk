@@ -29,7 +29,7 @@ import UIKit
       ProcessInfo.processInfo.environment["MAPS_API_KEY"] ?? findMapApiKeyFromDartDefines(
         "MAPS_API_KEY") ?? ""
     if mapsApiKey.isEmpty {
-      mapsApiKey = "YOUR_API_KEY"
+      mapsApiKey = "AIzaSyDxwjmBTjWSZIUzbFmaeSQRLbqoZpFmuec"
     }
     GMSServices.provideAPIKey(mapsApiKey)
     GeneratedPluginRegistrant.register(with: self)
