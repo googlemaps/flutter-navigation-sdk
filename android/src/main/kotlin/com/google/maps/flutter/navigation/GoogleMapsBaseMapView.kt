@@ -38,6 +38,7 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.Polygon
 import com.google.android.gms.maps.model.Polyline
+import kotlin.math.roundToInt
 
 abstract class GoogleMapsBaseMapView(
   private val viewId: Int?,
@@ -1111,12 +1112,13 @@ abstract class GoogleMapsBaseMapView(
 
   fun setPadding(padding: MapPaddingDto) {
     _mapOptions?.padding = padding
+    val density = Resources.getSystem().displayMetrics.density
     getMap()
       .setPadding(
-        padding.left.toInt(),
-        padding.top.toInt(),
-        padding.right.toInt(),
-        padding.bottom.toInt(),
+        Convert.convertLogicalToScreenPixel(padding.left.toDouble(), density).roundToInt(),
+        Convert.convertLogicalToScreenPixel(padding.top.toDouble(), density).roundToInt(),
+        Convert.convertLogicalToScreenPixel(padding.right.toDouble(), density).roundToInt(),
+        Convert.convertLogicalToScreenPixel(padding.bottom.toDouble(), density).roundToInt(),
       )
   }
 
