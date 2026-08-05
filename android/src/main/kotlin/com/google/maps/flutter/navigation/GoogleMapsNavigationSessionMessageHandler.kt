@@ -144,7 +144,7 @@ class GoogleMapsNavigationSessionMessageHandler(
   }
 
   override fun setAudioGuidance(settings: NavigationAudioGuidanceSettingsDto) {
-    val audioGuidanceSettings = Convert.convertAudioGuidanceSettingsToDto(settings)
+    val audioGuidanceSettings = Convert.convertAudioGuidanceSettingsFromDto(settings)
     sessionManager.setAudioGuidance(audioGuidanceSettings)
   }
 

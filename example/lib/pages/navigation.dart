@@ -792,7 +792,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       NavigationAudioGuidanceSettings(
         isBluetoothAudioEnabled: true,
         isVibrationEnabled: true,
-        guidanceType: NavigationAudioGuidanceType.alertsAndGuidance,
+        guidanceType: NavigationAudioGuidanceType.silent,
       ),
     );
   }
