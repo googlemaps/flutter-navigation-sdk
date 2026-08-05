@@ -445,17 +445,19 @@ object Convert {
    * @param settings pigeon [NavigationAudioGuidanceSettingsDto].
    * @return Google Navigation [AudioGuidanceTypeDto] int.
    */
-  fun convertAudioGuidanceSettingsFromDto(settings: NavigationAudioGuidanceSettingsDto): AudioGuidanceSettings {
+  fun convertAudioGuidanceSettingsFromDto(
+    settings: NavigationAudioGuidanceSettingsDto
+  ): AudioGuidanceSettings {
     val guidanceMode =
       when (settings.guidanceType) {
         AudioGuidanceTypeDto.SILENT -> AudioGuidanceSettings.GuidanceMode.SILENT
         AudioGuidanceTypeDto.ALERTS_ONLY -> AudioGuidanceSettings.GuidanceMode.VOICE_ALERTS_ONLY
-        AudioGuidanceTypeDto.ALERTS_AND_GUIDANCE -> AudioGuidanceSettings.GuidanceMode.VOICE_ALERTS_AND_GUIDANCE
+        AudioGuidanceTypeDto.ALERTS_AND_GUIDANCE ->
+          AudioGuidanceSettings.GuidanceMode.VOICE_ALERTS_AND_GUIDANCE
         null -> AudioGuidanceSettings.GuidanceMode.SILENT
       }
 
-    return AudioGuidanceSettings
-      .builder()
+    return AudioGuidanceSettings.builder()
       .setGuidanceMode(guidanceMode)
       .setBluetoothAudioEnabled(settings.isBluetoothAudioEnabled == true)
       .setVibrationEnabled(settings.isVibrationEnabled == true)

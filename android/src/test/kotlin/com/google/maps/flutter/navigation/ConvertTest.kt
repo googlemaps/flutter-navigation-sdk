@@ -87,72 +87,79 @@ internal class ConvertTest {
     assertEquals(
       AudioGuidanceSettings.GuidanceMode.VOICE_ALERTS_AND_GUIDANCE,
       Convert.convertAudioGuidanceSettingsFromDto(
-        NavigationAudioGuidanceSettingsDto(
-          isBluetoothAudioEnabled = false,
-          isVibrationEnabled = false,
-          guidanceType = AudioGuidanceTypeDto.ALERTS_AND_GUIDANCE,
+          NavigationAudioGuidanceSettingsDto(
+            isBluetoothAudioEnabled = false,
+            isVibrationEnabled = false,
+            guidanceType = AudioGuidanceTypeDto.ALERTS_AND_GUIDANCE,
+          )
         )
-      ).guidanceMode,
+        .guidanceMode,
     )
     assertEquals(
       AudioGuidanceSettings.GuidanceMode.SILENT,
       Convert.convertAudioGuidanceSettingsFromDto(
-        NavigationAudioGuidanceSettingsDto(
-          isBluetoothAudioEnabled = false,
-          isVibrationEnabled = false,
-          guidanceType = AudioGuidanceTypeDto.SILENT,
+          NavigationAudioGuidanceSettingsDto(
+            isBluetoothAudioEnabled = false,
+            isVibrationEnabled = false,
+            guidanceType = AudioGuidanceTypeDto.SILENT,
+          )
         )
-      ).guidanceMode,
+        .guidanceMode,
     )
     assertEquals(
       AudioGuidanceSettings.GuidanceMode.VOICE_ALERTS_ONLY,
       Convert.convertAudioGuidanceSettingsFromDto(
-        NavigationAudioGuidanceSettingsDto(
-          isBluetoothAudioEnabled = false,
-          isVibrationEnabled = false,
-          guidanceType = AudioGuidanceTypeDto.ALERTS_ONLY,
+          NavigationAudioGuidanceSettingsDto(
+            isBluetoothAudioEnabled = false,
+            isVibrationEnabled = false,
+            guidanceType = AudioGuidanceTypeDto.ALERTS_ONLY,
+          )
         )
-      ).guidanceMode,
+        .guidanceMode,
     )
     assertEquals(
       AudioGuidanceSettings.GuidanceMode.VOICE_ALERTS_AND_GUIDANCE,
       Convert.convertAudioGuidanceSettingsFromDto(
-        NavigationAudioGuidanceSettingsDto(
-          isBluetoothAudioEnabled = false,
-          isVibrationEnabled = true,
-          guidanceType = AudioGuidanceTypeDto.ALERTS_AND_GUIDANCE,
+          NavigationAudioGuidanceSettingsDto(
+            isBluetoothAudioEnabled = false,
+            isVibrationEnabled = true,
+            guidanceType = AudioGuidanceTypeDto.ALERTS_AND_GUIDANCE,
+          )
         )
-      ).guidanceMode,
+        .guidanceMode,
     )
     assertEquals(
       true,
       Convert.convertAudioGuidanceSettingsFromDto(
-        NavigationAudioGuidanceSettingsDto(
-          isBluetoothAudioEnabled = false,
-          isVibrationEnabled = true,
-          guidanceType = AudioGuidanceTypeDto.ALERTS_AND_GUIDANCE,
+          NavigationAudioGuidanceSettingsDto(
+            isBluetoothAudioEnabled = false,
+            isVibrationEnabled = true,
+            guidanceType = AudioGuidanceTypeDto.ALERTS_AND_GUIDANCE,
+          )
         )
-      ).vibrationEnabled,
+        .vibrationEnabled,
     )
     assertEquals(
       AudioGuidanceSettings.GuidanceMode.VOICE_ALERTS_AND_GUIDANCE,
       Convert.convertAudioGuidanceSettingsFromDto(
-        NavigationAudioGuidanceSettingsDto(
-          isBluetoothAudioEnabled = true,
-          isVibrationEnabled = false,
-          guidanceType = AudioGuidanceTypeDto.ALERTS_AND_GUIDANCE,
+          NavigationAudioGuidanceSettingsDto(
+            isBluetoothAudioEnabled = true,
+            isVibrationEnabled = false,
+            guidanceType = AudioGuidanceTypeDto.ALERTS_AND_GUIDANCE,
+          )
         )
-      ).guidanceMode,
+        .guidanceMode,
     )
     assertEquals(
       true,
       Convert.convertAudioGuidanceSettingsFromDto(
-        NavigationAudioGuidanceSettingsDto(
-          isBluetoothAudioEnabled = true,
-          isVibrationEnabled = false,
-          guidanceType = AudioGuidanceTypeDto.ALERTS_AND_GUIDANCE,
+          NavigationAudioGuidanceSettingsDto(
+            isBluetoothAudioEnabled = true,
+            isVibrationEnabled = false,
+            guidanceType = AudioGuidanceTypeDto.ALERTS_AND_GUIDANCE,
+          )
         )
-      ).bluetoothAudioEnabled,
+        .bluetoothAudioEnabled,
     )
   }
 
