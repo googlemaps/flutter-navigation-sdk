@@ -3195,6 +3195,57 @@ class TermsAndConditionsUIParamsDto {
   int get hashCode => Object.hashAll(_toList());
 }
 
+/// Android foreground-service notification configuration.
+///
+/// This preserves the Navigation SDK's built-in turn-by-turn notification.
+class NavigationNotificationOptionsDto {
+  NavigationNotificationOptionsDto({
+    this.notificationId,
+    this.defaultMessage,
+    required this.resumeAppOnTap,
+  });
+
+  int? notificationId;
+
+  String? defaultMessage;
+
+  bool resumeAppOnTap;
+
+  List<Object?> _toList() {
+    return <Object?>[notificationId, defaultMessage, resumeAppOnTap];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static NavigationNotificationOptionsDto decode(Object result) {
+    result as List<Object?>;
+    return NavigationNotificationOptionsDto(
+      notificationId: result[0] as int?,
+      defaultMessage: result[1] as String?,
+      resumeAppOnTap: result[2]! as bool,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! NavigationNotificationOptionsDto ||
+        other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(encode(), other.encode());
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
 /// Options for step image generation in turn-by-turn navigation events.
 class StepImageGenerationOptionsDto {
   StepImageGenerationOptionsDto({
@@ -3474,8 +3525,11 @@ class _PigeonCodec extends StandardMessageCodec {
     } else if (value is TermsAndConditionsUIParamsDto) {
       buffer.putUint8(202);
       writeValue(buffer, value.encode());
-    } else if (value is StepImageGenerationOptionsDto) {
+    } else if (value is NavigationNotificationOptionsDto) {
       buffer.putUint8(203);
+      writeValue(buffer, value.encode());
+    } else if (value is StepImageGenerationOptionsDto) {
+      buffer.putUint8(204);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -3671,6 +3725,8 @@ class _PigeonCodec extends StandardMessageCodec {
       case 202:
         return TermsAndConditionsUIParamsDto.decode(readValue(buffer)!);
       case 203:
+        return NavigationNotificationOptionsDto.decode(readValue(buffer)!);
+      case 204:
         return StepImageGenerationOptionsDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -8032,6 +8088,7 @@ class NavigationSessionApi {
   Future<void> createNavigationSession(
     bool abnormalTerminationReportingEnabled,
     TaskRemovedBehaviorDto behavior,
+    NavigationNotificationOptionsDto? notificationOptions,
   ) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession$pigeonVar_messageChannelSuffix';
@@ -8042,7 +8099,11 @@ class NavigationSessionApi {
           binaryMessenger: pigeonVar_binaryMessenger,
         );
     final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(
-      <Object?>[abnormalTerminationReportingEnabled, behavior],
+      <Object?>[
+        abnormalTerminationReportingEnabled,
+        behavior,
+        notificationOptions,
+      ],
     );
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;

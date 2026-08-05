@@ -254,8 +254,11 @@ class _PigeonCodec extends StandardMessageCodec {
     } else if (value is TermsAndConditionsUIParamsDto) {
       buffer.putUint8(202);
       writeValue(buffer, value.encode());
-    } else if (value is StepImageGenerationOptionsDto) {
+    } else if (value is NavigationNotificationOptionsDto) {
       buffer.putUint8(203);
+      writeValue(buffer, value.encode());
+    } else if (value is StepImageGenerationOptionsDto) {
+      buffer.putUint8(204);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -451,6 +454,8 @@ class _PigeonCodec extends StandardMessageCodec {
       case 202:
         return TermsAndConditionsUIParamsDto.decode(readValue(buffer)!);
       case 203:
+        return NavigationNotificationOptionsDto.decode(readValue(buffer)!);
+      case 204:
         return StepImageGenerationOptionsDto.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -5814,6 +5819,7 @@ abstract class TestNavigationSessionApi {
   Future<void> createNavigationSession(
     bool abnormalTerminationReportingEnabled,
     TaskRemovedBehaviorDto behavior,
+    NavigationNotificationOptionsDto? notificationOptions,
   );
 
   bool isInitialized();
@@ -5945,10 +5951,13 @@ abstract class TestNavigationSessionApi {
             arg_behavior != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.createNavigationSession was null, expected non-null TaskRemovedBehaviorDto.',
           );
+          final NavigationNotificationOptionsDto? arg_notificationOptions =
+              (args[2] as NavigationNotificationOptionsDto?);
           try {
             await api.createNavigationSession(
               arg_abnormalTerminationReportingEnabled!,
               arg_behavior!,
+              arg_notificationOptions,
             );
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {

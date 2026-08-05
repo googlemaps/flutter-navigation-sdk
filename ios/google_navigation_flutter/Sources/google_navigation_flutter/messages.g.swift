@@ -2488,6 +2488,45 @@ struct TermsAndConditionsUIParamsDto: Hashable {
   }
 }
 
+/// Android foreground-service notification configuration.
+///
+/// This preserves the Navigation SDK's built-in turn-by-turn notification.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct NavigationNotificationOptionsDto: Hashable {
+  var notificationId: Int64? = nil
+  var defaultMessage: String? = nil
+  var resumeAppOnTap: Bool
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> NavigationNotificationOptionsDto? {
+    let notificationId: Int64? = nilOrValue(pigeonVar_list[0])
+    let defaultMessage: String? = nilOrValue(pigeonVar_list[1])
+    let resumeAppOnTap = pigeonVar_list[2] as! Bool
+
+    return NavigationNotificationOptionsDto(
+      notificationId: notificationId,
+      defaultMessage: defaultMessage,
+      resumeAppOnTap: resumeAppOnTap
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      notificationId,
+      defaultMessage,
+      resumeAppOnTap,
+    ]
+  }
+  static func == (lhs: NavigationNotificationOptionsDto, rhs: NavigationNotificationOptionsDto)
+    -> Bool
+  {
+    return deepEqualsmessages(lhs.toList(), rhs.toList())
+  }
+  func hash(into hasher: inout Hasher) {
+    deepHashmessages(value: toList(), hasher: &hasher)
+  }
+}
+
 /// Options for step image generation in turn-by-turn navigation events.
 ///
 /// Generated class from Pigeon that represents data sent in messages.
@@ -2780,6 +2819,8 @@ private class MessagesPigeonCodecReader: FlutterStandardReader {
     case 202:
       return TermsAndConditionsUIParamsDto.fromList(self.readValue() as! [Any?])
     case 203:
+      return NavigationNotificationOptionsDto.fromList(self.readValue() as! [Any?])
+    case 204:
       return StepImageGenerationOptionsDto.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -3011,8 +3052,11 @@ private class MessagesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? TermsAndConditionsUIParamsDto {
       super.writeByte(202)
       super.writeValue(value.toList())
-    } else if let value = value as? StepImageGenerationOptionsDto {
+    } else if let value = value as? NavigationNotificationOptionsDto {
       super.writeByte(203)
+      super.writeValue(value.toList())
+    } else if let value = value as? StepImageGenerationOptionsDto {
+      super.writeByte(204)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -5880,6 +5924,7 @@ class ViewEventApi: ViewEventApiProtocol {
 protocol NavigationSessionApi {
   func createNavigationSession(
     abnormalTerminationReportingEnabled: Bool, behavior: TaskRemovedBehaviorDto,
+    notificationOptions: NavigationNotificationOptionsDto?,
     completion: @escaping (Result<Void, Error>) -> Void)
   func isInitialized() throws -> Bool
   func cleanup(resetSession: Bool) throws
@@ -5948,9 +5993,10 @@ class NavigationSessionApiSetup {
         let args = message as! [Any?]
         let abnormalTerminationReportingEnabledArg = args[0] as! Bool
         let behaviorArg = args[1] as! TaskRemovedBehaviorDto
+        let notificationOptionsArg: NavigationNotificationOptionsDto? = nilOrValue(args[2])
         api.createNavigationSession(
           abnormalTerminationReportingEnabled: abnormalTerminationReportingEnabledArg,
-          behavior: behaviorArg
+          behavior: behaviorArg, notificationOptions: notificationOptionsArg
         ) { result in
           switch result {
           case .success:

@@ -27,9 +27,15 @@ class GoogleMapsNavigationSessionMessageHandler(
   override fun createNavigationSession(
     abnormalTerminationReportingEnabled: Boolean,
     behavior: TaskRemovedBehaviorDto,
+    notificationOptions: NavigationNotificationOptionsDto?,
     callback: (Result<Unit>) -> Unit,
   ) {
-    sessionManager.createNavigationSession(abnormalTerminationReportingEnabled, behavior, callback)
+    sessionManager.createNavigationSession(
+      abnormalTerminationReportingEnabled,
+      behavior,
+      notificationOptions,
+      callback,
+    )
   }
 
   override fun isInitialized(): Boolean {
