@@ -191,6 +191,15 @@ await GoogleMapsNavigator.initializeNavigationSession(
 ```
 
 `resumeAppOnTap` makes a notification tap launch or resume the application.
+
+`notificationId` optionally sets the Android notification ID. Set it when the
+application needs the navigation notification to use a known ID or to avoid
+colliding with IDs used by its other notifications; otherwise, the Navigation
+SDK default is used.
+
+`defaultMessage` optionally sets the text displayed while the SDK is not
+actively navigating. The Navigation SDK default is used when it is omitted.
+
 These options retain the Navigation SDK's turn-by-turn notification content;
 custom notification layouts are not supported.
 

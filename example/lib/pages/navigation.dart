@@ -315,8 +315,6 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       try {
         await GoogleMapsNavigator.initializeNavigationSession(
           notificationOptions: const NavigationNotificationOptions(
-            notificationId: 1234,
-            defaultMessage: 'Navigation is active',
             resumeAppOnTap: true,
           ),
         );
