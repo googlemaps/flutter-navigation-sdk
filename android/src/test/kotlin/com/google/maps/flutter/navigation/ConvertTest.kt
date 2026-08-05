@@ -29,7 +29,6 @@ import com.google.android.libraries.navigation.AlternateRoutesStrategy
 import com.google.android.libraries.navigation.AudioGuidanceSettings
 import com.google.android.libraries.navigation.NavigationRoadStretchRenderingData
 import com.google.android.libraries.navigation.NavigationTrafficData
-import com.google.android.libraries.navigation.Navigator.AudioGuidance
 import com.google.android.libraries.navigation.Navigator.TaskRemovedBehavior
 import com.google.android.libraries.navigation.RoutingOptions.RoutingStrategy
 import com.google.android.libraries.navigation.SpeedAlertSeverity
@@ -87,7 +86,7 @@ internal class ConvertTest {
   fun convertAudioGuidanceSettings_returnsExpectedValue() {
     assertEquals(
       AudioGuidanceSettings.GuidanceMode.VOICE_ALERTS_AND_GUIDANCE,
-      Convert.convertAudioGuidanceSettingsToDto(
+      Convert.convertAudioGuidanceSettingsFromDto(
         NavigationAudioGuidanceSettingsDto(
           isBluetoothAudioEnabled = false,
           isVibrationEnabled = false,
@@ -97,7 +96,7 @@ internal class ConvertTest {
     )
     assertEquals(
       AudioGuidanceSettings.GuidanceMode.SILENT,
-      Convert.convertAudioGuidanceSettingsToDto(
+      Convert.convertAudioGuidanceSettingsFromDto(
         NavigationAudioGuidanceSettingsDto(
           isBluetoothAudioEnabled = false,
           isVibrationEnabled = false,
@@ -107,7 +106,7 @@ internal class ConvertTest {
     )
     assertEquals(
       AudioGuidanceSettings.GuidanceMode.VOICE_ALERTS_ONLY,
-      Convert.convertAudioGuidanceSettingsToDto(
+      Convert.convertAudioGuidanceSettingsFromDto(
         NavigationAudioGuidanceSettingsDto(
           isBluetoothAudioEnabled = false,
           isVibrationEnabled = false,
@@ -117,7 +116,7 @@ internal class ConvertTest {
     )
     assertEquals(
       AudioGuidanceSettings.GuidanceMode.VOICE_ALERTS_AND_GUIDANCE,
-      Convert.convertAudioGuidanceSettingsToDto(
+      Convert.convertAudioGuidanceSettingsFromDto(
         NavigationAudioGuidanceSettingsDto(
           isBluetoothAudioEnabled = false,
           isVibrationEnabled = true,
@@ -127,7 +126,7 @@ internal class ConvertTest {
     )
     assertEquals(
       true,
-      Convert.convertAudioGuidanceSettingsToDto(
+      Convert.convertAudioGuidanceSettingsFromDto(
         NavigationAudioGuidanceSettingsDto(
           isBluetoothAudioEnabled = false,
           isVibrationEnabled = true,
@@ -137,7 +136,7 @@ internal class ConvertTest {
     )
     assertEquals(
       AudioGuidanceSettings.GuidanceMode.VOICE_ALERTS_AND_GUIDANCE,
-      Convert.convertAudioGuidanceSettingsToDto(
+      Convert.convertAudioGuidanceSettingsFromDto(
         NavigationAudioGuidanceSettingsDto(
           isBluetoothAudioEnabled = true,
           isVibrationEnabled = false,
@@ -147,7 +146,7 @@ internal class ConvertTest {
     )
     assertEquals(
       true,
-      Convert.convertAudioGuidanceSettingsToDto(
+      Convert.convertAudioGuidanceSettingsFromDto(
         NavigationAudioGuidanceSettingsDto(
           isBluetoothAudioEnabled = true,
           isVibrationEnabled = false,

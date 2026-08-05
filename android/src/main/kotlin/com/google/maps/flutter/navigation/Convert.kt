@@ -49,7 +49,6 @@ import com.google.android.libraries.navigation.ForceNightMode
 import com.google.android.libraries.navigation.NavigationRoadStretchRenderingData
 import com.google.android.libraries.navigation.NavigationTrafficData
 import com.google.android.libraries.navigation.Navigator
-import com.google.android.libraries.navigation.Navigator.AudioGuidance
 import com.google.android.libraries.navigation.Navigator.TaskRemovedBehavior
 import com.google.android.libraries.navigation.RouteSegment
 import com.google.android.libraries.navigation.RoutingOptions
@@ -446,7 +445,7 @@ object Convert {
    * @param settings pigeon [NavigationAudioGuidanceSettingsDto].
    * @return Google Navigation [AudioGuidanceTypeDto] int.
    */
-  fun convertAudioGuidanceSettingsToDto(settings: NavigationAudioGuidanceSettingsDto): AudioGuidanceSettings {
+  fun convertAudioGuidanceSettingsFromDto(settings: NavigationAudioGuidanceSettingsDto): AudioGuidanceSettings {
     val guidanceMode =
       when (settings.guidanceType) {
         AudioGuidanceTypeDto.SILENT -> AudioGuidanceSettings.GuidanceMode.SILENT
