@@ -57,26 +57,34 @@ class _FakeNavigationTimeAndDistanceDto_1 extends _i1.SmartFake
   ) : super(parent, parentInvocation);
 }
 
-class _FakeCameraPositionDto_2 extends _i1.SmartFake
+class _FakeNavigationHeaderStylingOptionsDto_2 extends _i1.SmartFake
+    implements _i2.NavigationHeaderStylingOptionsDto {
+  _FakeNavigationHeaderStylingOptionsDto_2(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(parent, parentInvocation);
+}
+
+class _FakeCameraPositionDto_3 extends _i1.SmartFake
     implements _i2.CameraPositionDto {
-  _FakeCameraPositionDto_2(Object parent, Invocation parentInvocation)
+  _FakeCameraPositionDto_3(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeLatLngBoundsDto_3 extends _i1.SmartFake
+class _FakeLatLngBoundsDto_4 extends _i1.SmartFake
     implements _i2.LatLngBoundsDto {
-  _FakeLatLngBoundsDto_3(Object parent, Invocation parentInvocation)
+  _FakeLatLngBoundsDto_4(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeMapPaddingDto_4 extends _i1.SmartFake implements _i2.MapPaddingDto {
-  _FakeMapPaddingDto_4(Object parent, Invocation parentInvocation)
+class _FakeMapPaddingDto_5 extends _i1.SmartFake implements _i2.MapPaddingDto {
+  _FakeMapPaddingDto_5(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeImageDescriptorDto_5 extends _i1.SmartFake
+class _FakeImageDescriptorDto_6 extends _i1.SmartFake
     implements _i2.ImageDescriptorDto {
-  _FakeImageDescriptorDto_5(Object parent, Invocation parentInvocation)
+  _FakeImageDescriptorDto_6(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
@@ -93,11 +101,13 @@ class MockTestNavigationSessionApi extends _i1.Mock
   _i4.Future<void> createNavigationSession(
     bool? abnormalTerminationReportingEnabled,
     _i2.TaskRemovedBehaviorDto? behavior,
+    _i2.NavigationNotificationOptionsDto? notificationOptions,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#createNavigationSession, [
               abnormalTerminationReportingEnabled,
               behavior,
+              notificationOptions,
             ]),
             returnValue: _i4.Future<void>.value(),
             returnValueForMissingStub: _i4.Future<void>.value(),
@@ -481,6 +491,31 @@ class MockTestMapViewApi extends _i1.Mock implements _i3.TestMapViewApi {
       );
 
   @override
+  _i2.NavigationHeaderStylingOptionsDto getNavigationHeaderStylingOptions(
+    int? viewId,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#getNavigationHeaderStylingOptions, [viewId]),
+            returnValue: _FakeNavigationHeaderStylingOptionsDto_2(
+              this,
+              Invocation.method(#getNavigationHeaderStylingOptions, [viewId]),
+            ),
+          )
+          as _i2.NavigationHeaderStylingOptionsDto);
+
+  @override
+  void setNavigationHeaderStylingOptions(
+    int? viewId,
+    _i2.NavigationHeaderStylingOptionsDto? stylingOptions,
+  ) => super.noSuchMethod(
+    Invocation.method(#setNavigationHeaderStylingOptions, [
+      viewId,
+      stylingOptions,
+    ]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
   bool isNavigationFooterEnabled(int? viewId) =>
       (super.noSuchMethod(
             Invocation.method(#isNavigationFooterEnabled, [viewId]),
@@ -843,7 +878,7 @@ class MockTestMapViewApi extends _i1.Mock implements _i3.TestMapViewApi {
   _i2.CameraPositionDto getCameraPosition(int? viewId) =>
       (super.noSuchMethod(
             Invocation.method(#getCameraPosition, [viewId]),
-            returnValue: _FakeCameraPositionDto_2(
+            returnValue: _FakeCameraPositionDto_3(
               this,
               Invocation.method(#getCameraPosition, [viewId]),
             ),
@@ -854,7 +889,7 @@ class MockTestMapViewApi extends _i1.Mock implements _i3.TestMapViewApi {
   _i2.LatLngBoundsDto getVisibleRegion(int? viewId) =>
       (super.noSuchMethod(
             Invocation.method(#getVisibleRegion, [viewId]),
-            returnValue: _FakeLatLngBoundsDto_3(
+            returnValue: _FakeLatLngBoundsDto_4(
               this,
               Invocation.method(#getVisibleRegion, [viewId]),
             ),
@@ -1283,7 +1318,7 @@ class MockTestMapViewApi extends _i1.Mock implements _i3.TestMapViewApi {
   _i2.MapPaddingDto getPadding(int? viewId) =>
       (super.noSuchMethod(
             Invocation.method(#getPadding, [viewId]),
-            returnValue: _FakeMapPaddingDto_4(
+            returnValue: _FakeMapPaddingDto_5(
               this,
               Invocation.method(#getPadding, [viewId]),
             ),
@@ -1377,7 +1412,7 @@ class MockTestAutoMapViewApi extends _i1.Mock
   _i2.CameraPositionDto getCameraPosition() =>
       (super.noSuchMethod(
             Invocation.method(#getCameraPosition, []),
-            returnValue: _FakeCameraPositionDto_2(
+            returnValue: _FakeCameraPositionDto_3(
               this,
               Invocation.method(#getCameraPosition, []),
             ),
@@ -1388,7 +1423,7 @@ class MockTestAutoMapViewApi extends _i1.Mock
   _i2.LatLngBoundsDto getVisibleRegion() =>
       (super.noSuchMethod(
             Invocation.method(#getVisibleRegion, []),
-            returnValue: _FakeLatLngBoundsDto_3(
+            returnValue: _FakeLatLngBoundsDto_4(
               this,
               Invocation.method(#getVisibleRegion, []),
             ),
@@ -2025,7 +2060,7 @@ class MockTestAutoMapViewApi extends _i1.Mock
   _i2.MapPaddingDto getPadding() =>
       (super.noSuchMethod(
             Invocation.method(#getPadding, []),
-            returnValue: _FakeMapPaddingDto_4(
+            returnValue: _FakeMapPaddingDto_5(
               this,
               Invocation.method(#getPadding, []),
             ),
@@ -2095,7 +2130,7 @@ class MockTestImageRegistryApi extends _i1.Mock
               width,
               height,
             ]),
-            returnValue: _FakeImageDescriptorDto_5(
+            returnValue: _FakeImageDescriptorDto_6(
               this,
               Invocation.method(#registerBitmapImage, [
                 imageId,

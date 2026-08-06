@@ -2696,6 +2696,44 @@ data class TermsAndConditionsUIParamsDto(
 }
 
 /**
+ * Android foreground-service notification configuration.
+ *
+ * This preserves the Navigation SDK's built-in turn-by-turn notification.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class NavigationNotificationOptionsDto(
+  val notificationId: Long? = null,
+  val defaultMessage: String? = null,
+  val resumeAppOnTap: Boolean,
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): NavigationNotificationOptionsDto {
+      val notificationId = pigeonVar_list[0] as Long?
+      val defaultMessage = pigeonVar_list[1] as String?
+      val resumeAppOnTap = pigeonVar_list[2] as Boolean
+      return NavigationNotificationOptionsDto(notificationId, defaultMessage, resumeAppOnTap)
+    }
+  }
+
+  fun toList(): List<Any?> {
+    return listOf(notificationId, defaultMessage, resumeAppOnTap)
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (other !is NavigationNotificationOptionsDto) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/**
  * Options for step image generation in turn-by-turn navigation events.
  *
  * Generated class from Pigeon that represents data sent in messages.
@@ -2979,6 +3017,11 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
         }
       }
       203.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          NavigationNotificationOptionsDto.fromList(it)
+        }
+      }
+      204.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           StepImageGenerationOptionsDto.fromList(it)
         }
@@ -3285,8 +3328,12 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
         stream.write(202)
         writeValue(stream, value.toList())
       }
-      is StepImageGenerationOptionsDto -> {
+      is NavigationNotificationOptionsDto -> {
         stream.write(203)
+        writeValue(stream, value.toList())
+      }
+      is StepImageGenerationOptionsDto -> {
+        stream.write(204)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -6889,6 +6936,7 @@ interface NavigationSessionApi {
   fun createNavigationSession(
     abnormalTerminationReportingEnabled: Boolean,
     behavior: TaskRemovedBehaviorDto,
+    notificationOptions: NavigationNotificationOptionsDto?,
     callback: (Result<Unit>) -> Unit,
   )
 
@@ -7011,8 +7059,12 @@ interface NavigationSessionApi {
             val args = message as List<Any?>
             val abnormalTerminationReportingEnabledArg = args[0] as Boolean
             val behaviorArg = args[1] as TaskRemovedBehaviorDto
-            api.createNavigationSession(abnormalTerminationReportingEnabledArg, behaviorArg) {
-              result: Result<Unit> ->
+            val notificationOptionsArg = args[2] as NavigationNotificationOptionsDto?
+            api.createNavigationSession(
+              abnormalTerminationReportingEnabledArg,
+              behaviorArg,
+              notificationOptionsArg,
+            ) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))

@@ -322,7 +322,11 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     if (!_navigatorInitialized) {
       debugPrint('Initializing new navigation session...');
       try {
-        await GoogleMapsNavigator.initializeNavigationSession();
+        await GoogleMapsNavigator.initializeNavigationSession(
+          notificationOptions: const NavigationNotificationOptions(
+            resumeAppOnTap: true,
+          ),
+        );
       } on SessionInitializationException catch (e) {
         switch (e.code) {
           case SessionInitializationError.termsNotAccepted:
@@ -795,7 +799,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       NavigationAudioGuidanceSettings(
         isBluetoothAudioEnabled: true,
         isVibrationEnabled: true,
-        guidanceType: NavigationAudioGuidanceType.alertsAndGuidance,
+        guidanceType: NavigationAudioGuidanceType.silent,
       ),
     );
   }

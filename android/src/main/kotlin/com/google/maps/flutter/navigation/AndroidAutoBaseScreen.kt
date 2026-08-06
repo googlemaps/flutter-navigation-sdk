@@ -20,6 +20,7 @@ import android.app.Presentation
 import android.graphics.Point
 import android.hardware.display.DisplayManager
 import android.hardware.display.VirtualDisplay
+import android.util.DisplayMetrics
 import androidx.car.app.AppManager
 import androidx.car.app.CarContext
 import androidx.car.app.Screen
@@ -225,6 +226,7 @@ open class AndroidAutoBaseScreen(carContext: CarContext) :
             imageRegistry,
             navigationView,
             googleMap,
+            surfaceContainer.dpi / DisplayMetrics.DENSITY_DEFAULT.toFloat(),
             onFlutterCustomNavigationAutoEvent = { event, data ->
               onCustomNavigationAutoEventFromFlutter(event, data)
             },

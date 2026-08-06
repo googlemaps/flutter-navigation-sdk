@@ -15,7 +15,6 @@
 // ignore_for_file: public_member_api_docs
 
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 
@@ -245,10 +244,6 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
       padding = _getViewPadding();
     }
 
-    // On Android, scale padding by device pixel ratio
-    if (Platform.isAndroid) {
-      return padding * MediaQuery.of(context).devicePixelRatio;
-    }
     return padding;
   }
 

@@ -16,7 +16,6 @@
 
 package com.google.maps.flutter.navigation
 
-import android.content.res.Resources
 import android.graphics.Point
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMapOptions
@@ -43,12 +42,12 @@ import com.google.android.libraries.mapsplatform.turnbyturn.model.NavInfo
 import com.google.android.libraries.mapsplatform.turnbyturn.model.NavState
 import com.google.android.libraries.mapsplatform.turnbyturn.model.StepInfo
 import com.google.android.libraries.navigation.AlternateRoutesStrategy
+import com.google.android.libraries.navigation.AudioGuidanceSettings
 import com.google.android.libraries.navigation.DisplayOptions
 import com.google.android.libraries.navigation.ForceNightMode
 import com.google.android.libraries.navigation.NavigationRoadStretchRenderingData
 import com.google.android.libraries.navigation.NavigationTrafficData
 import com.google.android.libraries.navigation.Navigator
-import com.google.android.libraries.navigation.Navigator.AudioGuidance
 import com.google.android.libraries.navigation.Navigator.TaskRemovedBehavior
 import com.google.android.libraries.navigation.RouteSegment
 import com.google.android.libraries.navigation.RoutingOptions
@@ -184,10 +183,10 @@ object Convert {
    *
    * @param dx Delta on x-axis
    * @param dy Delta ony-axis
+   * @param density Display density used to convert logical pixels.
    * @return Android [Point].
    */
-  fun convertDeltaToPoint(dx: Double?, dy: Double?): Point? {
-    val density = Resources.getSystem().displayMetrics.density
+  fun convertDeltaToPoint(dx: Double?, dy: Double?, density: Float): Point? {
     var focus: Point? = null
     if (dx != null && dy != null) {
       focus =
@@ -445,21 +444,23 @@ object Convert {
    * @param settings pigeon [NavigationAudioGuidanceSettingsDto].
    * @return Google Navigation [AudioGuidanceTypeDto] int.
    */
-  fun convertAudioGuidanceSettingsToDto(settings: NavigationAudioGuidanceSettingsDto): Int {
-    var base =
+  fun convertAudioGuidanceSettingsFromDto(
+    settings: NavigationAudioGuidanceSettingsDto
+  ): AudioGuidanceSettings {
+    val guidanceMode =
       when (settings.guidanceType) {
-        AudioGuidanceTypeDto.SILENT -> AudioGuidance.SILENT
-        AudioGuidanceTypeDto.ALERTS_ONLY -> AudioGuidance.VOICE_ALERTS_ONLY
-        AudioGuidanceTypeDto.ALERTS_AND_GUIDANCE -> AudioGuidance.VOICE_ALERTS_AND_GUIDANCE
-        null -> AudioGuidance.SILENT
+        AudioGuidanceTypeDto.SILENT -> AudioGuidanceSettings.GuidanceMode.SILENT
+        AudioGuidanceTypeDto.ALERTS_ONLY -> AudioGuidanceSettings.GuidanceMode.VOICE_ALERTS_ONLY
+        AudioGuidanceTypeDto.ALERTS_AND_GUIDANCE ->
+          AudioGuidanceSettings.GuidanceMode.VOICE_ALERTS_AND_GUIDANCE
+        null -> AudioGuidanceSettings.GuidanceMode.SILENT
       }
-    if (settings.isBluetoothAudioEnabled == true) {
-      base = base or AudioGuidance.BLUETOOTH_AUDIO
-    }
-    if (settings.isVibrationEnabled == true) {
-      base = base or AudioGuidance.VIBRATION
-    }
-    return base
+
+    return AudioGuidanceSettings.builder()
+      .setGuidanceMode(guidanceMode)
+      .setBluetoothAudioEnabled(settings.isBluetoothAudioEnabled == true)
+      .setVibrationEnabled(settings.isVibrationEnabled == true)
+      .build()
   }
 
   /**
