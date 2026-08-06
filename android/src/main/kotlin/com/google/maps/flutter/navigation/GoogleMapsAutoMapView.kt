@@ -27,12 +27,15 @@ internal constructor(
   imageRegistry: ImageRegistry,
   override val navigationView: NavigationView,
   map: GoogleMap,
+  private val displayDensity: Float,
   private val onFlutterCustomNavigationAutoEvent: (String, Any) -> Unit,
 ) : GoogleMapsBaseNavigationView(null, mapOptions, null, imageRegistry) {
 
   override fun getView(): View {
     return navigationView
   }
+
+  override fun getDisplayDensity(): Float = displayDensity
 
   init {
     setMap(map)
