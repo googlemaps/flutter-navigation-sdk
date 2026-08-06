@@ -153,7 +153,7 @@ abstract class GoogleMapsBaseMapView extends StatefulWidget {
   /// Null by default (unbounded).
   final LatLngBounds? initialCameraTargetBounds;
 
-  /// Specifies the initial padding for the map view.
+  /// Specifies initial map-view padding in logical pixels.
   ///
   /// Null by default (no padding).
   final EdgeInsets? initialPadding;

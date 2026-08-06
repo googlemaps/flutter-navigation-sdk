@@ -17,7 +17,6 @@
 package com.google.maps.flutter.navigation
 
 import android.annotation.SuppressLint
-import android.content.res.Resources
 import android.graphics.Point
 import android.graphics.SurfaceTexture
 import android.location.Location
@@ -38,6 +37,7 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.Polygon
 import com.google.android.gms.maps.model.Polyline
+import kotlin.math.roundToInt
 
 abstract class GoogleMapsBaseMapView(
   private val viewId: Int?,
@@ -81,6 +81,9 @@ abstract class GoogleMapsBaseMapView(
   private var currentLifecycleState: LifecycleState = LifecycleState.NONE
 
   abstract fun getView(): View
+
+  /** Returns the density of the display rendering this map view. */
+  open fun getDisplayDensity(): Float = getView().resources.displayMetrics.density
 
   open fun onStart(): Boolean {
     if (
@@ -879,14 +882,14 @@ abstract class GoogleMapsBaseMapView(
   }
 
   fun getPolygons(): List<PolygonDto> {
-    val density = Resources.getSystem().displayMetrics.density
+    val density = getDisplayDensity()
     return _polygons.map {
       PolygonDto(it.polygonId, Convert.polygonToPolygonOptions(it.polygon, density))
     }
   }
 
   fun addPolygons(polygons: List<PolygonDto>): List<PolygonDto> {
-    val density = Resources.getSystem().displayMetrics.density
+    val density = getDisplayDensity()
     val result = mutableListOf<PolygonDto>()
     polygons.forEach {
       val builder = PolygonBuilder()
@@ -905,7 +908,7 @@ abstract class GoogleMapsBaseMapView(
   fun updatePolygons(polygons: List<PolygonDto>): List<PolygonDto> {
     var error: Throwable? = null
     val result = mutableListOf<PolygonDto>()
-    val density = Resources.getSystem().displayMetrics.density
+    val density = getDisplayDensity()
     polygons.forEach {
       findPolygonController(it.polygonId)?.let { controller ->
         Convert.sinkPolygonOptions(it.options, controller, density)
@@ -942,14 +945,14 @@ abstract class GoogleMapsBaseMapView(
   }
 
   fun getPolylines(): List<PolylineDto> {
-    val density = Resources.getSystem().displayMetrics.density
+    val density = getDisplayDensity()
     return _polylines.map {
       PolylineDto(it.polylineId, Convert.polylineToPolylineOptions(it.polyline, density))
     }
   }
 
   fun addPolylines(polylines: List<PolylineDto>): List<PolylineDto> {
-    val density = Resources.getSystem().displayMetrics.density
+    val density = getDisplayDensity()
     val result = mutableListOf<PolylineDto>()
     polylines.forEach {
       val builder = PolylineBuilder()
@@ -967,7 +970,7 @@ abstract class GoogleMapsBaseMapView(
 
   fun updatePolylines(polylines: List<PolylineDto>): List<PolylineDto> {
     var error: Throwable? = null
-    val density = Resources.getSystem().displayMetrics.density
+    val density = getDisplayDensity()
     val result = mutableListOf<PolylineDto>()
     polylines.forEach {
       findPolylineController(it.polylineId)?.let { controller ->
@@ -1004,14 +1007,14 @@ abstract class GoogleMapsBaseMapView(
   }
 
   fun getCircles(): List<CircleDto> {
-    val density = Resources.getSystem().displayMetrics.density
+    val density = getDisplayDensity()
     return _circles.map {
       CircleDto(it.circleId, Convert.circleToCircleOptions(it.circle, density))
     }
   }
 
   fun addCircles(circles: List<CircleDto>): List<CircleDto> {
-    val density = Resources.getSystem().displayMetrics.density
+    val density = getDisplayDensity()
     val result = mutableListOf<CircleDto>()
     circles.forEach {
       val builder = CircleBuilder()
@@ -1028,7 +1031,7 @@ abstract class GoogleMapsBaseMapView(
   }
 
   fun updateCircles(circles: List<CircleDto>): List<CircleDto> {
-    val density = Resources.getSystem().displayMetrics.density
+    val density = getDisplayDensity()
     val result = mutableListOf<CircleDto>()
     var error: Throwable? = null
     circles.forEach {
@@ -1111,12 +1114,13 @@ abstract class GoogleMapsBaseMapView(
 
   fun setPadding(padding: MapPaddingDto) {
     _mapOptions?.padding = padding
+    val density = getDisplayDensity()
     getMap()
       .setPadding(
-        padding.left.toInt(),
-        padding.top.toInt(),
-        padding.right.toInt(),
-        padding.bottom.toInt(),
+        Convert.convertLogicalToScreenPixel(padding.left.toDouble(), density).roundToInt(),
+        Convert.convertLogicalToScreenPixel(padding.top.toDouble(), density).roundToInt(),
+        Convert.convertLogicalToScreenPixel(padding.right.toDouble(), density).roundToInt(),
+        Convert.convertLogicalToScreenPixel(padding.bottom.toDouble(), density).roundToInt(),
       )
   }
 

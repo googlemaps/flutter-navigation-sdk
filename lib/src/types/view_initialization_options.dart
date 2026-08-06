@@ -197,7 +197,7 @@ class MapOptions {
   /// Null by default (unbounded).
   final LatLngBounds? cameraTargetBounds;
 
-  /// Specifies the initial padding for the map view.
+  /// Specifies initial map-view padding in logical pixels.
   ///
   /// Null by default (no padding).
   final EdgeInsets? padding;

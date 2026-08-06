@@ -16,7 +16,6 @@
 
 package com.google.maps.flutter.navigation
 
-import android.content.res.Resources
 import android.graphics.Point
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMapOptions
@@ -184,10 +183,10 @@ object Convert {
    *
    * @param dx Delta on x-axis
    * @param dy Delta ony-axis
+   * @param density Display density used to convert logical pixels.
    * @return Android [Point].
    */
-  fun convertDeltaToPoint(dx: Double?, dy: Double?): Point? {
-    val density = Resources.getSystem().displayMetrics.density
+  fun convertDeltaToPoint(dx: Double?, dy: Double?, density: Float): Point? {
     var focus: Point? = null
     if (dx != null && dy != null) {
       focus =
