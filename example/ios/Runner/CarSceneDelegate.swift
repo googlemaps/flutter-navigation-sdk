@@ -305,8 +305,7 @@ class CarSceneDelegate: BaseCarSceneDelegate, GMSNavigatorListener {
   private func syncNavigatorListenerRegistration() {
     let navView = getNavView()
     let shouldRegister =
-      (navView?.isAttachedToSession ?? false) &&
-      (navView?.isNavigationUIEnabled() ?? false)
+      (navView?.isAttachedToSession ?? false) && (navView?.isNavigationUIEnabled() ?? false)
     if shouldRegister {
       registerNavigatorListener()
     } else {
@@ -408,7 +407,8 @@ class CarSceneDelegate: BaseCarSceneDelegate, GMSNavigatorListener {
       getNavView()?.getMyLocation()
       ?? CLLocationCoordinate2D(latitude: 0, longitude: 0)
 
-    let destinationCoordinate = navigator.currentRouteLeg?.destinationCoordinate
+    let destinationCoordinate =
+      navigator.currentRouteLeg?.destinationCoordinate
       ?? originCoordinate
     let destinationTitle =
       navigator.currentRouteLeg?.destinationWaypoint?.title
