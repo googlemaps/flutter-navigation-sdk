@@ -444,6 +444,12 @@ This package uses the Google Maps [Navigation SDK](https://mapsplatform.google.c
 > [!NOTE]
 > This package provides a `GoogleMapsMapView` widget, which can be used as a classic Google Maps view without navigation. See [Add a map view](#add-a-map-view) for details.
 
+### Flutter overlays and gesture propagation on iOS
+
+The map is rendered as a native platform view. Flutter widgets placed on top of the map (custom controls, panels, buttons, etc.) do not automatically stop touches from reaching the native map view, so taps on your overlay can also be interpreted as map gestures. Flutter's `HitTestBehavior` and opaque widgets do not prevent this.
+
+To stop gestures from propagating to the map underneath, wrap your interactive overlays with the [`pointer_interceptor`](https://pub.dev/packages/pointer_interceptor) package, which inserts a native view that absorbs the touches. See the example app for usage.
+
 ## Contributing
 
 See the [Contributing guide](https://github.com/googlemaps/flutter-navigation-sdk/blob/main/CONTRIBUTING.md).

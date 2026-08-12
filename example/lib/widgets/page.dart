@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'package:flutter/material.dart';
+import 'package:pointer_interceptor/pointer_interceptor.dart';
 
 /// Base wrapper widget for example pages, holding mainmenu leading
 /// icon and also page title.
@@ -115,80 +116,83 @@ abstract class ExamplePageState<T extends ExamplePage> extends State<T>
   }
 
   Widget _buildOverlay() {
-    return Stack(
-      children: <Widget>[
-        // Overlay background, which is used to close overlay when tapped.
-        GestureDetector(
-          onTap: hideOverlay,
-          child: AnimatedBuilder(
-            animation: _controller,
-            builder: (BuildContext context, Widget? child) => Container(
-              color: Colors.black.withAlpha(
-                (255.0 * _controller.value * 0.5).round(),
+    // Use PointerInterceptor to stop taps leaking to the map underneath.
+    return PointerInterceptor(
+      child: Stack(
+        children: <Widget>[
+          // Overlay background, which is used to close overlay when tapped.
+          GestureDetector(
+            onTap: hideOverlay,
+            child: AnimatedBuilder(
+              animation: _controller,
+              builder: (BuildContext context, Widget? child) => Container(
+                color: Colors.black.withAlpha(
+                  (255.0 * _controller.value * 0.5).round(),
+                ),
               ),
             ),
           ),
-        ),
-        // Overlay content
-        SlideTransition(
-          position: _overlayOffsetAnimation,
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            // GestureDetector is used to prevent closing overlay when tapping
-            // on the content itself.
-            child: GestureDetector(
-              onTap: () {},
-              behavior: HitTestBehavior.opaque,
-              child: Material(
-                color: Theme.of(context).cardColor,
-                elevation: 4,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    // Close button
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16, right: 16),
-                      child: Align(
-                        alignment: Alignment.topRight,
-                        child: IconButton(
-                          icon: const Icon(Icons.close),
-                          onPressed: () => hideOverlay(),
-                        ),
-                      ),
-                    ),
-                    // Container for overlay content
-                    Container(
-                      constraints: BoxConstraints(
-                        maxHeight: MediaQuery.of(context).size.height * 0.6,
-                      ),
-                      child: SafeArea(
-                        top: false,
-                        minimum: const EdgeInsets.only(
-                          left: 8,
-                          right: 8,
-                          bottom: 16,
-                        ),
-                        // Make content scrollable
-                        child: Scrollbar(
-                          thumbVisibility: true,
-                          radius: const Radius.circular(30),
-                          child: SingleChildScrollView(
-                            child: buildOverlayContent(context),
+          // Overlay content
+          SlideTransition(
+            position: _overlayOffsetAnimation,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              // GestureDetector is used to prevent closing overlay when tapping
+              // on the content itself.
+              child: GestureDetector(
+                onTap: () {},
+                behavior: HitTestBehavior.opaque,
+                child: Material(
+                  color: Theme.of(context).cardColor,
+                  elevation: 4,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      // Close button
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16, right: 16),
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () => hideOverlay(),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                      // Container for overlay content
+                      Container(
+                        constraints: BoxConstraints(
+                          maxHeight: MediaQuery.of(context).size.height * 0.6,
+                        ),
+                        child: SafeArea(
+                          top: false,
+                          minimum: const EdgeInsets.only(
+                            left: 8,
+                            right: 8,
+                            bottom: 16,
+                          ),
+                          // Make content scrollable
+                          child: Scrollbar(
+                            thumbVisibility: true,
+                            radius: const Radius.circular(30),
+                            child: SingleChildScrollView(
+                              child: buildOverlayContent(context),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
