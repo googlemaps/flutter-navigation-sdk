@@ -19,6 +19,8 @@
 		2A8C4AD32CC64AE500168311 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8C4AD12CC64AE500168311 /* main.swift */; };
 		2A8C4ADD2CC656D700168311 /* PhoneSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8C4ADC2CC656D700168311 /* PhoneSceneDelegate.swift */; };
 		2A8C4ADF2CC656E800168311 /* CarSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8C4ADE2CC656E800168311 /* CarSceneDelegate.swift */; };
+		2ABD3D9A302F11D7002D0AD0 /* FlutterGeneratedPluginSwiftPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 78A3181F2AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage */; };
+		2ABD3D9C302F1237002D0AD0 /* FlutterGeneratedPluginSwiftPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 2ABD3D9B302F1237002D0AD0 /* FlutterGeneratedPluginSwiftPackage */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		506F574D2AD8012C004AC70F /* RunnerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 506F574C2AD8012C004AC70F /* RunnerUITests.m */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
@@ -128,6 +130,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3A3B5ED895816BDF2A70351 /* Pods_RunnerCarPlay.framework in Frameworks */,
+				2ABD3D9A302F11D7002D0AD0 /* FlutterGeneratedPluginSwiftPackage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,6 +139,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9CBB6602AD89694007C737E /* XCTest.framework in Frameworks */,
+				2ABD3D9C302F1237002D0AD0 /* FlutterGeneratedPluginSwiftPackage in Frameworks */,
 				9BAC8E60A263AA40A946AFCF /* Pods_Runner_RunnerUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -282,7 +286,6 @@
 				2A8C4AC02CC646F200168311 /* Resources */,
 				2A8C4AC52CC646F200168311 /* Embed Frameworks */,
 				2A8C4AC62CC646F200168311 /* Thin Binary */,
-				BAAF78ADF4EC76C6CC3D931D /* [CP] Embed Pods Frameworks */,
 				E1A54FD049B3FD079D5EAF0B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -327,7 +330,6 @@
 				3AC0A81F7D36AA565D151485 /* [CP] Copy Pods Resources */,
 				506F57562AD80211004AC70F /* xcode_backend build */,
 				506F57572AD8022C004AC70F /* xcode_backend embed_and_thin */,
-				D1AE5F46BE0FA1B15C1D9A70 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -351,7 +353,6 @@
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				FEC6DAC35845571C69A2CBCF /* [CP] Copy Pods Resources */,
-				123001C9CDB283FA4E6405E7 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -453,23 +454,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		123001C9CDB283FA4E6405E7 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		2A2E8CE8E375732F73D2ABA1 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -606,40 +590,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
-		};
-		BAAF78ADF4EC76C6CC3D931D /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-RunnerCarPlay/Pods-RunnerCarPlay-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-RunnerCarPlay/Pods-RunnerCarPlay-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-RunnerCarPlay/Pods-RunnerCarPlay-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D1AE5F46BE0FA1B15C1D9A70 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner-RunnerUITests/Pods-Runner-RunnerUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Runner-RunnerUITests/Pods-Runner-RunnerUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner-RunnerUITests/Pods-Runner-RunnerUITests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 		D21A0255C7E8DBD9403FFD35 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1483,6 +1433,10 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		2ABD3D9B302F1237002D0AD0 /* FlutterGeneratedPluginSwiftPackage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FlutterGeneratedPluginSwiftPackage;
+		};
 		78A3181F2AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FlutterGeneratedPluginSwiftPackage;
