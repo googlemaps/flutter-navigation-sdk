@@ -15,24 +15,8 @@
 import Dispatch
 import Foundation
 
-/// Weak wrapper so the registry does not own the views it tracks.
-///
-/// A `GoogleMapsNavigationView` removes itself from the registry only in its
-/// `deinit` (`unregisterView()`). If the registry held views strongly, that
-/// strong entry would keep the view's reference count above zero after Flutter
-/// tears down the platform view, so `deinit` would never run, the view would
-/// never be unregistered, and its underlying `GMSMapView` would be retained for
-/// the lifetime of the process. Because Flutter assigns a new view id for each
-/// platform view, nothing overwrites the stale entry either, so one view leaks
-/// per view creation. Holding views weakly lets a released view deallocate,
-/// which triggers `deinit` and prunes the (now-empty) entry.
-private class WeakViewRef {
-  weak var view: GoogleMapsNavigationView?
-  init(_ view: GoogleMapsNavigationView) { self.view = view }
-}
-
 class GoogleMapsNavigationViewRegistry {
-  private var views: [Int64: WeakViewRef] = [:]
+  private var viewRefs: [Int64: WeakRef<GoogleMapsNavigationView>] = [:]
   private var carPlayView: GoogleMapsNavigationView? {
     didSet {
       onHasCarPlayViewChanged?(carPlayView != nil)
@@ -50,46 +34,44 @@ class GoogleMapsNavigationViewRegistry {
 
   func registerView(viewId: Int64, view: GoogleMapsNavigationView) {
     queue.sync(flags: .barrier) { [weak self] in
-      self?.views[viewId] = WeakViewRef(view)
+      self?.viewRefs[viewId] = WeakRef(view)
     }
   }
 
   func unregisterView(viewId: Int64, viewInstanceIdToUnregister: ObjectIdentifier) {
     queue.async(flags: .barrier) { [weak self] in
       guard let self else { return }
-      // Remove the entry when it matches the unregistering instance, or when the
-      // weakly-held view has already been reclaimed, so stale keys never linger.
-      if let registeredView = self.views[viewId]?.view {
+      if let registeredView = self.viewRefs[viewId]?.value {
         if ObjectIdentifier(registeredView) == viewInstanceIdToUnregister {
-          self.views.removeValue(forKey: viewId)
+          self.viewRefs.removeValue(forKey: viewId)
         }
       } else {
-        self.views.removeValue(forKey: viewId)
+        self.viewRefs.removeValue(forKey: viewId)
       }
     }
   }
 
   func getView(viewId: Int64) -> GoogleMapsNavigationView? {
     queue.sync {
-      views[viewId]?.view
+      viewRefs[viewId]?.value
     }
   }
 
   func getAllRegisteredViewIds() -> [Int64] {
     queue.sync {
-      views.compactMap { $0.value.view != nil ? $0.key : nil }
+      viewRefs.compactMap { id, ref in ref.value != nil ? id : nil }
     }
   }
 
   func getAllRegisteredViews() -> [GoogleMapsNavigationView] {
     queue.sync {
-      views.values.compactMap { $0.view }
+      viewRefs.values.compactMap { $0.value }
     }
   }
 
   func getAllRegisteredNavigationViewIds() -> [Int64] {
     // Filter the views dictionary to include only those views that are navigation views
-    views.compactMap { $0.value.view?.isNavigationView() == true ? $0.key : nil }
+    viewRefs.compactMap { id, ref in ref.value?.isNavigationView() == true ? id : nil }
   }
 
   func registerCarPlayView(view: GoogleMapsNavigationView) {
@@ -116,7 +98,7 @@ class GoogleMapsNavigationViewRegistry {
 
   func sendPromptVisibilityChangedToAllViews(promptVisible: Bool) {
     queue.sync {
-      for view in views.values.compactMap({ $0.view }) {
+      for view in viewRefs.values.compactMap({ $0.value }) {
         view.sendPromptVisibilityChangedEvent(promptVisible: promptVisible)
       }
       // Also send to CarPlay view if it exists
