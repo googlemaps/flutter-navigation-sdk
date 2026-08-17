@@ -7,7 +7,8 @@ _See also: [Flutter's code of conduct](https://flutter.io/design-principles/#cod
 - **Operating System:** Linux, macOS, or Windows.
 - **Version Control:** [git](https://git-scm.com).
 - **Development Environment:** An IDE such as [Android Studio](https://developer.android.com/studio) or [Visual Studio Code](https://code.visualstudio.com/).
-- **Code Formatting:** [`swift-format`](https://formulae.brew.sh/formula/swift-format). 
+- **Code Formatting:** [`swift-format`](https://formulae.brew.sh/formula/swift-format).
+- **iOS Development:** Xcode 26.x.x or later.
 
 ### 1.1. Installing swift-format
 The CI uses latest swift-format which you can install with the command below:

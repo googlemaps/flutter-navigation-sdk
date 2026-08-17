@@ -71,6 +71,7 @@ This plugin requires Swift Package Manager on iOS; CocoaPods is not supported. I
 1. Open `ios/Runner.xcodeproj` in Xcode.
 2. Set the `Runner` target's iOS deployment target to 16.0.
 3. In Xcode, open the Info.plist file and add `App registers for location updates` to the list of `Required background modes`.
+4. Add `NSMotionUsageDescription` to Info.plist with a user-facing explanation of how your app uses motion data for navigation. See the [Navigation SDK for iOS release notes](https://developers.google.com/maps/documentation/navigation/ios-sdk/release-notes#August_06_2026) for details.
 
 ### Set Google Maps API Key
 
