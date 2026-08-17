@@ -601,14 +601,6 @@ public class GoogleMapsNavigationView: NSObject, FlutterPlatformView, ViewSettle
     _mapView.settings.showsDestinationMarkers = show
   }
 
-  func showTrafficLights(show: Bool) {
-    _mapView.settings.showsTrafficLights = show
-  }
-
-  func showStopSigns(show: Bool) {
-    _mapView.settings.showsStopSigns = show
-  }
-
   func isNavigationTripProgressBarEnabled() throws -> Bool {
     _mapView.settings.isNavigationTripProgressBarEnabled
   }
