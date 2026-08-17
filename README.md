@@ -66,7 +66,7 @@ dependencies {
 
 ### iOS
 
-This plugin requires Swift Package Manager on iOS; CocoaPods is not supported. If your app requires CocoaPods, use the last plugin release that supports it: 0.11.0
+This plugin requires Swift Package Manager on iOS; CocoaPods is not supported. See Flutter's [Swift Package Manager guide for app developers](https://docs.flutter.dev/packages-and-plugins/swift-package-manager/for-app-developers) to enable SwiftPM support in your app.
 
 1. Open `ios/Runner.xcodeproj` in Xcode.
 2. Set the `Runner` target's iOS deployment target to 16.0.
