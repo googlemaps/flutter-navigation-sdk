@@ -83,7 +83,7 @@ jobs:
         with:
           melos-version: "6.3.2"
       - name: Cache podfiles
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: "**/Pods"
           key: ${{ runner.os }}-pods-${{ hashFiles('**/*.podspec') }}
@@ -171,7 +171,7 @@ jobs:
         with:
           melos-version: "6.3.2"
       - name: Cache podfiles
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: "**/Pods"
           key: ${{ runner.os }}-pods-${{ hashFiles('**/*.podspec') }}
@@ -228,7 +228,7 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
       - name: Cache ADB keys
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.android/adb*
           key: adb-keys
@@ -243,7 +243,7 @@ jobs:
         with:
           name: ${{ runner.os }}-build-artifact
       - name: Cache pub global packages
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.pub-cache
           key: ${{ runner.os }}-pub-cache-${{ env.patrol_cli_version }}
@@ -351,14 +351,14 @@ jobs:
         with:
           name: ${{ runner.os }}-build-artifact
       - name: Cache podfiles
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: "**/Pods"
           key: ${{ runner.os }}-pods-${{ hashFiles('**/*.podspec') }}
           restore-keys: |
             ${{ runner.os }}-pods-
       - name: Cache pub global packages
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.pub-cache
           key: ${{ runner.os }}-pub-cache-${{ env.patrol_cli_version }}
