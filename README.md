@@ -66,14 +66,12 @@ dependencies {
 
 ### iOS
 
-1. Open the ios/Podfile config file in your preferred IDE.
-2. Add the following lines to the beginning of this Podfile:
+This plugin requires Swift Package Manager on iOS; CocoaPods is not supported. See Flutter's [Swift Package Manager guide for app developers](https://docs.flutter.dev/packages-and-plugins/swift-package-manager/for-app-developers) to enable SwiftPM support in your app.
 
-```
-  # Set platform to 16.0 to enable latest Google Maps SDK
-  platform :ios, '16.0'
-```
-3. In Xcode open Info.plist file and add `App registers for location updates` to the list of `Required background modes`
+1. Open `ios/Runner.xcodeproj` in Xcode.
+2. Set the `Runner` target's iOS deployment target to 16.0.
+3. In Xcode, open the Info.plist file and add `App registers for location updates` to the list of `Required background modes`.
+4. Add `NSMotionUsageDescription` to Info.plist with a user-facing explanation of how your app uses motion data for navigation. See the [Navigation SDK for iOS release notes](https://developers.google.com/maps/documentation/navigation/ios-sdk/release-notes#August_06_2026) for details.
 
 ### Set Google Maps API Key
 

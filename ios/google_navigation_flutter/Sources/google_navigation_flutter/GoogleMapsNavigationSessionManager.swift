@@ -267,12 +267,6 @@ class GoogleMapsNavigationSessionManager: NSObject {
       if let showDestinationMarkers = options.showDestinationMarkers {
         view.showDestinationMarkers(show: showDestinationMarkers)
       }
-      if let showStopSigns = options.showStopSigns {
-        view.showStopSigns(show: showStopSigns)
-      }
-      if let showTrafficLights = options.showTrafficLights {
-        view.showTrafficLights(show: showTrafficLights)
-      }
     }
   }
 
