@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.11.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.10.0...0.11.0) (2026-08-31)
+
+
+### ⚠ BREAKING CHANGES
+
+* unify map padding to use density-independent pixels ([#749](https://github.com/googlemaps/flutter-navigation-sdk/issues/749))
+
+### Features
+
+* android notification improvements ([#745](https://github.com/googlemaps/flutter-navigation-sdk/issues/745)) ([81e3810](https://github.com/googlemaps/flutter-navigation-sdk/commit/81e38108e1997d662a8a005132ead2270220116e))
+* unify map padding to use density-independent pixels ([#749](https://github.com/googlemaps/flutter-navigation-sdk/issues/749)) ([b3a0075](https://github.com/googlemaps/flutter-navigation-sdk/commit/b3a0075fda83119aabaccac9bc6503d7c0a60889))
+* upgrade android sdk to 7.8.0 and ios sdk to 10.15.0 ([#747](https://github.com/googlemaps/flutter-navigation-sdk/issues/747)) ([f8921ba](https://github.com/googlemaps/flutter-navigation-sdk/commit/f8921ba4375e2676f53757955c0b6a1c54f17f54))
+* upgrade ios sdk to 11.0.0 and remove cocoapods integration ([#753](https://github.com/googlemaps/flutter-navigation-sdk/issues/753)) ([0c18710](https://github.com/googlemaps/flutter-navigation-sdk/commit/0c18710fe1cdce018ab11b3f45725449b1a8240d))
+
+
+### Bug Fixes
+
+* **ios:** hold navigation views weakly in the view registry so they deallocate on teardown ([#752](https://github.com/googlemaps/flutter-navigation-sdk/issues/752)) ([ae82e09](https://github.com/googlemaps/flutter-navigation-sdk/commit/ae82e09ee94b5dc36162779061b25c4e719e065e))
+
 ## [0.10.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.9.4...0.10.0) (2026-07-02)
 
 
