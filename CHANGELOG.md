@@ -6,7 +6,6 @@
 ### ⚠ BREAKING CHANGES
 
 * unify map padding to use density-independent pixels ([#749](https://github.com/googlemaps/flutter-navigation-sdk/issues/749))
-* upgrade android sdk to 7.8.0 and ios sdk to 10.15.0 ([#747](https://github.com/googlemaps/flutter-navigation-sdk/issues/747))
 
 ### Features
 
