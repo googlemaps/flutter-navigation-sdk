@@ -55,7 +55,7 @@ jobs:
           - name: Run Android native unit tests
             run: melos run test:android
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ runner.os }}-build-artifact
           include-hidden-files: true
@@ -90,7 +90,7 @@ jobs:
       - name: "Run iOS native unit tests"
         run: TEST_DEVICE='iPhone 17 Pro' TEST_OS='26.5' melos run test:ios
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ runner.os }}-build-artifact
           include-hidden-files: true
@@ -132,7 +132,7 @@ jobs:
       - name: "Run build for Android"
         run: melos run flutter-build-android
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ runner.os }}-build-artifact
           include-hidden-files: true
@@ -172,7 +172,7 @@ jobs:
       - name: "Run build for iOS"
         run: melos run flutter-build-ios
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ runner.os }}-build-artifact
           include-hidden-files: true
@@ -273,7 +273,7 @@ jobs:
         run: |
           patrol test --dart-define=IS_CI=true ${{ runner.debug && '--show-flutter-logs --verbose' || '' }}
       - name: Upload test report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: ${{ always() }}
         with:
           name: android_integration_test_report
@@ -354,7 +354,7 @@ jobs:
         run: |
           patrol test --dart-define=MAPS_API_KEY="$MAPS_API_KEY" --dart-define=IS_CI=true --ios=$IOS_VERSION ${{ runner.debug && '--show-flutter-logs --verbose' || '' }} -d "$DEVICE_ID"
       - name: Upload test report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: ${{ always() }}
         with:
           name: ios_integration_test_report
