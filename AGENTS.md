@@ -62,10 +62,11 @@ failure, use the versions pinned in `.github/workflows/` rather than copying
 version numbers into this file.
 
 From the repository root, install the Melos version used by CI and bootstrap the
-workspace:
+workspace. Replace `VERSION_FROM_CI` with the `melos-version` value in
+`.github/workflows/test-and-build.yaml`:
 
 ```sh
-dart pub global activate melos
+dart pub global activate melos VERSION_FROM_CI
 melos bootstrap
 ```
 
@@ -74,6 +75,8 @@ Additional tools depend on the files being changed:
 - Android work requires the Java version configured by CI and a working Android
   SDK.
 - iOS work requires macOS, the Xcode version used by CI, and `swift-format`.
+- iOS uses Swift Package Manager; CocoaPods is not supported. Follow the SwiftPM
+  setup in `README.md`.
 - New source files may require the `addlicense` command described in
   `CONTRIBUTING.md`.
 - Patrol is required only for integration tests. Use the Patrol CLI version
@@ -101,6 +104,13 @@ melos run flutter-build-ios
 
 # License checks.
 melos run check-license-header
+```
+
+Before running native iOS tests on a fresh checkout, generate the Flutter iOS
+configuration from `example/` (as CI does):
+
+```sh
+(cd example && flutter build ios --config-only)
 ```
 
 The iOS test script accepts `TEST_DEVICE` and `TEST_OS` environment variables
