@@ -112,9 +112,13 @@ void main() {
       // Emit test events via DTO
       testSessionApi.testEventApi.onRoadSnappedLocationUpdated(
         LatLngDto(latitude: 37.4220, longitude: -122.0841),
+        90.0,
+        12.5,
       );
       testSessionApi.testEventApi.onRoadSnappedLocationUpdated(
         LatLngDto(latitude: 37.4225, longitude: -122.0845),
+        null,
+        null,
       );
 
       await Future<void>.delayed(const Duration(milliseconds: 50));
@@ -124,6 +128,12 @@ void main() {
       expect(receivedEvents[0].location.longitude, -122.0841);
       expect(receivedEvents[1].location.latitude, 37.4225);
       expect(receivedEvents[1].location.longitude, -122.0845);
+      expect(receivedEvents[0].heading, 90.0);
+      expect(receivedEvents[0].speed, 12.5);
+      // A platform that reports no course or speed must not be read as
+      // heading due north at a standstill.
+      expect(receivedEvents[1].heading, isNull);
+      expect(receivedEvents[1].speed, isNull);
 
       await subscription.cancel();
     });
@@ -142,6 +152,8 @@ void main() {
       // Emit test event via DTO
       testSessionApi.testEventApi.onRoadSnappedRawLocationUpdated(
         LatLngDto(latitude: 40.7128, longitude: -74.0060),
+        180.0,
+        3.0,
       );
 
       await Future<void>.delayed(const Duration(milliseconds: 50));
@@ -149,6 +161,8 @@ void main() {
       expect(receivedEvents.length, 1);
       expect(receivedEvents[0].location.latitude, 40.7128);
       expect(receivedEvents[0].location.longitude, -74.0060);
+      expect(receivedEvents[0].heading, 180.0);
+      expect(receivedEvents[0].speed, 3.0);
 
       await subscription.cancel();
     });

@@ -1617,8 +1617,16 @@ abstract class NavigationSessionApi {
 @FlutterApi()
 abstract class NavigationSessionEventApi {
   void onSpeedingUpdated(SpeedingUpdatedEventDto msg);
-  void onRoadSnappedLocationUpdated(LatLngDto location);
-  void onRoadSnappedRawLocationUpdated(LatLngDto location);
+  void onRoadSnappedLocationUpdated(
+    LatLngDto location,
+    double? heading,
+    double? speed,
+  );
+  void onRoadSnappedRawLocationUpdated(
+    LatLngDto location,
+    double? heading,
+    double? speed,
+  );
   void onArrival(NavigationWaypointDto waypoint);
   void onRouteChanged();
   void onRemainingTimeOrDistanceChanged(
