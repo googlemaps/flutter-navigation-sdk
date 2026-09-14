@@ -286,7 +286,7 @@ native build configuration.
 
 - Use a Conventional Commit pull-request title, such as `feat:`, `fix:`,
   `docs:`, `test:`, `refactor:`, `build:`, or `chore:`.
-- Mark intentional breaking changes clearly, including migration instructions.
+- Mark intentional breaking changes by appending an exclamation mark to the type in the pull request title (e.g., `feat!:`). Always include migration instructions in the PR body.
 - Explain what changed and why, link the relevant issue when applicable, and
   list the checks that were actually run.
 - Keep generated changes, implementation changes, tests, and documentation in
