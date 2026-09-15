@@ -13,7 +13,7 @@
 // limitations under the License.
 
 buildscript {
-    val kotlinVersion = "2.3.20"
+    val kotlinVersion = "2.4.0"
     repositories {
         google()
         mavenCentral()
