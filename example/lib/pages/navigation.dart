@@ -233,6 +233,15 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
     _autoViewController.listenForCustomNavigationAutoEvents((event) {
       if (!mounted) return;
+      // Android Auto custom stop guidance event.
+      if (event.event == 'HostStopNavigation') {
+        setState(() {
+          _guidanceRunning = false;
+        });
+        unawaited(_syncAutoNavigationUI());
+        _showMessage('Navigation stopped from Android Auto');
+        return;
+      }
       _showMessage("Received event: ${event.event}");
     });
 
