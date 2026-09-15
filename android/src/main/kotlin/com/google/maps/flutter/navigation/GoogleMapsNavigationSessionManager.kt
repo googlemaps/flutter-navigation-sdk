@@ -909,13 +909,20 @@ constructor(
         object : RoadSnappedLocationProvider.GpsAvailabilityEnhancedLocationListener {
           override fun onLocationChanged(location: Location) {
             navigationSessionEventApi.onRoadSnappedLocationUpdated(
-              LatLngDto(location.latitude, location.longitude)
+              LatLngDto(location.latitude, location.longitude),
+              // A Location without a bearing or a speed still answers 0f for
+              // both. Passed on as-is, a stationary device would read as
+              // heading due north, so an absent value is sent as null.
+              if (location.hasBearing()) location.bearing.toDouble() else null,
+              if (location.hasSpeed()) location.speed.toDouble() else null
             ) {}
           }
 
           override fun onRawLocationUpdate(location: Location) {
             navigationSessionEventApi.onRoadSnappedRawLocationUpdated(
-              LatLngDto(location.latitude, location.longitude)
+              LatLngDto(location.latitude, location.longitude),
+              if (location.hasBearing()) location.bearing.toDouble() else null,
+              if (location.hasSpeed()) location.speed.toDouble() else null
             ) {}
           }
 

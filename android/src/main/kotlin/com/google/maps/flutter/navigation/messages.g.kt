@@ -7881,13 +7881,18 @@ class NavigationSessionEventApi(
     }
   }
 
-  fun onRoadSnappedLocationUpdated(locationArg: LatLngDto, callback: (Result<Unit>) -> Unit) {
+  fun onRoadSnappedLocationUpdated(
+    locationArg: LatLngDto,
+    headingArg: Double?,
+    speedArg: Double?,
+    callback: (Result<Unit>) -> Unit,
+  ) {
     val separatedMessageChannelSuffix =
       if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
     val channelName =
       "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRoadSnappedLocationUpdated$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(locationArg)) {
+    channel.send(listOf(locationArg, headingArg, speedArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
@@ -7900,13 +7905,18 @@ class NavigationSessionEventApi(
     }
   }
 
-  fun onRoadSnappedRawLocationUpdated(locationArg: LatLngDto, callback: (Result<Unit>) -> Unit) {
+  fun onRoadSnappedRawLocationUpdated(
+    locationArg: LatLngDto,
+    headingArg: Double?,
+    speedArg: Double?,
+    callback: (Result<Unit>) -> Unit,
+  ) {
     val separatedMessageChannelSuffix =
       if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
     val channelName =
       "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRoadSnappedRawLocationUpdated$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(locationArg)) {
+    channel.send(listOf(locationArg, headingArg, speedArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
