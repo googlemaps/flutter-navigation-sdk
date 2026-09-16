@@ -9078,9 +9078,17 @@ abstract class NavigationSessionEventApi {
 
   void onSpeedingUpdated(SpeedingUpdatedEventDto msg);
 
-  void onRoadSnappedLocationUpdated(LatLngDto location);
+  void onRoadSnappedLocationUpdated(
+    LatLngDto location,
+    double? heading,
+    double? speed,
+  );
 
-  void onRoadSnappedRawLocationUpdated(LatLngDto location);
+  void onRoadSnappedRawLocationUpdated(
+    LatLngDto location,
+    double? heading,
+    double? speed,
+  );
 
   void onArrival(NavigationWaypointDto waypoint);
 
@@ -9175,8 +9183,14 @@ abstract class NavigationSessionEventApi {
             arg_location != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRoadSnappedLocationUpdated was null, expected non-null LatLngDto.',
           );
+          final double? arg_heading = (args[1] as double?);
+          final double? arg_speed = (args[2] as double?);
           try {
-            api.onRoadSnappedLocationUpdated(arg_location!);
+            api.onRoadSnappedLocationUpdated(
+              arg_location!,
+              arg_heading,
+              arg_speed,
+            );
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -9209,8 +9223,14 @@ abstract class NavigationSessionEventApi {
             arg_location != null,
             'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRoadSnappedRawLocationUpdated was null, expected non-null LatLngDto.',
           );
+          final double? arg_heading = (args[1] as double?);
+          final double? arg_speed = (args[2] as double?);
           try {
-            api.onRoadSnappedRawLocationUpdated(arg_location!);
+            api.onRoadSnappedRawLocationUpdated(
+              arg_location!,
+              arg_heading,
+              arg_speed,
+            );
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
