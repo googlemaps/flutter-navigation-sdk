@@ -19,6 +19,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:google_navigation_flutter/google_navigation_flutter.dart';
+import 'package:pointer_interceptor/pointer_interceptor.dart';
 
 import '../utils/utils.dart';
 import '../widgets/widgets.dart';
@@ -182,37 +183,41 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            child: Column(
-              children: <Widget>[
-                ElevatedButton(
-                  style: mapTypeStyle,
-                  onPressed: mapType == MapType.normal
-                      ? null
-                      : () => setMapType(MapType.normal),
-                  child: const Text('Normal'),
-                ),
-                ElevatedButton(
-                  style: mapTypeStyle,
-                  onPressed: mapType == MapType.satellite
-                      ? null
-                      : () => setMapType(MapType.satellite),
-                  child: const Text('Satellite'),
-                ),
-                ElevatedButton(
-                  style: mapTypeStyle,
-                  onPressed: mapType == MapType.terrain
-                      ? null
-                      : () => setMapType(MapType.terrain),
-                  child: const Text('Terrain'),
-                ),
-                ElevatedButton(
-                  style: mapTypeStyle,
-                  onPressed: mapType == MapType.hybrid
-                      ? null
-                      : () => setMapType(MapType.hybrid),
-                  child: const Text('Hybrid'),
-                ),
-              ],
+            // Use PointerInterceptor to stop taps leaking to the map underneath.
+            child: PointerInterceptor(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  ElevatedButton(
+                    style: mapTypeStyle,
+                    onPressed: mapType == MapType.normal
+                        ? null
+                        : () => setMapType(MapType.normal),
+                    child: const Text('Normal'),
+                  ),
+                  ElevatedButton(
+                    style: mapTypeStyle,
+                    onPressed: mapType == MapType.satellite
+                        ? null
+                        : () => setMapType(MapType.satellite),
+                    child: const Text('Satellite'),
+                  ),
+                  ElevatedButton(
+                    style: mapTypeStyle,
+                    onPressed: mapType == MapType.terrain
+                        ? null
+                        : () => setMapType(MapType.terrain),
+                    child: const Text('Terrain'),
+                  ),
+                  ElevatedButton(
+                    style: mapTypeStyle,
+                    onPressed: mapType == MapType.hybrid
+                        ? null
+                        : () => setMapType(MapType.hybrid),
+                    child: const Text('Hybrid'),
+                  ),
+                ],
+              ),
             ),
           ),
           if (mapType == MapType.normal)
@@ -222,30 +227,33 @@ class _MapPageState extends ExamplePageState<BasicMapPage> {
                   : const EdgeInsets.all(8.0),
               child: Align(
                 alignment: Alignment.topRight,
-                child: Column(
-                  children: <Widget>[
-                    ElevatedButton(
-                      style: mapTypeStyle,
-                      onPressed: MapIdManager.instance.mapId != null
-                          ? null
-                          : () => setMapStyleDefault(),
-                      child: const Text('Default style'),
-                    ),
-                    ElevatedButton(
-                      style: mapTypeStyle,
-                      onPressed: MapIdManager.instance.mapId != null
-                          ? null
-                          : () => setMapStyleNight(),
-                      child: const Text('Night style'),
-                    ),
-                    ElevatedButton(
-                      style: mapTypeStyle,
-                      onPressed: MapIdManager.instance.mapId != null
-                          ? null
-                          : () => setMapStyleSepia(),
-                      child: const Text('Sepia style'),
-                    ),
-                  ],
+                child: PointerInterceptor(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      ElevatedButton(
+                        style: mapTypeStyle,
+                        onPressed: MapIdManager.instance.mapId != null
+                            ? null
+                            : () => setMapStyleDefault(),
+                        child: const Text('Default style'),
+                      ),
+                      ElevatedButton(
+                        style: mapTypeStyle,
+                        onPressed: MapIdManager.instance.mapId != null
+                            ? null
+                            : () => setMapStyleNight(),
+                        child: const Text('Night style'),
+                      ),
+                      ElevatedButton(
+                        style: mapTypeStyle,
+                        onPressed: MapIdManager.instance.mapId != null
+                            ? null
+                            : () => setMapStyleSepia(),
+                        child: const Text('Sepia style'),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

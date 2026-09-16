@@ -15,6 +15,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:pointer_interceptor/pointer_interceptor.dart';
 
 /// Builds options button Widget for the example app.
 Widget getOptionsButton(
@@ -40,7 +41,10 @@ Widget getOverlayOptionsButton(
         : Alignment.bottomRight,
     child: Padding(
       padding: const EdgeInsets.all(10),
-      child: getOptionsButton(context, onPressed: onPressed, style: style),
+      // Use PointerInterceptor to stop taps leaking to the map underneath.
+      child: PointerInterceptor(
+        child: getOptionsButton(context, onPressed: onPressed, style: style),
+      ),
     ),
   ),
 );

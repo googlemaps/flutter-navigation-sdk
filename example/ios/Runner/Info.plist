@@ -40,6 +40,8 @@
 	<string>Location needed for functionalities</string>
 	<key>NSLocationUsageDescription</key>
 	<string>Location needed for functionalities</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Motion data is used to improve navigation.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Location needed for functionalities</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>

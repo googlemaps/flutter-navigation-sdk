@@ -16,7 +16,7 @@ import Dispatch
 import Foundation
 
 class GoogleMapsNavigationViewRegistry {
-  private var views: [Int64: GoogleMapsNavigationView] = [:]
+  private var viewRefs: [Int64: WeakRef<GoogleMapsNavigationView>] = [:]
   private var carPlayView: GoogleMapsNavigationView? {
     didSet {
       onHasCarPlayViewChanged?(carPlayView != nil)
@@ -34,41 +34,44 @@ class GoogleMapsNavigationViewRegistry {
 
   func registerView(viewId: Int64, view: GoogleMapsNavigationView) {
     queue.sync(flags: .barrier) { [weak self] in
-      self?.views[viewId] = view
+      self?.viewRefs[viewId] = WeakRef(view)
     }
   }
 
   func unregisterView(viewId: Int64, viewInstanceIdToUnregister: ObjectIdentifier) {
     queue.async(flags: .barrier) { [weak self] in
-      if let registeredView = self?.views[viewId],
-        ObjectIdentifier(registeredView) == viewInstanceIdToUnregister
-      {
-        self?.views.removeValue(forKey: viewId)
+      guard let self else { return }
+      if let registeredView = self.viewRefs[viewId]?.value {
+        if ObjectIdentifier(registeredView) == viewInstanceIdToUnregister {
+          self.viewRefs.removeValue(forKey: viewId)
+        }
+      } else {
+        self.viewRefs.removeValue(forKey: viewId)
       }
     }
   }
 
   func getView(viewId: Int64) -> GoogleMapsNavigationView? {
     queue.sync {
-      views[viewId]
+      viewRefs[viewId]?.value
     }
   }
 
   func getAllRegisteredViewIds() -> [Int64] {
     queue.sync {
-      Array(views.keys)
+      viewRefs.compactMap { id, ref in ref.value != nil ? id : nil }
     }
   }
 
   func getAllRegisteredViews() -> [GoogleMapsNavigationView] {
     queue.sync {
-      Array(views.values)
+      viewRefs.values.compactMap { $0.value }
     }
   }
 
   func getAllRegisteredNavigationViewIds() -> [Int64] {
     // Filter the views dictionary to include only those views that are navigation views
-    views.filter { $0.value.isNavigationView() }.map(\.key)
+    viewRefs.compactMap { id, ref in ref.value?.isNavigationView() == true ? id : nil }
   }
 
   func registerCarPlayView(view: GoogleMapsNavigationView) {
@@ -95,7 +98,7 @@ class GoogleMapsNavigationViewRegistry {
 
   func sendPromptVisibilityChangedToAllViews(promptVisible: Bool) {
     queue.sync {
-      for view in views.values {
+      for view in viewRefs.values.compactMap({ $0.value }) {
         view.sendPromptVisibilityChangedEvent(promptVisible: promptVisible)
       }
       // Also send to CarPlay view if it exists
