@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.1](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.11.0...0.11.1) (2026-09-16)
+
+
+### Features
+
+* upgrade iOS SDK to 11.1.0 and Android SDK to 7.9.0 ([#763](https://github.com/googlemaps/flutter-navigation-sdk/issues/763)) ([a538dfe](https://github.com/googlemaps/flutter-navigation-sdk/commit/a538dfe0ad6748b5e890e9306936c990ea61f0ef))
+
 ## [0.11.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.10.0...0.11.0) (2026-08-31)
 
 
