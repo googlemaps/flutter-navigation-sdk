@@ -629,6 +629,23 @@ abstract class GoogleMapsBaseMapView(
     return getMap().projection.visibleRegion.latLngBounds
   }
 
+  fun getScreenCoordinate(latLng: LatLng): android.graphics.Point {
+    return getMap().projection.toScreenLocation(latLng)
+  }
+
+  @Throws(FlutterError::class)
+  fun getLatLng(screenCoordinate: android.graphics.Point): LatLng {
+    // [fromScreenLocation] returns null if the ray through the given screen
+    // point does not intersect the ground plane (e.g. when the map is heavily
+    // tilted). Surface this as a [FlutterError] so it can be handled on the
+    // Dart side.
+    return getMap().projection.fromScreenLocation(screenCoordinate)
+      ?: throw FlutterError(
+        "latLngConversionFailed",
+        "Could not convert screen coordinate to LatLng.",
+      )
+  }
+
   private fun getMapCallback(callback: (Result<Boolean>) -> Unit): GoogleMap.CancelableCallback {
     return object : GoogleMap.CancelableCallback {
       override fun onFinish() {
