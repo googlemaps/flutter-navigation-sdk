@@ -29,4 +29,5 @@ enum class NavigationUIEnabledPreference {
 data class NavigationViewOptions(
   val navigationUiEnabledPreference: NavigationUIEnabledPreference?,
   val forceNightMode: Int?,
+  val headerStylingOptions: NavigationHeaderStylingOptionsDto?,
 )

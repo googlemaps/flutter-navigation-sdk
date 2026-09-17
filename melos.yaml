@@ -176,7 +176,6 @@ scripts:
     # "check-license-header".
     run: |
       addlicense -f header_template.txt \
-        --ignore "**/Pods/**" \
         --ignore "**/.dart_tool/**" \
         --ignore "**/example/build/**" \
         --ignore "**/example/integration_test/test_bundle.dart" \
@@ -197,7 +196,6 @@ scripts:
     run: |
       addlicense -f header_template.txt \
         --check \
-        --ignore "**/Pods/**" \
         --ignore "**/.dart_tool/**" \
         --ignore "**/example/build/**" \
         --ignore "**/example/integration_test/test_bundle.dart" \

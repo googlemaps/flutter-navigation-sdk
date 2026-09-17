@@ -16,8 +16,6 @@
 
 package com.google.maps.flutter.navigation
 
-import android.content.res.Resources
-
 /** GoogleMapsViewMessageHandler */
 class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegistry) : MapViewApi {
 
@@ -221,7 +219,7 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
     duration: Long?,
     callback: (Result<Boolean>) -> Unit,
   ) {
-    val density = Resources.getSystem().displayMetrics.density
+    val density = getView(viewId.toInt()).getDisplayDensity()
     return getView(viewId.toInt())
       .animateCameraToLatLngBounds(
         Convert.convertLatLngBoundsFromDto(bounds),
@@ -263,7 +261,7 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
     return getView(viewId.toInt())
       .animateCameraByZoom(
         zoomBy,
-        Convert.convertDeltaToPoint(focusDx, focusDy),
+        Convert.convertDeltaToPoint(focusDx, focusDy, getView(viewId.toInt()).getDisplayDensity()),
         duration,
         callback,
       )
@@ -288,7 +286,7 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
   }
 
   override fun moveCameraToLatLngBounds(viewId: Long, bounds: LatLngBoundsDto, padding: Double) {
-    val density = Resources.getSystem().displayMetrics.density
+    val density = getView(viewId.toInt()).getDisplayDensity()
     return getView(viewId.toInt())
       .moveCameraToLatLngBounds(
         Convert.convertLatLngBoundsFromDto(bounds),
@@ -306,7 +304,10 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
 
   override fun moveCameraByZoom(viewId: Long, zoomBy: Double, focusDx: Double?, focusDy: Double?) {
     return getView(viewId.toInt())
-      .moveCameraByZoom(zoomBy, Convert.convertDeltaToPoint(focusDx, focusDy))
+      .moveCameraByZoom(
+        zoomBy,
+        Convert.convertDeltaToPoint(focusDx, focusDy, getView(viewId.toInt()).getDisplayDensity()),
+      )
   }
 
   override fun moveCameraToZoom(viewId: Long, zoom: Double) {
@@ -336,6 +337,17 @@ class GoogleMapsViewMessageHandler(private val viewRegistry: GoogleMapsViewRegis
 
   override fun setNavigationHeaderEnabled(viewId: Long, enabled: Boolean) {
     getNavigationView(viewId.toInt()).setNavigationHeaderEnabled(enabled)
+  }
+
+  override fun getNavigationHeaderStylingOptions(viewId: Long): NavigationHeaderStylingOptionsDto {
+    return getNavigationView(viewId.toInt()).getNavigationHeaderStylingOptions()
+  }
+
+  override fun setNavigationHeaderStylingOptions(
+    viewId: Long,
+    stylingOptions: NavigationHeaderStylingOptionsDto,
+  ) {
+    getNavigationView(viewId.toInt()).setNavigationHeaderStylingOptions(stylingOptions)
   }
 
   override fun isNavigationFooterEnabled(viewId: Long): Boolean {

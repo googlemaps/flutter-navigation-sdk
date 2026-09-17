@@ -185,8 +185,7 @@ class RoutingOptions {
 
 /// Display options.
 ///
-/// By default, the destination markers are shown, stop signs
-/// and traffic lights are not.
+/// By default, destination markers, stop signs, and traffic lights are shown.
 /// {@category Navigation}
 class NavigationDisplayOptions {
   /// Initializer for display options.
@@ -201,19 +200,21 @@ class NavigationDisplayOptions {
 
   /// Show stop signs.
   ///
-  /// Deprecated: This option now defaults to true and will be removed in future
-  /// versions.
+  /// Has no effect on iOS, where Navigation SDK 11 always shows stop signs
+  /// during navigation when data is available. On Android, it defaults to true
+  /// when unset.
   @Deprecated(
-    'This option now defaults to true and will be removed in future versions.',
+    'This option has no effect on iOS, defaults to true on Android, and will be removed in future versions.',
   )
   final bool? showStopSigns;
 
   /// Show traffic lights.
   ///
-  /// Deprecated: This option now defaults to true and will be removed in future
-  /// versions.
+  /// Has no effect on iOS, where Navigation SDK 11 always shows traffic lights
+  /// during navigation when data is available. On Android, it defaults to true
+  /// when unset.
   @Deprecated(
-    'This option now defaults to true and will be removed in future versions.',
+    'This option has no effect on iOS, defaults to true on Android, and will be removed in future versions.',
   )
   final bool? showTrafficLights;
 

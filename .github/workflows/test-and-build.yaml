@@ -15,6 +15,12 @@
 name: Run tests and build
 on:
   pull_request:
+    paths-ignore:
+      - '**.md'
+      - 'LICENSE'
+      - '.github/workflows/analyze.yaml'
+      - '.github/workflows/licence-check.yaml'
+      - '.github/workflows/release-please.yml'
   push:
     branches:
       - main
@@ -24,8 +30,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test-dart:
-    name: Run dart unit tests
+  test-dart-and-android:
+    name: Run Dart and Android unit tests
     timeout-minutes: 45
     runs-on:
       labels: ubuntu-latest
@@ -41,41 +47,19 @@ jobs:
       - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         name: Setup flutter
         with:
-          flutter-version: "3.38.x"
+          flutter-version: "3.44.x"
           channel: "stable"
           cache: true
       - uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
+        name: Setup melos
         with:
           melos-version: "6.3.2"
-      - name: "Run flutter test"
-        run: melos run test:dart
-
-  test-android:
-    name: Run Android native unit tests
-    timeout-minutes: 45
-    runs-on:
-      labels: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - name: Setup java
-        uses: actions/setup-java@v4
-        with:
-          distribution: "temurin"
-          java-version: "17"
-          cache: "gradle"
-      - name: Setup flutter
-        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
-        with:
-          flutter-version: "3.38.x"
-          channel: "stable"
-          cache: true
-      - name: Setup melos
-        uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
-        with:
-          melos-version: "6.3.2"
-      - name: "Run Android native unit tests"
-        run: melos run test:android
+      - name: Run tests in parallel
+        parallel:
+          - name: Run dart unit tests
+            run: melos run test:dart
+          - name: Run Android native unit tests
+            run: melos run test:android
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
@@ -86,6 +70,7 @@ jobs:
 
   test-ios:
     name: Run iOS native unit tests
+    if: github.actor != 'dependabot[bot]'
     timeout-minutes: 45
     runs-on:
       labels: macos-26-xlarge
@@ -97,20 +82,13 @@ jobs:
       - name: Setup flutter
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         with:
-          flutter-version: "3.38.x"
+          flutter-version: "3.44.x"
           channel: "stable"
           cache: true
       - name: Setup melos
         uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
         with:
           melos-version: "6.3.2"
-      - name: Cache podfiles
-        uses: actions/cache@v4
-        with:
-          path: "**/Pods"
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/*.podspec') }}
-          restore-keys: |
-            ${{ runner.os }}-pods-
       - name: Select XCode 26.5
         run: sudo xcode-select -s '/Applications/Xcode_26.5.app/Contents/Developer'
       - name: Generate necessary files with flutter build
@@ -128,7 +106,7 @@ jobs:
 
   build-android:
     name: Build Android
-    needs: [test-dart, test-android]
+    needs: [test-dart-and-android]
     if: contains(github.base_ref, 'main')
     timeout-minutes: 45
     runs-on:
@@ -147,7 +125,7 @@ jobs:
       - name: Setup flutter
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         with:
-          flutter-version: "3.38.x"
+          flutter-version: "3.44.x"
           channel: "stable"
           cache: true
       - name: Setup melos
@@ -171,8 +149,8 @@ jobs:
 
   build-ios:
     name: Build iOS
-    needs: [test-dart, test-ios]
-    if: contains(github.base_ref, 'main')
+    needs: [test-dart-and-android, test-ios]
+    if: contains(github.base_ref, 'main') && github.actor != 'dependabot[bot]'
     timeout-minutes: 90
     runs-on:
       labels: macos-26-xlarge
@@ -184,7 +162,7 @@ jobs:
       - name: Setup flutter
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         with:
-          flutter-version: "3.38.x"
+          flutter-version: "3.44.x"
           channel: "stable"
           cache: true
           architecture: x64
@@ -192,13 +170,6 @@ jobs:
         uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
         with:
           melos-version: "6.3.2"
-      - name: Cache podfiles
-        uses: actions/cache@v4
-        with:
-          path: "**/Pods"
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/*.podspec') }}
-          restore-keys: |
-            ${{ runner.os }}-pods-
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
@@ -226,7 +197,7 @@ jobs:
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
       PATROL_ANALYTICS_ENABLED: false
-      patrol_cli_version: "4.4.0"
+      patrol_cli_version: "4.7.0"
       working_directory: "example"
     steps:
       - name: Fail if workflow has no access to API key
@@ -257,7 +228,7 @@ jobs:
       - name: Setup flutter
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         with:
-          flutter-version: "3.38.x"
+          flutter-version: "3.44.x"
           channel: "stable"
           cache: true
       - name: Download Build Artifact
@@ -319,14 +290,14 @@ jobs:
   integration-test-ios:
     name: Run iOS Integration Tests
     needs: [build-ios]
-    if: contains(github.base_ref, 'main')
+    if: contains(github.base_ref, 'main') && github.actor != 'dependabot[bot]'
     timeout-minutes: 90
     runs-on:
       labels: macos-26-xlarge
     env:
       MAPS_API_KEY: ${{ secrets.ACTIONS_API_KEY }}
       PATROL_ANALYTICS_ENABLED: false
-      patrol_cli_version: "4.4.0"
+      patrol_cli_version: "4.7.0"
       working_directory: "example"
       IOS_VERSION: "26.5"
     steps:
@@ -340,7 +311,7 @@ jobs:
       - name: Setup flutter
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         with:
-          flutter-version: "3.38.x"
+          flutter-version: "3.44.x"
           channel: "stable"
           cache: true
       - name: Select XCode 26.5
@@ -372,13 +343,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ runner.os }}-build-artifact
-      - name: Cache podfiles
-        uses: actions/cache@v4
-        with:
-          path: "**/Pods"
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/*.podspec') }}
-          restore-keys: |
-            ${{ runner.os }}-pods-
       - name: Cache pub global packages
         uses: actions/cache@v4
         with:

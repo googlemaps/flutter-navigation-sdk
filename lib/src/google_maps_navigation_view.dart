@@ -65,6 +65,7 @@ class GoogleMapsNavigationView extends GoogleMapsBaseMapView {
     this.initialNavigationUIEnabledPreference =
         NavigationUIEnabledPreference.automatic,
     this.initialForceNightMode = NavigationForceNightMode.auto,
+    this.initialNavigationHeaderStylingOptions,
     super.layoutDirection,
     super.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
     super.onRecenterButtonClicked,
@@ -154,6 +155,11 @@ class GoogleMapsNavigationView extends GoogleMapsBaseMapView {
   /// automatically determine day or night mode based on time and location.
   final NavigationForceNightMode initialForceNightMode;
 
+  /// Controls the initial navigation header styling.
+  ///
+  /// If null, the native SDK defaults are preserved.
+  final NavigationHeaderStylingOptions? initialNavigationHeaderStylingOptions;
+
   /// On navigation UI enabled changed callback.
   final OnNavigationUIEnabledChanged? onNavigationUIEnabledChanged;
 
@@ -201,6 +207,7 @@ class GoogleMapsNavigationViewState
           navigationUIEnabledPreference:
               widget.initialNavigationUIEnabledPreference,
           forceNightMode: widget.initialForceNightMode,
+          headerStylingOptions: widget.initialNavigationHeaderStylingOptions,
         ),
       ),
       onPlatformViewCreated: _onPlatformViewCreated,

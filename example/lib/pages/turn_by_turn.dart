@@ -15,9 +15,9 @@
 // ignore_for_file: public_member_api_docs
 
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_navigation_flutter/google_navigation_flutter.dart';
+import 'package:pointer_interceptor/pointer_interceptor.dart';
 
 import '../widgets/widgets.dart';
 
@@ -245,10 +245,6 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
       padding = _getViewPadding();
     }
 
-    // On Android, scale padding by device pixel ratio
-    if (Platform.isAndroid) {
-      return padding * MediaQuery.of(context).devicePixelRatio;
-    }
     return padding;
   }
 
@@ -298,7 +294,8 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
           bottom: safePadding.bottom + 16,
           left: 16,
           right: 16,
-          child: _buildControlButtons(context),
+          // Use PointerInterceptor to stop taps leaking to the map underneath.
+          child: PointerInterceptor(child: _buildControlButtons(context)),
         ),
       ],
     );
@@ -337,9 +334,12 @@ class _TurnByTurnPageState extends ExamplePageState<TurnByTurnPage> {
             top: viewPadding.top,
             left: 0,
             right: 0,
-            child: CustomNavigationHeaderExample(
-              navInfo: _navInfo!,
-              onStepChanged: _onStepChanged,
+            // Use PointerInterceptor to stop taps leaking to the map underneath.
+            child: PointerInterceptor(
+              child: CustomNavigationHeaderExample(
+                navInfo: _navInfo!,
+                onStepChanged: _onStepChanged,
+              ),
             ),
           ),
           if (!_isPromptVisible)

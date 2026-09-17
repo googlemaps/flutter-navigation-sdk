@@ -511,7 +511,7 @@ class GoogleMapViewController {
     return GoogleMapsNavigationPlatform.instance.viewAPI.clear(viewId: _viewId);
   }
 
-  /// Set padding for the map view.
+  /// Sets map-view padding in logical pixels.
   Future<void> setPadding(EdgeInsets padding) {
     return GoogleMapsNavigationPlatform.instance.viewAPI.setPadding(
       viewId: _viewId,
@@ -519,7 +519,7 @@ class GoogleMapViewController {
     );
   }
 
-  // Gets the map padding from the map view.
+  /// Gets map-view padding in logical pixels.
   Future<EdgeInsets> getPadding() async {
     return GoogleMapsNavigationPlatform.instance.viewAPI.getPadding(
       viewId: _viewId,

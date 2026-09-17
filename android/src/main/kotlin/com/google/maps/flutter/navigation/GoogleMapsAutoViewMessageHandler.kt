@@ -16,8 +16,6 @@
 
 package com.google.maps.flutter.navigation
 
-import android.content.res.Resources
-
 /** GoogleMapsAutoViewMessageHandler */
 class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewRegistry) :
   AutoMapViewApi {
@@ -271,7 +269,7 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
     duration: Long?,
     callback: (Result<Boolean>) -> Unit,
   ) {
-    val density = Resources.getSystem().displayMetrics.density
+    val density = getView().getDisplayDensity()
     return getView()
       .animateCameraToLatLngBounds(
         Convert.convertLatLngBoundsFromDto(bounds),
@@ -310,7 +308,7 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
     return getView()
       .animateCameraByZoom(
         zoomBy,
-        Convert.convertDeltaToPoint(focusDx, focusDy),
+        Convert.convertDeltaToPoint(focusDx, focusDy, getView().getDisplayDensity()),
         duration,
         callback,
       )
@@ -334,7 +332,7 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
   }
 
   override fun moveCameraToLatLngBounds(bounds: LatLngBoundsDto, padding: Double) {
-    val density = Resources.getSystem().displayMetrics.density
+    val density = getView().getDisplayDensity()
     return getView()
       .moveCameraToLatLngBounds(
         Convert.convertLatLngBoundsFromDto(bounds),
@@ -351,7 +349,11 @@ class GoogleMapsAutoViewMessageHandler(private val viewRegistry: GoogleMapsViewR
   }
 
   override fun moveCameraByZoom(zoomBy: Double, focusDx: Double?, focusDy: Double?) {
-    return getView().moveCameraByZoom(zoomBy, Convert.convertDeltaToPoint(focusDx, focusDy))
+    return getView()
+      .moveCameraByZoom(
+        zoomBy,
+        Convert.convertDeltaToPoint(focusDx, focusDy, getView().getDisplayDensity()),
+      )
   }
 
   override fun moveCameraToZoom(zoom: Double) {

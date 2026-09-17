@@ -16,11 +16,11 @@ name: google_navigation_flutter
 description: A plugin for adding Google Navigation widget to Flutter apps targeting Android and iOS
 repository: https://github.com/googlemaps/flutter-navigation-sdk
 issue_tracker: https://github.com/googlemaps/flutter-navigation-sdk/issues
-version: 0.9.4
+version: 0.11.1
 
 environment:
   sdk: ^3.8.0
-  flutter: ">=3.32.0"
+  flutter: ">=3.44.0"
 
 dependencies:
   collection: ^1.17.2

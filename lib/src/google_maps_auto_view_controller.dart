@@ -394,14 +394,14 @@ class GoogleMapsAutoViewController {
     return GoogleMapsNavigationPlatform.instance.autoAPI.clear();
   }
 
-  /// Set padding for the map view.
+  /// Sets map-view padding in logical pixels.
   Future<void> setPadding(EdgeInsets padding) {
     return GoogleMapsNavigationPlatform.instance.autoAPI.setPadding(
       padding: padding,
     );
   }
 
-  // Gets the map padding from the map view.
+  /// Gets map-view padding in logical pixels.
   Future<EdgeInsets> getPadding() async {
     return GoogleMapsNavigationPlatform.instance.autoAPI.getPadding();
   }

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// ignore_for_file: experimental_member_use
+
 import 'dart:async';
 import 'dart:io';
 
@@ -108,6 +110,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   IndoorBuilding? _focusedIndoorBuilding;
 
   bool _navigationHeaderEnabled = true;
+  NavigationHeaderStylingOptions _navigationHeaderStylingOptions =
+      const NavigationHeaderStylingOptions();
   bool _navigationFooterEnabled = true;
   bool _navigationTripProgressBarEnabled = true;
   bool _navigationUIEnabled = true;
@@ -229,6 +233,15 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
     _autoViewController.listenForCustomNavigationAutoEvents((event) {
       if (!mounted) return;
+      // Android Auto custom stop guidance event.
+      if (event.event == 'HostStopNavigation') {
+        setState(() {
+          _guidanceRunning = false;
+        });
+        unawaited(_syncAutoNavigationUI());
+        _showMessage('Navigation stopped from Android Auto');
+        return;
+      }
       _showMessage("Received event: ${event.event}");
     });
 
@@ -309,7 +322,11 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     if (!_navigatorInitialized) {
       debugPrint('Initializing new navigation session...');
       try {
-        await GoogleMapsNavigator.initializeNavigationSession();
+        await GoogleMapsNavigator.initializeNavigationSession(
+          notificationOptions: const NavigationNotificationOptions(
+            resumeAppOnTap: true,
+          ),
+        );
       } on SessionInitializationException catch (e) {
         switch (e.code) {
           case SessionInitializationError.termsNotAccepted:
@@ -782,7 +799,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       NavigationAudioGuidanceSettings(
         isBluetoothAudioEnabled: true,
         isVibrationEnabled: true,
-        guidanceType: NavigationAudioGuidanceType.alertsAndGuidance,
+        guidanceType: NavigationAudioGuidanceType.silent,
       ),
     );
   }
@@ -802,6 +819,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     if (_navigationViewController != null) {
       final bool navigationHeaderEnabled = await _navigationViewController!
           .isNavigationHeaderEnabled();
+      final NavigationHeaderStylingOptions navigationHeaderStylingOptions =
+          await _navigationViewController!.getNavigationHeaderStylingOptions();
       final bool navigationFooterEnabled = await _navigationViewController!
           .isNavigationFooterEnabled();
       final bool navigationTripProgressBarEnabled =
@@ -830,6 +849,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
       setState(() {
         _navigationHeaderEnabled = navigationHeaderEnabled;
+        _navigationHeaderStylingOptions = navigationHeaderStylingOptions;
         _navigationFooterEnabled = navigationFooterEnabled;
         _navigationTripProgressBarEnabled = navigationTripProgressBarEnabled;
         _navigationUIEnabled = navigationUIEnabled;
@@ -844,6 +864,21 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         _indoorLevelPickerEnabled = indoorLevelPickerEnabled;
       });
     }
+  }
+
+  Future<void> _applyNavigationHeaderStyling(
+    NavigationHeaderStylingOptions stylingOptions,
+  ) async {
+    if (_navigationViewController == null) {
+      return;
+    }
+    await _navigationViewController!.setNavigationHeaderStylingOptions(
+      stylingOptions,
+    );
+    if (!mounted) return;
+    setState(() {
+      _navigationHeaderStylingOptions = stylingOptions;
+    });
   }
 
   void _onRecenterButtonClickedEvent(
@@ -2134,6 +2169,86 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                       _navigationHeaderEnabled = newValue;
                     });
                   },
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Header styling example',
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: <Widget>[
+                          ElevatedButton(
+                            onPressed: () => _applyNavigationHeaderStyling(
+                              const NavigationHeaderStylingOptions(
+                                primaryDayModeBackgroundColor: Colors.blue,
+                                secondaryDayModeBackgroundColor: Colors.red,
+                                primaryNightModeBackgroundColor: Colors.black,
+                                secondaryNightModeBackgroundColor:
+                                    Colors.blueGrey,
+                              ),
+                            ),
+                            child: const Text('Apply background colors'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => _applyNavigationHeaderStyling(
+                              const NavigationHeaderStylingOptions(
+                                primaryDayModeBackgroundColor: Colors.indigo,
+                                secondaryDayModeBackgroundColor:
+                                    Colors.deepPurple,
+                                primaryNightModeBackgroundColor: Colors.black,
+                                secondaryNightModeBackgroundColor:
+                                    Colors.indigo,
+                                largeManeuverIconColor: Colors.orange,
+                                smallManeuverIconColor: Colors.amber,
+                                nextStepTextColor: Colors.yellow,
+                                nextStepTextSize: 18,
+                                distanceValueTextColor: Colors.white,
+                                distanceUnitsTextColor: Colors.white70,
+                                distanceValueTextSize: 24,
+                                distanceUnitsTextSize: 16,
+                                instructionsTextColor: Colors.cyanAccent,
+                                instructionsFirstRowTextSize: 28,
+                                instructionsSecondRowTextSize: 22,
+                                guidanceRecommendedLaneColor:
+                                    Colors.lightGreenAccent,
+                              ),
+                            ),
+                            child: const Text('Apply full styling sample'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => _applyNavigationHeaderStyling(
+                              const NavigationHeaderStylingOptions(),
+                            ),
+                            child: const Text('Reset header styling'),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Current primary day color: '
+                        '${_navigationHeaderStylingOptions.primaryDayModeBackgroundColor ?? 'default'}',
+                      ),
+                      Text(
+                        'Current large maneuver icon color: '
+                        '${_navigationHeaderStylingOptions.largeManeuverIconColor ?? 'default'}',
+                      ),
+                      Text(
+                        'Current next-step text size: '
+                        '${_navigationHeaderStylingOptions.nextStepTextSize ?? 'default'} '
+                        '(Android only)',
+                      ),
+                    ],
+                  ),
                 ),
                 ExampleSwitch(
                   title: 'Enable footer',
