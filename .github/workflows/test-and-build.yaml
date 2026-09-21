@@ -29,6 +29,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   test-dart-and-android:
     name: Run Dart and Android unit tests
@@ -38,7 +41,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
         name: Checkout code
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6
         name: Setup java
         with:
           distribution: "temurin"
@@ -61,7 +64,7 @@ jobs:
           - name: Run Android native unit tests
             run: melos run test:android
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: ${{ runner.os }}-build-artifact
           include-hidden-files: true
@@ -97,7 +100,7 @@ jobs:
       - name: "Run iOS native unit tests"
         run: TEST_DEVICE='iPhone 17 Pro' TEST_OS='26.5' melos run test:ios
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: ${{ runner.os }}-build-artifact
           include-hidden-files: true
@@ -117,7 +120,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - name: Setup java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6
         with:
           distribution: "temurin"
           java-version: "17"
@@ -133,13 +136,13 @@ jobs:
         with:
           melos-version: "6.3.2"
       - name: Download Build Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: ${{ runner.os }}-build-artifact
       - name: "Run build for Android"
         run: melos run flutter-build-android
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: ${{ runner.os }}-build-artifact
           include-hidden-files: true
@@ -171,7 +174,7 @@ jobs:
         with:
           melos-version: "6.3.2"
       - name: Download Build Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: ${{ runner.os }}-build-artifact
       - name: Select XCode 26.5
@@ -179,7 +182,7 @@ jobs:
       - name: "Run build for iOS"
         run: melos run flutter-build-ios
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: ${{ runner.os }}-build-artifact
           include-hidden-files: true
@@ -208,7 +211,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - name: Setup java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6
         with:
           distribution: "temurin"
           java-version: "17"
@@ -219,9 +222,9 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@40fd30fb8d7440372e1316f5d1809ec01dcd3699
       - name: Cache ADB keys
-        uses: actions/cache@v4
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: ~/.android/adb*
           key: adb-keys
@@ -232,11 +235,11 @@ jobs:
           channel: "stable"
           cache: true
       - name: Download Build Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: ${{ runner.os }}-build-artifact
       - name: Cache pub global packages
-        uses: actions/cache@v4
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: ~/.pub-cache
           key: ${{ runner.os }}-pub-cache-${{ env.patrol_cli_version }}
@@ -280,7 +283,7 @@ jobs:
         run: |
           patrol test --dart-define=IS_CI=true ${{ runner.debug && '--show-flutter-logs --verbose' || '' }}
       - name: Upload test report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: ${{ always() }}
         with:
           name: android_integration_test_report
@@ -340,11 +343,11 @@ jobs:
           # Save DEVICE_ID for later use
           echo "DEVICE_ID=$DEVICE_ID" >> $GITHUB_ENV
       - name: Download Build Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
         with:
           name: ${{ runner.os }}-build-artifact
       - name: Cache pub global packages
-        uses: actions/cache@v4
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: ~/.pub-cache
           key: ${{ runner.os }}-pub-cache-${{ env.patrol_cli_version }}
@@ -361,7 +364,7 @@ jobs:
         run: |
           patrol test --dart-define=MAPS_API_KEY="$MAPS_API_KEY" --dart-define=IS_CI=true --ios=$IOS_VERSION ${{ runner.debug && '--show-flutter-logs --verbose' || '' }} -d "$DEVICE_ID"
       - name: Upload test report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: ${{ always() }}
         with:
           name: ios_integration_test_report
