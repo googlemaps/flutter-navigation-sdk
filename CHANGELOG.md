@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.2](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.11.1...0.11.2) (2026-09-17)
+
+
+### Features
+
+* map projection ([#772](https://github.com/googlemaps/flutter-navigation-sdk/issues/772)) ([0707f21](https://github.com/googlemaps/flutter-navigation-sdk/commit/0707f21a736618503ce0fe5ae8d31623fbdda9fc))
+
 ## [0.11.1](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.11.0...0.11.1) (2026-09-16)
 
 
