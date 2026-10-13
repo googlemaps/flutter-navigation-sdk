@@ -761,17 +761,33 @@ class NavigationSessionEventApiImpl implements NavigationSessionEventApi {
   }
 
   @override
-  void onRoadSnappedLocationUpdated(LatLngDto location) {
+  void onRoadSnappedLocationUpdated(
+    LatLngDto location,
+    double? heading,
+    double? speed,
+  ) {
     sessionEventStreamController.add(
-      RoadSnappedLocationUpdatedEvent(location: location.toLatLng()),
+      RoadSnappedLocationUpdatedEvent(
+        location: location.toLatLng(),
+        heading: heading,
+        speed: speed,
+      ),
     );
   }
 
   // Android only.
   @override
-  void onRoadSnappedRawLocationUpdated(LatLngDto location) {
+  void onRoadSnappedRawLocationUpdated(
+    LatLngDto location,
+    double? heading,
+    double? speed,
+  ) {
     sessionEventStreamController.add(
-      RoadSnappedRawLocationUpdatedEvent(location: location.toLatLng()),
+      RoadSnappedRawLocationUpdatedEvent(
+        location: location.toLatLng(),
+        heading: heading,
+        speed: speed,
+      ),
     );
   }
 

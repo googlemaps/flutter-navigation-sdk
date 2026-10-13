@@ -594,6 +594,11 @@ extension GoogleMapsNavigationSessionManager: GMSRoadSnappedLocationProviderList
           latitude: location.coordinate.latitude,
           longitude: location.coordinate.longitude
         ),
+      // CLLocation reports an unavailable course or speed as a negative
+      // value. Passed on as-is a stationary device would read as heading
+      // due north at negative speed, so those arrive as nil instead.
+      heading: location.course >= 0 ? location.course : nil,
+      speed: location.speed >= 0 ? location.speed : nil,
       completion: { _ in }
     )
   }

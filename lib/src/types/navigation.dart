@@ -58,27 +58,59 @@ class SpeedingUpdatedEvent {
 /// {@category Navigation}
 class RoadSnappedLocationUpdatedEvent {
   /// Initialize road snapped location updated event message.
-  RoadSnappedLocationUpdatedEvent({required this.location});
+  RoadSnappedLocationUpdatedEvent({
+    required this.location,
+    this.heading,
+    this.speed,
+  });
 
   /// Coordinate of the updated location.
   final LatLng location;
 
+  /// Direction of travel in degrees clockwise from true north, or null where
+  /// the platform reports none.
+  ///
+  /// A stationary device has no direction to report, and neither platform
+  /// invents one: iOS leaves `CLLocation.course` negative and Android leaves
+  /// `Location.hasBearing()` false. Both arrive here as null rather than as
+  /// zero, which would read as due north.
+  final double? heading;
+
+  /// Speed over ground in metres per second, or null where the platform
+  /// reports none. Negative iOS values and absent Android values are null.
+  final double? speed;
+
   @override
-  String toString() => 'RoadSnappedLocationUpdatedEvent(location: $location)';
+  String toString() =>
+      'RoadSnappedLocationUpdatedEvent(location: $location, '
+      'heading: $heading, speed: $speed)';
 }
 
 /// RoadSnappedRawLocationUpdated event message (Android only).
 /// {@category Navigation}
 class RoadSnappedRawLocationUpdatedEvent {
   /// Initialize road snapped raw location updated event message.
-  RoadSnappedRawLocationUpdatedEvent({required this.location});
+  RoadSnappedRawLocationUpdatedEvent({
+    required this.location,
+    this.heading,
+    this.speed,
+  });
 
   /// Coordinate of the updated location.
   final LatLng location;
 
+  /// Direction of travel in degrees clockwise from true north, or null where
+  /// the platform reports none. See [RoadSnappedLocationUpdatedEvent.heading].
+  final double? heading;
+
+  /// Speed over ground in metres per second, or null where the platform
+  /// reports none. See [RoadSnappedLocationUpdatedEvent.speed].
+  final double? speed;
+
   @override
   String toString() =>
-      'RoadSnappedRawLocationUpdatedEvent(location: $location)';
+      'RoadSnappedRawLocationUpdatedEvent(location: $location, '
+      'heading: $heading, speed: $speed)';
 }
 
 /// GpsAvailabilityUpdated event message (Android only).
