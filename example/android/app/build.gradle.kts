@@ -107,11 +107,11 @@ flutter {
 dependencies {
     implementation("androidx.car.app:app:1.7.0")
     implementation("androidx.car.app:app-projected:1.7.0")
-    implementation("com.google.android.libraries.navigation:navigation:7.9.0")
+    implementation("com.google.android.libraries.navigation:navigation:8.0.0")
     // 1.2.1 pads libdatastore_shared_counter.so's GNU_RELRO segment for 16 KB pages.
     implementation("androidx.datastore:datastore-core:1.2.1")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs_nio:2.1.5")
-    androidTestUtil("androidx.test:orchestrator:1.5.1")
+    androidTestUtil("androidx.test:orchestrator:1.6.1")
 }
 
 secrets {
