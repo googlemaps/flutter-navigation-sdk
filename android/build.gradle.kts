@@ -24,7 +24,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.android.tools.build:gradle:8.7.3")
+        classpath("com.android.tools.build:gradle:9.2.1")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
         // ktfmt (Kotlin formatter) is a development/CI-only tool. Pulling it onto the classpath
         // (and applying it below) is gated behind -Pktfmt so it is never forced on apps that
