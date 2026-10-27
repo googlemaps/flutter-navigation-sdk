@@ -45,11 +45,6 @@ typedef OnArrivalEventCallback = void Function(OnArrivalEvent onArrivalEvent);
 /// Called during rerouting event. (Android only)
 typedef OnReroutingEventCallback = void Function();
 
-/// Called during GPS availability event. (Android only).
-@Deprecated('Use OnGpsAvailabilityChangeEventCallback instead')
-typedef OnGpsAvailabilityEventCallback =
-    void Function(GpsAvailabilityUpdatedEvent gpsAvailabilityUpdatedEvent);
-
 /// Called during GPS availability change event. (Android only).
 typedef OnGpsAvailabilityChangeEventCallback =
     void Function(GpsAvailabilityChangeEvent gpsAvailabilityChangeEvent);

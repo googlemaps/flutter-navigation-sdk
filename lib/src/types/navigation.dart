@@ -81,22 +81,6 @@ class RoadSnappedRawLocationUpdatedEvent {
       'RoadSnappedRawLocationUpdatedEvent(location: $location)';
 }
 
-/// GpsAvailabilityUpdated event message (Android only).
-/// {@category Navigation}
-@Deprecated(
-  'Use getNavigationOnGpsAvailabilityChangeEventStream and GpsAvailabilityChangeEvent instead',
-)
-class GpsAvailabilityUpdatedEvent {
-  /// Initialize GPS availability updated event message.
-  GpsAvailabilityUpdatedEvent({required this.available});
-
-  /// GPS availability.
-  final bool available;
-
-  @override
-  String toString() => 'GpsAvailabilityUpdatedEvent(available: $available)';
-}
-
 /// GpsAvailabilityChange event message (Android only).
 /// {@category Navigation}
 class GpsAvailabilityChangeEvent {

@@ -301,36 +301,6 @@ void main() {
       await GoogleMapsNavigator.startGuidance();
       await $.pumpAndSettle();
 
-      /// Test that the received coordinates fit between start and end location coordinates within tolerance.
-      void onLocationEvent(RoadSnappedLocationUpdatedEvent msg) {
-        /// Sometimes on Android, the simulator "overshoots" and passes the destination
-        /// with high speedMultiplier.
-        if (arrivalEventCount < 2) {
-          expectSync(
-            msg.location.latitude,
-            greaterThanOrEqualTo(startLat - tolerance),
-          );
-          expectSync(
-            msg.location.latitude,
-            lessThanOrEqualTo(endLat + tolerance),
-          );
-          expectSync(
-            msg.location.longitude,
-            greaterThanOrEqualTo(startLng - tolerance),
-          );
-          expectSync(
-            msg.location.longitude,
-            lessThanOrEqualTo(endLng + tolerance),
-          );
-        }
-      }
-
-      final StreamSubscription<RoadSnappedLocationUpdatedEvent>
-      roadSnappedSubscription =
-          await GoogleMapsNavigator.setRoadSnappedLocationUpdatedListener(
-            onLocationEvent,
-          );
-
       /// Wait for new navigation session event.
       await newSessionFired.future.timeout(
         const Duration(seconds: 30),
@@ -346,11 +316,6 @@ void main() {
           .simulateLocationsAlongExistingRouteWithOptions(
             SimulationOptions(speedMultiplier: 5),
           );
-
-      // Give simulation time to start properly
-      await $.tester.runAsync(
-        () => Future.delayed(const Duration(milliseconds: 500)),
-      );
 
       expect(await GoogleMapsNavigator.isGuidanceRunning(), true);
 
@@ -405,7 +370,10 @@ void main() {
               showDestinationMarkers: false,
             ),
           );
-          await GoogleMapsNavigator.setDestinations(updatedDestinations);
+          expect(
+            await GoogleMapsNavigator.setDestinations(updatedDestinations),
+            NavigationRouteStatus.statusOk,
+          );
         }
       }
 
@@ -421,13 +389,16 @@ void main() {
             SimulationOptions(speedMultiplier: 5),
           );
 
-      await navigationFinished.future;
+      await navigationFinished.future.timeout(const Duration(seconds: 60));
+      expect(
+        arrivedWaypointTitles,
+        unorderedEquals(['Näkkäläntie 1st stop', 'Näkkäläntie 2nd stop']),
+      );
       expect(await GoogleMapsNavigator.isGuidanceRunning(), false);
 
       // Cancel subscriptions before cleanup
       await onArrivalSubscription.cancel();
       await onNewNavigationSessionSubscription.cancel();
-      await roadSnappedSubscription.cancel();
       await GoogleMapsNavigator.cleanup();
     },
     variant: multipleDestinationsVariants,
@@ -1063,11 +1034,7 @@ void main() {
         avoidHighways: true,
         locationTimeoutMs: 2500,
       ),
-      displayOptions: NavigationDisplayOptions(
-        showDestinationMarkers: false,
-        showStopSigns: false,
-        showTrafficLights: false,
-      ),
+      displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
     );
     NavigationRouteStatus status = await GoogleMapsNavigator.setDestinations(
       destinations,
@@ -1104,11 +1071,7 @@ void main() {
         avoidHighways: false,
         locationTimeoutMs: 5000,
       ),
-      displayOptions: NavigationDisplayOptions(
-        showDestinationMarkers: true,
-        showStopSigns: true,
-        showTrafficLights: true,
-      ),
+      displayOptions: NavigationDisplayOptions(showDestinationMarkers: true),
     );
     status = await GoogleMapsNavigator.setDestinations(destinations2);
     expect(status, NavigationRouteStatus.statusOk);

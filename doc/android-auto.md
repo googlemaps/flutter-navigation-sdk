@@ -6,6 +6,10 @@ This guide explains how to enable and integrate Android Auto with the Flutter Na
 
 - Android device
 - Android Auto test device or Android Automotive OS emulator
+- `androidx.car.app:app` and `androidx.car.app:app-projected` 1.3.0 or later.
+  Navigation SDK for Android 8.0.0 no longer bundles keep rules for these
+  libraries; use versions with their own consumer ProGuard rules. The plugin
+  and example use 1.7.0.
 
 ## Setup
 

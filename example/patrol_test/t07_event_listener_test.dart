@@ -488,15 +488,14 @@ void main() {
   });
 
   patrol(
-    'Test navigation onRerouting, onGpsAvailability and onGpsAvailabilityChange event listeners',
+    'Test navigation onRerouting and onGpsAvailabilityChange event listeners',
     (PatrolIntegrationTester $) async {
       final Completer<void> reroutingEventReceived = Completer<void>();
-      final Completer<void> gpsAvailabilityEventReceived = Completer<void>();
       final Completer<void> gpsAvailabilityChangeEventReceived =
           Completer<void>();
 
       /// Set up navigation.
-      await startNavigationWithoutDestination($);
+      final navigationController = await startNavigationWithoutDestination($);
 
       /// Set up the rerouting listener with the test.
       final StreamSubscription<void> onReroutingSubscription =
@@ -512,15 +511,7 @@ void main() {
           );
       await $.pumpAndSettle();
 
-      /// Set up GPS availability listeners with completers.
-      // ignore: deprecated_member_use
-      void onGpsAvailability(GpsAvailabilityUpdatedEvent event) {
-        $.log('GpsAvailabilityEvent (deprecated): $event');
-        if (!gpsAvailabilityEventReceived.isCompleted) {
-          gpsAvailabilityEventReceived.complete();
-        }
-      }
-
+      // Set up the GPS availability change listener.
       void onGpsAvailabilityChange(GpsAvailabilityChangeEvent event) {
         $.log(
           'GpsAvailabilityChangeEvent: isGpsLost=${event.isGpsLost}, isGpsValidForNavigation=${event.isGpsValidForNavigation}',
@@ -530,27 +521,20 @@ void main() {
         }
       }
 
-      /// Set up both the old (deprecated) and new gpsAvailability listeners.
-      // ignore: deprecated_member_use
-      final StreamSubscription<GpsAvailabilityUpdatedEvent>
-          // ignore: deprecated_member_use
-          onGpsAvailabilitySubscription =
-          // ignore: deprecated_member_use
-          await GoogleMapsNavigator.setOnGpsAvailabilityListener(
-            onGpsAvailability,
-          );
-
       final StreamSubscription<GpsAvailabilityChangeEvent>
       onGpsAvailabilityChangeSubscription =
           await GoogleMapsNavigator.setOnGpsAvailabilityChangeListener(
             onGpsAvailabilityChange,
           );
 
-      /// Simulate location.
-      await GoogleMapsNavigator.simulator.setUserLocation(
-        const LatLng(latitude: 37.790693, longitude: -122.4132157),
+      // Simulate location and wait until it is observable on the map.
+      await setSimulatedUserLocationWithCheck(
+        $,
+        navigationController,
+        37.790693,
+        -122.4132157,
+        0.001,
       );
-      await $.tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
 
       /// Create a waypoint for simulator.
       final List<NavigationWaypoint> waypoint = <NavigationWaypoint>[
@@ -592,43 +576,29 @@ void main() {
           );
       await $.pumpAndSettle();
 
-      Future<void> cancelSubscriptionsAndResetState() async {
+      try {
+        // Wait for rerouting before disabling location.
+        await reroutingEventReceived.future.timeout(
+          const Duration(seconds: 10),
+          onTimeout: () {
+            fail('Rerouting event timed out');
+          },
+        );
+
+        await $.platformAutomator.android.disableLocation();
+
+        // Wait for the supported GPS availability change event.
+        await gpsAvailabilityChangeEventReceived.future.timeout(
+          const Duration(seconds: 20),
+          onTimeout: () {
+            fail('GpsAvailabilityChangeEvent timed out');
+          },
+        );
+      } finally {
         await $.platformAutomator.android.enableLocation();
         await onReroutingSubscription.cancel();
-        await onGpsAvailabilitySubscription.cancel();
         await onGpsAvailabilityChangeSubscription.cancel();
       }
-
-      /// Wait for rerouting event (this should fire reliably).
-      await reroutingEventReceived.future.timeout(
-        const Duration(seconds: 10),
-        onTimeout: () {
-          cancelSubscriptionsAndResetState();
-          fail('Rerouting event timed out');
-        },
-      );
-
-      await $.platformAutomator.android.disableLocation();
-
-      /// Wait for GPS availability events with timeout.
-      await gpsAvailabilityEventReceived.future.timeout(
-        const Duration(seconds: 20),
-        onTimeout: () {
-          cancelSubscriptionsAndResetState();
-          fail('GpsAvailabilityEvent timed out');
-        },
-      );
-
-      await gpsAvailabilityChangeEventReceived.future.timeout(
-        const Duration(seconds: 20),
-        onTimeout: () {
-          cancelSubscriptionsAndResetState();
-          fail('GpsAvailabilityChangeEvent timed out');
-        },
-      );
-
-      /// Cancel all subscriptions.
-      await cancelSubscriptionsAndResetState();
     },
     // Android-only test; also skip on CI where ATD emulator image lacks
     // the Settings app required for Patrol's native location interactions.

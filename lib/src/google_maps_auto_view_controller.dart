@@ -33,6 +33,7 @@ class GoogleMapsAutoViewController {
   /// - cameraPosition: The initial positioning of the camera (target, zoom, bearing, tilt)
   /// - mapId: A cloud-based map ID for custom styling
   /// - mapType: The type of map to display (normal, satellite, terrain, hybrid)
+  ///   On Android Auto, terrain falls back to normal during navigation.
   /// - mapColorScheme: Color scheme affecting map colors, roads, and labels (light, dark, or follow system)
   /// - forceNightMode: Controls light/dark mode for navigation UI when navigation is running
   ///
@@ -85,6 +86,9 @@ class GoogleMapsAutoViewController {
   /// such as [MapType.normal], [MapType.satellite], [MapType.terrain],
   /// or [MapType.hybrid].
   ///
+  /// On Android Auto, terrain selected before navigation falls back to normal
+  /// while navigation is active.
+  ///
   /// Example usage:
   /// ```dart
   /// _mapViewController.changeMapType(MapType.satellite);
@@ -115,6 +119,9 @@ class GoogleMapsAutoViewController {
   ///
   /// Use [perspective] to specify the orientation of the camera
   /// and optional [zoomLevel] to control the map zoom.
+  ///
+  /// On Android Auto, specifying [zoomLevel] uses a native API deprecated in
+  /// Navigation SDK 8.0.0. Custom zoom remains supported in this release.
   Future<void> followMyLocation(
     CameraPerspective perspective, {
     double? zoomLevel,

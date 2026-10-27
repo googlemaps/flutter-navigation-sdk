@@ -204,6 +204,8 @@ class _NavigationWithoutMapPageState
           _showMessage(
             'The route could not be calculated, because the user location is unknown.',
           );
+        case NavigationRouteStatus.routingTimeout:
+          _showMessage('The route calculation timed out. Please try again.');
       }
     } on SessionNotInitializedException {
       _showMessage(

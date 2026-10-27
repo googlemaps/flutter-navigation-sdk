@@ -81,10 +81,10 @@ void main() {
       reason:
           'isNavigationUIEnabled should return false when navigation is not yet initialized.',
     );
-    waitForValueMatchingPredicate<bool>(
+    await waitForValueMatchingPredicate(
       $,
       () async => navigationUIisEnabled,
-      (bool value) => value == false,
+      (value) => !value,
     );
     expect(navigationUIisEnabled, false);
 
@@ -97,10 +97,10 @@ void main() {
       reason:
           'isNavigationUIEnabled should return true after navigation is initialized.',
     );
-    waitForValueMatchingPredicate<bool>(
+    await waitForValueMatchingPredicate(
       $,
       () async => navigationUIisEnabled,
-      (bool value) => value == true,
+      (value) => value,
     );
     expect(
       navigationUIisEnabled,
@@ -151,10 +151,10 @@ void main() {
       );
 
       /// Test that NavigationUIEnabledChanged event works.
-      waitForValueMatchingPredicate<bool>(
+      await waitForValueMatchingPredicate(
         $,
         () async => navigationUIisEnabled,
-        (bool value) => value == result,
+        (value) => value == result,
       );
       expect(navigationUIisEnabled, result);
     }
@@ -360,10 +360,10 @@ void main() {
       await $.pumpAndSettle(timeout: const Duration(seconds: 2));
 
       /// Check if prompt visibility event was triggered
-      waitForValueMatchingPredicate<bool?>(
+      await waitForValueMatchingPredicate(
         $,
         () async => promptVisible,
-        (bool? value) => value == true,
+        (value) => value ?? false,
         maxTries: 50, // Wait up to 5 seconds (50 * 100ms)
       );
 

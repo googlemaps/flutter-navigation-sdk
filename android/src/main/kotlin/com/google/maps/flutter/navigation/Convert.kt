@@ -475,12 +475,6 @@ object Convert {
       if (displayOptions.showDestinationMarkers != null) {
         this.hideDestinationMarkers(!displayOptions.showDestinationMarkers)
       }
-      if (displayOptions.showStopSigns != null) {
-        this.showStopSigns(displayOptions.showStopSigns)
-      }
-      if (displayOptions.showTrafficLights != null) {
-        this.showTrafficLights(displayOptions.showTrafficLights)
-      }
     }
   }
 
@@ -585,6 +579,7 @@ object Convert {
       Navigator.RouteStatus.QUOTA_CHECK_FAILED -> RouteStatusDto.QUOTA_CHECK_FAILED
       Navigator.RouteStatus.WAYPOINT_ERROR -> RouteStatusDto.WAYPOINT_ERROR
       Navigator.RouteStatus.DUPLICATE_WAYPOINTS_ERROR -> RouteStatusDto.DUPLICATE_WAYPOINTS_ERROR
+      Navigator.RouteStatus.ROUTING_TIMEOUT -> RouteStatusDto.ROUTING_TIMEOUT
     }
   }
 

@@ -30,7 +30,11 @@ const String testMapId = 'DEMO_MAP_ID';
 
 void main() {
   final mapTypeVariants = getMapTypeVariants();
-  patrol('Test map types', (PatrolIntegrationTester $) async {
+  patrol('Test map types without navigation UI', (
+    PatrolIntegrationTester $,
+  ) async {
+    await checkLocationDialogAndTosAcceptance($);
+
     /// Get viewController for the test type (navigation map or regular map).
     GoogleMapViewController viewController =
         await getMapViewControllerForTestMapType(
@@ -39,6 +43,13 @@ void main() {
           initializeNavigation: false,
           simulateLocation: false,
         );
+
+    // Terrain remains supported in map-only mode. Android falls back to Normal
+    // while navigation is enabled, so keep this round-trip test map-only.
+    if (viewController is GoogleNavigationViewController) {
+      await viewController.setNavigationUIEnabled(false);
+      expect(await viewController.isNavigationUIEnabled(), false);
+    }
 
     // Test default type.
     expect(await viewController.getMapType(), MapType.normal);

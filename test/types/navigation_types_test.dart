@@ -45,11 +45,7 @@ void main() {
       waypoints: <NavigationWaypoint>[waypoint],
       displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
     );
-    displayOptions = NavigationDisplayOptions(
-      showDestinationMarkers: false,
-      showStopSigns: true,
-      showTrafficLights: true,
-    );
+    displayOptions = NavigationDisplayOptions(showDestinationMarkers: false);
     routingOptions = RoutingOptions(
       alternateRoutesStrategy: NavigationAlternateRoutesStrategy.all,
       routingStrategy: NavigationRoutingStrategy.defaultBest,
@@ -141,14 +137,6 @@ void main() {
         destinations.displayOptions.showDestinationMarkers,
         pidgeonDestinationMessage.displayOptions.showDestinationMarkers,
       );
-      expect(
-        destinations.displayOptions.showStopSigns,
-        pidgeonDestinationMessage.displayOptions.showStopSigns,
-      );
-      expect(
-        destinations.displayOptions.showTrafficLights,
-        pidgeonDestinationMessage.displayOptions.showTrafficLights,
-      );
 
       expect(
         destinations.waypoints.length,
@@ -185,14 +173,6 @@ void main() {
       expect(
         pigeonDtoDisplayOptions.showDestinationMarkers,
         displayOptions.showDestinationMarkers,
-      );
-      expect(
-        pigeonDtoDisplayOptions.showStopSigns,
-        displayOptions.showStopSigns,
-      );
-      expect(
-        pigeonDtoDisplayOptions.showTrafficLights,
-        displayOptions.showTrafficLights,
       );
     });
 
@@ -256,16 +236,6 @@ void main() {
   });
 
   group('Navigation tests', () {
-    test('Navigation RouteStatus conversion from Pigeon DTO', () {
-      final NavigationRouteStatus status = RouteStatusDto.apiKeyNotAuthorized
-          .toNavigationRouteStatus();
-
-      expect(
-        status.toString().split('.').last,
-        RouteStatusDto.apiKeyNotAuthorized.toString().split('.').last,
-      );
-    });
-
     test('Navigation time and distance conversion from Pigeon DTO', () {
       final NavigationTimeAndDistance td = NavigationTimeAndDistanceDto(
         time: 5.0,

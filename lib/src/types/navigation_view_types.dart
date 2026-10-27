@@ -37,7 +37,10 @@ enum MapType {
   /// Satellite map.
   satellite,
 
-  /// Terrain map. (Does not work during navigation)
+  /// Terrain map.
+  ///
+  /// Supported in map-only views. During navigation on Android, the SDK uses
+  /// [normal] instead.
   terrain,
 
   /// Hybrid map.
