@@ -190,23 +190,26 @@ class GoogleMapsNavigator {
         });
   }
 
-  /// Sets the listener for GPS availability changes on Android.
+  /// Sets the event channel listener for the GPS availability change events.
+  /// (Android only).
   ///
-  /// Registers a native road-snapped location listener while subscribed.
+  /// Setting this listener will also register road snapped location listener
+  /// on native side.
   ///
-  /// This API is experimental and may change or be removed in future releases.
+  /// DISCLAIMER: This is an EXPERIMENTAL API and its behaviors may be subject
+  /// to removal or breaking changes in future releases.
   ///
-  /// Returns a [Future] containing a [StreamSubscription] for the events.
-  /// Cancel the subscription with [StreamSubscription.cancel] when it is no
-  /// longer needed.
+  /// Returns a [StreamSubscription] for GPS availability change events.
+  /// This subscription must be canceled using `cancel()` when it is no longer
+  /// needed to stop receiving events and allow the stream to perform necessary
+  /// cleanup, such as releasing resources or shutting down event sources. The
+  /// cleanup is asynchronous, and the `cancel()` method returns a Future that
+  /// completes once the cleanup is done.
   ///
   /// Example usage:
   /// ```dart
-  /// final subscription =
-  ///     await GoogleMapsNavigator.setOnGpsAvailabilityChangeListener(
-  ///       yourEventHandler,
-  ///     );
-  /// // When done with the subscription.
+  /// final subscription = setOnGpsAvailabilityChangeListener(yourEventHandler);
+  /// // When done with the subscription
   /// await subscription.cancel();
   /// ```
   static Future<StreamSubscription<GpsAvailabilityChangeEvent>>

@@ -23,7 +23,7 @@ This repository contains a Flutter plugin that provides a [Google Navigation](ht
   *  If you are not a Mobility Services developer, refer to [Setup Google Cloud Project](https://developers.google.com/maps/documentation/navigation/android-sdk/cloud-setup) for instructions.
 * An [API key](https://console.cloud.google.com/google/maps-apis/credentials) from the project above
   * The API key must be configured for both Android and iOS. Refer to [Android Using Api Keys](https://developers.google.com/maps/documentation/navigation/android-sdk/get-api-key) and [iOS Using Api Keys](https://developers.google.com/maps/documentation/navigation/ios-sdk/get-api-key) respectively for instructions.
-* If targeting Android, [Google Play Services](https://developers.google.com/android/guides/overview) installed and enabled, Kotlin 2.3.0 or later, Android Gradle Plugin (AGP) 9.0.1 or later, Gradle 9.1.0 or later, JDK 17, and `compileSdk` 36 or later
+* If targeting Android, [Google Play Services](https://developers.google.com/android/guides/overview) installed and enabled, Kotlin 2.3.0 or later, Android Gradle Plugin (AGP) 9.0.1 or later, Gradle 9.1.0 or later, JDK 17 or later, and `compileSdk` 36 or later
 * [Attributions and licensing text](https://developers.google.com/maps/documentation/navigation/android-sdk/set-up-project#include_the_required_attributions_in_your_app) added to your app
 
 > [!IMPORTANT]
@@ -48,10 +48,7 @@ android.builtInKotlin=false
 android.newDsl=false
 ```
 
-Enabling built-in Kotlin requires Flutter 3.47 or later and migration of your
-app and its plugins. See [Flutter's Kotlin migration guide](https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin).
-
-Set the `minSdk` in `android/app/build.gradle`:
+Set `compileSdk` and `minSdk` in `android/app/build.gradle`:
 
 ```groovy
 android {

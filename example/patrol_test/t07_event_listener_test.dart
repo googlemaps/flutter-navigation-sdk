@@ -495,7 +495,8 @@ void main() {
           Completer<void>();
 
       /// Set up navigation.
-      final navigationController = await startNavigationWithoutDestination($);
+      final GoogleNavigationViewController navigationController =
+          await startNavigationWithoutDestination($);
 
       /// Set up the rerouting listener with the test.
       final StreamSubscription<void> onReroutingSubscription =
@@ -511,7 +512,7 @@ void main() {
           );
       await $.pumpAndSettle();
 
-      // Set up the GPS availability change listener.
+      /// Set up GPS availability listeners with completers.
       void onGpsAvailabilityChange(GpsAvailabilityChangeEvent event) {
         $.log(
           'GpsAvailabilityChangeEvent: isGpsLost=${event.isGpsLost}, isGpsValidForNavigation=${event.isGpsValidForNavigation}',
@@ -527,7 +528,7 @@ void main() {
             onGpsAvailabilityChange,
           );
 
-      // Simulate location and wait until it is observable on the map.
+      /// Simulate location and wait until it is observable on the map.
       await setSimulatedUserLocationWithCheck(
         $,
         navigationController,
@@ -577,7 +578,7 @@ void main() {
       await $.pumpAndSettle();
 
       try {
-        // Wait for rerouting before disabling location.
+        /// Wait for rerouting before disabling location.
         await reroutingEventReceived.future.timeout(
           const Duration(seconds: 10),
           onTimeout: () {
@@ -587,7 +588,7 @@ void main() {
 
         await $.platformAutomator.android.disableLocation();
 
-        // Wait for the supported GPS availability change event.
+        /// Wait for the GPS availability change event.
         await gpsAvailabilityChangeEventReceived.future.timeout(
           const Duration(seconds: 20),
           onTimeout: () {

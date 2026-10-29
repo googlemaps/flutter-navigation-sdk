@@ -107,9 +107,8 @@ To run unit tests for the Google Maps Flutter Navigation plugin, navigate to the
 melos run test:dart
 ```
 
-Android unit tests use Robolectric 4.17 on API 36 and require JDK 21. Set
-`JAVA_HOME` to a JDK 21 installation, matching the Android unit-test CI job, then
-run:
+Android unit tests use Robolectric on API 36 and require JDK 21.
+Set `JAVA_HOME` to a JDK 21 installation, then run:
 
 ```bash
 melos run test:android

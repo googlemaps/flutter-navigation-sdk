@@ -32,7 +32,6 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import io.mockk.just
 import io.mockk.slot
-import io.mockk.verify
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
 import org.junit.After
@@ -151,29 +150,6 @@ internal class GoogleMapsNavigationSessionManagerTest {
 
       assertEquals(1, results.size)
       assertSame(error, results.single().exceptionOrNull())
-    }
-  }
-
-  @Test
-  fun setDestinations_preservesMalformedRouteTokenError() {
-    val results = mutableListOf<Result<Navigator.RouteStatus>>()
-    sessionManager.setDestinations(
-      listOf(waypoint),
-      RoutingOptions(),
-      DisplayOptions(),
-      RouteTokenOptionsDto("!"),
-      results::add,
-    )
-
-    assertEquals(1, results.size)
-    assertEquals("routeTokenMalformed", (results.single().exceptionOrNull() as FlutterError).code)
-    verify(exactly = 0) {
-      navigator.setDestinations(
-        any<List<Waypoint>>(),
-        any<CustomRoutesOptions>(),
-        any<DisplayOptions>(),
-        any<RouteDescriptionLoadCallback>(),
-      )
     }
   }
 

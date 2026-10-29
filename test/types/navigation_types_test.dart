@@ -236,6 +236,20 @@ void main() {
   });
 
   group('Navigation tests', () {
+    test('Navigation RouteStatus conversion from Pigeon DTO', () {
+      final NavigationRouteStatus status = RouteStatusDto.apiKeyNotAuthorized
+          .toNavigationRouteStatus();
+
+      expect(
+        status.toString().split('.').last,
+        RouteStatusDto.apiKeyNotAuthorized.toString().split('.').last,
+      );
+      expect(
+        RouteStatusDto.routingTimeout.toNavigationRouteStatus(),
+        NavigationRouteStatus.routingTimeout,
+      );
+    });
+
     test('Navigation time and distance conversion from Pigeon DTO', () {
       final NavigationTimeAndDistance td = NavigationTimeAndDistanceDto(
         time: 5.0,

@@ -741,6 +741,26 @@ void main() {
             ),
           );
           when(viewMockApi.isNavigationHeaderEnabled(any)).thenReturn(true);
+          when(viewMockApi.getNavigationHeaderStylingOptions(any)).thenReturn(
+            NavigationHeaderStylingOptionsDto(
+              primaryDayModeBackgroundColor: Colors.blue.toARGB32(),
+              secondaryDayModeBackgroundColor: Colors.red.toARGB32(),
+              primaryNightModeBackgroundColor: Colors.black.toARGB32(),
+              secondaryNightModeBackgroundColor: Colors.grey.toARGB32(),
+              largeManeuverIconColor: Colors.orange.toARGB32(),
+              smallManeuverIconColor: Colors.pink.toARGB32(),
+              nextStepTextColor: Colors.yellow.toARGB32(),
+              nextStepTextSize: 18,
+              distanceValueTextColor: Colors.green.toARGB32(),
+              distanceUnitsTextColor: Colors.lime.toARGB32(),
+              distanceValueTextSize: 24,
+              distanceUnitsTextSize: 14,
+              instructionsTextColor: Colors.cyan.toARGB32(),
+              instructionsFirstRowTextSize: 30,
+              instructionsSecondRowTextSize: 20,
+              guidanceRecommendedLaneColor: Colors.teal.toARGB32(),
+            ),
+          );
           when(viewMockApi.isNavigationFooterEnabled(any)).thenReturn(true);
           when(viewMockApi.isSpeedLimitIconEnabled(any)).thenReturn(true);
           when(viewMockApi.isSpeedometerEnabled(any)).thenReturn(true);
@@ -774,6 +794,28 @@ void main() {
           expect(focusedIndoorBuilding.activeLevelIndex, 1);
           await controller.activateIndoorLevel(focusedIndoorBuilding.levels[0]);
           expect(await controller.isNavigationHeaderEnabled(), true);
+          // Platform channels preserve ARGB values, not MaterialColor swatch types.
+          expect(
+            await controller.getNavigationHeaderStylingOptions(),
+            NavigationHeaderStylingOptions(
+              primaryDayModeBackgroundColor: Color(Colors.blue.toARGB32()),
+              secondaryDayModeBackgroundColor: Color(Colors.red.toARGB32()),
+              primaryNightModeBackgroundColor: Colors.black,
+              secondaryNightModeBackgroundColor: Color(Colors.grey.toARGB32()),
+              largeManeuverIconColor: Color(Colors.orange.toARGB32()),
+              smallManeuverIconColor: Color(Colors.pink.toARGB32()),
+              nextStepTextColor: Color(Colors.yellow.toARGB32()),
+              nextStepTextSize: 18,
+              distanceValueTextColor: Color(Colors.green.toARGB32()),
+              distanceUnitsTextColor: Color(Colors.lime.toARGB32()),
+              distanceValueTextSize: 24,
+              distanceUnitsTextSize: 14,
+              instructionsTextColor: Color(Colors.cyan.toARGB32()),
+              instructionsFirstRowTextSize: 30,
+              instructionsSecondRowTextSize: 20,
+              guidanceRecommendedLaneColor: Color(Colors.teal.toARGB32()),
+            ),
+          );
           expect(await controller.isNavigationFooterEnabled(), true);
           expect(await controller.isSpeedLimitIconEnabled(), true);
           expect(await controller.isSpeedometerEnabled(), true);
@@ -801,6 +843,7 @@ void main() {
           verify(viewMockApi.getFocusedIndoorBuilding(captureAny));
           verify(viewMockApi.activateIndoorLevel(captureAny, captureAny));
           verify(viewMockApi.isNavigationHeaderEnabled(captureAny));
+          verify(viewMockApi.getNavigationHeaderStylingOptions(captureAny));
           verify(viewMockApi.isNavigationFooterEnabled(captureAny));
           verify(viewMockApi.isSpeedLimitIconEnabled(captureAny));
           verify(viewMockApi.isSpeedometerEnabled(captureAny));
