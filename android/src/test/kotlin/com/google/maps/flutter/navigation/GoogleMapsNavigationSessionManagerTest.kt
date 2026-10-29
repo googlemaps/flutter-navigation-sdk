@@ -67,6 +67,18 @@ internal class GoogleMapsNavigationSessionManagerTest {
   }
 
   @Test
+  fun continueToNextDestination_reportsUninitializedSessionWithoutThrowing() {
+    GoogleMapsNavigatorHolder.setNavigator(null)
+    val handler = GoogleMapsNavigationSessionMessageHandler(sessionManager)
+    val results = mutableListOf<Result<ContinueToNextDestinationResponseDto>>()
+
+    handler.continueToNextDestination(results::add)
+
+    assertEquals(1, results.size)
+    assertEquals("sessionNotInitialized", (results.single().exceptionOrNull() as FlutterError).code)
+  }
+
+  @Test
   fun setDestinations_waitsForCallbackBeforeCompletingTimeoutResult() {
     val routeCallback = slot<RouteDescriptionLoadCallback>()
     every {
