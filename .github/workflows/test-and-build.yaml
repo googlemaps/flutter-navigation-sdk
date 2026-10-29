@@ -219,6 +219,9 @@ jobs:
           sudo udevadm trigger --name-match=kvm
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          # Override v3's default, which includes the retired tools package.
+          packages: 'platform-tools emulator'
       - name: Cache ADB keys
         uses: actions/cache@v4
         with:
