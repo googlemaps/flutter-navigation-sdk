@@ -54,12 +54,11 @@ jobs:
         name: Setup melos
         with:
           melos-version: "6.3.2"
-      - name: Run tests in parallel
-        parallel:
-          - name: Run dart unit tests
-            run: melos run test:dart
-          - name: Run Android native unit tests
-            run: melos run test:android
+      # Standard steps remain compatible with the organization-pinned Zizmor scanner.
+      - name: Run dart unit tests
+        run: melos run test:dart
+      - name: Run Android native unit tests
+        run: melos run test:android
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
