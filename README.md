@@ -17,13 +17,13 @@ This repository contains a Flutter plugin that provides a [Google Navigation](ht
 | ------------------------------- | ------------- | --------- |
 | **Minimum mobile OS supported** | API level 24+ | iOS 16.0+ |
 
-* A Flutter project
+* Flutter 3.44 or later
 * A Google Cloud project
   *  If you are a Mobility Services developer, you must contact Sales as described in [Mobility services documentation](https://developers.google.com/maps/documentation/transportation-logistics/mobility).
   *  If you are not a Mobility Services developer, refer to [Setup Google Cloud Project](https://developers.google.com/maps/documentation/navigation/android-sdk/cloud-setup) for instructions.
 * An [API key](https://console.cloud.google.com/google/maps-apis/credentials) from the project above
   * The API key must be configured for both Android and iOS. Refer to [Android Using Api Keys](https://developers.google.com/maps/documentation/navigation/android-sdk/get-api-key) and [iOS Using Api Keys](https://developers.google.com/maps/documentation/navigation/ios-sdk/get-api-key) respectively for instructions.
-* If targeting Android, [Google Play Services](https://developers.google.com/android/guides/overview) installed and enabled and minimum Kotlin version 2.0 (Kotlin 2.2.20 or newer recommended for Flutter 3.44+)
+* If targeting Android, [Google Play Services](https://developers.google.com/android/guides/overview) installed and enabled, Kotlin 2.3.0 or later, Android Gradle Plugin (AGP) 9.0.1 or later, Gradle 9.1.0 or later, JDK 17 or later, and `compileSdk` 36 or later
 * [Attributions and licensing text](https://developers.google.com/maps/documentation/navigation/android-sdk/set-up-project#include_the_required_attributions_in_your_app) added to your app
 
 > [!IMPORTANT]
@@ -36,20 +36,31 @@ To add the Google Navigation for Flutter package to your project, use the comman
 flutter pub add google_navigation_flutter
 ```
 
+Upgrading an existing app? See the [migration guide for Android Navigation SDK 8.0.0](MIGRATING.md).
+
 ### Android
 
-Set the `minSdk` in `android/app/build.gradle`:
+This plugin uses Navigation SDK for Android 8.0.0. For Flutter 3.44, configure
+the AGP 9 compatibility settings in `android/gradle.properties`:
+
+```properties
+android.builtInKotlin=false
+android.newDsl=false
+```
+
+Set `compileSdk` and `minSdk` in `android/app/build.gradle`:
 
 ```groovy
 android {
+    compileSdk 36
     defaultConfig {
         minSdk 24
     }
 }
 ```
 
-If `minSdk` is set to less than 34 (API 34), you need to configure desugaring for your Android app.
-To enable desugaring, add the following configurations to `android/app/build.gradle` file:
+Navigation SDK 8.0.0 requires core library desugaring. Enable it in your app's
+`android/app/build.gradle`:
 ```groovy
 android {
     ...
@@ -60,7 +71,7 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs_nio:2.0.4'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs_nio:2.1.5'
 }
 ```
 

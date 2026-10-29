@@ -59,6 +59,9 @@ class GoogleMapViewController {
   /// such as [MapType.normal], [MapType.satellite], [MapType.terrain],
   /// or [MapType.hybrid].
   ///
+  /// On Android, terrain selected before navigation falls back to normal while
+  /// navigation is active. Non-navigation map views still support terrain.
+  ///
   /// Example usage:
   /// ```dart
   /// _mapViewController.changeMapType(MapType.satellite);
@@ -95,6 +98,9 @@ class GoogleMapViewController {
   ///
   /// Use [perspective] to specify the orientation of the camera
   /// and optional [zoomLevel] to control the map zoom.
+  ///
+  /// On Android, specifying [zoomLevel] uses a native API deprecated in
+  /// Navigation SDK 8.0.0. Custom zoom remains supported in this release.
   Future<void> followMyLocation(
     CameraPerspective perspective, {
     double? zoomLevel,

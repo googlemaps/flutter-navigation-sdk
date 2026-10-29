@@ -166,34 +166,12 @@ internal class ConvertTest {
   @Test
   fun convertDisplayOptions_returnsExpectedValue() {
     val none = NavigationDisplayOptionsDto()
-    val allFalse =
-      NavigationDisplayOptionsDto(
-        showDestinationMarkers = false,
-        showStopSigns = false,
-        showTrafficLights = false,
-      )
-    val allTrue =
-      NavigationDisplayOptionsDto(
-        showDestinationMarkers = true,
-        showStopSigns = true,
-        showTrafficLights = true,
-      )
+    val hidden = NavigationDisplayOptionsDto(showDestinationMarkers = false)
+    val shown = NavigationDisplayOptionsDto(showDestinationMarkers = true)
 
-    val convertedNone = Convert.convertDisplayOptionsFromDto(none)
-    // When not specified, SDK defaults are used: stop signs and traffic lights are shown
-    assertEquals(true, convertedNone.showStopSigns)
-    assertEquals(true, convertedNone.showTrafficLights)
-    assertEquals(false, convertedNone.hideDestinationMarkers)
-
-    val convertedAllFalse = Convert.convertDisplayOptionsFromDto(allFalse)
-    assertEquals(false, convertedAllFalse.showStopSigns)
-    assertEquals(false, convertedAllFalse.showTrafficLights)
-    assertEquals(true, convertedAllFalse.hideDestinationMarkers)
-
-    val convertedAllTrue = Convert.convertDisplayOptionsFromDto(allTrue)
-    assertEquals(true, convertedAllTrue.showStopSigns)
-    assertEquals(true, convertedAllTrue.showTrafficLights)
-    assertEquals(false, convertedAllTrue.hideDestinationMarkers)
+    assertEquals(false, Convert.convertDisplayOptionsFromDto(none).hideDestinationMarkers)
+    assertEquals(true, Convert.convertDisplayOptionsFromDto(hidden).hideDestinationMarkers)
+    assertEquals(false, Convert.convertDisplayOptionsFromDto(shown).hideDestinationMarkers)
   }
 
   @Test

@@ -645,14 +645,6 @@ class NavigationSessionAPIImpl {
         .map((_ReroutingEvent event) => ());
   }
 
-  /// Get navigation on GPS availability update event stream from the navigation session.
-  @Deprecated('Use getNavigationOnGpsAvailabilityChangeEventStream instead')
-  Stream<GpsAvailabilityUpdatedEvent>
-  getNavigationOnGpsAvailabilityUpdateEventStream() {
-    return _sessionEventStreamController.stream
-        .whereType<GpsAvailabilityUpdatedEvent>();
-  }
-
   /// Get navigation on GPS availability change event stream from the navigation session.
   /// Android only.
   Stream<GpsAvailabilityChangeEvent>
@@ -731,13 +723,6 @@ class NavigationSessionEventApiImpl implements NavigationSessionEventApi {
   @override
   void onRerouting() {
     sessionEventStreamController.add(_ReroutingEvent());
-  }
-
-  @override
-  void onGpsAvailabilityUpdate(bool available) {
-    sessionEventStreamController.add(
-      GpsAvailabilityUpdatedEvent(available: available),
-    );
   }
 
   @override

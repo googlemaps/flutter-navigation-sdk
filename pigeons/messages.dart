@@ -536,6 +536,8 @@ class MapPaddingDto {
 /// Any null value resets that specific field to the native SDK default.
 ///
 /// Text size fields are currently Android only and are ignored on iOS.
+/// Android Navigation SDK 8.0.0 deprecates custom text sizes, but they remain
+/// functional.
 class NavigationHeaderStylingOptionsDto {
   NavigationHeaderStylingOptionsDto({
     this.primaryDayModeBackgroundColor,
@@ -883,25 +885,9 @@ class RoutingOptionsDto {
 }
 
 class NavigationDisplayOptionsDto {
-  NavigationDisplayOptionsDto(
-    this.showDestinationMarkers,
-    this.showStopSigns,
-    this.showTrafficLights,
-  );
+  NavigationDisplayOptionsDto(this.showDestinationMarkers);
 
   final bool? showDestinationMarkers;
-
-  /// Deprecated: This option now defaults to true.
-  @Deprecated(
-    'This option now defaults to true and will be removed in Navigation SDK 8.0',
-  )
-  final bool? showStopSigns;
-
-  /// Deprecated: This option now defaults to true.
-  @Deprecated(
-    'This option now defaults to true and will be removed in Navigation SDK 8.0',
-  )
-  final bool? showTrafficLights;
 }
 
 class NavigationWaypointDto {
@@ -943,6 +929,11 @@ enum RouteStatusDto {
   locationUnknown,
   quotaCheckFailed,
   unknown,
+
+  /// The routing request timed out.
+  ///
+  /// Android only.
+  routingTimeout,
 }
 
 enum TrafficDelaySeverityDto { light, medium, heavy, noData }
@@ -1642,9 +1633,6 @@ abstract class NavigationSessionEventApi {
 
   /// Android-only event.
   void onRerouting();
-
-  /// Android-only event.
-  void onGpsAvailabilityUpdate(bool available);
 
   /// Android-only event.
   void onGpsAvailabilityChange(GpsAvailabilityChangeEventDto event);

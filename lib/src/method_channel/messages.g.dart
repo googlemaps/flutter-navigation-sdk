@@ -163,6 +163,11 @@ enum RouteStatusDto {
   locationUnknown,
   quotaCheckFailed,
   unknown,
+
+  /// The routing request timed out.
+  ///
+  /// Android only.
+  routingTimeout,
 }
 
 enum TrafficDelaySeverityDto { light, medium, heavy, noData }
@@ -1831,6 +1836,8 @@ class MapPaddingDto {
 /// Any null value resets that specific field to the native SDK default.
 ///
 /// Text size fields are currently Android only and are ignored on iOS.
+/// Android Navigation SDK 8.0.0 deprecates custom text sizes, but they remain
+/// functional.
 class NavigationHeaderStylingOptionsDto {
   NavigationHeaderStylingOptionsDto({
     this.primaryDayModeBackgroundColor,
@@ -2121,22 +2128,12 @@ class RoutingOptionsDto {
 }
 
 class NavigationDisplayOptionsDto {
-  NavigationDisplayOptionsDto({
-    this.showDestinationMarkers,
-    this.showStopSigns,
-    this.showTrafficLights,
-  });
+  NavigationDisplayOptionsDto({this.showDestinationMarkers});
 
   bool? showDestinationMarkers;
 
-  /// Deprecated: This option now defaults to true.
-  bool? showStopSigns;
-
-  /// Deprecated: This option now defaults to true.
-  bool? showTrafficLights;
-
   List<Object?> _toList() {
-    return <Object?>[showDestinationMarkers, showStopSigns, showTrafficLights];
+    return <Object?>[showDestinationMarkers];
   }
 
   Object encode() {
@@ -2147,8 +2144,6 @@ class NavigationDisplayOptionsDto {
     result as List<Object?>;
     return NavigationDisplayOptionsDto(
       showDestinationMarkers: result[0] as bool?,
-      showStopSigns: result[1] as bool?,
-      showTrafficLights: result[2] as bool?,
     );
   }
 
@@ -9214,9 +9209,6 @@ abstract class NavigationSessionEventApi {
   void onRerouting();
 
   /// Android-only event.
-  void onGpsAvailabilityUpdate(bool available);
-
-  /// Android-only event.
   void onGpsAvailabilityChange(GpsAvailabilityChangeEventDto event);
 
   /// Turn-by-Turn navigation events.
@@ -9482,40 +9474,6 @@ abstract class NavigationSessionEventApi {
         pigeonVar_channel.setMessageHandler((Object? message) async {
           try {
             api.onRerouting();
-            return wrapResponse(empty: true);
-          } on PlatformException catch (e) {
-            return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-              error: PlatformException(code: 'error', message: e.toString()),
-            );
-          }
-        });
-      }
-    }
-    {
-      final BasicMessageChannel<Object?>
-      pigeonVar_channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityUpdate$messageChannelSuffix',
-        pigeonChannelCodec,
-        binaryMessenger: binaryMessenger,
-      );
-      if (api == null) {
-        pigeonVar_channel.setMessageHandler(null);
-      } else {
-        pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(
-            message != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityUpdate was null.',
-          );
-          final List<Object?> args = (message as List<Object?>?)!;
-          final bool? arg_available = (args[0] as bool?);
-          assert(
-            arg_available != null,
-            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityUpdate was null, expected non-null bool.',
-          );
-          try {
-            api.onGpsAvailabilityUpdate(arg_available!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);

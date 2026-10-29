@@ -122,6 +122,8 @@ abstract class GoogleMapsBaseNavigationView(
     return _navigationHeaderStylingOptions
   }
 
+  // SDK 8.0 deprecates text sizes without a replacement; preserve the public styling options.
+  @Suppress("DEPRECATION")
   fun setNavigationHeaderStylingOptions(stylingOptions: NavigationHeaderStylingOptionsDto) {
     val builder = StylingOptions()
 

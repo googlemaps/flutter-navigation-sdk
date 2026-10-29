@@ -24,7 +24,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.android.tools.build:gradle:8.7.3")
+        classpath("com.android.tools.build:gradle:9.0.1")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
         // ktfmt (Kotlin formatter) is a development/CI-only tool. Pulling it onto the classpath
         // (and applying it below) is gated behind -Pktfmt so it is never forced on apps that
@@ -75,7 +75,7 @@ if (providers.gradleProperty("ktfmt").isPresent) {
 android {
     namespace = "com.google.maps.flutter.navigation"
 
-    compileSdk = 35
+    compileSdk = 36
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -100,6 +100,18 @@ android {
         unitTests {
             isIncludeAndroidResources = true
             all {
+                // Robolectric's Android runtime needs access to OpenJDK internals on Java 21.
+                it.jvmArgs(
+                    "--add-opens=java.base/java.lang=ALL-UNNAMED",
+                    "--add-opens=java.base/java.util=ALL-UNNAMED",
+                    "--add-opens=java.base/java.io=ALL-UNNAMED",
+                    "--add-opens=java.base/java.net=ALL-UNNAMED",
+                    "--add-opens=java.base/java.security=ALL-UNNAMED",
+                    "--add-opens=java.base/java.text=ALL-UNNAMED",
+                    "--add-opens=java.base/jdk.internal.access=ALL-UNNAMED",
+                    "--add-opens=java.desktop/java.awt.font=ALL-UNNAMED",
+                    "--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
+                )
                 it.testLogging {
                     events("passed", "skipped", "failed", "standardOut", "standardError")
                     showStandardStreams = true
@@ -124,9 +136,9 @@ dependencies {
     implementation("androidx.car.app:app:1.7.0")
     implementation("androidx.car.app:app-projected:1.7.0")
     implementation("androidx.startup:startup-runtime:1.2.0")
-    implementation("com.google.android.libraries.navigation:navigation:7.9.0")
+    implementation("com.google.android.libraries.navigation:navigation:8.0.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("io.mockk:mockk:1.13.8")
     testImplementation("junit:junit:4.13.2")
-    testImplementation("org.robolectric:robolectric:4.14.1")
+    testImplementation("org.robolectric:robolectric:4.17")
 }

@@ -782,6 +782,8 @@ abstract class GoogleMapsBaseMapView(
     }
   }
 
+  // SDK 8.0 deprecates custom follow zoom without a replacement; keep explicit zoom working.
+  @Suppress("DEPRECATION")
   @SuppressLint("MissingPermission")
   fun followMyLocation(perspective: Int, zoomLevel: Double?) {
     if (zoomLevel != null) {
