@@ -29,11 +29,11 @@ let package = Package(
     .package(name: "FlutterFramework", path: "../FlutterFramework"),
     .package(
       url: "https://github.com/googlemaps/ios-navigation-sdk",
-      exact: "11.1.0"
+      exact: "11.2.0"
     ),
     .package(
       url: "https://github.com/googlemaps/ios-maps-sdk",
-      exact: "11.1.0"
+      exact: "11.2.0"
     ),
   ],
   targets: [
