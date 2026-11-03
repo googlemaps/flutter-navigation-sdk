@@ -36,12 +36,13 @@ To add the Google Navigation for Flutter package to your project, use the comman
 flutter pub add google_navigation_flutter
 ```
 
-Upgrading an existing app? See the [migration guide for Android Navigation SDK 8.0.0](MIGRATING.md).
+Upgrading an existing app? See the [migration guide](MIGRATING.md).
 
 ### Android
 
-This plugin uses Navigation SDK for Android 8.0.0. For Flutter 3.44, configure
-the AGP 9 compatibility settings in `android/gradle.properties`:
+This plugin uses Navigation SDK for Android 8.0.0. Flutter 3.44 to 3.46 support
+AGP 9 only with built-in Kotlin disabled, so configure these settings in
+`android/gradle.properties`:
 
 ```properties
 android.builtInKotlin=false
