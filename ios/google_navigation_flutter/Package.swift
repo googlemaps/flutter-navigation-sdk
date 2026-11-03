@@ -20,7 +20,7 @@ import PackageDescription
 let package = Package(
   name: "google_navigation_flutter",
   platforms: [
-    .iOS("16.0")
+    .iOS("17.0")
   ],
   products: [
     .library(name: "google-navigation-flutter", targets: ["google_navigation_flutter"])
@@ -29,11 +29,11 @@ let package = Package(
     .package(name: "FlutterFramework", path: "../FlutterFramework"),
     .package(
       url: "https://github.com/googlemaps/ios-navigation-sdk",
-      exact: "11.2.0"
+      exact: "11.3.0"
     ),
     .package(
       url: "https://github.com/googlemaps/ios-maps-sdk",
-      exact: "11.2.0"
+      exact: "11.3.0"
     ),
   ],
   targets: [

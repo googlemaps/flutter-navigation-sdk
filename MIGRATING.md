@@ -11,8 +11,9 @@ This document covers breaking changes and migration steps between versions of
 
 ## Migrating from 0.11.x to 0.12.x
 
-Version 0.12.0 upgrades the Android Navigation SDK from 7.9.0 to 8.0.0. The
-shared Dart API removals below apply to apps targeting either platform.
+Version 0.12.0 upgrades the Android Navigation SDK from 7.9.0 to 8.0.0 and the
+iOS Navigation SDK from 11.1.0 to 11.3.0. The shared Dart API changes below
+apply to apps targeting either platform.
 
 ### Update the Android build configuration
 
@@ -80,6 +81,31 @@ calculation times out on the routing backend. It is distinct from
 This result can be returned by destination requests and simulations that
 calculate a new route. No equivalent status is emitted by this plugin on iOS.
 
+### Raise the iOS deployment target
+
+iOS Navigation SDK 11.3.0 requires **iOS 17.0 or later** and Xcode 26. Set the
+`Runner` target's iOS deployment target to 17.0. See the
+[iOS installation instructions](README.md#ios).
+
+### Handle a missing route status
+
+`GoogleMapsNavigator.setDestinations` throws `RouteStatusUnavailableException`
+when the native SDK completes a route request without a route status. On
+Android, the `Simulator.simulateLocationsAlongNewRoute` methods throw it as well.
+Routes that are not found still complete with a failure
+`NavigationRouteStatus`, as before.
+
+### Review route token behavior
+
+On iOS, `setDestinations` with `RouteTokenOptions` sends only the route token to
+the Navigation SDK; the token defines the destinations, and
+`Destinations.waypoints` is not sent. Android still sends the waypoints with
+the token.
+
+On both platforms, routing options encoded in the route token, including the
+travel mode, take precedence over client-side settings. This upstream change
+applies to all Navigation SDK versions.
+
 ### Review terrain map behavior
 
 On Android, terrain maps selected before navigation fall back to normal maps
@@ -105,4 +131,6 @@ selecting **Navigation** and any additional precise-location use cases.
 ### Release notes
 
 For the full upstream changes, review the
-[Android Navigation SDK 8.0.0 release notes](https://developers.google.com/maps/documentation/navigation/android-sdk/release-notes#October_01_2026).
+[Android Navigation SDK 8.0.0 release notes](https://developers.google.com/maps/documentation/navigation/android-sdk/release-notes#October_01_2026)
+and the
+[iOS Navigation SDK 11.3.0 release notes](https://developers.google.com/maps/documentation/navigation/ios-sdk/release-notes#November_02_2026).

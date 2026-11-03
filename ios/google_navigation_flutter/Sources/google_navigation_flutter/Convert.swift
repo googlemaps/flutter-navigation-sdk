@@ -515,6 +515,26 @@ enum Convert {
     }
   }
 
+  /// Converts a route completion to the route status returned to Dart.
+  ///
+  /// Failed routes still carry a route description with a failure status, so
+  /// only a missing description is reported as an error.
+  static func convertRouteCompletion(
+    routeDescription: NavigationRouteDescription?,
+    error: Error?
+  ) -> Result<RouteStatusDto, Error> {
+    guard let routeDescription else {
+      return .failure(
+        PigeonError(
+          code: "routeStatusUnavailable",
+          message: "The Navigation SDK returned no route status.",
+          details: error?.localizedDescription
+        )
+      )
+    }
+    return .success(convertRouteStatus(routeDescription.routeStatus))
+  }
+
   static func convertTravelMode(_ travelMode: TravelModeDto?)
     -> GMSNavigationTravelMode
   {

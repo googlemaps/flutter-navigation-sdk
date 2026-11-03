@@ -32,6 +32,10 @@ class Destinations {
        );
 
   /// List of navigation waypoints.
+  ///
+  /// When [routeTokenOptions] is set, the route token defines the
+  /// destinations. On Android, the waypoints are sent to the Navigation SDK
+  /// with the route token. On iOS, they are not sent.
   final List<NavigationWaypoint> waypoints;
 
   /// Navigation display options.
@@ -75,9 +79,9 @@ class RouteTokenOptions {
   /// Specifies the type of [NavigationTravelMode] used to determine the
   /// navigation directions.
   ///
-  /// It must match the travel mode used to generate the [routeToken].
-  /// If there is a mismatch, [travelMode] will override the travel mode used to
-  /// generate the [routeToken].
+  /// It must match the travel mode used to generate the [routeToken]. Routing
+  /// options encoded in the [routeToken], including the travel mode, take
+  /// precedence over client-side settings.
   final NavigationTravelMode? travelMode;
 
   @override

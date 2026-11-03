@@ -232,6 +232,8 @@ class NavigationSessionAPIImpl {
           throw const SessionNotInitializedException();
         case 'routeTokenMalformed':
           throw const RouteTokenMalformedException();
+        case 'routeStatusUnavailable':
+          throw RouteStatusUnavailableException(e.details as String?);
         default:
           rethrow;
       }
@@ -390,6 +392,8 @@ class NavigationSessionAPIImpl {
       switch (e.code) {
         case 'sessionNotInitialized':
           throw const SessionNotInitializedException();
+        case 'routeStatusUnavailable':
+          throw RouteStatusUnavailableException(e.details as String?);
         default:
           rethrow;
       }
@@ -417,6 +421,8 @@ class NavigationSessionAPIImpl {
       switch (e.code) {
         case 'sessionNotInitialized':
           throw const SessionNotInitializedException();
+        case 'routeStatusUnavailable':
+          throw RouteStatusUnavailableException(e.details as String?);
         default:
           rethrow;
       }
@@ -442,6 +448,8 @@ class NavigationSessionAPIImpl {
       switch (e.code) {
         case 'sessionNotInitialized':
           throw const SessionNotInitializedException();
+        case 'routeStatusUnavailable':
+          throw RouteStatusUnavailableException(e.details as String?);
         default:
           rethrow;
       }

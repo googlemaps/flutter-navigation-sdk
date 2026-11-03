@@ -594,6 +594,10 @@ class GoogleMapsNavigator {
   ///
   /// When navigating to multiple waypoints, use [continueToNextDestination]
   /// to advance to the next waypoint.
+  ///
+  /// Routes that fail to be found complete with a failure
+  /// [NavigationRouteStatus]. Throws [RouteStatusUnavailableException] if the
+  /// Navigation SDK returns no route status.
   static Future<NavigationRouteStatus> setDestinations(
     Destinations destinations,
   ) {
@@ -739,4 +743,24 @@ class RouteTokenMalformedException implements Exception {
 
   @override
   String toString() => 'RouteTokenMalformedException';
+}
+
+/// A route request has failed, because the Navigation SDK returned no route
+/// status.
+///
+/// Thrown by [GoogleMapsNavigator.setDestinations] on Android and iOS, and by
+/// the `simulateLocationsAlongNewRoute` methods of [Simulator] on Android.
+/// {@category Navigation}
+class RouteStatusUnavailableException implements Exception {
+  /// Creates a [RouteStatusUnavailableException] with the native error
+  /// [details], if the Navigation SDK provided them.
+  const RouteStatusUnavailableException([this.details]);
+
+  /// Description of the native error, or `null` if none was provided.
+  final String? details;
+
+  @override
+  String toString() =>
+      'RouteStatusUnavailableException: The Navigation SDK returned no route status.'
+      '${details != null ? ' $details' : ''}';
 }

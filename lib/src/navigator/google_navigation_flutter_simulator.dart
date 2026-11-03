@@ -45,6 +45,9 @@ class Simulator {
   }
 
   /// Simulates locations along new route.
+  ///
+  /// Throws [RouteStatusUnavailableException] on Android if the Navigation SDK
+  /// returns no route status.
   Future<NavigationRouteStatus> simulateLocationsAlongNewRoute(
     List<NavigationWaypoint> waypoints,
   ) {
@@ -53,6 +56,9 @@ class Simulator {
   }
 
   /// Simulates locations along new route with routing options.
+  ///
+  /// Throws [RouteStatusUnavailableException] on Android if the Navigation SDK
+  /// returns no route status.
   Future<NavigationRouteStatus>
   simulateLocationsAlongNewRouteWithRoutingOptions(
     List<NavigationWaypoint> waypoints,
@@ -66,6 +72,9 @@ class Simulator {
   }
 
   /// Simulates locations along new route with routing and simulation options.
+  ///
+  /// Throws [RouteStatusUnavailableException] on Android if the Navigation SDK
+  /// returns no route status.
   Future<NavigationRouteStatus>
   simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
     List<NavigationWaypoint> waypoints,

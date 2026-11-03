@@ -283,17 +283,21 @@ class GoogleMapsNavigationSessionManager: NSObject {
       // If the session has view attached, enable given display options.
       handleDisplayOptionsIfNeeded(options: destinations.displayOptions)
 
-      // Set the destinations for the navigator with a route token.
+      let completionHandler: GMSNavigationRouteCompletionHandler = { routeDescription, error in
+        completion(
+          Convert.convertRouteCompletion(routeDescription: routeDescription, error: error))
+      }
+
+      // The route token defines the destinations, so the waypoints are not
+      // passed. The SDK rejects the token when the session's travel mode at
+      // call time is unsupported, so the travel mode is set first.
       if let options = destinations.routeTokenOptions {
-        try getNavigator()
-          .setDestinations(
-            Convert.convertWaypoints(destinations.waypoints),
-            routeToken: options.routeToken,
-            callback: { routeStatus in
-              completion(.success(Convert.convertRouteStatus(routeStatus)))
-            }
-          )
+        let navigator = try getNavigator()
         _session?.travelMode = Convert.convertTravelMode(options.travelMode)
+        navigator.setDestinationsWithToken(
+          options.routeToken,
+          completionHandler: completionHandler
+        )
         return
       }
 
@@ -304,10 +308,9 @@ class GoogleMapsNavigationSessionManager: NSObject {
         // Set destinations for navigator.
         try getNavigator()
           .setDestinations(
-            Convert.convertWaypoints(destinations.waypoints)
-          ) { routeStatus in
-            completion(.success(Convert.convertRouteStatus(routeStatus)))
-          }
+            Convert.convertWaypoints(destinations.waypoints),
+            completionHandler: completionHandler
+          )
         return
       }
 
@@ -316,9 +319,7 @@ class GoogleMapsNavigationSessionManager: NSObject {
         .setDestinations(
           Convert.convertWaypoints(destinations.waypoints),
           routingOptions: Convert.convertRoutingOptions(destinations.routingOptions),
-          callback: { routeStatus in
-            completion(.success(Convert.convertRouteStatus(routeStatus)))
-          }
+          completionHandler: completionHandler
         )
     } catch {
       completion(.failure(error))

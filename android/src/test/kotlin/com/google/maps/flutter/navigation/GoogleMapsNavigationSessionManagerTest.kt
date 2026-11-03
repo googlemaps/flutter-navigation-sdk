@@ -205,4 +205,91 @@ internal class GoogleMapsNavigationSessionManagerTest {
       assertEquals(Navigator.RouteStatus.ROUTING_TIMEOUT, results.single().getOrThrow())
     }
   }
+
+  @Test
+  fun routeCallbacks_failWhenRouteDescriptionIsMissing() {
+    val waypoints = listOf(waypoint)
+    val routingOptions = RoutingOptions()
+    val simulationOptions = SimulationOptions()
+    val routeCallback = slot<RouteDescriptionLoadCallback>()
+    every {
+      navigator.setDestinations(
+        any<List<Waypoint>>(),
+        any<RoutingOptions>(),
+        any<DisplayOptions>(),
+        capture(routeCallback),
+      )
+    } just Runs
+    every {
+      navigator.setDestinations(
+        any<List<Waypoint>>(),
+        any<CustomRoutesOptions>(),
+        any<DisplayOptions>(),
+        capture(routeCallback),
+      )
+    } just Runs
+    every { navigator.simulator } returns simulator
+    every { simulator.simulateLocationsAlongNewRoute(waypoints, capture(routeCallback)) } just Runs
+    every {
+      simulator.simulateLocationsAlongNewRoute(waypoints, routingOptions, capture(routeCallback))
+    } just Runs
+    every {
+      simulator.simulateLocationsAlongNewRoute(
+        waypoints,
+        routingOptions,
+        simulationOptions,
+        capture(routeCallback),
+      )
+    } just Runs
+
+    val requests =
+      listOf<((Result<Navigator.RouteStatus>) -> Unit) -> Unit>(
+        { callback ->
+          sessionManager.setDestinations(
+            waypoints,
+            routingOptions,
+            DisplayOptions(),
+            null,
+            callback,
+          )
+        },
+        { callback ->
+          sessionManager.setDestinations(
+            waypoints,
+            routingOptions,
+            DisplayOptions(),
+            RouteTokenOptionsDto("dG9rZW4="),
+            callback,
+          )
+        },
+        { callback -> sessionManager.simulateLocationsAlongNewRoute(waypoints, callback) },
+        { callback ->
+          sessionManager.simulateLocationsAlongNewRouteWithRoutingOptions(
+            waypoints,
+            routingOptions,
+            callback,
+          )
+        },
+        { callback ->
+          sessionManager.simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
+            waypoints,
+            routingOptions,
+            simulationOptions,
+            callback,
+          )
+        },
+      )
+    for (request in requests) {
+      val results = mutableListOf<Result<Navigator.RouteStatus>>()
+      request(results::add)
+
+      routeCallback.captured.onRouteDescription(null)
+
+      assertEquals(1, results.size)
+      assertEquals(
+        "routeStatusUnavailable",
+        (results.single().exceptionOrNull() as FlutterError).code,
+      )
+    }
+  }
 }
