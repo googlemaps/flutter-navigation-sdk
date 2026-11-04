@@ -1139,16 +1139,17 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
     final List<Marker?> destinationMarkers;
     try {
-      destinationMarkers = await _navigationViewController!
-          .updateMarkers(<Marker>[
-            _newWaypointMarker!.copyWith(
-              options: _newWaypointMarker!.options.copyWith(
-                infoWindow: InfoWindow(title: title),
-                anchor: const MarkerAnchor(u: 0.5, v: 1.2),
-                icon: waypointMarkerImage,
-              ),
+      destinationMarkers = await _navigationViewController!.updateMarkers(
+        <Marker>[
+          _newWaypointMarker!.copyWith(
+            options: _newWaypointMarker!.options.copyWith(
+              infoWindow: InfoWindow(title: title),
+              anchor: const MarkerAnchor(u: 0.5, v: 1.2),
+              icon: waypointMarkerImage,
             ),
-          ]);
+          ),
+        ],
+      );
     } on MarkerNotFoundException catch (e) {
       debugPrint(e.toString());
       _showMessage('Marker not found');

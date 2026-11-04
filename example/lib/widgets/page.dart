@@ -228,9 +228,8 @@ abstract class ExamplePageState<T extends ExamplePage> extends State<T>
     overlay.insert(overlayEntry);
 
     // Automatically remove the snack bar after some duration
-    Future<void>.delayed(
-      const Duration(seconds: 3),
-    ).then((_) => overlayEntry.remove());
+    Future<void>.delayed(const Duration(seconds: 3))
+        .then((_) => overlayEntry.remove());
   }
 
   @override

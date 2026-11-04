@@ -22,10 +22,12 @@
 
 import 'dart:async';
 import 'dart:io';
+
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:google_navigation_flutter/src/google_navigation_flutter_platform_interface.dart';
 import 'package:google_navigation_flutter/src/inspector/inspector_platform.dart';
+
 import 'shared.dart';
 
 void main() {
@@ -186,226 +188,221 @@ void main() {
     await GoogleMapsNavigator.cleanup();
   });
 
-  patrol(
-    'Test navigating to multiple destinations',
-    (PatrolIntegrationTester $) async {
-      final Completer<void> firstArrival = Completer<void>();
-      final Completer<void> navigationFinished = Completer<void>();
-      Completer<void> newSessionFired = Completer<void>();
-      int arrivalEventCount = 0;
-      OnArrivalEvent? firstArrivalEvent;
-      List<NavigationWaypoint> waypoints = <NavigationWaypoint>[];
-      final Set<String> arrivedWaypointTitles = <String>{};
+  patrol('Test navigating to multiple destinations', (
+    PatrolIntegrationTester $,
+  ) async {
+    final Completer<void> firstArrival = Completer<void>();
+    final Completer<void> navigationFinished = Completer<void>();
+    Completer<void> newSessionFired = Completer<void>();
+    int arrivalEventCount = 0;
+    OnArrivalEvent? firstArrivalEvent;
+    List<NavigationWaypoint> waypoints = <NavigationWaypoint>[];
+    final Set<String> arrivedWaypointTitles = <String>{};
 
-      /// Set up navigation view and controller.
-      final GoogleNavigationViewController viewController =
-          await startNavigationWithoutDestination($);
+    /// Set up navigation view and controller.
+    final GoogleNavigationViewController viewController =
+        await startNavigationWithoutDestination($);
 
-      /// Specify tolerance and navigation destination coordinates.
-      const double tolerance = 0.001;
-      const double midLat = 68.59781164189049,
-          midLon = 23.520303427087182,
-          endLat = 68.60079240808535,
-          endLng = 23.527946512754752;
+    /// Specify tolerance and navigation destination coordinates.
+    const double tolerance = 0.001;
+    const double midLat = 68.59781164189049,
+        midLon = 23.520303427087182,
+        endLat = 68.60079240808535,
+        endLng = 23.527946512754752;
 
-      Future<void> onArrivalEvent(OnArrivalEvent msg) async {
-        arrivalEventCount += 1;
-        final String title = msg.waypoint.title;
-        $.log('Got arrival event #$arrivalEventCount, waypoint: "$title"');
+    Future<void> onArrivalEvent(OnArrivalEvent msg) async {
+      arrivalEventCount += 1;
+      final String title = msg.waypoint.title;
+      $.log('Got arrival event #$arrivalEventCount, waypoint: "$title"');
 
-        // Ignore duplicate arrivals for the same waypoint.
-        if (!arrivedWaypointTitles.add(title)) {
-          $.log('Ignoring duplicate arrival for "$title"');
-          return;
-        }
-
-        if (arrivedWaypointTitles.length == 1) {
-          // First unique waypoint arrival.
-          firstArrivalEvent = msg;
-          firstArrival.complete();
-        } else {
-          $.log('Final arrival at "$title", stopping guidance');
-          // Stop guidance after the last destination
-          await GoogleMapsNavigator.stopGuidance();
-          navigationFinished.complete();
-        }
+      // Ignore duplicate arrivals for the same waypoint.
+      if (!arrivedWaypointTitles.add(title)) {
+        $.log('Ignoring duplicate arrival for "$title"');
+        return;
       }
 
-      /// Set up listener for new navigation session event.
-      Future<void> onNewNavigationSession() async {
-        if (!newSessionFired.isCompleted) {
-          newSessionFired.complete();
-        }
-
-        /// Sets audio guidance settings for the current navigation session.
-        /// Cannot be verified, because native SDK lacks getter methods,
-        /// but exercise the API for basic sanity testing.
-        await GoogleMapsNavigator.setAudioGuidance(
-          NavigationAudioGuidanceSettings(
-            isBluetoothAudioEnabled: true,
-            isVibrationEnabled: true,
-            guidanceType: NavigationAudioGuidanceType.alertsAndGuidance,
-          ),
-        );
-
-        /// Sets speed alert options for the current navigation session.
-        /// Cannot be verified, because native SDK lacks getter methods,
-        /// but exercise the API for basic sanity testing.
-        await GoogleMapsNavigator.setSpeedAlertOptions(
-          SpeedAlertOptions(
-            minorSpeedAlertThresholdPercentage: 5,
-            majorSpeedAlertThresholdPercentage: 10,
-            severityUpgradeDurationSeconds: 3,
-          ),
-        );
-      }
-
-      final StreamSubscription<OnArrivalEvent> onArrivalSubscription =
-          GoogleMapsNavigator.setOnArrivalListener(onArrivalEvent);
-      final StreamSubscription<void> onNewNavigationSessionSubscription =
-          GoogleMapsNavigator.setOnNewNavigationSessionListener(
-            onNewNavigationSession,
-          );
-
-      /// Simulate location and test it.
-      await setSimulatedUserLocationWithCheck(
-        $,
-        viewController,
-        startLat,
-        startLng,
-        tolerance,
-      );
-
-      /// Set up initial waypoints.
-      waypoints = <NavigationWaypoint>[
-        NavigationWaypoint.withLatLngTarget(
-          title: 'Näkkäläntie 1st stop',
-          target: const LatLng(latitude: midLat, longitude: midLon),
-        ),
-        NavigationWaypoint.withLatLngTarget(
-          title: 'Näkkäläntie 2nd stop',
-          target: const LatLng(latitude: endLat, longitude: endLng),
-        ),
-      ];
-
-      /// Set Destination.
-      final Destinations destinations = Destinations(
-        waypoints: waypoints,
-        displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
-      );
-      final NavigationRouteStatus status =
-          await GoogleMapsNavigator.setDestinations(destinations);
-      expect(status, NavigationRouteStatus.statusOk);
-      await $.pumpAndSettle();
-
-      expect(await GoogleMapsNavigator.isGuidanceRunning(), false);
-
-      /// Start guidance.
-      await GoogleMapsNavigator.startGuidance();
-      await $.pumpAndSettle();
-
-      /// Wait for new navigation session event.
-      await newSessionFired.future.timeout(
-        const Duration(seconds: 30),
-        onTimeout: () => throw TimeoutException(
-          'New navigation session event was not fired',
-        ),
-      );
-      expect(newSessionFired.isCompleted, true);
-
-      /// Start simulation.
-      $.log('Starting simulation with speedMultiplier: 5');
-      await GoogleMapsNavigator.simulator
-          .simulateLocationsAlongExistingRouteWithOptions(
-            SimulationOptions(speedMultiplier: 5),
-          );
-
-      expect(await GoogleMapsNavigator.isGuidanceRunning(), true);
-
-      await firstArrival.future.timeout(
-        const Duration(seconds: 60),
-        onTimeout: () =>
-            throw TimeoutException('First arrival event was not fired'),
-      );
-
-      if (multipleDestinationsVariants.currentValue ==
-          'continueToNextDestination') {
-        $.log('Call continueToNextDestination after first arrival');
-
-        // Clear simulation, on iOS the simulator needs to be cleared before
-        // continuing to next destination. Otherwise simulation to the next
-        // waypoint will not start and the test will timeout waiting for the
-        // final arrival.
-        await GoogleMapsNavigator.simulator.removeUserLocation();
-
-        newSessionFired = Completer<void>();
-        final ContinueToNextDestinationResponse response =
-            await GoogleMapsNavigator.continueToNextDestination();
-
-        expectSync(response.waypoint, isNotNull);
-        // On iOS, routeStatus should be available and OK.
-        if (Platform.isIOS) {
-          expectSync(response.routeStatus, NavigationRouteStatus.statusOk);
-        }
+      if (arrivedWaypointTitles.length == 1) {
+        // First unique waypoint arrival.
+        firstArrivalEvent = msg;
+        firstArrival.complete();
       } else {
-        $.log(
-          'Call setDestinations with remaining waypoint after first arrival',
-        );
-        // Find and remove the waypoint that matches the arrived waypoint.
-        int waypointIndex = -1;
-        for (int i = 0; i < waypoints.length; i++) {
-          final NavigationWaypoint waypoint = waypoints[i];
-          if (waypoint.title == firstArrivalEvent?.waypoint.title) {
-            waypointIndex = i;
-            break;
-          }
-        }
+        $.log('Final arrival at "$title", stopping guidance');
+        // Stop guidance after the last destination
+        await GoogleMapsNavigator.stopGuidance();
+        navigationFinished.complete();
+      }
+    }
 
-        if (waypointIndex >= 0) {
-          waypoints.removeAt(waypointIndex);
-        }
-
-        if (waypoints.isNotEmpty) {
-          newSessionFired = Completer<void>();
-          final Destinations updatedDestinations = Destinations(
-            waypoints: waypoints,
-            displayOptions: NavigationDisplayOptions(
-              showDestinationMarkers: false,
-            ),
-          );
-          expect(
-            await GoogleMapsNavigator.setDestinations(updatedDestinations),
-            NavigationRouteStatus.statusOk,
-          );
-        }
+    /// Set up listener for new navigation session event.
+    Future<void> onNewNavigationSession() async {
+      if (!newSessionFired.isCompleted) {
+        newSessionFired.complete();
       }
 
-      await newSessionFired.future.timeout(
-        const Duration(seconds: 10),
-        onTimeout: () => throw TimeoutException(
-          'New navigation session event was not fired after updating destinations',
+      /// Sets audio guidance settings for the current navigation session.
+      /// Cannot be verified, because native SDK lacks getter methods,
+      /// but exercise the API for basic sanity testing.
+      await GoogleMapsNavigator.setAudioGuidance(
+        NavigationAudioGuidanceSettings(
+          isBluetoothAudioEnabled: true,
+          isVibrationEnabled: true,
+          guidanceType: NavigationAudioGuidanceType.alertsAndGuidance,
         ),
       );
 
-      await GoogleMapsNavigator.simulator
-          .simulateLocationsAlongExistingRouteWithOptions(
-            SimulationOptions(speedMultiplier: 5),
-          );
-
-      await navigationFinished.future.timeout(const Duration(seconds: 60));
-      expect(
-        arrivedWaypointTitles,
-        unorderedEquals(['Näkkäläntie 1st stop', 'Näkkäläntie 2nd stop']),
+      /// Sets speed alert options for the current navigation session.
+      /// Cannot be verified, because native SDK lacks getter methods,
+      /// but exercise the API for basic sanity testing.
+      await GoogleMapsNavigator.setSpeedAlertOptions(
+        SpeedAlertOptions(
+          minorSpeedAlertThresholdPercentage: 5,
+          majorSpeedAlertThresholdPercentage: 10,
+          severityUpgradeDurationSeconds: 3,
+        ),
       );
-      expect(await GoogleMapsNavigator.isGuidanceRunning(), false);
+    }
 
-      // Cancel subscriptions before cleanup
-      await onArrivalSubscription.cancel();
-      await onNewNavigationSessionSubscription.cancel();
-      await GoogleMapsNavigator.cleanup();
-    },
-    variant: multipleDestinationsVariants,
-  );
+    final StreamSubscription<OnArrivalEvent> onArrivalSubscription =
+        GoogleMapsNavigator.setOnArrivalListener(onArrivalEvent);
+    final StreamSubscription<void> onNewNavigationSessionSubscription =
+        GoogleMapsNavigator.setOnNewNavigationSessionListener(
+          onNewNavigationSession,
+        );
+
+    /// Simulate location and test it.
+    await setSimulatedUserLocationWithCheck(
+      $,
+      viewController,
+      startLat,
+      startLng,
+      tolerance,
+    );
+
+    /// Set up initial waypoints.
+    waypoints = <NavigationWaypoint>[
+      NavigationWaypoint.withLatLngTarget(
+        title: 'Näkkäläntie 1st stop',
+        target: const LatLng(latitude: midLat, longitude: midLon),
+      ),
+      NavigationWaypoint.withLatLngTarget(
+        title: 'Näkkäläntie 2nd stop',
+        target: const LatLng(latitude: endLat, longitude: endLng),
+      ),
+    ];
+
+    /// Set Destination.
+    final Destinations destinations = Destinations(
+      waypoints: waypoints,
+      displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
+    );
+    final NavigationRouteStatus status =
+        await GoogleMapsNavigator.setDestinations(destinations);
+    expect(status, NavigationRouteStatus.statusOk);
+    await $.pumpAndSettle();
+
+    expect(await GoogleMapsNavigator.isGuidanceRunning(), false);
+
+    /// Start guidance.
+    await GoogleMapsNavigator.startGuidance();
+    await $.pumpAndSettle();
+
+    /// Wait for new navigation session event.
+    await newSessionFired.future.timeout(
+      const Duration(seconds: 30),
+      onTimeout: () =>
+          throw TimeoutException('New navigation session event was not fired'),
+    );
+    expect(newSessionFired.isCompleted, true);
+
+    /// Start simulation.
+    $.log('Starting simulation with speedMultiplier: 5');
+    await GoogleMapsNavigator.simulator
+        .simulateLocationsAlongExistingRouteWithOptions(
+          SimulationOptions(speedMultiplier: 5),
+        );
+
+    expect(await GoogleMapsNavigator.isGuidanceRunning(), true);
+
+    await firstArrival.future.timeout(
+      const Duration(seconds: 60),
+      onTimeout: () =>
+          throw TimeoutException('First arrival event was not fired'),
+    );
+
+    if (multipleDestinationsVariants.currentValue ==
+        'continueToNextDestination') {
+      $.log('Call continueToNextDestination after first arrival');
+
+      // Clear simulation, on iOS the simulator needs to be cleared before
+      // continuing to next destination. Otherwise simulation to the next
+      // waypoint will not start and the test will timeout waiting for the
+      // final arrival.
+      await GoogleMapsNavigator.simulator.removeUserLocation();
+
+      newSessionFired = Completer<void>();
+      final ContinueToNextDestinationResponse response =
+          await GoogleMapsNavigator.continueToNextDestination();
+
+      expectSync(response.waypoint, isNotNull);
+      // On iOS, routeStatus should be available and OK.
+      if (Platform.isIOS) {
+        expectSync(response.routeStatus, NavigationRouteStatus.statusOk);
+      }
+    } else {
+      $.log('Call setDestinations with remaining waypoint after first arrival');
+      // Find and remove the waypoint that matches the arrived waypoint.
+      int waypointIndex = -1;
+      for (int i = 0; i < waypoints.length; i++) {
+        final NavigationWaypoint waypoint = waypoints[i];
+        if (waypoint.title == firstArrivalEvent?.waypoint.title) {
+          waypointIndex = i;
+          break;
+        }
+      }
+
+      if (waypointIndex >= 0) {
+        waypoints.removeAt(waypointIndex);
+      }
+
+      if (waypoints.isNotEmpty) {
+        newSessionFired = Completer<void>();
+        final Destinations updatedDestinations = Destinations(
+          waypoints: waypoints,
+          displayOptions: NavigationDisplayOptions(
+            showDestinationMarkers: false,
+          ),
+        );
+        expect(
+          await GoogleMapsNavigator.setDestinations(updatedDestinations),
+          NavigationRouteStatus.statusOk,
+        );
+      }
+    }
+
+    await newSessionFired.future.timeout(
+      const Duration(seconds: 10),
+      onTimeout: () => throw TimeoutException(
+        'New navigation session event was not fired after updating destinations',
+      ),
+    );
+
+    await GoogleMapsNavigator.simulator
+        .simulateLocationsAlongExistingRouteWithOptions(
+          SimulationOptions(speedMultiplier: 5),
+        );
+
+    await navigationFinished.future.timeout(const Duration(seconds: 60));
+    expect(
+      arrivedWaypointTitles,
+      unorderedEquals(['Näkkäläntie 1st stop', 'Näkkäläntie 2nd stop']),
+    );
+    expect(await GoogleMapsNavigator.isGuidanceRunning(), false);
+
+    // Cancel subscriptions before cleanup
+    await onArrivalSubscription.cancel();
+    await onNewNavigationSessionSubscription.cancel();
+    await GoogleMapsNavigator.cleanup();
+  }, variant: multipleDestinationsVariants);
 
   patrol('Test simulation along new route', (PatrolIntegrationTester $) async {
     int loopIteration = 1;
@@ -811,8 +808,7 @@ void main() {
             NavigationRouteStatus.networkError,
             NavigationRouteStatus.routeNotFound,
           ]),
-          reason:
-              'simulateLocationsAlongNewRoute did not return networkError or routeNotFound',
+          reason: 'simulateLocationsAlongNewRoute did not return networkError or routeNotFound',
         );
       } finally {
         /// Re-enable network connection.

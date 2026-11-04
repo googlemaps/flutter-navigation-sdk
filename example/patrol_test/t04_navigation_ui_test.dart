@@ -78,8 +78,7 @@ void main() {
     expect(
       await viewController.isNavigationUIEnabled(),
       false,
-      reason:
-          'isNavigationUIEnabled should return false when navigation is not yet initialized.',
+      reason: 'isNavigationUIEnabled should return false when navigation is not yet initialized.',
     );
     await waitForValueMatchingPredicate<bool>(
       $,
@@ -94,8 +93,7 @@ void main() {
     expect(
       await viewController.isNavigationUIEnabled(),
       true,
-      reason:
-          'isNavigationUIEnabled should return true after navigation is initialized.',
+      reason: 'isNavigationUIEnabled should return true after navigation is initialized.',
     );
     await waitForValueMatchingPredicate<bool>(
       $,
@@ -105,8 +103,7 @@ void main() {
     expect(
       navigationUIisEnabled,
       true,
-      reason:
-          'onNavigationUIEnabledChanged should be called after navigation is initialized with enabled state.',
+      reason: 'onNavigationUIEnabledChanged should be called after navigation is initialized with enabled state.',
     );
 
     await $.pumpAndSettle();

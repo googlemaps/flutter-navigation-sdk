@@ -624,9 +624,8 @@ class CustomNavigationFooterExample extends StatelessWidget {
     final secondaryColor = secondaryTextColor ?? Colors.grey.shade700;
     final remainingDuration = Duration(seconds: timeToDestination);
     final etaTime = DateTime.now().add(remainingDuration);
-    final etaTimeFormatted = TimeOfDay.fromDateTime(
-      etaTime,
-    ).format(context); // Uses locale settings
+    final etaTimeFormatted = TimeOfDay.fromDateTime(etaTime)
+        .format(context); // Uses locale settings
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8),

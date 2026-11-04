@@ -18,7 +18,9 @@
 // the same Navigator through native implementations.
 
 import 'dart:isolate';
+
 import 'package:flutter/services.dart';
+
 import 'shared.dart';
 
 void main() {
