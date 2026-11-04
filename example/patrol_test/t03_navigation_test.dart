@@ -173,7 +173,10 @@ void main() {
 
     expect(await GoogleMapsNavigator.isGuidanceRunning(), true);
 
-    await hasArrived.future;
+    await hasArrived.future.withEventTimeout(
+      'Arrival event',
+      timeout: arrivalTimeout,
+    );
     expect(await GoogleMapsNavigator.isGuidanceRunning(), false);
 
     // Cancel subscriptions before cleanup
@@ -556,7 +559,10 @@ void main() {
       final NavigationRouteStatus status = await simulatorType();
       expect(status, NavigationRouteStatus.statusOk);
       $.log('Simulation along the route started.');
-      await finishTest.future;
+      await finishTest.future.withEventTimeout(
+        'Arrival event',
+        timeout: arrivalTimeout,
+      );
       $.log('Loop with simulator$loopIteration finished.');
 
       await subscription.cancel();
@@ -953,7 +959,10 @@ void main() {
         );
     await $.pumpAndSettle();
 
-    await hasArrived.future;
+    await hasArrived.future.withEventTimeout(
+      'Arrival event',
+      timeout: arrivalTimeout,
+    );
 
     // Values after arrival
     final List<LatLng> endTraveledRoute =

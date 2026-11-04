@@ -20,6 +20,7 @@
 // For more information about Flutter integration tests, please see
 // https://docs.flutter.dev/cookbook/testing/integration/introduction
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -205,6 +206,14 @@ void main() {
       );
     }
 
+    final Completer<void> mapClicked = Completer<void>();
+    int mapClickCount = 0;
+    void onMapClicked(LatLng coordinates) {
+      mapClickCount += 1;
+      expectSync(mapClickCount, 1, reason: 'One tap produced several clicks.');
+      mapClicked.complete();
+    }
+
     /// Set up navigation without initialization to test isMyLocationEnabled
     /// is false before initialization is done. Test the onMapClicked event
     /// and setting the other callback functions.
@@ -215,9 +224,7 @@ void main() {
           testMapType: mapTypeVariants.currentValue!,
           initializeNavigation: false,
           simulateLocation: false,
-          onMapClicked: expectAsync1((LatLng msg) {
-            expectSync(msg, isA<LatLng>());
-          }, max: 1),
+          onMapClicked: onMapClicked,
           onMapLongClicked: onMapLongClicked,
           onMyLocationButtonClicked: onMyLocationButtonClicked,
           onMyLocationClicked: onMyLocationClicked,
@@ -226,6 +233,10 @@ void main() {
 
     /// Test that the onMapClicked event comes in.
     await $.platformAutomator.mobile.tapAt(const Offset(0.5, 0.5));
+    await mapClicked.future.withEventTimeout(
+      'Map click event',
+      timeout: const Duration(seconds: 10),
+    );
 
     /// Test the default values match with what has been documented in the
     /// API documentation in google_navigation_flutter.dart file.

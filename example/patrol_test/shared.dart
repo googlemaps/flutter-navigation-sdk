@@ -69,6 +69,28 @@ const int testTimeoutSeconds = 480; // 8 minutes
 /// long as on CI emulator the controller creation can take a while.
 const int controllerCompleterTimeoutSeconds = 30;
 
+/// Timeout for an event that follows promptly from the action that triggers
+/// it, such as a map click or the first navigation event after simulation
+/// starts.
+const Duration eventTimeout = Duration(seconds: 30);
+
+/// Timeout for arriving at a destination while simulating along a route.
+const Duration arrivalTimeout = Duration(seconds: 60);
+
+extension EventTimeout<T> on Future<T> {
+  /// Fails the test when [event] has not arrived within [timeout].
+  ///
+  /// A bare await on an event that never arrives blocks until the whole test
+  /// times out, which hides which event was missing.
+  Future<T> withEventTimeout(String event, {Duration timeout = eventTimeout}) {
+    return this.timeout(
+      timeout,
+      onTimeout: () =>
+          fail('$event was not received within ${timeout.inSeconds} seconds.'),
+    );
+  }
+}
+
 final PlatformAutomatorConfig _platformAutomatorConfig =
     PlatformAutomatorConfig.fromOptions(
       findTimeout: Duration(seconds: 120),
@@ -365,8 +387,8 @@ Future<GoogleNavigationViewController> startNavigationWithoutDestination(
   void Function(NavigationViewRecenterButtonClickedEvent)?
   onRecenterButtonClicked,
 }) async {
-  final Completer<GoogleNavigationViewController> controllerCompleter =
-      Completer<GoogleNavigationViewController>();
+  final ControllerCompleter<GoogleNavigationViewController>
+  controllerCompleter = ControllerCompleter<GoogleNavigationViewController>();
 
   await checkLocationDialogAndTosAcceptance($);
 
