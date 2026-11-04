@@ -23,7 +23,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:google_navigation_flutter/src/google_navigation_flutter_platform_interface.dart';
 import 'package:google_navigation_flutter/src/inspector/inspector_platform.dart';
 import 'shared.dart';

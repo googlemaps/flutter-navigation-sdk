@@ -17,7 +17,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 
 import '../routes_api/routes_api.dart';
@@ -1129,9 +1129,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     }
   }
 
-  Future<void> _convertNewWaypointMarkerToDestinationMarker(
-    final int index,
-  ) async {
+  Future<void> _convertNewWaypointMarkerToDestinationMarker(int index) async {
     final String title = 'Waypoint $index';
     final ImageDescriptor waypointMarkerImage =
         await registerWaypointMarkerImage(
