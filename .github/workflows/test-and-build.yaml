@@ -50,7 +50,7 @@ jobs:
       - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         name: Setup flutter
         with:
-          flutter-version: "3.44.x"
+          flutter-version: "3.47.x"
           channel: "stable"
           cache: true
       - uses: bluefireteam/melos-action@6085791af7036f6366c9a4b9d55105c0ef9c6388
@@ -70,6 +70,30 @@ jobs:
           path: example/build
           retention-days: 1
 
+  # The plugin supports an older Flutter than the example app requires, so
+  # this job checks the plugin alone at its minimum version. melos and a plain
+  # `flutter pub get` would also resolve the example, which needs a newer SDK.
+  test-dart-minimum-flutter:
+    name: Run Dart analysis and unit tests on minimum Flutter
+    timeout-minutes: 20
+    runs-on:
+      labels: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        name: Checkout code
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
+        name: Setup flutter
+        with:
+          flutter-version: "3.44.x"
+          channel: "stable"
+          cache: true
+      - name: Install dependencies
+        run: flutter pub get --no-example
+      - name: Run Dart analysis
+        run: flutter analyze --no-pub lib test --fatal-infos
+      - name: Run Dart unit tests
+        run: flutter test --no-pub
+
   test-ios:
     name: Run iOS native unit tests
     if: github.actor != 'dependabot[bot]'
@@ -84,7 +108,7 @@ jobs:
       - name: Setup flutter
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         with:
-          flutter-version: "3.44.x"
+          flutter-version: "3.47.x"
           channel: "stable"
           cache: true
       - name: Setup melos
@@ -127,7 +151,7 @@ jobs:
       - name: Setup flutter
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         with:
-          flutter-version: "3.44.x"
+          flutter-version: "3.47.x"
           channel: "stable"
           cache: true
       - name: Setup melos
@@ -164,7 +188,7 @@ jobs:
       - name: Setup flutter
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         with:
-          flutter-version: "3.44.x"
+          flutter-version: "3.47.x"
           channel: "stable"
           cache: true
           architecture: x64
@@ -233,7 +257,7 @@ jobs:
       - name: Setup flutter
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         with:
-          flutter-version: "3.44.x"
+          flutter-version: "3.47.x"
           channel: "stable"
           cache: true
       - name: Download Build Artifact
@@ -316,7 +340,7 @@ jobs:
       - name: Setup flutter
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
         with:
-          flutter-version: "3.44.x"
+          flutter-version: "3.47.x"
           channel: "stable"
           cache: true
       - name: Select XCode 26.5
