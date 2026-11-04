@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 /// Defines an image. For marker this class can be used to set the
 /// image of the marker icon.

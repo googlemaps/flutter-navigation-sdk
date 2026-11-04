@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../google_navigation_flutter.dart';
 import '../utils/color.dart';
@@ -69,9 +69,9 @@ class CircleOptions {
     this.position = const LatLng(latitude: 0.0, longitude: 0.0),
     this.radius = 0.0,
     this.strokeWidth = 10,
-    this.strokeColor = Colors.black,
+    this.strokeColor = const Color(0xFF000000),
     this.strokePattern = const <PatternItem>[],
-    this.fillColor = Colors.black,
+    this.fillColor = const Color(0xFF000000),
     this.zIndex = 0.0,
     this.visible = true,
     this.clickable = false,
