@@ -2431,11 +2431,6 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                           _buildMapTypeChip(MapType.hybrid, 'Hybrid'),
                         ],
                       ),
-                      if (Platform.isAndroid)
-                        const Text(
-                          'Terrain displays as Normal '
-                          'during navigation on Android.',
-                        ),
                     ],
                   ),
                 ),
@@ -2611,11 +2606,6 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
                         _buildAutoMapTypeChip(MapType.hybrid, 'Hybrid'),
                       ],
                     ),
-                    if (Platform.isAndroid)
-                      const Text(
-                        'Terrain displays as Normal '
-                        'during navigation on Android.',
-                      ),
                   ],
                 ),
               ),
