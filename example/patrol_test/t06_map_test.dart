@@ -192,11 +192,20 @@ void main() {
       $.log('My location clicked event: currently $event');
     }
 
-    /// The events are not tested because there's no reliable way to trigger them currently.
+    final Completer<void> mapClicked = Completer<void>();
+
+    /// A long click is not triggered on purpose. When one arrives while the
+    /// test waits for the tap's click, the device held the tap long enough to
+    /// count as a long press, and no click will follow.
     void onMapLongClicked(LatLng coordinates) {
       $.log(
-        'Map clicked event lat: ${coordinates.latitude}, lng: ${coordinates.longitude}.',
+        'Map long-clicked event lat: ${coordinates.latitude}, lng: ${coordinates.longitude}.',
       );
+      if (!mapClicked.isCompleted) {
+        mapClicked.completeError(
+          TestFailure('The tap was delivered as a long click, not a click.'),
+        );
+      }
     }
 
     void onPoiClicked(PointOfInterest poi) {
@@ -206,12 +215,13 @@ void main() {
       );
     }
 
-    final Completer<void> mapClicked = Completer<void>();
     int mapClickCount = 0;
     void onMapClicked(LatLng coordinates) {
       mapClickCount += 1;
       expectSync(mapClickCount, 1, reason: 'One tap produced several clicks.');
-      mapClicked.complete();
+      if (!mapClicked.isCompleted) {
+        mapClicked.complete();
+      }
     }
 
     /// Set up navigation without initialization to test isMyLocationEnabled
