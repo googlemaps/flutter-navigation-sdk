@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.12.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.11.2...0.12.0) (2026-11-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* iOS Navigation SDK 11.3.0 requires iOS 17.0 or later and Xcode 26. On iOS, setDestinations with RouteTokenOptions no longer sends waypoints; setDestinations and the Android simulateLocationsAlongNewRoute methods throw RouteStatusUnavailableException when the SDK returns no route status.
+* Requires AGP 9.0.1+, Gradle 9.1.0+, and compile SDK 36+. Removes showStopSigns, showTrafficLights, and the deprecated GPS availability API. Use setOnGpsAvailabilityChangeListener instead and handle NavigationRouteStatus.routingTimeout in exhaustive switches.
+
+### Features
+
+* upgrade Android Navigation SDK to 8.0.0 (https://github.com/googlemaps/flutter-navigation-sdk/pull/784) ([0864ba0](https://github.com/googlemaps/flutter-navigation-sdk/commit/0864ba0b73e713e5f9cacb67717e501e1fa75d73))
+* upgrade iOS Navigation SDK to 11.3.0 ([#787](https://github.com/googlemaps/flutter-navigation-sdk/issues/787)) ([8f46698](https://github.com/googlemaps/flutter-navigation-sdk/commit/8f46698abccd24379f6a2b1f7f2632b29cb4e91c))
+
 ## [0.11.2](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.11.1...0.11.2) (2026-09-17)
 
 
