@@ -15,7 +15,7 @@ This repository contains a Flutter plugin that provides a [Google Navigation](ht
 
 |                                 | Android       | iOS       |
 | ------------------------------- | ------------- | --------- |
-| **Minimum mobile OS supported** | API level 24+ | iOS 16.0+ |
+| **Minimum mobile OS supported** | API level 24+ | iOS 17.0+ |
 
 * Flutter 3.44 or later
 * A Google Cloud project
@@ -81,7 +81,7 @@ dependencies {
 This plugin requires Swift Package Manager on iOS; CocoaPods is not supported. See Flutter's [Swift Package Manager guide for app developers](https://docs.flutter.dev/packages-and-plugins/swift-package-manager/for-app-developers) to enable SwiftPM support in your app.
 
 1. Open `ios/Runner.xcodeproj` in Xcode.
-2. Set the `Runner` target's iOS deployment target to 16.0.
+2. Set the `Runner` target's iOS deployment target to 17.0.
 3. In Xcode, open the Info.plist file and add `App registers for location updates` to the list of `Required background modes`.
 4. Add `NSMotionUsageDescription` to Info.plist with a user-facing explanation of how your app uses motion data for navigation. See the [Navigation SDK for iOS release notes](https://developers.google.com/maps/documentation/navigation/ios-sdk/release-notes#August_06_2026) for details.
 

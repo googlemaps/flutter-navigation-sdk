@@ -32,3 +32,6 @@ analyzer:
     # Ignore generated files
     - "**/*.g.dart"
     - "**/*.mocks.dart" # Mockito @GenerateMocks
+    - build/**
+    - android/**
+    - ios/**

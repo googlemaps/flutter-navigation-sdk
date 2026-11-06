@@ -37,6 +37,7 @@ import com.google.android.libraries.navigation.NavigationUpdatesOptions
 import com.google.android.libraries.navigation.Navigator
 import com.google.android.libraries.navigation.Navigator.TaskRemovedBehavior
 import com.google.android.libraries.navigation.RoadSnappedLocationProvider
+import com.google.android.libraries.navigation.RouteDescription
 import com.google.android.libraries.navigation.RouteSegment
 import com.google.android.libraries.navigation.RoutingOptions
 import com.google.android.libraries.navigation.SimulationOptions
@@ -522,16 +523,33 @@ constructor(
         }
 
         getNavigator().setDestinations(waypoints, customRoutesOptions, displayOptions) {
-          callback(Result.success(it.routeStatus))
+          routeDescription: RouteDescription? ->
+          callback(routeStatusResult(routeDescription))
         }
         return
       }
       getNavigator().setDestinations(waypoints, routingOptions, displayOptions) {
-        callback(Result.success(it.routeStatus))
+        routeDescription: RouteDescription? ->
+        callback(routeStatusResult(routeDescription))
       }
     } catch (e: Throwable) {
       callback(Result.failure(e))
     }
+  }
+
+  /**
+   * Returns the route status of [routeDescription], or fails when the SDK passes none. The SDK does
+   * not annotate the callback parameter as non-null.
+   */
+  private fun routeStatusResult(
+    routeDescription: RouteDescription?
+  ): Result<Navigator.RouteStatus> {
+    if (routeDescription == null) {
+      return Result.failure(
+        FlutterError("routeStatusUnavailable", "The Navigation SDK returned no route status.")
+      )
+    }
+    return Result.success(routeDescription.routeStatus)
   }
 
   /**
@@ -711,7 +729,8 @@ constructor(
   ) {
     try {
       getNavigator().simulator.simulateLocationsAlongNewRoute(waypoints) {
-        callback(Result.success(it.routeStatus))
+        routeDescription: RouteDescription? ->
+        callback(routeStatusResult(routeDescription))
       }
     } catch (e: Throwable) {
       callback(Result.failure(e))
@@ -730,7 +749,8 @@ constructor(
   ) {
     try {
       getNavigator().simulator.simulateLocationsAlongNewRoute(waypoints, routingOptions) {
-        callback(Result.success(it.routeStatus))
+        routeDescription: RouteDescription? ->
+        callback(routeStatusResult(routeDescription))
       }
     } catch (e: Throwable) {
       callback(Result.failure(e))
@@ -753,8 +773,8 @@ constructor(
         waypoints,
         routingOptions,
         simulationOptions,
-      ) {
-        callback(Result.success(it.routeStatus))
+      ) { routeDescription: RouteDescription? ->
+        callback(routeStatusResult(routeDescription))
       }
     } catch (e: Throwable) {
       callback(Result.failure(e))

@@ -188,6 +188,30 @@ class ConvertTests: XCTestCase {
     XCTAssertTrue(Convert.convertRouteStatus(.waypointError) == .waypointError)
   }
 
+  func testConvertRouteCompletionReturnsStatusFromRouteDescription() throws {
+    let success = Convert.convertRouteCompletion(
+      routeDescription: FakeRouteDescription(routeStatus: .OK), error: nil)
+    XCTAssertEqual(try success.get(), .statusOk)
+
+    let failure = Convert.convertRouteCompletion(
+      routeDescription: FakeRouteDescription(routeStatus: .noRouteFound),
+      error: NSError(domain: "test", code: 1))
+    XCTAssertEqual(try failure.get(), .routeNotFound)
+  }
+
+  func testConvertRouteCompletionFailsWithoutRouteDescription() {
+    let result = Convert.convertRouteCompletion(
+      routeDescription: nil,
+      error: NSError(
+        domain: "test", code: 1, userInfo: [NSLocalizedDescriptionKey: "No route"]))
+
+    guard case .failure(let error) = result, let pigeonError = error as? PigeonError else {
+      return XCTFail("Expected a PigeonError, got \(result)")
+    }
+    XCTAssertEqual(pigeonError.code, "routeStatusUnavailable")
+    XCTAssertEqual(pigeonError.details as? String, "No route")
+  }
+
   func testConvertTravelMode() {
     XCTAssertTrue(Convert.convertTravelMode(nil) == .driving)
     XCTAssertTrue(Convert.convertTravelMode(.driving) == .driving)
@@ -755,5 +779,15 @@ class ConvertTests: XCTestCase {
     XCTAssertEqual(pigeonCircle.options.fillColor, circle.options.fillColor)
     XCTAssertEqual(pigeonCircle.options.zIndex, circle.options.zIndex)
     XCTAssertEqual(pigeonCircle.options.clickable, circle.options.clickable)
+  }
+}
+
+private class FakeRouteDescription: NSObject, NavigationRouteDescription {
+  let routeStatus: GMSRouteStatus
+  let error: Error? = nil
+  let routeTokenExecutionDetails: NavigationRouteTokenExecutionDetails? = nil
+
+  init(routeStatus: GMSRouteStatus) {
+    self.routeStatus = routeStatus
   }
 }

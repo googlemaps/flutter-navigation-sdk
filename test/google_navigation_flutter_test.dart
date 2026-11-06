@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 import 'package:google_navigation_flutter/src/google_navigation_flutter_platform_interface.dart';
@@ -1519,6 +1520,81 @@ void main() {
             speedAlertSettingsOut.severityUpgradeDurationSeconds,
           );
         });
+
+        test(
+          'Missing route status throws RouteStatusUnavailableException',
+          () async {
+            final PlatformException error = PlatformException(
+              code: 'routeStatusUnavailable',
+              details: 'No route',
+            );
+            final List<NavigationWaypoint> waypoints = <NavigationWaypoint>[
+              NavigationWaypoint.withLatLngTarget(
+                title: 'title',
+                target: const LatLng(latitude: 5.0, longitude: 6.0),
+              ),
+            ];
+            final RoutingOptions routingOptions = RoutingOptions();
+            when(sessionMockApi.setDestinations(any)).thenThrow(error);
+            when(
+              sessionMockApi.simulateLocationsAlongNewRoute(any),
+            ).thenThrow(error);
+            when(
+              sessionMockApi.simulateLocationsAlongNewRouteWithRoutingOptions(
+                any,
+                any,
+              ),
+            ).thenThrow(error);
+            when(
+              sessionMockApi
+                  .simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
+                    any,
+                    any,
+                    any,
+                  ),
+            ).thenThrow(error);
+
+            final Matcher throwsRouteStatusUnavailable = throwsA(
+              isA<RouteStatusUnavailableException>().having(
+                (RouteStatusUnavailableException e) => e.details,
+                'details',
+                'No route',
+              ),
+            );
+            await expectLater(
+              GoogleMapsNavigator.setDestinations(
+                Destinations(
+                  waypoints: waypoints,
+                  displayOptions: NavigationDisplayOptions(),
+                ),
+              ),
+              throwsRouteStatusUnavailable,
+            );
+            await expectLater(
+              GoogleMapsNavigator.simulator.simulateLocationsAlongNewRoute(
+                waypoints,
+              ),
+              throwsRouteStatusUnavailable,
+            );
+            await expectLater(
+              GoogleMapsNavigator.simulator
+                  .simulateLocationsAlongNewRouteWithRoutingOptions(
+                    waypoints,
+                    routingOptions,
+                  ),
+              throwsRouteStatusUnavailable,
+            );
+            await expectLater(
+              GoogleMapsNavigator.simulator
+                  .simulateLocationsAlongNewRouteWithRoutingAndSimulationOptions(
+                    waypoints,
+                    routingOptions,
+                    SimulationOptions(speedMultiplier: 1),
+                  ),
+              throwsRouteStatusUnavailable,
+            );
+          },
+        );
 
         test('Test navigation simulator', () async {
           // Pause/resume simulation.
