@@ -276,6 +276,10 @@ enum RouteStatusDto: Int {
   case locationUnknown = 12
   case quotaCheckFailed = 13
   case unknown = 14
+  /// The routing request timed out.
+  ///
+  /// Android only.
+  case routingTimeout = 15
 }
 
 enum TrafficDelaySeverityDto: Int {
@@ -1511,6 +1515,8 @@ struct MapPaddingDto: Hashable {
 /// Any null value resets that specific field to the native SDK default.
 ///
 /// Text size fields are currently Android only and are ignored on iOS.
+/// Android Navigation SDK 8.0.0 deprecates custom text sizes, but they remain
+/// functional.
 ///
 /// Generated class from Pigeon that represents data sent in messages.
 struct NavigationHeaderStylingOptionsDto: Hashable {
@@ -1721,28 +1727,18 @@ struct RoutingOptionsDto: Hashable {
 /// Generated class from Pigeon that represents data sent in messages.
 struct NavigationDisplayOptionsDto: Hashable {
   var showDestinationMarkers: Bool? = nil
-  /// Deprecated: This option now defaults to true.
-  var showStopSigns: Bool? = nil
-  /// Deprecated: This option now defaults to true.
-  var showTrafficLights: Bool? = nil
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> NavigationDisplayOptionsDto? {
     let showDestinationMarkers: Bool? = nilOrValue(pigeonVar_list[0])
-    let showStopSigns: Bool? = nilOrValue(pigeonVar_list[1])
-    let showTrafficLights: Bool? = nilOrValue(pigeonVar_list[2])
 
     return NavigationDisplayOptionsDto(
-      showDestinationMarkers: showDestinationMarkers,
-      showStopSigns: showStopSigns,
-      showTrafficLights: showTrafficLights
+      showDestinationMarkers: showDestinationMarkers
     )
   }
   func toList() -> [Any?] {
     return [
-      showDestinationMarkers,
-      showStopSigns,
-      showTrafficLights,
+      showDestinationMarkers
     ]
   }
   static func == (lhs: NavigationDisplayOptionsDto, rhs: NavigationDisplayOptionsDto) -> Bool {
@@ -6694,9 +6690,6 @@ protocol NavigationSessionEventApiProtocol {
   /// Android-only event.
   func onRerouting(completion: @escaping (Result<Void, PigeonError>) -> Void)
   /// Android-only event.
-  func onGpsAvailabilityUpdate(
-    available availableArg: Bool, completion: @escaping (Result<Void, PigeonError>) -> Void)
-  /// Android-only event.
   func onGpsAvailabilityChange(
     event eventArg: GpsAvailabilityChangeEventDto,
     completion: @escaping (Result<Void, PigeonError>) -> Void)
@@ -6879,29 +6872,6 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
     let channel = FlutterBasicMessageChannel(
       name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage(nil) { response in
-      guard let listResponse = response as? [Any?] else {
-        completion(.failure(createConnectionError(withChannelName: channelName)))
-        return
-      }
-      if listResponse.count > 1 {
-        let code: String = listResponse[0] as! String
-        let message: String? = nilOrValue(listResponse[1])
-        let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(PigeonError(code: code, message: message, details: details)))
-      } else {
-        completion(.success(()))
-      }
-    }
-  }
-  /// Android-only event.
-  func onGpsAvailabilityUpdate(
-    available availableArg: Bool, completion: @escaping (Result<Void, PigeonError>) -> Void
-  ) {
-    let channelName: String =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityUpdate\(messageChannelSuffix)"
-    let channel = FlutterBasicMessageChannel(
-      name: channelName, binaryMessenger: binaryMessenger, codec: codec)
-    channel.sendMessage([availableArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return

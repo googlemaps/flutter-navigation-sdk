@@ -62,16 +62,6 @@ void main() {
     TestImageRegistryApi.setUp(imageRegistryMockApi);
   });
 
-  T anyAs<T>() {
-    // ignore: cast_from_null_always_fails
-    return any as T;
-  }
-
-  T captureAnyAs<T>() {
-    // ignore: cast_from_null_always_fails
-    return captureAny as T;
-  }
-
   void verifyEnabled(VerificationResult result, bool enabled) {
     final bool enabledOut = result.captured[1] as bool;
     expect(enabledOut, enabled);
@@ -750,12 +740,8 @@ void main() {
               isUnderground: false,
             ),
           );
-          when(
-            viewMockApi.isNavigationHeaderEnabled(anyAs<int>()),
-          ).thenReturn(true);
-          when(
-            viewMockApi.getNavigationHeaderStylingOptions(anyAs<int>()),
-          ).thenReturn(
+          when(viewMockApi.isNavigationHeaderEnabled(any)).thenReturn(true);
+          when(viewMockApi.getNavigationHeaderStylingOptions(any)).thenReturn(
             NavigationHeaderStylingOptionsDto(
               primaryDayModeBackgroundColor: Colors.blue.toARGB32(),
               secondaryDayModeBackgroundColor: Colors.red.toARGB32(),
@@ -808,25 +794,26 @@ void main() {
           expect(focusedIndoorBuilding.activeLevelIndex, 1);
           await controller.activateIndoorLevel(focusedIndoorBuilding.levels[0]);
           expect(await controller.isNavigationHeaderEnabled(), true);
+          // Platform channels preserve ARGB values, not MaterialColor swatch types.
           expect(
             await controller.getNavigationHeaderStylingOptions(),
-            const NavigationHeaderStylingOptions(
-              primaryDayModeBackgroundColor: Colors.blue,
-              secondaryDayModeBackgroundColor: Colors.red,
+            NavigationHeaderStylingOptions(
+              primaryDayModeBackgroundColor: Color(Colors.blue.toARGB32()),
+              secondaryDayModeBackgroundColor: Color(Colors.red.toARGB32()),
               primaryNightModeBackgroundColor: Colors.black,
-              secondaryNightModeBackgroundColor: Colors.grey,
-              largeManeuverIconColor: Colors.orange,
-              smallManeuverIconColor: Colors.pink,
-              nextStepTextColor: Colors.yellow,
+              secondaryNightModeBackgroundColor: Color(Colors.grey.toARGB32()),
+              largeManeuverIconColor: Color(Colors.orange.toARGB32()),
+              smallManeuverIconColor: Color(Colors.pink.toARGB32()),
+              nextStepTextColor: Color(Colors.yellow.toARGB32()),
               nextStepTextSize: 18,
-              distanceValueTextColor: Colors.green,
-              distanceUnitsTextColor: Colors.lime,
+              distanceValueTextColor: Color(Colors.green.toARGB32()),
+              distanceUnitsTextColor: Color(Colors.lime.toARGB32()),
               distanceValueTextSize: 24,
               distanceUnitsTextSize: 14,
-              instructionsTextColor: Colors.cyan,
+              instructionsTextColor: Color(Colors.cyan.toARGB32()),
               instructionsFirstRowTextSize: 30,
               instructionsSecondRowTextSize: 20,
-              guidanceRecommendedLaneColor: Colors.teal,
+              guidanceRecommendedLaneColor: Color(Colors.teal.toARGB32()),
             ),
           );
           expect(await controller.isNavigationFooterEnabled(), true);
@@ -855,10 +842,8 @@ void main() {
           verify(viewMockApi.isIndoorLevelPickerEnabled(captureAny));
           verify(viewMockApi.getFocusedIndoorBuilding(captureAny));
           verify(viewMockApi.activateIndoorLevel(captureAny, captureAny));
-          verify(viewMockApi.isNavigationHeaderEnabled(captureAnyAs<int>()));
-          verify(
-            viewMockApi.getNavigationHeaderStylingOptions(captureAnyAs<int>()),
-          );
+          verify(viewMockApi.isNavigationHeaderEnabled(captureAny));
+          verify(viewMockApi.getNavigationHeaderStylingOptions(captureAny));
           verify(viewMockApi.isNavigationFooterEnabled(captureAny));
           verify(viewMockApi.isSpeedLimitIconEnabled(captureAny));
           verify(viewMockApi.isSpeedometerEnabled(captureAny));
@@ -1001,8 +986,8 @@ void main() {
           );
           final VerificationResult headerStylingResult = verify(
             viewMockApi.setNavigationHeaderStylingOptions(
-              captureAnyAs<int>(),
-              captureAnyAs<NavigationHeaderStylingOptionsDto>(),
+              captureAny,
+              captureAny,
             ),
           );
           final NavigationHeaderStylingOptionsDto headerStylingOut =
@@ -1394,11 +1379,7 @@ void main() {
           // Set destinations.
 
           final NavigationDisplayOptions navigationDisplayOptionsIn =
-              NavigationDisplayOptions(
-                showDestinationMarkers: false,
-                showStopSigns: true,
-                showTrafficLights: true,
-              );
+              NavigationDisplayOptions(showDestinationMarkers: false);
 
           final RoutingOptions routingOptionsIn = RoutingOptions(
             alternateRoutesStrategy: NavigationAlternateRoutesStrategy.all,
@@ -1449,14 +1430,6 @@ void main() {
           expect(
             destinationIn.displayOptions.showDestinationMarkers,
             destinationOut.displayOptions.showDestinationMarkers,
-          );
-          expect(
-            destinationIn.displayOptions.showStopSigns,
-            destinationOut.displayOptions.showStopSigns,
-          );
-          expect(
-            destinationIn.displayOptions.showTrafficLights,
-            destinationOut.displayOptions.showTrafficLights,
           );
 
           expect(

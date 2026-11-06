@@ -436,34 +436,5 @@ void main() {
 
       await subscription.cancel();
     });
-
-    test(
-      'GpsAvailabilityUpdatedEvent stream delivers events (deprecated)',
-      () async {
-        final List<GpsAvailabilityUpdatedEvent> receivedEvents =
-            <GpsAvailabilityUpdatedEvent>[];
-
-        // ignore: deprecated_member_use_from_same_package
-        final StreamSubscription<GpsAvailabilityUpdatedEvent> subscription =
-            testSessionApi
-                // ignore: deprecated_member_use_from_same_package
-                .getNavigationOnGpsAvailabilityUpdateEventStream()
-                .listen((GpsAvailabilityUpdatedEvent event) {
-                  receivedEvents.add(event);
-                });
-
-        // Emit test events via DTO
-        testSessionApi.testEventApi.onGpsAvailabilityUpdate(true);
-        testSessionApi.testEventApi.onGpsAvailabilityUpdate(false);
-
-        await Future<void>.delayed(const Duration(milliseconds: 50));
-
-        expect(receivedEvents.length, 2);
-        expect(receivedEvents[0].available, true);
-        expect(receivedEvents[1].available, false);
-
-        await subscription.cancel();
-      },
-    );
   });
 }

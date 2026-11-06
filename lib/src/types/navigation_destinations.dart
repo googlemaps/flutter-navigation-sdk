@@ -185,45 +185,20 @@ class RoutingOptions {
 
 /// Display options.
 ///
-/// By default, destination markers, stop signs, and traffic lights are shown.
+/// Destination markers are shown by default. Stop signs and traffic lights are
+/// always shown during navigation when data is available.
 /// {@category Navigation}
 class NavigationDisplayOptions {
   /// Initializer for display options.
-  NavigationDisplayOptions({
-    this.showDestinationMarkers,
-    this.showStopSigns,
-    this.showTrafficLights,
-  });
+  NavigationDisplayOptions({this.showDestinationMarkers});
 
   /// Show destination markers.
   final bool? showDestinationMarkers;
 
-  /// Show stop signs.
-  ///
-  /// Has no effect on iOS, where Navigation SDK 11 always shows stop signs
-  /// during navigation when data is available. On Android, it defaults to true
-  /// when unset.
-  @Deprecated(
-    'This option has no effect on iOS, defaults to true on Android, and will be removed in future versions.',
-  )
-  final bool? showStopSigns;
-
-  /// Show traffic lights.
-  ///
-  /// Has no effect on iOS, where Navigation SDK 11 always shows traffic lights
-  /// during navigation when data is available. On Android, it defaults to true
-  /// when unset.
-  @Deprecated(
-    'This option has no effect on iOS, defaults to true on Android, and will be removed in future versions.',
-  )
-  final bool? showTrafficLights;
-
   @override
   String toString() =>
       'NavigationDisplayOptions('
-      'showDestinationMarkers: $showDestinationMarkers, '
-      'showStopSigns: $showStopSigns, '
-      'showTrafficLights: $showTrafficLights'
+      'showDestinationMarkers: $showDestinationMarkers'
       ')';
 }
 
@@ -354,6 +329,11 @@ enum NavigationRouteStatus {
 
   /// Quota check failed
   quotaCheckFailed,
+
+  /// The routing request timed out.
+  ///
+  /// Android only.
+  routingTimeout,
 }
 
 /// Response returned by [GoogleMapsNavigator.continueToNextDestination].

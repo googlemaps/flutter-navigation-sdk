@@ -261,7 +261,7 @@ constructor(
       NavigationApi.ErrorCode.NETWORK_ERROR -> {
         FlutterError(
           "networkError",
-          "The session initialization failed, because there is no working network connection.",
+          "The session initialization failed because of a network or timeout failure, including during navigator access checks.",
         )
       }
       NavigationApi.ErrorCode.LOCATION_PERMISSION_MISSING -> {
@@ -490,8 +490,7 @@ constructor(
   }
 
   /**
-   * Wraps [Navigator.setDestinations] with result listener. See
-   * [Google Navigation SDK for Android](https://developers.google.com/maps/documentation/navigation/android-sdk/reference/com/google/android/libraries/navigation/Navigator#setDestinations(java.util.List%3Ccom.google.android.libraries.navigation.Waypoint%3E,%20com.google.android.libraries.navigation.CustomRoutesOptions,%20com.google.android.libraries.navigation.DisplayOptions)).
+   * Wraps the callback-based [Navigator.setDestinations] overloads and forwards the route status.
    */
   fun setDestinations(
     waypoints: List<Waypoint>,
@@ -522,14 +521,14 @@ constructor(
           )
         }
 
-        getNavigator()
-          .setDestinations(waypoints, customRoutesOptions, displayOptions)
-          .setOnResultListener { callback(Result.success(it)) }
+        getNavigator().setDestinations(waypoints, customRoutesOptions, displayOptions) {
+          callback(Result.success(it.routeStatus))
+        }
         return
       }
-      getNavigator()
-        .setDestinations(waypoints, routingOptions, displayOptions)
-        .setOnResultListener { callback(Result.success(it)) }
+      getNavigator().setDestinations(waypoints, routingOptions, displayOptions) {
+        callback(Result.success(it.routeStatus))
+      }
     } catch (e: Throwable) {
       callback(Result.failure(e))
     }
@@ -711,8 +710,8 @@ constructor(
     callback: (Result<Navigator.RouteStatus>) -> Unit,
   ) {
     try {
-      getNavigator().simulator.simulateLocationsAlongNewRoute(waypoints).setOnResultListener {
-        callback(Result.success(it))
+      getNavigator().simulator.simulateLocationsAlongNewRoute(waypoints) {
+        callback(Result.success(it.routeStatus))
       }
     } catch (e: Throwable) {
       callback(Result.failure(e))
@@ -730,10 +729,9 @@ constructor(
     callback: (Result<Navigator.RouteStatus>) -> Unit,
   ) {
     try {
-      getNavigator()
-        .simulator
-        .simulateLocationsAlongNewRoute(waypoints, routingOptions)
-        .setOnResultListener { callback(Result.success(it)) }
+      getNavigator().simulator.simulateLocationsAlongNewRoute(waypoints, routingOptions) {
+        callback(Result.success(it.routeStatus))
+      }
     } catch (e: Throwable) {
       callback(Result.failure(e))
     }
@@ -751,10 +749,13 @@ constructor(
     callback: (Result<Navigator.RouteStatus>) -> Unit,
   ) {
     try {
-      getNavigator()
-        .simulator
-        .simulateLocationsAlongNewRoute(waypoints, routingOptions, simulationOptions)
-        .setOnResultListener { callback(Result.success(it)) }
+      getNavigator().simulator.simulateLocationsAlongNewRoute(
+        waypoints,
+        routingOptions,
+        simulationOptions,
+      ) {
+        callback(Result.success(it.routeStatus))
+      }
     } catch (e: Throwable) {
       callback(Result.failure(e))
     }
@@ -917,10 +918,6 @@ constructor(
             navigationSessionEventApi.onRoadSnappedRawLocationUpdated(
               LatLngDto(location.latitude, location.longitude)
             ) {}
-          }
-
-          override fun onGpsAvailabilityUpdate(isGpsAvailable: Boolean) {
-            navigationSessionEventApi.onGpsAvailabilityUpdate(isGpsAvailable) {}
           }
 
           override fun onGpsAvailabilityChange(event: GpsAvailabilityChangeEvent?) {

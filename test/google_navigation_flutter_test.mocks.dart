@@ -77,14 +77,25 @@ class _FakeLatLngBoundsDto_4 extends _i1.SmartFake
     : super(parent, parentInvocation);
 }
 
-class _FakeMapPaddingDto_5 extends _i1.SmartFake implements _i2.MapPaddingDto {
-  _FakeMapPaddingDto_5(Object parent, Invocation parentInvocation)
+class _FakeScreenCoordinateDto_5 extends _i1.SmartFake
+    implements _i2.ScreenCoordinateDto {
+  _FakeScreenCoordinateDto_5(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeImageDescriptorDto_6 extends _i1.SmartFake
+class _FakeLatLngDto_6 extends _i1.SmartFake implements _i2.LatLngDto {
+  _FakeLatLngDto_6(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeMapPaddingDto_7 extends _i1.SmartFake implements _i2.MapPaddingDto {
+  _FakeMapPaddingDto_7(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeImageDescriptorDto_8 extends _i1.SmartFake
     implements _i2.ImageDescriptorDto {
-  _FakeImageDescriptorDto_6(Object parent, Invocation parentInvocation)
+  _FakeImageDescriptorDto_8(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
@@ -897,6 +908,34 @@ class MockTestMapViewApi extends _i1.Mock implements _i3.TestMapViewApi {
           as _i2.LatLngBoundsDto);
 
   @override
+  _i2.ScreenCoordinateDto getScreenCoordinate(
+    int? viewId,
+    _i2.LatLngDto? latLng,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#getScreenCoordinate, [viewId, latLng]),
+            returnValue: _FakeScreenCoordinateDto_5(
+              this,
+              Invocation.method(#getScreenCoordinate, [viewId, latLng]),
+            ),
+          )
+          as _i2.ScreenCoordinateDto);
+
+  @override
+  _i2.LatLngDto getLatLng(
+    int? viewId,
+    _i2.ScreenCoordinateDto? screenCoordinate,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#getLatLng, [viewId, screenCoordinate]),
+            returnValue: _FakeLatLngDto_6(
+              this,
+              Invocation.method(#getLatLng, [viewId, screenCoordinate]),
+            ),
+          )
+          as _i2.LatLngDto);
+
+  @override
   void followMyLocation(
     int? viewId,
     _i2.CameraPerspectiveDto? perspective,
@@ -1318,7 +1357,7 @@ class MockTestMapViewApi extends _i1.Mock implements _i3.TestMapViewApi {
   _i2.MapPaddingDto getPadding(int? viewId) =>
       (super.noSuchMethod(
             Invocation.method(#getPadding, [viewId]),
-            returnValue: _FakeMapPaddingDto_5(
+            returnValue: _FakeMapPaddingDto_7(
               this,
               Invocation.method(#getPadding, [viewId]),
             ),
@@ -1429,6 +1468,28 @@ class MockTestAutoMapViewApi extends _i1.Mock
             ),
           )
           as _i2.LatLngBoundsDto);
+
+  @override
+  _i2.ScreenCoordinateDto getScreenCoordinate(_i2.LatLngDto? latLng) =>
+      (super.noSuchMethod(
+            Invocation.method(#getScreenCoordinate, [latLng]),
+            returnValue: _FakeScreenCoordinateDto_5(
+              this,
+              Invocation.method(#getScreenCoordinate, [latLng]),
+            ),
+          )
+          as _i2.ScreenCoordinateDto);
+
+  @override
+  _i2.LatLngDto getLatLng(_i2.ScreenCoordinateDto? screenCoordinate) =>
+      (super.noSuchMethod(
+            Invocation.method(#getLatLng, [screenCoordinate]),
+            returnValue: _FakeLatLngDto_6(
+              this,
+              Invocation.method(#getLatLng, [screenCoordinate]),
+            ),
+          )
+          as _i2.LatLngDto);
 
   @override
   void followMyLocation(
@@ -2060,7 +2121,7 @@ class MockTestAutoMapViewApi extends _i1.Mock
   _i2.MapPaddingDto getPadding() =>
       (super.noSuchMethod(
             Invocation.method(#getPadding, []),
-            returnValue: _FakeMapPaddingDto_5(
+            returnValue: _FakeMapPaddingDto_7(
               this,
               Invocation.method(#getPadding, []),
             ),
@@ -2130,7 +2191,7 @@ class MockTestImageRegistryApi extends _i1.Mock
               width,
               height,
             ]),
-            returnValue: _FakeImageDescriptorDto_6(
+            returnValue: _FakeImageDescriptorDto_8(
               this,
               Invocation.method(#registerBitmapImage, [
                 imageId,

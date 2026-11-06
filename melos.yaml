@@ -99,13 +99,7 @@ scripts:
       if [ -d "example" ]; then cd example; fi && \
         flutter build apk --config-only && \
         cd android && \
-        ./gradlew test \
-          -x :flutter_plugin_android_lifecycle:testDebugUnitTest \
-          -x :flutter_plugin_android_lifecycle:testProfileUnitTest \
-          -x :flutter_plugin_android_lifecycle:testReleaseUnitTest \
-          -x :integration_test:testDebugUnitTest \
-          -x :integration_test:testProfileUnitTest \
-          -x :integration_test:testReleaseUnitTest
+        ./gradlew :google_navigation_flutter:test
     exec:
       concurrency: 1
       failFast: true
@@ -178,7 +172,7 @@ scripts:
       addlicense -f header_template.txt \
         --ignore "**/.dart_tool/**" \
         --ignore "**/example/build/**" \
-        --ignore "**/example/integration_test/test_bundle.dart" \
+        --ignore "**/example/patrol_test/test_bundle.dart" \
         --ignore "**/example/ios/Flutter/ephemeral/**" \
         --ignore "**/example/android/.idea/**" \
         --ignore "build/**" \
@@ -198,7 +192,7 @@ scripts:
         --check \
         --ignore "**/.dart_tool/**" \
         --ignore "**/example/build/**" \
-        --ignore "**/example/integration_test/test_bundle.dart" \
+        --ignore "**/example/patrol_test/test_bundle.dart" \
         --ignore "**/example/ios/Flutter/ephemeral/**" \
         --ignore "**/example/android/.idea/**" \
         --ignore "build/**" \

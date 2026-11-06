@@ -1369,6 +1369,8 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
           _showMessage(
             'The route could not be calculated, because the user location is unknown.',
           );
+        case NavigationRouteStatus.routingTimeout:
+          _showMessage('The route calculation timed out. Please try again.');
       }
     } on RouteTokenMalformedException catch (_) {
       _showMessage('Malformed route token');
@@ -1398,11 +1400,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
     return Destinations(
       waypoints: _waypoints,
-      displayOptions: NavigationDisplayOptions(
-        showDestinationMarkers: false,
-        showStopSigns: true,
-        showTrafficLights: true,
-      ),
+      displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
       routingOptions: RoutingOptions(travelMode: _travelMode),
     );
   }

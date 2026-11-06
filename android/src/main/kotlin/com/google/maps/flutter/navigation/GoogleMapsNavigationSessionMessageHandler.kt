@@ -124,17 +124,17 @@ class GoogleMapsNavigationSessionMessageHandler(
   override fun continueToNextDestination(
     callback: (Result<ContinueToNextDestinationResponseDto>) -> Unit
   ) {
-    val waypoint = sessionManager.continueToNextDestination()
-    val waypointDto = waypoint?.let { Convert.convertWaypointToDto(it) }
     callback(
-      Result.success(
+      runCatching {
+        val waypoint = sessionManager.continueToNextDestination()
+        val waypointDto = waypoint?.let { Convert.convertWaypointToDto(it) }
         ContinueToNextDestinationResponseDto(
           waypoint = waypointDto,
           // routeStatus is only available on iOS where the native SDK provides it
           // via a completion handler. On Android, the native SDK returns only the waypoint.
           routeStatus = null,
         )
-      )
+      }
     )
   }
 

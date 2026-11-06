@@ -18,8 +18,9 @@ import '../method_channel/messages.g.dart';
 
 /// Styling options for the native navigation header.
 ///
-/// Text size properties are currently supported on Android only. On iOS they
-/// are ignored.
+/// Text size properties are supported on Android only and are ignored on iOS.
+/// The Android Navigation SDK deprecated custom header text sizes in version
+/// 8.0.0, but these properties remain functional.
 /// {@category Navigation View}
 class NavigationHeaderStylingOptions {
   /// Creates navigation header styling options.
@@ -66,6 +67,7 @@ class NavigationHeaderStylingOptions {
   /// Size of the next-step text in logical pixels.
   ///
   /// Android only. Ignored on iOS.
+  /// Deprecated by the Android Navigation SDK in 8.0.0, but still functional.
   final double? nextStepTextSize;
 
   /// Color of the distance value text in the header.
@@ -77,11 +79,13 @@ class NavigationHeaderStylingOptions {
   /// Size of the distance value text in logical pixels.
   ///
   /// Android only. Ignored on iOS.
+  /// Deprecated by the Android Navigation SDK in 8.0.0, but still functional.
   final double? distanceValueTextSize;
 
   /// Size of the distance units text in logical pixels.
   ///
   /// Android only. Ignored on iOS.
+  /// Deprecated by the Android Navigation SDK in 8.0.0, but still functional.
   final double? distanceUnitsTextSize;
 
   /// Color of the instructions text in the header.
@@ -90,11 +94,13 @@ class NavigationHeaderStylingOptions {
   /// Size of the first row of the instructions text in logical pixels.
   ///
   /// Android only. Ignored on iOS.
+  /// Deprecated by the Android Navigation SDK in 8.0.0, but still functional.
   final double? instructionsFirstRowTextSize;
 
   /// Size of the second row of the instructions text in logical pixels.
   ///
   /// Android only. Ignored on iOS.
+  /// Deprecated by the Android Navigation SDK in 8.0.0, but still functional.
   final double? instructionsSecondRowTextSize;
 
   /// Color of the recommended lane highlight in the header.

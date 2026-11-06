@@ -313,7 +313,13 @@ enum class RouteStatusDto(val raw: Int) {
   TRAVEL_MODE_UNSUPPORTED(11),
   LOCATION_UNKNOWN(12),
   QUOTA_CHECK_FAILED(13),
-  UNKNOWN(14);
+  UNKNOWN(14),
+  /**
+   * The routing request timed out.
+   *
+   * Android only.
+   */
+  ROUTING_TIMEOUT(15);
 
   companion object {
     fun ofRaw(raw: Int): RouteStatusDto? {
@@ -1661,7 +1667,8 @@ data class MapPaddingDto(val top: Long, val left: Long, val bottom: Long, val ri
  * All color values are 32-bit ARGB integers (format: 0xAARRGGBB). All text size values are logical
  * pixels. Any null value resets that specific field to the native SDK default.
  *
- * Text size fields are currently Android only and are ignored on iOS.
+ * Text size fields are currently Android only and are ignored on iOS. Android Navigation SDK 8.0.0
+ * deprecates custom text sizes, but they remain functional.
  *
  * Generated class from Pigeon that represents data sent in messages.
  */
@@ -1878,24 +1885,16 @@ data class RoutingOptionsDto(
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class NavigationDisplayOptionsDto(
-  val showDestinationMarkers: Boolean? = null,
-  /** Deprecated: This option now defaults to true. */
-  val showStopSigns: Boolean? = null,
-  /** Deprecated: This option now defaults to true. */
-  val showTrafficLights: Boolean? = null,
-) {
+data class NavigationDisplayOptionsDto(val showDestinationMarkers: Boolean? = null) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): NavigationDisplayOptionsDto {
       val showDestinationMarkers = pigeonVar_list[0] as Boolean?
-      val showStopSigns = pigeonVar_list[1] as Boolean?
-      val showTrafficLights = pigeonVar_list[2] as Boolean?
-      return NavigationDisplayOptionsDto(showDestinationMarkers, showStopSigns, showTrafficLights)
+      return NavigationDisplayOptionsDto(showDestinationMarkers)
     }
   }
 
   fun toList(): List<Any?> {
-    return listOf(showDestinationMarkers, showStopSigns, showTrafficLights)
+    return listOf(showDestinationMarkers)
   }
 
   override fun equals(other: Any?): Boolean {
@@ -8095,26 +8094,6 @@ class NavigationSessionEventApi(
       "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRerouting$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(null) {
-      if (it is List<*>) {
-        if (it.size > 1) {
-          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
-        } else {
-          callback(Result.success(Unit))
-        }
-      } else {
-        callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))
-      }
-    }
-  }
-
-  /** Android-only event. */
-  fun onGpsAvailabilityUpdate(availableArg: Boolean, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix =
-      if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName =
-      "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onGpsAvailabilityUpdate$separatedMessageChannelSuffix"
-    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(availableArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))

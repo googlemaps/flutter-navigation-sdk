@@ -93,6 +93,8 @@ extension ConvertRouteStatusDto on RouteStatusDto {
         return NavigationRouteStatus.locationUnknown;
       case RouteStatusDto.quotaCheckFailed:
         return NavigationRouteStatus.quotaCheckFailed;
+      case RouteStatusDto.routingTimeout:
+        return NavigationRouteStatus.routingTimeout;
     }
   }
 }
