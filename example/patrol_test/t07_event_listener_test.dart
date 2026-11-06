@@ -36,17 +36,17 @@ void main() {
 
     /// Set up the listener and the test.
     final StreamSubscription<RemainingTimeOrDistanceChangedEvent> subscription =
-        GoogleMapsNavigator.setOnRemainingTimeOrDistanceChangedListener(
-          expectAsync1((RemainingTimeOrDistanceChangedEvent event) {
-            expectSync(event.remainingDistance, isA<double>());
-            expectSync(event.remainingTime, isA<double>());
+        GoogleMapsNavigator.setOnRemainingTimeOrDistanceChangedListener((
+          RemainingTimeOrDistanceChangedEvent event,
+        ) {
+          expectSync(event.remainingDistance, isA<double>());
+          expectSync(event.remainingTime, isA<double>());
 
-            /// Complete the eventReceived completer only once.
-            if (!eventReceived.isCompleted) {
-              eventReceived.complete();
-            }
-          }, max: -1),
-        );
+          /// Complete the eventReceived completer only once.
+          if (!eventReceived.isCompleted) {
+            eventReceived.complete();
+          }
+        });
     await $.pumpAndSettle();
 
     /// Simulate location (1298 California St)
@@ -79,7 +79,9 @@ void main() {
     await $.pumpAndSettle();
 
     /// Wait until the event is received and then test cancelling the subscription.
-    await eventReceived.future;
+    await eventReceived.future.withEventTimeout(
+      'Remaining time or distance changed event',
+    );
     await subscription.cancel();
     await navigationController.clear();
   });
@@ -120,23 +122,21 @@ void main() {
 
     /// Set up the listener and the test.
     final StreamSubscription<NavInfoEvent> subscription =
-        GoogleMapsNavigator.setNavInfoListener(
-          expectAsync1((NavInfoEvent event) {
-            expectSync(event.navInfo, isA<NavInfo>());
+        GoogleMapsNavigator.setNavInfoListener((NavInfoEvent event) {
+          expectSync(event.navInfo, isA<NavInfo>());
 
-            /// Complete the eventReceived completer only once.
-            if (!eventReceived.isCompleted) {
-              eventReceived.complete();
-            }
-          }, max: -1),
-        );
+          /// Complete the eventReceived completer only once.
+          if (!eventReceived.isCompleted) {
+            eventReceived.complete();
+          }
+        });
 
     /// Start simulation.
     await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
     await $.pumpAndSettle();
 
     /// Wait until the event is received and then test cancelling the subscription.
-    await eventReceived.future;
+    await eventReceived.future.withEventTimeout('NavInfo event');
     await subscription.cancel();
     await navigationController.clear();
   });
@@ -181,25 +181,22 @@ void main() {
 
       /// Set up the listener and the test.
       final StreamSubscription<NavInfoEvent> subscription =
-          GoogleMapsNavigator.setNavInfoListener(
-            expectAsync1((NavInfoEvent event) {
-              expectSync(event.navInfo, isA<NavInfo>());
-              expectSync(event.navInfo.currentStep?.maneuverImage, isNull);
+          GoogleMapsNavigator.setNavInfoListener((NavInfoEvent event) {
+            expectSync(event.navInfo, isA<NavInfo>());
+            expectSync(event.navInfo.currentStep?.maneuverImage, isNull);
 
-              /// Complete the eventReceived completer only once.
-              if (!eventReceived.isCompleted) {
-                eventReceived.complete();
-              }
-            }, max: -1),
-            numNextStepsToPreview: 1,
-          );
+            /// Complete the eventReceived completer only once.
+            if (!eventReceived.isCompleted) {
+              eventReceived.complete();
+            }
+          }, numNextStepsToPreview: 1);
 
       /// Start simulation.
       await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
       await $.pumpAndSettle();
 
       /// Wait until the event is received and then test cancelling the subscription.
-      await eventReceived.future;
+      await eventReceived.future.withEventTimeout('NavInfo event');
       await subscription.cancel();
       await navigationController.clear();
     },
@@ -248,7 +245,7 @@ void main() {
       /// Set up the listener and the test.
       final StreamSubscription<NavInfoEvent> subscription =
           GoogleMapsNavigator.setNavInfoListener(
-            expectAsync1((NavInfoEvent event) {
+            (NavInfoEvent event) {
               expectSync(event.navInfo, isA<NavInfo>());
               expectSync(event.navInfo.currentStep?.maneuverImage, isNotNull);
               expectSync(
@@ -270,7 +267,7 @@ void main() {
               if (!eventReceived.isCompleted) {
                 eventReceived.complete();
               }
-            }, max: -1),
+            },
             numNextStepsToPreview: null,
             stepImageGenerationOptions: const StepImageGenerationOptions(
               generateManeuverImages: true,
@@ -283,7 +280,7 @@ void main() {
       await $.pumpAndSettle();
 
       /// Wait until the event is received and then test cancelling the subscription.
-      await eventReceived.future;
+      await eventReceived.future.withEventTimeout('NavInfo event');
       await subscription.cancel();
 
       /// Test that the image descriptor can be used to get the image data.
@@ -304,14 +301,12 @@ void main() {
 
     /// Set up the listener and the test.
     final StreamSubscription<void> subscription =
-        GoogleMapsNavigator.setOnRouteChangedListener(
-          expectAsync0(() {
-            /// Complete the eventReceived completer only once.
-            if (!eventReceived.isCompleted) {
-              eventReceived.complete();
-            }
-          }, max: -1),
-        );
+        GoogleMapsNavigator.setOnRouteChangedListener(() {
+          /// Complete the eventReceived completer only once.
+          if (!eventReceived.isCompleted) {
+            eventReceived.complete();
+          }
+        });
     await $.pumpAndSettle();
 
     /// Simulate location (1298 California St)
@@ -344,7 +339,7 @@ void main() {
     await $.pumpAndSettle();
 
     /// Wait until the event is received and then test cancelling the subscription.
-    await eventReceived.future;
+    await eventReceived.future.withEventTimeout('Route changed event');
     await subscription.cancel();
   });
 
@@ -383,16 +378,16 @@ void main() {
 
     /// Set up the listener and the test.
     final StreamSubscription<RoadSnappedLocationUpdatedEvent> subscription =
-        await GoogleMapsNavigator.setRoadSnappedLocationUpdatedListener(
-          expectAsync1((RoadSnappedLocationUpdatedEvent event) {
-            expectSync(event.location, isA<LatLng>());
+        await GoogleMapsNavigator.setRoadSnappedLocationUpdatedListener((
+          RoadSnappedLocationUpdatedEvent event,
+        ) {
+          expectSync(event.location, isA<LatLng>());
 
-            /// Complete the eventReceived completer only once.
-            if (!eventReceived.isCompleted) {
-              eventReceived.complete();
-            }
-          }, max: -1),
-        );
+          /// Complete the eventReceived completer only once.
+          if (!eventReceived.isCompleted) {
+            eventReceived.complete();
+          }
+        });
 
     /// Start simulation.
     await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
@@ -412,7 +407,7 @@ void main() {
     }
 
     /// Wait until the event is received and then test cancelling the subscription.
-    await eventReceived.future;
+    await eventReceived.future.withEventTimeout('Road-snapped location event');
     await subscription.cancel();
   });
 
@@ -426,16 +421,14 @@ void main() {
 
     /// Set up the listeners and the tests.
     final StreamSubscription<OnArrivalEvent> onArrivalSubscription =
-        GoogleMapsNavigator.setOnArrivalListener(
-          expectAsync1((OnArrivalEvent event) {
-            expectSync(event.waypoint, isA<NavigationWaypoint>());
+        GoogleMapsNavigator.setOnArrivalListener((OnArrivalEvent event) {
+          expectSync(event.waypoint, isA<NavigationWaypoint>());
 
-            /// Comoplete the eventReceived completer only once.
-            if (!eventReceived.isCompleted) {
-              eventReceived.complete();
-            }
-          }, max: -1),
-        );
+          /// Comoplete the eventReceived completer only once.
+          if (!eventReceived.isCompleted) {
+            eventReceived.complete();
+          }
+        });
 
     /// The events are not tested because there's currently no reliable way to trigger them.
     void speedingUpdated(SpeedingUpdatedEvent event) {
@@ -482,7 +475,10 @@ void main() {
     await $.pumpAndSettle();
 
     /// Wait until the event is received and then test cancelling the subscriptions.
-    await eventReceived.future;
+    await eventReceived.future.withEventTimeout(
+      'Arrival event',
+      timeout: arrivalTimeout,
+    );
     await onArrivalSubscription.cancel();
     await onSpeedingUpdatedSubscription.cancel();
   });
@@ -500,16 +496,14 @@ void main() {
 
       /// Set up the rerouting listener with the test.
       final StreamSubscription<void> onReroutingSubscription =
-          GoogleMapsNavigator.setOnReroutingListener(
-            expectAsync0(() {
-              $.log('Rerouting event received');
+          GoogleMapsNavigator.setOnReroutingListener(() {
+            $.log('Rerouting event received');
 
-              /// Complete the eventReceived completer only once.
-              if (!reroutingEventReceived.isCompleted) {
-                reroutingEventReceived.complete();
-              }
-            }, max: -1),
-          );
+            /// Complete the eventReceived completer only once.
+            if (!reroutingEventReceived.isCompleted) {
+              reroutingEventReceived.complete();
+            }
+          });
       await $.pumpAndSettle();
 
       /// Set up GPS availability listeners with completers.

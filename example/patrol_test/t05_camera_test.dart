@@ -136,9 +136,11 @@ void main() {
 
   /// Wait for cameraMoveStarted, cameraMove and cameraIdle events.
   Future<void> waitForCameraEvents(PatrolIntegrationTester $) async {
-    await cameraMoveStartedCompleter.future;
-    await cameraMoveCompleter.future;
-    await cameraIdleCompleter.future;
+    await cameraMoveStartedCompleter.future.withEventTimeout(
+      'Camera move started event',
+    );
+    await cameraMoveCompleter.future.withEventTimeout('Camera move event');
+    await cameraIdleCompleter.future.withEventTimeout('Camera idle event');
     // Check the event positions are not empty.
     expect(
       cameraMoveStartedPosition,

@@ -20,6 +20,7 @@
 // For more information about Flutter integration tests, please see
 // https://docs.flutter.dev/cookbook/testing/integration/introduction
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -191,11 +192,20 @@ void main() {
       $.log('My location clicked event: currently $event');
     }
 
-    /// The events are not tested because there's no reliable way to trigger them currently.
+    final Completer<void> mapClicked = Completer<void>();
+
+    /// A long click is not triggered on purpose. When one arrives while the
+    /// test waits for the tap's click, the device held the tap long enough to
+    /// count as a long press, and no click will follow.
     void onMapLongClicked(LatLng coordinates) {
       $.log(
-        'Map clicked event lat: ${coordinates.latitude}, lng: ${coordinates.longitude}.',
+        'Map long-clicked event lat: ${coordinates.latitude}, lng: ${coordinates.longitude}.',
       );
+      if (!mapClicked.isCompleted) {
+        mapClicked.completeError(
+          TestFailure('The tap was delivered as a long click, not a click.'),
+        );
+      }
     }
 
     void onPoiClicked(PointOfInterest poi) {
@@ -203,6 +213,15 @@ void main() {
         'POI clicked event: placeId=${poi.placeID}, name=${poi.name}, '
         'lat=${poi.latLng.latitude}, lng=${poi.latLng.longitude}.',
       );
+    }
+
+    int mapClickCount = 0;
+    void onMapClicked(LatLng coordinates) {
+      mapClickCount += 1;
+      expectSync(mapClickCount, 1, reason: 'One tap produced several clicks.');
+      if (!mapClicked.isCompleted) {
+        mapClicked.complete();
+      }
     }
 
     /// Set up navigation without initialization to test isMyLocationEnabled
@@ -215,9 +234,7 @@ void main() {
           testMapType: mapTypeVariants.currentValue!,
           initializeNavigation: false,
           simulateLocation: false,
-          onMapClicked: expectAsync1((LatLng msg) {
-            expectSync(msg, isA<LatLng>());
-          }, max: 1),
+          onMapClicked: onMapClicked,
           onMapLongClicked: onMapLongClicked,
           onMyLocationButtonClicked: onMyLocationButtonClicked,
           onMyLocationClicked: onMyLocationClicked,
@@ -226,6 +243,10 @@ void main() {
 
     /// Test that the onMapClicked event comes in.
     await $.platformAutomator.mobile.tapAt(const Offset(0.5, 0.5));
+    await mapClicked.future.withEventTimeout(
+      'Map click event',
+      timeout: const Duration(seconds: 10),
+    );
 
     /// Test the default values match with what has been documented in the
     /// API documentation in google_navigation_flutter.dart file.
