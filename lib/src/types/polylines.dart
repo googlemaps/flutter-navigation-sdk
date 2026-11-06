@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../google_navigation_flutter.dart';
 import '../utils/color.dart';
@@ -69,7 +69,7 @@ class PolylineOptions {
     this.points = const <LatLng>[],
     this.clickable = false,
     this.geodesic = false,
-    this.strokeColor = Colors.black,
+    this.strokeColor = const Color(0xFF000000),
     this.strokeJointType,
     this.strokePattern,
     this.strokeWidth = 10,

@@ -14,7 +14,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../google_navigation_flutter.dart';
 import 'google_navigation_flutter_platform_interface.dart';

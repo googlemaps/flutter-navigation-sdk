@@ -14,7 +14,7 @@
 
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../google_navigation_flutter.dart';
 import '../utils/color.dart';
@@ -70,9 +70,9 @@ class PolygonOptions {
     this.points = const <LatLng>[],
     this.holes = const <List<LatLng>>[],
     this.clickable = false,
-    this.fillColor = Colors.black,
+    this.fillColor = const Color(0xFF000000),
     this.geodesic = false,
-    this.strokeColor = Colors.black,
+    this.strokeColor = const Color(0xFF000000),
     this.strokeWidth = 10,
     this.visible = true,
     this.zIndex = 0,
@@ -95,7 +95,7 @@ class PolygonOptions {
 
   /// Specifies the polygon's fill color.
   ///
-  /// By default, fillColor is [Colors.black].
+  /// By default, fillColor is opaque black.
   final Color fillColor;
 
   /// Specifies whether to draw each segment of this polygon as a geodesic.
@@ -105,7 +105,7 @@ class PolygonOptions {
 
   /// Specifies the polygon's stroke color.
   ///
-  /// By default, strokeColor is [Colors.black].
+  /// By default, strokeColor is opaque black.
   final Color strokeColor;
 
   /// Specifies the polygon's stroke width, in display pixels.
