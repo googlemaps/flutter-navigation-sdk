@@ -14,6 +14,8 @@
 
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui' as ui;
+
 import 'package:meta/meta.dart';
 
 // This is a basic Flutter integration test.
@@ -24,7 +26,8 @@ import 'package:meta/meta.dart';
 // For more information about Flutter integration tests, please see
 // https://docs.flutter.dev/cookbook/testing/integration/introduction
 
-import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 import 'package:patrol/patrol.dart';
@@ -97,6 +100,30 @@ final PlatformAutomatorConfig _platformAutomatorConfig =
       connectionTimeout: Duration(seconds: 240),
     );
 
+/// Lets taps reach platform views on iOS while the test binding is active.
+///
+/// The iOS engine asks [ui.PlatformDispatcher.onHitTest] whether a touch
+/// belongs to a platform view, and blocks it from the native view when no
+/// callback answers. [GestureBinding] installs that callback, but the test
+/// binding's `TestPlatformDispatcher` does not forward it to the real
+/// dispatcher, so every tap on the map is blocked. This installs the answer
+/// [GestureBinding] gives in an app.
+void _forwardPlatformViewHitTest() {
+  ui.PlatformDispatcher.instance.onHitTest = (ui.HitTestRequest request) {
+    final HitTestResult result = HitTestResult();
+    WidgetsBinding.instance.hitTestInView(
+      result,
+      request.offset,
+      request.view.viewId,
+    );
+    return ui.HitTestResponse(
+      hasPlatformView: result.path.any(
+        (HitTestEntry entry) => entry.target is NativeHitTestTarget,
+      ),
+    );
+  };
+}
+
 /// Create a wrapper [patrol] for [patrolTest] with custom options.
 @isTest
 void patrol(
@@ -110,6 +137,7 @@ void patrol(
   patrolTest(
     description,
     (PatrolIntegrationTester $) async {
+      _forwardPlatformViewHitTest();
       // Log the test start.
       $.log('Starting test: $description');
       // Run the test callback.

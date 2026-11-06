@@ -17,9 +17,10 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+
 import 'pages/circles.dart';
 import 'pages/pages.dart';
 import 'utils/utils.dart';
@@ -103,9 +104,8 @@ class _NavigationDemoState extends State<NavigationBody> {
   }
 
   Future<void> _pushPage(BuildContext context, ExamplePage page) async {
-    await Navigator.of(
-      context,
-    ).push(MaterialPageRoute<void>(builder: (_) => page));
+    await Navigator.of(context)
+        .push(MaterialPageRoute<void>(builder: (_) => page));
   }
 
   /// Request permission for accessing the device's location and notifications.

@@ -14,7 +14,7 @@
 
 // ignore_for_file: public_member_api_docs
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 
 import '../utils/utils.dart';
@@ -624,9 +624,8 @@ class CustomNavigationFooterExample extends StatelessWidget {
     final secondaryColor = secondaryTextColor ?? Colors.grey.shade700;
     final remainingDuration = Duration(seconds: timeToDestination);
     final etaTime = DateTime.now().add(remainingDuration);
-    final etaTimeFormatted = TimeOfDay.fromDateTime(
-      etaTime,
-    ).format(context); // Uses locale settings
+    final etaTimeFormatted = TimeOfDay.fromDateTime(etaTime)
+        .format(context); // Uses locale settings
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8),

@@ -17,7 +17,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 
 import '../routes_api/routes_api.dart';
@@ -1129,9 +1129,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     }
   }
 
-  Future<void> _convertNewWaypointMarkerToDestinationMarker(
-    final int index,
-  ) async {
+  Future<void> _convertNewWaypointMarkerToDestinationMarker(int index) async {
     final String title = 'Waypoint $index';
     final ImageDescriptor waypointMarkerImage =
         await registerWaypointMarkerImage(
@@ -1141,16 +1139,17 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
 
     final List<Marker?> destinationMarkers;
     try {
-      destinationMarkers = await _navigationViewController!
-          .updateMarkers(<Marker>[
-            _newWaypointMarker!.copyWith(
-              options: _newWaypointMarker!.options.copyWith(
-                infoWindow: InfoWindow(title: title),
-                anchor: const MarkerAnchor(u: 0.5, v: 1.2),
-                icon: waypointMarkerImage,
-              ),
+      destinationMarkers = await _navigationViewController!.updateMarkers(
+        <Marker>[
+          _newWaypointMarker!.copyWith(
+            options: _newWaypointMarker!.options.copyWith(
+              infoWindow: InfoWindow(title: title),
+              anchor: const MarkerAnchor(u: 0.5, v: 1.2),
+              icon: waypointMarkerImage,
             ),
-          ]);
+          ),
+        ],
+      );
     } on MarkerNotFoundException catch (e) {
       debugPrint(e.toString());
       _showMessage('Marker not found');

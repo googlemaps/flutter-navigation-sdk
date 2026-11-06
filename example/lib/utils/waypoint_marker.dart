@@ -15,7 +15,7 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 
 const Size _markerSize = Size(80, 80); // Example size in logical pixels

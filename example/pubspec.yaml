@@ -17,7 +17,8 @@ description: Demonstrates how to use the google_navigation_flutter plugin.
 publish_to: "none"
 
 environment:
-  sdk: ^3.8.0
+  sdk: ^3.13.0
+  flutter: ">=3.47.0"
 
 dependencies:
   cupertino_icons: ^1.0.8
@@ -27,6 +28,7 @@ dependencies:
   google_navigation_flutter:
     path: ../
   http: ^1.1.2
+  material_ui: ^1.10.0
   permission_handler: ^11.3.1
   pointer_interceptor: ^0.10.1+2
 
