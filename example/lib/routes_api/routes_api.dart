@@ -47,7 +47,7 @@ Future<List<String>> getRouteToken(List<NavigationWaypoint> waypoints) async {
     'destination': _toRoutesApiWaypoint(waypoints.last),
     'intermediates': waypoints
         .sublist(1, waypoints.length - 1)
-        .map((NavigationWaypoint wp) => _toRoutesApiWaypoint(wp, via: true))
+        .map(_toRoutesApiWaypoint)
         .toList(),
     'travelMode': 'DRIVE',
     'routingPreference': 'TRAFFIC_AWARE',
@@ -89,15 +89,13 @@ Future<List<String>> getRouteToken(List<NavigationWaypoint> waypoints) async {
 
 /// Converts a [NavigationWaypoint] to a waypoint request format supported
 /// by the Routes API.
-Map<String, dynamic> _toRoutesApiWaypoint(
-  NavigationWaypoint waypoint, {
-  bool via = false,
-}) {
+Map<String, dynamic> _toRoutesApiWaypoint(NavigationWaypoint waypoint) {
   assert(
     waypoint.target != null || waypoint.placeID != null,
     'Invalid NavigationWaypoint: Either target or placeID must be provided.',
   );
-  final Map<String, dynamic> output = <String, dynamic>{'via': via};
+  // Route tokens require stopovers, not pass-through (`via`) waypoints.
+  final Map<String, dynamic> output = <String, dynamic>{'via': false};
   if (waypoint.placeID != null) {
     output['placeId'] = waypoint.placeID;
   } else if (waypoint.target != null) {

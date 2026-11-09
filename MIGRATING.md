@@ -5,9 +5,47 @@ This document covers breaking changes and migration steps between versions of
 
 ## Table of Contents
 
+- [Migrating from 0.12.0 to 0.12.1](#migrating-from-0120-to-0121)
 - [Migrating from 0.11.x to 0.12.x](#migrating-from-011x-to-012x)
 
 ---
+
+## Migrating from 0.12.0 to 0.12.1
+
+Version 0.12.1 upgrades the Android Navigation SDK from 8.0.0 to 8.1.0.
+The iOS Navigation SDK remains at 11.3.0. Existing destination APIs remain
+supported; the new token-only API is available on both platforms.
+
+For the upstream Android changes, see the
+[Navigation SDK 8.1.0 release notes](https://developers.google.com/maps/documentation/navigation/android-sdk/release-notes#November_04_2026).
+
+### Migrate route-token requests
+
+Use `GoogleMapsNavigator.setDestinationsWithToken` instead of
+`Destinations.routeTokenOptions`, which is deprecated:
+
+```dart
+final NavigationRouteStatus status =
+    await GoogleMapsNavigator.setDestinationsWithToken(
+  routeToken,
+  displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
+);
+```
+
+The token defines the destinations and routing parameters on both Android and
+iOS. Do not pass waypoints, a travel mode, or routing options to the new method.
+`displayOptions` is optional. A previous walking or cycling route does not
+prevent using a supported route token.
+
+Existing `setDestinations` calls with `routeTokenOptions` remain supported,
+including their previous platform-specific behavior: Android passes the
+waypoints with the token, while iOS does not. New callers should use the
+dedicated method.
+
+On both platforms, routing options encoded in the route token, including the
+travel mode, take precedence over client-side settings. A successful route
+status means a route was found, not necessarily that the planned route was
+followed exactly.
 
 ## Migrating from 0.11.x to 0.12.x
 

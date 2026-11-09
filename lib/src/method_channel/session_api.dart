@@ -240,6 +240,29 @@ class NavigationSessionAPIImpl {
     }
   }
 
+  /// Sets destinations and routing parameters from a route token.
+  Future<NavigationRouteStatus> setDestinationsWithToken(
+    String routeToken, {
+    NavigationDisplayOptions? displayOptions,
+  }) async {
+    try {
+      final RouteStatusDto status = await _sessionApi.setDestinationsWithToken(
+        routeToken,
+        (displayOptions ?? NavigationDisplayOptions()).toDto(),
+      );
+      return status.toNavigationRouteStatus();
+    } on PlatformException catch (e) {
+      switch (e.code) {
+        case 'sessionNotInitialized':
+          throw const SessionNotInitializedException();
+        case 'routeStatusUnavailable':
+          throw RouteStatusUnavailableException(e.details as String?);
+        default:
+          rethrow;
+      }
+    }
+  }
+
   /// Clears destinations.
   Future<void> clearDestinations() async {
     try {

@@ -134,7 +134,7 @@ class GoogleMapsNavigator {
   ///
   /// This event is triggered when a new navigation session starts with guidance active.
   /// On both Android and iOS, this fires when:
-  /// - A route has been set via [setDestinations]
+  /// - A route has been set via [setDestinations] or [setDestinationsWithToken]
   /// - Guidance is started with [startGuidance]
   ///
   /// On Android, this wraps Navigator.NavigationSessionListener.onNewNavigationSession.
@@ -586,7 +586,8 @@ class GoogleMapsNavigator {
   ///
   /// Destinations are passed as [NavigationWaypoint] waypoints and options with
   /// [destinations] parameter. Routing can be controlled by defining
-  /// [RoutingOptions], or using route tokens passed with [RouteTokenOptions].
+  /// [RoutingOptions]. To route using a route token instead of waypoints, use
+  /// [setDestinationsWithToken].
   /// [NavigationDisplayOptions] will be used to display the route.
   ///
   /// If the options are omitted, the default routing and display options will
@@ -603,6 +604,33 @@ class GoogleMapsNavigator {
   ) {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
         .setDestinations(destinations);
+  }
+
+  /// Sets destinations for navigation using a route token.
+  ///
+  /// The token must be obtained from the Routes API or Route Optimization API.
+  /// It defines the destinations and routing parameters, including travel mode;
+  /// no waypoints or client-side routing options are required. A previous
+  /// walking or cycling route does not prevent using a supported route token.
+  ///
+  /// [displayOptions] controls route presentation. Destination markers are
+  /// shown unless explicitly disabled.
+  ///
+  /// Requires an initialized navigation session and an available user location.
+  /// Completes when the SDK finishes calculating the route. A route that cannot
+  /// be found completes with a failure [NavigationRouteStatus].
+  /// [NavigationRouteStatus.statusOk] means a route was found, not necessarily
+  /// that the planned route was followed exactly.
+  ///
+  /// Throws [SessionNotInitializedException] if the session is not initialized,
+  /// or [RouteStatusUnavailableException] if the SDK returns no route status.
+  /// Use [continueToNextDestination] to advance through a multi-destination token.
+  static Future<NavigationRouteStatus> setDestinationsWithToken(
+    String routeToken, {
+    NavigationDisplayOptions? displayOptions,
+  }) {
+    return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
+        .setDestinationsWithToken(routeToken, displayOptions: displayOptions);
   }
 
   /// Clears existing destinations.
@@ -748,7 +776,8 @@ class RouteTokenMalformedException implements Exception {
 /// A route request has failed, because the Navigation SDK returned no route
 /// status.
 ///
-/// Thrown by [GoogleMapsNavigator.setDestinations] on Android and iOS, and by
+/// Thrown by [GoogleMapsNavigator.setDestinations] and
+/// [GoogleMapsNavigator.setDestinationsWithToken] on Android and iOS, and by
 /// the `simulateLocationsAlongNewRoute` methods of [Simulator] on Android.
 /// {@category Navigation}
 class RouteStatusUnavailableException implements Exception {

@@ -538,6 +538,25 @@ constructor(
   }
 
   /**
+   * Wraps [Navigator.setDestinationsWithToken], using the token's destinations and routing
+   * parameters.
+   */
+  fun setDestinationsWithToken(
+    routeToken: String,
+    displayOptions: DisplayOptions,
+    callback: (Result<Navigator.RouteStatus>) -> Unit,
+  ) {
+    try {
+      getNavigator().setDestinationsWithToken(routeToken, displayOptions) {
+        routeDescription: RouteDescription? ->
+        callback(routeStatusResult(routeDescription))
+      }
+    } catch (e: Throwable) {
+      callback(Result.failure(e))
+    }
+  }
+
+  /**
    * Returns the route status of [routeDescription], or fails when the SDK passes none. The SDK does
    * not annotate the callback parameter as non-null.
    */

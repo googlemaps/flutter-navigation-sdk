@@ -6008,6 +6008,10 @@ protocol NavigationSessionApi {
   func stopGuidance() throws
   func setDestinations(
     destinations: DestinationsDto, completion: @escaping (Result<RouteStatusDto, Error>) -> Void)
+  /// Sets destinations and routing parameters from a route token.
+  func setDestinationsWithToken(
+    routeToken: String, displayOptions: NavigationDisplayOptionsDto,
+    completion: @escaping (Result<RouteStatusDto, Error>) -> Void)
   func clearDestinations() throws
   func continueToNextDestination(
     completion: @escaping (Result<ContinueToNextDestinationResponseDto, Error>) -> Void)
@@ -6254,6 +6258,29 @@ class NavigationSessionApiSetup {
       }
     } else {
       setDestinationsChannel.setMessageHandler(nil)
+    }
+    /// Sets destinations and routing parameters from a route token.
+    let setDestinationsWithTokenChannel = FlutterBasicMessageChannel(
+      name:
+        "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setDestinationsWithToken\(channelSuffix)",
+      binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setDestinationsWithTokenChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let routeTokenArg = args[0] as! String
+        let displayOptionsArg = args[1] as! NavigationDisplayOptionsDto
+        api.setDestinationsWithToken(routeToken: routeTokenArg, displayOptions: displayOptionsArg) {
+          result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setDestinationsWithTokenChannel.setMessageHandler(nil)
     }
     let clearDestinationsChannel = FlutterBasicMessageChannel(
       name:

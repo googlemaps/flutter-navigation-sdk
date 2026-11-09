@@ -5947,6 +5947,12 @@ abstract class TestNavigationSessionApi {
 
   Future<RouteStatusDto> setDestinations(DestinationsDto destinations);
 
+  /// Sets destinations and routing parameters from a route token.
+  Future<RouteStatusDto> setDestinationsWithToken(
+    String routeToken,
+    NavigationDisplayOptionsDto displayOptions,
+  );
+
   void clearDestinations();
 
   Future<ContinueToNextDestinationResponseDto> continueToNextDestination();
@@ -6425,6 +6431,52 @@ abstract class TestNavigationSessionApi {
                 );
               }
             });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?>
+      pigeonVar_channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setDestinationsWithToken$messageChannelSuffix',
+        pigeonChannelCodec,
+        binaryMessenger: binaryMessenger,
+      );
+      if (api == null) {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+      } else {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<
+          Object?
+        >(pigeonVar_channel, (Object? message) async {
+          assert(
+            message != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setDestinationsWithToken was null.',
+          );
+          final List<Object?> args = (message as List<Object?>?)!;
+          final String? arg_routeToken = (args[0] as String?);
+          assert(
+            arg_routeToken != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setDestinationsWithToken was null, expected non-null String.',
+          );
+          final NavigationDisplayOptionsDto? arg_displayOptions =
+              (args[1] as NavigationDisplayOptionsDto?);
+          assert(
+            arg_displayOptions != null,
+            'Argument for dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setDestinationsWithToken was null, expected non-null NavigationDisplayOptionsDto.',
+          );
+          try {
+            final RouteStatusDto output = await api.setDestinationsWithToken(
+              arg_routeToken!,
+              arg_displayOptions!,
+            );
+            return <Object?>[output];
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+              error: PlatformException(code: 'error', message: e.toString()),
+            );
+          }
+        });
       }
     }
     {
