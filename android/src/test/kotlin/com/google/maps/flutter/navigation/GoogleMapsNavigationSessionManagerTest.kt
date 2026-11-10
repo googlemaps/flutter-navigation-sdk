@@ -78,13 +78,30 @@ internal class GoogleMapsNavigationSessionManagerTest {
   }
 
   @Test
+  fun destinationRequests_reportUninitializedSessionWithoutThrowing() {
+    GoogleMapsNavigatorHolder.setNavigator(null)
+
+    for (request in destinationRequests()) {
+      val results = mutableListOf<Result<RouteStatusDto>>()
+      request(results::add)
+
+      assertEquals(1, results.size)
+      assertEquals(
+        "sessionNotInitialized",
+        (results.single().exceptionOrNull() as FlutterError).code,
+      )
+    }
+  }
+
+  @Test
   fun setDestinations_waitsForCallbackBeforeCompletingTimeoutResult() {
     val routeCallback = slot<RouteDescriptionLoadCallback>()
+    val displayOptions = slot<DisplayOptions>()
     every {
       navigator.setDestinations(
         any<List<Waypoint>>(),
         any<RoutingOptions>(),
-        any<DisplayOptions>(),
+        capture(displayOptions),
         capture(routeCallback),
       )
     } just Runs
@@ -92,29 +109,35 @@ internal class GoogleMapsNavigationSessionManagerTest {
       navigator.setDestinations(
         any<List<Waypoint>>(),
         any<CustomRoutesOptions>(),
-        any<DisplayOptions>(),
+        capture(displayOptions),
         capture(routeCallback),
       )
     } just Runs
-    val handler = GoogleMapsNavigationSessionMessageHandler(sessionManager)
-
-    for (routeTokenOptions in listOf(null, RouteTokenOptionsDto("dG9rZW4="))) {
-      val destinations =
-        DestinationsDto(
-          waypoints = listOf(NavigationWaypointDto("Destination", LatLngDto(60.0, 25.0))),
-          displayOptions = NavigationDisplayOptionsDto(),
-          routeTokenOptions = routeTokenOptions,
-        )
-      val results = mutableListOf<Result<RouteStatusDto>>()
-      handler.setDestinations(destinations, results::add)
-      assertEquals(0, results.size)
-
-      routeCallback.captured.onRouteDescription(
-        RouteDescription(Navigator.RouteStatus.ROUTING_TIMEOUT)
+    every {
+      navigator.setDestinationsWithToken(
+        "dG9rZW4=",
+        capture(displayOptions),
+        capture(routeCallback),
       )
+    } just Runs
 
-      assertEquals(1, results.size)
-      assertEquals(RouteStatusDto.ROUTING_TIMEOUT, results.single().getOrThrow())
+    for (showDestinationMarkers in listOf(null, false, true)) {
+      for (request in destinationRequests(NavigationDisplayOptionsDto(showDestinationMarkers))) {
+        val results = mutableListOf<Result<RouteStatusDto>>()
+        request(results::add)
+        assertEquals(0, results.size)
+        assertEquals(
+          showDestinationMarkers == false,
+          displayOptions.captured.hideDestinationMarkers,
+        )
+
+        routeCallback.captured.onRouteDescription(
+          RouteDescription(Navigator.RouteStatus.ROUTING_TIMEOUT, null)
+        )
+
+        assertEquals(1, results.size)
+        assertEquals(RouteStatusDto.ROUTING_TIMEOUT, results.single().getOrThrow())
+      }
     }
   }
 
@@ -137,16 +160,17 @@ internal class GoogleMapsNavigationSessionManagerTest {
         any<RouteDescriptionLoadCallback>(),
       )
     } throws error
-
-    for (routeTokenOptions in listOf(null, RouteTokenOptionsDto("dG9rZW4="))) {
-      val results = mutableListOf<Result<Navigator.RouteStatus>>()
-      sessionManager.setDestinations(
-        listOf(waypoint),
-        RoutingOptions(),
-        DisplayOptions(),
-        routeTokenOptions,
-        results::add,
+    every {
+      navigator.setDestinationsWithToken(
+        "dG9rZW4=",
+        any<DisplayOptions>(),
+        any<RouteDescriptionLoadCallback>(),
       )
+    } throws error
+
+    for (request in destinationRequests()) {
+      val results = mutableListOf<Result<RouteStatusDto>>()
+      request(results::add)
 
       assertEquals(1, results.size)
       assertSame(error, results.single().exceptionOrNull())
@@ -198,7 +222,7 @@ internal class GoogleMapsNavigationSessionManagerTest {
       assertEquals(0, results.size)
 
       routeCallback.captured.onRouteDescription(
-        RouteDescription(Navigator.RouteStatus.ROUTING_TIMEOUT)
+        RouteDescription(Navigator.RouteStatus.ROUTING_TIMEOUT, null)
       )
 
       assertEquals(1, results.size)
@@ -227,6 +251,9 @@ internal class GoogleMapsNavigationSessionManagerTest {
         any<DisplayOptions>(),
         capture(routeCallback),
       )
+    } just Runs
+    every {
+      navigator.setDestinationsWithToken("dG9rZW4=", any<DisplayOptions>(), capture(routeCallback))
     } just Runs
     every { navigator.simulator } returns simulator
     every { simulator.simulateLocationsAlongNewRoute(waypoints, capture(routeCallback)) } just Runs
@@ -262,6 +289,9 @@ internal class GoogleMapsNavigationSessionManagerTest {
             callback,
           )
         },
+        { callback ->
+          sessionManager.setDestinationsWithToken("dG9rZW4=", DisplayOptions(), callback)
+        },
         { callback -> sessionManager.simulateLocationsAlongNewRoute(waypoints, callback) },
         { callback ->
           sessionManager.simulateLocationsAlongNewRouteWithRoutingOptions(
@@ -291,5 +321,26 @@ internal class GoogleMapsNavigationSessionManagerTest {
         (results.single().exceptionOrNull() as FlutterError).code,
       )
     }
+  }
+
+  private fun destinationRequests(
+    displayOptions: NavigationDisplayOptionsDto = NavigationDisplayOptionsDto()
+  ): List<((Result<RouteStatusDto>) -> Unit) -> Unit> {
+    val handler = GoogleMapsNavigationSessionMessageHandler(sessionManager)
+    val destinations =
+      DestinationsDto(
+        waypoints = listOf(NavigationWaypointDto("Destination", LatLngDto(60.0, 25.0))),
+        displayOptions = displayOptions,
+      )
+    return listOf(
+      { callback -> handler.setDestinations(destinations, callback) },
+      { callback ->
+        handler.setDestinations(
+          destinations.copy(routeTokenOptions = RouteTokenOptionsDto("dG9rZW4=")),
+          callback,
+        )
+      },
+      { callback -> handler.setDestinationsWithToken("dG9rZW4=", displayOptions, callback) },
+    )
   }
 }

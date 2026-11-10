@@ -212,6 +212,58 @@ class ConvertTests: XCTestCase {
     XCTAssertEqual(pigeonError.details as? String, "No route")
   }
 
+  func testConvertRouteCompletionFailsWithoutRouteDescriptionOrError() {
+    let result = Convert.convertRouteCompletion(routeDescription: nil, error: nil)
+
+    guard case .failure(let error) = result, let pigeonError = error as? PigeonError else {
+      return XCTFail("Expected a PigeonError, got \(result)")
+    }
+    XCTAssertEqual(pigeonError.code, "routeStatusUnavailable")
+  }
+
+  func testSetDestinationsWithTokenFailsOnceWithoutNavigationSession() {
+    let manager = GoogleMapsNavigationSessionManager()
+    var completionCount = 0
+
+    manager.setDestinationsWithToken(
+      routeToken: "token",
+      displayOptions: NavigationDisplayOptionsDto()
+    ) { result in
+      completionCount += 1
+      guard case .failure(let error) = result,
+        let managerError = error as? GoogleMapsNavigationSessionManagerError,
+        case .sessionNotInitialized = managerError
+      else {
+        return XCTFail("Expected sessionNotInitialized, got \(result)")
+      }
+    }
+
+    XCTAssertEqual(completionCount, 1)
+  }
+
+  func testLegacyTokenDestinationsFailOnceWithoutNavigationSession() {
+    let manager = GoogleMapsNavigationSessionManager()
+    var completionCount = 0
+
+    manager.setDestinations(
+      destinations: DestinationsDto(
+        waypoints: [],
+        displayOptions: NavigationDisplayOptionsDto(),
+        routeTokenOptions: RouteTokenOptionsDto(routeToken: "token", travelMode: .driving)
+      )
+    ) { result in
+      completionCount += 1
+      guard case .failure(let error) = result,
+        let managerError = error as? GoogleMapsNavigationSessionManagerError,
+        case .sessionNotInitialized = managerError
+      else {
+        return XCTFail("Expected sessionNotInitialized, got \(result)")
+      }
+    }
+
+    XCTAssertEqual(completionCount, 1)
+  }
+
   func testConvertTravelMode() {
     XCTAssertTrue(Convert.convertTravelMode(nil) == .driving)
     XCTAssertTrue(Convert.convertTravelMode(.driving) == .driving)

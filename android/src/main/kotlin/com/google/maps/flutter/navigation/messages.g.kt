@@ -7051,6 +7051,13 @@ interface NavigationSessionApi {
 
   fun setDestinations(destinations: DestinationsDto, callback: (Result<RouteStatusDto>) -> Unit)
 
+  /** Sets destinations and routing parameters from a route token. */
+  fun setDestinationsWithToken(
+    routeToken: String,
+    displayOptions: NavigationDisplayOptionsDto,
+    callback: (Result<RouteStatusDto>) -> Unit,
+  )
+
   fun clearDestinations()
 
   fun continueToNextDestination(callback: (Result<ContinueToNextDestinationResponseDto>) -> Unit)
@@ -7381,6 +7388,33 @@ interface NavigationSessionApi {
             val args = message as List<Any?>
             val destinationsArg = args[0] as DestinationsDto
             api.setDestinations(destinationsArg) { result: Result<RouteStatusDto> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(MessagesPigeonUtils.wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(MessagesPigeonUtils.wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel =
+          BasicMessageChannel<Any?>(
+            binaryMessenger,
+            "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionApi.setDestinationsWithToken$separatedMessageChannelSuffix",
+            codec,
+          )
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val routeTokenArg = args[0] as String
+            val displayOptionsArg = args[1] as NavigationDisplayOptionsDto
+            api.setDestinationsWithToken(routeTokenArg, displayOptionsArg) {
+              result: Result<RouteStatusDto> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))

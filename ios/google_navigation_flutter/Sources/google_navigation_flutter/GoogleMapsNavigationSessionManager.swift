@@ -326,6 +326,32 @@ class GoogleMapsNavigationSessionManager: NSObject {
     }
   }
 
+  func setDestinationsWithToken(
+    routeToken: String,
+    displayOptions: NavigationDisplayOptionsDto,
+    completion: @escaping (Result<RouteStatusDto, Error>) -> Void
+  ) {
+    do {
+      _isNewNavigationSessionDetected = false
+      handleDisplayOptionsIfNeeded(
+        options: NavigationDisplayOptionsDto(
+          showDestinationMarkers: displayOptions.showDestinationMarkers ?? true))
+
+      let navigator = try getNavigator()
+      // Driving accepts both driving and two-wheeler tokens. Reset any previous
+      // walking or cycling mode, which the SDK rejects for token routing.
+      try getSession().travelMode = .driving
+
+      let completionHandler: GMSNavigationRouteCompletionHandler = { routeDescription, error in
+        completion(
+          Convert.convertRouteCompletion(routeDescription: routeDescription, error: error))
+      }
+      navigator.setDestinationsWithToken(routeToken, completionHandler: completionHandler)
+    } catch {
+      completion(.failure(error))
+    }
+  }
+
   func clearDestinations() throws {
     try getNavigator().clearDestinations()
     _isNewNavigationSessionDetected = false

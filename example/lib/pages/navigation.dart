@@ -159,6 +159,9 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   /// If true, route tokens and Routes API are used to calculate the route.
   bool _routeTokensEnabled = false;
 
+  /// Routing mode of the last successfully calculated route.
+  bool _activeRouteUsesToken = false;
+
   /// Used to track if navigator has been initialized at least once.
   /// In this example app navigator can be cleaned up and re-initialized.
   /// This variable is used to make sure that navigator is initialized before
@@ -972,6 +975,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       _delaySeverity = TrafficDelaySeverity.noData;
       _waitingForUserToContinue = false;
       _arrivedWaypoint = null;
+      _activeRouteUsesToken = false;
     });
   }
 
@@ -1172,11 +1176,17 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
   Future<void> _arrivedToWaypoint(NavigationWaypoint waypoint) async {
     debugPrint('Arrived to waypoint: ${waypoint.title}');
 
-    // Find the waypoint which has been arrived to.
-    final int waypointIndex = _waypoints.indexWhere(
-      (NavigationWaypoint currentWaypoint) =>
-          currentWaypoint.title == waypoint.title,
-    );
+    // Token-derived waypoints do not retain the example's local titles.
+    // Arrivals follow the ordered stopovers submitted to the Routes API.
+    final int waypointIndex = _activeRouteUsesToken
+        ? (_waypoints.isEmpty ? -1 : 0)
+        : _waypoints.indexWhere(
+            (NavigationWaypoint currentWaypoint) =>
+                currentWaypoint.title == waypoint.title,
+          );
+    final NavigationWaypoint arrivedWaypoint = waypointIndex >= 0
+        ? _waypoints[waypointIndex]
+        : waypoint;
 
     if (waypointIndex >= 0) {
       // Remove the corresponding destination marker.
@@ -1212,7 +1222,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       await _stopGuidance();
 
       _showMessage(
-        'You have arrived at ${waypoint.title}. Tap "Continue guidance" to proceed to the next destination.',
+        'You have arrived at ${arrivedWaypoint.title}. Tap "Continue guidance" to proceed to the next destination.',
       );
     }
 
@@ -1228,7 +1238,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     // Set state to waiting for user to continue
     setState(() {
       _waitingForUserToContinue = _waypoints.isNotEmpty;
-      _arrivedWaypoint = waypoint;
+      _arrivedWaypoint = arrivedWaypoint;
     });
   }
 
@@ -1294,15 +1304,13 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       await _initializeNavigator();
     }
 
-    // If route tokens are enabled, build destinations with route tokens.
-    final Destinations? destinations = _routeTokensEnabled
-        ? (await _buildDestinationsWithRoutesApi())
-        : _buildDestinations();
+    final bool useRouteToken = _routeTokensEnabled;
+    final String? routeToken = useRouteToken
+        ? await _fetchRouteTokenWithRoutesApi()
+        : null;
 
-    if (destinations == null) {
-      // Failed to build destinations.
-      // This can happen if route tokens are enabled and route token could
-      // not be fetched.
+    if (useRouteToken && routeToken == null) {
+      // Failed to fetch a route token.
       setState(() {
         _errorOnSetDestinations = true;
       });
@@ -1310,14 +1318,21 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     }
 
     try {
-      final NavigationRouteStatus navRouteStatus =
-          await GoogleMapsNavigator.setDestinations(destinations);
+      final NavigationRouteStatus navRouteStatus = useRouteToken
+          ? await GoogleMapsNavigator.setDestinationsWithToken(
+              routeToken!,
+              displayOptions: NavigationDisplayOptions(
+                showDestinationMarkers: false,
+              ),
+            )
+          : await GoogleMapsNavigator.setDestinations(_buildDestinations());
 
       switch (navRouteStatus) {
         case NavigationRouteStatus.statusOk:
           // Route is valid. Return true as success.
           setState(() {
             _errorOnSetDestinations = false;
+            _activeRouteUsesToken = useRouteToken;
           });
           return true;
         case NavigationRouteStatus.internalError:
@@ -1371,8 +1386,6 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
         case NavigationRouteStatus.routingTimeout:
           _showMessage('The route calculation timed out. Please try again.');
       }
-    } on RouteTokenMalformedException catch (_) {
-      _showMessage('Malformed route token');
     } on SessionNotInitializedException catch (_) {
       _showMessage('Cannot set destinations, session not initialized');
     }
@@ -1393,7 +1406,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     await _updateNavigationDestinationsAndNavigationViewState();
   }
 
-  Destinations? _buildDestinations() {
+  Destinations _buildDestinations() {
     // Show delayed calculating route message.
     unawaited(showCalculatingRouteMessage());
 
@@ -1404,7 +1417,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     );
   }
 
-  Future<Destinations?> _buildDestinationsWithRoutesApi() async {
+  Future<String?> _fetchRouteTokenWithRoutesApi() async {
     assert(_routeTokensEnabled);
 
     _showMessage('Using route token from Routes API.');
@@ -1433,14 +1446,7 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
       );
     }
 
-    return Destinations(
-      waypoints: _waypoints,
-      displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
-      routeTokenOptions: RouteTokenOptions(
-        routeToken: routeTokens.first, // Uses first fetched route token.
-        travelMode: _travelMode,
-      ),
-    );
+    return routeTokens.first;
   }
 
   Future<void> _startGuidance() async {

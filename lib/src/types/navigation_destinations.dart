@@ -25,6 +25,7 @@ class Destinations {
     required this.waypoints,
     required this.displayOptions,
     this.routingOptions,
+    @Deprecated('Use GoogleMapsNavigator.setDestinationsWithToken instead.')
     this.routeTokenOptions,
   }) : assert(
          routeTokenOptions == null || routingOptions == null,
@@ -45,6 +46,10 @@ class Destinations {
   final RoutingOptions? routingOptions;
 
   /// Navigation route token options.
+  ///
+  /// Existing callers remain supported. Use
+  /// [GoogleMapsNavigator.setDestinationsWithToken] to route with only a token.
+  @Deprecated('Use GoogleMapsNavigator.setDestinationsWithToken instead.')
   final RouteTokenOptions? routeTokenOptions;
 
   @override
@@ -64,6 +69,9 @@ class Destinations {
 /// [GoogleMapsNavigator.setDestinations] method. It allows the integration
 /// of a predefined route token, which the SDK can utilize for
 /// routing if possible.
+///
+/// For new route-token requests, use
+/// [GoogleMapsNavigator.setDestinationsWithToken] without these options.
 ///
 /// {@category Navigation}
 class RouteTokenOptions {

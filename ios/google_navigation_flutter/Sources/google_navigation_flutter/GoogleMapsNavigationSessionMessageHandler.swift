@@ -112,6 +112,18 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
     )
   }
 
+  func setDestinationsWithToken(
+    routeToken: String,
+    displayOptions: NavigationDisplayOptionsDto,
+    completion: @escaping (Result<RouteStatusDto, Error>) -> Void
+  ) {
+    GoogleMapsNavigationSessionManager.shared.setDestinationsWithToken(
+      routeToken: routeToken,
+      displayOptions: displayOptions,
+      completion: completion
+    )
+  }
+
   func clearDestinations() throws {
     try GoogleMapsNavigationSessionManager.shared.clearDestinations()
   }

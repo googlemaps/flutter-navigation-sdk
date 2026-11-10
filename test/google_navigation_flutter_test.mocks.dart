@@ -215,6 +215,22 @@ class MockTestNavigationSessionApi extends _i1.Mock
           as _i4.Future<_i2.RouteStatusDto>);
 
   @override
+  _i4.Future<_i2.RouteStatusDto> setDestinationsWithToken(
+    String? routeToken,
+    _i2.NavigationDisplayOptionsDto? displayOptions,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#setDestinationsWithToken, [
+              routeToken,
+              displayOptions,
+            ]),
+            returnValue: _i4.Future<_i2.RouteStatusDto>.value(
+              _i2.RouteStatusDto.internalError,
+            ),
+          )
+          as _i4.Future<_i2.RouteStatusDto>);
+
+  @override
   void clearDestinations() => super.noSuchMethod(
     Invocation.method(#clearDestinations, []),
     returnValueForMissingStub: null,

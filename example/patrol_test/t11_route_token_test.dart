@@ -26,13 +26,14 @@ void main() {
   // The token is fetched from the Routes API with the same MAPS_API_KEY the
   // app uses, so the key must have the Routes API enabled. A failed fetch
   // fails the test instead of skipping it, so a broken token path cannot pass.
-  patrol('Test navigating to a destination with a route token', (
+  patrol('Route-token navigation after walking and cycling routes', (
     PatrolIntegrationTester $,
   ) async {
     final Completer<void> hasArrived = Completer<void>();
 
     final GoogleNavigationViewController viewController =
         await startNavigationWithoutDestination($);
+    addTearDown(GoogleMapsNavigator.cleanup);
 
     await setSimulatedUserLocationWithCheck(
       $,
@@ -58,32 +59,46 @@ void main() {
     ]);
     expect(routeTokens, isNotEmpty);
 
-    final NavigationRouteStatus status =
-        await GoogleMapsNavigator.setDestinations(
-          Destinations(
-            waypoints: <NavigationWaypoint>[destination],
+    // setDestinations is setup: leave the session in walking/cycling mode.
+    // setDestinationsWithToken must then use the driving mode encoded in the
+    // token, rather than fail on iOS with travelModeUnsupported.
+    for (final NavigationTravelMode priorMode in <NavigationTravelMode>[
+      NavigationTravelMode.walking,
+      NavigationTravelMode.cycling,
+    ]) {
+      final NavigationRouteStatus priorStatus =
+          await GoogleMapsNavigator.setDestinations(
+            Destinations(
+              waypoints: <NavigationWaypoint>[destination],
+              routingOptions: RoutingOptions(travelMode: priorMode),
+              displayOptions: NavigationDisplayOptions(
+                showDestinationMarkers: false,
+              ),
+            ),
+          );
+      expect(priorStatus, NavigationRouteStatus.statusOk);
+
+      final NavigationRouteStatus status =
+          await GoogleMapsNavigator.setDestinationsWithToken(
+            routeTokens.first,
             displayOptions: NavigationDisplayOptions(
               showDestinationMarkers: false,
             ),
-            routeTokenOptions: RouteTokenOptions(
-              routeToken: routeTokens.first,
-              travelMode: NavigationTravelMode.driving,
-            ),
-          ),
-        );
-    expect(status, NavigationRouteStatus.statusOk);
+          );
+      expect(status, NavigationRouteStatus.statusOk);
 
-    final List<RouteSegment> segments =
-        await GoogleMapsNavigator.getRouteSegments();
-    expect(segments, isNotEmpty);
-    expect(
-      segments.last.destinationLatLng.latitude,
-      closeTo(endLat, tolerance),
-    );
-    expect(
-      segments.last.destinationLatLng.longitude,
-      closeTo(endLng, tolerance),
-    );
+      final List<RouteSegment> segments =
+          await GoogleMapsNavigator.getRouteSegments();
+      expect(segments, isNotEmpty);
+      expect(
+        segments.last.destinationLatLng.latitude,
+        closeTo(endLat, tolerance),
+      );
+      expect(
+        segments.last.destinationLatLng.longitude,
+        closeTo(endLng, tolerance),
+      );
+    }
 
     final StreamSubscription<OnArrivalEvent> onArrivalSubscription =
         GoogleMapsNavigator.setOnArrivalListener((OnArrivalEvent event) {
@@ -91,6 +106,7 @@ void main() {
             hasArrived.complete();
           }
         });
+    addTearDown(onArrivalSubscription.cancel);
 
     await GoogleMapsNavigator.startGuidance();
     await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
@@ -101,8 +117,5 @@ void main() {
         'Did not arrive at the route token destination',
       ),
     );
-
-    await onArrivalSubscription.cancel();
-    await GoogleMapsNavigator.cleanup();
   });
 }

@@ -40,7 +40,7 @@ Upgrading an existing app? See the [migration guide](MIGRATING.md).
 
 ### Android
 
-This plugin uses Navigation SDK for Android 8.0.0. Flutter 3.44 to 3.46 support
+This plugin uses Navigation SDK for Android 8.1.0. Flutter 3.44 to 3.46 support
 AGP 9 only with built-in Kotlin disabled, so configure these settings in
 `android/gradle.properties`:
 
@@ -60,7 +60,7 @@ android {
 }
 ```
 
-Navigation SDK 8.0.0 requires core library desugaring. Enable it in your app's
+Navigation SDK 8.1.0 requires core library desugaring. Enable it in your app's
 `android/app/build.gradle`:
 ```groovy
 android {
@@ -175,6 +175,33 @@ class _NavigationSampleState extends State<NavigationSample> {
 > Route calculation is only available after the Navigation SDK has successfully acquired the user's location. If the location is not yet available when trying to set a destination, the SDK will return a NavigationRouteStatus.locationUnavailable status.
 >
 > To avoid this, ensure that the SDK has provided a valid user location before calling the setDestinations function. You can do this by subscribing to the RoadSnappedLocationUpdatedEvent and waiting for the first valid location update.
+
+#### Set destinations with a route token
+
+After initializing navigation and acquiring the user's location, pass a route
+token from the Routes API or Route Optimization API:
+
+```dart
+final NavigationRouteStatus status =
+    await GoogleMapsNavigator.setDestinationsWithToken(
+  routeToken,
+  displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
+);
+```
+
+On Android and iOS, the token supplies the destinations and routing parameters,
+including travel mode. No waypoint list or travel-mode argument is needed.
+`displayOptions` is optional. A successful status means a route was found;
+traffic, road conditions, or a different starting location can still change the
+planned route. Request a fresh token for each new route.
+
+Continue using `setDestinations` for waypoint-based routing.
+`Destinations.routeTokenOptions` is deprecated; see the
+[migration guide](MIGRATING.md#migrate-route-token-requests).
+
+The example requests intermediate waypoints as stopovers, not pass-through
+points, so token routes retain the continue-to-next-destination flow. Arrival
+handling does not depend on the SDK preserving local waypoint labels.
 
 #### Task Removed Behavior
 

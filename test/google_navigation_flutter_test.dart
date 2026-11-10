@@ -1537,6 +1537,9 @@ void main() {
             final RoutingOptions routingOptions = RoutingOptions();
             when(sessionMockApi.setDestinations(any)).thenThrow(error);
             when(
+              sessionMockApi.setDestinationsWithToken(any, any),
+            ).thenThrow(error);
+            when(
               sessionMockApi.simulateLocationsAlongNewRoute(any),
             ).thenThrow(error);
             when(
@@ -1571,6 +1574,10 @@ void main() {
               throwsRouteStatusUnavailable,
             );
             await expectLater(
+              GoogleMapsNavigator.setDestinationsWithToken('route-token'),
+              throwsRouteStatusUnavailable,
+            );
+            await expectLater(
               GoogleMapsNavigator.simulator.simulateLocationsAlongNewRoute(
                 waypoints,
               ),
@@ -1595,6 +1602,44 @@ void main() {
             );
           },
         );
+
+        test('Token routing requires an initialized session', () async {
+          when(
+            sessionMockApi.setDestinationsWithToken(any, any),
+          ).thenThrow(PlatformException(code: 'sessionNotInitialized'));
+
+          await expectLater(
+            GoogleMapsNavigator.setDestinationsWithToken('route-token'),
+            throwsA(isA<SessionNotInitializedException>()),
+          );
+        });
+
+        test('Token routing preserves unexpected platform failures', () async {
+          when(sessionMockApi.setDestinationsWithToken(any, any)).thenThrow(
+            PlatformException(
+              code: 'routing-failed',
+              message: 'Route request failed',
+              details: 'Native failure details',
+            ),
+          );
+
+          await expectLater(
+            GoogleMapsNavigator.setDestinationsWithToken('route-token'),
+            throwsA(
+              isA<PlatformException>()
+                  .having(
+                    (PlatformException e) => e.code,
+                    'code',
+                    'routing-failed',
+                  )
+                  .having(
+                    (PlatformException e) => e.details,
+                    'details',
+                    'Native failure details',
+                  ),
+            ),
+          );
+        });
 
         test('Test navigation simulator', () async {
           // Pause/resume simulation.

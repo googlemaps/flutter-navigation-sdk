@@ -1563,6 +1563,13 @@ abstract class NavigationSessionApi {
   void stopGuidance();
   @async
   RouteStatusDto setDestinations(DestinationsDto destinations);
+
+  /// Sets destinations and routing parameters from a route token.
+  @async
+  RouteStatusDto setDestinationsWithToken(
+    String routeToken,
+    NavigationDisplayOptionsDto displayOptions,
+  );
   void clearDestinations();
   @async
   ContinueToNextDestinationResponseDto continueToNextDestination();
