@@ -6701,9 +6701,11 @@ protocol NavigationSessionEventApiProtocol {
   func onSpeedingUpdated(
     msg msgArg: SpeedingUpdatedEventDto, completion: @escaping (Result<Void, PigeonError>) -> Void)
   func onRoadSnappedLocationUpdated(
-    location locationArg: LatLngDto, completion: @escaping (Result<Void, PigeonError>) -> Void)
+    location locationArg: LatLngDto, heading headingArg: Double?, speed speedArg: Double?,
+    completion: @escaping (Result<Void, PigeonError>) -> Void)
   func onRoadSnappedRawLocationUpdated(
-    location locationArg: LatLngDto, completion: @escaping (Result<Void, PigeonError>) -> Void)
+    location locationArg: LatLngDto, heading headingArg: Double?, speed speedArg: Double?,
+    completion: @escaping (Result<Void, PigeonError>) -> Void)
   func onArrival(
     waypoint waypointArg: NavigationWaypointDto,
     completion: @escaping (Result<Void, PigeonError>) -> Void)
@@ -6760,13 +6762,14 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
     }
   }
   func onRoadSnappedLocationUpdated(
-    location locationArg: LatLngDto, completion: @escaping (Result<Void, PigeonError>) -> Void
+    location locationArg: LatLngDto, heading headingArg: Double?, speed speedArg: Double?,
+    completion: @escaping (Result<Void, PigeonError>) -> Void
   ) {
     let channelName: String =
       "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRoadSnappedLocationUpdated\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(
       name: channelName, binaryMessenger: binaryMessenger, codec: codec)
-    channel.sendMessage([locationArg] as [Any?]) { response in
+    channel.sendMessage([locationArg, headingArg, speedArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -6782,13 +6785,14 @@ class NavigationSessionEventApi: NavigationSessionEventApiProtocol {
     }
   }
   func onRoadSnappedRawLocationUpdated(
-    location locationArg: LatLngDto, completion: @escaping (Result<Void, PigeonError>) -> Void
+    location locationArg: LatLngDto, heading headingArg: Double?, speed speedArg: Double?,
+    completion: @escaping (Result<Void, PigeonError>) -> Void
   ) {
     let channelName: String =
       "dev.flutter.pigeon.google_navigation_flutter.NavigationSessionEventApi.onRoadSnappedRawLocationUpdated\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(
       name: channelName, binaryMessenger: binaryMessenger, codec: codec)
-    channel.sendMessage([locationArg] as [Any?]) { response in
+    channel.sendMessage([locationArg, headingArg, speedArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
