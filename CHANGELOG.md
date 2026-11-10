@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.1](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.12.0...0.12.1) (2026-11-10)
+
+
+### Features
+
+* add token-only destination routing and upgrade Android SDK to 8.1.0 ([#802](https://github.com/googlemaps/flutter-navigation-sdk/issues/802)) ([0f06178](https://github.com/googlemaps/flutter-navigation-sdk/commit/0f061781239fb2abd8052156439a6f5da743fdde))
+
 ## [0.12.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.11.2...0.12.0) (2026-11-06)
 
 
