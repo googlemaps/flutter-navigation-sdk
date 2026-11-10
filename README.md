@@ -196,7 +196,7 @@ traffic, road conditions, or a different starting location can still change the
 planned route. Request a fresh token for each new route.
 
 Continue using `setDestinations` for waypoint-based routing.
-`Destinations.routeTokenOptions` is deprecated but remains functional; see the
+`Destinations.routeTokenOptions` is deprecated; see the
 [migration guide](MIGRATING.md#migrate-route-token-requests).
 
 The example requests intermediate waypoints as stopovers, not pass-through

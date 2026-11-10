@@ -26,7 +26,7 @@ void main() {
   // The token is fetched from the Routes API with the same MAPS_API_KEY the
   // app uses, so the key must have the Routes API enabled. A failed fetch
   // fails the test instead of skipping it, so a broken token path cannot pass.
-  patrol('Test navigating to a destination with a route token', (
+  patrol('Route-token navigation after walking and cycling routes', (
     PatrolIntegrationTester $,
   ) async {
     final Completer<void> hasArrived = Completer<void>();
@@ -59,8 +59,9 @@ void main() {
     ]);
     expect(routeTokens, isNotEmpty);
 
-    // Each token request must replace the preceding non-driving travel mode.
-    // In particular, iOS must not try to apply the token to that stale mode.
+    // setDestinations is setup: leave the session in walking/cycling mode.
+    // setDestinationsWithToken must then use the driving mode encoded in the
+    // token, rather than fail on iOS with travelModeUnsupported.
     for (final NavigationTravelMode priorMode in <NavigationTravelMode>[
       NavigationTravelMode.walking,
       NavigationTravelMode.cycling,

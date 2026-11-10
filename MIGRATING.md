@@ -41,6 +41,8 @@ Existing `setDestinations` calls with `routeTokenOptions` remain supported,
 including their previous platform-specific behavior: Android passes the
 waypoints with the token, while iOS does not. New callers should use the
 dedicated method.
+The deprecated `routeTokenOptions` parameter may be removed in a future major
+release.
 
 On both platforms, routing options encoded in the route token, including the
 travel mode, take precedence over client-side settings. A successful route
