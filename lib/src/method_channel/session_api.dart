@@ -242,13 +242,11 @@ class NavigationSessionAPIImpl {
 
   /// Sets destinations and routing parameters from a route token.
   Future<NavigationRouteStatus> setDestinationsWithToken(
-    String routeToken, {
-    NavigationDisplayOptions? displayOptions,
-  }) async {
+    DestinationsWithToken destinations,
+  ) async {
     try {
       final RouteStatusDto status = await _sessionApi.setDestinationsWithToken(
-        routeToken,
-        (displayOptions ?? NavigationDisplayOptions()).toDto(),
+        destinations.toDto(),
       );
       return status.toNavigationRouteStatus();
     } on PlatformException catch (e) {

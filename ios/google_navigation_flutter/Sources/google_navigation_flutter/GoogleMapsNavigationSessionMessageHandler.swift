@@ -113,13 +113,11 @@ class GoogleMapsNavigationSessionMessageHandler: NavigationSessionApi {
   }
 
   func setDestinationsWithToken(
-    routeToken: String,
-    displayOptions: NavigationDisplayOptionsDto,
+    destinations: DestinationsWithTokenDto,
     completion: @escaping (Result<RouteStatusDto, Error>) -> Void
   ) {
     GoogleMapsNavigationSessionManager.shared.setDestinationsWithToken(
-      routeToken: routeToken,
-      displayOptions: displayOptions,
+      destinations: destinations,
       completion: completion
     )
   }

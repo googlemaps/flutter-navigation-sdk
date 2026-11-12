@@ -62,6 +62,48 @@ class Destinations {
       ')';
 }
 
+/// Destinations and options for routing with a route token.
+///
+/// {@category Navigation}
+class DestinationsWithToken {
+  /// Initializes token-based destinations with optional mode and display options.
+  DestinationsWithToken({
+    required this.routeToken,
+    this.travelMode,
+    this.displayOptions,
+  });
+
+  /// Route token obtained from the Routes API or Route Optimization API.
+  ///
+  /// Encoded routing parameters, including travel mode, take precedence over
+  /// client-side settings.
+  final String routeToken;
+
+  /// Optional client-side travel mode.
+  ///
+  /// Only [NavigationTravelMode.driving] and [NavigationTravelMode.twoWheeler]
+  /// are supported. Other explicit modes return
+  /// [NavigationRouteStatus.travelModeUnsupported].
+  ///
+  /// On iOS, an omitted mode preserves the session's current mode; an
+  /// unsupported inherited mode also returns
+  /// [NavigationRouteStatus.travelModeUnsupported]. An explicit supported mode
+  /// is applied to the session. On Android, the token determines the route's
+  /// travel mode rather than this client-side setting.
+  final NavigationTravelMode? travelMode;
+
+  /// Route presentation options. Destination markers are shown by default.
+  final NavigationDisplayOptions? displayOptions;
+
+  @override
+  String toString() =>
+      'DestinationsWithToken('
+      'routeToken: $routeToken, '
+      'travelMode: $travelMode, '
+      'displayOptions: $displayOptions'
+      ')';
+}
+
 /// Provides options for routing using a route token
 /// in the Google Maps Navigation SDK.
 ///

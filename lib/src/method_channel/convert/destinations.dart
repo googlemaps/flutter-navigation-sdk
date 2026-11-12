@@ -29,3 +29,14 @@ extension ConvertDestinations on Destinations {
     routeTokenOptions: routeTokenOptions?.toDto(),
   );
 }
+
+/// [DestinationsWithToken] convert extension.
+/// @nodoc
+extension ConvertDestinationsWithToken on DestinationsWithToken {
+  /// Converts [DestinationsWithToken] to [DestinationsWithTokenDto].
+  DestinationsWithTokenDto toDto() => DestinationsWithTokenDto(
+    routeToken: routeToken,
+    displayOptions: displayOptions?.toDto() ?? NavigationDisplayOptionsDto(),
+    travelMode: travelMode?.toDto(),
+  );
+}

@@ -856,6 +856,18 @@ class DestinationsDto {
   final RouteTokenOptionsDto? routeTokenOptions;
 }
 
+class DestinationsWithTokenDto {
+  DestinationsWithTokenDto({
+    required this.routeToken,
+    required this.displayOptions,
+    this.travelMode,
+  });
+
+  final String routeToken;
+  final NavigationDisplayOptionsDto displayOptions;
+  final TravelModeDto? travelMode;
+}
+
 enum AlternateRoutesStrategyDto { all, none, one }
 
 enum RoutingStrategyDto { defaultBest, deltaToTargetDistance, shorter }
@@ -1567,8 +1579,7 @@ abstract class NavigationSessionApi {
   /// Sets destinations and routing parameters from a route token.
   @async
   RouteStatusDto setDestinationsWithToken(
-    String routeToken,
-    NavigationDisplayOptionsDto displayOptions,
+    DestinationsWithTokenDto destinations,
   );
   void clearDestinations();
   @async

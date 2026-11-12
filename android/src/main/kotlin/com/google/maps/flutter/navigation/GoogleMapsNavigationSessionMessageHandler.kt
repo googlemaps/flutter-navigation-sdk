@@ -118,16 +118,10 @@ class GoogleMapsNavigationSessionMessageHandler(
   }
 
   override fun setDestinationsWithToken(
-    routeToken: String,
-    displayOptions: NavigationDisplayOptionsDto,
+    destinations: DestinationsWithTokenDto,
     callback: (Result<RouteStatusDto>) -> Unit,
   ) {
-    sessionManager.setDestinationsWithToken(
-      routeToken,
-      Convert.convertDisplayOptionsFromDto(displayOptions),
-    ) {
-      callback(it.map(Convert::convertRouteStatusToDto))
-    }
+    sessionManager.setDestinationsWithToken(destinations, callback)
   }
 
   override fun clearDestinations() {

@@ -221,24 +221,29 @@ class ConvertTests: XCTestCase {
     XCTAssertEqual(pigeonError.code, "routeStatusUnavailable")
   }
 
-  func testSetDestinationsWithTokenFailsOnceWithoutNavigationSession() {
+  func testSetDestinationsWithTokenRequiresSessionBeforeCheckingTravelMode() {
     let manager = GoogleMapsNavigationSessionManager()
-    var completionCount = 0
+    let requests = [
+      DestinationsWithTokenDto(
+        routeToken: "token", displayOptions: NavigationDisplayOptionsDto()),
+      DestinationsWithTokenDto(
+        routeToken: "token", displayOptions: NavigationDisplayOptionsDto(), travelMode: .walking),
+    ]
 
-    manager.setDestinationsWithToken(
-      routeToken: "token",
-      displayOptions: NavigationDisplayOptionsDto()
-    ) { result in
-      completionCount += 1
-      guard case .failure(let error) = result,
-        let managerError = error as? GoogleMapsNavigationSessionManagerError,
-        case .sessionNotInitialized = managerError
-      else {
-        return XCTFail("Expected sessionNotInitialized, got \(result)")
+    for destinations in requests {
+      var completionCount = 0
+      manager.setDestinationsWithToken(destinations: destinations) { result in
+        completionCount += 1
+        guard case .failure(let error) = result,
+          let managerError = error as? GoogleMapsNavigationSessionManagerError,
+          case .sessionNotInitialized = managerError
+        else {
+          return XCTFail("Expected sessionNotInitialized, got \(result)")
+        }
       }
-    }
 
-    XCTAssertEqual(completionCount, 1)
+      XCTAssertEqual(completionCount, 1)
+    }
   }
 
   func testLegacyTokenDestinationsFailOnceWithoutNavigationSession() {

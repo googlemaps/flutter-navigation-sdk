@@ -608,13 +608,9 @@ class GoogleMapsNavigator {
 
   /// Sets destinations for navigation using a route token.
   ///
-  /// The token must be obtained from the Routes API or Route Optimization API.
-  /// It defines the destinations and routing parameters, including travel mode;
-  /// no waypoints or client-side routing options are required. A previous
-  /// walking or cycling route does not prevent using a supported route token.
-  ///
-  /// [displayOptions] controls route presentation. Destination markers are
-  /// shown unless explicitly disabled.
+  /// [DestinationsWithToken.routeToken] defines the destinations and routing
+  /// parameters; no waypoints are required. See [DestinationsWithToken] for
+  /// platform-specific travel mode behavior and display options.
   ///
   /// Requires an initialized navigation session and an available user location.
   /// Completes when the SDK finishes calculating the route. A route that cannot
@@ -626,11 +622,10 @@ class GoogleMapsNavigator {
   /// or [RouteStatusUnavailableException] if the SDK returns no route status.
   /// Use [continueToNextDestination] to advance through a multi-destination token.
   static Future<NavigationRouteStatus> setDestinationsWithToken(
-    String routeToken, {
-    NavigationDisplayOptions? displayOptions,
-  }) {
+    DestinationsWithToken destinations,
+  ) {
     return GoogleMapsNavigationPlatform.instance.navigationSessionAPI
-        .setDestinationsWithToken(routeToken, displayOptions: displayOptions);
+        .setDestinationsWithToken(destinations);
   }
 
   /// Clears existing destinations.

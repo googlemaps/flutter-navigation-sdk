@@ -216,14 +216,10 @@ class MockTestNavigationSessionApi extends _i1.Mock
 
   @override
   _i4.Future<_i2.RouteStatusDto> setDestinationsWithToken(
-    String? routeToken,
-    _i2.NavigationDisplayOptionsDto? displayOptions,
+    _i2.DestinationsWithTokenDto? destinations,
   ) =>
       (super.noSuchMethod(
-            Invocation.method(#setDestinationsWithToken, [
-              routeToken,
-              displayOptions,
-            ]),
+            Invocation.method(#setDestinationsWithToken, [destinations]),
             returnValue: _i4.Future<_i2.RouteStatusDto>.value(
               _i2.RouteStatusDto.internalError,
             ),

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:google_navigation_flutter_example/routes_api/routes_api.dart';
 
@@ -23,10 +24,29 @@ void main() {
   const double endLat = 68.59451829688189, endLng = 23.512277951523007;
   const double tolerance = 0.001;
 
-  // The token is fetched from the Routes API with the same MAPS_API_KEY the
-  // app uses, so the key must have the Routes API enabled. A failed fetch
-  // fails the test instead of skipping it, so a broken token path cannot pass.
-  patrol('Route-token navigation after walking and cycling routes', (
+  patrol('Route-token session errors precede explicit mode validation', (
+    PatrolIntegrationTester $,
+  ) async {
+    await startNavigationWithoutDestination($, initializeNavigation: false);
+    expect(await GoogleMapsNavigator.isInitialized(), false);
+
+    // This needs no Routes API request: session errors must win even when
+    // both the explicit client mode and token are invalid.
+    await expectLater(
+      GoogleMapsNavigator.setDestinationsWithToken(
+        DestinationsWithToken(
+          routeToken: 'invalid-route-token',
+          travelMode: NavigationTravelMode.walking,
+        ),
+      ),
+      throwsA(isA<SessionNotInitializedException>()),
+    );
+    expect(await GoogleMapsNavigator.isInitialized(), false);
+  });
+
+  // Tokens are fetched with the app's runtime MAPS_API_KEY, which must have
+  // the Routes API enabled. Failed fetches fail the test rather than skip it.
+  patrol('Route-token modes preserve rejected routes and support guidance', (
     PatrolIntegrationTester $,
   ) async {
     final Completer<void> hasArrived = Completer<void>();
@@ -47,58 +67,133 @@ void main() {
       title: 'Näkkäläntie',
       target: const LatLng(latitude: endLat, longitude: endLng),
     );
-    final List<String> routeTokens = await getRouteToken(<NavigationWaypoint>[
-      NavigationWaypoint.withLatLngTarget(
-        title: 'Origin',
-        target: const LatLng(
-          latitude: startLocationLat,
-          longitude: startLocationLng,
-        ),
-      ),
-      destination,
-    ]);
-    expect(routeTokens, isNotEmpty);
+    final NavigationWaypoint priorDestination =
+        NavigationWaypoint.withLatLngTarget(
+          title: 'Prior destination',
+          target: const LatLng(
+            latitude: 68.60338455021943,
+            longitude: 23.548804200724454,
+          ),
+        );
 
-    // setDestinations is setup: leave the session in walking/cycling mode.
-    // setDestinationsWithToken must then use the driving mode encoded in the
-    // token, rather than fail on iOS with travelModeUnsupported.
-    for (final NavigationTravelMode priorMode in <NavigationTravelMode>[
-      NavigationTravelMode.walking,
-      NavigationTravelMode.cycling,
-    ]) {
-      final NavigationRouteStatus priorStatus =
+    Future<String> fetchRouteToken() async {
+      final List<String> routeTokens = await getRouteToken(<NavigationWaypoint>[
+        NavigationWaypoint.withLatLngTarget(
+          title: 'Origin',
+          target: const LatLng(
+            latitude: startLocationLat,
+            longitude: startLocationLng,
+          ),
+        ),
+        destination,
+      ]);
+      expect(routeTokens, isNotEmpty);
+      return routeTokens.first;
+    }
+
+    Future<List<LatLng>> routeEndpoints() async {
+      final List<RouteSegment> segments =
+          await GoogleMapsNavigator.getRouteSegments();
+      expect(segments, isNotEmpty);
+      return segments
+          .map((RouteSegment segment) => segment.destinationLatLng)
+          .toList();
+    }
+
+    Future<void> expectTokenDestination() async {
+      final List<LatLng> endpoints = await routeEndpoints();
+      expect(endpoints.last.latitude, closeTo(endLat, tolerance));
+      expect(endpoints.last.longitude, closeTo(endLng, tolerance));
+    }
+
+    Future<List<LatLng>> setPriorRoute(NavigationTravelMode mode) async {
+      final NavigationRouteStatus status =
           await GoogleMapsNavigator.setDestinations(
             Destinations(
-              waypoints: <NavigationWaypoint>[destination],
-              routingOptions: RoutingOptions(travelMode: priorMode),
+              waypoints: <NavigationWaypoint>[priorDestination],
+              routingOptions: RoutingOptions(travelMode: mode),
               displayOptions: NavigationDisplayOptions(
                 showDestinationMarkers: false,
               ),
             ),
           );
-      expect(priorStatus, NavigationRouteStatus.statusOk);
+      expect(status, NavigationRouteStatus.statusOk);
+      return routeEndpoints();
+    }
 
+    // Start in a supported mode so ignoring an explicit unsupported mode
+    // cannot accidentally pass through iOS's inherited-mode validation.
+    final List<LatLng> baselineEndpoints = await setPriorRoute(
+      NavigationTravelMode.driving,
+    );
+    for (final NavigationTravelMode unsupportedMode in <NavigationTravelMode>[
+      NavigationTravelMode.walking,
+      NavigationTravelMode.cycling,
+      NavigationTravelMode.taxi,
+    ]) {
       final NavigationRouteStatus status =
           await GoogleMapsNavigator.setDestinationsWithToken(
-            routeTokens.first,
-            displayOptions: NavigationDisplayOptions(
-              showDestinationMarkers: false,
+            DestinationsWithToken(
+              routeToken: 'invalid-route-token',
+              travelMode: unsupportedMode,
+              displayOptions: NavigationDisplayOptions(
+                showDestinationMarkers: true,
+              ),
             ),
           );
-      expect(status, NavigationRouteStatus.statusOk);
-
-      final List<RouteSegment> segments =
-          await GoogleMapsNavigator.getRouteSegments();
-      expect(segments, isNotEmpty);
-      expect(
-        segments.last.destinationLatLng.latitude,
-        closeTo(endLat, tolerance),
-      );
-      expect(
-        segments.last.destinationLatLng.longitude,
-        closeTo(endLng, tolerance),
-      );
+      expect(status, NavigationRouteStatus.travelModeUnsupported);
+      expect(await routeEndpoints(), orderedEquals(baselineEndpoints));
     }
+
+    // Keep the previous route distinct from the token's destination so
+    // rejected requests cannot silently replace it.
+    for (final NavigationTravelMode priorMode in <NavigationTravelMode>[
+      NavigationTravelMode.walking,
+      NavigationTravelMode.cycling,
+    ]) {
+      final List<LatLng> priorEndpoints = await setPriorRoute(priorMode);
+
+      final NavigationRouteStatus inheritedModeStatus =
+          await GoogleMapsNavigator.setDestinationsWithToken(
+            DestinationsWithToken(routeToken: await fetchRouteToken()),
+          );
+      if (Platform.isIOS) {
+        expect(
+          inheritedModeStatus,
+          NavigationRouteStatus.travelModeUnsupported,
+        );
+        expect(await routeEndpoints(), orderedEquals(priorEndpoints));
+      } else {
+        expect(inheritedModeStatus, NavigationRouteStatus.statusOk);
+        await expectTokenDestination();
+      }
+
+      final NavigationRouteStatus drivingStatus =
+          await GoogleMapsNavigator.setDestinationsWithToken(
+            DestinationsWithToken(
+              routeToken: await fetchRouteToken(),
+              travelMode: NavigationTravelMode.driving,
+              displayOptions: NavigationDisplayOptions(
+                showDestinationMarkers: false,
+              ),
+            ),
+          );
+      expect(drivingStatus, NavigationRouteStatus.statusOk);
+      await expectTokenDestination();
+    }
+
+    // Either supported client mode can use a DRIVE token, even where
+    // two-wheeler route generation is unavailable (such as Finland).
+    // Omitting displayOptions also exercises the default visible markers.
+    final NavigationRouteStatus twoWheelerStatus =
+        await GoogleMapsNavigator.setDestinationsWithToken(
+          DestinationsWithToken(
+            routeToken: await fetchRouteToken(),
+            travelMode: NavigationTravelMode.twoWheeler,
+          ),
+        );
+    expect(twoWheelerStatus, NavigationRouteStatus.statusOk);
+    await expectTokenDestination();
 
     final StreamSubscription<OnArrivalEvent> onArrivalSubscription =
         GoogleMapsNavigator.setOnArrivalListener((OnArrivalEvent event) {
@@ -109,6 +204,7 @@ void main() {
     addTearDown(onArrivalSubscription.cancel);
 
     await GoogleMapsNavigator.startGuidance();
+    expect(await GoogleMapsNavigator.isGuidanceRunning(), true);
     await GoogleMapsNavigator.simulator.simulateLocationsAlongExistingRoute();
 
     await hasArrived.future.timeout(

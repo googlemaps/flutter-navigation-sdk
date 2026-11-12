@@ -1320,9 +1320,12 @@ class _NavigationPageState extends ExamplePageState<NavigationPage> {
     try {
       final NavigationRouteStatus navRouteStatus = useRouteToken
           ? await GoogleMapsNavigator.setDestinationsWithToken(
-              routeToken!,
-              displayOptions: NavigationDisplayOptions(
-                showDestinationMarkers: false,
+              DestinationsWithToken(
+                routeToken: routeToken!,
+                travelMode: NavigationTravelMode.driving,
+                displayOptions: NavigationDisplayOptions(
+                  showDestinationMarkers: false,
+                ),
               ),
             )
           : await GoogleMapsNavigator.setDestinations(_buildDestinations());

@@ -1536,9 +1536,7 @@ void main() {
             ];
             final RoutingOptions routingOptions = RoutingOptions();
             when(sessionMockApi.setDestinations(any)).thenThrow(error);
-            when(
-              sessionMockApi.setDestinationsWithToken(any, any),
-            ).thenThrow(error);
+            when(sessionMockApi.setDestinationsWithToken(any)).thenThrow(error);
             when(
               sessionMockApi.simulateLocationsAlongNewRoute(any),
             ).thenThrow(error);
@@ -1574,7 +1572,9 @@ void main() {
               throwsRouteStatusUnavailable,
             );
             await expectLater(
-              GoogleMapsNavigator.setDestinationsWithToken('route-token'),
+              GoogleMapsNavigator.setDestinationsWithToken(
+                DestinationsWithToken(routeToken: 'route-token'),
+              ),
               throwsRouteStatusUnavailable,
             );
             await expectLater(
@@ -1605,17 +1605,19 @@ void main() {
 
         test('Token routing requires an initialized session', () async {
           when(
-            sessionMockApi.setDestinationsWithToken(any, any),
+            sessionMockApi.setDestinationsWithToken(any),
           ).thenThrow(PlatformException(code: 'sessionNotInitialized'));
 
           await expectLater(
-            GoogleMapsNavigator.setDestinationsWithToken('route-token'),
+            GoogleMapsNavigator.setDestinationsWithToken(
+              DestinationsWithToken(routeToken: 'route-token'),
+            ),
             throwsA(isA<SessionNotInitializedException>()),
           );
         });
 
         test('Token routing preserves unexpected platform failures', () async {
-          when(sessionMockApi.setDestinationsWithToken(any, any)).thenThrow(
+          when(sessionMockApi.setDestinationsWithToken(any)).thenThrow(
             PlatformException(
               code: 'routing-failed',
               message: 'Route request failed',
@@ -1624,7 +1626,9 @@ void main() {
           );
 
           await expectLater(
-            GoogleMapsNavigator.setDestinationsWithToken('route-token'),
+            GoogleMapsNavigator.setDestinationsWithToken(
+              DestinationsWithToken(routeToken: 'route-token'),
+            ),
             throwsA(
               isA<PlatformException>()
                   .having(

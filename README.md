@@ -184,20 +184,39 @@ token from the Routes API or Route Optimization API:
 ```dart
 final NavigationRouteStatus status =
     await GoogleMapsNavigator.setDestinationsWithToken(
-  routeToken,
-  displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
+  DestinationsWithToken(
+    routeToken: routeToken,
+    travelMode: NavigationTravelMode.driving,
+    displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
+  ),
 );
 ```
 
 On Android and iOS, the token supplies the destinations and routing parameters,
-including travel mode. No waypoint list or travel-mode argument is needed.
-`displayOptions` is optional. A successful status means a route was found;
+including the actual route's travel mode. Do not pass a waypoint list.
+The optional `travelMode` selects a supported client mode, not the token's mode:
+only `NavigationTravelMode.driving` and `NavigationTravelMode.twoWheeler` are
+supported. Any other explicit mode returns
+`NavigationRouteStatus.travelModeUnsupported` without changing the current route
+or display settings, even if the token is invalid.
+
+When `travelMode` is omitted, iOS preserves the session's current mode. If that
+mode is walking, cycling, or taxi, the request returns
+`NavigationRouteStatus.travelModeUnsupported`; select driving or two-wheeler
+explicitly before using a token. Android uses the token-derived mode when the
+client mode is omitted. `displayOptions` is optional and destination markers
+are visible by default.
+
+Check the returned `NavigationRouteStatus` for route failures, including
+unsupported modes. Missing route statuses and other native-call errors can
+still throw; session and terms-of-service errors retain precedence over mode
+validation. A successful status means a route was found;
 traffic, road conditions, or a different starting location can still change the
 planned route. Request a fresh token for each new route.
 
 Continue using `setDestinations` for waypoint-based routing.
 `Destinations.routeTokenOptions` is deprecated; see the
-[migration guide](MIGRATING.md#migrate-route-token-requests).
+[migration guide](MIGRATING.md#migrating-from-012x-to-013x).
 
 The example requests intermediate waypoints as stopovers, not pass-through
 points, so token routes retain the continue-to-next-destination flow. Arrival

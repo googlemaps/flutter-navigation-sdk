@@ -1825,6 +1825,38 @@ data class DestinationsDto(
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
+data class DestinationsWithTokenDto(
+  val routeToken: String,
+  val displayOptions: NavigationDisplayOptionsDto,
+  val travelMode: TravelModeDto? = null,
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): DestinationsWithTokenDto {
+      val routeToken = pigeonVar_list[0] as String
+      val displayOptions = pigeonVar_list[1] as NavigationDisplayOptionsDto
+      val travelMode = pigeonVar_list[2] as TravelModeDto?
+      return DestinationsWithTokenDto(routeToken, displayOptions, travelMode)
+    }
+  }
+
+  fun toList(): List<Any?> {
+    return listOf(routeToken, displayOptions, travelMode)
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (other !is DestinationsWithTokenDto) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
 data class RoutingOptionsDto(
   val alternateRoutesStrategy: AlternateRoutesStrategyDto? = null,
   val routingStrategy: RoutingStrategyDto? = null,
@@ -2968,89 +3000,92 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
         return (readValue(buffer) as? List<Any?>)?.let { DestinationsDto.fromList(it) }
       }
       182.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { RoutingOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { DestinationsWithTokenDto.fromList(it) }
       }
       183.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { NavigationDisplayOptionsDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { RoutingOptionsDto.fromList(it) }
       }
       184.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let { NavigationWaypointDto.fromList(it) }
+        return (readValue(buffer) as? List<Any?>)?.let { NavigationDisplayOptionsDto.fromList(it) }
       }
       185.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let { NavigationWaypointDto.fromList(it) }
+      }
+      186.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           ContinueToNextDestinationResponseDto.fromList(it)
         }
       }
-      186.toByte() -> {
+      187.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavigationTimeAndDistanceDto.fromList(it) }
       }
-      187.toByte() -> {
+      188.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           NavigationAudioGuidanceSettingsDto.fromList(it)
         }
       }
-      188.toByte() -> {
+      189.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SimulationOptionsDto.fromList(it) }
       }
-      189.toByte() -> {
+      190.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LatLngDto.fromList(it) }
       }
-      190.toByte() -> {
+      191.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LatLngBoundsDto.fromList(it) }
       }
-      191.toByte() -> {
+      192.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { ScreenCoordinateDto.fromList(it) }
       }
-      192.toByte() -> {
+      193.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SpeedingUpdatedEventDto.fromList(it) }
       }
-      193.toByte() -> {
+      194.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           GpsAvailabilityChangeEventDto.fromList(it)
         }
       }
-      194.toByte() -> {
+      195.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           SpeedAlertOptionsThresholdPercentageDto.fromList(it)
         }
       }
-      195.toByte() -> {
+      196.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { SpeedAlertOptionsDto.fromList(it) }
       }
-      196.toByte() -> {
+      197.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(it)
         }
       }
-      197.toByte() -> {
+      198.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentTrafficDataDto.fromList(it) }
       }
-      198.toByte() -> {
+      199.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { RouteSegmentDto.fromList(it) }
       }
-      199.toByte() -> {
+      200.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LaneDirectionDto.fromList(it) }
       }
-      200.toByte() -> {
+      201.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { LaneDto.fromList(it) }
       }
-      201.toByte() -> {
+      202.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { StepInfoDto.fromList(it) }
       }
-      202.toByte() -> {
+      203.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let { NavInfoDto.fromList(it) }
       }
-      203.toByte() -> {
+      204.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           TermsAndConditionsUIParamsDto.fromList(it)
         }
       }
-      204.toByte() -> {
+      205.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           NavigationNotificationOptionsDto.fromList(it)
         }
       }
-      205.toByte() -> {
+      206.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           StepImageGenerationOptionsDto.fromList(it)
         }
@@ -3273,100 +3308,104 @@ private open class messagesPigeonCodec : StandardMessageCodec() {
         stream.write(181)
         writeValue(stream, value.toList())
       }
-      is RoutingOptionsDto -> {
+      is DestinationsWithTokenDto -> {
         stream.write(182)
         writeValue(stream, value.toList())
       }
-      is NavigationDisplayOptionsDto -> {
+      is RoutingOptionsDto -> {
         stream.write(183)
         writeValue(stream, value.toList())
       }
-      is NavigationWaypointDto -> {
+      is NavigationDisplayOptionsDto -> {
         stream.write(184)
         writeValue(stream, value.toList())
       }
-      is ContinueToNextDestinationResponseDto -> {
+      is NavigationWaypointDto -> {
         stream.write(185)
         writeValue(stream, value.toList())
       }
-      is NavigationTimeAndDistanceDto -> {
+      is ContinueToNextDestinationResponseDto -> {
         stream.write(186)
         writeValue(stream, value.toList())
       }
-      is NavigationAudioGuidanceSettingsDto -> {
+      is NavigationTimeAndDistanceDto -> {
         stream.write(187)
         writeValue(stream, value.toList())
       }
-      is SimulationOptionsDto -> {
+      is NavigationAudioGuidanceSettingsDto -> {
         stream.write(188)
         writeValue(stream, value.toList())
       }
-      is LatLngDto -> {
+      is SimulationOptionsDto -> {
         stream.write(189)
         writeValue(stream, value.toList())
       }
-      is LatLngBoundsDto -> {
+      is LatLngDto -> {
         stream.write(190)
         writeValue(stream, value.toList())
       }
-      is ScreenCoordinateDto -> {
+      is LatLngBoundsDto -> {
         stream.write(191)
         writeValue(stream, value.toList())
       }
-      is SpeedingUpdatedEventDto -> {
+      is ScreenCoordinateDto -> {
         stream.write(192)
         writeValue(stream, value.toList())
       }
-      is GpsAvailabilityChangeEventDto -> {
+      is SpeedingUpdatedEventDto -> {
         stream.write(193)
         writeValue(stream, value.toList())
       }
-      is SpeedAlertOptionsThresholdPercentageDto -> {
+      is GpsAvailabilityChangeEventDto -> {
         stream.write(194)
         writeValue(stream, value.toList())
       }
-      is SpeedAlertOptionsDto -> {
+      is SpeedAlertOptionsThresholdPercentageDto -> {
         stream.write(195)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentTrafficDataRoadStretchRenderingDataDto -> {
+      is SpeedAlertOptionsDto -> {
         stream.write(196)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentTrafficDataDto -> {
+      is RouteSegmentTrafficDataRoadStretchRenderingDataDto -> {
         stream.write(197)
         writeValue(stream, value.toList())
       }
-      is RouteSegmentDto -> {
+      is RouteSegmentTrafficDataDto -> {
         stream.write(198)
         writeValue(stream, value.toList())
       }
-      is LaneDirectionDto -> {
+      is RouteSegmentDto -> {
         stream.write(199)
         writeValue(stream, value.toList())
       }
-      is LaneDto -> {
+      is LaneDirectionDto -> {
         stream.write(200)
         writeValue(stream, value.toList())
       }
-      is StepInfoDto -> {
+      is LaneDto -> {
         stream.write(201)
         writeValue(stream, value.toList())
       }
-      is NavInfoDto -> {
+      is StepInfoDto -> {
         stream.write(202)
         writeValue(stream, value.toList())
       }
-      is TermsAndConditionsUIParamsDto -> {
+      is NavInfoDto -> {
         stream.write(203)
         writeValue(stream, value.toList())
       }
-      is NavigationNotificationOptionsDto -> {
+      is TermsAndConditionsUIParamsDto -> {
         stream.write(204)
         writeValue(stream, value.toList())
       }
-      is StepImageGenerationOptionsDto -> {
+      is NavigationNotificationOptionsDto -> {
         stream.write(205)
+        writeValue(stream, value.toList())
+      }
+      is StepImageGenerationOptionsDto -> {
+        stream.write(206)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -7053,8 +7092,7 @@ interface NavigationSessionApi {
 
   /** Sets destinations and routing parameters from a route token. */
   fun setDestinationsWithToken(
-    routeToken: String,
-    displayOptions: NavigationDisplayOptionsDto,
+    destinations: DestinationsWithTokenDto,
     callback: (Result<RouteStatusDto>) -> Unit,
   )
 
@@ -7411,10 +7449,8 @@ interface NavigationSessionApi {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val routeTokenArg = args[0] as String
-            val displayOptionsArg = args[1] as NavigationDisplayOptionsDto
-            api.setDestinationsWithToken(routeTokenArg, displayOptionsArg) {
-              result: Result<RouteStatusDto> ->
+            val destinationsArg = args[0] as DestinationsWithTokenDto
+            api.setDestinationsWithToken(destinationsArg) { result: Result<RouteStatusDto> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))
