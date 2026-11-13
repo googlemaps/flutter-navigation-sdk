@@ -5,13 +5,13 @@ This document covers breaking changes and migration steps between versions of
 
 ## Table of Contents
 
-- [Migrating from 0.12.x to 0.13.x](#migrating-from-012x-to-013x)
+- [Migrating from 0.12.1 to 0.13.x](#migrating-from-0121-to-013x)
 - [Migrating from 0.12.0 to 0.12.1](#migrating-from-0120-to-0121)
 - [Migrating from 0.11.x to 0.12.x](#migrating-from-011x-to-012x)
 
 ---
 
-## Migrating from 0.12.x to 0.13.x
+## Migrating from 0.12.1 to 0.13.x
 
 ### Update token-routing arguments
 
@@ -78,6 +78,9 @@ final NavigationRouteStatus status =
   displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
 );
 ```
+
+From 0.13.0, these arguments are wrapped in a `DestinationsWithToken` object;
+see [Update token-routing arguments](#update-token-routing-arguments).
 
 The token defines the destinations and routing parameters on both Android and
 iOS. Do not pass waypoints, a travel mode, or routing options to the new method.

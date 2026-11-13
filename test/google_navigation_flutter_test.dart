@@ -1603,6 +1603,39 @@ void main() {
           },
         );
 
+        test('Token routing forwards the token and its options', () async {
+          when(
+            sessionMockApi.setDestinationsWithToken(any),
+          ).thenAnswer((Invocation _) async => RouteStatusDto.statusOk);
+
+          expect(
+            await GoogleMapsNavigator.setDestinationsWithToken(
+              DestinationsWithToken(
+                routeToken: 'route-token',
+                travelMode: NavigationTravelMode.twoWheeler,
+                displayOptions: NavigationDisplayOptions(
+                  showDestinationMarkers: false,
+                ),
+              ),
+            ),
+            NavigationRouteStatus.statusOk,
+          );
+          await GoogleMapsNavigator.setDestinationsWithToken(
+            DestinationsWithToken(routeToken: 'bare-token'),
+          );
+
+          final List<DestinationsWithTokenDto> sent = verify(
+            sessionMockApi.setDestinationsWithToken(captureAny),
+          ).captured.cast<DestinationsWithTokenDto>();
+          expect(sent, hasLength(2));
+          expect(sent[0].routeToken, 'route-token');
+          expect(sent[0].travelMode, TravelModeDto.twoWheeler);
+          expect(sent[0].displayOptions.showDestinationMarkers, false);
+          expect(sent[1].routeToken, 'bare-token');
+          expect(sent[1].travelMode, isNull);
+          expect(sent[1].displayOptions.showDestinationMarkers, isNull);
+        });
+
         test('Token routing requires an initialized session', () async {
           when(
             sessionMockApi.setDestinationsWithToken(any),
