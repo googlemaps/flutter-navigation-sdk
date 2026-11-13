@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.13.0](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.12.1...0.13.0) (2026-11-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* `setDestinationsWithToken` now requires a `DestinationsWithToken` object instead of a positional token and named display options. Wrap existing arguments in DestinationsWithToken(routeToken: token, displayOptions: displayOptions).
+
+### Features
+
+* unify route-token destination options ([#806](https://github.com/googlemaps/flutter-navigation-sdk/issues/806)) ([ce2b01b](https://github.com/googlemaps/flutter-navigation-sdk/commit/ce2b01b7e059ef044ac87cd44e16deccb4e7e4bf))
+
 ## [0.12.1](https://github.com/googlemaps/flutter-navigation-sdk/compare/0.12.0...0.12.1) (2026-11-10)
 
 
