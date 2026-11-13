@@ -542,14 +542,23 @@ constructor(
    * parameters.
    */
   fun setDestinationsWithToken(
-    routeToken: String,
-    displayOptions: DisplayOptions,
-    callback: (Result<Navigator.RouteStatus>) -> Unit,
+    destinations: DestinationsWithTokenDto,
+    callback: (Result<RouteStatusDto>) -> Unit,
   ) {
     try {
-      getNavigator().setDestinationsWithToken(routeToken, displayOptions) {
+      val navigator = getNavigator()
+      if (
+        destinations.travelMode != null &&
+          destinations.travelMode != TravelModeDto.DRIVING &&
+          destinations.travelMode != TravelModeDto.TWO_WHEELER
+      ) {
+        callback(Result.success(RouteStatusDto.TRAVEL_MODE_UNSUPPORTED))
+        return
+      }
+      val displayOptions = Convert.convertDisplayOptionsFromDto(destinations.displayOptions)
+      navigator.setDestinationsWithToken(destinations.routeToken, displayOptions) {
         routeDescription: RouteDescription? ->
-        callback(routeStatusResult(routeDescription))
+        callback(routeStatusResult(routeDescription).map(Convert::convertRouteStatusToDto))
       }
     } catch (e: Throwable) {
       callback(Result.failure(e))

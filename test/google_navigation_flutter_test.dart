@@ -1536,9 +1536,7 @@ void main() {
             ];
             final RoutingOptions routingOptions = RoutingOptions();
             when(sessionMockApi.setDestinations(any)).thenThrow(error);
-            when(
-              sessionMockApi.setDestinationsWithToken(any, any),
-            ).thenThrow(error);
+            when(sessionMockApi.setDestinationsWithToken(any)).thenThrow(error);
             when(
               sessionMockApi.simulateLocationsAlongNewRoute(any),
             ).thenThrow(error);
@@ -1574,7 +1572,9 @@ void main() {
               throwsRouteStatusUnavailable,
             );
             await expectLater(
-              GoogleMapsNavigator.setDestinationsWithToken('route-token'),
+              GoogleMapsNavigator.setDestinationsWithToken(
+                DestinationsWithToken(routeToken: 'route-token'),
+              ),
               throwsRouteStatusUnavailable,
             );
             await expectLater(
@@ -1603,19 +1603,54 @@ void main() {
           },
         );
 
+        test('Token routing forwards the token and its options', () async {
+          when(
+            sessionMockApi.setDestinationsWithToken(any),
+          ).thenAnswer((Invocation _) async => RouteStatusDto.statusOk);
+
+          expect(
+            await GoogleMapsNavigator.setDestinationsWithToken(
+              DestinationsWithToken(
+                routeToken: 'route-token',
+                travelMode: NavigationTravelMode.twoWheeler,
+                displayOptions: NavigationDisplayOptions(
+                  showDestinationMarkers: false,
+                ),
+              ),
+            ),
+            NavigationRouteStatus.statusOk,
+          );
+          await GoogleMapsNavigator.setDestinationsWithToken(
+            DestinationsWithToken(routeToken: 'bare-token'),
+          );
+
+          final List<DestinationsWithTokenDto> sent = verify(
+            sessionMockApi.setDestinationsWithToken(captureAny),
+          ).captured.cast<DestinationsWithTokenDto>();
+          expect(sent, hasLength(2));
+          expect(sent[0].routeToken, 'route-token');
+          expect(sent[0].travelMode, TravelModeDto.twoWheeler);
+          expect(sent[0].displayOptions.showDestinationMarkers, false);
+          expect(sent[1].routeToken, 'bare-token');
+          expect(sent[1].travelMode, isNull);
+          expect(sent[1].displayOptions.showDestinationMarkers, isNull);
+        });
+
         test('Token routing requires an initialized session', () async {
           when(
-            sessionMockApi.setDestinationsWithToken(any, any),
+            sessionMockApi.setDestinationsWithToken(any),
           ).thenThrow(PlatformException(code: 'sessionNotInitialized'));
 
           await expectLater(
-            GoogleMapsNavigator.setDestinationsWithToken('route-token'),
+            GoogleMapsNavigator.setDestinationsWithToken(
+              DestinationsWithToken(routeToken: 'route-token'),
+            ),
             throwsA(isA<SessionNotInitializedException>()),
           );
         });
 
         test('Token routing preserves unexpected platform failures', () async {
-          when(sessionMockApi.setDestinationsWithToken(any, any)).thenThrow(
+          when(sessionMockApi.setDestinationsWithToken(any)).thenThrow(
             PlatformException(
               code: 'routing-failed',
               message: 'Route request failed',
@@ -1624,7 +1659,9 @@ void main() {
           );
 
           await expectLater(
-            GoogleMapsNavigator.setDestinationsWithToken('route-token'),
+            GoogleMapsNavigator.setDestinationsWithToken(
+              DestinationsWithToken(routeToken: 'route-token'),
+            ),
             throwsA(
               isA<PlatformException>()
                   .having(

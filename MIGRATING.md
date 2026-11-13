@@ -5,10 +5,57 @@ This document covers breaking changes and migration steps between versions of
 
 ## Table of Contents
 
+- [Migrating from 0.12.1 to 0.13.x](#migrating-from-0121-to-013x)
 - [Migrating from 0.12.0 to 0.12.1](#migrating-from-0120-to-0121)
 - [Migrating from 0.11.x to 0.12.x](#migrating-from-011x-to-012x)
 
 ---
+
+## Migrating from 0.12.1 to 0.13.x
+
+### Update token-routing arguments
+
+`GoogleMapsNavigator.setDestinationsWithToken` now takes one
+`DestinationsWithToken` object. This is a breaking change from the positional
+route-token string and named `displayOptions` introduced in 0.12.1. Move those
+values into the object:
+
+```dart
+final NavigationRouteStatus status =
+    await GoogleMapsNavigator.setDestinationsWithToken(
+  DestinationsWithToken(
+    routeToken: routeToken,
+    travelMode: NavigationTravelMode.driving,
+    displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
+  ),
+);
+```
+
+The token is required; `travelMode` and `displayOptions` are optional.
+Destination markers are visible by default. Do not pass waypoints or routing
+options: the token defines the destinations and actual routing parameters.
+
+### Handle unsupported client travel modes
+
+Only `NavigationTravelMode.driving` and `NavigationTravelMode.twoWheeler` are
+accepted explicitly. Other explicit modes return
+`NavigationRouteStatus.travelModeUnsupported` before changing route or display
+state, even with an invalid token.
+
+On iOS, the wrapper no longer resets the session to driving automatically.
+Omitting `travelMode` preserves the current session mode; after walking,
+cycling, or taxi, pass a supported mode explicitly to avoid
+`NavigationRouteStatus.travelModeUnsupported`. On Android, an omitted mode
+follows native token routing. A supported client mode does not override the
+travel mode encoded in the token.
+
+Unsupported modes are reported through the returned status, not an exception.
+Session and terms-of-service errors retain precedence over mode validation;
+missing route statuses and other native-call errors can still throw.
+
+The deprecated `Destinations.routeTokenOptions` path is unchanged. Rebuild the
+native app after upgrading because the Pigeon contract changed; hot reload
+alone is not sufficient.
 
 ## Migrating from 0.12.0 to 0.12.1
 
@@ -31,6 +78,9 @@ final NavigationRouteStatus status =
   displayOptions: NavigationDisplayOptions(showDestinationMarkers: false),
 );
 ```
+
+From 0.13.0, these arguments are wrapped in a `DestinationsWithToken` object;
+see [Update token-routing arguments](#update-token-routing-arguments).
 
 The token defines the destinations and routing parameters on both Android and
 iOS. Do not pass waypoints, a travel mode, or routing options to the new method.

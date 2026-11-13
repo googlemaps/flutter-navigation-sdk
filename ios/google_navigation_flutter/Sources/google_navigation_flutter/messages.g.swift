@@ -1672,6 +1672,39 @@ struct DestinationsDto: Hashable {
 }
 
 /// Generated class from Pigeon that represents data sent in messages.
+struct DestinationsWithTokenDto: Hashable {
+  var routeToken: String
+  var displayOptions: NavigationDisplayOptionsDto
+  var travelMode: TravelModeDto? = nil
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> DestinationsWithTokenDto? {
+    let routeToken = pigeonVar_list[0] as! String
+    let displayOptions = pigeonVar_list[1] as! NavigationDisplayOptionsDto
+    let travelMode: TravelModeDto? = nilOrValue(pigeonVar_list[2])
+
+    return DestinationsWithTokenDto(
+      routeToken: routeToken,
+      displayOptions: displayOptions,
+      travelMode: travelMode
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      routeToken,
+      displayOptions,
+      travelMode,
+    ]
+  }
+  static func == (lhs: DestinationsWithTokenDto, rhs: DestinationsWithTokenDto) -> Bool {
+    return deepEqualsmessages(lhs.toList(), rhs.toList())
+  }
+  func hash(into hasher: inout Hasher) {
+    deepHashmessages(value: toList(), hasher: &hasher)
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
 struct RoutingOptionsDto: Hashable {
   var alternateRoutesStrategy: AlternateRoutesStrategyDto? = nil
   var routingStrategy: RoutingStrategyDto? = nil
@@ -2801,53 +2834,55 @@ private class MessagesPigeonCodecReader: FlutterStandardReader {
     case 181:
       return DestinationsDto.fromList(self.readValue() as! [Any?])
     case 182:
-      return RoutingOptionsDto.fromList(self.readValue() as! [Any?])
+      return DestinationsWithTokenDto.fromList(self.readValue() as! [Any?])
     case 183:
-      return NavigationDisplayOptionsDto.fromList(self.readValue() as! [Any?])
+      return RoutingOptionsDto.fromList(self.readValue() as! [Any?])
     case 184:
-      return NavigationWaypointDto.fromList(self.readValue() as! [Any?])
+      return NavigationDisplayOptionsDto.fromList(self.readValue() as! [Any?])
     case 185:
-      return ContinueToNextDestinationResponseDto.fromList(self.readValue() as! [Any?])
+      return NavigationWaypointDto.fromList(self.readValue() as! [Any?])
     case 186:
-      return NavigationTimeAndDistanceDto.fromList(self.readValue() as! [Any?])
+      return ContinueToNextDestinationResponseDto.fromList(self.readValue() as! [Any?])
     case 187:
-      return NavigationAudioGuidanceSettingsDto.fromList(self.readValue() as! [Any?])
+      return NavigationTimeAndDistanceDto.fromList(self.readValue() as! [Any?])
     case 188:
-      return SimulationOptionsDto.fromList(self.readValue() as! [Any?])
+      return NavigationAudioGuidanceSettingsDto.fromList(self.readValue() as! [Any?])
     case 189:
-      return LatLngDto.fromList(self.readValue() as! [Any?])
+      return SimulationOptionsDto.fromList(self.readValue() as! [Any?])
     case 190:
-      return LatLngBoundsDto.fromList(self.readValue() as! [Any?])
+      return LatLngDto.fromList(self.readValue() as! [Any?])
     case 191:
-      return ScreenCoordinateDto.fromList(self.readValue() as! [Any?])
+      return LatLngBoundsDto.fromList(self.readValue() as! [Any?])
     case 192:
-      return SpeedingUpdatedEventDto.fromList(self.readValue() as! [Any?])
+      return ScreenCoordinateDto.fromList(self.readValue() as! [Any?])
     case 193:
-      return GpsAvailabilityChangeEventDto.fromList(self.readValue() as! [Any?])
+      return SpeedingUpdatedEventDto.fromList(self.readValue() as! [Any?])
     case 194:
-      return SpeedAlertOptionsThresholdPercentageDto.fromList(self.readValue() as! [Any?])
+      return GpsAvailabilityChangeEventDto.fromList(self.readValue() as! [Any?])
     case 195:
-      return SpeedAlertOptionsDto.fromList(self.readValue() as! [Any?])
+      return SpeedAlertOptionsThresholdPercentageDto.fromList(self.readValue() as! [Any?])
     case 196:
+      return SpeedAlertOptionsDto.fromList(self.readValue() as! [Any?])
+    case 197:
       return RouteSegmentTrafficDataRoadStretchRenderingDataDto.fromList(
         self.readValue() as! [Any?])
-    case 197:
-      return RouteSegmentTrafficDataDto.fromList(self.readValue() as! [Any?])
     case 198:
-      return RouteSegmentDto.fromList(self.readValue() as! [Any?])
+      return RouteSegmentTrafficDataDto.fromList(self.readValue() as! [Any?])
     case 199:
-      return LaneDirectionDto.fromList(self.readValue() as! [Any?])
+      return RouteSegmentDto.fromList(self.readValue() as! [Any?])
     case 200:
-      return LaneDto.fromList(self.readValue() as! [Any?])
+      return LaneDirectionDto.fromList(self.readValue() as! [Any?])
     case 201:
-      return StepInfoDto.fromList(self.readValue() as! [Any?])
+      return LaneDto.fromList(self.readValue() as! [Any?])
     case 202:
-      return NavInfoDto.fromList(self.readValue() as! [Any?])
+      return StepInfoDto.fromList(self.readValue() as! [Any?])
     case 203:
-      return TermsAndConditionsUIParamsDto.fromList(self.readValue() as! [Any?])
+      return NavInfoDto.fromList(self.readValue() as! [Any?])
     case 204:
-      return NavigationNotificationOptionsDto.fromList(self.readValue() as! [Any?])
+      return TermsAndConditionsUIParamsDto.fromList(self.readValue() as! [Any?])
     case 205:
+      return NavigationNotificationOptionsDto.fromList(self.readValue() as! [Any?])
+    case 206:
       return StepImageGenerationOptionsDto.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -3016,77 +3051,80 @@ private class MessagesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? DestinationsDto {
       super.writeByte(181)
       super.writeValue(value.toList())
-    } else if let value = value as? RoutingOptionsDto {
+    } else if let value = value as? DestinationsWithTokenDto {
       super.writeByte(182)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationDisplayOptionsDto {
+    } else if let value = value as? RoutingOptionsDto {
       super.writeByte(183)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationWaypointDto {
+    } else if let value = value as? NavigationDisplayOptionsDto {
       super.writeByte(184)
       super.writeValue(value.toList())
-    } else if let value = value as? ContinueToNextDestinationResponseDto {
+    } else if let value = value as? NavigationWaypointDto {
       super.writeByte(185)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationTimeAndDistanceDto {
+    } else if let value = value as? ContinueToNextDestinationResponseDto {
       super.writeByte(186)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationAudioGuidanceSettingsDto {
+    } else if let value = value as? NavigationTimeAndDistanceDto {
       super.writeByte(187)
       super.writeValue(value.toList())
-    } else if let value = value as? SimulationOptionsDto {
+    } else if let value = value as? NavigationAudioGuidanceSettingsDto {
       super.writeByte(188)
       super.writeValue(value.toList())
-    } else if let value = value as? LatLngDto {
+    } else if let value = value as? SimulationOptionsDto {
       super.writeByte(189)
       super.writeValue(value.toList())
-    } else if let value = value as? LatLngBoundsDto {
+    } else if let value = value as? LatLngDto {
       super.writeByte(190)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenCoordinateDto {
+    } else if let value = value as? LatLngBoundsDto {
       super.writeByte(191)
       super.writeValue(value.toList())
-    } else if let value = value as? SpeedingUpdatedEventDto {
+    } else if let value = value as? ScreenCoordinateDto {
       super.writeByte(192)
       super.writeValue(value.toList())
-    } else if let value = value as? GpsAvailabilityChangeEventDto {
+    } else if let value = value as? SpeedingUpdatedEventDto {
       super.writeByte(193)
       super.writeValue(value.toList())
-    } else if let value = value as? SpeedAlertOptionsThresholdPercentageDto {
+    } else if let value = value as? GpsAvailabilityChangeEventDto {
       super.writeByte(194)
       super.writeValue(value.toList())
-    } else if let value = value as? SpeedAlertOptionsDto {
+    } else if let value = value as? SpeedAlertOptionsThresholdPercentageDto {
       super.writeByte(195)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteSegmentTrafficDataRoadStretchRenderingDataDto {
+    } else if let value = value as? SpeedAlertOptionsDto {
       super.writeByte(196)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteSegmentTrafficDataDto {
+    } else if let value = value as? RouteSegmentTrafficDataRoadStretchRenderingDataDto {
       super.writeByte(197)
       super.writeValue(value.toList())
-    } else if let value = value as? RouteSegmentDto {
+    } else if let value = value as? RouteSegmentTrafficDataDto {
       super.writeByte(198)
       super.writeValue(value.toList())
-    } else if let value = value as? LaneDirectionDto {
+    } else if let value = value as? RouteSegmentDto {
       super.writeByte(199)
       super.writeValue(value.toList())
-    } else if let value = value as? LaneDto {
+    } else if let value = value as? LaneDirectionDto {
       super.writeByte(200)
       super.writeValue(value.toList())
-    } else if let value = value as? StepInfoDto {
+    } else if let value = value as? LaneDto {
       super.writeByte(201)
       super.writeValue(value.toList())
-    } else if let value = value as? NavInfoDto {
+    } else if let value = value as? StepInfoDto {
       super.writeByte(202)
       super.writeValue(value.toList())
-    } else if let value = value as? TermsAndConditionsUIParamsDto {
+    } else if let value = value as? NavInfoDto {
       super.writeByte(203)
       super.writeValue(value.toList())
-    } else if let value = value as? NavigationNotificationOptionsDto {
+    } else if let value = value as? TermsAndConditionsUIParamsDto {
       super.writeByte(204)
       super.writeValue(value.toList())
-    } else if let value = value as? StepImageGenerationOptionsDto {
+    } else if let value = value as? NavigationNotificationOptionsDto {
       super.writeByte(205)
+      super.writeValue(value.toList())
+    } else if let value = value as? StepImageGenerationOptionsDto {
+      super.writeByte(206)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -6010,7 +6048,7 @@ protocol NavigationSessionApi {
     destinations: DestinationsDto, completion: @escaping (Result<RouteStatusDto, Error>) -> Void)
   /// Sets destinations and routing parameters from a route token.
   func setDestinationsWithToken(
-    routeToken: String, displayOptions: NavigationDisplayOptionsDto,
+    destinations: DestinationsWithTokenDto,
     completion: @escaping (Result<RouteStatusDto, Error>) -> Void)
   func clearDestinations() throws
   func continueToNextDestination(
@@ -6267,10 +6305,8 @@ class NavigationSessionApiSetup {
     if let api = api {
       setDestinationsWithTokenChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let routeTokenArg = args[0] as! String
-        let displayOptionsArg = args[1] as! NavigationDisplayOptionsDto
-        api.setDestinationsWithToken(routeToken: routeTokenArg, displayOptions: displayOptionsArg) {
-          result in
+        let destinationsArg = args[0] as! DestinationsWithTokenDto
+        api.setDestinationsWithToken(destinations: destinationsArg) { result in
           switch result {
           case .success(let res):
             reply(wrapResult(res))

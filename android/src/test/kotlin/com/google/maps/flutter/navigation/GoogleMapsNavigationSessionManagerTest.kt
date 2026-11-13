@@ -32,6 +32,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import io.mockk.just
 import io.mockk.slot
+import io.mockk.verify
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
 import org.junit.After
@@ -91,6 +92,47 @@ internal class GoogleMapsNavigationSessionManagerTest {
         (results.single().exceptionOrNull() as FlutterError).code,
       )
     }
+  }
+
+  @Test
+  fun setDestinationsWithToken_rejectsUnsupportedModesBeforeCallingNavigator() {
+    for (travelMode in listOf(TravelModeDto.CYCLING, TravelModeDto.WALKING, TravelModeDto.TAXI)) {
+      val results = mutableListOf<Result<RouteStatusDto>>()
+
+      sessionManager.setDestinationsWithToken(
+        DestinationsWithTokenDto(
+          routeToken = "dG9rZW4=",
+          displayOptions = NavigationDisplayOptionsDto(false),
+          travelMode = travelMode,
+        ),
+        results::add,
+      )
+
+      assertEquals(1, results.size)
+      assertEquals(RouteStatusDto.TRAVEL_MODE_UNSUPPORTED, results.single().getOrThrow())
+    }
+    verify(exactly = 0) {
+      navigator.setDestinationsWithToken(any(), any(), any<RouteDescriptionLoadCallback>())
+    }
+  }
+
+  @Test
+  fun setDestinationsWithToken_reportsUninitializedSessionBeforeUnsupportedMode() {
+    GoogleMapsNavigatorHolder.setNavigator(null)
+
+    val results = mutableListOf<Result<RouteStatusDto>>()
+
+    sessionManager.setDestinationsWithToken(
+      DestinationsWithTokenDto(
+        routeToken = "dG9rZW4=",
+        displayOptions = NavigationDisplayOptionsDto(),
+        travelMode = TravelModeDto.WALKING,
+      ),
+      results::add,
+    )
+
+    assertEquals(1, results.size)
+    assertEquals("sessionNotInitialized", (results.single().exceptionOrNull() as FlutterError).code)
   }
 
   @Test
@@ -270,7 +312,7 @@ internal class GoogleMapsNavigationSessionManagerTest {
     } just Runs
 
     val requests =
-      listOf<((Result<Navigator.RouteStatus>) -> Unit) -> Unit>(
+      listOf<((Result<*>) -> Unit) -> Unit>(
         { callback ->
           sessionManager.setDestinations(
             waypoints,
@@ -290,7 +332,10 @@ internal class GoogleMapsNavigationSessionManagerTest {
           )
         },
         { callback ->
-          sessionManager.setDestinationsWithToken("dG9rZW4=", DisplayOptions(), callback)
+          sessionManager.setDestinationsWithToken(
+            DestinationsWithTokenDto("dG9rZW4=", NavigationDisplayOptionsDto()),
+            callback,
+          )
         },
         { callback -> sessionManager.simulateLocationsAlongNewRoute(waypoints, callback) },
         { callback ->
@@ -310,7 +355,7 @@ internal class GoogleMapsNavigationSessionManagerTest {
         },
       )
     for (request in requests) {
-      val results = mutableListOf<Result<Navigator.RouteStatus>>()
+      val results = mutableListOf<Result<*>>()
       request(results::add)
 
       routeCallback.captured.onRouteDescription(null)
@@ -332,15 +377,28 @@ internal class GoogleMapsNavigationSessionManagerTest {
         waypoints = listOf(NavigationWaypointDto("Destination", LatLngDto(60.0, 25.0))),
         displayOptions = displayOptions,
       )
-    return listOf(
-      { callback -> handler.setDestinations(destinations, callback) },
-      { callback ->
-        handler.setDestinations(
-          destinations.copy(routeTokenOptions = RouteTokenOptionsDto("dG9rZW4=")),
-          callback,
-        )
-      },
-      { callback -> handler.setDestinationsWithToken("dG9rZW4=", displayOptions, callback) },
-    )
+    val requests =
+      listOf<((Result<RouteStatusDto>) -> Unit) -> Unit>(
+        { callback -> handler.setDestinations(destinations, callback) },
+        { callback ->
+          handler.setDestinations(
+            destinations.copy(routeTokenOptions = RouteTokenOptionsDto("dG9rZW4=")),
+            callback,
+          )
+        },
+      )
+    return requests +
+      listOf(null, TravelModeDto.DRIVING, TravelModeDto.TWO_WHEELER).map { travelMode ->
+        { callback: (Result<RouteStatusDto>) -> Unit ->
+          handler.setDestinationsWithToken(
+            DestinationsWithTokenDto(
+              routeToken = "dG9rZW4=",
+              displayOptions = displayOptions,
+              travelMode = travelMode,
+            ),
+            callback,
+          )
+        }
+      }
   }
 }
