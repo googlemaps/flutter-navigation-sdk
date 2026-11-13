@@ -88,8 +88,9 @@ class DestinationsWithToken {
   /// On iOS, an omitted mode preserves the session's current mode; an
   /// unsupported inherited mode also returns
   /// [NavigationRouteStatus.travelModeUnsupported]. An explicit supported mode
-  /// is applied to the session. On Android, the token determines the route's
-  /// travel mode rather than this client-side setting.
+  /// is applied to the session. On Android, this value is only validated: the
+  /// native token API takes no travel mode, so the token alone determines the
+  /// route's mode.
   final NavigationTravelMode? travelMode;
 
   /// Route presentation options. Destination markers are shown by default.
