@@ -13,7 +13,7 @@
 // limitations under the License.
 
 buildscript {
-    val kotlinVersion = "2.3.20"
+    val kotlinVersion = "2.4.21"
     repositories {
         google()
         mavenCentral()
@@ -30,7 +30,7 @@ buildscript {
         // (and applying it below) is gated behind -Pktfmt so it is never forced on apps that
         // depend on this plugin. Enabled by `melos run format:android`.
         if (providers.gradleProperty("ktfmt").isPresent) {
-            classpath("com.ncorti.ktfmt.gradle:plugin:0.21.0")
+            classpath("com.ncorti.ktfmt.gradle:plugin:0.28.0")
         }
     }
 }
@@ -138,7 +138,7 @@ dependencies {
     implementation("androidx.startup:startup-runtime:1.2.0")
     implementation("com.google.android.libraries.navigation:navigation:8.1.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation("io.mockk:mockk:1.13.8")
+    testImplementation("io.mockk:mockk:1.14.12")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.robolectric:robolectric:4.17")
 }
